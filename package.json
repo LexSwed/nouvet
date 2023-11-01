@@ -4,14 +4,14 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "vite build && vite build --ssr",
     "dev": "vite dev",
+    "build": "vite build && vite build --ssr",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@remix-run/css-bundle": "^2.2.0",
     "@remix-run/node": "^2.2.0",
+    "@remix-run/css-bundle": "^2.2.0",
     "@remix-run/react": "^2.2.0",
     "@remix-run/serve": "^2.2.0",
     "isbot": "^3.6.8",
@@ -21,9 +21,16 @@
   "devDependencies": {
     "@remix-run/dev": "^2.2.0",
     "@remix-run/eslint-config": "^2.2.0",
+    "@remix-run/node": "^2.2.0",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
-    "eslint": "^8.38.0",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.52.0",
+    "postcss": "^8.4.31",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.6",
+    "tailwindcss": "^3.3.5",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.1.6",
     "vite": "^4.5.0",
     "vite-tsconfig-paths": "^4.2.1"
