@@ -24,7 +24,7 @@ export default function App() {
 				<Meta />
 				<Links />
 			</head>
-			<body>
+			<body className="bg-background text-on-background font-sans">
 				<Outlet />
 				<ScrollRestoration />
 				<LiveReload />
