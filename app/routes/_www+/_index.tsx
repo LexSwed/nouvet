@@ -7,7 +7,7 @@ export const meta: MetaFunction = () => {
 	];
 };
 
-export default function Index() {
+export default function IndexRoute() {
 	return (
 		<div className="bg-black text-white">
 			<h1>Welcome to Remix</h1>
