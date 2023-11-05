@@ -7,13 +7,19 @@
     "dev": "vite dev",
     "build": "vite build && vite build --ssr",
     "start": "remix-serve ./build/index.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "db:generate": "drizzle-kit generate:sqlite",
+    "db:push": "drizzle-kit push:sqlite"
   },
   "dependencies": {
     "@remix-run/css-bundle": "^2.2.0",
     "@remix-run/node": "^2.2.0",
     "@remix-run/react": "^2.2.0",
     "@remix-run/serve": "^2.2.0",
+    "@types/better-sqlite3": "^7.6.6",
+    "better-sqlite3": "^9.0.0",
+    "D": "^1.0.0",
+    "drizzle-orm": "^0.28.6",
     "isbot": "^3.6.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -25,6 +31,7 @@
     "@types/react": "^18.2.35",
     "@types/react-dom": "^18.2.7",
     "autoprefixer": "^10.4.16",
+    "drizzle-kit": "^0.19.13",
     "eslint": "^8.53.0",
     "postcss": "^8.4.31",
     "prettier": "^3.0.3",
@@ -36,6 +43,6 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   }
 }

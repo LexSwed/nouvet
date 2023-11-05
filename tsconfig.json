@@ -16,6 +16,7 @@
     "skipLibCheck": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,
+    "verbatimModuleSyntax": true,
     "paths": {
       "~/*": ["./app/*"]
     }
