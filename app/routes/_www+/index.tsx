@@ -2,15 +2,17 @@ import { type MetaFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
 	return [
-		{ title: "New Remix App" },
-		{ name: "description", content: "Welcome to Remix!" },
+		{ title: "NouVet" },
+		{ name: "description", content: "Human routine for pets" },
 	];
 };
 
 export default function IndexRoute() {
 	return (
-		<div className="bg-black text-white">
-			<h1>Welcome to Remix</h1>
+		<div className="container">
+			<header>
+				<h1 className="text-3xl">Welcome to Remix</h1>
+			</header>
 			<ul>
 				<li>
 					<a
