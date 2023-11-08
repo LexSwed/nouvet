@@ -12,6 +12,7 @@
     "db:push": "drizzle-kit push:sqlite"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "^5.0.15",
     "@lucia-auth/adapter-sqlite": "^2.0.1",
     "@lucia-auth/oauth": "^3.4.0",
     "@radix-ui/react-avatar": "^1.0.4",

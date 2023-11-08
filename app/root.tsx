@@ -8,8 +8,9 @@ import {
 	Scripts,
 	ScrollRestoration,
 } from "@remix-run/react";
+import "@fontsource-variable/inter";
 
-import "./global.css";
+import "./globals.css";
 
 export const links: LinksFunction = () => [
 	...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -24,7 +25,7 @@ export default function App() {
 				<Meta />
 				<Links />
 			</head>
-			<body className="bg-background text-on-background font-sans">
+			<body className="text-on-background bg-background font-sans">
 				<Outlet />
 				<ScrollRestoration />
 				<LiveReload />
