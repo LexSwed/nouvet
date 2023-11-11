@@ -11,6 +11,7 @@ import {
 import "@fontsource-variable/inter";
 
 import "./globals.css";
+import i18n from "./i18n/i18n.server.ts";
 
 export const links: LinksFunction = () => [
 	...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -18,7 +19,7 @@ export const links: LinksFunction = () => [
 
 export default function App() {
 	return (
-		<html lang="en">
+		<html lang={i18n.language} dir={i18n.dir(i18n.language)}>
 			<head>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
