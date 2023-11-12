@@ -1,7 +1,9 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import enCommon from "../../public/locales/en/common.json";
+import enWWW from "../../public/locales/en/www.json";
 
-import Backend from "i18next-http-backend";
+import HttpApi from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 // don't want to use this?
 // have a look at the Quick start guide
@@ -11,7 +13,7 @@ i18n
 	// load translation using http -> see /public/locales (i.e. https://github.com/i18next/react-i18next/tree/master/example/react/public/locales)
 	// learn more: https://github.com/i18next/i18next-http-backend
 	// want your translations to be loaded from a professional CDN? => https://github.com/locize/react-tutorial#step-2---use-the-locize-cdn
-	.use(Backend)
+	.use(HttpApi)
 	// detect user language
 	// learn more: https://github.com/i18next/i18next-browser-languageDetector
 	.use(LanguageDetector)
@@ -22,12 +24,21 @@ i18n
 	.init({
 		fallbackLng: "en",
 		debug: true,
-		load: "currentOnly",
+		load: "languageOnly",
 		ns: ["common", "www"],
+		defaultNS: "common",
+
+		resources: {
+			en: {
+				common: enCommon,
+				www: enWWW,
+			},
+		},
 
 		interpolation: {
 			escapeValue: false, // not needed for react as it escapes by default
 		},
+		react: { useSuspense: false },
 	});
 
 export default i18n;

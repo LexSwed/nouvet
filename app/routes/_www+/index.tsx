@@ -13,11 +13,12 @@ export const meta: MetaFunction = () => {
 };
 
 export default function IndexRoute() {
+	const { t } = useTranslation();
 	return (
 		<div className="container">
 			<header>
 				<h1 className="text-3xl">
-					{/* <Trans ns="www">Human routine for pets</Trans> */}
+					<Trans ns="www">Human routine for pets</Trans>
 				</h1>
 			</header>
 			<ul>
@@ -27,7 +28,7 @@ export default function IndexRoute() {
 						href="https://remix.run/tutorials/blog"
 						rel="noreferrer"
 					>
-						15m Quickstart Blog Tutorial
+						{t("greeting")}
 					</a>
 				</li>
 				<li>
