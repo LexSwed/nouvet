@@ -11,10 +11,15 @@ import {
 import "@fontsource-variable/inter";
 
 import "./globals.css";
+
 import i18n from "./i18n/i18n.server.ts";
 
 export const links: LinksFunction = () => [
 	...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+	{ rel: "icon", href: "/icons/icon.svg", sizes: "32x32" },
+	{ rel: "apple-touch-icon", href: "/icons/icon.svg" },
+	{ rel: "icon", href: "/icons/icon-apple.png" },
+	{ rel: "manifest", href: "/manifest.webmanifest" },
 ];
 
 export default function App() {
@@ -26,7 +31,7 @@ export default function App() {
 				<Meta />
 				<Links />
 			</head>
-			<body className="text-on-background bg-background font-sans">
+			<body className="text-on-background h-full bg-background font-sans">
 				<Outlet />
 				<ScrollRestoration />
 				<LiveReload />

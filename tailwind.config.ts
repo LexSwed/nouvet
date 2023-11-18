@@ -30,6 +30,9 @@ export default {
 					...(defaultConfig as any).theme.fontFamily.sans,
 				],
 			},
+			backgroundImage: {
+				main: "linear-gradient(105deg, hsl(var(--background))  0%, hsl(var(--accent)/0.7) 100%)",
+			},
 			colors: {
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",
