@@ -13,6 +13,7 @@ import "@fontsource-variable/inter";
 import "./globals.css";
 
 import i18n from "./i18n/i18n.server.ts";
+import { href as svgSprite } from "./lib/icons/icon.tsx";
 
 export const links: LinksFunction = () => [
 	...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -20,6 +21,8 @@ export const links: LinksFunction = () => [
 	{ rel: "apple-touch-icon", href: "/icons/icon.svg" },
 	{ rel: "icon", href: "/icons/icon-apple.png" },
 	{ rel: "manifest", href: "/manifest.webmanifest" },
+	// icons
+	{ rel: "preload", href: svgSprite, as: "image" },
 ];
 
 export default function App() {

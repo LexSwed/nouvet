@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build && vite build --ssr",
+    "build:icons": "npx rmx-cli svg-sprite assets/icons app/lib/icons --components --components-template=./assets/icons/icon.template",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc",
     "db:generate": "drizzle-kit generate:sqlite",
