@@ -1,5 +1,5 @@
 import { Outlet, type MetaFunction } from "@remix-run/react";
-import i18n from "~/i18n/i18n.server.ts";
+import i18n from "~/i18n/i18n.ts";
 
 export const meta: MetaFunction = () => {
 	return [

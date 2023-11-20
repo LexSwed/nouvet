@@ -12,7 +12,7 @@ import "@fontsource-variable/inter";
 
 import "./globals.css";
 
-import i18n from "./i18n/i18n.server.ts";
+import i18n from "./i18n/i18n.ts";
 import { href as svgSprite } from "./lib/icons/icon.tsx";
 
 export const links: LinksFunction = () => [
