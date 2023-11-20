@@ -48,7 +48,7 @@ export default function IndexRoute() {
 							</Link>
 						</li>
 						<li className="shrink-0">
-							<Link to="/privacy-policy">
+							<Link to="/privacy">
 								<Card className="flex min-w-[8rem] flex-col place-items-start gap-2">
 									<Icon size="lg" icon="scroll" className="text-primary/60" />
 									{t("link-privacy-policy")}
