@@ -5,6 +5,7 @@ import { Link, Outlet } from "@remix-run/react";
 import { Button } from "~/lib/ui/button.tsx";
 import { Icon } from "~/lib/icons/icon.tsx";
 import { Card } from "~/lib/ui/card.tsx";
+import { NavCard } from "~/lib/ui/navcard.tsx";
 
 export const meta: MetaFunction = () => {
 	return [
@@ -32,27 +33,27 @@ export default function WWWLayout() {
 				<nav>
 					<ul className="-mx-3 flex snap-x snap-mandatory scroll-p-3 flex-row gap-2 overflow-x-auto p-3 scrollbar-none">
 						<li className="shrink-0">
-							<Link to="#features">
-								<Card className="flex min-w-[8rem] flex-col place-items-start gap-2">
-									<Icon size="lg" icon="package" className="text-primary/60" />
+							<Link to="/#features">
+								<NavCard className="flex min-w-[8rem] flex-col place-items-start gap-2">
+									<Icon size="lg" icon="package" className="text-primary" />
 									{t("features")}
-								</Card>
+								</NavCard>
 							</Link>
 						</li>
 						<li className="shrink-0">
 							<Link to="/about">
-								<Card className="flex min-w-[8rem] flex-col place-items-start gap-2">
-									<Icon size="lg" icon="nouvet" className="text-primary/60" />
+								<NavCard className="flex min-w-[8rem] flex-col place-items-start gap-2">
+									<Icon size="lg" icon="nouvet" className="text-primary" />
 									{t("link-about-the-project")}
-								</Card>
+								</NavCard>
 							</Link>
 						</li>
 						<li className="shrink-0">
 							<Link to="/privacy">
-								<Card className="flex min-w-[8rem] flex-col place-items-start gap-2">
-									<Icon size="lg" icon="scroll" className="text-primary/60" />
+								<NavCard className="flex min-w-[8rem] flex-col place-items-start gap-2">
+									<Icon size="lg" icon="scroll" className="text-primary" />
 									{t("link-privacy-policy")}
-								</Card>
+								</NavCard>
 							</Link>
 						</li>
 					</ul>
