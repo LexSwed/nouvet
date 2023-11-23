@@ -4,7 +4,6 @@ import i18n from "~/i18n/i18n.ts";
 import { Link, Outlet } from "@remix-run/react";
 import { Button } from "~/lib/ui/button.tsx";
 import { Icon } from "~/lib/icons/icon.tsx";
-import { Card } from "~/lib/ui/card.tsx";
 import { NavCard } from "~/lib/ui/navcard.tsx";
 
 export const meta: MetaFunction = () => {

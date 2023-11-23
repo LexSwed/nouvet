@@ -23,4 +23,7 @@ export default defineConfig({
 		}),
 		tsconfigPaths(),
 	],
+	ssr: {
+		noExternal: ["remix-i18next"],
+	},
 });
