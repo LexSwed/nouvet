@@ -1,6 +1,8 @@
+import containerQueryPlugin from "@tailwindcss/container-queries";
 import { type Config } from "tailwindcss";
 import defaultConfig from "tailwindcss/defaultConfig.js";
 import plugin from "tailwindcss/plugin.js";
+import animatePlugin from "tailwindcss-animate";
 
 export default {
 	darkMode: ["class"],
@@ -91,7 +93,8 @@ export default {
 		},
 	},
 	plugins: [
-		require("tailwindcss-animate"),
+		containerQueryPlugin,
+		animatePlugin,
 		plugin(function noScrollBarPlugin({ addUtilities }) {
 			addUtilities({
 				".scrollbar-none": {
