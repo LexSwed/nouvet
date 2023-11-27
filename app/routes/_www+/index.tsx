@@ -40,7 +40,7 @@ export default function IndexRoute() {
 						</Link>
 					</Button>
 				</div>
-				<div className="w-[50%] min-w-[400px] overflow-hidden rounded-full border border-foreground object-cover p-14">
+				<div className="w-[50%] min-w-[400px] overflow-hidden rounded-full border border-foreground object-cover p-12">
 					<img
 						src="https://images.unsplash.com/photo-1563460716037-460a3ad24ba9?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 						className="aspect-[9/12] w-full rounded-full object-cover"

@@ -9,7 +9,7 @@ const NavCard = React.forwardRef<
 	<div
 		ref={ref}
 		className={cn(
-			"text-on-muted rounded-xl bg-muted/50 p-3 transition-colors hover:bg-muted/70 focus:bg-muted/70",
+			"text-on-muted rounded-xl bg-muted/50 px-4 py-3 transition-colors hover:bg-muted/70 focus:bg-muted/70",
 			className,
 		)}
 		{...props}

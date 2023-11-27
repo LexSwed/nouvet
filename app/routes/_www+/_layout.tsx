@@ -33,7 +33,7 @@ export default function WWWLayout() {
 					<ul className="-mx-3 flex snap-x snap-mandatory scroll-p-3 flex-row gap-2 overflow-x-auto p-3 scrollbar-none">
 						<li className="shrink-0">
 							<Link to="/#features">
-								<NavCard className="flex min-w-[8rem] flex-col place-items-start gap-2">
+								<NavCard className="flex min-w-[8rem] flex-col place-items-start gap-2 font-medium">
 									<Icon size="lg" icon="package" className="text-primary" />
 									{t("features")}
 								</NavCard>
@@ -41,7 +41,7 @@ export default function WWWLayout() {
 						</li>
 						<li className="shrink-0">
 							<Link to="/about">
-								<NavCard className="flex min-w-[8rem] flex-col place-items-start gap-2">
+								<NavCard className="flex min-w-[8rem] flex-col place-items-start gap-2 font-medium">
 									<Icon size="lg" icon="nouvet" className="text-primary" />
 									{t("link-about-the-project")}
 								</NavCard>
@@ -49,7 +49,7 @@ export default function WWWLayout() {
 						</li>
 						<li className="shrink-0">
 							<Link to="/privacy">
-								<NavCard className="flex min-w-[8rem] flex-col place-items-start gap-2">
+								<NavCard className="flex min-w-[8rem] flex-col place-items-start gap-2 font-medium">
 									<Icon size="lg" icon="scroll" className="text-primary" />
 									{t("link-privacy-policy")}
 								</NavCard>
