@@ -19,18 +19,23 @@ export const meta: MetaFunction = () => {
 export default function WWWLayout() {
 	const { t } = useTranslation("www");
 	return (
-		<div className="min-h-full bg-main pb-8 pt-4">
+		<div className="to-tertiary/5 min-h-full bg-gradient-to-br from-primary/5 pb-8 pt-4">
 			<header className="container flex flex-col gap-4">
 				<div className="flex flex-row items-center justify-between">
-					<a href="/" title={t("link-home")} className="-m-4 p-4">
-						<img src={"/icons/icon.svg"} className="h-12 w-12" />
-					</a>
+					<Link
+						to="/"
+						aria-label={t("link-home")}
+						title={t("link-home")}
+						className="-m-4 p-4"
+					>
+						<img src={"/icons/icon.svg"} alt="" className="h-12 w-12" />
+					</Link>
 					<Button asChild>
 						<Link to="/family">{t("open-family-app")}</Link>
 					</Button>
 				</div>
 				<nav>
-					<ul className="-mx-3 flex snap-x snap-mandatory scroll-p-3 flex-row gap-2 overflow-x-auto p-3 scrollbar-none">
+					<ul className="spacing-bleed flex snap-x snap-mandatory flex-row gap-2 overflow-x-auto scrollbar-none">
 						<li className="shrink-0">
 							<Link to="/#features">
 								<NavCard className="flex min-w-[8rem] flex-col place-items-start gap-2 font-medium">

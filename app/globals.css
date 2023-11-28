@@ -14,6 +14,8 @@
 		--primary-foreground: 0 0% 100%;
 		--secondary: 240 4.8% 95.9%;
 		--secondary-foreground: 240 5.9% 10%;
+		--tertiary: 191 100% 25%;
+		--tertiary-foreground: 240 100% 99%;
 		--muted: 357 100% 93%;
 		--muted-foreground: 345 100% 13%;
 		--accent: 240 4.8% 95.9%;
@@ -24,6 +26,12 @@
 		--input: 240 5.9% 90%;
 		--ring: 351 70% 65%;
 		--radius: 0.5rem;
+		--container-px-base: 1rem;
+		--container-px-sm: 2rem;
+		--container-px-md: 3rem;
+		--container-px-lg: 4rem;
+		--container-px-xl: 5rem;
+		--container-px-2xl: 6rem;
 	}
 
 	.dark {
@@ -37,6 +45,8 @@
 		--primary-foreground: 0 0% 100%;
 		--secondary: 240 3.7% 15.9%;
 		--secondary-foreground: 0 0% 98%;
+		--tertiary: 191 100% 25%;
+		--tertiary-foreground: 240 100% 99%;
 		--muted: 0 0% 15%;
 		--muted-foreground: 240 5% 64.9%;
 		--accent: 12 6.5% 15.1%;
