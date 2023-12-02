@@ -10,17 +10,15 @@ module.exports = {
   rules: {
     // good to know this can be enforced
     'tailwindcss/no-custom-classname': 'off',
+    // conflicts with prettier
+    'tailwindcss/classnames-order': 'off',
   },
   overrides: [
     {
       env: {
         node: true,
       },
-      files: [
-        '.eslintrc.cjs',
-        'prettier.config.cjs',
-        'tailwind.config.ts',
-      ],
+      files: ['.eslintrc.cjs', 'prettier.config.cjs', 'tailwind.config.ts'],
       parserOptions: {
         sourceType: 'script',
       },
@@ -33,7 +31,7 @@ module.exports = {
         sourceType: 'module',
       },
       plugins: ['@typescript-eslint'],
-      extends: ["plugin:solid/typescript"]
+      extends: ['plugin:solid/typescript'],
     },
   ],
 };
