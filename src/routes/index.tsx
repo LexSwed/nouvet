@@ -1,15 +1,20 @@
-import { A } from "@solidjs/router";
+import { translator } from "@solid-primitives/i18n";
+import { A, type RouteSectionProps,  createAsync } from "@solidjs/router";
+import { getDictionary } from "~/i18n/i18n";
 
-export default function Home() {
+const createTranslator = (props: RouteSectionProps) => {
+  const dict = createAsync(() => getDictionary('en', 'www'))
+
+  return translator(dict);
+}
+
+export default function Home(props: RouteSectionProps) {
+  const t = createTranslator(props);
   return (
     <main class="to-tertiary/5 from-primary/5 min-h-full bg-gradient-to-br pb-8 pt-4">
       <h1 class="max-6-xs my-16 text-6xl font-thin uppercase text-sky-700">Hello world!</h1>
       <p class="mt-8">
-        Visit{" "}
-        <a href="https://solidjs.com" target="_blank" class="text-sky-600 hover:underline">
-          solidjs.com
-        </a>{" "}
-        to learn how to build Solid apps.
+       {t('common.meta.title')}
       </p>
       <p class="my-4">
         <span>Home</span>
