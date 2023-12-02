@@ -2,7 +2,6 @@
 const config = {
   // see https://github.com/withastro/prettier-plugin-astro
   plugins: [
-    require.resolve('prettier-plugin-astro'),
     require.resolve('prettier-plugin-tailwindcss'),
   ],
   overrides: [
