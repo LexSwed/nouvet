@@ -1,5 +1,13 @@
-import { twJoin, twMerge, type ClassNameValue } from 'tailwind-merge';
+import { type ClassNameValue, extendTailwindMerge } from 'tailwind-merge';
+
+const customTwMerge = extendTailwindMerge({
+  extend: {
+    theme: {
+      spacing: ['font'],
+    },
+  },
+});
 
 export function tw(...classNames: ClassNameValue[]) {
-  return twMerge(twJoin(...classNames));
+  return customTwMerge(...classNames);
 }

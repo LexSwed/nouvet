@@ -83,10 +83,7 @@ export default {
       '2xl': '1400px',
     },
     extend: {
-      width: {
-        font: '1em',
-      },
-      height: {
+      spacing: {
         font: '1em',
       },
       fontFamily: {
@@ -141,6 +138,9 @@ export default {
           },
         },
       });
+    }),
+    plugin(function hoverAndFocusVariant({ addVariant }) {
+      addVariant('intent', ['&:where(:hover,:focus)']);
     }),
     plugin(function spacingBleed({ addComponents, theme }) {
       addComponents({

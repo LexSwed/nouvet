@@ -18,21 +18,20 @@ const iconVariants = cva('', {
   },
 });
 
-export function Icon(
+const Icon = (
   props: JSX.SvgSVGAttributes<SVGSVGElement> &
     VariantProps<typeof iconVariants> & {
       icon: string;
     },
-) {
+) => {
   return (
     <svg
       {...props}
-      class={tw(
-        iconVariants({ size: props.size, class: props.class }),
-        'inline',
-      )}
+      class={tw(iconVariants({ size: props.size }), 'inline', props.class)}
     >
       <use href={`#${props.icon}`} />
     </svg>
   );
-}
+};
+
+export { Icon };
