@@ -1,4 +1,3 @@
-import { A } from '@solidjs/router';
 import { For, type ParentProps } from 'solid-js';
 
 import nouvetIcon from '~/assets/icons/nouvet.svg';
@@ -35,14 +34,14 @@ export default function WWWLayout(props: ParentProps) {
       <div class="min-h-full bg-gradient-to-br from-primary/5 to-tertiary/5 pb-8 pt-4">
         <header class="container flex flex-col gap-4">
           <div class="flex flex-row items-center justify-between">
-            <A
+            <a
               href="/"
               aria-label={t('www.link-home')}
               title={t('www.link-home')}
               class="-m-4 p-4"
             >
               <Icon icon={nouvetIcon} class="h-12 w-12" />
-            </A>
+            </a>
             <ButtonLink href="/family">{t('www.open-family-app')}</ButtonLink>
           </div>
           <nav>

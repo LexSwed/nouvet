@@ -14,8 +14,6 @@ type ModulesMap = Record<i18nModule, typeof WWWWDict>;
 
 async function fetchDictionary(locale: Locale = 'en', routeModule: i18nModule) {
   'use server';
-  const event = getRequestEvent();
-  console.log(event?.request.method);
   const commonDict = await (import(`./locales/${locale}/common.json`).then(
     (common) => common.default,
   ) as Promise<typeof CommonDict>);
