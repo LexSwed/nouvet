@@ -1,6 +1,6 @@
 import { Title } from '@solidjs/meta';
 import ArrowCircleUpRight from '~/assets/icons/arrow-circle-up-right.svg';
-import { createTranslator } from '~/i18n';
+import { T, createTranslator } from '~/i18n';
 import { ButtonLink } from '~/lib/ui/button';
 
 import { Icon } from '~/lib/ui/icon';
@@ -14,10 +14,9 @@ export default function WWW() {
       <section class="flex flex-col items-center justify-between gap-12 @container/hero md:flex-row">
         <div class="flex flex-col gap-12">
           <div class="flex flex-col gap-6">
-            <h1
-              class="text-5xl font-bold leading-[1.1] md:text-6xl"
-              innerHTML={t('www.headline')}
-            />
+            <h1 class="text-5xl font-bold leading-[1.1] md:text-6xl">
+              <T namespace="www" i18nKey="headline" />
+            </h1>
             <h2 class="text-2xl">{t('www.subheadline')}</h2>
           </div>
           <ButtonLink

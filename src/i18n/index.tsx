@@ -1,6 +1,7 @@
 import { prefix, resolveTemplate, translator } from '@solid-primitives/i18n';
 import { cache, createAsync } from '@solidjs/router';
 
+import { type ParentProps } from 'solid-js';
 import { getRequestEvent } from 'solid-js/web';
 import { type acceptedLocales } from './const';
 import { getLocale } from './locale';
@@ -10,7 +11,7 @@ import type WWWWDict from './locales/en/www.json';
 export type Locale = (typeof acceptedLocales)[number];
 type Namespace = 'www';
 
-type ModulesMap = Record<Namespace, typeof WWWWDict>;
+type NamespaceMap = Record<Namespace, typeof WWWWDict>;
 
 async function fetchDictionary(locale: Locale = 'en', namespace: Namespace) {
   'use server';
@@ -21,7 +22,9 @@ async function fetchDictionary(locale: Locale = 'en', namespace: Namespace) {
   const commonPrefixedDict = prefix(commonDict, 'common');
   const routeModuleDict = await (import(
     `./locales/${locale}/${namespace}.json`
-  ).then((common) => common.default) as Promise<ModulesMap[typeof namespace]>);
+  ).then((common) => common.default) as Promise<
+    NamespaceMap[typeof namespace]
+  >);
   const modulePrefixedDict = prefix(routeModuleDict, namespace);
 
   return {
@@ -41,10 +44,30 @@ export const getDictionary = cache(async (namespace: Namespace) => {
   return fetchDictionary(locale.language as Locale, namespace);
 }, 'translations');
 
-export const createTranslator = (namespace: Namespace) => {
+export const createTranslator = <T extends Namespace = Namespace>(
+  namespace: T,
+) => {
   const dict = createAsync(() => getDictionary(namespace), {
     deferStream: true,
   });
 
   return translator(dict, resolveTemplate);
 };
+
+/**
+ * Renders translations strings that might include HTML.
+ * Uses innerHTML, so the validation of the tags should happen when accepting translations.
+ */
+export function T<T extends Namespace>(
+  props: ParentProps<{
+    namespace: T;
+    i18nKey: keyof NamespaceMap[T];
+  }>,
+) {
+  const t = createTranslator(props.namespace);
+  const text = t(
+    `${props.namespace}.${String(props.i18nKey)}` as Parameters<typeof t>[0],
+  );
+  // eslint-disable-next-line solid/no-innerhtml
+  return <span innerHTML={text} class="contents" />;
+}
