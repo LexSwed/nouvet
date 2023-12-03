@@ -72,13 +72,6 @@
       0px 8px 12px rgba(0, 0, 0, 0.15);
 
     --radius: 0.5rem;
-
-    --container-x-base: 1rem;
-    --container-x-sm: 2rem;
-    --container-x-md: 3rem;
-    --container-x-lg: 4rem;
-    --container-x-xl: 5rem;
-    --container-x-2xl: 6rem;
   }
 
   .dark {

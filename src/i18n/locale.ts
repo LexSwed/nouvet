@@ -1,5 +1,5 @@
 import { parse } from 'cookie-es';
-import { acceptedLocales } from '~/i18n/i18n';
+import { acceptedLocales, LANG_COOKIE } from '~/i18n/const';
 
 export function getLocale(request: Request): Intl.Locale {
   'use server';
@@ -15,7 +15,6 @@ export function getLocale(request: Request): Intl.Locale {
   return new Intl.Locale('en');
 }
 
-const LANG_COOKIE = 'i18n-lang';
 /**
  * Attempts to get preferred language from cookies, when user manually updated it from the UI.
  * Verifies it's a correct language. Matches only to one of the supported locales.
@@ -66,7 +65,7 @@ function header(request: Request): Intl.Locale | null {
       },
       [] as unknown as Array<readonly [Intl.Locale, number]>,
     )
-    .toSorted((a, b) => a[1] - b[1])
+    .toSorted((a, b) => b[1] - a[1])
     .find(([locale]) => {
       try {
         // @ts-expect-error thanks TypeScript

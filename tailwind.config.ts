@@ -74,10 +74,20 @@ export default {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
-  corePlugins: {
-    container: false,
-  },
   theme: {
+    container: {
+      center: true,
+      padding: {
+        'DEFAULT': '1rem',
+        'sm': '2rem',
+        'lg': '4rem',
+        'xl': '5rem',
+        '2xl': '6rem',
+      },
+      screens: {
+        '2xl': '1400px',
+      },
+    },
     screens: {
       ...defaultConfig.theme?.screens,
       '2xl': '1400px',
@@ -141,57 +151,6 @@ export default {
     }),
     plugin(function hoverAndFocusVariant({ addVariant }) {
       addVariant('intent', ['&:where(:hover,:focus)']);
-    }),
-    plugin(function spacingBleed({ addComponents, theme }) {
-      addComponents({
-        '.container': {
-          'margin-inline': 'auto',
-          'padding-inline': 'var(--container-x-base)',
-          '@screen sm': {
-            'padding-inline': 'var(--container-x-sm)',
-          },
-          '@screen md': {
-            'padding-inline': 'var(--container-x-md)',
-          },
-          '@screen lg': {
-            'maxWidth': theme('screens.lg'),
-            'padding-inline': 'var(--container-x-lg)',
-          },
-          '@screen xl': {
-            'maxWidth': theme('screens.xl'),
-            'padding-inline': 'var(--container-x-xl)',
-          },
-          '@screen 2xl': {
-            'maxWidth': theme('screens.2xl'),
-            'padding-inline': 'var(--container-x-2xl)',
-          },
-        },
-      });
-
-      addComponents({
-        '.spacing-bleed': {
-          '--spacing-bleed': 'var(--container-x-base, 0)',
-
-          'margin-inline': 'calc(-1 * var(--spacing-bleed))',
-          'padding-inline': 'var(--spacing-bleed)',
-          'scroll-padding-inline': 'var(--spacing-bleed)',
-          '@screen sm': {
-            '--spacing-bleed': 'var(--container-x-sm)',
-          },
-          '@screen md': {
-            '--spacing-bleed': 'var(--container-x-md)',
-          },
-          // "@screen lg": {
-          // 	"margin-inline": "calc(-1 * var(--container-px-lg))",
-          // },
-          // "@screen xl": {
-          // 	"margin-inline": "calc(-1 * var(--container-px-xl))",
-          // },
-          // "@screen 2xl": {
-          // 	"margin-inline": "calc(-1 * var(--container-px-2xl))",
-          // },
-        },
-      });
     }),
   ],
 } satisfies Config;

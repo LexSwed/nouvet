@@ -1,5 +1,6 @@
 import { Button as KobalteButton } from '@kobalte/core';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { type JSX } from 'solid-js';
 import { tw } from './tw';
 
 const buttonVariants = cva(
@@ -32,11 +33,28 @@ const buttonVariants = cva(
   },
 );
 
-const Button = (
-  props: KobalteButton.ButtonRootProps & VariantProps<typeof buttonVariants>,
-) => {
+type ButtonVariants = VariantProps<typeof buttonVariants>;
+
+const Button = (props: KobalteButton.ButtonRootProps & ButtonVariants) => {
   return (
     <KobalteButton.Root
+      {...props}
+      class={tw(
+        buttonVariants({
+          variant: props.variant,
+          size: props.size,
+        }),
+        props.class,
+      )}
+    />
+  );
+};
+
+export const ButtonLink = (
+  props: JSX.AnchorHTMLAttributes<HTMLAnchorElement> & ButtonVariants,
+) => {
+  return (
+    <a
       {...props}
       class={tw(
         buttonVariants({

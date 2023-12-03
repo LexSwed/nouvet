@@ -1,5 +1,5 @@
 import { createHandler, StartServer } from '@solidjs/start/server';
-import { getLocale } from './lib/utils/locale';
+import { getLocale } from './i18n/locale';
 
 export default createHandler((ctx) => {
   const locale = getLocale(ctx.request);
