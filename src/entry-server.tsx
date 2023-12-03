@@ -1,20 +1,41 @@
-import { createHandler, StartServer } from "@solidjs/start/server";
+import { createHandler, StartServer } from '@solidjs/start/server';
+import { getLocale } from './lib/utils/locale';
 
-export default createHandler(() => (
-  <StartServer
-    document={({ assets, children, scripts }) => (
-      <html lang="en">
-        <head>
-          <meta charset="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="icon" href="/favicon.ico" />
-          {assets}
-        </head>
-        <body>
-          <div id="app">{children}</div>
-          {scripts}
-        </body>
-      </html>
-    )}
-  />
-));
+export default createHandler((ctx) => {
+  const locale = getLocale(ctx.request);
+  return (
+    <StartServer
+      document={({ assets, children, scripts }) => (
+        <html
+          lang={locale.baseName}
+          dir={
+            'textInfo' in locale
+              ? // @ts-expect-error Chrome has this
+                locale.textInfo.direction
+              : 'getTextInfo' in locale
+                ? // @ts-expect-error Worker has this?
+                  locale.getTextInfo().direction
+                : 'ltr'
+          }
+        >
+          <head>
+            <meta charset="utf-8" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1"
+            />
+            <link rel="icon" href="/icons/icon.svg" sizes="32x32" />
+            <link rel="apple-touch-icon" href="/icons/icon-apple.png" />
+            <link rel="icon" href="/icons/icon-apple.png" />
+            <link rel="manifest" href="/manifest.webmanifest" />
+            {assets}
+          </head>
+          <body>
+            <div id="app">{children}</div>
+            {scripts}
+          </body>
+        </html>
+      )}
+    />
+  );
+});

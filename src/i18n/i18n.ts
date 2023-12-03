@@ -4,7 +4,9 @@ import { prefix } from '@solid-primitives/i18n';
 import type CommonDict from './locales/en/common.json';
 import type WWWWDict from './locales/en/www.json';
 
-export type Locale = 'en' | 'es';
+export const acceptedLocales = ['en', 'es'] as const;
+
+export type Locale = (typeof acceptedLocales)[number];
 type i18nModule = 'www';
 
 type ModulesMap = Record<i18nModule, typeof WWWWDict>;
