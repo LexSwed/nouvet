@@ -1,8 +1,11 @@
 import { As } from '@kobalte/core';
 import { resolveTemplate, translator } from '@solid-primitives/i18n';
 import { A, type RouteSectionProps, createAsync } from '@solidjs/router';
+
+import stackIcon from '~/assets/icons/stack.svg';
 import { getDictionary } from '~/i18n/i18n';
 import { Button } from '~/lib/ui/button';
+import { Icon } from '~/lib/ui/icon';
 
 const createTranslator = (props: RouteSectionProps) => {
   const dict = createAsync(() => getDictionary('en', 'www'));
@@ -17,6 +20,7 @@ export default function Home(props: RouteSectionProps) {
       <h1 class="max-6-xs my-16 text-6xl font-thin uppercase text-sky-700">
         Hello world!
       </h1>
+      <Icon icon={stackIcon} />
       <p class="mt-8">{t('common.meta.title')}</p>
       <p class="my-4">
         <span>Home</span>

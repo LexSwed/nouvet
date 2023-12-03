@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  plugins: ['tailwindcss', '@typescript-eslint', 'solid'],
+  plugins: ['tailwindcss', '@typescript-eslint', 'solid', 'import'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -12,6 +12,30 @@ module.exports = {
     'tailwindcss/no-custom-classname': 'off',
     // conflicts with prettier
     'tailwindcss/classnames-order': 'off',
+    '@typescript-eslint/consistent-type-imports': [
+      'warn',
+      {
+        prefer: 'type-imports',
+        disallowTypeAnnotations: true,
+        fixStyle: 'inline-type-imports',
+      },
+    ],
+    'import/no-duplicates': ['warn', { 'prefer-inline': true }],
+    'import/consistent-type-specifier-style': ['warn', 'prefer-inline'],
+    'import/order': [
+      'warn',
+      {
+        alphabetize: { order: 'asc', caseInsensitive: true },
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+        ],
+      },
+    ],
   },
   overrides: [
     {

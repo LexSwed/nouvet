@@ -83,6 +83,12 @@ export default {
       '2xl': '1400px',
     },
     extend: {
+      width: {
+        font: '1em',
+      },
+      height: {
+        font: '1em',
+      },
       fontFamily: {
         sans: [
           'var(--nou-font-sans)',
