@@ -14,9 +14,10 @@ export default function WWW() {
       <section class="flex flex-col items-center justify-between gap-12 @container/hero md:flex-row">
         <div class="flex flex-col gap-12">
           <div class="flex flex-col gap-6">
-            <h1 class="text-5xl font-bold leading-[1.1] md:text-6xl">
-              {t('www.headline')}
-            </h1>
+            <h1
+              class="text-5xl font-bold leading-[1.1] md:text-6xl"
+              innerHTML={t('www.headline')}
+            />
             <h2 class="text-2xl">{t('www.subheadline')}</h2>
           </div>
           <ButtonLink
@@ -25,7 +26,7 @@ export default function WWW() {
             class="flex items-center gap-4 self-start text-lg"
           >
             {t('www.cta-start')}
-            <Icon icon={ArrowCircleUpRight} class="h-6 w-6 shrink-0" />
+            <Icon icon={ArrowCircleUpRight} class="h-8 w-8 shrink-0" />
           </ButtonLink>
         </div>
         <div class="border-foreground -z-10 -mt-32 w-full max-w-[500px] self-end overflow-hidden rounded-full border object-cover p-8 md:z-auto md:w-[50%] md:min-w-[320px]">

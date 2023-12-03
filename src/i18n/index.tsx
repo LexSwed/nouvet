@@ -8,11 +8,11 @@ import type CommonDict from './locales/en/common.json';
 import type WWWWDict from './locales/en/www.json';
 
 export type Locale = (typeof acceptedLocales)[number];
-type i18nModule = 'www';
+type Namespace = 'www';
 
-type ModulesMap = Record<i18nModule, typeof WWWWDict>;
+type ModulesMap = Record<Namespace, typeof WWWWDict>;
 
-async function fetchDictionary(locale: Locale = 'en', routeModule: i18nModule) {
+async function fetchDictionary(locale: Locale = 'en', namespace: Namespace) {
   'use server';
   const commonDict = await (import(`./locales/${locale}/common.json`).then(
     (common) => common.default,
@@ -20,11 +20,9 @@ async function fetchDictionary(locale: Locale = 'en', routeModule: i18nModule) {
 
   const commonPrefixedDict = prefix(commonDict, 'common');
   const routeModuleDict = await (import(
-    `./locales/${locale}/${routeModule}.json`
-  ).then((common) => common.default) as Promise<
-    ModulesMap[typeof routeModule]
-  >);
-  const modulePrefixedDict = prefix(routeModuleDict, routeModule);
+    `./locales/${locale}/${namespace}.json`
+  ).then((common) => common.default) as Promise<ModulesMap[typeof namespace]>);
+  const modulePrefixedDict = prefix(routeModuleDict, namespace);
 
   return {
     ...commonPrefixedDict,
@@ -32,7 +30,7 @@ async function fetchDictionary(locale: Locale = 'en', routeModule: i18nModule) {
   };
 }
 
-export const getDictionary = cache(async (module: i18nModule) => {
+export const getDictionary = cache(async (namespace: Namespace) => {
   'use server';
   const event = getRequestEvent();
   if (!event)
@@ -40,11 +38,11 @@ export const getDictionary = cache(async (module: i18nModule) => {
       "Wrong execution environment. Check if 'use server' directive is correctly applied.",
     );
   const locale = getLocale(event.request);
-  return fetchDictionary(locale.language as Locale, module);
+  return fetchDictionary(locale.language as Locale, namespace);
 }, 'translations');
 
-export const createTranslator = (i18nModule: i18nModule) => {
-  const dict = createAsync(() => getDictionary(i18nModule), {
+export const createTranslator = (namespace: Namespace) => {
+  const dict = createAsync(() => getDictionary(namespace), {
     deferStream: true,
   });
 
