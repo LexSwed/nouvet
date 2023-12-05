@@ -5,7 +5,6 @@ import packageIcon from '~/assets/icons/package.svg';
 import scrollIcon from '~/assets/icons/scroll.svg';
 
 import { createTranslator } from '~/i18n';
-import { ButtonLink } from '~/lib/ui/button';
 import { Icon } from '~/lib/ui/icon';
 import { NavCard } from '~/lib/ui/nav-card';
 
@@ -33,7 +32,7 @@ export default function WWWLayout(props: ParentProps) {
     <>
       <div class="min-h-full bg-gradient-to-br from-primary/5 to-tertiary/5 pb-8 pt-4">
         <header class="container flex flex-col gap-4">
-          <div class="flex flex-row items-center justify-between">
+          <div class="flex flex-row items-center">
             <a
               href="/"
               aria-label={t('www.link-home')}
@@ -42,7 +41,6 @@ export default function WWWLayout(props: ParentProps) {
             >
               <Icon icon={nouvetIcon} class="h-12 w-12" />
             </a>
-            <ButtonLink href="/family">{t('www.open-family-app')}</ButtonLink>
           </div>
           <nav>
             <ul class="-mx-4 flex snap-x snap-mandatory flex-row gap-2 overflow-x-auto p-2 scrollbar-none sm:-mx-2">

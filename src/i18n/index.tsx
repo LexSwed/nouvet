@@ -1,8 +1,8 @@
 import { prefix, resolveTemplate, translator } from '@solid-primitives/i18n';
 import { cache, createAsync } from '@solidjs/router';
-
-import { type ParentProps } from 'solid-js';
+import { children, type JSX, type ParentProps } from 'solid-js';
 import { getRequestEvent } from 'solid-js/web';
+
 import { type acceptedLocales } from './const';
 import { getLocale } from './locale';
 import type CommonDict from './locales/en/common.json';
@@ -58,16 +58,9 @@ export const createTranslator = <T extends Namespace = Namespace>(
  * Renders translations strings that might include HTML.
  * Uses innerHTML, so the validation of the tags should happen when accepting translations.
  */
-export function T<T extends Namespace>(
-  props: ParentProps<{
-    namespace: T;
-    i18nKey: keyof NamespaceMap[T];
-  }>,
-) {
-  const t = createTranslator(props.namespace);
-  const text = t(
-    `${props.namespace}.${String(props.i18nKey)}` as Parameters<typeof t>[0],
-  );
+export function T(props: ParentProps): JSX.Element {
+  const resolved = children(() => props.children);
+
   // eslint-disable-next-line solid/no-innerhtml
-  return <span innerHTML={text} class="contents" />;
+  return <span innerHTML={`${resolved()}`} />;
 }
