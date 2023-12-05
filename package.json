@@ -10,8 +10,6 @@
   },
   "dependencies": {
     "@fontsource-variable/rubik": "^5.0.19",
-    "@kobalte/core": "^0.11.2",
-    "@kobalte/utils": "^0.9.0",
     "@solid-primitives/i18n": "^2.0.0",
     "@solidjs/meta": "^0.29.1",
     "@solidjs/router": "^0.10.0-beta.2",

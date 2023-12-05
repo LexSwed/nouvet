@@ -2,6 +2,7 @@ import { Title } from '@solidjs/meta';
 import ArrowCircleUpRight from '~/assets/icons/arrow-circle-up-right.svg';
 import { T, createTranslator } from '~/i18n';
 import { ButtonLink } from '~/lib/ui/button';
+import { Card } from '~/lib/ui/card';
 
 import { Icon } from '~/lib/ui/icon';
 
@@ -15,7 +16,7 @@ export default function WWW() {
         <div class="flex flex-col gap-12">
           <div class="flex flex-col gap-6">
             <h1 class="text-5xl font-bold leading-[1.1] md:text-6xl">
-              <T namespace="www" i18nKey="headline" />
+              <T>{t('www.headline')}</T>
             </h1>
             <h2 class="text-2xl">{t('www.subheadline')}</h2>
           </div>
@@ -40,29 +41,23 @@ export default function WWW() {
         <h2 class="sr-only" id="features">
           {t('www.heading-features')}
         </h2>
-        {/* <ul class="spacing-bleed flex snap-x snap-mandatory flex-row gap-4 overflow-x-auto pb-2">
-					<li>
-						<Card class="w-64 snap-start border-2 border-background bg-gradient-to-br from-primary/5 via-secondary/5 via-60% to-primary/5 shadow-sm">
-							<CardHeader>
-								<CardTitle>{t("www.feature-medical-history")}</CardTitle>
-							</CardHeader>
-						</Card>
-					</li>
-					<li>
-						<Card class="w-64 snap-start border-2 border-background bg-gradient-to-br from-primary/5 via-secondary/5 via-50% to-primary/5 shadow-sm">
-							<CardHeader>
-								<CardTitle>{t("www.feature-share-reminders")}</CardTitle>
-							</CardHeader>
-						</Card>
-					</li>
-					<li>
-						<Card class="w-64 snap-start border-2 border-background bg-gradient-to-br from-primary/5 via-secondary/5 via-50% to-primary/5 shadow-sm">
-							<CardHeader>
-								<CardTitle>{t("www.feature-connect-veterinaries")}</CardTitle>
-							</CardHeader>
-						</Card>
-					</li>
-				</ul> */}
+        <ul class="spacing-bleed flex snap-x snap-mandatory flex-row gap-4 overflow-x-auto pb-2">
+          <li>
+            <Card class="w-64 snap-start border-2 border-background bg-gradient-to-br from-primary/5 via-secondary/5 via-60% to-primary/5 shadow-sm">
+              {t('www.feature-medical-history')}
+            </Card>
+          </li>
+          <li>
+            <Card class="w-64 snap-start border-2 border-background bg-gradient-to-br from-primary/5 via-secondary/5 via-50% to-primary/5 shadow-sm">
+              {t('www.feature-share-reminders')}
+            </Card>
+          </li>
+          <li>
+            <Card class="w-64 snap-start border-2 border-background bg-gradient-to-br from-primary/5 via-secondary/5 via-50% to-primary/5 shadow-sm">
+              {t('www.feature-connect-veterinaries')}
+            </Card>
+          </li>
+        </ul>
       </section>
     </>
   );

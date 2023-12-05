@@ -1,6 +1,5 @@
-import { Button as KobalteButton } from '@kobalte/core';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { type JSX } from 'solid-js';
+import { mergeProps, type JSX } from 'solid-js';
 import { tw } from './tw';
 
 const buttonVariants = cva(
@@ -34,10 +33,17 @@ const buttonVariants = cva(
 );
 
 type ButtonVariants = VariantProps<typeof buttonVariants>;
+interface ButtonProps
+  extends JSX.ButtonHTMLAttributes<HTMLButtonElement>,
+    ButtonVariants {}
 
-const Button = (props: KobalteButton.ButtonRootProps & ButtonVariants) => {
+const Button = (ownProps: ButtonProps) => {
+  const props = mergeProps<[ButtonProps, ButtonProps]>(
+    { type: 'button' },
+    ownProps,
+  );
   return (
-    <KobalteButton.Root
+    <button
       {...props}
       class={tw(
         buttonVariants({
@@ -50,9 +56,11 @@ const Button = (props: KobalteButton.ButtonRootProps & ButtonVariants) => {
   );
 };
 
-export const ButtonLink = (
-  props: JSX.AnchorHTMLAttributes<HTMLAnchorElement> & ButtonVariants,
-) => {
+interface LinkProps
+  extends JSX.AnchorHTMLAttributes<HTMLAnchorElement>,
+    ButtonVariants {}
+
+export const ButtonLink = (props: LinkProps) => {
   return (
     <a
       {...props}
