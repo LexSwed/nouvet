@@ -43,17 +43,26 @@ export default function WWW() {
         </h2>
         <ul class="spacing-bleed flex snap-x snap-mandatory flex-row gap-4 overflow-x-auto p-2">
           <li>
-            <Card class="w-64 snap-start border-2 border-background">
+            <Card
+              variant="flat"
+              class="w-64 snap-start border-2 border-background bg-gradient-to-tl from-secondary-container/20 via-tertiary-container/10 via-60% to-tertiary-container/10"
+            >
               {t('www.feature-medical-history')}
             </Card>
           </li>
           <li>
-            <Card class="w-64 snap-start border-2 border-background">
+            <Card
+              variant="flat"
+              class="w-64 snap-start border-2 border-background bg-gradient-to-br from-secondary-container/20 via-tertiary-container/10 via-60% to-tertiary-container/10"
+            >
               {t('www.feature-share-reminders')}
             </Card>
           </li>
           <li>
-            <Card class="w-64 snap-start border-2 border-background">
+            <Card
+              variant="flat"
+              class="w-64 snap-start border-2 border-background bg-gradient-to-br from-secondary-container/20 via-tertiary-container/10 via-60% to-tertiary-container/10"
+            >
               {t('www.feature-connect-veterinaries')}
             </Card>
           </li>

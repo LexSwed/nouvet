@@ -104,7 +104,7 @@ export default {
         ],
       },
       backgroundImage: {
-        main: 'linear-gradient(105deg, hsl(var(--background))  0%, hsl(var(--primary)/0.7) 100%)',
+        main: 'linear-gradient(135deg, hsl(var(--nou-secondary-container)/0.3) 0%, hsl(var(--nou-tertiary-container)/0.3) 100%)',
       },
       colors,
       borderRadius: {

@@ -5,8 +5,8 @@ import packageIcon from '~/assets/icons/package.svg';
 import scrollIcon from '~/assets/icons/scroll.svg';
 
 import { createTranslator } from '~/i18n';
+import { NavCard } from '~/lib/ui/card';
 import { Icon } from '~/lib/ui/icon';
-import { NavCard } from '~/lib/ui/nav-card';
 
 export default function WWWLayout(props: ParentProps) {
   const t = createTranslator('www');
@@ -30,7 +30,7 @@ export default function WWWLayout(props: ParentProps) {
   ];
   return (
     <>
-      <div class="min-h-full bg-gradient-to-br from-primary/5 to-tertiary/5 pb-8 pt-4">
+      <div class="min-h-full bg-main pb-8 pt-4">
         <header class="container flex flex-col gap-4">
           <div class="flex flex-row items-center">
             <a
