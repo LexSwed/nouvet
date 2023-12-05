@@ -41,19 +41,19 @@ export default function WWW() {
         <h2 class="sr-only" id="features">
           {t('www.heading-features')}
         </h2>
-        <ul class="spacing-bleed flex snap-x snap-mandatory flex-row gap-4 overflow-x-auto pb-2">
+        <ul class="spacing-bleed flex snap-x snap-mandatory flex-row gap-4 overflow-x-auto p-2">
           <li>
-            <Card class="w-64 snap-start border-2 border-background bg-gradient-to-br from-primary/5 via-secondary/5 via-60% to-primary/5 shadow-sm">
+            <Card class="w-64 snap-start border-2 border-background">
               {t('www.feature-medical-history')}
             </Card>
           </li>
           <li>
-            <Card class="w-64 snap-start border-2 border-background bg-gradient-to-br from-primary/5 via-secondary/5 via-50% to-primary/5 shadow-sm">
+            <Card class="w-64 snap-start border-2 border-background">
               {t('www.feature-share-reminders')}
             </Card>
           </li>
           <li>
-            <Card class="w-64 snap-start border-2 border-background bg-gradient-to-br from-primary/5 via-secondary/5 via-50% to-primary/5 shadow-sm">
+            <Card class="w-64 snap-start border-2 border-background">
               {t('www.feature-connect-veterinaries')}
             </Card>
           </li>
