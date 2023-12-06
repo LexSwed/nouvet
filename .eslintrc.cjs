@@ -1,11 +1,12 @@
 module.exports = {
   root: true,
-  plugins: ['tailwindcss', '@typescript-eslint', 'solid', 'import'],
+  plugins: ['tailwindcss', '@typescript-eslint', 'solid', 'import', 'drizzle'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:tailwindcss/recommended',
     'plugin:solid/typescript',
+    'plugin:drizzle/recommended',
   ],
   rules: {
     // good to know this can be enforced

@@ -41,11 +41,11 @@ export default function WWW() {
         <h2 class="sr-only" id="features">
           {t('www.heading-features')}
         </h2>
-        <ul class="spacing-bleed flex snap-x snap-mandatory flex-row gap-4 overflow-x-auto p-2">
+        <ul class="spacing-bleed grid w-[70%] snap-x snap-mandatory grid-cols-3 flex-row gap-4 overflow-x-auto p-2">
           <li>
             <Card
               variant="flat"
-              class="w-64 snap-start border-2 border-background bg-gradient-to-tl from-secondary-container/20 via-tertiary-container/10 via-60% to-tertiary-container/10"
+              class="snap-start border-2 border-background bg-surface/5 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
             >
               {t('www.feature-medical-history')}
             </Card>
@@ -53,7 +53,7 @@ export default function WWW() {
           <li>
             <Card
               variant="flat"
-              class="w-64 snap-start border-2 border-background bg-gradient-to-br from-secondary-container/20 via-tertiary-container/10 via-60% to-tertiary-container/10"
+              class="snap-start border-2 border-background bg-surface/5 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
             >
               {t('www.feature-share-reminders')}
             </Card>
@@ -61,7 +61,7 @@ export default function WWW() {
           <li>
             <Card
               variant="flat"
-              class="w-64 snap-start border-2 border-background bg-gradient-to-br from-secondary-container/20 via-tertiary-container/10 via-60% to-tertiary-container/10"
+              class="snap-start border-2 border-background bg-surface/5 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
             >
               {t('www.feature-connect-veterinaries')}
             </Card>

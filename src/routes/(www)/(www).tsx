@@ -1,12 +1,19 @@
+import { type RouteDefinition } from '@solidjs/router';
 import { For, type ParentProps } from 'solid-js';
 
 import nouvetIcon from '~/assets/icons/nouvet.svg';
 import packageIcon from '~/assets/icons/package.svg';
-import scrollIcon from '~/assets/icons/scroll.svg';
+// import scrollIcon from '~/assets/icons/scroll.svg';
 
-import { createTranslator } from '~/i18n';
+import { createTranslator, getDictionary } from '~/i18n';
 import { NavCard } from '~/lib/ui/card';
 import { Icon } from '~/lib/ui/icon';
+
+export const route = {
+  load() {
+    getDictionary('www');
+  },
+} satisfies RouteDefinition;
 
 export default function WWWLayout(props: ParentProps) {
   const t = createTranslator('www');
@@ -22,11 +29,11 @@ export default function WWWLayout(props: ParentProps) {
       label: t('www.link-about-the-project')!,
       icon: nouvetIcon,
     },
-    {
-      href: '/privacy',
-      label: t('www.link-privacy-policy')!,
-      icon: scrollIcon,
-    },
+    // {
+    //   href: '/privacy',
+    //   label: t('www.link-privacy-policy')!,
+    //   icon: scrollIcon,
+    // },
   ];
   return (
     <>
