@@ -1,4 +1,4 @@
-import { parse } from 'cookie-es';
+import { parseCookies } from 'oslo/cookie';
 import { acceptedLocales, LANG_COOKIE } from '~/i18n/const';
 
 export function getLocale(request: Request): Intl.Locale {
@@ -20,10 +20,10 @@ export function getLocale(request: Request): Intl.Locale {
  * Verifies it's a correct language. Matches only to one of the supported locales.
  */
 function cookie(request: Request): Intl.Locale | null {
-  const cookies = parse(request.headers.get('Cookie') || '');
-  if (cookies[LANG_COOKIE]) {
+  const cookies = parseCookies(request.headers.get('Cookie') || '');
+  if (cookies.has(LANG_COOKIE)) {
     try {
-      const locale = new Intl.Locale(cookies[LANG_COOKIE]);
+      const locale = new Intl.Locale(cookies.get(LANG_COOKIE)!);
 
       if (acceptedLocales.some((lang) => lang === locale.language))
         return locale;

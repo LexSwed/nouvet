@@ -1,17 +1,17 @@
 import Database from 'better-sqlite3';
-import { sql } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import {
+  drizzle,
+  type BetterSQLite3Database,
+} from 'drizzle-orm/better-sqlite3';
+import { env } from '~/lib/utils/env';
 
-const sqlite = new Database('sqlite.db');
-const db = drizzle(sqlite);
+const sqlite = new Database(env.DB);
+let _db: BetterSQLite3Database | null = null;
 
-const users = sqliteTable('users', {
-  id: text('id'),
-  textModifiers: text('text_modifiers')
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
-  intModifiers: integer('int_modifiers', { mode: 'boolean' })
-    .notNull()
-    .default(false),
-});
+export const useDb = () => {
+  if (!_db) {
+    _db = drizzle(sqlite);
+  }
+
+  return _db;
+};

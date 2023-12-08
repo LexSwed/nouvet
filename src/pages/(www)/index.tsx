@@ -12,34 +12,36 @@ export default function WWW() {
   return (
     <>
       <Title>{t('www.meta.main-title')}</Title>
-      <section class="relative lg:static">
-        <div class="absolute -right-8 top-40 mt-0 w-[85%] min-w-[320px] overflow-hidden rounded-2xl sm:right-4 sm:top-36 sm:h-full sm:w-[60%] lg:top-4 lg:h-auto lg:max-h-[calc(100%-theme(spacing.8))] lg:w-[40%]">
-          <img
-            src="https://images.unsplash.com/photo-1563460716037-460a3ad24ba9?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            class="aspect-[9/12] h-full w-full bg-primary/5 object-cover"
-            alt={t('www.hero-image')}
-          />
-        </div>
-        <div class="relative flex flex-col gap-32 lg:gap-12">
-          <h1 class="text-5xl font-bold md:text-6xl">
+      <section>
+        <div class="flex flex-col gap-12">
+          <h1 class="text-6xl font-bold">
             <T>{t('www.headline')}</T>
           </h1>
-          <ButtonLink
-            href="/family"
-            size="cta"
-            class="flex items-center gap-4 self-start text-lg"
-          >
-            {t('www.cta-start')}
-            <Icon icon={ArrowCircleUpRight} class="h-8 w-8 shrink-0" />
-          </ButtonLink>
+          <div class="flex flex-row sm:gap-8">
+            <ButtonLink
+              href="/family"
+              size="cta"
+              class="relative -me-12 mt-16 flex items-center gap-4 self-start text-lg sm:me-0"
+            >
+              {t('www.cta-start')}
+              <Icon icon={ArrowCircleUpRight} class="h-8 w-8 shrink-0" />
+            </ButtonLink>
+            <div class="-mb-12 h-full w-[85%] min-w-[320px] overflow-hidden rounded-2xl sm:top-36 sm:w-full lg:absolute lg:right-4 lg:top-4 lg:max-h-[calc(100%-theme(spacing.8))] lg:w-[40%]">
+              <img
+                src="https://images.unsplash.com/photo-1563460716037-460a3ad24ba9?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                class="aspect-[9/12] h-full w-full bg-primary/5 object-cover"
+                alt={t('www.hero-image')}
+              />
+            </div>
+          </div>
         </div>
       </section>
-      <section aria-labelledby="features" class="mt-64 sm:mt-48 lg:mt-0">
+      <section aria-labelledby="features" class="">
         <h2 class="sr-only" id="features">
           {t('www.heading-features')}
         </h2>
-        <ul class="spacing-bleed -mx-4 flex snap-x snap-mandatory flex-row gap-4 overflow-x-auto p-2">
-          <li class="min-w-[20rem]">
+        <ul class="spacing-bleed -mx-4 flex snap-x snap-mandatory scroll-p-2 flex-row gap-4 overflow-x-auto p-2">
+          <li class="min-w-[16rem]">
             <Card
               variant="flat"
               class="snap-start rounded-md border-2 border-background bg-surface/80 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
@@ -47,7 +49,7 @@ export default function WWW() {
               {t('www.feature-medical-history')}
             </Card>
           </li>
-          <li class="min-w-[20rem]">
+          <li class="min-w-[16rem]">
             <Card
               variant="flat"
               class="snap-start rounded-md border-2 border-background bg-surface/80 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
@@ -55,7 +57,7 @@ export default function WWW() {
               {t('www.feature-share-reminders')}
             </Card>
           </li>
-          <li class="min-w-[20rem]">
+          <li class="min-w-[16rem]">
             <Card
               variant="flat"
               class="snap-start rounded-md border-2 border-background bg-surface/80 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
