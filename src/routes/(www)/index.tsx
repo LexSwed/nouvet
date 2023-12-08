@@ -13,15 +13,15 @@ export default function WWW() {
     <>
       <Title>{t('www.meta.main-title')}</Title>
       <section class="relative lg:static">
-        <div class="absolute top-36 mt-0 min-w-[320px] overflow-hidden rounded-2xl sm:right-4 sm:h-full lg:top-4 lg:max-h-[calc(100%-theme(spacing.8))] lg:w-[40%]">
+        <div class="absolute -right-8 top-40 mt-0 w-[85%] min-w-[320px] overflow-hidden rounded-2xl sm:right-4 sm:top-36 sm:h-full sm:w-[60%] lg:top-4 lg:h-auto lg:max-h-[calc(100%-theme(spacing.8))] lg:w-[40%]">
           <img
             src="https://images.unsplash.com/photo-1563460716037-460a3ad24ba9?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             class="aspect-[9/12] h-full w-full bg-primary/5 object-cover"
             alt={t('www.hero-image')}
           />
         </div>
-        <div class="relative flex flex-col gap-52 lg:gap-12">
-          <h1 class="text-6xl font-bold">
+        <div class="relative flex flex-col gap-32 lg:gap-12">
+          <h1 class="text-5xl font-bold md:text-6xl">
             <T>{t('www.headline')}</T>
           </h1>
           <ButtonLink
@@ -34,7 +34,7 @@ export default function WWW() {
           </ButtonLink>
         </div>
       </section>
-      <section aria-labelledby="features">
+      <section aria-labelledby="features" class="mt-64 sm:mt-48 lg:mt-0">
         <h2 class="sr-only" id="features">
           {t('www.heading-features')}
         </h2>
