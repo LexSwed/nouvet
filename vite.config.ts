@@ -17,4 +17,9 @@ const config = {
   ],
 } satisfies UserConfig;
 
-export default defineConfig(config);
+export default defineConfig({
+  start: {
+    middleware: './src/middleware.ts',
+  },
+  ...config,
+});

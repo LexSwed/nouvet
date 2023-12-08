@@ -1,8 +1,8 @@
 import { type PageEvent } from '@solidjs/start/server/types';
 import { OAuth2RequestError } from 'arctic';
 import { parseCookies } from 'oslo/cookie';
-import { createUser, getUserByFacebookId } from '~/db/queries/family';
-import { useFacebookAuth, useLucia } from '~/lib/utils/lucia';
+import { useFacebookAuth, useLucia } from '~/server/lucia';
+import { createUser, getUserByFacebookId } from '~/server/queries/family';
 
 export const GET = async ({ request }: PageEvent) => {
   const cookies = parseCookies(request.headers.get('Cookie') ?? '');
@@ -44,12 +44,12 @@ export const GET = async ({ request }: PageEvent) => {
       facebookId: facebookUser.id,
     });
 
-    const session = await lucia.createSession(user!.id, {});
+    const session = await lucia.createSession(user.id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
     return new Response(null, {
       status: 302,
       headers: {
-        'Location': '/',
+        'Location': '/family',
         'Set-Cookie': sessionCookie.serialize(),
       },
     });

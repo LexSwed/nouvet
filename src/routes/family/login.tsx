@@ -1,5 +1,6 @@
 import { Title } from '@solidjs/meta';
 import { createTranslator } from '~/i18n';
+import { ButtonLink } from '~/lib/ui/button';
 
 function FamilyPage() {
   const t = createTranslator('family');
@@ -7,7 +8,9 @@ function FamilyPage() {
   return (
     <>
       <Title>{t('family.meta.title')}</Title>
-      <section>"Welcome"</section>
+      <section>
+        <ButtonLink href="/api/auth/facebook">{t('family.login')}</ButtonLink>
+      </section>
     </>
   );
 }

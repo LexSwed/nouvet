@@ -1,3 +1,4 @@
+'use server';
 import { eq } from 'drizzle-orm';
 import {
   parse,
@@ -8,8 +9,8 @@ import {
   maxLength,
   ValiError,
 } from 'valibot';
-import { useDb } from '../db';
-import { profileInfo, userTable } from '../schema';
+import { useDb } from '../../db/db';
+import { userTable } from '../../db/schema';
 
 export const getUserByFacebookId = async (facebookId: string) => {
   const user = await useDb()
@@ -33,14 +34,11 @@ export const createUser = async (user: Output<typeof insertUserSchema>) => {
   try {
     const userInfo = parse(insertUserSchema, user);
     const db = useDb();
-    return await db.transaction(async (tx) => {
-      const [{ userId }] = await tx
-        .insert(userTable)
-        .values(userInfo)
-        .returning({ userId: userTable.id });
-      await tx.insert(profileInfo).values({ name: user.name, userId: userId });
-      return { id: userId, name: user.name };
-    });
+    return await db
+      .insert(userTable)
+      .values(userInfo)
+      .returning({ id: userTable.id, name: userTable.name })
+      .get();
   } catch (error) {
     if (error instanceof ValiError) {
       throw error;
