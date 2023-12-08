@@ -12,6 +12,7 @@ import type WWWDict from './locales/en/www.json';
 export type Locale = (typeof acceptedLocales)[number];
 
 type NamespaceMap = {
+  common: typeof CommonDict;
   www: typeof WWWDict;
   family: typeof FamilyDict;
 };
@@ -23,13 +24,15 @@ async function fetchDictionary<T extends Namespace>(
 ) {
   'use server';
   const commonDict = await (import(`./locales/${locale}/common.json`).then(
-    (common) => common.default,
+    (commonModule) => commonModule.default,
   ) as Promise<typeof CommonDict>);
 
   const commonPrefixedDict = prefix(commonDict, 'common');
   const routeModuleDict = await (import(
     `./locales/${locale}/${namespace}.json`
-  ).then((common) => common.default) as Promise<NamespaceMap[T]>);
+  ).then((namespaceModule) => namespaceModule.default) as Promise<
+    NamespaceMap[T]
+  >);
   const modulePrefixedDict = prefix(routeModuleDict, namespace);
 
   return {

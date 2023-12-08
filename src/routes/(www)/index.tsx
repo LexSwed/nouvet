@@ -11,15 +11,19 @@ export default function WWW() {
 
   return (
     <>
-      <Title>{t('common.meta.title')}</Title>
-      <section class="flex flex-col items-center justify-between gap-12 @container/hero md:flex-row">
-        <div class="flex flex-col gap-12">
-          <div class="flex flex-col gap-6">
-            <h1 class="text-5xl font-bold leading-[1.1] md:text-6xl">
-              <T>{t('www.headline')}</T>
-            </h1>
-            <h2 class="text-2xl">{t('www.subheadline')}</h2>
-          </div>
+      <Title>{t('www.meta.main-title')}</Title>
+      <section class="relative lg:static">
+        <div class="absolute top-36 mt-0 min-w-[320px] overflow-hidden rounded-2xl sm:right-4 sm:h-full lg:top-4 lg:max-h-[calc(100%-theme(spacing.8))] lg:w-[40%]">
+          <img
+            src="https://images.unsplash.com/photo-1563460716037-460a3ad24ba9?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            class="aspect-[9/12] h-full w-full bg-primary/5 object-cover"
+            alt={t('www.hero-image')}
+          />
+        </div>
+        <div class="relative flex flex-col gap-52 lg:gap-12">
+          <h1 class="text-6xl font-bold">
+            <T>{t('www.headline')}</T>
+          </h1>
           <ButtonLink
             href="/family"
             size="cta"
@@ -29,39 +33,32 @@ export default function WWW() {
             <Icon icon={ArrowCircleUpRight} class="h-8 w-8 shrink-0" />
           </ButtonLink>
         </div>
-        <div class="border-foreground -z-10 -mt-32 w-full max-w-[500px] self-end overflow-hidden rounded-full border object-cover p-8 md:z-auto md:w-[50%] md:min-w-[320px]">
-          <img
-            src="https://images.unsplash.com/photo-1563460716037-460a3ad24ba9?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            class="aspect-[9/12] w-full rounded-full bg-primary/5 object-cover"
-            alt={t('www.hero-image')}
-          />
-        </div>
       </section>
       <section aria-labelledby="features">
         <h2 class="sr-only" id="features">
           {t('www.heading-features')}
         </h2>
-        <ul class="spacing-bleed grid w-[70%] snap-x snap-mandatory grid-cols-3 flex-row gap-4 overflow-x-auto p-2">
-          <li>
+        <ul class="spacing-bleed -mx-4 flex snap-x snap-mandatory flex-row gap-4 overflow-x-auto p-2">
+          <li class="min-w-[20rem]">
             <Card
               variant="flat"
-              class="snap-start border-2 border-background bg-surface/5 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
+              class="snap-start rounded-md border-2 border-background bg-surface/80 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
             >
               {t('www.feature-medical-history')}
             </Card>
           </li>
-          <li>
+          <li class="min-w-[20rem]">
             <Card
               variant="flat"
-              class="snap-start border-2 border-background bg-surface/5 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
+              class="snap-start rounded-md border-2 border-background bg-surface/80 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
             >
               {t('www.feature-share-reminders')}
             </Card>
           </li>
-          <li>
+          <li class="min-w-[20rem]">
             <Card
               variant="flat"
-              class="snap-start border-2 border-background bg-surface/5 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
+              class="snap-start rounded-md border-2 border-background bg-surface/80 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
             >
               {t('www.feature-connect-veterinaries')}
             </Card>

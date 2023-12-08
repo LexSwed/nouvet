@@ -1,11 +1,12 @@
 import { type RouteDefinition } from '@solidjs/router';
-import { For, type ParentProps } from 'solid-js';
+import { For, Show, type ParentProps } from 'solid-js';
 
 import nouvetIcon from '~/assets/icons/nouvet.svg';
 import packageIcon from '~/assets/icons/package.svg';
 // import scrollIcon from '~/assets/icons/scroll.svg';
 
 import { createTranslator, getDictionary } from '~/i18n';
+import { LogoLink } from '~/lib/logo-link';
 import { NavCard } from '~/lib/ui/card';
 import { Icon } from '~/lib/ui/icon';
 
@@ -36,18 +37,11 @@ export default function WWWLayout(props: ParentProps) {
     // },
   ];
   return (
-    <>
-      <div class="min-h-full bg-main pb-8 pt-4">
+    <Show when={t('www.cta-start')}>
+      <div class="min-h-full pb-8 pt-4">
         <header class="container flex flex-col gap-4">
           <div class="flex flex-row items-center">
-            <a
-              href="/"
-              aria-label={t('www.link-home')}
-              title={t('www.link-home')}
-              class="-m-4 p-4"
-            >
-              <Icon icon={nouvetIcon} class="h-12 w-12" />
-            </a>
+            <LogoLink label={t('common.app-name')!} class="-m-4 p-4" />
           </div>
           <nav>
             <ul class="-mx-4 flex snap-x snap-mandatory flex-row gap-2 overflow-x-auto p-2 scrollbar-none sm:-mx-2">
@@ -69,6 +63,6 @@ export default function WWWLayout(props: ParentProps) {
         </header>
         <main class="container mt-8 flex flex-col gap-8">{props.children}</main>
       </div>
-    </>
+    </Show>
   );
 }

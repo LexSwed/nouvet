@@ -145,6 +145,6 @@
   html,
   body,
   #app {
-    height: 100%;
+    @apply h-full bg-background text-on-background;
   }
 }
