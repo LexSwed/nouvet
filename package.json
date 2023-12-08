@@ -6,25 +6,29 @@
     "build": "NITRO_PRESET=cloudflare_pages vinxi build",
     "start": "vinxi start",
     "typecheck": "tsc",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "db:up": "npx drizzle-kit generate:sqlite",
+    "db:push": "npx drizzle-kit push:sqlite"
   },
   "dependencies": {
     "@fontsource-variable/rubik": "^5.0.20",
     "@lucia-auth/adapter-drizzle": "^1.0.0-beta.2",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@solid-primitives/i18n": "^2.0.0",
     "@solidjs/meta": "^0.29.1",
     "@solidjs/router": "^0.10.1",
     "@solidjs/start": "^0.4.0-alpha.1",
+    "arctic": "^0.7.1",
     "better-sqlite3": "^9.2.2",
     "class-variance-authority": "^0.7.0",
-    "cookie-es": "^1.0.0",
     "drizzle-orm": "^0.29.1",
+    "drizzle-valibot": "^0.1.1",
     "eslint-plugin-drizzle": "^0.2.2",
     "lucia": "^3.0.0-beta.10",
     "oslo": "^0.23.5",
     "solid-js": "^1.8.7",
     "tailwind-merge": "^2.1.0",
-    "valibot": "^0.22.0"
+    "valibot": "^0.23.0"
   },
   "devDependencies": {
     "@tailwindcss/container-queries": "^0.1.1",
@@ -45,6 +49,7 @@
     "typescript": "^5.3.3",
     "vinxi": "^0.0.48",
     "vite": "^4.5.0",
+    "vite-plugin-solid": "^2.8.0",
     "vite-plugin-svg-sprite": "^0.5.1",
     "vite-tsconfig-paths": "^4.2.2"
   },
