@@ -8,19 +8,25 @@ export default createMiddleware({
       const { pathname } = new URL(event.request.url);
       try {
         if (pathname === '/family/login') {
-          const isValid = await validate(event);
-          if (isValid)
+          const user = await validate(event);
+          if (user) {
+            event.locals.user = user;
             return new Response(null, {
               status: 302,
               headers: {
                 Location: `/family`,
               },
             });
+          }
           return;
         }
         if (pathname.startsWith('/family')) {
-          const isValid = await validate(event);
-          if (isValid) return;
+          const user = await validate(event);
+          if (user) {
+            event.locals.user = user;
+            return;
+          }
+
           setCookie(event, RETURN_URL_COOKIE, event.request.url, {
             httpOnly: true,
             maxAge: 60 * 5, // 5 minutes

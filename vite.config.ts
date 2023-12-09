@@ -14,6 +14,7 @@ const config = {
 
 export default defineConfig({
   start: {
+    ssr: true,
     middleware: './src/middleware.ts',
   },
   ...config,

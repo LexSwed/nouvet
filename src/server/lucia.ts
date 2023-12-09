@@ -1,7 +1,7 @@
 import { DrizzleSQLiteAdapter } from '@lucia-auth/adapter-drizzle';
 import { type FetchEvent } from '@solidjs/start/server/types';
 import { Facebook } from 'arctic';
-import { Lucia } from 'lucia';
+import { Lucia, type User } from 'lucia';
 import { verifyRequestOrigin } from 'oslo/request';
 import { setCookie } from 'vinxi/server';
 
@@ -44,7 +44,7 @@ export const useFacebookAuth = () => {
   );
 };
 
-export async function validate(event: FetchEvent): Promise<boolean> {
+export async function validate(event: FetchEvent): Promise<User | null> {
   if (env.PROD) {
     const originHeader = event.request.headers.get('Origin');
     const hostHeader = event.request.headers.get('Host');
@@ -60,11 +60,11 @@ export async function validate(event: FetchEvent): Promise<boolean> {
   const cookieHeader = event.request.headers.get('Cookie');
   const sessionId = lucia.readSessionCookie(cookieHeader ?? '');
   if (!sessionId) {
-    return false;
+    return null;
   }
 
   const { session, user } = await lucia.validateSession(sessionId);
-  console.log(session, user);
+
   if (!session || !session.fresh) {
     // sessionId is not valid, reset it
     const sessionCookie = lucia.createBlankSessionCookie();
@@ -74,8 +74,8 @@ export async function validate(event: FetchEvent): Promise<boolean> {
       sessionCookie.value,
       sessionCookie.attributes,
     );
-    return false;
+    return null;
   }
 
-  return true;
+  return user;
 }

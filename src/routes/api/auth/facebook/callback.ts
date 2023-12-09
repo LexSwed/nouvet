@@ -25,7 +25,7 @@ export const GET = async (event: PageEvent) => {
 
   try {
     const tokens = await facebookAuth.validateAuthorizationCode(code);
-    const facebookUser = await facebookAuth.getUser(tokens.accessToken);
+    const facebookUser = await fetchFacebookUser(tokens.accessToken);
     const lucia = useLucia();
 
     const existingUser = await getUserByFacebookId(facebookUser.id);
@@ -75,3 +75,12 @@ export const GET = async (event: PageEvent) => {
     });
   }
 };
+
+async function fetchFacebookUser(accessToken: string) {
+  const url = new URL('https://graph.facebook.com/me');
+  url.searchParams.set('access_token', accessToken);
+  url.searchParams.set('fields', ['id', 'name', 'picture', 'email'].join(','));
+  const response = await fetch(url);
+  const user = await response.json();
+  return user;
+}
