@@ -21,6 +21,7 @@ const Privacy = lazy(() => import('./pages/(www)/privacy'));
 export default function App() {
   return (
     <Router
+      preload={false}
       root={(props) => {
         return (
           <>

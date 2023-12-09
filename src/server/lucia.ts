@@ -3,6 +3,7 @@ import { type FetchEvent } from '@solidjs/start/server/types';
 import { Facebook } from 'arctic';
 import { Lucia } from 'lucia';
 import { verifyRequestOrigin } from 'oslo/request';
+import { setCookie } from 'vinxi/server';
 
 import { useDb } from '~/db/db';
 import { sessionTable, userTable } from '~/db/schema';
@@ -67,7 +68,12 @@ export async function validate(event: FetchEvent): Promise<boolean> {
   if (!session || !session.fresh) {
     // sessionId is not valid, reset it
     const sessionCookie = lucia.createBlankSessionCookie();
-    event.appendResponseHeader('Set-Cookie', sessionCookie.serialize());
+    setCookie(
+      event,
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    );
     return false;
   }
 
