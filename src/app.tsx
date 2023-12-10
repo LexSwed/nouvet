@@ -1,22 +1,11 @@
 // @refresh reload
 import { MetaProvider } from '@solidjs/meta';
-import { Route, Router } from '@solidjs/router';
+import { Router } from '@solidjs/router';
 // @ts-expect-error solid issues
 import { FileRoutes } from '@solidjs/start';
-import { Suspense, lazy } from 'solid-js';
+import { Suspense } from 'solid-js';
 
 import './global.css';
-import { route as wwwLayoutRoute } from './pages/(www)/(www)';
-// import { route as familyLayoutRoute } from './pages/family/(family)';
-
-// I want routes grouping. See https://github.com/unjs/nitro/issues/1205
-const WWWLayout = lazy(() => import('./pages/(www)/(www)'));
-const About = lazy(() => import('./pages/(www)/about'));
-const WWW = lazy(() => import('./pages/(www)/index'));
-const Privacy = lazy(() => import('./pages/(www)/privacy'));
-
-// const FamilyLayout = lazy(() => import('./pages/family/(family)'));
-// const Family = lazy(() => import('./pages/family/index'));
 
 export default function App() {
   return (
@@ -34,11 +23,11 @@ export default function App() {
     >
       <FileRoutes />
       {/* www routes */}
-      <Route path="/" component={WWWLayout} load={wwwLayoutRoute.load}>
+      {/* <Route path="/" component={WWWLayout} load={wwwLayoutRoute.load}>
         <Route path={'/'} component={WWW} />
         <Route path={'/about'} component={About} />
         <Route path={'/privacy'} component={Privacy} />
-      </Route>
+      </Route> */}
       {/* <Route
         path="/family"
         component={FamilyLayout}

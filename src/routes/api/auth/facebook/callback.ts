@@ -1,10 +1,11 @@
 import { type PageEvent } from '@solidjs/start/server/types';
 import { OAuth2RequestError } from 'arctic';
 import { parseCookies } from 'oslo/cookie';
+import { object, parse, string } from 'valibot';
 import { deleteCookie, getCookie } from 'vinxi/server';
 import { RETURN_URL_COOKIE } from '~/server/const';
 import { useFacebookAuth, useLucia } from '~/server/lucia';
-import { createUser, getUserByFacebookId } from '~/server/queries/family';
+import { createUser, getUserByAuthProviderId } from '~/server/queries/family';
 
 export const GET = async (event: PageEvent) => {
   const { request } = event;
@@ -28,7 +29,10 @@ export const GET = async (event: PageEvent) => {
     const facebookUser = await fetchFacebookUser(tokens.accessToken);
     const lucia = useLucia();
 
-    const existingUser = await getUserByFacebookId(facebookUser.id);
+    const existingUser = await getUserByAuthProviderId(
+      'facebook',
+      facebookUser.id,
+    );
 
     if (existingUser) {
       const session = await lucia.createSession(existingUser.id, {});
@@ -43,8 +47,9 @@ export const GET = async (event: PageEvent) => {
     }
 
     const user = await createUser({
+      provider: 'facebook',
+      accountProviderId: facebookUser.id,
       name: facebookUser.name,
-      facebookId: facebookUser.id,
     });
 
     const returnUrl = getCookie(event, RETURN_URL_COOKIE);
@@ -76,11 +81,18 @@ export const GET = async (event: PageEvent) => {
   }
 };
 
+const facebookUserSchema = object({
+  id: string(),
+  name: string(),
+});
 async function fetchFacebookUser(accessToken: string) {
   const url = new URL('https://graph.facebook.com/me');
   url.searchParams.set('access_token', accessToken);
   url.searchParams.set('fields', ['id', 'name', 'picture', 'email'].join(','));
   const response = await fetch(url);
-  const user = await response.json();
-  return user;
+  if (response.ok) {
+    const user = (await response.json()) as unknown;
+    return parse(facebookUserSchema, user);
+  }
+  throw new Error(`Couldn't get Facebook user from Facebook API`);
 }

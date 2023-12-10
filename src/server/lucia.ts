@@ -5,8 +5,8 @@ import { Lucia, type User } from 'lucia';
 import { verifyRequestOrigin } from 'oslo/request';
 import { setCookie } from 'vinxi/server';
 
-import { useDb } from '~/db/db';
-import { sessionTable, userTable } from '~/db/schema';
+import { useDb } from './db';
+import { sessionTable } from './db/schema';
 import { env } from '~/server/env';
 
 export const useLucia = () => {

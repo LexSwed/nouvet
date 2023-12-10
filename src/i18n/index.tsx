@@ -45,10 +45,11 @@ export const getDictionary = cache(
   async <T extends Namespace>(namespace: T) => {
     'use server';
     const event = getRequestEvent();
-    if (!event)
+    if (!event) {
       throw new Error(
         "Wrong execution environment. Check if 'use server' directive is correctly applied.",
       );
+    }
     const locale = getLocale(event.request);
     return fetchDictionary(locale.language as Locale, namespace);
   },
