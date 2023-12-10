@@ -22,9 +22,7 @@ export const petTable = sqliteTable('pet', {
 
 export const userTable = sqliteTable('user', {
   id: text('id').notNull().primaryKey(),
-  familyId: integer('family_id')
-    .notNull()
-    .references(() => familyTable.id),
+  familyId: integer('family_id').references(() => familyTable.id),
   createdAt: utcDatetime('created_at'),
 });
 

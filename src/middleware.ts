@@ -27,10 +27,15 @@ export default createMiddleware({
             return;
           }
 
-          setCookie(event, RETURN_URL_COOKIE, event.request.url, {
-            httpOnly: true,
-            maxAge: 60 * 5, // 5 minutes
-          });
+          setCookie(
+            event,
+            RETURN_URL_COOKIE,
+            new URL(event.request.url).pathname,
+            {
+              httpOnly: true,
+              maxAge: 60 * 5, // 5 minutes
+            },
+          );
           return new Response(null, {
             status: 302,
             headers: {

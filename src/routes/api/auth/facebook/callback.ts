@@ -2,7 +2,7 @@ import { type PageEvent } from '@solidjs/start/server/types';
 import { OAuth2RequestError } from 'arctic';
 import { parseCookies } from 'oslo/cookie';
 import { object, parse, string } from 'valibot';
-import { deleteCookie, getCookie } from 'vinxi/server';
+import { deleteCookie, getCookie, sendRedirect, setCookie } from 'vinxi/server';
 import { RETURN_URL_COOKIE } from '~/server/const';
 import { useFacebookAuth, useLucia } from '~/server/lucia';
 import { createUser, getUserByAuthProviderId } from '~/server/queries/family';
@@ -19,6 +19,7 @@ export const GET = async (event: PageEvent) => {
 
   // verify state
   if (!state || !stateCookie || !code || stateCookie !== state) {
+    console.error('Facebook auth callback is called without state');
     return new Response(null, {
       status: 400,
     });
@@ -60,13 +61,15 @@ export const GET = async (event: PageEvent) => {
 
     const session = await lucia.createSession(user.id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
-    return new Response(null, {
-      status: 302,
-      headers: {
-        'Location': returnUrl || '/family',
-        'Set-Cookie': sessionCookie.serialize(),
-      },
-    });
+
+    setCookie(
+      event,
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    );
+
+    return sendRedirect(event, returnUrl || '/family');
   } catch (error) {
     console.log(error);
     if (error instanceof OAuth2RequestError) {
@@ -90,6 +93,7 @@ async function fetchFacebookUser(accessToken: string) {
   url.searchParams.set('access_token', accessToken);
   url.searchParams.set('fields', ['id', 'name', 'picture', 'email'].join(','));
   const response = await fetch(url);
+
   if (response.ok) {
     const user = (await response.json()) as unknown;
     return parse(facebookUserSchema, user);

@@ -60,7 +60,7 @@ export async function validateUser(event: FetchEvent): Promise<User | null> {
 
   const { session, user } = await lucia.validateSession(sessionId);
 
-  if (!session || !session.fresh) {
+  if (!session) {
     // sessionId is not valid, reset it
     const sessionCookie = lucia.createBlankSessionCookie();
     setCookie(
@@ -70,6 +70,17 @@ export async function validateUser(event: FetchEvent): Promise<User | null> {
       sessionCookie.attributes,
     );
     return null;
+  }
+
+  // the session has been updated, update the cookie expiration date
+  if (session.fresh) {
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    setCookie(
+      event,
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    );
   }
 
   return user;

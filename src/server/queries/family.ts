@@ -16,7 +16,6 @@ import {
   userProfileTable,
   userTable,
   type SupportedAuthProvider,
-  familyTable,
 } from '../db/schema';
 
 export const getUserByAuthProviderId = async (
@@ -52,22 +51,16 @@ export const createUser = async (newUser: Output<typeof createUserSchema>) => {
     const userInfo = parse(createUserSchema, newUser);
     const db = useDb();
     return await db.transaction(async (tx) => {
-      /* Fail fast if this combination of provider and providerUserId was already in the table */
+      const user = await tx
+        .insert(userTable)
+        .values({ id: userId })
+        .returning({ id: userTable.id })
+        .get();
       await tx.insert(authAccount).values({
-        userId: userId,
+        userId: user.id,
         provider: userInfo.provider,
         providerUserId: userInfo.accountProviderId,
       });
-      const family = await tx
-        .insert(familyTable)
-        .values({})
-        .returning({ id: familyTable.id })
-        .get();
-      const user = await tx
-        .insert(userTable)
-        .values({ id: userId, familyId: family.id })
-        .returning({ id: userTable.id })
-        .get();
       await tx
         .insert(userProfileTable)
         .values({ userId: user.id, name: userInfo.name });
