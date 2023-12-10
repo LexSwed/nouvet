@@ -13,20 +13,21 @@ export default function WWW() {
     <>
       <Title>{t('www.meta.main-title')}</Title>
       <section>
-        <div class="flex flex-col gap-12">
-          <h1 class="text-6xl font-bold">
+        <div class="flex flex-col items-start md:gap-12">
+          <h1 class="z-10 rounded-2xl bg-background bg-main py-4 pe-4 text-6xl font-bold [background-attachment:fixed] md:h-[calc(theme(fontSize.6xl)+theme(spacing.4)*2)]">
             <T>{t('www.headline')}</T>
           </h1>
           <div class="flex flex-row sm:gap-8">
             <ButtonLink
               href="/family"
               size="cta"
+              link={false}
               class="relative -me-12 mt-16 flex items-center gap-4 self-start text-lg sm:me-0"
             >
               {t('www.cta-start')}
               <Icon icon={ArrowCircleUpRight} class="h-8 w-8 shrink-0" />
             </ButtonLink>
-            <div class="-mb-36 h-full w-[85%] min-w-[320px] overflow-hidden rounded-2xl sm:top-36 sm:w-full lg:absolute lg:right-4 lg:top-4 lg:max-h-[calc(100%-theme(spacing.8))] lg:w-[40%]">
+            <div class="-mb-36 h-full w-[85%] min-w-[320px] overflow-hidden rounded-2xl sm:top-36 sm:w-full lg:absolute lg:right-4 lg:top-4 lg:max-h-[calc(100%-theme(spacing.8))] lg:w-[65%] xl:w-[45%]">
               <img
                 src="https://images.unsplash.com/photo-1563460716037-460a3ad24ba9?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 class="aspect-[9/12] h-full w-full bg-primary/5 object-cover"

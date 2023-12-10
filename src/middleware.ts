@@ -1,6 +1,6 @@
 import { createMiddleware, setCookie } from '@solidjs/start/server';
 import { RETURN_URL_COOKIE } from './server/const';
-import { validate } from './server/lucia';
+import { validateUser } from './server/lucia';
 
 export default createMiddleware({
   onRequest: [
@@ -8,7 +8,7 @@ export default createMiddleware({
       const { pathname } = new URL(event.request.url);
       try {
         if (pathname === '/family/login') {
-          const user = await validate(event);
+          const user = await validateUser(event);
           if (user) {
             event.locals.user = user;
             return new Response(null, {
@@ -21,7 +21,7 @@ export default createMiddleware({
           return;
         }
         if (pathname.startsWith('/family')) {
-          const user = await validate(event);
+          const user = await validateUser(event);
           if (user) {
             event.locals.user = user;
             return;
@@ -39,6 +39,7 @@ export default createMiddleware({
           });
         }
       } catch (error) {
+        console.error(error);
         return new Response(null, {
           status: 403,
         });

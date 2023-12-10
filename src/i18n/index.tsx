@@ -68,5 +68,5 @@ export const createTranslator = <T extends Namespace>(namespace: T) => {
  */
 export function T(props: ParentProps): JSX.Element {
   // eslint-disable-next-line solid/no-innerhtml
-  return <span innerHTML={`${props.children}`} />;
+  return <span innerHTML={`${props.children}`} class="contents" />;
 }

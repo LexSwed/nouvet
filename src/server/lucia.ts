@@ -6,17 +6,12 @@ import { verifyRequestOrigin } from 'oslo/request';
 import { setCookie } from 'vinxi/server';
 
 import { useDb } from './db';
-import { sessionTable } from './db/schema';
+import { sessionTable, userTable } from './db/schema';
 import { env } from '~/server/env';
 
 export const useLucia = () => {
   const db = useDb();
-  const adapter = new DrizzleSQLiteAdapter(
-    db,
-    sessionTable,
-    // @ts-expect-error autogenerating IDs instead of using Lucia's createId
-    userTable,
-  );
+  const adapter = new DrizzleSQLiteAdapter(db, sessionTable, userTable);
 
   const lucia = new Lucia(adapter, {
     sessionCookie: {
@@ -44,7 +39,7 @@ export const useFacebookAuth = () => {
   );
 };
 
-export async function validate(event: FetchEvent): Promise<User | null> {
+export async function validateUser(event: FetchEvent): Promise<User | null> {
   if (env.PROD) {
     const originHeader = event.request.headers.get('Origin');
     const hostHeader = event.request.headers.get('Host');
