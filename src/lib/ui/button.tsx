@@ -1,5 +1,7 @@
+import { A } from '@solidjs/router';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { mergeProps, type JSX } from 'solid-js';
+import { Dynamic } from 'solid-js/web';
 import { tw } from './tw';
 
 const buttonVariants = cva(
@@ -62,7 +64,8 @@ interface LinkProps
 
 export const ButtonLink = (props: LinkProps) => {
   return (
-    <a
+    <Dynamic
+      component={props.link ? 'a' : A}
       {...props}
       class={tw(
         buttonVariants({
