@@ -1,6 +1,6 @@
 import { A } from '@solidjs/router';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { mergeProps, type JSX } from 'solid-js';
+import { mergeProps, type JSX, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 import { tw } from './tw';
 
@@ -20,11 +20,10 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {
-        default: 'h-12 px-4 py-2',
-        sm: 'h-10 rounded-md px-3',
-        lg: 'h-14 rounded-md px-8',
+        default: 'h-12 px-4 py-2 text-base',
+        sm: 'h-10 rounded-md px-3 text-base',
+        lg: 'h-14 rounded-md px-8 text-lg',
         cta: 'h-16 rounded-full px-8 text-lg',
-        icon: 'h-10 w-10',
       },
     },
     defaultVariants: {
@@ -40,10 +39,9 @@ interface ButtonProps
     ButtonVariants {}
 
 const Button = (ownProps: ButtonProps) => {
-  const props = mergeProps<[ButtonProps, ButtonProps]>(
-    { type: 'button' },
-    ownProps,
-  );
+  const props = mergeProps<[ButtonProps, ButtonProps]>(ownProps, {
+    type: 'button',
+  });
   return (
     <button
       {...props}
@@ -62,11 +60,16 @@ interface LinkProps
   extends JSX.AnchorHTMLAttributes<HTMLAnchorElement>,
     ButtonVariants {}
 
-export const ButtonLink = (props: LinkProps) => {
+export const ButtonLink = (ownProps: LinkProps) => {
+  /**
+   * When link={false} should use <a> without any link attribute
+   * @link https://github.com/solidjs/solid-router/discussions/321
+   */
+  const [local, props] = splitProps(ownProps, ['link']);
   return (
     <Dynamic
-      component={props.link ? 'a' : A}
       {...props}
+      component={local.link ? A : 'a'}
       class={tw(
         buttonVariants({
           variant: props.variant,

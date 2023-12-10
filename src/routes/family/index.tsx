@@ -6,8 +6,8 @@ function FamilyPage() {
 
   return (
     <>
-      <Title>{t('family.meta.title')}</Title>
-      <section>"Welcome"</section>
+      <Title>{t('family.meta.title', { familyName: 'Perales' })}</Title>
+      <section>Welcome</section>
     </>
   );
 }

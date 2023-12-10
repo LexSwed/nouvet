@@ -6,9 +6,9 @@ import packageIcon from '~/assets/icons/package.svg';
 // import scrollIcon from '~/assets/icons/scroll.svg';
 
 import { createTranslator, getDictionary } from '~/i18n';
+import { LogoLink } from '~/lib/logo-link';
 import { NavCard } from '~/lib/ui/card';
 import { Icon } from '~/lib/ui/icon';
-import { LogoLink } from '~/lib/ui/logo-link';
 
 export const route = {
   load() {

@@ -1,6 +1,7 @@
 import { Title } from '@solidjs/meta';
 import ArrowCircleUpRight from '~/assets/icons/arrow-circle-up-right.svg';
 import { T, createTranslator } from '~/i18n';
+import { HeroImage } from '~/lib/hero-image';
 import { ButtonLink } from '~/lib/ui/button';
 import { Card } from '~/lib/ui/card';
 
@@ -28,11 +29,7 @@ export default function WWW() {
               <Icon icon={ArrowCircleUpRight} class="h-8 w-8 shrink-0" />
             </ButtonLink>
             <div class="-mb-36 h-full w-[85%] min-w-[320px] overflow-hidden rounded-2xl sm:top-36 sm:w-full lg:absolute lg:right-4 lg:top-4 lg:max-h-[calc(100%-theme(spacing.8))] lg:w-[65%] xl:w-[45%]">
-              <img
-                src="https://images.unsplash.com/photo-1563460716037-460a3ad24ba9?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                class="aspect-[9/12] h-full w-full bg-primary/5 object-cover"
-                alt={t('www.hero-image')}
-              />
+              <HeroImage alt={t('www.hero-image')} />
             </div>
           </div>
         </div>

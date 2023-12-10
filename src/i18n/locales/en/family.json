@@ -1,4 +1,4 @@
 {
   "login": "Log in",
-  "meta.title": "NouVet | Sign In"
+  "meta.title": "NouVet | {{familyName}}"
 }

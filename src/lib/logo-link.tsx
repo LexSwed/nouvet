@@ -1,6 +1,6 @@
 import { type JSX } from 'solid-js';
-import { Icon } from './icon';
-import { tw } from './tw';
+import { Icon } from './ui/icon';
+import { tw } from './ui/tw';
 import nouvetIcon from '~/assets/icons/nouvet.svg';
 
 function LogoLink(props: {

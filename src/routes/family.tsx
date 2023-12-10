@@ -9,7 +9,7 @@ export const route = {
 } satisfies RouteDefinition;
 
 function FamilyLayout(props: ParentProps) {
-  return <div>{props.children}</div>;
+  return <>{props.children}</>;
 }
 
 export default FamilyLayout;
