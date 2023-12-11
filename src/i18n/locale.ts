@@ -1,13 +1,14 @@
-import { parseCookies } from 'oslo/cookie';
+import { type RequestEvent } from 'solid-js/web';
+import { getCookie, getHeader } from 'vinxi/server';
 import { acceptedLocales, LANG_COOKIE } from '~/i18n/const';
 
-export function getLocale(request: Request): Intl.Locale {
-  'use server';
-
+export function getLocale(event: RequestEvent): Intl.Locale {
   try {
     for (const fn of [cookie, header]) {
-      const locale = fn(request);
-      if (locale) return locale;
+      const locale = fn(event);
+      if (locale) {
+        return locale;
+      }
     }
   } catch (error) {
     console.error(error);
@@ -19,16 +20,13 @@ export function getLocale(request: Request): Intl.Locale {
  * Attempts to get preferred language from cookies, when user manually updated it from the UI.
  * Verifies it's a correct language. Matches only to one of the supported locales.
  */
-function cookie(request: Request): Intl.Locale | null {
-  const cookies = parseCookies(request.headers.get('Cookie') || '');
-  if (cookies.has(LANG_COOKIE)) {
-    try {
-      const locale = new Intl.Locale(cookies.get(LANG_COOKIE)!);
+function cookie(event: RequestEvent): Intl.Locale | null {
+  const langCookie = getCookie(event, LANG_COOKIE);
+  if (langCookie) {
+    const locale = new Intl.Locale(langCookie);
 
-      if (acceptedLocales.some((lang) => lang === locale.language))
-        return locale;
-    } catch (error) {
-      console.error(error);
+    if (acceptedLocales.some((lang) => lang === locale.language)) {
+      return locale;
     }
   }
   return null;
@@ -38,9 +36,9 @@ function cookie(request: Request): Intl.Locale | null {
  * Attempts to get preferred language from Accept-Language header.
  * Verifies it's a correct language. Matches only to one of the supported locales.
  */
-function header(request: Request): Intl.Locale | null {
+function header(event: RequestEvent): Intl.Locale | null {
   /** @example en-GB,en;q=0.9,en-US;q=0.8,es;q=0.7. */
-  const rawHeader = request.headers.get('Accept-Language');
+  const rawHeader = getHeader(event, 'Accept-Language');
   if (!rawHeader) return null;
   const maybeMatching = rawHeader
     .split(',')

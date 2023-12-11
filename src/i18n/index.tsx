@@ -52,7 +52,7 @@ export const getDictionary = cache(
         "Wrong execution environment. Check if 'use server' directive is correctly applied.",
       );
     }
-    const locale = getLocale(event.request);
+    const locale = getLocale(event);
     return fetchDictionary(locale.language as Locale, namespace);
   },
   'translations',

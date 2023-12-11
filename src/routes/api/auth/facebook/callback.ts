@@ -1,6 +1,5 @@
 import { type PageEvent } from '@solidjs/start/server/types';
 import { OAuth2RequestError } from 'arctic';
-import { parseCookies } from 'oslo/cookie';
 import { object, parse, string } from 'valibot';
 import { deleteCookie, getCookie, sendRedirect, setCookie } from 'vinxi/server';
 import { RETURN_URL_COOKIE } from '~/server/const';
@@ -9,8 +8,7 @@ import { createUser, getUserByAuthProviderId } from '~/server/queries/family';
 
 export const GET = async (event: PageEvent) => {
   const { request } = event;
-  const cookies = parseCookies(request.headers.get('Cookie') ?? '');
-  const stateCookie = cookies.get('oauth_state') ?? null;
+  const stateCookie = getCookie(event, 'oauth_state') ?? null;
   const facebookAuth = useFacebookAuth();
 
   const url = new URL(request.url);
