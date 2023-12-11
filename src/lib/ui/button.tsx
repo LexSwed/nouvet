@@ -1,7 +1,8 @@
 import { A } from '@solidjs/router';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { mergeProps, type JSX, splitProps } from 'solid-js';
+import { type JSX, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
+import { mergeDefaultProps } from '../merge-default-props';
 import { tw } from './tw';
 
 const buttonVariants = cva(
@@ -39,9 +40,12 @@ interface ButtonProps
     ButtonVariants {}
 
 const Button = (ownProps: ButtonProps) => {
-  const props = mergeProps<[ButtonProps, ButtonProps]>(ownProps, {
-    type: 'button',
-  });
+  const props = mergeDefaultProps(
+    {
+      type: 'button',
+    },
+    ownProps,
+  );
   return (
     <button
       {...props}

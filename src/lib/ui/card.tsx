@@ -1,5 +1,7 @@
+import { A, type AnchorProps } from '@solidjs/router';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { mergeProps, type JSX } from 'solid-js';
+import { type JSX } from 'solid-js';
+import { mergeDefaultProps } from '../merge-default-props';
 import { tw } from './tw';
 
 const cardVariants = cva('rounded-lg p-3', {
@@ -28,22 +30,17 @@ const Card = (props: CardProps) => (
   />
 );
 
-interface NavCardProps
-  extends JSX.AnchorHTMLAttributes<HTMLAnchorElement>,
-    CardVariants {
+interface NavCardProps extends AnchorProps, CardVariants {
   /**
    * @default 'filled'
    */
   variant?: CardVariants['variant'];
 }
 export const NavCard = (ownProps: NavCardProps) => {
-  const props = mergeProps<[typeof ownProps, typeof ownProps]>(
-    { variant: 'filled' },
-    ownProps,
-  );
+  const props = mergeDefaultProps({ variant: 'filled' }, ownProps);
 
   return (
-    <a
+    <A
       {...props}
       class={tw(cardVariants({ variant: props.variant }), props.class)}
     />
