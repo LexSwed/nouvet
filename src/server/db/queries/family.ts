@@ -10,13 +10,16 @@ import {
   ValiError,
   picklist,
 } from 'valibot';
-import { useDb } from '../db';
+import { useDb } from '..';
 import {
   authAccount,
   userProfileTable,
   userTable,
   type SupportedAuthProvider,
-} from '../db/schema';
+  familyTable,
+  petTable,
+  type DatabaseUser,
+} from '../schema';
 
 export const getUserByAuthProviderId = async (
   provider: SupportedAuthProvider,
@@ -67,10 +70,27 @@ export const createUser = async (newUser: Output<typeof createUserSchema>) => {
       return user;
     });
   } catch (error) {
+    console.error(error);
     if (error instanceof ValiError) {
       throw error;
     }
-    console.error(error);
     throw error;
   }
+};
+
+export const getDbUserFamilyAndPets = async (userId: DatabaseUser['id']) => {
+  const db = useDb();
+  return await db
+    .select({
+      userId: userTable.id,
+      familyId: userTable.familyId,
+      familyName: familyTable.name,
+      petId: petTable.id,
+      petName: petTable.name,
+    })
+    .from(userTable)
+    .leftJoin(familyTable, eq(userTable.familyId, familyTable.id))
+    .leftJoin(petTable, eq(petTable.familyId, familyTable.id))
+    .where(eq(userTable.id, userId))
+    .all();
 };

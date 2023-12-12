@@ -3,8 +3,11 @@ import { OAuth2RequestError } from 'arctic';
 import { object, parse, string } from 'valibot';
 import { deleteCookie, getCookie, sendRedirect, setCookie } from 'vinxi/server';
 import { RETURN_URL_COOKIE } from '~/server/const';
+import {
+  createUser,
+  getUserByAuthProviderId,
+} from '~/server/db/queries/family';
 import { useFacebookAuth, useLucia } from '~/server/lucia';
-import { createUser, getUserByAuthProviderId } from '~/server/queries/family';
 
 export const GET = async (event: PageEvent) => {
   const { request } = event;

@@ -14,11 +14,14 @@ export const familyTable = sqliteTable('family', {
 
 export const petTable = sqliteTable('pet', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
-  name: text('name', { length: 100 }).notNull(),
+  name: text('name', { length: 100 })
+    .notNull()
+    .$default(() => ''),
   familyId: integer('family_id')
     .notNull()
     .references(() => familyTable.id),
 });
+export type DatabasePet = typeof petTable.$inferSelect;
 
 export const userTable = sqliteTable('user', {
   id: text('id').notNull().primaryKey(),

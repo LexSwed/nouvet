@@ -1,7 +1,6 @@
 // @refresh reload
 import { MetaProvider } from '@solidjs/meta';
 import { Route, Router } from '@solidjs/router';
-// @ts-expect-error solid issues
 import { FileRoutes } from '@solidjs/start';
 import { Suspense, lazy } from 'solid-js';
 
