@@ -1,4 +1,4 @@
-import { A } from '@solidjs/router';
+import { A, type AnchorProps } from '@solidjs/router';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { type JSX, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
@@ -60,9 +60,7 @@ const Button = (ownProps: ButtonProps) => {
   );
 };
 
-interface LinkProps
-  extends JSX.AnchorHTMLAttributes<HTMLAnchorElement>,
-    ButtonVariants {}
+interface LinkProps extends AnchorProps, ButtonVariants {}
 
 export const ButtonLink = (ownProps: LinkProps) => {
   /**
@@ -73,7 +71,7 @@ export const ButtonLink = (ownProps: LinkProps) => {
   return (
     <Dynamic
       {...props}
-      component={local.link ? A : 'a'}
+      component={local.link === false ? 'a' : A}
       class={tw(
         buttonVariants({
           variant: props.variant,
