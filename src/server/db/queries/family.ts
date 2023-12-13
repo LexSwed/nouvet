@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
-import { and, eq, exists } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import {
   parse,
   type Output,
@@ -101,6 +101,9 @@ export const createUser = async (newUser: Output<typeof createUserSchema>) => {
  */
 export const userHasPets = async (userId: DatabaseUser['id']) => {
   const db = useDb();
-  const query = db.select().from(petTable).where(eq(petTable.ownerId, userId));
-  return exists(query);
+  return db
+    .select({ petId: petTable.id })
+    .from(petTable)
+    .where(eq(petTable.ownerId, userId))
+    .get();
 };

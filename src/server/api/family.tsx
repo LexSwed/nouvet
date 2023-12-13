@@ -43,8 +43,15 @@ export const getIsEmptyUser = cache(async () => {
   'use server';
   const currentUser = getCurrentUser();
   if (currentUser.familyId) return false;
-  const pets = await userHasPets(currentUser.id);
-  return pets?.petId ? false : true;
+  try {
+    const pets = await userHasPets(currentUser.id);
+
+    console.log(pets);
+    return pets?.petId ? false : true;
+  } catch (error) {
+    console.error(error);
+    return true;
+  }
 }, 'is-new-user');
 
 function getCurrentUser() {
