@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, exists } from 'drizzle-orm';
 import {
   parse,
   type Output,
@@ -16,7 +16,6 @@ import {
   userProfileTable,
   userTable,
   type SupportedAuthProvider,
-  familyTable,
   petTable,
   type DatabaseUser,
 } from '../schema';
@@ -78,19 +77,30 @@ export const createUser = async (newUser: Output<typeof createUserSchema>) => {
   }
 };
 
-export const getDbUserFamilyAndPets = async (userId: DatabaseUser['id']) => {
+// export const getDbUserFamilyAndPets = async (userId: DatabaseUser['id']) => {
+//   const db = useDb();
+//   return await db
+//     .select({
+//       userId: userTable.id,
+//       familyId: userTable.familyId,
+//       familyName: familyTable.name,
+//       petId: petTable.id,
+//       petName: petTable.name,
+//     })
+//     .from(userTable)
+//     .leftJoin(familyTable, eq(userTable.familyId, familyTable.id))
+//     .leftJoin(petTable, eq(petTable.familyId, familyTable.id))
+//     .where(eq(userTable.id, userId))
+//     .all();
+// };
+
+/**
+ * New users don't have a family nor pets.
+ * Some users can be invited to a family that has a pet, but users are not owning them.
+ * Users can be removed from families, but still own a pet.
+ */
+export const userHasPets = async (userId: DatabaseUser['id']) => {
   const db = useDb();
-  return await db
-    .select({
-      userId: userTable.id,
-      familyId: userTable.familyId,
-      familyName: familyTable.name,
-      petId: petTable.id,
-      petName: petTable.name,
-    })
-    .from(userTable)
-    .leftJoin(familyTable, eq(userTable.familyId, familyTable.id))
-    .leftJoin(petTable, eq(petTable.familyId, familyTable.id))
-    .where(eq(userTable.id, userId))
-    .all();
+  const query = db.select().from(petTable).where(eq(petTable.ownerId, userId));
+  return exists(query);
 };

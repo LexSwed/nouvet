@@ -140,7 +140,7 @@
 
 @layer base {
   * {
-    @apply border-outline font-sans;
+    @apply min-w-0 border-outline font-sans;
   }
   html,
   body,

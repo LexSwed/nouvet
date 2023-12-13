@@ -1,12 +1,12 @@
 import { DrizzleSQLiteAdapter } from '@lucia-auth/adapter-drizzle';
 import { type FetchEvent } from '@solidjs/start/server/types';
 import { Facebook } from 'arctic';
-import { Lucia, type User } from 'lucia';
+import { Lucia, type DatabaseUserAttributes, type User } from 'lucia';
 import { verifyRequestOrigin } from 'oslo/request';
 import { setCookie } from 'vinxi/server';
 
 import { useDb } from './db';
-import { sessionTable, userTable } from './db/schema';
+import { sessionTable, userTable, type DatabaseUser } from './db/schema';
 import { env } from '~/server/env';
 
 export const useLucia = () => {
@@ -19,16 +19,19 @@ export const useLucia = () => {
         secure: env.PROD,
       },
     },
+    getUserAttributes: (attributes: DatabaseUserAttributes) => ({
+      familyId: attributes.familyId,
+    }),
   });
 
   return lucia;
 };
-type LuciaInstance = ReturnType<typeof useLucia>;
 
 declare module 'lucia' {
   interface Register {
-    Lucia: LuciaInstance;
+    Lucia: ReturnType<typeof useLucia>;
   }
+  interface DatabaseUserAttributes extends DatabaseUser {}
 }
 
 export const useFacebookAuth = () => {

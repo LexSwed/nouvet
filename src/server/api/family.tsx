@@ -1,11 +1,17 @@
 import { cache } from '@solidjs/router';
+import { type User } from 'lucia';
 import { getRequestEvent } from 'solid-js/web';
-import { getDbUserFamilyAndPets } from '../db/queries/family';
+import {
+  getDbUserFamilyAndPets,
+  getUserHasAFamilyPet,
+  getUserPets,
+  userHasPets,
+} from '../db/queries/family';
 
 export const getUserFamilyAndPets = cache(async () => {
   'use server';
-  const id = getCurrentUser();
-  const familyPets = await getDbUserFamilyAndPets(id);
+  const currentUser = getCurrentUser();
+  const familyPets = await getDbUserFamilyAndPets(currentUser.id);
 
   if (familyPets.length === 0) throw new Error('User is not authenticated');
 
@@ -33,6 +39,19 @@ export const getUserFamilyAndPets = cache(async () => {
   // TODO: group by user
 }, 'user-family-pets');
 
+/**
+ * Check if a user has no pets or not a part of a family.
+ * If user just registered all removed the data.
+ *
+ */
+export const getIsEmptyUser = cache(async () => {
+  'use server';
+  const currentUser = getCurrentUser();
+  if (currentUser.familyId) return false;
+  const pets = await userHasPets(currentUser.id);
+  return pets?.petId ? false : true;
+}, 'is-new-user');
+
 function getCurrentUser() {
   const event = getRequestEvent();
 
@@ -41,7 +60,7 @@ function getCurrentUser() {
     event?.locals.user !== null &&
     'id' in event.locals.user
   ) {
-    return event.locals.user.id as string;
+    return event.locals.user as User;
   }
   throw new Error('User is not authenticated');
 }

@@ -14,12 +14,18 @@ export const familyTable = sqliteTable('family', {
 
 export const petTable = sqliteTable('pet', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
-  name: text('name', { length: 100 })
+  /**
+   * Name of a pet
+   */
+  name: text('name', { length: 200 })
     .notNull()
     .$default(() => ''),
-  familyId: integer('family_id')
+  /**
+   * Pets have an official owner that has access to all the data.
+   */
+  ownerId: text('owner_id')
     .notNull()
-    .references(() => familyTable.id),
+    .references(() => userTable.id),
 });
 export type DatabasePet = typeof petTable.$inferSelect;
 
