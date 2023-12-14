@@ -7,7 +7,7 @@ import { LogoLink } from '~/lib/logo-link';
 import { ButtonLink } from '~/lib/ui/button';
 import { Icon } from '~/lib/ui/icon';
 
-function FamilyPage() {
+function AppLoginPage() {
   const t = createTranslator('login');
 
   return (
@@ -47,4 +47,4 @@ function FamilyPage() {
   );
 }
 
-export default FamilyPage;
+export default AppLoginPage;

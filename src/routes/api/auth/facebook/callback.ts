@@ -3,10 +3,8 @@ import { OAuth2RequestError } from 'arctic';
 import { object, parse, string } from 'valibot';
 import { deleteCookie, getCookie, sendRedirect, setCookie } from 'vinxi/server';
 import { RETURN_URL_COOKIE } from '~/server/const';
-import {
-  createUser,
-  getUserByAuthProviderId,
-} from '~/server/db/queries/family';
+import { createUser } from '~/server/db/queries/createUser';
+import { getUserByAuthProviderId } from '~/server/db/queries/getUserByAuthProviderId';
 import { useFacebookAuth, useLucia } from '~/server/lucia';
 
 export const GET = async (event: PageEvent) => {
@@ -42,7 +40,7 @@ export const GET = async (event: PageEvent) => {
       return new Response(null, {
         status: 302,
         headers: {
-          'Location': '/family',
+          'Location': '/app',
           'Set-Cookie': sessionCookie.serialize(),
         },
       });
@@ -70,7 +68,7 @@ export const GET = async (event: PageEvent) => {
       sessionCookie.attributes,
     );
 
-    return sendRedirect(event, returnUrl || '/family');
+    return sendRedirect(event, returnUrl || '/app');
   } catch (error) {
     console.log(error);
     if (error instanceof OAuth2RequestError) {

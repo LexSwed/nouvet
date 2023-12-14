@@ -2,11 +2,11 @@ import { Title } from '@solidjs/meta';
 import { createTranslator } from '~/i18n';
 
 function NewUserPage() {
-  const t = createTranslator('family');
+  const t = createTranslator('app');
 
   return (
     <>
-      <Title>{t('family.meta.title-new-user')}</Title>
+      <Title>{t('app.meta.title-new-user')}</Title>
       <section>Welcome</section>
     </>
   );

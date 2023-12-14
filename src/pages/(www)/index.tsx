@@ -20,7 +20,7 @@ export default function WWW() {
           </h1>
           <div class="flex flex-row sm:gap-8">
             <ButtonLink
-              href="/family"
+              href="/app"
               size="cta"
               link={false}
               class="relative -me-12 mt-16 flex items-center gap-4 self-start text-lg sm:me-0"
@@ -38,11 +38,11 @@ export default function WWW() {
         <h2 class="sr-only" id="features">
           {t('www.heading-features')}
         </h2>
-        <ul class="spacing-bleed -mx-4 flex snap-x snap-mandatory scroll-p-2 flex-row gap-4 overflow-x-auto p-2 scrollbar-none">
+        <ul class="spacing-bleed -mx-3 flex snap-x snap-mandatory scroll-p-2 flex-row gap-4 overflow-x-auto px-3 scrollbar-none">
           <li class="min-w-[16rem]">
             <Card
               variant="flat"
-              class="snap-start rounded-md border-2 border-background bg-surface/80 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
+              class="snap-start rounded-md border-2 border-primary-container/20 p-8"
             >
               {t('www.feature-medical-history')}
             </Card>
@@ -50,7 +50,7 @@ export default function WWW() {
           <li class="min-w-[16rem]">
             <Card
               variant="flat"
-              class="snap-start rounded-md border-2 border-background bg-surface/80 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
+              class="snap-start rounded-md border-2 border-primary-container/20 p-8"
             >
               {t('www.feature-share-reminders')}
             </Card>
@@ -58,7 +58,7 @@ export default function WWW() {
           <li class="min-w-[16rem]">
             <Card
               variant="flat"
-              class="snap-start rounded-md border-2 border-background bg-surface/80 bg-gradient-to-tl from-secondary-container/10 to-tertiary-container/10 p-12 backdrop-blur-sm"
+              class="snap-start rounded-md border-2 border-primary-container/20 p-8"
             >
               {t('www.feature-connect-veterinaries')}
             </Card>

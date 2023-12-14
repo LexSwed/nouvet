@@ -6,7 +6,7 @@ import { getRequestEvent } from 'solid-js/web';
 import { type acceptedLocales } from './const';
 import { getLocale } from './locale';
 import type CommonDict from './locales/en/common.json';
-import type FamilyDict from './locales/en/family.json';
+import type AppDict from './locales/en/app.json';
 import type LoginDict from './locales/en/login.json';
 import type WWWDict from './locales/en/www.json';
 
@@ -15,7 +15,7 @@ export type Locale = (typeof acceptedLocales)[number];
 type NamespaceMap = {
   common: typeof CommonDict;
   www: typeof WWWDict;
-  family: typeof FamilyDict;
+  app: typeof AppDict;
   login: typeof LoginDict;
 };
 type Namespace = keyof NamespaceMap;
