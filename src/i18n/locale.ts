@@ -1,5 +1,5 @@
 import { type RequestEvent } from 'solid-js/web';
-import { getCookie, getHeader } from 'vinxi/server';
+import { getCookie, getHeader } from '@solidjs/start/server';
 import { acceptedLocales, LANG_COOKIE } from '~/i18n/const';
 
 export function getLocale(event: RequestEvent): Intl.Locale {

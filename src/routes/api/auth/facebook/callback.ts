@@ -1,7 +1,12 @@
 import { type PageEvent } from '@solidjs/start/server/types';
 import { OAuth2RequestError } from 'arctic';
 import { object, parse, string } from 'valibot';
-import { deleteCookie, getCookie, sendRedirect, setCookie } from 'vinxi/server';
+import {
+  deleteCookie,
+  getCookie,
+  sendRedirect,
+  setCookie,
+} from '@solidjs/start/server';
 import { RETURN_URL_COOKIE } from '~/server/const';
 import { createUser } from '~/server/db/queries/createUser';
 import { getUserByAuthProviderId } from '~/server/db/queries/getUserByAuthProviderId';

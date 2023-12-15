@@ -1,6 +1,6 @@
 import { type PageEvent } from '@solidjs/start/server/types';
 import { generateState } from 'arctic';
-import { sendRedirect, setCookie } from 'vinxi/server';
+import { sendRedirect, setCookie } from '@solidjs/start/server';
 import { env } from '~/server/env';
 import { useFacebookAuth } from '~/server/lucia';
 

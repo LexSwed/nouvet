@@ -3,7 +3,7 @@ import { type FetchEvent } from '@solidjs/start/server/types';
 import { Facebook } from 'arctic';
 import { Lucia, type DatabaseUserAttributes, type User } from 'lucia';
 import { verifyRequestOrigin } from 'oslo/request';
-import { setCookie } from 'vinxi/server';
+import { setCookie } from '@solidjs/start/server';
 
 import { useDb } from './db';
 import { sessionTable, userTable, type DatabaseUser } from './db/schema';
