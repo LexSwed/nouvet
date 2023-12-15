@@ -32,8 +32,18 @@ export type DatabasePet = typeof petTable.$inferSelect;
 export const userTable = sqliteTable('user', {
   id: text('id').notNull().primaryKey(),
   familyId: integer('family_id').references(() => familyTable.id),
+  avatarUrl: text('avatar_url', { length: 200 }),
   createdAt: utcDatetime('created_at'),
 });
+
+// export const mediaTable = sqliteTable('user-media', {
+//   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
+//   sourceUrl: text('source_url').notNull(),
+//   uploaderId: text('uploader_id')
+//     .notNull()
+//     .references(() => userTable.id, { onDelete: 'cascade' }),
+//   uploadDate: utcDatetime('created_at'),
+// });
 
 export const userProfileTable = sqliteTable('user_profile', {
   userId: text('user_id')

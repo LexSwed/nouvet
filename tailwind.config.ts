@@ -125,6 +125,7 @@ export default {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'spinner-circle': 'spinner-circle 1.8s linear infinite',
       },
       boxShadow: {
         '1': 'var(--nou-elevation-1)',
@@ -134,10 +135,37 @@ export default {
         '5': 'var(--nou-elevation-5)',
       },
     },
+    keyframes: {
+      'spinner-circle': {
+        '0%': {
+          'stroke-dasharray': '1, 150',
+          'stroke-dashoffset': '0',
+        },
+        '50%': {
+          'stroke-dasharray': '90, 150',
+          'stroke-dashoffset': '-35',
+        },
+        '100%': {
+          'stroke-dasharray': '90, 150',
+          'stroke-dashoffset': '-124',
+        },
+      },
+    },
   },
   plugins: [
     containerQueryPlugin,
     animatePlugin,
+    plugin(function sizePlugin({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          size: (value) => ({
+            blockSize: value,
+            inlineSize: value,
+          }),
+        },
+        { values: theme('height') },
+      );
+    }),
     plugin(function noScrollBarPlugin({ addUtilities }) {
       addUtilities({
         '.scrollbar-none': {

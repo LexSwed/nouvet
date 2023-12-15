@@ -1,4 +1,5 @@
 import { Title } from '@solidjs/meta';
+import { createSignal, onCleanup } from 'solid-js';
 
 import chevronLeft from '~/assets/icons/chevron-left.svg';
 import { createTranslator } from '~/i18n';
@@ -9,6 +10,17 @@ import { Icon } from '~/lib/ui/icon';
 
 function AppLoginPage() {
   const t = createTranslator('login');
+  const [loading, setLoading] = createSignal(false);
+
+  const onClick = () => {
+    setLoading(true);
+    onCleanup(() => {
+      const timeout = setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+      clearTimeout(timeout);
+    });
+  };
 
   return (
     <>
@@ -29,6 +41,8 @@ function AppLoginPage() {
               class="flex items-center gap-3 !bg-[#1877F2]"
               size="lg"
               link={false}
+              loading={true}
+              onClick={onClick}
             >
               <img src="/assets/facebook.svg" class="h-8 w-8" alt="" />
               {t('login.with-facebook')}
