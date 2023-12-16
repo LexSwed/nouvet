@@ -18,12 +18,12 @@ export default function WWW() {
           <h1 class="z-10 rounded-2xl bg-background bg-main py-4 pe-4 text-6xl font-bold [background-attachment:fixed] md:h-[calc(theme(fontSize.6xl)+theme(spacing.4)*2)]">
             <T>{t('www.headline')}</T>
           </h1>
-          <div class="flex flex-row sm:gap-8">
+          <div class="flex w-full flex-row sm:gap-8">
             <ButtonLink
               href="/app"
               size="cta"
               link={false}
-              class="relative -me-12 mt-16 flex items-center gap-4 self-start text-lg sm:me-0"
+              class="relative -me-12 mt-16 flex shrink-0 items-center gap-4 self-start text-lg sm:me-0"
             >
               {t('www.cta-start')}
               <Icon icon={ArrowCircleUpRight} class="h-8 w-8 shrink-0" />
@@ -38,7 +38,7 @@ export default function WWW() {
         <h2 class="sr-only" id="features">
           {t('www.heading-features')}
         </h2>
-        <ul class="spacing-bleed -mx-3 flex snap-x snap-mandatory scroll-p-2 flex-row gap-4 overflow-x-auto px-3 scrollbar-none">
+        <ul class="spacing-bleed -mx-4 flex snap-x snap-mandatory scroll-p-2 flex-row gap-4 overflow-x-auto px-3 scrollbar-none">
           <li class="min-w-[16rem]">
             <Card
               variant="flat"
