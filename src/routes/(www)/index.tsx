@@ -28,13 +28,13 @@ export default function WWW() {
               {t('www.cta-start')}
               <Icon icon={ArrowCircleUpRight} class="h-8 w-8 shrink-0" />
             </ButtonLink>
-            <div class="-mb-36 h-full w-[85%] min-w-[320px] overflow-hidden rounded-2xl sm:top-36 sm:w-full lg:absolute lg:right-4 lg:top-4 lg:max-h-[calc(100%-theme(spacing.8))] lg:w-[65%] xl:w-[45%]">
+            <div class="h-full w-[85%] min-w-[320px] overflow-hidden rounded-2xl sm:top-36 sm:w-full lg:absolute lg:right-4 lg:top-4 lg:max-h-[calc(100%-theme(spacing.8))] lg:w-[65%] xl:w-[45%]">
               <HeroImage alt={t('www.hero-image')} />
             </div>
           </div>
         </div>
       </section>
-      <section aria-labelledby="features" class="relative">
+      <section aria-labelledby="features" class="relative -mt-32">
         <h2 class="sr-only" id="features">
           {t('www.heading-features')}
         </h2>
