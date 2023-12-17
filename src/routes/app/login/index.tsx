@@ -41,7 +41,7 @@ function AppLoginPage() {
               class="flex items-center gap-3 !bg-[#1877F2]"
               size="lg"
               link={false}
-              loading={!loading()}
+              loading={loading()}
               onClick={onClick}
             >
               <img src="/assets/facebook.svg" class="h-8 w-8" alt="" />

@@ -76,9 +76,11 @@ export const userProfileTable = sqliteTable('user_profile', {
   avatarUrl: text('avatar_url', { length: 200 }),
   /** Full ISO code, language and region. Inferred from browser on creation, can be changed later. */
   locale: text('locale').notNull(),
-  /** 'imperical' or 'metrical'. Used for times, events
-   * TODO: can be enum? */
-  measurementsSystem: text('measurements_system').notNull(),
+  /** Used for weights. */
+  measurementSystem: text('measurement_system', {
+    mode: 'text',
+    enum: ['imperial', 'metrical'] as const,
+  }).notNull(),
 });
 
 /**

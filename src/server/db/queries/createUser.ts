@@ -20,6 +20,8 @@ const createUserSchema = object({
     minLength(1),
     maxLength(200),
   ]),
+  locale: string(),
+  measurementSystem: picklist(['imperial', 'metrical']),
 });
 
 export const createUser = async (newUser: Output<typeof createUserSchema>) => {
@@ -38,9 +40,12 @@ export const createUser = async (newUser: Output<typeof createUserSchema>) => {
         provider: userInfo.provider,
         providerUserId: userInfo.accountProviderId,
       });
-      await tx
-        .insert(userProfileTable)
-        .values({ userId: user.id, name: userInfo.name });
+      await tx.insert(userProfileTable).values({
+        userId: user.id,
+        name: userInfo.name,
+        measurementSystem: userInfo.measurementSystem,
+        locale: userInfo.locale,
+      });
       return user;
     });
   } catch (error) {

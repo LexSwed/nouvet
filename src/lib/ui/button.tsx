@@ -60,7 +60,7 @@ const BaseComponent = <T extends ValidComponent>(
     >
       {props.children}
       <Show when={local.loading}>
-        <div class="absolute inset-0 z-20 flex cursor-default items-center justify-center rounded-[inherit] bg-primary">
+        <div class="absolute inset-0 z-20 flex cursor-default items-center justify-center rounded-[inherit] bg-[inherit]">
           <Spinner />
         </div>
       </Show>

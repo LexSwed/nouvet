@@ -11,6 +11,7 @@ import { RETURN_URL_COOKIE } from '~/server/const';
 import { createUser } from '~/server/db/queries/createUser';
 import { getUserByAuthProviderId } from '~/server/db/queries/getUserByAuthProviderId';
 import { useFacebookAuth, useLucia } from '~/server/lucia';
+import { getLocale } from '~/i18n/locale';
 
 export const GET = async (event: PageEvent) => {
   const { request } = event;
@@ -50,11 +51,17 @@ export const GET = async (event: PageEvent) => {
         },
       });
     }
+    const locale = getLocale(event);
 
     const user = await createUser({
       provider: 'facebook',
       accountProviderId: facebookUser.id,
       name: facebookUser.name,
+      locale: locale.baseName,
+      measurementSystem:
+        locale.region && ['US', 'LR', 'MM'].includes(locale.region)
+          ? 'imperial'
+          : 'metrical',
     });
 
     const returnUrl = getCookie(event, RETURN_URL_COOKIE);
