@@ -5,19 +5,21 @@ import { getCurrentUser } from './utils';
 export const getUserFamilyAndPets = cache(async () => {
   'use server';
   const currentUser = getCurrentUser();
-  const familyPets = await getDbUserFamilyAndPets(currentUser.id);
+  const userData = await getDbUserFamilyAndPets(currentUser.id);
 
-  if (familyPets.length === 0) throw new Error('User is not authenticated');
+  if (userData.length === 0) throw new Error('User is not authenticated');
 
   const user = {
-    userId: familyPets[0].userId,
-    family: familyPets[0].familyId
+    id: userData[0].userId,
+    avatarUrl: userData[0].avatarUrl,
+    name: userData[0].name,
+    family: userData[0].familyId
       ? {
-          id: familyPets[0].familyId,
-          name: familyPets[0].familyName,
+          id: userData[0].familyId,
+          name: userData[0].familyName,
         }
       : null,
-    pets: familyPets.reduce(
+    pets: userData.reduce(
       (res, pet) => {
         if (pet.petId !== null && pet.petName !== null) {
           res.push({ id: pet.petId, name: pet.petName });
@@ -26,7 +28,7 @@ export const getUserFamilyAndPets = cache(async () => {
       },
       [] as Array<{ id: number; name: string }>,
     ),
-  };
+  } as const;
 
   return user;
 }, 'user-family-pets');

@@ -8,7 +8,7 @@ export const route = {
 } satisfies RouteDefinition;
 
 function MainAppLayout(props: RouteSectionProps) {
-  return <>{props.children}</>;
+  return <div class="min-h-full">{props.children}</div>;
 }
 
 export default MainAppLayout;

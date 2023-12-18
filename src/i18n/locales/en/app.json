@@ -1,5 +1,6 @@
 {
   "login": "Log in",
   "meta.title-new-user": "NouVet | Welcome",
-  "meta.title": "NouVet | {{familyName}}"
+  "meta.title": "NouVet | {{familyName}}",
+  "my-family-cta": "My Family"
 }

@@ -69,9 +69,6 @@ export const userTable = sqliteTable('user', {
 
 /**
  * User profile details and preferences.
- * TODO: Maybe should be stored in cookies?
- * Locale should be accessed on each request, to get translations, not updated often (on login or change of preferences).
- * This cookie can be part of the `User` on `events.local`, to convert all data into correct format.
  */
 export const userProfileTable = sqliteTable('user_profile', {
   userId: text('user_id')
