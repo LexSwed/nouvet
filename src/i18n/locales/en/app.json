@@ -2,5 +2,8 @@
   "login": "Log in",
   "meta.title-new-user": "NouVet | Welcome",
   "meta.title": "NouVet | {{familyName}}",
-  "my-family-cta": "My Family"
+  "my-family-cta": "My Family",
+  "invite-card-heading": "Sharing is caring",
+  "invite-card-description": "Your pets are happier with more humans around! Share the care for your pets with the loved ones.",
+  "cta-invite-join": "Join"
 }

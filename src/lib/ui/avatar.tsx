@@ -2,7 +2,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { Show } from 'solid-js';
 import { tw } from './tw';
 
-const avatarVariants = cva('rounded-full', {
+const avatarVariants = cva('rounded-full shadow-inner', {
   variants: {
     size: {
       base: 'size-12',
@@ -89,70 +89,71 @@ function BoringAvatar(props: AvatarProps) {
   }
 
   return (
-    <svg
-      fill="none"
-      role="img"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox={'0 0 ' + SIZE + ' ' + SIZE}
-      class={tw(avatarVariants({ size: props.size }), props.class)}
-    >
-      <title>{props.name}</title>
-      <mask
-        id="mask__beam"
-        maskUnits="userSpaceOnUse"
-        x={0}
-        y={0}
-        width={SIZE}
-        height={SIZE}
+    <div class={tw(avatarVariants({ size: props.size }), props.class)}>
+      <svg
+        fill="none"
+        role="img"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox={'0 0 ' + SIZE + ' ' + SIZE}
       >
-        <rect fill="#FFFFFF" width={SIZE} height={SIZE} rx={SIZE * 2}></rect>
-      </mask>
-      <g mask="url(#mask__beam)">
-        <rect width={SIZE} height={SIZE} fill={data.backgroundColor}></rect>
-        <rect
-          x="0"
-          y="0"
+        <title>{props.name}</title>
+        <mask
+          id="mask__beam"
+          maskUnits="userSpaceOnUse"
+          x={0}
+          y={0}
           width={SIZE}
           height={SIZE}
-          transform={getRectTransform()}
-          fill={data.wrapperColor}
-          rx={data.isCircle ? SIZE : SIZE / 6}
-        ></rect>
-        <g transform={getGroupTransform()}>
-          <Show
-            fallback={
-              <path d={getClosedMouthData()} fill={data.faceColor}></path>
-            }
-            when={data.isMouthOpen}
-          >
-            <path
-              fill="none"
-              stroke-linecap="round"
-              d={getOpenMouthData()}
-              stroke={data.faceColor}
-            ></path>
-          </Show>
+        >
+          <rect fill="#FFFFFF" width={SIZE} height={SIZE} rx={SIZE * 2}></rect>
+        </mask>
+        <g mask="url(#mask__beam)">
+          <rect width={SIZE} height={SIZE} fill={data.backgroundColor}></rect>
           <rect
-            stroke="none"
-            x={14 - data.eyeSpread}
-            y={14}
-            width={1.5}
-            height={2}
-            rx={1}
-            fill={data.faceColor}
+            x="0"
+            y="0"
+            width={SIZE}
+            height={SIZE}
+            transform={getRectTransform()}
+            fill={data.wrapperColor}
+            rx={data.isCircle ? SIZE : SIZE / 6}
           ></rect>
-          <rect
-            stroke="none"
-            x={20 + data.eyeSpread}
-            y={14}
-            width={1.5}
-            height={2}
-            rx={1}
-            fill={data.faceColor}
-          ></rect>
+          <g transform={getGroupTransform()}>
+            <Show
+              fallback={
+                <path d={getClosedMouthData()} fill={data.faceColor}></path>
+              }
+              when={data.isMouthOpen}
+            >
+              <path
+                fill="none"
+                stroke-linecap="round"
+                d={getOpenMouthData()}
+                stroke={data.faceColor}
+              ></path>
+            </Show>
+            <rect
+              stroke="none"
+              x={14 - data.eyeSpread}
+              y={14}
+              width={1.5}
+              height={2}
+              rx={1}
+              fill={data.faceColor}
+            ></rect>
+            <rect
+              stroke="none"
+              x={20 + data.eyeSpread}
+              y={14}
+              width={1.5}
+              height={2}
+              rx={1}
+              fill={data.faceColor}
+            ></rect>
+          </g>
         </g>
-      </g>
-    </svg>
+      </svg>
+    </div>
   );
 }
 
