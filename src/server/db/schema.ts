@@ -5,6 +5,7 @@ import {
   integer,
   primaryKey,
 } from 'drizzle-orm/sqlite-core';
+import { acceptedLocales } from '~/i18n/const';
 
 export const familyTable = sqliteTable('family', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
@@ -19,11 +20,8 @@ export const petTable = sqliteTable('pet', {
     .notNull()
     .references(() => userTable.id),
   /** Name of a pet */
-  name: text('name', { length: 200 })
-    .notNull()
-    .$default(() => ''),
-  /** TODO: find a scientific name for it. */
-  sex: text('sex', { length: 50 }),
+  name: text('name', { length: 200 }).notNull(),
+  sex: text('sex', { mode: 'text', enum: ['male', 'female'] as const }),
   breedId: integer('breed_id')
     .notNull()
     .references(() => breedTable.id),
@@ -35,9 +33,19 @@ export type DatabasePet = typeof petTable.$inferSelect;
 
 export const breedTable = sqliteTable('breed', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
-  /** Should be inferrable from the source. 'dog' | 'cat' | 'nutria' | 'etc'.
-   *  TODO: Can be enumed? */
-  animalType: text('animal_type').notNull(),
+  type: text('animal_type', {
+    mode: 'text',
+    enum: [
+      'dog',
+      'cat',
+      'bird',
+      'fish',
+      'reptile',
+      'rabbit',
+      'rodent',
+      'other',
+    ],
+  }).notNull(),
   /** Has to include "Other" for people who don't know the breed */
   name: text('name').notNull().unique(),
   // photoUrl: string;

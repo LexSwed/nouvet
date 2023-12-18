@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ESNext", "DOM", "ESNext.Intl"],
     "paths": {
       "~/*": ["./src/*"]
     }

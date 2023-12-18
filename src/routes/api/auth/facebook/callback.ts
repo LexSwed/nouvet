@@ -12,6 +12,7 @@ import { createUser } from '~/server/db/queries/createUser';
 import { getUserByAuthProviderId } from '~/server/db/queries/getUserByAuthProviderId';
 import { useFacebookAuth, useLucia } from '~/server/lucia';
 import { getLocale } from '~/i18n/locale';
+import { saveUserPreferences } from '~/server/userPreferencesCookie';
 
 export const GET = async (event: PageEvent) => {
   const { request } = event;
@@ -39,36 +40,51 @@ export const GET = async (event: PageEvent) => {
       'facebook',
       facebookUser.id,
     );
+    const returnUrl = getCookie(event, RETURN_URL_COOKIE);
+
+    if (returnUrl) {
+      deleteCookie(event, RETURN_URL_COOKIE);
+    }
 
     if (existingUser) {
       const session = await lucia.createSession(existingUser.id, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
-      return new Response(null, {
-        status: 302,
-        headers: {
-          'Location': '/app',
-          'Set-Cookie': sessionCookie.serialize(),
-        },
-      });
+
+      setCookie(
+        event,
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
+
+      try {
+        saveUserPreferences(event, {
+          locale: existingUser.locale!,
+          measurementSystem: existingUser.measurementSystem!,
+        });
+      } catch (error) {
+        console.error(
+          `Wrong preferences for user ${existingUser.id}: locale ${existingUser.locale}, ${existingUser.measurementSystem}`,
+        );
+        return sendRedirect(event, returnUrl || '/app');
+      }
+
+      return sendRedirect(event, returnUrl || '/app');
     }
     const locale = getLocale(event);
+
+    const measurementSystem =
+      locale.region && ['US', 'LR', 'MM'].includes(locale.region)
+        ? 'imperial'
+        : 'metrical';
 
     const user = await createUser({
       provider: 'facebook',
       accountProviderId: facebookUser.id,
       name: facebookUser.name,
       locale: locale.baseName,
-      measurementSystem:
-        locale.region && ['US', 'LR', 'MM'].includes(locale.region)
-          ? 'imperial'
-          : 'metrical',
+      measurementSystem: measurementSystem,
     });
-
-    const returnUrl = getCookie(event, RETURN_URL_COOKIE);
-
-    if (returnUrl) {
-      deleteCookie(event, RETURN_URL_COOKIE);
-    }
 
     const session = await lucia.createSession(user.id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
@@ -79,6 +95,8 @@ export const GET = async (event: PageEvent) => {
       sessionCookie.value,
       sessionCookie.attributes,
     );
+
+    saveUserPreferences(event, { locale: locale.baseName, measurementSystem });
 
     return sendRedirect(event, returnUrl || '/app');
   } catch (error) {

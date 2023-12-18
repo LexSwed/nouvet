@@ -1,6 +1,7 @@
 import { type RequestEvent } from 'solid-js/web';
 import { getCookie, getHeader } from '@solidjs/start/server';
-import { acceptedLocales, LANG_COOKIE } from '~/i18n/const';
+import { acceptedLocales } from '~/i18n/const';
+import { getUserPreferences } from '~/server/userPreferencesCookie';
 
 export function getLocale(event: RequestEvent): Intl.Locale {
   try {
@@ -17,19 +18,16 @@ export function getLocale(event: RequestEvent): Intl.Locale {
 }
 
 /**
- * Attempts to get preferred language from cookies, when user manually updated it from the UI.
- * Verifies it's a correct language. Matches only to one of the supported locales.
+ * Attempts to get preferred language from cookies, for when the user manually updated it from the UI.
  */
 function cookie(event: RequestEvent): Intl.Locale | null {
-  const langCookie = getCookie(event, LANG_COOKIE);
-  if (langCookie) {
-    const locale = new Intl.Locale(langCookie);
-
-    if (acceptedLocales.some((lang) => lang === locale.language)) {
-      return locale;
-    }
+  try {
+    const preferences = getUserPreferences(event);
+    return new Intl.Locale(preferences.locale);
+  } catch (error) {
+    // TODO: if the app is migrated to new values, where does invalidation of cookies happen?
+    return null;
   }
-  return null;
 }
 
 /**

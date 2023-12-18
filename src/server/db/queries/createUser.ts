@@ -29,7 +29,7 @@ export const createUser = async (newUser: Output<typeof createUserSchema>) => {
     const userId = createId();
     const userInfo = parse(createUserSchema, newUser);
     const db = useDb();
-    return await db.transaction(async (tx) => {
+    const user = await db.transaction(async (tx) => {
       const user = await tx
         .insert(userTable)
         .values({ id: userId })
@@ -48,6 +48,7 @@ export const createUser = async (newUser: Output<typeof createUserSchema>) => {
       });
       return user;
     });
+    return user;
   } catch (error) {
     console.error(error);
     if (error instanceof ValiError) {
