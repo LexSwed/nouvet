@@ -50,7 +50,7 @@ export default function WWWLayout(props: ParentProps) {
                   <li class="shrink-0">
                     <NavCard
                       href={item.href}
-                      class="flex min-w-[8rem] flex-col place-items-start gap-2"
+                      class="flex min-w-[8rem] flex-col place-items-start gap-2 p-3"
                     >
                       <Icon size="lg" icon={item.icon} class="text-primary" />
                       {item.label}

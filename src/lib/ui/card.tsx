@@ -4,7 +4,7 @@ import { type JSX } from 'solid-js';
 import { mergeDefaultProps } from '../merge-default-props';
 import { tw } from './tw';
 
-const cardVariants = cva('rounded-lg p-3', {
+const cardVariants = cva('rounded-lg p-6', {
   variants: {
     variant: {
       elevated: 'bg-surface text-on-surface shadow-1',
