@@ -22,10 +22,10 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 intent:underline',
       },
       size: {
-        default: 'h-12 min-w-[theme(spacing.12)] px-4 py-2 text-base',
-        sm: 'h-10 min-w-[theme(spacing.10)] min-w-[3rem] rounded-md px-3 text-base',
-        lg: 'h-14 min-w-[theme(spacing.14)] rounded-md px-8 text-lg',
-        cta: 'h-16 min-w-[theme(spacing.16)] rounded-full px-8 text-lg',
+        default: 'h-12 min-w-12 px-4 py-2 text-base',
+        sm: 'h-10 min-w-10 rounded-md px-3 text-base',
+        lg: 'h-14 min-w-14 rounded-md px-8 text-lg',
+        cta: 'h-16 min-w-16 rounded-full px-8 text-lg',
       },
       loading: {
         true: '',

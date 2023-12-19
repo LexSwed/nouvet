@@ -39,7 +39,7 @@ export default function WWW() {
           {t('www.heading-features')}
         </h2>
         <ul class="spacing-bleed -mx-4 flex snap-x snap-mandatory scroll-p-2 flex-row gap-4 overflow-x-auto px-3 scrollbar-none">
-          <li class="min-w-[16rem]">
+          <li class="min-w-64">
             <Card
               variant="flat"
               class="snap-start rounded-md border-2 border-primary-container/20 p-8"
@@ -47,7 +47,7 @@ export default function WWW() {
               {t('www.feature-medical-history')}
             </Card>
           </li>
-          <li class="min-w-[16rem]">
+          <li class="min-w-64">
             <Card
               variant="flat"
               class="snap-start rounded-md border-2 border-primary-container/20 p-8"
@@ -55,7 +55,7 @@ export default function WWW() {
               {t('www.feature-share-reminders')}
             </Card>
           </li>
-          <li class="min-w-[16rem]">
+          <li class="min-w-64">
             <Card
               variant="flat"
               class="snap-start rounded-md border-2 border-primary-container/20 p-8"

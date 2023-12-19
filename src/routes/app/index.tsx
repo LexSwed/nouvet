@@ -60,7 +60,7 @@ function AppMainPage(props: RouteSectionProps) {
                 >
                   <h3 class="text-2xl">{t('app.invite-card-heading')}</h3>
                   <p class="text-lg">{t('app.invite-card-description')}</p>
-                  <div class="-mb-3 -me-3 min-w-[theme(spacing.20)] self-end rounded-lg p-3 text-center text-primary transition-colors intent:bg-primary/10">
+                  <div class="min-w-20 -mb-3 -me-3 self-end rounded-lg p-3 text-center text-primary transition-colors intent:bg-primary/10">
                     {t('app.cta-invite-join')}
                   </div>
                 </NavCard>

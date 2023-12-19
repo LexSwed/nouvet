@@ -155,17 +155,6 @@ export default {
   plugins: [
     containerQueryPlugin,
     animatePlugin,
-    plugin(function sizePlugin({ matchUtilities, theme }) {
-      matchUtilities(
-        {
-          size: (value) => ({
-            blockSize: value,
-            inlineSize: value,
-          }),
-        },
-        { values: theme('height') },
-      );
-    }),
     plugin(function noScrollBarPlugin({ addUtilities }) {
       addUtilities({
         '.scrollbar-none': {
