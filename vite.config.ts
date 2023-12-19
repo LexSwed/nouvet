@@ -1,4 +1,3 @@
-// @ts-expect-error not typed
 import { defineConfig } from '@solidjs/start/config';
 import { type UserConfig } from 'vite';
 import createSvgSpritePlugin from 'vite-plugin-svg-sprite';
@@ -14,7 +13,7 @@ const config = {
 
 export default defineConfig({
   start: {
-    ssr: true,
+    ssr: 'async',
     middleware: './src/middleware.ts',
   },
   ...config,
