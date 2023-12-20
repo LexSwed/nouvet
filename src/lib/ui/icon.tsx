@@ -2,15 +2,15 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { type JSX } from 'solid-js';
 import { tw } from './tw';
 
-const iconVariants = cva('', {
+const iconVariants = cva('shrink-0 inline', {
   variants: {
     size: {
       font: 'w-font h-font',
-      xs: 'w-3 h-3',
-      sm: 'w-4 h-4',
-      md: 'w-5 h-5',
-      lg: 'w-6 h-6',
-      xl: 'w-7 h-7',
+      xs: 'size-6',
+      sm: 'size-8',
+      md: 'size-12',
+      lg: 'size-18',
+      xl: 'size-24',
     },
   },
   defaultVariants: {
@@ -25,10 +25,7 @@ const Icon = (
     },
 ) => {
   return (
-    <svg
-      {...props}
-      class={tw(iconVariants({ size: props.size }), 'inline', props.class)}
-    >
+    <svg {...props} class={tw(iconVariants({ size: props.size }), props.class)}>
       <use href={`#${props.icon}`} />
     </svg>
   );

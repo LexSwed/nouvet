@@ -6,11 +6,13 @@ import {
 } from '@solidjs/router';
 import { Show } from 'solid-js';
 import { createTranslator, getDictionary } from '~/i18n';
-import { LogoLink } from '~/lib/logo-link';
 import { Avatar } from '~/lib/ui/avatar';
 import { ButtonLink } from '~/lib/ui/button';
 import { Card, NavCard } from '~/lib/ui/card';
+import { Icon } from '~/lib/ui/icon';
 import { getUserFamilyAndPets } from '~/server/api/getUserFamilyAndPets';
+
+import ArrowCircleUpRight from '~/assets/icons/arrow-circle-up-right.svg';
 
 export const route = {
   load() {
@@ -34,7 +36,7 @@ function AppMainPage(props: RouteSectionProps) {
               ? t('app.meta.title', { familyName: user().family?.name! })
               : t('app.meta.title-new-user')}
           </Title>
-          <div class="min-h-full">
+          <div class="min-h-full bg-background">
             <header class="align-center flex justify-between px-4 py-4">
               <Show
                 when={user().family}
@@ -51,18 +53,19 @@ function AppMainPage(props: RouteSectionProps) {
               />
               <Avatar name={userName()} avatarUrl={user().avatarUrl} />
             </header>
-            <div class="mt-8 flex flex-col gap-6">
+            <div class="flex flex-col gap-6">
               <section class="container">
                 <NavCard
                   href="/app/join"
                   role="article"
-                  class="flex flex-col gap-4"
+                  class="flex flex-row items-center justify-between p-4"
                 >
-                  <h3 class="text-2xl">{t('app.invite-card-heading')}</h3>
-                  <p class="text-lg">{t('app.invite-card-description')}</p>
-                  <div class="min-w-20 -mb-3 -me-3 self-end rounded-lg p-3 text-center text-primary transition-colors intent:bg-primary/10">
-                    {t('app.cta-invite-join')}
-                  </div>
+                  <h3 class="text-base">{t('app.invite-card-heading')}</h3>
+                  <Icon
+                    icon={ArrowCircleUpRight}
+                    class="text-primary"
+                    size="sm"
+                  />
                 </NavCard>
               </section>
               <section class="container">
