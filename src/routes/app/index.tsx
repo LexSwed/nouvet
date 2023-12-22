@@ -13,6 +13,7 @@ import { Icon } from '~/lib/ui/icon';
 import { getUserFamilyAndPets } from '~/server/api/getUserFamilyAndPets';
 
 import ArrowCircleUpRight from '~/assets/icons/arrow-circle-up-right.svg';
+import { TextField } from '~/lib/ui/text-field';
 
 export const route = {
   load() {
@@ -71,7 +72,7 @@ function AppMainPage(props: RouteSectionProps) {
               <section class="container">
                 <Card variant="flat">
                   <h3 class="text-2xl">Your pet</h3>
-                  Input field
+                  <TextField label="Name" />
                 </Card>
               </section>
             </div>
