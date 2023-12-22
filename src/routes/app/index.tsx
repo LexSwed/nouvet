@@ -55,20 +55,22 @@ function AppMainPage(props: RouteSectionProps) {
               <Avatar name={userName()} avatarUrl={user().avatarUrl} />
             </header>
             <div class="flex flex-col gap-6">
-              <section class="container">
-                <NavCard
-                  href="/app/join"
-                  role="article"
-                  class="flex flex-row items-center justify-between p-4"
-                >
-                  <h3 class="text-base">{t('app.invite-card-heading')}</h3>
-                  <Icon
-                    icon={ArrowCircleUpRight}
-                    class="text-primary"
-                    size="sm"
-                  />
-                </NavCard>
-              </section>
+              <Show when={!user().family && user().pets.length === 0}>
+                <article class="container">
+                  <NavCard
+                    href="/app/join"
+                    variant="filled-secondary"
+                    class="flex flex-row items-center justify-between gap-2 text-balance"
+                  >
+                    <h3 class="text-base">{t('app.invite-card-heading')}</h3>
+                    <Icon
+                      icon={ArrowCircleUpRight}
+                      class="text-tertiary"
+                      size="sm"
+                    />
+                  </NavCard>
+                </article>
+              </Show>
               <section class="container">
                 <Card variant="flat" class="flex flex-col gap-4">
                   <h3 class="text-2xl">Your pet</h3>

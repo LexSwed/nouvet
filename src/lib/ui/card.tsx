@@ -4,22 +4,40 @@ import { type JSX } from 'solid-js';
 import { mergeDefaultProps } from '../merge-default-props';
 import { tw } from './tw';
 
-const cardVariants = cva('rounded-lg p-6', {
+const cardVariants = cva('rounded-lg p-6 transition-shadow', {
   variants: {
+    _link: {
+      true: '',
+      false: '',
+    },
     variant: {
-      elevated: 'bg-surface text-on-surface shadow-1',
-      flat: 'bg-surface-container text-on-surface',
-      filled:
-        'bg-secondary-container outline-none text-on-secondary-container transition-all intent:ring-8 intent:ring-secondary-container',
-      outlined: 'bg-surface text-on-surface border border-outline-variant',
+      'elevated': 'bg-surface text-on-surface shadow-1',
+      'flat': 'bg-surface-container text-on-surface',
+      'filled':
+        'bg-secondary-container focus:outline-background text-on-secondary-container',
+      'filled-secondary':
+        'bg-tertiary-container focus:outline-background text-on-tertiary-container',
+      'outlined': 'bg-surface text-on-surface border border-outline-variant',
     },
   },
   defaultVariants: {
     variant: 'elevated',
   },
+  compoundVariants: [
+    {
+      variant: 'filled',
+      _link: true,
+      class: 'intent:ring-8 intent:ring-secondary-container',
+    },
+    {
+      variant: 'filled-secondary',
+      _link: true,
+      class: 'intent:ring-8 intent:ring-tertiary-container',
+    },
+  ],
 });
 
-type CardVariants = VariantProps<typeof cardVariants>;
+type CardVariants = Omit<VariantProps<typeof cardVariants>, '_link'>;
 
 interface CardProps extends JSX.HTMLAttributes<HTMLDivElement>, CardVariants {}
 
@@ -42,7 +60,10 @@ export const NavCard = (ownProps: NavCardProps) => {
   return (
     <A
       {...props}
-      class={tw(cardVariants({ variant: props.variant }), props.class)}
+      class={tw(
+        cardVariants({ variant: props.variant, _link: true }),
+        props.class,
+      )}
     />
   );
 };

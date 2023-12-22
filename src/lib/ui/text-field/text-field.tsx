@@ -15,7 +15,6 @@ export interface TextFieldProps
    */
   label?: string;
 }
-console.log(cssStyle);
 const TextField = (ownProps: TextFieldProps) => {
   const [styles, local, props] = splitProps(
     mergeDefaultProps({ type: 'text' }, ownProps),
