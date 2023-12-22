@@ -1,0 +1,57 @@
+@tailwind components;
+
+@layer components {
+  .field {
+    --border-color: theme('colors.outline');
+    --border-scale-y: 1;
+    --border-mx: theme('spacing.2');
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    transition: background-color 0.2s ease-out;
+    border-radius: theme('borderRadius.lg') theme('borderRadius.lg') 0 0;
+    &:after {
+      position: absolute;
+      bottom: 0;
+      left: var(--border-mx);
+      right: var(--border-mx);
+      height: 2px;
+      content: '';
+      transition: all 0.2s ease-out;
+      transform-origin: center bottom;
+      margin-inline: auto;
+      transform: scaleY(var(--border-scale));
+      isolation: isolate;
+      background: linear-gradient(
+        to top,
+        var(--border-color),
+        var(--border-color)
+      );
+    }
+    &:where(:focus-within, :hover) {
+      background-color: theme('colors.surface');
+      --border-mx: 0;
+    }
+    &:where(:focus-within) {
+      --border-color: theme('colors.primary');
+      --border-scale: 1.5;
+      & > .label {
+        color: theme('colors.primary');
+      }
+    }
+  }
+  .label {
+    padding: theme(spacing.2) theme('spacing.3') 0;
+    @apply text-xs;
+  }
+  .input {
+    padding: theme(spacing.2) theme('spacing.3') theme('spacing.3');
+    background: transparent;
+    outline: none;
+    @apply text-base;
+    &::placeholder {
+      color: theme('colors.on-surface/0.6');
+      font-weight: 400;
+    }
+  }
+}

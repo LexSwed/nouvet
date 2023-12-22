@@ -17,6 +17,14 @@
     "lib": ["ESNext", "DOM", "ESNext.Intl"],
     "paths": {
       "~/*": ["./src/*"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": {
+          "goToDefinition": true
+        }
+      }
+    ]
   }
 }

@@ -10,7 +10,7 @@ const cardVariants = cva('rounded-lg p-6', {
       elevated: 'bg-surface text-on-surface shadow-1',
       flat: 'bg-surface-container text-on-surface',
       filled:
-        'bg-secondary-container text-on-secondary-container transition-all intent:ring-8 intent:ring-secondary-container',
+        'bg-secondary-container outline-none text-on-secondary-container transition-all intent:ring-8 intent:ring-secondary-container',
       outlined: 'bg-surface text-on-surface border border-outline-variant',
     },
   },
