@@ -17,9 +17,9 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 	return [{ title: data?.title }];
 };
 
-export let handle = { i18n: "login" };
+export let handle = { i18n: ["common", "login"] };
 
-function AppLoginPage() {
+export default function AppLoginPage() {
 	const { t } = useTranslation(["login", "common"]);
 	const [loading, setLoading] = useState(false);
 
@@ -66,5 +66,3 @@ function AppLoginPage() {
 		</div>
 	);
 }
-
-export default AppLoginPage;

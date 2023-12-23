@@ -30,12 +30,12 @@ export default async function handleRequest(
 	let ns = i18next.getRouteNamespaces(remixContext);
 
 	await instance
-		.use(initReactI18next) // Tell our instance to use react-i18next
-		.use(Backend) // Setup our backend
+		.use(initReactI18next)
+		.use(Backend)
 		.init({
-			...i18n, // spread the configuration
-			lng, // The locale we detected above
-			ns, // The namespaces the routes about to render wants to use
+			...i18n,
+			lng,
+			ns,
 			backend: { loadPath: resolve("./public/locales/{{lng}}/{{ns}}.json") },
 		});
 

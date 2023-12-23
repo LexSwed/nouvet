@@ -24,7 +24,6 @@ export const links: LinksFunction = () => [
 
 export default function App() {
 	let { i18n } = useTranslation();
-
 	return (
 		<html lang={i18n.language} dir={i18n.dir(i18n.language)}>
 			<head>
