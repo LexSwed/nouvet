@@ -4,6 +4,7 @@ export { href };
 
 export const iconNames = [
 	"arrow-circle-up-right",
+	"chevron-left",
 	"nouvet",
 	"package",
 	"scroll",

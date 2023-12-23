@@ -1,4 +1,4 @@
-import { cn } from "~/lib/utils.ts";
+import { tw } from "~/lib/ui/tw.ts";
 
 const sizeClassName = {
 	font: "w-font h-font",
