@@ -11,7 +11,7 @@ export const iconNames = [
 ] as const;
 export type IconName = (typeof iconNames)[number];
 
-import { cn } from "~/lib/utils.ts";
+import { tw } from "~/lib/ui/tw.ts";
 
 const sizeClassName = {
 	font: "w-font h-font",
@@ -34,7 +34,7 @@ export function Icon({
 	size?: Size;
 }) {
 	return (
-		<svg {...props} className={cn(sizeClassName[size], "inline", className)}>
+		<svg {...props} className={tw(sizeClassName[size], "inline", className)}>
 			<use href={`${href}#${icon}`} />
 		</svg>
 	);

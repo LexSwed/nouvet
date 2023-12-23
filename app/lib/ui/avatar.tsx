@@ -1,50 +1,256 @@
-"use client"
+import { cva, type VariantProps } from "class-variance-authority";
+import { tw } from "./tw.ts";
+import { useMemo } from "react";
 
-import * as React from "react"
-import * as AvatarPrimitive from "@radix-ui/react-avatar"
+const avatarVariants = cva("rounded-full shadow-inner", {
+	variants: {
+		size: {
+			base: "size-12",
+			sm: "size-10",
+			lg: "size-14",
+		},
+	},
+	defaultVariants: {
+		size: "base",
+	},
+});
 
-import { cn } from "~/lib/utils.ts"
+interface AvatarProps extends VariantProps<typeof avatarVariants> {
+	name: string;
+	avatarUrl: string | null;
+	className?: string;
+}
+function Avatar({ avatarUrl, name, size, className }: AvatarProps) {
+	if (avatarUrl) {
+		return (
+			<img
+				src={avatarUrl}
+				title={name}
+				className={tw(avatarVariants({ size: size }), className)}
+			/>
+		);
+	}
+	return <BoringAvatar className={className} name={name} />;
+}
 
-const Avatar = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Root
-    ref={ref}
-    className={cn(
-      "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
-      className
-    )}
-    {...props}
-  />
-))
-Avatar.displayName = AvatarPrimitive.Root.displayName
+export { Avatar };
 
-const AvatarImage = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Image>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Image
-    ref={ref}
-    className={cn("aspect-square h-full w-full", className)}
-    {...props}
-  />
-))
-AvatarImage.displayName = AvatarPrimitive.Image.displayName
+// TODO: More brand like custom colors?
+const colors = ["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"];
+/**
+ * The implementation is copied from https://github.com/cmgriffing/boringer-avatars
+ * and stripped out reactivity + unnecessary parts. All credit belongs to https://boringavatars.com/.
+ */
+function BoringAvatar({
+	name,
+	className,
+	size,
+}: Omit<AvatarProps, "avatarUrl">) {
+	const data = useMemo(() => generateData(name, colors), [name]);
 
-const AvatarFallback = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Fallback>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Fallback
-    ref={ref}
-    className={cn(
-      "flex h-full w-full items-center justify-center rounded-full bg-muted",
-      className
-    )}
-    {...props}
-  />
-))
-AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
+	function getRectTransform() {
+		return (
+			"translate(" +
+			data.wrapperTranslateX +
+			" " +
+			data.wrapperTranslateY +
+			") rotate(" +
+			data.wrapperRotate +
+			" " +
+			SIZE / 2 +
+			" " +
+			SIZE / 2 +
+			") scale(" +
+			data.wrapperScale +
+			")"
+		);
+	}
 
-export { Avatar, AvatarImage, AvatarFallback }
+	function getGroupTransform() {
+		return (
+			"translate(" +
+			data.faceTranslateX +
+			" " +
+			data.faceTranslateY +
+			") rotate(" +
+			data.faceRotate +
+			" " +
+			SIZE / 2 +
+			" " +
+			SIZE / 2 +
+			")"
+		);
+	}
+
+	function getOpenMouthData() {
+		return "M15 " + (19 + data.mouthSpread) + "c2 1 4 1 6 0";
+	}
+
+	function getClosedMouthData() {
+		return "M13," + (19 + data.mouthSpread) + " a1,0.75 0 0,0 10,0";
+	}
+
+	return (
+		<div className={tw(avatarVariants({ size }), className)}>
+			<svg
+				fill="none"
+				role="img"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox={"0 0 " + SIZE + " " + SIZE}
+			>
+				<title>{name}</title>
+				<mask
+					id="mask__beam"
+					maskUnits="userSpaceOnUse"
+					x={0}
+					y={0}
+					width={SIZE}
+					height={SIZE}
+				>
+					<rect fill="#FFFFFF" width={SIZE} height={SIZE} rx={SIZE * 2}></rect>
+				</mask>
+				<g mask="url(#mask__beam)">
+					<rect width={SIZE} height={SIZE} fill={data.backgroundColor}></rect>
+					<rect
+						x="0"
+						y="0"
+						width={SIZE}
+						height={SIZE}
+						transform={getRectTransform()}
+						fill={data.wrapperColor}
+						rx={data.isCircle ? SIZE : SIZE / 6}
+					></rect>
+					<g transform={getGroupTransform()}>
+						{data.isMouthOpen ? (
+							<path
+								fill="none"
+								stroke-linecap="round"
+								d={getOpenMouthData()}
+								stroke={data.faceColor}
+							></path>
+						) : (
+							<path d={getClosedMouthData()} fill={data.faceColor}></path>
+						)}
+						<rect
+							stroke="none"
+							x={14 - data.eyeSpread}
+							y={14}
+							width={1.5}
+							height={2}
+							rx={1}
+							fill={data.faceColor}
+						></rect>
+						<rect
+							stroke="none"
+							x={20 + data.eyeSpread}
+							y={14}
+							width={1.5}
+							height={2}
+							rx={1}
+							fill={data.faceColor}
+						></rect>
+					</g>
+				</g>
+			</svg>
+		</div>
+	);
+}
+
+export interface Color {
+	color: string;
+	translateX: number;
+	translateY: number;
+	rotate: number;
+	isSquare: boolean;
+}
+
+const SIZE = 36;
+
+const hashCode = (name: string) => {
+	var hash = 0;
+	for (var i = 0; i < name.length; i++) {
+		var character = name.charCodeAt(i);
+		hash = (hash << 5) - hash + character;
+		hash = hash & hash; // Convert to 32bit integer
+	}
+	return Math.abs(hash);
+};
+
+const getDigit = (number: number, ntn: number) => {
+	return Math.floor((number / Math.pow(10, ntn)) % 10);
+};
+
+const getBoolean = (number: number, ntn: number) => {
+	return !(getDigit(number, ntn) % 2);
+};
+
+const getUnit = (number: number, range: number, index?: number) => {
+	let value = number % range;
+
+	if (index && getDigit(number, index) % 2 === 0) {
+		return -value;
+	} else return value;
+};
+
+const getRandomColor = (number: number, colors: string[], range: number) => {
+	return colors[number % range];
+};
+
+const getContrast = (hexcolor: string) => {
+	if (!hexcolor) {
+		return "#FFFFFF";
+	}
+
+	// If a leading # is provided, remove it
+	if (hexcolor.slice(0, 1) === "#") {
+		hexcolor = hexcolor.slice(1);
+	}
+
+	// Convert to RGB value
+	var r = parseInt(hexcolor.substr(0, 2), 16);
+	var g = parseInt(hexcolor.substr(2, 2), 16);
+	var b = parseInt(hexcolor.substr(4, 2), 16);
+
+	// Get YIQ ratio
+	var yiq = (r * 299 + g * 587 + b * 114) / 1000;
+
+	// Check contrast
+	return yiq >= 128 ? "#000000" : "#FFFFFF";
+};
+
+export function generateData(name: string, colors: string[]) {
+	const numFromName = hashCode(name);
+	const range = colors && colors.length;
+	const wrapperColor = getRandomColor(numFromName, colors, range);
+	const preTranslateX = getUnit(numFromName, 10, 1);
+	const wrapperTranslateX =
+		preTranslateX < 5 ? preTranslateX + SIZE / 9 : preTranslateX;
+	const preTranslateY = getUnit(numFromName, 10, 2);
+	const wrapperTranslateY =
+		preTranslateY < 5 ? preTranslateY + SIZE / 9 : preTranslateY;
+
+	const data = {
+		wrapperColor: wrapperColor,
+		faceColor: getContrast(wrapperColor),
+		backgroundColor: getRandomColor(numFromName + 13, colors, range),
+		wrapperTranslateX: wrapperTranslateX,
+		wrapperTranslateY: wrapperTranslateY,
+		wrapperRotate: getUnit(numFromName, 360),
+		wrapperScale: 1 + getUnit(numFromName, SIZE / 12) / 10,
+		isMouthOpen: getBoolean(numFromName, 2),
+		isCircle: getBoolean(numFromName, 1),
+		eyeSpread: getUnit(numFromName, 5),
+		mouthSpread: getUnit(numFromName, 3),
+		faceRotate: getUnit(numFromName, 10, 3),
+		faceTranslateX:
+			wrapperTranslateX > SIZE / 6
+				? wrapperTranslateX / 2
+				: getUnit(numFromName, 8, 1),
+		faceTranslateY:
+			wrapperTranslateY > SIZE / 6
+				? wrapperTranslateY / 2
+				: getUnit(numFromName, 7, 2),
+	};
+
+	return data;
+}

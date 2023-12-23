@@ -1,13 +1,13 @@
 import { Outlet, type MetaFunction } from "@remix-run/react";
-import i18n from "~/i18n/i18n.ts";
+// import i18next from "~/i18n/i18next.server.ts";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = (ctx) => {
 	return [
 		{ title: "NouVet" },
-		{
-			name: "description",
-			content: i18n.t("headline", { ns: "www" }),
-		},
+		// {
+		// 	name: "description",
+		// 	content: i18next.getFixedT(request, "headline", { ns: "www" }),
+		// },
 	];
 };
 

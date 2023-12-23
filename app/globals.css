@@ -1,69 +1,156 @@
+@import "@fontsource-variable/rubik/index.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
 	:root {
-		--background: 240 100% 99%;
-		--foreground: 204 9% 11%;
-		--card: 240 33% 98%;
-		--card-foreground: 204 9% 11%;
-		--popover: 240 33% 98%;
-		--popover-foreground: 204 9% 11%;
-		--primary: 351 70% 65%;
-		--primary-foreground: 0 0% 100%;
-		--secondary: 240 4.8% 95.9%;
-		--secondary-foreground: 240 5.9% 10%;
-		--tertiary: 191 100% 25%;
-		--tertiary-foreground: 240 100% 99%;
-		--muted: 357 100% 93%;
-		--muted-foreground: 345 100% 13%;
-		--accent: 240 4.8% 95.9%;
-		--accent-foreground: 240 5.9% 10%;
-		--destructive: 0 84.2% 60.2%;
-		--destructive-foreground: 0 0% 98%;
-		--border: 240 5.9% 90%;
-		--input: 240 5.9% 90%;
-		--ring: 351 70% 65%;
+		--nou-font-sans: "Rubik Variable";
+
+		--nou-white: 0 0% 100%;
+		--nou-black: 0 0% 0%;
+		--nou-primary: 349 50.9% 43.1%;
+		--nou-on-primary: 0 0% 100%;
+		--nou-primary-container: 357 100% 92.7%;
+		--nou-on-primary-container: 345 100% 12.5%;
+		--nou-primary-fixed: 357 100% 92.7%;
+		--nou-on-primary-fixed: 345 100% 12.5%;
+		--nou-primary-fixed-dim: 355 100% 84.9%;
+		--nou-on-primary-fixed-variant: 348 63.4% 32.2%;
+		--nou-secondary: 354 15.7% 40%;
+		--nou-on-secondary: 0 0% 100%;
+		--nou-secondary-container: 357 100% 92.7%;
+		--nou-on-secondary-container: 355 35.4% 12.7%;
+		--nou-secondary-fixed: 357 100% 92.7%;
+		--nou-on-secondary-fixed: 355 35.4% 12.7%;
+		--nou-secondary-fixed-dim: 357 43.5% 82%;
+		--nou-on-secondary-fixed-variant: 354 18.7% 30.4%;
+		--nou-tertiary: 191 100% 24.5%;
+		--nou-on-tertiary: 0 0% 100%;
+		--nou-tertiary-container: 196 100% 84.9%;
+		--nou-on-tertiary-container: 192 100% 7.6%;
+		--nou-tertiary-fixed: 196 100% 84.9%;
+		--nou-on-tertiary-fixed: 192 100% 7.6%;
+		--nou-tertiary-fixed-dim: 193 91.9% 66.1%;
+		--nou-on-tertiary-fixed-variant: 191 100% 18.6%;
+		--nou-error: 352 79.8% 40.8%;
+		--nou-on-error: 0 0% 100%;
+		--nou-error-container: 3 100% 92.4%;
+		--nou-on-error-container: 354 100% 12.7%;
+		--nou-outline: 349 6.9% 48.4%;
+		--nou-background: 240 100% 99.4%;
+		--nou-on-background: 204 9.1% 10.8%;
+		--nou-surface: 240 33.3% 98.2%;
+		--nou-on-surface: 204 9.1% 10.8%;
+		--nou-surface-variant: 349 47.8% 91%;
+		--nou-on-surface-variant: 347 9.5% 29%;
+		--nou-inverse-surface: 204 5.2% 19%;
+		--nou-inverse-on-surface: 240 11.1% 94.7%;
+		--nou-inverse-primary: 355 100% 84.9%;
+		--nou-shadow: 0 0% 0%;
+		--nou-surface-tint: 349 50.9% 43.1%;
+		--nou-outline-variant: 351 19.6% 80%;
+		--nou-scrim: 0 0% 0%;
+		--nou-surface-container-highest: 240 5.5% 89.2%;
+		--nou-surface-container-high: 225 9.1% 91.4%;
+		--nou-surface-container: 220 9.1% 93.5%;
+		--nou-surface-container-low: 240 14.3% 95.9%;
+		--nou-surface-container-lowest: 0 0% 100%;
+		--nou-surface-bright: 240 33.3% 98.2%;
+		--nou-surface-dim: 225 5.6% 85.9%;
+
+		--nou-elevation-1: 0px 1px 3px rgba(0, 0, 0, 0.15),
+			0px 1px 2px rgba(0, 0, 0, 0.3);
+		--nou-elevation-2: 0px 2px 6px rgba(0, 0, 0, 0.15),
+			0px 1px 2px rgba(0, 0, 0, 0.3);
+		--nou-elevation-3: 0px 1px 3px rgba(0, 0, 0, 0.3),
+			0px 4px 8px rgba(0, 0, 0, 0.15);
+		--nou-elevation-4: 0px 2px 3px rgba(0, 0, 0, 0.3),
+			0px 6px 10px rgba(0, 0, 0, 0.15);
+		--nou-elevation-5: 0px 4px 4px rgba(0, 0, 0, 0.3),
+			0px 8px 12px rgba(0, 0, 0, 0.15);
+
 		--radius: 0.5rem;
-		--container-px-base: 1rem;
-		--container-px-sm: 2rem;
-		--container-px-md: 3rem;
-		--container-px-lg: 4rem;
-		--container-px-xl: 5rem;
-		--container-px-2xl: 6rem;
 	}
 
 	.dark {
-		--background: 20 14.3% 4.1%;
-		--foreground: 0 0% 95%;
-		--card: 24 9.8% 10%;
-		--card-foreground: 0 0% 95%;
-		--popover: 0 0% 9%;
-		--popover-foreground: 0 0% 95%;
-		--primary: 351 70% 65%;
-		--primary-foreground: 0 0% 100%;
-		--secondary: 240 3.7% 15.9%;
-		--secondary-foreground: 0 0% 98%;
-		--tertiary: 191 100% 25%;
-		--tertiary-foreground: 240 100% 99%;
-		--muted: 0 0% 15%;
-		--muted-foreground: 240 5% 64.9%;
-		--accent: 12 6.5% 15.1%;
-		--accent-foreground: 0 0% 98%;
-		--destructive: 0 62.8% 30.6%;
-		--destructive-foreground: 0 85.7% 97.3%;
-		--border: 240 3.7% 15.9%;
-		--input: 240 3.7% 15.9%;
-		--ring: 351 70% 65%;
+		--nou-primary: 355 100% 84.9%;
+		--nou-on-primary: 342 98.1% 20.4%;
+		--nou-primary-container: 348 63.4% 32.2%;
+		--nou-on-primary-container: 357 100% 92.7%;
+		--nou-primary-fixed: 357 100% 92.7%;
+		--nou-on-primary-fixed: 345 100% 12.5%;
+		--nou-primary-fixed-dim: 355 100% 84.9%;
+		--nou-on-primary-fixed-variant: 348 63.4% 32.2%;
+		--nou-secondary: 357 43.5% 82%;
+		--nou-on-secondary: 353 24.8% 21.4%;
+		--nou-secondary-container: 354 18.7% 30.4%;
+		--nou-on-secondary-container: 357 100% 92.7%;
+		--nou-secondary-fixed: 357 100% 92.7%;
+		--nou-on-secondary-fixed: 355 35.4% 12.7%;
+		--nou-secondary-fixed-dim: 357 43.5% 82%;
+		--nou-on-secondary-fixed-variant: 354 18.7% 30.4%;
+		--nou-tertiary: 193 91.9% 66.1%;
+		--nou-on-tertiary: 191 100% 12.9%;
+		--nou-tertiary-container: 191 100% 18.6%;
+		--nou-on-tertiary-container: 196 100% 84.9%;
+		--nou-tertiary-fixed: 196 100% 84.9%;
+		--nou-on-tertiary-fixed: 192 100% 7.6%;
+		--nou-tertiary-fixed-dim: 193 91.9% 66.1%;
+		--nou-on-tertiary-fixed-variant: 191 100% 18.6%;
+		--nou-error: 2 100% 84.7%;
+		--nou-on-error: 350 100% 20.4%;
+		--nou-error-container: 348 100% 28.6%;
+		--nou-on-error-container: 3 100% 92.4%;
+		--nou-outline: 347 8.5% 58.4%;
+		--nou-background: 204 9.1% 10.8%;
+		--nou-on-background: 240 5.5% 89.2%;
+		--nou-surface: 204 12.8% 7.6%;
+		--nou-on-surface: 225 3.6% 78%;
+		--nou-surface-variant: 347 9.5% 29%;
+		--nou-on-surface-variant: 351 19.6% 80%;
+		--nou-inverse-surface: 240 5.5% 89.2%;
+		--nou-inverse-on-surface: 204 9.1% 10.8%;
+		--nou-inverse-primary: 349 50.9% 43.1%;
+		--nou-shadow: 0 0% 0%;
+		--nou-surface-tint: 355 100% 84.9%;
+		--nou-outline-variant: 347 9.5% 29%;
+		--nou-scrim: 0 0% 0%;
+		--nou-surface-container-highest: 210 3.8% 20.8%;
+		--nou-surface-container-high: 210 4.8% 16.5%;
+		--nou-surface-container: 210 6.2% 12.5%;
+		--nou-surface-container-low: 204 9.1% 10.8%;
+		--nou-surface-container-lowest: 216 17.2% 5.7%;
+		--nou-surface-bright: 216 4.3% 22.5%;
+		--nou-surface-dim: 204 12.8% 7.6%;
+
+		--nou-elevation-1: 0px 1px 2px rgba(0, 0, 0, 0.3),
+			0px 1px 3px rgba(0, 0, 0, 0.15);
+		--nou-elevation-2: 0px 1px 2px rgba(0, 0, 0, 0.3),
+			0px 2px 6px rgba(0, 0, 0, 0.15);
+		--nou-elevation-3: 0px 1px 3px rgba(0, 0, 0, 0.3),
+			0px 4px 8px rgba(0, 0, 0, 0.15);
+		--nou-elevation-4: 0px 2px 3px rgba(0, 0, 0, 0.3),
+			0px 6px 10px rgba(0, 0, 0, 0.15);
+		--nou-elevation-5: 0px 4px 4px rgba(0, 0, 0, 0.3),
+			0px 8px 12px rgba(0, 0, 0, 0.15);
 	}
 }
 
 @layer base {
-	* {
-		@apply border-border font-sans;
+	::selection {
+		@apply bg-primary/20;
 	}
-	html {
-		height: 100%;
+	* {
+		@apply border-outline min-w-0 font-sans;
+	}
+	html,
+	body,
+	#app {
+		@apply text-on-background h-full max-w-full bg-background;
+	}
+	#app {
+		@apply overflow-x-hidden;
 	}
 }

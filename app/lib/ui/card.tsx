@@ -1,86 +1,66 @@
-import * as React from "react";
+import { Link, type LinkProps } from "@remix-run/react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { tw } from "./tw.ts";
+import type { HTMLAttributes } from "react";
 
-import { cn } from "~/lib/utils.ts";
+const cardVariants = cva("rounded-lg p-6 transition-shadow", {
+	variants: {
+		_link: {
+			true: "",
+			false: "",
+		},
+		variant: {
+			"elevated": "bg-surface-container text-on-surface",
+			"flat": "bg-surface text-on-surface",
+			"filled":
+				"bg-secondary-container focus:outline-background text-on-secondary-container",
+			"filled-secondary":
+				"bg-tertiary-container focus:outline-background text-on-tertiary-container",
+			"outlined": "bg-surface text-on-surface border border-outline/20",
+		},
+	},
+	defaultVariants: {
+		variant: "elevated",
+	},
+	compoundVariants: [
+		{
+			variant: "filled",
+			_link: true,
+			class: "intent:ring-8 intent:ring-secondary-container",
+		},
+		{
+			variant: "filled-secondary",
+			_link: true,
+			class: "intent:ring-8 intent:ring-tertiary-container",
+		},
+	],
+});
 
-const Card = React.forwardRef<
-	HTMLDivElement,
-	React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-	<div
-		ref={ref}
-		className={cn(
-			"rounded-lg border bg-card p-3 text-card-foreground shadow-sm",
-			className,
-		)}
-		{...props}
-	/>
-));
-Card.displayName = "Card";
+type CardVariants = Omit<VariantProps<typeof cardVariants>, "_link">;
 
-const CardHeader = React.forwardRef<
-	HTMLDivElement,
-	React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-	<div
-		ref={ref}
-		className={cn("flex flex-col space-y-1.5 p-6", className)}
-		{...props}
-	/>
-));
-CardHeader.displayName = "CardHeader";
+interface CardProps extends HTMLAttributes<HTMLDivElement>, CardVariants {}
 
-const CardTitle = React.forwardRef<
-	HTMLParagraphElement,
-	React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-	<h3
-		ref={ref}
-		className={cn(
-			"text-2xl font-semibold leading-none tracking-tight",
-			className,
-		)}
-		{...props}
-	/>
-));
-CardTitle.displayName = "CardTitle";
+const Card = ({ variant, className, ...props }: CardProps) => (
+	<div {...props} className={tw(cardVariants({ variant }), className)} />
+);
 
-const CardDescription = React.forwardRef<
-	HTMLParagraphElement,
-	React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-	<p
-		ref={ref}
-		className={cn("text-sm text-muted-foreground", className)}
-		{...props}
-	/>
-));
-CardDescription.displayName = "CardDescription";
-
-const CardContent = React.forwardRef<
-	HTMLDivElement,
-	React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-	<div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-));
-CardContent.displayName = "CardContent";
-
-const CardFooter = React.forwardRef<
-	HTMLDivElement,
-	React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-	<div
-		ref={ref}
-		className={cn("flex items-center p-6 pt-0", className)}
-		{...props}
-	/>
-));
-CardFooter.displayName = "CardFooter";
-
-export {
-	Card,
-	CardHeader,
-	CardFooter,
-	CardTitle,
-	CardDescription,
-	CardContent,
+interface NavCardProps extends LinkProps, CardVariants {
+	/**
+	 * @default 'filled'
+	 */
+	variant?: CardVariants["variant"];
+}
+export const NavCard = ({
+	variant = "filled",
+	className,
+	...props
+}: NavCardProps) => {
+	return (
+		<Link
+			{...props}
+			className={tw(cardVariants({ variant, _link: true }), className)}
+		/>
+	);
 };
+
+export { Card };
