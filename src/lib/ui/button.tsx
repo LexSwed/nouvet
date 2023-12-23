@@ -70,7 +70,9 @@ const BaseComponent = <T extends ValidComponent>(
 
 interface ButtonProps
   extends JSX.ButtonHTMLAttributes<HTMLButtonElement>,
-    ButtonVariants {}
+    ButtonVariants {
+  label?: string;
+}
 
 const Button = (ownProps: ButtonProps) => {
   const props = mergeDefaultProps(
@@ -79,10 +81,19 @@ const Button = (ownProps: ButtonProps) => {
     },
     ownProps,
   );
-  return <BaseComponent component="button" {...props} />;
+  return (
+    <BaseComponent
+      component="button"
+      aria-label={props.label}
+      title={props.title}
+      {...props}
+    />
+  );
 };
 
-interface LinkProps extends AnchorProps, ButtonVariants {}
+interface LinkProps extends AnchorProps, ButtonVariants {
+  label?: string;
+}
 
 export const ButtonLink = (ownProps: LinkProps) => {
   /**
@@ -91,7 +102,12 @@ export const ButtonLink = (ownProps: LinkProps) => {
    */
   const [local, props] = splitProps(ownProps, ['link']);
   return (
-    <BaseComponent {...props} component={local.link === false ? 'a' : A} />
+    <BaseComponent
+      {...props}
+      aria-label={props.label}
+      title={props.title}
+      component={local.link === false ? 'a' : A}
+    />
   );
 };
 

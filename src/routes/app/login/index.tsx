@@ -52,6 +52,7 @@ function AppLoginPage() {
             href="/"
             class="mt-auto h-16 w-16 rounded-full border-2 border-outline p-0"
             variant="ghost"
+            label={t('login.back-home')}
           >
             <Icon icon={chevronLeft} size="xl" />
           </ButtonLink>
