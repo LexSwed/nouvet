@@ -55,7 +55,7 @@ export default function IndexRoute() {
 					<li className="min-w-64">
 						<Card
 							variant="flat"
-							className="border-primary-container/20 snap-start rounded-md border-2 p-8"
+							className="snap-start rounded-md border-2 border-primary-container/20 p-8"
 						>
 							{t("feature-medical-history")}
 						</Card>
@@ -63,7 +63,7 @@ export default function IndexRoute() {
 					<li className="min-w-64">
 						<Card
 							variant="flat"
-							className="border-primary-container/20 snap-start rounded-md border-2 p-8"
+							className="snap-start rounded-md border-2 border-primary-container/20 p-8"
 						>
 							{t("feature-share-reminders")}
 						</Card>
@@ -71,7 +71,7 @@ export default function IndexRoute() {
 					<li className="min-w-64">
 						<Card
 							variant="flat"
-							className="border-primary-container/20 snap-start rounded-md border-2 p-8"
+							className="snap-start rounded-md border-2 border-primary-container/20 p-8"
 						>
 							{t("feature-connect-veterinaries")}
 						</Card>

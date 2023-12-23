@@ -10,7 +10,7 @@ import { createInstance } from "i18next";
 import i18next from "~/i18n/i18next.server.ts";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import Backend from "i18next-fs-backend";
-import i18n from "~/i18n/shared.ts"; // your i18n configuration file
+import i18n from "~/i18n/shared.ts";
 import { resolve } from "node:path";
 
 const ABORT_DELAY = 5000;

@@ -4,10 +4,6 @@ import { Icon, type IconName } from "~/lib/icons/icon.tsx";
 import { NavCard } from "~/lib/ui/card.tsx";
 import { LogoLink } from "~/lib/ui/logo-link.tsx";
 
-export let handle = {
-	i18n: ["www", "common"],
-};
-
 export default function WWWLayout() {
 	const { t } = useTranslation(["www", "common"]);
 

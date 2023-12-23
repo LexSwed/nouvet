@@ -17,7 +17,6 @@
     "@lucia-auth/adapter-sqlite": "^2.0.1",
     "@lucia-auth/oauth": "^3.5.0",
     "@radix-ui/react-slot": "^1.0.2",
-    "@remix-run/css-bundle": "^2.4.1",
     "@remix-run/node": "^2.4.1",
     "@remix-run/react": "^2.4.1",
     "@remix-run/serve": "^2.4.1",

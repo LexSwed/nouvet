@@ -1,5 +1,4 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node";
 import {
 	Links,
 	LiveReload,
@@ -7,22 +6,14 @@ import {
 	Outlet,
 	Scripts,
 	ScrollRestoration,
-	json,
-	useLoaderData,
 } from "@remix-run/react";
 
 import "./globals.css";
 
 import { href as svgSprite } from "./lib/icons/icon.tsx";
-import i18next from "./i18n/i18next.server.ts";
 import { useTranslation } from "react-i18next";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-	let locale = await i18next.getLocale(request);
-	return json({ locale });
-}
 export const links: LinksFunction = () => [
-	...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 	{ rel: "icon", href: "/icons/icon.svg", sizes: "32x32" },
 	{ rel: "apple-touch-icon", href: "/icons/icon.svg" },
 	{ rel: "icon", href: "/icons/icon-apple.png" },
@@ -42,13 +33,11 @@ export default function App() {
 				<Meta />
 				<Links />
 			</head>
-			<body className="text-on-background h-full bg-background font-sans">
-				<div id="app">
-					<Outlet />
-				</div>
+			<body>
+				<Outlet />
 				<ScrollRestoration />
-				<LiveReload />
 				<Scripts />
+				<LiveReload />
 			</body>
 		</html>
 	);
