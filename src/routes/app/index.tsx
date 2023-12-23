@@ -9,11 +9,10 @@ import { Show } from 'solid-js';
 import { createTranslator, getDictionary } from '~/i18n';
 import { Avatar } from '~/lib/ui/avatar';
 import { ButtonLink } from '~/lib/ui/button';
-import { Card, NavCard } from '~/lib/ui/card';
+import { Card } from '~/lib/ui/card';
 import { Icon } from '~/lib/ui/icon';
 import { getUserFamilyAndPets } from '~/server/api/getUserFamilyAndPets';
 
-import ArrowCircleUpRight from '~/assets/icons/arrow-circle-up-right.svg';
 import { TextField } from '~/lib/ui/text-field/text-field';
 
 export const route = {
@@ -76,7 +75,7 @@ function AppMainPage(props: RouteSectionProps) {
                           {t('app.invite-card-heading')}
                         </h3>
                         <Icon
-                          icon={ArrowCircleUpRight}
+                          use="arrow-circle-up-right"
                           class="text-primary"
                           size="sm"
                         />

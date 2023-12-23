@@ -54,7 +54,7 @@ function AppLoginPage() {
             variant="ghost"
             label={t('login.back-home')}
           >
-            <Icon icon={chevronLeft} size="xl" />
+            <Icon use="chevron-left" size="xl" />
           </ButtonLink>
         </section>
       </div>

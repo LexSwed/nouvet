@@ -1,12 +1,20 @@
 import { defineConfig } from '@solidjs/start/config';
 import { type UserConfig } from 'vite';
-import createSvgSpritePlugin from 'vite-plugin-svg-sprite';
+import viteSvgSpriteWrapper from 'vite-svg-sprite-wrapper';
 
 const config = {
   plugins: [
-    createSvgSpritePlugin({
-      include: '**/src/assets/icons/*.svg',
-      symbolId: 'icon-[name]-[hash]',
+    viteSvgSpriteWrapper({
+      icons: './src/assets/icons/*.svg',
+      outputDir: './public/assets',
+      generateType: true,
+      sprite: {
+        shape: {
+          dimension: {
+            attributes: true, // Width and height attributes on embedded shapes
+          },
+        },
+      },
     }),
   ],
 } satisfies UserConfig;

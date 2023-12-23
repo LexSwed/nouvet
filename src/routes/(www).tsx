@@ -1,14 +1,10 @@
 import { type RouteDefinition } from '@solidjs/router';
 import { For, Show, type ParentProps } from 'solid-js';
 
-import nouvetIcon from '~/assets/icons/nouvet.svg';
-import packageIcon from '~/assets/icons/package.svg';
-// import scrollIcon from '~/assets/icons/scroll.svg';
-
 import { createTranslator, getDictionary } from '~/i18n';
 import { LogoLink } from '~/lib/logo-link';
 import { NavCard } from '~/lib/ui/card';
-import { Icon } from '~/lib/ui/icon';
+import { Icon, type IconProps } from '~/lib/ui/icon';
 
 export const route = {
   load() {
@@ -19,23 +15,24 @@ export const route = {
 export default function WWWLayout(props: ParentProps) {
   const t = createTranslator('www');
 
-  const items: Array<{ label: string; icon: string; href: string }> = [
-    {
-      href: '/#features',
-      label: t('www.features')!,
-      icon: packageIcon,
-    },
-    {
-      href: '/about',
-      label: t('www.link-about-the-project')!,
-      icon: nouvetIcon,
-    },
-    // {
-    //   href: '/privacy',
-    //   label: t('www.link-privacy-policy')!,
-    //   icon: scrollIcon,
-    // },
-  ];
+  const items: Array<{ label: string; icon: IconProps['use']; href: string }> =
+    [
+      {
+        href: '/#features',
+        label: t('www.features')!,
+        icon: 'package',
+      },
+      {
+        href: '/about',
+        label: t('www.link-about-the-project')!,
+        icon: 'nouvet',
+      },
+      // {
+      //   href: '/privacy',
+      //   label: t('www.link-privacy-policy')!,
+      //   icon: scrollIcon,
+      // },
+    ];
   return (
     <Show when={t('www.cta-start')}>
       <div class="min-h-full bg-main pb-8 pt-4">
@@ -52,7 +49,7 @@ export default function WWWLayout(props: ParentProps) {
                       href={item.href}
                       class="flex min-w-[8rem] flex-col place-items-start gap-2 p-3"
                     >
-                      <Icon size="lg" icon={item.icon} class="text-primary" />
+                      <Icon size="sm" use={item.icon} class="text-primary" />
                       {item.label}
                     </NavCard>
                   </li>
