@@ -11,4 +11,5 @@ export default {
 	defaultNS: "common",
 	// Disabling suspense is recommended
 	react: { useSuspense: false },
+	keySeparator: false,
 } satisfies InitOptions;

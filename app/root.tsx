@@ -32,9 +32,6 @@ export const links: LinksFunction = () => [
 ];
 
 export default function App() {
-	// Get the locale from the loader
-	let { locale } = useLoaderData<typeof loader>();
-
 	let { i18n } = useTranslation();
 
 	return (

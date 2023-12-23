@@ -1,14 +1,22 @@
-import { type MetaFunction } from "@remix-run/node";
+import {
+	json,
+	type LoaderFunctionArgs,
+	type MetaFunction,
+} from "@remix-run/node";
 import { Trans, useTranslation } from "react-i18next";
 import { ButtonLink } from "~/lib/ui/button.tsx";
 import { Icon } from "~/lib/icons/icon.tsx";
 import { Card } from "~/lib/ui/card.tsx";
 import { HeroImage } from "~/lib/ui/hero-image.tsx";
+import i18next from "~/i18n/i18next.server.ts";
 
-export const meta: MetaFunction = () => {
-	// let t = await i18n.getFixedT(request);
-	// return [{ title: i18n.t("meta.main-title", { ns: "www" }) }];
-	return [];
+export async function loader({ request }: LoaderFunctionArgs) {
+	let t = await i18next.getFixedT(request, "www");
+	return json({ title: t("meta.main-title") });
+}
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+	return [{ title: data?.title }];
 };
 
 export default function IndexRoute() {
