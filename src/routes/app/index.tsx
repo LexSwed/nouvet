@@ -1,5 +1,6 @@
 import { Title } from '@solidjs/meta';
 import {
+  A,
   createAsync,
   type RouteDefinition,
   type RouteSectionProps,
@@ -55,26 +56,33 @@ function AppMainPage(props: RouteSectionProps) {
               <Avatar name={userName()} avatarUrl={user().avatarUrl} />
             </header>
             <div class="flex flex-col gap-6">
-              <Show when={!user().family && user().pets.length === 0}>
-                <article class="container">
-                  <NavCard
-                    href="/app/join"
-                    variant="filled-secondary"
-                    class="flex flex-row items-center justify-between gap-2 text-balance"
-                  >
-                    <h3 class="text-base">{t('app.invite-card-heading')}</h3>
-                    <Icon
-                      icon={ArrowCircleUpRight}
-                      class="text-tertiary"
-                      size="sm"
-                    />
-                  </NavCard>
-                </article>
-              </Show>
               <section class="container">
-                <Card variant="flat" class="flex flex-col gap-4">
-                  <h3 class="text-2xl">Your pet</h3>
-                  <TextField label="Name" placeholder="Garfield" />
+                <Card variant="outlined" class="p-0">
+                  <div class="flex flex-col gap-4 p-4 ">
+                    <h3 class="text-2xl">{t('app.new-pet-heading')}</h3>
+                    <TextField
+                      label={t('app.new-pet-text-field-label')}
+                      placeholder={t('app.new-pet-text-field-placeholder')}
+                    />
+                  </div>
+                  <Show when={!user().family && user().pets.length === 0}>
+                    <>
+                      <hr class="border-outline/20" />
+                      <A
+                        href="/app/join"
+                        class="-m-[1px] flex flex-row items-center justify-between gap-2 text-balance bg-primary-container p-4 shadow-[0_0_1px_theme(colors.primary)]"
+                      >
+                        <h3 class="text-base">
+                          {t('app.invite-card-heading')}
+                        </h3>
+                        <Icon
+                          icon={ArrowCircleUpRight}
+                          class="text-primary"
+                          size="sm"
+                        />
+                      </A>
+                    </>
+                  </Show>
                 </Card>
               </section>
             </div>

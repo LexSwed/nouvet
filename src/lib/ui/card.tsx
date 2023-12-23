@@ -11,13 +11,13 @@ const cardVariants = cva('rounded-lg p-6 transition-shadow', {
       false: '',
     },
     variant: {
-      'elevated': 'bg-surface text-on-surface shadow-1',
-      'flat': 'bg-surface-container text-on-surface',
+      'elevated': 'bg-surface-container text-on-surface',
+      'flat': 'bg-surface text-on-surface',
       'filled':
         'bg-secondary-container focus:outline-background text-on-secondary-container',
       'filled-secondary':
         'bg-tertiary-container focus:outline-background text-on-tertiary-container',
-      'outlined': 'bg-surface text-on-surface border border-outline-variant',
+      'outlined': 'bg-surface text-on-surface border border-outline/20',
     },
   },
   defaultVariants: {

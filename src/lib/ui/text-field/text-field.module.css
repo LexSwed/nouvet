@@ -30,15 +30,12 @@
       );
     }
     &:where(:focus-within, :hover) {
-      background-color: theme('colors.primary-container/0.3');
+      background-color: theme('colors.surface-container-high');
       --border-mx: 0;
     }
     &:where(:focus-within) {
-      --border-color: theme('colors.primary');
+      --border-color: theme('colors.on-surface');
       --border-scale: 1.5;
-      & > .label {
-        color: theme('colors.primary');
-      }
     }
   }
   .label {
