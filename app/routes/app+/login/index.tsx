@@ -18,12 +18,11 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export let handle = {
-	i18n: "login",
+	i18n: ["common", "login"],
 };
 
 function AppLoginPage() {
-	const { t: tCommon } = useTranslation("common");
-	const { t } = useTranslation("login");
+	const { t } = useTranslation(["login", "common"]);
 	const [loading, setLoading] = useState(false);
 
 	const onClick = () => {
@@ -38,7 +37,7 @@ function AppLoginPage() {
 		<>
 			<div className="flex min-h-full flex-col gap-12 bg-main pb-8 pt-4">
 				<header className="container">
-					<LogoLink label={tCommon("link-home")!} />
+					<LogoLink label={t("link-home", { ns: "common" })} />
 				</header>
 				<section className="container flex h-full flex-[2] flex-col items-center gap-12">
 					<div className="flex max-w-2xl flex-col gap-8">

@@ -5,12 +5,11 @@ import { NavCard } from "~/lib/ui/card.tsx";
 import { LogoLink } from "~/lib/ui/logo-link.tsx";
 
 export let handle = {
-	i18n: "www",
+	i18n: ["www", "common"],
 };
 
 export default function WWWLayout() {
-	const { t: commonT } = useTranslation("common");
-	const { t } = useTranslation("www");
+	const { t } = useTranslation(["www", "common"]);
 
 	const items: Array<{ label: string; icon: IconName; href: string }> = [
 		{
@@ -33,7 +32,10 @@ export default function WWWLayout() {
 		<div className="min-h-full bg-main pb-8 pt-4">
 			<header className="container flex flex-col gap-4">
 				<div className="flex flex-row items-center">
-					<LogoLink label={commonT("app-name")} className="-m-4 p-4" />
+					<LogoLink
+						label={t("app-name", { ns: "common" })}
+						className="-m-4 p-4"
+					/>
 				</div>
 				<nav>
 					<ul className="-mx-4 flex snap-x snap-mandatory flex-row gap-2 overflow-x-auto p-2 scrollbar-none sm:-mx-2">

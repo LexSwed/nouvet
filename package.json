@@ -4,8 +4,8 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build && vite build --ssr",
+    "dev": "remix vite:dev",
+    "build": "remix vite:build",
     "build:icons": "npx rmx-cli svg-sprite assets/icons app/lib/icons --components --components-template=./assets/icons/icon.template",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc",
