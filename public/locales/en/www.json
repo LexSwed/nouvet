@@ -11,7 +11,7 @@
   "feature-medical-history": "Own the medical history of your pet",
   "feature-share-reminders": "Share the reminders with your family",
   "feature-connect-veterinaries": "Connect with veterinaries around you",
-  "meta.main-title": "NouVet for pets wellbeing",
-  "meta.about-title": "About NouVet",
-  "meta.privacy-title": "NouVet privacy policy"
+  "meta:main-title": "NouVet for pets wellbeing",
+  "meta:about-title": "About NouVet",
+  "meta:privacy-title": "NouVet privacy policy"
 }

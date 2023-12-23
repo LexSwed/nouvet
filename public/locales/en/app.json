@@ -1,7 +1,7 @@
 {
   "login": "Log in",
-  "meta.title-new-user": "NouVet | Welcome",
-  "meta.title": "NouVet | {{familyName}}",
+  "meta:title-new-user": "NouVet | Welcome",
+  "meta:title": "NouVet | {{familyName}}",
   "my-family-cta": "My Family",
   "invite-card-heading": "Have your partner already registered? Join them!",
   "invite-card-description": "Your pets are happier with more humans around! Share the care for your pets with the loved ones.",
