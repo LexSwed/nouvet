@@ -30,11 +30,11 @@
       );
     }
     &:where(:focus-within, :hover) {
-      background-color: theme('colors.surface-container-high');
+      background-color: theme('colors.primary-container/0.3');
       --border-mx: 0;
     }
     &:where(:focus-within) {
-      --border-color: theme('colors.on-surface');
+      --border-color: theme('colors.primary');
       --border-scale: 1.5;
     }
   }

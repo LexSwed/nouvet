@@ -69,9 +69,9 @@ function AppMainPage(props: RouteSectionProps) {
                       <hr class="border-outline/20" />
                       <A
                         href="/app/join"
-                        class="flex flex-row items-center justify-between gap-2 text-balance bg-primary-container p-4 shadow-[0_0_1px_theme(colors.primary)]"
+                        class="flex flex-row items-center justify-between gap-2 text-balance rounded-b-[inherit] p-4"
                       >
-                        <h3 class="text-base">
+                        <h3 class="text-sm text-primary">
                           {t('app.invite-card-heading')}
                         </h3>
                         <Icon

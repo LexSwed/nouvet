@@ -21,7 +21,7 @@ const config = {
 
 export default defineConfig({
   start: {
-    ssr: true,
+    ssr: 'async',
     middleware: './src/middleware.ts',
   },
   ...config,

@@ -2,7 +2,7 @@ import { splitProps, type JSX, Show, createUniqueId } from 'solid-js';
 import { tw } from '../tw';
 import { mergeDefaultProps } from '../../merge-default-props';
 
-import cssStyle from './text-field.module.css';
+import * as cssStyle from './text-field.module.css';
 
 export interface TextFieldProps
   extends JSX.InputHTMLAttributes<HTMLInputElement> {
