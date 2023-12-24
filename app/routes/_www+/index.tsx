@@ -5,7 +5,7 @@ import {
 } from "@remix-run/node";
 import { Trans, useTranslation } from "react-i18next";
 import { ButtonLink } from "~/lib/ui/button.tsx";
-import { Icon } from "~/lib/icons/icon.tsx";
+import { Icon } from "~/lib/ui/icon/icon";
 import { Card } from "~/lib/ui/card.tsx";
 import { HeroImage } from "~/lib/ui/hero-image.tsx";
 import i18next from "~/i18n/i18next.server.ts";
@@ -39,7 +39,7 @@ export default function IndexRoute() {
 							className="relative -me-12 mt-16 flex shrink-0 items-center gap-4 self-start text-lg sm:me-0"
 						>
 							{t("cta-start")}
-							<Icon icon="arrow-circle-up-right" className="h-8 w-8 shrink-0" />
+							<Icon use="arrow-circle-up-right" className="h-8 w-8 shrink-0" />
 						</ButtonLink>
 						<div className="h-full w-[85%] min-w-[320px] overflow-hidden rounded-2xl sm:top-36 sm:w-full lg:absolute lg:right-4 lg:top-4 lg:max-h-[calc(100%-theme(spacing.8))] lg:w-[65%] xl:w-[45%]">
 							<HeroImage alt={t("hero-image")} />

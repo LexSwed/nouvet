@@ -1,5 +1,5 @@
 import { Link, type LinkProps } from "@remix-run/react";
-import { Icon } from "../icons/icon.tsx";
+import { Icon } from "./icon";
 import { tw } from "./tw.ts";
 
 function LogoLink({ className, label }: { label: string; className?: string }) {
@@ -10,7 +10,7 @@ function LogoLink({ className, label }: { label: string; className?: string }) {
 			title={label}
 			className={tw("flex flex-row items-center gap-4", className)}
 		>
-			<Icon icon="nouvet" className="h-14 w-14" />
+			<Icon use="nouvet" className="h-14 w-14" />
 			<span className="hidden text-lg sm:inline-block">{label}</span>
 		</Link>
 	);

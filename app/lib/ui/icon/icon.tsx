@@ -1,18 +1,8 @@
 import { type SVGProps } from "react";
-import href from "./icon.svg";
-export { href };
-
-export const iconNames = [
-	"arrow-circle-up-right",
-	"chevron-left",
-	"nouvet",
-	"package",
-	"scroll",
-	"stack",
-] as const;
-export type IconName = (typeof iconNames)[number];
 
 import { tw } from "~/lib/ui/tw.ts";
+import type { SvgIcons } from "./svg-icons";
+export type { SvgIcons };
 
 const sizeClassName = {
 	font: "w-font h-font",
@@ -26,17 +16,17 @@ const sizeClassName = {
 type Size = keyof typeof sizeClassName;
 
 export function Icon({
-	icon,
+	use,
 	size = "font",
 	className,
 	...props
 }: SVGProps<SVGSVGElement> & {
-	icon: IconName;
+	use: SvgIcons;
 	size?: Size;
 }) {
 	return (
 		<svg {...props} className={tw(sizeClassName[size], "inline", className)}>
-			<use href={`${href}#${icon}`} />
+			<use href={`/assets/sprite.svg#${use}`} />
 		</svg>
 	);
 }

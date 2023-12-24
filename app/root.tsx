@@ -10,7 +10,6 @@ import {
 
 import "./globals.css";
 
-import { href as svgSprite } from "./lib/icons/icon.tsx";
 import { useTranslation } from "react-i18next";
 
 export const links: LinksFunction = () => [
@@ -19,7 +18,7 @@ export const links: LinksFunction = () => [
 	{ rel: "icon", href: "/icons/icon-apple.png" },
 	{ rel: "manifest", href: "/manifest.webmanifest" },
 	// icons
-	{ rel: "preload", href: svgSprite, as: "image" },
+	{ rel: "preload", href: "/assets/sprite.svg", as: "image" },
 ];
 
 export default function App() {

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Outlet } from "@remix-run/react";
-import { Icon, type IconName } from "~/lib/icons/icon.tsx";
+import { Icon, type SvgIcons } from "~/lib/ui/icon";
 import { NavCard } from "~/lib/ui/card.tsx";
 import { LogoLink } from "~/lib/ui/logo-link.tsx";
 
@@ -9,7 +9,7 @@ export let handle = { i18n: ["common", "www"] };
 export default function WWWLayout() {
 	const { t } = useTranslation(["www", "common"]);
 
-	const items: Array<{ label: string; icon: IconName; href: string }> = [
+	const items: Array<{ label: string; icon: SvgIcons; href: string }> = [
 		{
 			href: "/#features",
 			label: t("features")!,
@@ -43,7 +43,7 @@ export default function WWWLayout() {
 									to={item.href}
 									className="flex min-w-[8rem] flex-col place-items-start gap-2 p-3"
 								>
-									<Icon size="lg" icon={item.icon} className="text-primary" />
+									<Icon size="lg" use={item.icon} className="text-primary" />
 									{item.label}
 								</NavCard>
 							</li>
