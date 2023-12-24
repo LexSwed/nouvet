@@ -32,7 +32,7 @@ function AppMainPage(props: RouteSectionProps) {
         <>
           <Title>
             <Show
-              when={user().family}
+              when={user().family?.name}
               children={t('app.meta.title', {
                 familyName: user().family?.name!,
               })}
