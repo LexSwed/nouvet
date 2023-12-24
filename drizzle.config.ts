@@ -1,10 +1,12 @@
+import "dotenv/config";
+
 import { type Config } from "drizzle-kit";
 
 export default {
-	out: "./db/.drizzle",
-	schema: "./db/schema.ts",
+	schema: "./app/db/schema.ts",
+	out: "./app/db/drizzle/migrations",
 	driver: "better-sqlite",
 	dbCredentials: {
-		url: "./db/sqlite.db",
+		url: String(process.env.DB),
 	},
 } satisfies Config;

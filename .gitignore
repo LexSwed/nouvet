@@ -1,8 +1,34 @@
-node_modules
 
+# dependencies
+node_modules/
+
+# build output
 /.cache
 /build
 /public/build
-.env
+dist/
+.output
+.wrangler
 
+# environment variables
+.env*
+!.env.example
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# macOS-specific files
 .DS_Store
+
+# just in case
+.npmrc
+
+# eslint cache
+.eslintcache
+
+# local sqlite db
+sqlite.db
+app/db/.drizzle

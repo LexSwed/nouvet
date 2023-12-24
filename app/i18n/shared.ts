@@ -1,8 +1,10 @@
 import type { InitOptions } from "i18next";
 
+export const acceptedLocales = ["en", "es"];
+
 export default {
 	// This is the list of languages your application supports
-	supportedLngs: ["en", "es"],
+	supportedLngs: acceptedLocales,
 	// This is the language you want to use in case
 	// if the user language is not in the supportedLngs
 	fallbackLng: "en",
