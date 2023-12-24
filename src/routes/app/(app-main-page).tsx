@@ -11,9 +11,9 @@ import { Avatar } from '~/lib/ui/avatar';
 import { ButtonLink } from '~/lib/ui/button';
 import { Card } from '~/lib/ui/card';
 import { Icon } from '~/lib/ui/icon';
-import { getUserFamilyAndPets } from '~/server/api/getUserFamilyAndPets';
 
 import { TextField } from '~/lib/ui/text-field/text-field';
+import { getUserFamilyAndPets } from './_queries';
 
 export const route = {
   load() {
@@ -25,8 +25,6 @@ export const route = {
 function AppMainPage(props: RouteSectionProps) {
   const t = createTranslator('app');
   const user = createAsync(() => getUserFamilyAndPets());
-
-  const userName = () => user()?.name || '';
 
   return (
     <Show when={user()}>
@@ -56,7 +54,7 @@ function AppMainPage(props: RouteSectionProps) {
                   </ButtonLink>
                 }
               />
-              <Avatar name={userName()} avatarUrl={user().avatarUrl} />
+              <Avatar name={user().name || ''} avatarUrl={user().avatarUrl} />
             </header>
             <div class="flex flex-col gap-6">
               <section class="container">
