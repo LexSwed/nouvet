@@ -33,7 +33,7 @@ export default createMiddleware({
             new URL(event.request.url).pathname,
             {
               httpOnly: true,
-              maxAge: 60 * 5, // 5 minutes
+              maxAge: 10 * 60, // 10 minutes
             },
           );
           return new Response(null, {

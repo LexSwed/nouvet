@@ -33,9 +33,13 @@ function AppMainPage(props: RouteSectionProps) {
       {(user) => (
         <>
           <Title>
-            {user().family
-              ? t('app.meta.title', { familyName: user().family?.name! })
-              : t('app.meta.title-new-user')}
+            <Show
+              when={user().family}
+              children={t('app.meta.title', {
+                familyName: user().family?.name!,
+              })}
+              fallback={t('app.meta.title-new-user')}
+            ></Show>
           </Title>
           <div class="min-h-full bg-background">
             <header class="align-center flex justify-between px-4 py-4">

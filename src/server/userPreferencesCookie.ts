@@ -1,6 +1,5 @@
 import type { FetchEvent } from '@solidjs/start/server/types';
 import {
-  custom,
   object,
   string,
   type BaseValidation,
@@ -8,10 +7,8 @@ import {
   actionIssue,
   actionOutput,
   picklist,
-  safeParse,
   type Output,
   parse,
-  ValiError,
 } from 'valibot';
 import { getCookie, setCookie } from 'vinxi/server';
 import { acceptedLocales } from '~/i18n/const';

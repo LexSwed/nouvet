@@ -10,7 +10,7 @@
     flex-direction: column;
     transition: background-color 0.2s ease-out;
     border-radius: theme('borderRadius.lg') theme('borderRadius.lg') 0 0;
-    @apply -mx-2;
+    margin-inline: theme(spacing.2);
     &:after {
       position: absolute;
       bottom: 0;
