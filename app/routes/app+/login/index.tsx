@@ -10,7 +10,7 @@ import { LogoLink } from "~/lib/ui/logo-link.tsx";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	let t = await i18next.getFixedT(request, "login");
-	return json({ title: t("meta:title") });
+	return json({ title: t("meta.title") });
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
