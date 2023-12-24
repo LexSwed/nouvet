@@ -3,7 +3,7 @@ import { json, type MetaFunction } from "@remix-run/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18next from "~/i18n/i18next.server.ts";
-import { Icon } from "~/lib/ui/icon/icon";
+import { Icon } from "~/lib/ui/icon";
 import { ButtonLink } from "~/lib/ui/button.tsx";
 import { HeroImage } from "~/lib/ui/hero-image.tsx";
 import { LogoLink } from "~/lib/ui/logo-link.tsx";

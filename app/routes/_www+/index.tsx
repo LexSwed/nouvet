@@ -5,7 +5,7 @@ import {
 } from "@remix-run/node";
 import { Trans, useTranslation } from "react-i18next";
 import { ButtonLink } from "~/lib/ui/button.tsx";
-import { Icon } from "~/lib/ui/icon/icon";
+import { Icon } from "~/lib/ui/icon";
 import { Card } from "~/lib/ui/card.tsx";
 import { HeroImage } from "~/lib/ui/hero-image.tsx";
 import i18next from "~/i18n/i18next.server.ts";
