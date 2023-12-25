@@ -10,7 +10,7 @@ import {
 	string,
 } from "valibot";
 
-import { useDb } from "..";
+import { useDb } from "../db.server";
 import { userTable, authAccount, userProfileTable } from "../schema";
 
 const createUserSchema = object({

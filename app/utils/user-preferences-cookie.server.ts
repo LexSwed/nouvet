@@ -40,7 +40,7 @@ export const getUserPreferences = async (
 };
 
 /**
- * Serializes user preferences to a cookie for 30 days if all the values are correct.
+ * Serializes user preferences to a cookie for 180 days if all the values are correct.
  * @throws {ValiError} if locale or measurements system is not supported.
  */
 export const serializeUserPreferences = (

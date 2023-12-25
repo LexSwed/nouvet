@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import type { DatabaseUser } from "lucia";
-import { useDb } from "..";
+import { useDb } from "../db.server";
 import { userTable, familyTable, petTable, userProfileTable } from "../schema";
 
 export const getDbUserFamilyAndPets = async (userId: DatabaseUser["id"]) => {

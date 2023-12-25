@@ -1,9 +1,8 @@
 import { DrizzleSQLiteAdapter } from "@lucia-auth/adapter-drizzle";
 import { Facebook } from "arctic";
-import { Lucia, type DatabaseUserAttributes, type User } from "lucia";
-import { verifyRequestOrigin } from "oslo/request";
+import { Lucia, type DatabaseUserAttributes } from "lucia";
 
-import { useDb } from "~/db";
+import { useDb } from "~/db/db.server";
 import { sessionTable, userTable, type DatabaseUser } from "~/db/schema";
 import { env } from "~/utils/env.server";
 
@@ -32,51 +31,12 @@ declare module "lucia" {
 	interface DatabaseUserAttributes extends DatabaseUser {}
 }
 
-export const useFacebookAuth = () => {
+export const useFacebookAuth = (request: Request) => {
+	const origin = new URL(request.url).origin;
 	return new Facebook(
 		env.FACEBOOK_APP_ID,
 		env.FACEBOOK_APP_SECRET,
-		"http://localhost:3000/api/auth/facebook/callback",
+		// TODO:
+		`${origin}/api/auth/facebook/callback`,
 	);
 };
-
-export async function validateUser(event: {
-	request: Request;
-	response: Response;
-}): Promise<User | null> {
-	if (env.PROD) {
-		const originHeader = event.request.headers.get("Origin");
-		const hostHeader = event.request.headers.get("Host");
-		if (
-			!originHeader ||
-			!hostHeader ||
-			!verifyRequestOrigin(originHeader, [hostHeader])
-		) {
-			throw new Error("Request Origin is not matching");
-		}
-	}
-	const lucia = useLucia();
-	const cookieHeader = event.request.headers.get("Cookie");
-	const sessionId = lucia.readSessionCookie(cookieHeader ?? "");
-	if (!sessionId) {
-		return null;
-	}
-
-	const { session, user } = await lucia.validateSession(sessionId);
-
-	if (!session) {
-		// sessionId is not valid, reset it
-		const blankSessionCookie = lucia.createBlankSessionCookie();
-		event.response.headers.set("Set-Cookie", blankSessionCookie.serialize());
-		return null;
-	}
-
-	// the session has been updated, update the cookie expiration date
-	if (session.fresh) {
-		const sessionCookie = lucia.createSessionCookie(session.id);
-
-		event.response.headers.set("Set-Cookie", sessionCookie.serialize());
-	}
-
-	return user;
-}

@@ -1,3 +1,17 @@
 import Database from "better-sqlite3";
+import {
+	drizzle,
+	type BetterSQLite3Database,
+} from "drizzle-orm/better-sqlite3";
+import { env } from "~/utils/env.server";
 
-export const sqlite = new Database("./db/sqlite.db");
+let _db: BetterSQLite3Database | null = null;
+
+export const useDb = () => {
+	if (!_db) {
+		const sqlite = new Database(env.DB);
+		_db = drizzle(sqlite, { logger: env.DEV });
+	}
+
+	return _db;
+};

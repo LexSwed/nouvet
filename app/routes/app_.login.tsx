@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json, type MetaFunction } from "@remix-run/react";
+import { json, useNavigation, type MetaFunction } from "@remix-run/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18next from "~/i18n/i18next.server.ts";
@@ -21,15 +21,9 @@ export let handle = { i18n: ["common", "login"] };
 
 export default function AppLoginPage() {
 	const { t } = useTranslation(["login", "common"]);
-	const [loading, setLoading] = useState(false);
+	const navigation = useNavigation();
 
-	const onClick = () => {
-		setLoading(true);
-		const timeout = setTimeout(() => {
-			setLoading(false);
-		}, 1000);
-		clearTimeout(timeout);
-	};
+	const isLoading = "/api/auth/facebook" === navigation.location?.pathname;
 
 	return (
 		<div className="flex min-h-full flex-col gap-12 bg-main pb-8 pt-4">
@@ -47,8 +41,7 @@ export default function AppLoginPage() {
 						to="/api/auth/facebook"
 						className="flex items-center gap-3 !bg-[#1877F2]"
 						size="lg"
-						loading={loading}
-						onClick={onClick}
+						loading={isLoading}
 					>
 						<img src="/assets/facebook.svg" className="h-8 w-8" alt="" />
 						{t("with-facebook")}

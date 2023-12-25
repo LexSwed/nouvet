@@ -8,7 +8,6 @@ export let handle = { i18n: ["common", "www"] };
 
 export default function WWWLayout() {
 	const { t } = useTranslation(["www", "common"]);
-
 	const items: Array<{ label: string; icon: SvgIcons; href: string }> = [
 		{
 			href: "/#features",

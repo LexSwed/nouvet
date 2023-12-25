@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { useDb } from "..";
+import { useDb } from "../db.server";
 import { petTable, type DatabaseUser } from "../schema";
 
 /**

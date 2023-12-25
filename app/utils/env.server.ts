@@ -22,7 +22,7 @@ const schema = object({
 });
 
 export let env: Output<typeof schema>;
-console.log(import.meta.env);
+
 try {
 	env = parse(schema, {
 		...import.meta.env,

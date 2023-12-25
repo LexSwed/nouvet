@@ -12,7 +12,7 @@ import i18next from "~/i18n/i18next.server.ts";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	let t = await i18next.getFixedT(request, "www");
-	return json({ title: t("meta:main-title") });
+	return json({ title: t("meta.main-title") });
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

@@ -22,7 +22,7 @@ export const Spinner = ({ size, className, ...props }: Props) => {
 				cy="25"
 				r="20"
 				fill="none"
-				stroke-width="4"
+				strokeWidth="4"
 				className="animate-spinner-circle stroke-current [stroke-linecap:round]"
 			/>
 		</svg>

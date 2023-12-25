@@ -1,5 +1,5 @@
 import { and, eq } from "drizzle-orm";
-import { useDb } from "..";
+import { useDb } from "../db.server";
 import {
 	type SupportedAuthProvider,
 	authAccount,
