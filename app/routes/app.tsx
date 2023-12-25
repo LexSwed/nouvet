@@ -1,5 +1,10 @@
 import { redirect, type LoaderFunctionArgs, json } from "@remix-run/node";
-import { returnUrlCookie, userCookie } from "~/auth/cookie.server";
+import { getI18n } from "react-i18next";
+import {
+	getSafeRequestUser,
+	returnUrlCookie,
+	serializeUserCookie,
+} from "~/auth/cookie.server";
 import { useLucia } from "~/auth/lucia.server";
 
 /** Validates user auth. Expected to run before any other loader,
@@ -37,10 +42,27 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	}
 
 	const headers = new Headers();
-	headers.append(
-		"Set-Cookie",
-		await userCookie.serialize(JSON.stringify(user)),
-	);
+
+	/** Refresh user cookie if necessary */
+	const requestUser = await getSafeRequestUser(request);
+	if (!requestUser.success) {
+		const localeString = getI18n().language || "en-GB";
+		const locale = new Intl.Locale(localeString);
+
+		const measurementSystem =
+			locale.region && ["US", "LR", "MM"].includes(locale.region)
+				? "imperial"
+				: "metrical";
+
+		headers.append(
+			"Set-Cookie",
+			await serializeUserCookie({
+				id: user.id,
+				locale: locale.baseName,
+				measurementSystem,
+			}),
+		);
+	}
 	// the session has been updated, update the cookie expiration date
 	if (session.fresh) {
 		const sessionCookie = lucia.createSessionCookie(session.id);

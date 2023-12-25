@@ -87,6 +87,8 @@ export const userProfileTable = sqliteTable("user_profile", {
 	}).notNull(),
 });
 
+export type DatabaseUserProfile = typeof userProfileTable.$inferSelect;
+
 /**
  * Maps different OAuth accounts to the same user.
  */

@@ -1,12 +1,15 @@
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { useFacebookAuth, useLucia } from "~/auth/lucia.server";
 import { getUserByAuthProviderId } from "~/db/queries/getUserByAuthProviderId";
-import { facebookAuthCookie, returnUrlCookie } from "~/auth/cookie.server";
+import {
+	facebookAuthCookie,
+	returnUrlCookie,
+	serializeUserCookie,
+} from "~/auth/cookie.server";
 import { object, parse, string } from "valibot";
 import { getI18n } from "react-i18next";
 import { createUser } from "~/db/queries/createUser";
 import { OAuth2RequestError } from "arctic";
-import { serializeUserPreferences } from "~/utils/user-preferences-cookie.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const cookieString = request.headers.get("Cookie");
@@ -49,20 +52,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		if (existingUser) {
 			const session = await lucia.createSession(existingUser.id, {});
 			const sessionCookie = lucia.createSessionCookie(session.id);
-			try {
-				headers.append(
-					"Set-Cookie",
-					await serializeUserPreferences({
-						locale: existingUser.locale!,
-						measurementSystem: existingUser.measurementSystem!,
-					}),
-				);
-			} catch (error) {
-				console.error(
-					`Wrong preferences for user ${existingUser.id}: locale ${existingUser.locale}, ${existingUser.measurementSystem}`,
-				);
-			}
-
+			headers.append(
+				"Set-Cookie",
+				await serializeUserCookie({
+					id: existingUser.id,
+					locale: existingUser.locale!,
+					measurementSystem: existingUser.measurementSystem!,
+				}),
+			);
 			headers.append("Set-Cookie", sessionCookie.serialize());
 
 			throw redirect(returnUrl || "/app", { headers });
@@ -88,21 +85,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		const session = await lucia.createSession(user.id, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
 
+		headers.append(
+			"Set-Cookie",
+			await serializeUserCookie({
+				...user,
+				locale: locale.baseName,
+				measurementSystem,
+			}),
+		);
 		headers.append("Set-Cookie", sessionCookie.serialize());
-
-		try {
-			headers.append(
-				"Set-Cookie",
-				await serializeUserPreferences({
-					locale: locale.baseName,
-					measurementSystem,
-				}),
-			);
-		} catch (error) {
-			console.error(
-				`Wrong preferences for user ${user.id}: locale ${locale.baseName}, ${measurementSystem}`,
-			);
-		}
 
 		throw redirect(returnUrl || "/app", { headers });
 	} catch (error) {
