@@ -10,7 +10,6 @@ import {
 import { RETURN_URL_COOKIE } from '~/server/const';
 import { createUser } from '~/server/db/queries/createUser';
 import { getUserByAuthProviderId } from '~/server/db/queries/getUserByAuthProviderId';
-import { useLucia } from '~/server/auth/lucia';
 import { getLocale } from '~/i18n/locale';
 import { getFacebookOAuthStateCookie, useFacebookAuth } from './_shared';
 import { createUserSession } from '~/server/auth/user-session';

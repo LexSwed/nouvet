@@ -7,7 +7,7 @@ export const getUserFamilyAndPets = cache(async () => {
   'use server';
   const event = getRequestEvent();
   const currentUser = await getRequestUser(event!);
-  const userData = await getDbUserFamilyAndPets(currentUser.id);
+  const userData = await getDbUserFamilyAndPets(currentUser.userId);
 
   if (userData.length === 0) throw new Error('User is not authenticated');
   const { userId, avatarUrl, name, familyId, familyName } = userData[0];

@@ -1,6 +1,6 @@
 import { Facebook } from 'arctic';
 import { getRequestEvent, type RequestEvent } from 'solid-js/web';
-import { getCookie, setCookie } from 'vinxi/server';
+import { deleteCookie, getCookie, setCookie } from 'vinxi/server';
 import { env } from '~/server/env';
 
 const FACEBOOK_OAUTH_STATE_COOKIE = 'oauth_state';
@@ -18,7 +18,11 @@ export function setFacebookOAuthStateCookie(
 }
 
 export function getFacebookOAuthStateCookie(event: RequestEvent) {
-  return getCookie(event, FACEBOOK_OAUTH_STATE_COOKIE) ?? null;
+  const cookieString = getCookie(event, FACEBOOK_OAUTH_STATE_COOKIE) ?? null;
+  if (cookieString) {
+    deleteCookie(event, FACEBOOK_OAUTH_STATE_COOKIE);
+  }
+  return cookieString;
 }
 
 export const useFacebookAuth = () => {

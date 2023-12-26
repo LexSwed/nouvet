@@ -1,7 +1,8 @@
 import { type RequestEvent } from 'solid-js/web';
 import { getHeader } from '@solidjs/start/server';
-// import { getRequestUser } from '~/server/auth/user-session';
+import { getRequestUser } from '~/server/auth/user-session';
 
+// TODO: take into account the cookie when start support async in createHandler
 export function getLocale(event: RequestEvent): Intl.Locale {
   try {
     for (const fn of [header]) {
@@ -19,15 +20,15 @@ export function getLocale(event: RequestEvent): Intl.Locale {
 /**
  * Attempts to get preferred language from cookies, for when the user manually updated it from the UI.
  */
-// async function cookie(event: RequestEvent): Promise<Intl.Locale | null> {
-//   try {
-//     const user = await getRequestUser();
-//     return new Intl.Locale(user?.locale!);
-//   } catch (error) {
-//     // TODO: if the app is migrated to new values, where does invalidation of cookies happen?
-//     return null;
-//   }
-// }
+async function cookie(event: RequestEvent): Promise<Intl.Locale | null> {
+  try {
+    const user = await getRequestUser(event);
+    return new Intl.Locale(user?.locale!);
+  } catch (error) {
+    // TODO: if the app is migrated to new values, where does invalidation of cookies happen?
+    return null;
+  }
+}
 
 /**
  * Attempts to get preferred language from Accept-Language header.
