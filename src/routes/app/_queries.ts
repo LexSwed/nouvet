@@ -1,22 +1,25 @@
 import { cache } from '@solidjs/router';
+import { getRequestEvent } from 'solid-js/web';
+import { getRequestUser } from '~/server/auth/user-session';
 import { getDbUserFamilyAndPets } from '~/server/db/queries/getUserFamilyAndPets';
-import { getCurrentUser } from '~/server/utils';
 
 export const getUserFamilyAndPets = cache(async () => {
   'use server';
-  const currentUser = getCurrentUser();
+  const event = getRequestEvent();
+  const currentUser = await getRequestUser(event!);
   const userData = await getDbUserFamilyAndPets(currentUser.id);
 
   if (userData.length === 0) throw new Error('User is not authenticated');
+  const { userId, avatarUrl, name, familyId, familyName } = userData[0];
 
   const user = {
-    id: userData[0].userId,
-    avatarUrl: userData[0].avatarUrl,
-    name: userData[0].name,
-    family: userData[0].familyId
+    id: userId,
+    name,
+    avatarUrl,
+    family: familyId
       ? {
-          id: userData[0].familyId,
-          name: userData[0].familyName,
+          id: familyId,
+          name: familyName,
         }
       : null,
     pets: userData.reduce(

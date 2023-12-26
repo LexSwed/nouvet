@@ -24,9 +24,14 @@ export default createHandler((ctx) => {
               name="viewport"
               content="width=device-width, initial-scale=1"
             />
-            <link rel="icon" href="/icons/icon.svg" sizes="32x32" />
+            <link rel="icon" href="/icons/favicon.ico" sizes="32x32" />
+            <link
+              rel="icon"
+              href="/icons/icon.svg"
+              sizes="32x32"
+              type="image/svg+xml"
+            />
             <link rel="apple-touch-icon" href="/icons/icon-apple.png" />
-            <link rel="icon" href="/icons/icon-apple.png" />
             <link rel="manifest" href="/manifest.webmanifest" />
             {assets}
           </head>

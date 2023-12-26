@@ -5,7 +5,6 @@ import {
   integer,
   primaryKey,
 } from 'drizzle-orm/sqlite-core';
-import { acceptedLocales } from '~/i18n/const';
 
 export const familyTable = sqliteTable('family', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
@@ -81,12 +80,13 @@ export const userProfileTable = sqliteTable('user_profile', {
   avatarUrl: text('avatar_url', { length: 200 }),
   /** Full ISO code, language and region. Inferred from browser on creation, can be changed later. */
   locale: text('locale').notNull(),
-  /** Used for weights. */
+  /** Used for weights formatting, etc. Stored separately in case user wants to change it. */
   measurementSystem: text('measurement_system', {
     mode: 'text',
     enum: ['imperial', 'metrical'] as const,
   }).notNull(),
 });
+export type DatabaseUserProfile = typeof userProfileTable.$inferSelect;
 
 /**
  * Maps different OAuth accounts to the same user.

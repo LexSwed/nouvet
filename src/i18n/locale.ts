@@ -1,11 +1,10 @@
 import { type RequestEvent } from 'solid-js/web';
-import { getCookie, getHeader } from '@solidjs/start/server';
-import { acceptedLocales } from '~/i18n/const';
-import { getUserPreferences } from '~/server/userPreferencesCookie';
+import { getHeader } from '@solidjs/start/server';
+// import { getRequestUser } from '~/server/auth/user-session';
 
 export function getLocale(event: RequestEvent): Intl.Locale {
   try {
-    for (const fn of [cookie, header]) {
+    for (const fn of [header]) {
       const locale = fn(event);
       if (locale) {
         return locale;
@@ -20,15 +19,15 @@ export function getLocale(event: RequestEvent): Intl.Locale {
 /**
  * Attempts to get preferred language from cookies, for when the user manually updated it from the UI.
  */
-function cookie(event: RequestEvent): Intl.Locale | null {
-  try {
-    const preferences = getUserPreferences(event);
-    return new Intl.Locale(preferences.locale);
-  } catch (error) {
-    // TODO: if the app is migrated to new values, where does invalidation of cookies happen?
-    return null;
-  }
-}
+// async function cookie(event: RequestEvent): Promise<Intl.Locale | null> {
+//   try {
+//     const user = await getRequestUser();
+//     return new Intl.Locale(user?.locale!);
+//   } catch (error) {
+//     // TODO: if the app is migrated to new values, where does invalidation of cookies happen?
+//     return null;
+//   }
+// }
 
 /**
  * Attempts to get preferred language from Accept-Language header.
@@ -65,7 +64,7 @@ function header(event: RequestEvent): Intl.Locale | null {
     .find(([locale]) => {
       try {
         // @ts-expect-error thanks TypeScript
-        return acceptedLocales.includes(locale.language);
+        return acceptedLocaleLanguageTag.includes(locale.language);
       } catch (error) {
         return false;
       }
@@ -76,3 +75,7 @@ function header(event: RequestEvent): Intl.Locale | null {
   }
   return null;
 }
+
+export const acceptedLocaleLanguageTag = ['en', 'es'] as const satisfies Array<
+  Intl.Locale['language']
+>;

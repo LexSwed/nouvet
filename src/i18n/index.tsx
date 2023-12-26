@@ -3,14 +3,13 @@ import { cache, createAsync } from '@solidjs/router';
 import { type JSX, type ParentProps } from 'solid-js';
 import { getRequestEvent } from 'solid-js/web';
 
-import { type acceptedLocales } from './const';
-import { getLocale } from './locale';
+import { acceptedLocaleLanguageTag, getLocale } from './locale';
 import type CommonDict from './locales/en/common.json';
 import type AppDict from './locales/en/app.json';
 import type LoginDict from './locales/en/login.json';
 import type WWWDict from './locales/en/www.json';
 
-export type Locale = (typeof acceptedLocales)[number];
+export type Locale = (typeof acceptedLocaleLanguageTag)[number];
 
 type NamespaceMap = {
   common: typeof CommonDict;
@@ -52,7 +51,7 @@ export const getDictionary = cache(
         "Wrong execution environment. Check if 'use server' directive is correctly applied.",
       );
     }
-    const locale = getLocale(event);
+    const locale = await getLocale(event);
     return fetchDictionary(locale.language as Locale, namespace);
   },
   'translations',

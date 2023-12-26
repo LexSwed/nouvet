@@ -50,11 +50,11 @@ function AppLoginPage() {
           </div>
           <ButtonLink
             href="/"
-            class="mt-auto h-16 w-16 rounded-full border-2 border-outline p-0"
+            class="mt-auto flex h-16 w-16 items-center justify-center rounded-full border-2 border-outline p-0"
             variant="ghost"
             label={t('login.back-home')}
           >
-            <Icon use="chevron-left" size="xl" />
+            <Icon use="chevron-left" size="sm" />
           </ButtonLink>
         </section>
       </div>
