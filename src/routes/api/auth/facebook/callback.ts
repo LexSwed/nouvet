@@ -66,7 +66,6 @@ export const GET = async (event: PageEvent) => {
         console.error(
           `Wrong preferences for user ${existingUser.id}: locale ${existingUser.locale}, ${existingUser.measurementSystem}`,
         );
-        return sendRedirect(event, returnUrl || '/app');
       }
 
       return sendRedirect(event, returnUrl || '/app');

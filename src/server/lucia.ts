@@ -8,6 +8,7 @@ import { setCookie } from '@solidjs/start/server';
 import { useDb } from './db';
 import { sessionTable, userTable, type DatabaseUser } from './db/schema';
 import { env } from '~/server/env';
+import { getRequestEvent } from 'solid-js/web';
 
 export const useLucia = () => {
   const db = useDb();
@@ -35,10 +36,12 @@ declare module 'lucia' {
 }
 
 export const useFacebookAuth = () => {
+  const event = getRequestEvent();
+  const { origin } = new URL(event?.request.url!);
   return new Facebook(
     env.FACEBOOK_APP_ID,
     env.FACEBOOK_APP_SECRET,
-    'http://localhost:3000/api/auth/facebook/callback',
+    `${origin}/api/auth/facebook/callback`,
   );
 };
 
