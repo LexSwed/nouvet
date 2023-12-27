@@ -58,5 +58,9 @@ module.exports = {
       plugins: ['@typescript-eslint'],
       extends: ['plugin:solid/typescript'],
     },
+    {
+      files: ['*.stories.ts', '*.stories.tsx'],
+      extends: ['plugin:storybook/recommended'],
+    },
   ],
 };

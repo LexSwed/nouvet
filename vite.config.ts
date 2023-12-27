@@ -3,6 +3,7 @@ import { type UserConfig } from 'vite';
 import viteSvgSpriteWrapper from 'vite-svg-sprite-wrapper';
 
 const config = {
+  assetsInclude: ['/sb-preview/**'],
   plugins: [
     viteSvgSpriteWrapper({
       icons: './src/assets/icons/*.svg',
