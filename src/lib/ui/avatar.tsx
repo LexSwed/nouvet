@@ -105,10 +105,10 @@ function BoringAvatar(props: AvatarProps) {
           width={SIZE}
           height={SIZE}
         >
-          <rect fill="#FFFFFF" width={SIZE} height={SIZE} rx={SIZE * 2}></rect>
+          <rect fill="#FFFFFF" width={SIZE} height={SIZE} rx={SIZE * 2} />
         </mask>
         <g mask="url(#mask__beam)">
-          <rect width={SIZE} height={SIZE} fill={data.backgroundColor}></rect>
+          <rect width={SIZE} height={SIZE} fill={data.backgroundColor} />
           <rect
             x="0"
             y="0"
@@ -117,12 +117,10 @@ function BoringAvatar(props: AvatarProps) {
             transform={getRectTransform()}
             fill={data.wrapperColor}
             rx={data.isCircle ? SIZE : SIZE / 6}
-          ></rect>
+          />
           <g transform={getGroupTransform()}>
             <Show
-              fallback={
-                <path d={getClosedMouthData()} fill={data.faceColor}></path>
-              }
+              fallback={<path d={getClosedMouthData()} fill={data.faceColor} />}
               when={data.isMouthOpen}
             >
               <path
@@ -130,7 +128,7 @@ function BoringAvatar(props: AvatarProps) {
                 stroke-linecap="round"
                 d={getOpenMouthData()}
                 stroke={data.faceColor}
-              ></path>
+              />
             </Show>
             <rect
               stroke="none"
@@ -140,7 +138,7 @@ function BoringAvatar(props: AvatarProps) {
               height={2}
               rx={1}
               fill={data.faceColor}
-            ></rect>
+            />
             <rect
               stroke="none"
               x={20 + data.eyeSpread}
@@ -149,7 +147,7 @@ function BoringAvatar(props: AvatarProps) {
               height={2}
               rx={1}
               fill={data.faceColor}
-            ></rect>
+            />
           </g>
         </g>
       </svg>
@@ -168,9 +166,9 @@ export interface Color {
 const SIZE = 36;
 
 const hashCode = (name: string) => {
-  var hash = 0;
-  for (var i = 0; i < name.length; i++) {
-    var character = name.charCodeAt(i);
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    const character = name.charCodeAt(i);
     hash = (hash << 5) - hash + character;
     hash = hash & hash; // Convert to 32bit integer
   }
@@ -186,7 +184,7 @@ const getBoolean = (number: number, ntn: number) => {
 };
 
 const getUnit = (number: number, range: number, index?: number) => {
-  let value = number % range;
+  const value = number % range;
 
   if (index && getDigit(number, index) % 2 === 0) {
     return -value;
@@ -208,12 +206,12 @@ const getContrast = (hexcolor: string) => {
   }
 
   // Convert to RGB value
-  var r = parseInt(hexcolor.substr(0, 2), 16);
-  var g = parseInt(hexcolor.substr(2, 2), 16);
-  var b = parseInt(hexcolor.substr(4, 2), 16);
+  const r = parseInt(hexcolor.substr(0, 2), 16);
+  const g = parseInt(hexcolor.substr(2, 2), 16);
+  const b = parseInt(hexcolor.substr(4, 2), 16);
 
   // Get YIQ ratio
-  var yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
 
   // Check contrast
   return yiq >= 128 ? '#000000' : '#FFFFFF';

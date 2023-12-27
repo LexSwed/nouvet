@@ -3,8 +3,8 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { type JSX, splitProps, type ValidComponent, Show } from 'solid-js';
 import { Dynamic, type DynamicProps } from 'solid-js/web';
 import { mergeDefaultProps } from '../merge-default-props';
-import { tw } from './tw';
 import { Spinner } from './spinner';
+import { tw } from './tw';
 
 const buttonVariants = cva(
   'relative ring-offset-background focus-visible:ring-outline inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
@@ -47,6 +47,7 @@ const BaseComponent = <T extends ValidComponent>(
   const [local, props] = splitProps(ownProps, ['size', 'loading', 'variant']);
   return (
     <Dynamic
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       {...(props as any)}
       class={tw(buttonVariants(local), props.class)}
       onClick={(event: MouseEvent) => {
