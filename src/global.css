@@ -139,9 +139,6 @@
 }
 
 @layer base {
-  ::selection {
-    @apply bg-primary/20;
-  }
   * {
     @apply min-w-0 border-outline font-sans;
   }

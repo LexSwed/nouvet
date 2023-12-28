@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { createSignal, requestCallback } from 'solid-js';
 import { type Meta } from 'storybook-solidjs';
 
 import { Button } from '../button';
@@ -31,14 +31,16 @@ export const WithErrors = () => {
           });
         } else {
           setErrors(null);
-          setLoading(true);
-          setTimeout(() => {
-            setLoading(false);
-          }, 1000);
         }
+        if (!event.currentTarget.checkValidity()) return;
+
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
       }}
     >
-      <TextField name="name" label="Pet name" required />
+      <TextField name="name" label="Pet name" placeholder="Garfield" required />
       <Button type="submit" loading={loading()} class="ms-auto w-[7rem]">
         Submit
       </Button>

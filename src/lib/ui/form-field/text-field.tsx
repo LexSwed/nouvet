@@ -5,6 +5,7 @@ import {
   createUniqueId,
   Match,
   Switch,
+  createEffect,
 } from 'solid-js';
 import { mergeDefaultProps } from '../../merge-default-props';
 import { tw } from '../tw';
@@ -35,6 +36,10 @@ const TextField = (ownProps: TextFieldProps) => {
   const descriptionId = () => `${id()}-description`;
   const errorMessage = () =>
     ownProps.name ? formContext().validationErrors?.[ownProps.name] : null;
+
+  createEffect(() => {
+    console.log(formContext().validationErrors);
+  });
   return (
     <div class={tw(cssStyle.field, styles.class)} style={styles.style}>
       <Show when={local.label}>

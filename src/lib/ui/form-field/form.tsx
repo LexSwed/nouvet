@@ -1,3 +1,4 @@
+import { mergeRefs } from '@solid-primitives/refs';
 import {
   createContext,
   type ComponentProps,
@@ -5,6 +6,9 @@ import {
   type ParentProps,
   type Accessor,
   createSignal,
+  splitProps,
+  createEffect,
+  on,
 } from 'solid-js';
 
 interface FormContext {
@@ -18,17 +22,40 @@ const formContext = createContext<Accessor<FormContext>>(() => ({
 export const Form = (
   ownProps: ParentProps<FormContext & ComponentProps<'form'>>,
 ) => {
+  let formRef: HTMLFormElement | undefined;
+  const [local, props] = splitProps(ownProps, ['validationErrors']);
   const [nativeErrors, setNativeErrors] =
     createSignal<FormContext['validationErrors']>();
   const value = () => ({
-    validationErrors: nativeErrors(),
+    validationErrors: { ...local.validationErrors, ...nativeErrors() },
   });
+
+  createEffect(
+    on(
+      () => local.validationErrors,
+      (newErrors, prevErrors) => {
+        if (!formRef) return;
+        console.log({ newErrors, prevErrors });
+        Array.from(formRef!.elements).forEach((input) => {
+          const name = input.getAttribute('name');
+          if (!name || !('setCustomValidity' in input)) return;
+          if (name in (prevErrors || {})) {
+            (input as HTMLInputElement).setCustomValidity('');
+          }
+          if (name in (newErrors || {})) {
+            (input as HTMLInputElement).setCustomValidity(newErrors![name]);
+          }
+        });
+      },
+    ),
+  );
 
   return (
     <formContext.Provider value={value}>
       <form
         novalidate
-        {...ownProps}
+        {...props}
+        ref={mergeRefs(ownProps.ref, (el) => (formRef = el))}
         onSubmit={(event) => {
           const form = event.currentTarget;
           const errors = Array.from(form.elements).reduce((errors, element) => {
@@ -47,17 +74,11 @@ export const Form = (
             }
             return errors;
           }, new Map<string, string>());
-          if (errors.size > 0) {
-            event.preventDefault();
-          } else {
-            // @ts-expect-error Solid issues
-            ownProps.onSubmit?.(event);
-          }
           setNativeErrors(Object.fromEntries(errors.entries()));
+          // @ts-expect-error Solid issues
+          props.onSubmit?.(event);
         }}
-      >
-        {ownProps.children}
-      </form>
+      />
     </formContext.Provider>
   );
 };

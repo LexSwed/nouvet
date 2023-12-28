@@ -27,16 +27,20 @@
         var(--border-color)
       );
     }
-    &:where(:focus-within, :hover) {
+    &:where(:hover) {
+      background-color: theme('colors.surface-container');
+    }
+    &:where(:focus-within) {
       background-color: theme('colors.primary-container/0.3');
     }
     &:where(:focus-within) {
       --border-color: theme('colors.primary');
       --border-scale: 1.5;
     }
-    &:where(:has(input:invalid)) {
+    &:where(:has(input:user-invalid)) {
       --border-color: theme('colors.error');
-      & .description {
+      & .description,
+      & .label {
         color: theme('colors.error');
       }
     }
@@ -46,7 +50,7 @@
     @apply text-xs;
   }
   .input {
-    padding: theme(spacing.3) theme(spacing.2);
+    padding: theme(spacing.3) theme(spacing.3);
     background: transparent;
     outline: none;
     @apply text-base;
