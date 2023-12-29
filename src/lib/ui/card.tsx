@@ -11,7 +11,7 @@ const cardVariants = cva('rounded-lg p-6 transition-shadow', {
       false: '',
     },
     variant: {
-      'elevated': 'bg-surface-container text-on-surface',
+      'elevated': 'bg-surface text-on-surface shadow-1',
       'flat': 'bg-surface text-on-surface',
       'filled':
         'bg-secondary-container focus:outline-background text-on-secondary-container',

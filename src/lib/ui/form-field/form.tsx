@@ -33,18 +33,24 @@ export const Form = (
   createEffect(
     on(
       () => local.validationErrors,
-      (newErrors, prevErrors) => {
+      (newPropErrors, prevPropErrors) => {
         if (!formRef) return;
-        console.log({ newErrors, prevErrors });
-        Array.from(formRef!.elements).forEach((input) => {
-          const name = input.getAttribute('name');
-          if (!name || !('setCustomValidity' in input)) return;
-          if (name in (prevErrors || {})) {
-            (input as HTMLInputElement).setCustomValidity('');
-          }
-          if (name in (newErrors || {})) {
-            (input as HTMLInputElement).setCustomValidity(newErrors![name]);
-          }
+        setNativeErrors((errors) => {
+          // const newErrors = { ...errors };
+          Array.from(formRef!.elements).forEach((input) => {
+            const name = input.getAttribute('name');
+            if (!name || !('setCustomValidity' in input)) return;
+            if (prevPropErrors && name in prevPropErrors) {
+              errors && name in errors && delete errors[name];
+              (input as HTMLInputElement).setCustomValidity('');
+              console.log('reset');
+            }
+            if (newPropErrors && name in newPropErrors) {
+              (input as HTMLInputElement).setCustomValidity(
+                newPropErrors[name],
+              );
+            }
+          });
         });
       },
     ),
