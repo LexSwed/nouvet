@@ -4,6 +4,7 @@
   .field {
     --border-color: theme('colors.outline');
     --border-scale-y: 1;
+    --start-padding: theme(spacing.3);
     display: inline-flex;
     flex-flow: column nowrap;
     gap: theme(spacing.1);
@@ -38,11 +39,8 @@
         var(--border-color)
       );
     }
-    &:where(:hover) {
-      background-color: theme('colors.surface-container');
-    }
-    &:where(:focus-within) {
-      background-color: theme('colors.primary-container/0.3');
+    &:where(:hover, :focus-within) {
+      background-color: theme('colors.surface-container-lowest');
     }
     &:where(:focus-within) {
       --border-color: theme('colors.primary');
@@ -50,11 +48,11 @@
     }
   }
   .label {
-    padding: theme(spacing.2) theme(spacing.3) 0;
+    padding: theme(spacing.2) 0 0 var(--start-padding);
     @apply text-xs;
   }
   .input {
-    padding: theme(spacing.3) theme(spacing.3);
+    padding: theme(spacing.3) var(--start-padding);
     background: transparent;
     outline: none;
     @apply text-base;
@@ -65,8 +63,7 @@
   }
   .description {
     /* same as label */
-    inset-inline-start: theme(spacing.3);
-    inset-block-end: calc(-1 * theme(spacing.6));
+    padding-inline-start: var(--start-padding);
     color: theme('colors.on-surface-variant');
     @apply text-sm;
   }

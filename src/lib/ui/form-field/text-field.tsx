@@ -12,6 +12,9 @@ import { tw } from '../tw';
 import { useFormContext } from './form';
 import * as cssStyle from './text-field.module.css';
 
+/**
+ * Only style and class name are set on the parent element, the rest are propagated on the input element.
+ */
 export interface TextFieldProps
   extends JSX.InputHTMLAttributes<HTMLInputElement> {
   /**

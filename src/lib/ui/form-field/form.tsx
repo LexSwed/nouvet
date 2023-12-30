@@ -39,6 +39,7 @@ export const Form = (
         if (!formRef) return;
         Array.from(formRef!.elements).forEach((element) => {
           if (!isValidatableInput(element)) return;
+          // reset custom message if it was set before
           element.setCustomValidity('');
           if (newPropErrors && element.name in newPropErrors) {
             element.setCustomValidity(newPropErrors[element.name]);
