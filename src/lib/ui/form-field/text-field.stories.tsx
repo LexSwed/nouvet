@@ -75,6 +75,7 @@ export const WithErrors = () => {
           if (errors) {
             setErrors(errors);
           } else {
+            // Do not forget to reset the errors!
             setErrors(null);
           }
           setLoading(false);
