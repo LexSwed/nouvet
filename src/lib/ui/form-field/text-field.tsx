@@ -5,7 +5,6 @@ import {
   createUniqueId,
   Match,
   Switch,
-  createEffect,
 } from 'solid-js';
 import { mergeDefaultProps } from '../../merge-default-props';
 import { tw } from '../tw';
@@ -37,24 +36,23 @@ const TextField = (ownProps: TextFieldProps) => {
   const errorMessage = () =>
     ownProps.name ? formContext().validationErrors?.[ownProps.name] : null;
 
-  createEffect(() => {
-    console.log(formContext().validationErrors);
-  });
   return (
     <div class={tw(cssStyle.field, styles.class)} style={styles.style}>
-      <Show when={local.label}>
-        <label for={id()} class={cssStyle.label}>
-          {local.label}
-        </label>
-      </Show>
-      <input
-        {...props}
-        class={cssStyle.input}
-        id={id()}
-        aria-describedby={
-          errorMessage() || props.description ? descriptionId() : undefined
-        }
-      />
+      <div class={cssStyle.inputWrapper}>
+        <Show when={local.label}>
+          <label for={id()} class={cssStyle.label}>
+            {local.label}
+          </label>
+        </Show>
+        <input
+          {...props}
+          class={cssStyle.input}
+          id={id()}
+          aria-describedby={
+            errorMessage() || props.description ? descriptionId() : undefined
+          }
+        />
+      </div>
       <Switch>
         <Match when={errorMessage()}>
           <span

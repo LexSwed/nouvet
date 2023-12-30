@@ -4,12 +4,23 @@
   .field {
     --border-color: theme('colors.outline');
     --border-scale-y: 1;
+    display: inline-flex;
+    flex-flow: column nowrap;
+    gap: theme(spacing.1);
+    &:where(:has(input:user-invalid)) {
+      --border-color: theme('colors.error');
+      & .description,
+      & .label {
+        color: theme('colors.error');
+      }
+    }
+  }
+  .inputWrapper {
     position: relative;
     display: inline-flex;
     flex-direction: column;
     transition: background-color 0.2s ease-out;
     border-radius: theme('borderRadius.lg') theme('borderRadius.lg') 0 0;
-    margin-block-end: theme(spacing.4);
     &:after {
       position: absolute;
       bottom: 0;
@@ -37,13 +48,6 @@
       --border-color: theme('colors.primary');
       --border-scale: 1.5;
     }
-    &:where(:has(input:user-invalid)) {
-      --border-color: theme('colors.error');
-      & .description,
-      & .label {
-        color: theme('colors.error');
-      }
-    }
   }
   .label {
     padding: theme(spacing.2) theme(spacing.3) 0;
@@ -60,7 +64,6 @@
     }
   }
   .description {
-    position: absolute;
     /* same as label */
     inset-inline-start: theme(spacing.3);
     inset-block-end: calc(-1 * theme(spacing.6));

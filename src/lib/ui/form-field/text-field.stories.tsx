@@ -31,13 +31,11 @@ export const WithErrors = () => {
             setErrors({
               name: 'This name is already taken',
             });
-          } else {
-            setErrors(null);
+            return;
           }
-          // todo: how to reset form errors?
-          if (!event.currentTarget.checkValidity()) return;
-
+          setErrors(null);
           setLoading(true);
+
           setTimeout(() => {
             setLoading(false);
           }, 1000);
@@ -50,6 +48,7 @@ export const WithErrors = () => {
           pattern="[a-zA-Z]*"
           autocomplete="off"
           required
+          minLength={2}
         />
         <Button type="submit" loading={loading()} class="ms-auto w-[7rem]">
           Submit

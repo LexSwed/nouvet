@@ -18,6 +18,7 @@ interface FormContext {
 const formContext = createContext<Accessor<FormContext>>(() => ({
   validationErrors: null,
 }));
+export const useFormContext = () => useContext(formContext);
 
 export const Form = (
   ownProps: ParentProps<FormContext & ComponentProps<'form'>>,
@@ -30,27 +31,18 @@ export const Form = (
     validationErrors: { ...local.validationErrors, ...nativeErrors() },
   });
 
+  /* Sets custom validation errors on validationErrors prop fields */
   createEffect(
     on(
       () => local.validationErrors,
-      (newPropErrors, prevPropErrors) => {
+      (newPropErrors) => {
         if (!formRef) return;
-        setNativeErrors((errors) => {
-          // const newErrors = { ...errors };
-          Array.from(formRef!.elements).forEach((input) => {
-            const name = input.getAttribute('name');
-            if (!name || !('setCustomValidity' in input)) return;
-            if (prevPropErrors && name in prevPropErrors) {
-              errors && name in errors && delete errors[name];
-              (input as HTMLInputElement).setCustomValidity('');
-              console.log('reset');
-            }
-            if (newPropErrors && name in newPropErrors) {
-              (input as HTMLInputElement).setCustomValidity(
-                newPropErrors[name],
-              );
-            }
-          });
+        Array.from(formRef!.elements).forEach((element) => {
+          if (!isValidatableInput(element)) return;
+          element.setCustomValidity('');
+          if (newPropErrors && element.name in newPropErrors) {
+            element.setCustomValidity(newPropErrors[element.name]);
+          }
         });
       },
     ),
@@ -63,30 +55,58 @@ export const Form = (
         {...props}
         ref={mergeRefs(ownProps.ref, (el) => (formRef = el))}
         onSubmit={(event) => {
-          const form = event.currentTarget;
-          const errors = Array.from(form.elements).reduce((errors, element) => {
-            if (
-              'validity' in element &&
-              element['validity'] instanceof ValidityState &&
-              !element.validity.valid
-            ) {
-              const name = element.getAttribute('name');
-              if (name) {
-                errors.set(
-                  name,
-                  (element as HTMLInputElement).validationMessage,
-                );
-              }
-            }
-            return errors;
-          }, new Map<string, string>());
+          const errors = setNativeValidationMessages(event.currentTarget);
+
           setNativeErrors(Object.fromEntries(errors.entries()));
-          // @ts-expect-error Solid issues
-          props.onSubmit?.(event);
+          if (errors.size > 0) {
+            event.preventDefault();
+          } else {
+            // @ts-expect-error Solid issues
+            props.onSubmit?.(event);
+          }
         }}
       />
     </formContext.Provider>
   );
 };
 
-export const useFormContext = () => useContext(formContext);
+/**
+ * Checks validatable form elements for native validation errors,
+ * like `required` or `minlenght`. Keeps custom error message, if it was set.
+ * @returns native validation errors.
+ */
+function setNativeValidationMessages(form: HTMLFormElement) {
+  const invalid = new Map<string, string>();
+  Array.from(form.elements).forEach((element) => {
+    if (!isValidatableInput(element)) return;
+
+    const customValidationError = element.validity.customError
+      ? (element as HTMLInputElement).validationMessage
+      : null;
+    // reset possible custom message to check native validation
+    (element as HTMLInputElement).setCustomValidity('');
+    // if the field is still invalid – set new native validation message
+    if (!element['validity'].valid) {
+      invalid.set(
+        element.name,
+        (element as HTMLInputElement).validationMessage,
+      );
+      return;
+    }
+    // if native validation passed, but there are still errors from props - set them.
+    if (customValidationError) {
+      (element as HTMLInputElement).setCustomValidity(customValidationError);
+    }
+  });
+  return invalid;
+}
+
+function isValidatableInput(
+  element: Element,
+): element is HTMLInputElement & { name: string } {
+  return (
+    !!element.getAttribute('name') &&
+    'validity' in element &&
+    element['validity'] instanceof ValidityState
+  );
+}
