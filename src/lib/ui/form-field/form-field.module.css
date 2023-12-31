@@ -18,7 +18,8 @@
   }
   .inputWrapper {
     position: relative;
-    display: inline-flex;
+    display: flex;
+    width: 100%;
     flex-direction: column;
     transition: background-color 0.2s ease-out;
     border-radius: theme('borderRadius.lg') theme('borderRadius.lg') 0 0;
@@ -54,8 +55,8 @@
   }
   .description {
     /* same as label */
-    padding-inline-start: var(--start-padding);
-    color: theme('colors.on-surface-variant');
+    padding-inline: var(--start-padding);
+    color: theme('colors.on-surface');
     @apply text-sm;
   }
 }

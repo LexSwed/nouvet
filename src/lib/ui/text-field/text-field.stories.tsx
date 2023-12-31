@@ -77,6 +77,18 @@ export const WithErrors = () => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
           setLoading(true);
+          const date = new Date(
+            (
+              event.currentTarget.elements.namedItem(
+                'byear',
+              ) as HTMLInputElement
+            ).valueAsNumber,
+            parseInt(formData.get('bmonth')!.toString(), 10),
+            (
+              event.currentTarget.elements.namedItem('bday') as HTMLInputElement
+            ).valueAsNumber,
+          );
+          console.log(date.toLocaleDateString());
           const { errors } = await server({
             name: formData.get('name'),
             bday: (
