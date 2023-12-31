@@ -1,10 +1,12 @@
-import { mergeProps } from 'solid-js';
+import { mergeProps, type MergeProps } from 'solid-js';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function mergeDefaultProps<T extends Record<string, any>>(
-  defaultProps: Partial<T>,
+export type DefaultProps<T, K extends keyof T> = MergeProps<
+  [Required<Pick<T, K>>, T]
+>;
+export function mergeDefaultProps<T, K extends keyof T>(
   props: T,
-): T {
-  const mergedProps = mergeProps(defaultProps, props);
-  return mergedProps;
+  defaults: Required<Pick<T, K>>,
+): DefaultProps<T, K> {
+  // eslint-disable-next-line solid/reactivity
+  return mergeProps(defaults, props);
 }

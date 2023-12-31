@@ -1,5 +1,6 @@
 import type { StorybookConfig } from 'storybook-solidjs-vite';
 import { mergeConfig } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 const config = {
   core: {
@@ -9,6 +10,7 @@ const config = {
     // Merge custom configuration into the default config
     return mergeConfig(config, {
       assetsInclude: ['/sb-preview/**'],
+      plugins: [tsconfigPaths()],
     });
   },
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],

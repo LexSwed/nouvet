@@ -8,7 +8,7 @@
     display: inline-flex;
     flex-flow: column nowrap;
     gap: theme(spacing.1);
-    &:where(:has(input:user-invalid)) {
+    &:where(:has(:user-invalid)) {
       --border-color: theme('colors.error');
       & .description,
       & .label {

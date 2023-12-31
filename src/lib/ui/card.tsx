@@ -55,7 +55,7 @@ interface NavCardProps extends AnchorProps, CardVariants {
   variant?: CardVariants['variant'];
 }
 export const NavCard = (ownProps: NavCardProps) => {
-  const props = mergeDefaultProps({ variant: 'filled' }, ownProps);
+  const props = mergeDefaultProps(ownProps, { variant: 'filled' });
 
   return (
     <A

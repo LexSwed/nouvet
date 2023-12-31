@@ -9,7 +9,7 @@ export interface TextFieldProps
     JSX.InputHTMLAttributes<HTMLInputElement> {}
 const TextField = (ownProps: TextFieldProps) => {
   const [fieldProps, props] = splitProps(
-    mergeDefaultProps({ type: 'text' }, ownProps),
+    mergeDefaultProps(ownProps, { type: 'text' }),
     ['class', 'style', 'id', 'label'],
   );
 
@@ -20,7 +20,7 @@ const TextField = (ownProps: TextFieldProps) => {
           {...props}
           class={cssStyle.input}
           id={aria.id()}
-          aria-describedby={aria.descriptionId()}
+          aria-describedby={aria.describedBy()}
         />
       )}
     </FormField>

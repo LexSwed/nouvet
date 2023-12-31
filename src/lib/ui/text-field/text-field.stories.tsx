@@ -2,11 +2,12 @@ import { For, createSignal } from 'solid-js';
 import { type Meta } from 'storybook-solidjs';
 
 import {
-  date,
+  coerce,
   maxValue,
   minValue,
   notValue,
   nullable,
+  number,
   object,
   safeParse,
   string,
@@ -14,7 +15,7 @@ import {
 import { Button } from '../button';
 import { Card } from '../card';
 import { Form } from '../form';
-import { Option, SelectList } from '../select-list';
+import { Option, Picker } from '../picker';
 import { Text } from '../text';
 import { TextField } from './';
 
@@ -40,10 +41,25 @@ export const WithErrors = () => {
         notValue('admin', 'This name is already taken ;)'),
       ]),
       bday: nullable(
-        date('Date format is incorrect', [
-          minValue(new Date(1990, 0, 1), 'Cannot be before 1990'),
-          maxValue(new Date(), 'Birth day cannot exceed current date'),
-        ]),
+        coerce(
+          number('Date format is incorrect', [minValue(1), maxValue(31)]),
+          Number,
+        ),
+      ),
+      bmonth: nullable(
+        coerce(
+          number('Date format is incorrect', [minValue(1), maxValue(12)]),
+          Number,
+        ),
+      ),
+      byear: nullable(
+        coerce(
+          number('Date format is incorrect', [
+            minValue(1990),
+            maxValue(new Date().getFullYear()),
+          ]),
+          Number,
+        ),
       ),
     });
     await sleep(400);
@@ -77,29 +93,11 @@ export const WithErrors = () => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
           setLoading(true);
-          const date = new Date(
-            (
-              event.currentTarget.elements.namedItem(
-                'byear',
-              ) as HTMLInputElement
-            ).valueAsNumber,
-            parseInt(formData.get('bmonth')!.toString(), 10),
-            (
-              event.currentTarget.elements.namedItem('bday') as HTMLInputElement
-            ).valueAsNumber,
-          );
-          console.log(date.toLocaleDateString());
           const { errors } = await server({
             name: formData.get('name'),
-            bday: (
-              event.currentTarget.elements.namedItem('bday') as HTMLInputElement
-            ).valueAsNumber,
+            bday: formData.get('bday'),
             bmonth: formData.get('bmonth'),
-            byear: (
-              event.currentTarget.elements.namedItem(
-                'byear',
-              ) as HTMLInputElement
-            ).valueAsNumber,
+            byear: formData.get('byear'),
           });
           if (errors) {
             setErrors(errors);
@@ -129,13 +127,19 @@ export const WithErrors = () => {
               type="number"
               min="1"
               max="31"
+              class="flex-1"
             />
-            <SelectList label="Month" name="bmonth" autocomplete="off">
+            <Picker
+              label="Month"
+              name="bmonth"
+              autocomplete="off"
+              class="flex-[2]"
+            >
               <Option value="" />
               <For each={monthNames}>
                 {(month, index) => <Option value={index()}>{month}</Option>}
               </For>
-            </SelectList>
+            </Picker>
             <TextField
               name="byear"
               label="Year"
@@ -143,6 +147,7 @@ export const WithErrors = () => {
               type="number"
               min="1990"
               max={new Date().getFullYear()}
+              class="flex-1"
             />
           </div>
         </div>

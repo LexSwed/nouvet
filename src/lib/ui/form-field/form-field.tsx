@@ -26,7 +26,7 @@ interface FieldInnerProps
   name?: string;
   children: (ariaProps: {
     id: Accessor<string>;
-    descriptionId: Accessor<string | undefined>;
+    describedBy: Accessor<string | undefined>;
   }) => JSX.Element;
 }
 const FormField = (props: FieldInnerProps) => {
@@ -47,7 +47,7 @@ const FormField = (props: FieldInnerProps) => {
         </Show>
         {props.children({
           id,
-          descriptionId: () =>
+          describedBy: () =>
             errorMessage() || props.description ? descriptionId() : undefined,
         })}
       </div>

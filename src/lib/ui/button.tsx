@@ -76,12 +76,9 @@ interface ButtonProps
 }
 
 const Button = (ownProps: ButtonProps) => {
-  const props = mergeDefaultProps(
-    {
-      type: 'button',
-    },
-    ownProps,
-  );
+  const props = mergeDefaultProps(ownProps, {
+    type: 'button',
+  });
   return (
     <BaseComponent
       component="button"
