@@ -119,6 +119,7 @@ export const WithErrors = () => {
               max="31"
             />
             <SelectList label="Month" name="bmonth" autocomplete="off">
+              <Option value="" />
               <For each={monthNames}>
                 {(month, index) => <Option value={index()}>{month}</Option>}
               </For>

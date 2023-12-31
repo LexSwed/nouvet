@@ -19,34 +19,26 @@ import * as cssStyle from './select-list.module.css';
 
 interface SelectListProps
   extends FormFieldProps,
-    Pick<
-      JSX.SelectHTMLAttributes<HTMLSelectElement>,
-      'class' | 'style' | 'id' | 'name' | 'autocomplete' | 'children'
-    > {}
+    JSX.SelectHTMLAttributes<HTMLSelectElement> {}
 
 const SelectList = (ownProps: SelectListProps) => {
-  const [fieldProps, props] = splitProps(ownProps, [
-    'class',
-    'style',
-    'id',
-    'label',
-  ]);
+  const [fieldProps, attrs, props] = splitProps(
+    ownProps,
+    ['class', 'style', 'id', 'label'],
+    ['name'],
+  );
   const formContext = useFormContext();
   const localId = createUniqueId();
   const id = () => (fieldProps.label ? fieldProps.id || localId : localId);
   const descriptionId = () => `${id()}-description`;
   const errorMessage = () =>
-    props.name ? formContext().validationErrors?.[props.name] : null;
+    attrs.name ? formContext().validationErrors?.[attrs.name] : null;
   return (
     <div
       class={tw(formFieldCss.field, fieldProps.class)}
       style={fieldProps.style}
     >
-      <x-selectlist
-        id={id()}
-        attr:name={props.name}
-        autocomplete={props.autocomplete}
-      >
+      <x-selectlist id={id()} attr:name={attrs.name} {...props}>
         <button
           slot="button"
           behavior="button"

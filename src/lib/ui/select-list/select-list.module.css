@@ -7,8 +7,10 @@
   .selected {
     padding: theme(spacing.3) var(--start-padding);
     background: transparent;
-    outline: none;
     @apply text-base;
+    &:where(:empty):after {
+      content: '\200b';
+    }
   }
   .listbox {
     border-radius: theme('borderRadius.md');
