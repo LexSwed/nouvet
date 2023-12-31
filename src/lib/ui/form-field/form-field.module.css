@@ -48,18 +48,9 @@
     }
   }
   .label {
-    padding: theme(spacing.2) 0 0 var(--start-padding);
+    padding-inline: var(--start-padding);
+    padding-block-start: theme('spacing.2');
     @apply text-xs;
-  }
-  .input {
-    padding: theme(spacing.3) var(--start-padding);
-    background: transparent;
-    outline: none;
-    @apply text-base;
-    &::placeholder {
-      color: theme('colors.on-surface/0.6');
-      font-weight: 400;
-    }
   }
   .description {
     /* same as label */

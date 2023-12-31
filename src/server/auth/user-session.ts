@@ -7,8 +7,8 @@ import {
 import { getRequestEvent, type RequestEvent } from 'solid-js/web';
 import { object, picklist, string, type Output, parse } from 'valibot';
 import { sendRedirect, useSession, updateSession } from 'vinxi/server';
+import { type DatabaseUserProfile } from '../db/schema';
 import { env } from '../env';
-import type { DatabaseUserProfile } from '../db/schema';
 import { useLucia } from './lucia';
 
 const SESSION_COOKIE = '_nouvet_user';

@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { For, createSignal } from 'solid-js';
 import { type Meta } from 'storybook-solidjs';
 
 import {
@@ -13,7 +13,9 @@ import {
 } from 'valibot';
 import { Button } from '../button';
 import { Card } from '../card';
-import { Form } from './form';
+import { Form } from '../form';
+import { Option, SelectList } from '../select-list';
+import { Text } from '../text';
 import { TextField } from './';
 
 const meta = {
@@ -56,6 +58,15 @@ export const WithErrors = () => {
     return { pet: result.output };
   }
 
+  const formatter = Intl.DateTimeFormat(document.documentElement.lang, {
+    month: 'long',
+  });
+  const monthNames = Array.from({ length: 12 }).map((_, month) => {
+    const date = new Date();
+    date.setMonth(month, 1);
+    return formatter.format(date);
+  });
+
   return (
     <Card variant="flat" class="mx-auto w-[360px]">
       <Form
@@ -70,7 +81,13 @@ export const WithErrors = () => {
             name: formData.get('name'),
             bday: (
               event.currentTarget.elements.namedItem('bday') as HTMLInputElement
-            ).valueAsDate,
+            ).valueAsNumber,
+            bmonth: formData.get('bmonth'),
+            byear: (
+              event.currentTarget.elements.namedItem(
+                'byear',
+              ) as HTMLInputElement
+            ).valueAsNumber,
           });
           if (errors) {
             setErrors(errors);
@@ -90,12 +107,32 @@ export const WithErrors = () => {
           required
           minLength={2}
         />
-        <TextField
-          name="bday"
-          label="Pet's birth date"
-          autocomplete="off"
-          type="month"
-        />
+        <div class="flex flex-col gap-2">
+          <Text component="label">Pet's birth date</Text>
+          <div class="flex flex-row gap-2">
+            <TextField
+              name="bday"
+              label="Day"
+              autocomplete="off"
+              type="number"
+              min="1"
+              max="31"
+            />
+            <SelectList label="Month" name="bmonth" autocomplete="off">
+              <For each={monthNames}>
+                {(month, index) => <Option value={index()}>{month}</Option>}
+              </For>
+            </SelectList>
+            <TextField
+              name="byear"
+              label="Year"
+              autocomplete="off"
+              type="number"
+              min="1990"
+              max={new Date().getFullYear()}
+            />
+          </div>
+        </div>
         <Button type="submit" loading={loading()} class="ms-auto w-[7rem]">
           Submit
         </Button>

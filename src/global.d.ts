@@ -1,5 +1,4 @@
 /// <reference types="@solidjs/start/env" />
-/// <reference types="vite-plugin-svg-sprite/client" />
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
