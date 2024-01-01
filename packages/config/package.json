@@ -4,7 +4,7 @@
   "type": "module",
   "exports": {
     "./*": "./*",
-    "./lint": "./rules.cjs",
+    "./lint": "./eslint.cjs",
     "./tailwind": "./tailwind.ts",
     "./tsconfig": "./tsconfig.json"
   },
