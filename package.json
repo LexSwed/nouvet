@@ -2,75 +2,23 @@
   "name": "nouvet",
   "version": "0.0.1",
   "type": "module",
-  "scripts": {
-    "dev": "vinxi dev",
-    "build": "NITRO_PRESET=cloudflare_pages vinxi build",
-    "start": "vinxi start",
-    "typecheck": "tsc",
-    "lint": "eslint src",
-    "db:up": "npx drizzle-kit generate:sqlite",
-    "db:push": "npx drizzle-kit push:sqlite",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
-  },
-  "dependencies": {
-    "@fontsource-variable/rubik": "^5.0.20",
-    "@lucia-auth/adapter-drizzle": "^1.0.0-beta.4",
-    "@paralleldrive/cuid2": "^2.2.2",
-    "@solid-primitives/i18n": "^2.0.0",
-    "@solid-primitives/refs": "^1.0.5",
-    "@solidjs/meta": "^0.29.3",
-    "@solidjs/router": "^0.10.5",
-    "@solidjs/start": "^0.4.2",
-    "arctic": "^0.10.2",
-    "better-sqlite3": "^9.2.2",
-    "class-variance-authority": "^0.7.0",
-    "drizzle-orm": "^0.29.2",
-    "drizzle-valibot": "^0.1.1",
-    "lucia": "^3.0.0-beta.13",
-    "oslo": "^0.26.2",
-    "solid-js": "^1.8.7",
-    "tailwind-merge": "^2.2.0",
-    "valibot": "^0.25.0",
-    "vinxi": "^0.0.61"
-  },
-  "devDependencies": {
-    "@storybook/addon-essentials": "^7.6.6",
-    "@storybook/addon-interactions": "^7.6.6",
-    "@storybook/addon-links": "^7.6.6",
-    "@storybook/blocks": "^7.6.6",
-    "@storybook/builder-vite": "^7.6.6",
-    "@storybook/testing-library": "^0.2.2",
-    "@tailwindcss/container-queries": "^0.1.1",
-    "@types/better-sqlite3": "^7.6.8",
-    "@typescript-eslint/eslint-plugin": "^6.16.0",
-    "autoprefixer": "^10.4.16",
-    "drizzle-kit": "^0.20.9",
-    "eslint": "^8.56.0",
-    "eslint-plugin-drizzle": "^0.2.3",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-solid": "^0.13.1",
-    "eslint-plugin-storybook": "^0.6.15",
-    "eslint-plugin-tailwindcss": "^3.13.1",
-    "postcss": "^8.4.32",
-    "prettier": "^3.1.1",
-    "prettier-plugin-tailwindcss": "^0.5.10",
-    "storybook": "^7.6.6",
-    "storybook-solidjs": "^1.0.0-beta.2",
-    "storybook-solidjs-vite": "^1.0.0-beta.2",
-    "tailwindcss": "^3.4.0",
-    "tailwindcss-animate": "^1.0.7",
-    "typescript": "^5.3.3",
-    "typescript-plugin-css-modules": "^5.0.2",
-    "vite": "^5.0.10",
-    "vite-plugin-solid": "^2.8.0",
-    "vite-svg-sprite-wrapper": "^1.3.0",
-    "vite-tsconfig-paths": "^4.2.3"
-  },
+  "workspaces": [
+    "packages/ui",
+    "packages/web",
+    "packages/config"
+  ],
   "engines": {
     "node": ">=20"
   },
-  "overrides": {
-    "vite": "^5.0.10"
+  "scripts": {
+    "dev:ui": "npm run dev -w @nou/ui",
+    "dev:web": "npm run dev -w @nou/web",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "prettier": "^3.1.1",
+    "prettier-plugin-tailwindcss": "^0.5.10",
+    "turbo": "^1.11.2",
+    "typescript": "^5.3.3"
   }
 }

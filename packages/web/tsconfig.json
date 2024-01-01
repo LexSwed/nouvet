@@ -1,0 +1,10 @@
+{
+  "extends": "@nou/config/tsconfig",
+  "include": ["./src", "./drizzle.config.ts"],
+  "compilerOptions": {
+    "types": ["vinxi/client"],
+    "paths": {
+      "~/*": ["./src/*"]
+    }
+  }
+}

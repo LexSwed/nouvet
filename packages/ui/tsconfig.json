@@ -1,0 +1,4 @@
+{
+  "extends": "@nou/config/tsconfig",
+  "include": ["./src", "./.storybook"]
+}
