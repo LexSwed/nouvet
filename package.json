@@ -13,6 +13,7 @@
   "scripts": {
     "dev:ui": "npm run dev -w @nou/ui",
     "dev:web": "npm run dev -w @nou/web",
+    "lint": "npx turbo run lint",
     "typecheck": "tsc"
   },
   "devDependencies": {

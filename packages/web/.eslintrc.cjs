@@ -1,4 +1,4 @@
 module.exports = {
   plugins: ['drizzle'],
-  extends: ['@nou/config/eslint', 'plugin:drizzle/recommended'],
+  extends: [require.resolve('@nou/config/eslint'), 'plugin:drizzle/recommended'],
 };

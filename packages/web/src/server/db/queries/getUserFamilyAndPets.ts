@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm';
-import type { DatabaseUser } from 'lucia';
+import  { type DatabaseUser } from 'lucia';
 import { useDb } from '..';
 import { userTable, familyTable, petTable, userProfileTable } from '../schema';
 

@@ -1,6 +1,6 @@
+import { Icon, tw } from '@nou/ui';
 import { A } from '@solidjs/router';
 import { type JSX } from 'solid-js';
-import { Icon, tw } from '@nou/ui';
 
 function LogoLink(props: {
   label: string;

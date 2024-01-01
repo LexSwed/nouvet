@@ -58,7 +58,7 @@ module.exports = {
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+        // project: ['./tsconfig.json', './packages/*/tsconfig.json'],
       },
       plugins: ['@typescript-eslint'],
       extends: ['plugin:solid/typescript'],

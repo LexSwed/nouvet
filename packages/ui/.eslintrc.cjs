@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['@nou/config/eslint'],
+  extends: [require.resolve('@nou/config/eslint')],
   overrides: [
     {
       files: ['*.stories.ts', '*.stories.tsx'],

@@ -1,15 +1,14 @@
+import { Avatar, ButtonLink, Card, Icon, TextField } from '@nou/ui';
 import { Title } from '@solidjs/meta';
 import {
   A,
   createAsync,
   type RouteDefinition,
-  type RouteSectionProps,
 } from '@solidjs/router';
 import { Show } from 'solid-js';
-import { createTranslator, getDictionary } from '~/i18n';
-import { Avatar, ButtonLink, Card, Icon, TextField } from '@nou/ui';
-
 import { getUserFamilyAndPets } from './_queries';
+import { createTranslator, getDictionary } from '~/i18n';
+
 
 export const route = {
   load() {
@@ -18,7 +17,7 @@ export const route = {
   },
 } satisfies RouteDefinition;
 
-function AppMainPage(props: RouteSectionProps) {
+function AppMainPage() {
   const t = createTranslator('app');
   const user = createAsync(() => getUserFamilyAndPets());
 
@@ -30,13 +29,13 @@ function AppMainPage(props: RouteSectionProps) {
             <Show
               when={user().family?.name}
               children={t('app.meta.title', {
-                familyName: user().family?.name!,
+                familyName: user().family!.name!,
               })}
               fallback={t('app.meta.title-new-user')}
-            ></Show>
+             />
           </Title>
           <div class="bg-background min-h-full">
-            <header class="align-center flex justify-between px-4 py-4">
+            <header class="align-center flex justify-between p-4">
               <Show
                 when={user().family}
                 children={

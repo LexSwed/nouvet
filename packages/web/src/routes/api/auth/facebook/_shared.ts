@@ -27,7 +27,7 @@ export function getFacebookOAuthStateCookie(event: RequestEvent) {
 
 export const useFacebookAuth = () => {
   const event = getRequestEvent();
-  const { origin } = new URL(event?.request.url!);
+  const { origin } = new URL(event!.request.url);
   return new Facebook(
     env.FACEBOOK_APP_ID,
     env.FACEBOOK_APP_SECRET,

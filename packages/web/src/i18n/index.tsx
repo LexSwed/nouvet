@@ -3,9 +3,9 @@ import { cache, createAsync } from '@solidjs/router';
 import { type JSX, type ParentProps } from 'solid-js';
 import { getRequestEvent } from 'solid-js/web';
 
-import { acceptedLocaleLanguageTag, getLocale } from './locale';
-import type CommonDict from './locales/en/common.json';
+import { type acceptedLocaleLanguageTag, getLocale } from './locale';
 import type AppDict from './locales/en/app.json';
+import type CommonDict from './locales/en/common.json';
 import type LoginDict from './locales/en/login.json';
 import type WWWDict from './locales/en/www.json';
 

@@ -8,7 +8,7 @@ export const route = {
 } satisfies RouteDefinition;
 
 function MainAppLayout(props: RouteSectionProps) {
-  return props.children;
+  return <>{props.children}</>;
 }
 
 export default MainAppLayout;

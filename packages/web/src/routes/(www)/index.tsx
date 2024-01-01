@@ -1,8 +1,7 @@
+import { Card, ButtonLink, Icon } from '@nou/ui';
 import { Title } from '@solidjs/meta';
-import ArrowCircleUpRight from '~/assets/icons/arrow-circle-up-right.svg';
 import { T, createTranslator } from '~/i18n';
 import { HeroImage } from '~/lib/hero-image';
-import { Card, ButtonLink, Icon } from '@nou/ui';
 
 export default function WWW() {
   const t = createTranslator('www');

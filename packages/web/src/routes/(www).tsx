@@ -1,9 +1,9 @@
+import { NavCard, Icon, type SvgIcons } from '@nou/ui';
 import { type RouteDefinition } from '@solidjs/router';
 import { For, Show, type ParentProps } from 'solid-js';
 
 import { createTranslator, getDictionary } from '~/i18n';
 import { LogoLink } from '~/lib/logo-link';
-import { NavCard, Icon, type SvgIcons } from '@nou/ui';
 
 export const route = {
   load() {

@@ -1,10 +1,10 @@
+import { ButtonLink, Icon } from '@nou/ui';
 import { Title } from '@solidjs/meta';
 import { createSignal, onCleanup } from 'solid-js';
 
 import { createTranslator } from '~/i18n';
 import { HeroImage } from '~/lib/hero-image';
 import { LogoLink } from '~/lib/logo-link';
-import { ButtonLink, Icon } from '@nou/ui';
 
 function AppLoginPage() {
   const t = createTranslator('login');

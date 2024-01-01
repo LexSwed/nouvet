@@ -4,8 +4,8 @@ import {
   type FetchEvent,
   sendRedirect,
 } from '@solidjs/start/server';
-import { RETURN_URL_COOKIE } from './server/const';
 import { validateAuthSession } from './server/auth/user-session';
+import { RETURN_URL_COOKIE } from './server/const';
 
 export default createMiddleware({
   onRequest: [checkUserAuth],
