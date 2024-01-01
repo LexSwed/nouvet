@@ -140,12 +140,12 @@
 
 @layer base {
   * {
-    @apply min-w-0 border-outline font-sans;
+    @apply border-outline min-w-0 font-sans;
   }
   html,
   body,
   #app {
-    @apply h-full max-w-full bg-background text-on-background;
+    @apply bg-background text-on-background h-full max-w-full;
   }
   #app {
     @apply overflow-x-hidden;

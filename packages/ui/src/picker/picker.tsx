@@ -26,7 +26,7 @@ const Picker = (ownProps: PickerProps) => {
           <span class="flex flex-row items-center gap-2">
             {fieldProps.label}
             <div class="flex h-[1em] items-center">
-              <Icon use="carret-up-down" size="xs" />
+              <Icon use="carret-up-down" class="size-3" />
             </div>
           </span>
         ) : null

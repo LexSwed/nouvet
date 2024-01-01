@@ -15,7 +15,9 @@ import {
 import { Button } from '../button';
 import { Card } from '../card';
 import { Form } from '../form';
+import { Icon } from '../icon';
 import { Option, Picker } from '../picker';
+import { RadioCard } from '../radio';
 import { Text } from '../text';
 import { TextField } from './';
 
@@ -150,6 +152,57 @@ export const WithErrors = () => {
               class="flex-1"
             />
           </div>
+        </div>
+        <div class="scrollbar-none -mx-2 flex snap-mandatory snap-start scroll-px-2 flex-row gap-2 overflow-auto px-2 pb-2 pt-0">
+          <RadioCard
+            class="w-[8rem] snap-x"
+            name="animal-type"
+            value="dog"
+            label="Dog"
+            icon={<Icon size="sm" use="dog" />}
+          />
+          <RadioCard
+            class="w-[8rem] snap-x"
+            name="animal-type"
+            value="cat"
+            label="Cat"
+            icon={<Icon size="sm" use="cat" />}
+          />
+          <RadioCard
+            class="w-[8rem] snap-x"
+            name="animal-type"
+            value="parrot"
+            label="Parrot"
+            icon={<Icon size="sm" use="bird" />}
+          />
+          <RadioCard
+            class="w-[8rem] snap-x"
+            name="animal-type"
+            value="rabbit"
+            label="Rabbit"
+            icon={<Icon size="sm" use="rabbit" />}
+          />
+          <RadioCard
+            class="w-[8rem] snap-x"
+            name="animal-type"
+            value="horse"
+            label="Horse"
+            icon={<Icon size="sm" use="horse" />}
+          />
+          <RadioCard
+            class="w-[8rem] snap-x"
+            name="animal-type"
+            value="fish"
+            label="Fish"
+            icon={<Icon size="sm" use="fish" />}
+          />
+          <RadioCard
+            class="w-[8rem] snap-x"
+            name="animal-type"
+            value="other"
+            label="Other"
+            icon={<Icon size="sm" use="alien" />}
+          />
         </div>
         <Button type="submit" loading={loading()} class="ms-auto w-[7rem]">
           Submit

@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import { type ValidComponent } from 'solid-js';
+import { splitProps, type ValidComponent } from 'solid-js';
 import { Dynamic, type DynamicProps } from 'solid-js/web';
 import { tw } from './tw';
 
@@ -44,9 +44,28 @@ const textVariants = cva('font-sans m-0', {
 });
 
 const Text = <T extends ValidComponent>(
-  props: DynamicProps<T> & VariantProps<typeof textVariants>,
+  ownProps: DynamicProps<T> & {
+    /** @default 'span' */
+    component?: T | undefined;
+  } & VariantProps<typeof textVariants>,
 ) => {
-  return <Dynamic {...props} class={tw(textVariants(props), props.class)} />;
+  const [style, props] = splitProps(ownProps, [
+    'with',
+    'tone',
+    'align',
+    'dense',
+  ]);
+
+  return (
+    <Dynamic
+      {...(props as $noFix)}
+      component={props.component || 'span'}
+      class={tw(textVariants(style), props.class)}
+    />
+  );
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type $noFix = any;
 
 export { Text };

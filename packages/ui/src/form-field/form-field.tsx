@@ -32,7 +32,7 @@ interface FieldInnerProps
 const FormField = (props: FieldInnerProps) => {
   const formContext = useFormContext();
   const localId = createUniqueId();
-  const id = () => (props.label ? props.id || localId : localId);
+  const id = () => props.id || localId;
   const descriptionId = () => `${id()}-description`;
   const errorMessage = () =>
     props.name ? formContext().validationErrors?.[props.name] : null;

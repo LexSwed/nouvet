@@ -1,0 +1,48 @@
+@tailwind components;
+
+@layer components {
+  .card {
+    position: relative;
+    flex-shrink: 0;
+    border-radius: theme('borderRadius.lg');
+    padding: theme('spacing.3');
+    transition: all 0.24s ease-out;
+    background-color: theme('colors.surface');
+    border: theme('borderWidth.2') solid theme('colors.surface-container-high');
+    cursor: default;
+    &:has(input:checked) {
+      border-color: theme('colors.primary');
+      background-color: theme('colors.primary/0.08');
+      & .label {
+        color: theme('colors.primary');
+      }
+      & .icon {
+        color: theme('colors.primary');
+        background-color: theme('colors.primary/0.12');
+      }
+    }
+    &:where(:hover, :focus-within) {
+      background-color: theme('colors.surface-container-lowest');
+    }
+  }
+  .input {
+    appearance: none;
+    position: absolute;
+    inset: 0;
+  }
+  .wrapper {
+    display: flex;
+    gap: theme('spacing.3');
+    align-items: center;
+    &:empty {
+      display: none;
+    }
+  }
+  .icon {
+    padding: theme('spacing.2');
+    background-color: theme('colors.on-surface/0.08');
+    border-radius: theme('borderRadius.full');
+  }
+  .label {
+  }
+}

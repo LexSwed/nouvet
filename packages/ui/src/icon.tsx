@@ -30,7 +30,11 @@ export interface IconProps
 const Icon = (ownProps: IconProps) => {
   const [local, props] = splitProps(ownProps, ['use', 'size']);
   return (
-    <svg {...props} class={tw(iconVariants(local), props.class)}>
+    <svg
+      {...props}
+      class={tw(iconVariants(local), props.class)}
+      aria-hidden="true"
+    >
       <use href={`${spriteHref}#${local.use}`} />
     </svg>
   );
