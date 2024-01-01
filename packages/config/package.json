@@ -5,7 +5,8 @@
   "exports": {
     "./eslint": "./eslint.cjs",
     "./tailwind": "./tailwind.ts",
-    "./tsconfig": "./tsconfig.json"
+    "./tsconfig": "./tsconfig.json",
+    "./global.css": "./global.css"
   },
   "engines": {
     "node": ">=20"
