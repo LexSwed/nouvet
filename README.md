@@ -1,4 +1,4 @@
-<img src="./public/icons/icon.svg" width="48" height="48" />
+<img src="./packages/web/public/icons/icon.svg" width="48" height="48" />
 
 # NouVet
 
