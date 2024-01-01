@@ -5,6 +5,7 @@ import {
   type Accessor,
   type JSX,
   createUniqueId,
+  type JSXElement,
 } from 'solid-js';
 
 import { useFormContext } from '../form';
@@ -14,7 +15,7 @@ import * as cssStyle from './form-field.module.css';
 
 export interface FormFieldProps {
   /** Field label. */
-  label?: string;
+  label?: JSXElement;
   /** Helper text. */
   description?: string;
 }

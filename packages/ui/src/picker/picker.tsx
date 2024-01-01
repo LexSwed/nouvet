@@ -3,8 +3,9 @@ import { splitProps, type JSX } from 'solid-js';
 
 import { FormField, type FormFieldProps } from '../form-field';
 
-import * as cssStyle from './picker.module.css';
+import { Icon } from '../icon';
 import { tw } from '../tw';
+import * as cssStyle from './picker.module.css';
 
 interface PickerProps
   extends FormFieldProps,
@@ -18,7 +19,20 @@ const Picker = (ownProps: PickerProps) => {
     'label',
   ]);
   return (
-    <FormField {...fieldProps} name={props.name}>
+    <FormField
+      {...fieldProps}
+      label={
+        fieldProps.label ? (
+          <span class="flex flex-row items-center gap-2">
+            {fieldProps.label}
+            <div class="flex h-[1em] items-center">
+              <Icon use="carret-up-down" size="xs" />
+            </div>
+          </span>
+        ) : null
+      }
+      name={props.name}
+    >
       {(aria) => {
         return (
           <select
