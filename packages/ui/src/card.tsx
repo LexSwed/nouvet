@@ -1,8 +1,8 @@
 import { A, type AnchorProps } from '@solidjs/router';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { type JSX } from 'solid-js';
-import { mergeDefaultProps } from './utils';
 import { tw } from './tw';
+import { mergeDefaultProps } from './utils';
 
 const cardVariants = cva('rounded-lg p-6 transition-shadow', {
   variants: {

@@ -88,7 +88,7 @@ export const WithErrors = () => {
   return (
     <Card variant="flat" class="mx-auto w-[360px]">
       <Form
-        class="flex flex-col gap-4"
+        class="flex flex-col gap-6"
         validationErrors={errors()}
         // eslint-disable-next-line solid/reactivity
         onSubmit={async (event) => {
@@ -120,38 +120,42 @@ export const WithErrors = () => {
           minLength={2}
         />
         <div class="flex flex-col gap-2">
-          <Text component="label">Pet's birth date</Text>
-          <div class="flex flex-row gap-2">
-            <TextField
-              name="bday"
-              label="Day"
-              autocomplete="off"
-              type="number"
-              min="1"
-              max="31"
-              class="flex-1"
-            />
-            <Picker
-              label="Month"
-              name="bmonth"
-              autocomplete="off"
-              class="flex-[2]"
-            >
-              <Option value="" />
-              <For each={monthNames}>
-                {(month, index) => <Option value={index()}>{month}</Option>}
-              </For>
-            </Picker>
-            <TextField
-              name="byear"
-              label="Year"
-              autocomplete="off"
-              type="number"
-              min="1990"
-              max={new Date().getFullYear()}
-              class="flex-1"
-            />
-          </div>
+          <fieldset>
+            <Text as="legend" with="label-sm" class="mb-2 inline-block">
+              Pet's birth date
+            </Text>
+            <div class="flex flex-row gap-2">
+              <TextField
+                name="bday"
+                label="Day"
+                autocomplete="off"
+                type="number"
+                min="1"
+                max="31"
+                class="flex-1"
+              />
+              <Picker
+                label="Month"
+                name="bmonth"
+                autocomplete="off"
+                class="flex-[2]"
+              >
+                <Option value="" />
+                <For each={monthNames}>
+                  {(month, index) => <Option value={index()}>{month}</Option>}
+                </For>
+              </Picker>
+              <TextField
+                name="byear"
+                label="Year"
+                autocomplete="off"
+                type="number"
+                min="1990"
+                max={new Date().getFullYear()}
+                class="flex-1"
+              />
+            </div>
+          </fieldset>
         </div>
         <div class="scrollbar-none -mx-2 flex snap-mandatory snap-start scroll-px-2 flex-row gap-2 overflow-auto px-2 pb-2 pt-0">
           <RadioCard
@@ -160,6 +164,7 @@ export const WithErrors = () => {
             value="dog"
             label="Dog"
             icon={<Icon size="sm" use="dog" />}
+            checked
           />
           <RadioCard
             class="w-[8rem] snap-x"

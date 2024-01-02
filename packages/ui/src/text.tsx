@@ -12,6 +12,7 @@ const textVariants = cva('font-sans m-0', {
       'body-lg': 'text-lg',
       'body-xl': 'text-xl',
       'label': 'text-sm font-medium',
+      'label-sm': 'text-xs',
       'label-lg': 'text-lg font-medium',
       'headline-1': 'text-3xl font-extrabold',
       'headline-2': 'text-2xl',
@@ -43,29 +44,26 @@ const textVariants = cva('font-sans m-0', {
   },
 });
 
-const Text = <T extends ValidComponent>(
-  ownProps: DynamicProps<T> & {
+type TextProps<T extends ValidComponent> = Omit<DynamicProps<T>, 'component'> &
+  VariantProps<typeof textVariants> & {
     /** @default 'span' */
-    component?: T | undefined;
-  } & VariantProps<typeof textVariants>,
-) => {
-  const [style, props] = splitProps(ownProps, [
-    'with',
-    'tone',
-    'align',
-    'dense',
-  ]);
+    as?: T | undefined;
+  };
+
+const Text = <T extends ValidComponent>(ownProps: TextProps<T>) => {
+  const [style, component, props] = splitProps(
+    ownProps as TextProps<'span'>,
+    ['with', 'tone', 'align', 'dense'],
+    ['as', 'class'],
+  );
 
   return (
     <Dynamic
-      {...(props as $noFix)}
-      component={props.component || 'span'}
-      class={tw(textVariants(style), props.class)}
+      {...props}
+      component={component.as || 'span'}
+      class={tw(textVariants(style), component.class)}
     />
   );
 };
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type $noFix = any;
 
 export { Text };

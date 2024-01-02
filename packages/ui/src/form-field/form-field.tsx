@@ -40,7 +40,7 @@ const FormField = (props: FieldInnerProps) => {
     <div class={tw(cssStyle.field, props.class)} style={props.style}>
       <div class={cssStyle.inputWrapper}>
         <Show when={props.label}>
-          <Text component="label" for={id()} class={cssStyle.label}>
+          <Text as="label" for={id()} with="label-sm" class={cssStyle.label}>
             {props.label}
           </Text>
         </Show>

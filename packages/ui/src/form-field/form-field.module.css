@@ -26,8 +26,7 @@
     &:after {
       position: absolute;
       bottom: 0;
-      left: 0;
-      right: 0;
+      inset-inline: 0;
       content: '';
       height: 2px;
       transition: all 0.2s ease-out;
@@ -51,7 +50,6 @@
   .label {
     padding-inline: var(--start-padding);
     padding-block-start: theme('spacing.2');
-    @apply text-xs;
   }
   .description {
     /* same as label */

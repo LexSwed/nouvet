@@ -12,7 +12,7 @@
     cursor: default;
     &:has(input:checked) {
       border-color: theme('colors.primary');
-      background-color: theme('colors.primary/0.08');
+      background-color: theme('colors.surface-container-lowest');
       & .label {
         color: theme('colors.primary');
       }

@@ -29,12 +29,7 @@ const RadioCard = (ownProps: RadioCardProps) => {
           <div class={cssStyle.icon}>{local.icon}</div>
         </Show>
         <Show when={local.label}>
-          <Text
-            component="label"
-            with="label"
-            for={id()}
-            class={cssStyle.label}
-          >
+          <Text as="label" with="label" for={id()} class={cssStyle.label}>
             {local.label}
           </Text>
         </Show>
