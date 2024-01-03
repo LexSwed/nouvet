@@ -1,7 +1,7 @@
 import { splitProps, type JSX } from 'solid-js';
+import { FormField, type FormFieldProps } from '../form-field';
 import { mergeDefaultProps } from '../utils';
 
-import { FormField, type FormFieldProps } from '../form-field';
 import * as cssStyle from './text-field.module.css';
 
 export interface TextFieldProps

@@ -28,7 +28,8 @@
     "lucia": "^3.0.0-beta.13",
     "oslo": "^0.26.2",
     "solid-js": "^1.8.7",
-    "valibot": "^0.25.0"
+    "valibot": "^0.25.0",
+    "vinxi": "^0.0.62"
   },
   "devDependencies": {
     "@nou/config": "^1.0.0",

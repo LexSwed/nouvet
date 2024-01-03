@@ -1,6 +1,7 @@
 import { Canvas, Meta } from '@storybook/blocks';
 
 import * as TextFieldStories from './text-field.stories.tsx';
+import { BigForm } from '../form.stories';
 
 <Meta of={TextFieldStories} />
 
@@ -12,5 +13,4 @@ Wraps HTML `<input />` element, supporting native props + stylized `label` and s
 
 ## Validity states
 
-
-<Canvas of={TextFieldStories.WithErrors} />
+<Canvas of={BigForm} />

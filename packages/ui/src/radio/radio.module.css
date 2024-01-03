@@ -22,7 +22,7 @@
       }
     }
     &:where(:hover, :focus-within) {
-      background-color: theme('colors.surface-container-lowest');
+      background-color: theme('colors.surface-container-high');
     }
   }
   .input {
