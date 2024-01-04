@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-namespace */
 import { splitProps, type JSX } from 'solid-js';
 
 import { FormField, type FormFieldProps } from '../form-field';
@@ -52,12 +51,3 @@ const Option = (props: JSX.OptionHTMLAttributes<HTMLOptionElement>) => {
 };
 
 export { Picker, Option };
-
-declare module 'solid-js' {
-  namespace JSX {
-    interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
-      popover?: true | 'auto' | 'manual';
-      popovertarget?: string;
-    }
-  }
-}

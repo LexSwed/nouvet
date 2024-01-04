@@ -2,9 +2,9 @@ import { A, type AnchorProps } from '@solidjs/router';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { type JSX, splitProps, type ValidComponent, Show } from 'solid-js';
 import { Dynamic, type DynamicProps } from 'solid-js/web';
-import { mergeDefaultProps } from './utils';
 import { Spinner } from './spinner';
 import { tw } from './tw';
+import { mergeDefaultProps } from './utils';
 
 const buttonVariants = cva(
   'relative ring-offset-background focus-visible:ring-outline inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
@@ -31,10 +31,14 @@ const buttonVariants = cva(
         true: '',
         false: '',
       },
+      icon: {
+        true: 'p-0 rounded-full',
+      },
     },
     defaultVariants: {
       variant: 'default',
       size: 'default',
+      icon: false,
     },
   },
 );
@@ -44,7 +48,12 @@ type ButtonVariants = VariantProps<typeof buttonVariants>;
 const BaseComponent = <T extends ValidComponent>(
   ownProps: ButtonVariants & DynamicProps<T>,
 ) => {
-  const [local, props] = splitProps(ownProps, ['size', 'loading', 'variant']);
+  const [local, props] = splitProps(ownProps, [
+    'size',
+    'loading',
+    'variant',
+    'icon',
+  ]);
   return (
     <Dynamic
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
