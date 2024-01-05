@@ -14,18 +14,18 @@ export default meta;
 
 export const AccountMenu = () => {
   return (
-    <>
+    <div class="flex h-full w-full justify-end">
       <Button popoverTarget="settings" variant="ghost" icon>
         <Avatar name="John Doe" avatarUrl={null} />
       </Button>
       <Popover
         id="settings"
-        placement="bottom-start"
-        offset={(state) => ({
-          mainAxis:
-            -1 * (state.elements.reference as HTMLElement).offsetHeight - 12,
-          crossAxis: -12,
-        })}
+        placement="bottom-end"
+        // offset={(state) => ({
+        //   mainAxis:
+        //     -1 * (state.elements.reference as HTMLElement).offsetHeight - 12,
+        //   crossAxis: -12,
+        // })}
         class="flex flex-col gap-4"
       >
         <ButtonLink
@@ -43,6 +43,6 @@ export const AccountMenu = () => {
           <MenuItem>Log Out</MenuItem>
         </MenuList>
       </Popover>
-    </>
+    </div>
   );
 };

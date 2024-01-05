@@ -79,6 +79,7 @@ const Popover = <T extends ValidComponent = 'div'>(ownProps: PopupProps<T>) => {
       id={local.id}
       style={data.style}
       tabIndex={0}
+      data-placement={data.placement}
       ref={mergeRefs(local.ref, setPopover)}
       class={tw(popupVariants(styles), local.class)}
       onBeforeToggle={composeEventHandlers(props.onBeforeToggle, (event) => {
@@ -100,7 +101,10 @@ const Popover = <T extends ValidComponent = 'div'>(ownProps: PopupProps<T>) => {
         }
       })}
       onFocusOut={composeEventHandlers(props.onFocusOut, (event) => {
-        if (!popover()?.contains(event.relatedTarget as Node)) {
+        if (
+          !popover()?.contains(event.relatedTarget as Node) &&
+          event.relatedTarget !== trigger()
+        ) {
           popover()?.hidePopover();
         }
       })}

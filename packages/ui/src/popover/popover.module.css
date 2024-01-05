@@ -3,10 +3,10 @@
 @layer components {
   .popover {
     opacity: 0;
-    transition:
-      opacity 0.2s ease-out,
-      overlay 0.2s allow-discrete,
-      display 0.2s allow-discrete;
+    isolation: isolate;
+    transition-property: opacity, transform, display;
+    transition-duration: 0.1s;
+    transition-behavior: allow-discrete;
     @apply bg-surface m-0 max-h-60 overflow-y-auto rounded-md shadow-md;
 
     &:not(:popover-open) {
@@ -14,9 +14,49 @@
     }
     &:popover-open {
       opacity: 1;
+      transform: none;
+      transition-duration: 0.24s;
       @starting-style {
         opacity: 0;
+        transform: scale(0.9);
       }
+    }
+
+    &[data-placement='top'] {
+      transform-origin: bottom center;
+    }
+    &[data-placement='right'] {
+      transform-origin: left center;
+    }
+    &[data-placement='bottom'] {
+      transform-origin: top center;
+    }
+    &[data-placement='left'] {
+      transform-origin: right center;
+    }
+    &[data-placement='top-start'] {
+      transform-origin: bottom left;
+    }
+    &[data-placement='right-start'] {
+      transform-origin: left top;
+    }
+    &[data-placement='bottom-start'] {
+      transform-origin: top left;
+    }
+    &[data-placement='left-start'] {
+      transform-origin: top right;
+    }
+    &[data-placement='top-end'] {
+      transform-origin: bottom right;
+    }
+    &[data-placement='right-end'] {
+      transform-origin: left bottom;
+    }
+    &[data-placement='bottom-end'] {
+      transform-origin: top right;
+    }
+    &[data-placement='left-end'] {
+      transform-origin: right bottom;
     }
   }
 }

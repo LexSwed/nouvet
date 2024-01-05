@@ -98,10 +98,10 @@ export function createFloating<
         return undefined;
       }
       return {
-        'inset': 'unset',
-        'inset-inline-start': `${data().x}px`,
-        'inset-block-start': `${data().y}px`,
-        'position': strategy,
+        inset: 'unset',
+        top: `${data().y}px`,
+        left: `${data().x}px`,
+        position: strategy,
       };
     },
     get x() {
