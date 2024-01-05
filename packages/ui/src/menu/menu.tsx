@@ -1,9 +1,9 @@
 import { type ComponentProps } from 'solid-js';
-import { Button } from './button';
+import { Button } from '../button';
+import { Popover } from '../popover/popover';
+import { tw } from '../tw';
+import { composeEventHandlers } from '../utils';
 import * as cssStyle from './menu.module.css';
-import { Popup } from './popup';
-import { tw } from './tw';
-import { composeEventHandlers } from './utils';
 
 interface MenuTriggerProps extends ComponentProps<typeof Button> {
   /**
@@ -21,11 +21,11 @@ const MenuTrigger = (ownProps: MenuTriggerProps) => {
   );
 };
 
-interface MenuProps extends Omit<ComponentProps<typeof Popup>, 'variant'> {}
+interface MenuProps extends Omit<ComponentProps<typeof Popover>, 'variant'> {}
 
 const Menu = (ownProps: MenuProps) => {
   return (
-    <Popup
+    <Popover
       role="menu"
       variant="list"
       {...ownProps}
@@ -65,6 +65,13 @@ const MenuItem = (ownProps: MenuItemProps) => {
       role="menuitem"
       tabIndex={-1}
       {...ownProps}
+      onClick={composeEventHandlers(ownProps.onClick, (event) => {
+        if (event.defaultPrevented) return;
+        const popover = event.currentTarget.closest('[popover]');
+        if (popover) {
+          (popover as HTMLDivElement).hidePopover();
+        }
+      })}
       class={tw(cssStyle.listItem, ownProps.class)}
     />
   );

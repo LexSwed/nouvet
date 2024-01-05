@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-namespace */
 import { mergeRefs } from '@solid-primitives/refs';
 import { cva, type VariantProps } from 'class-variance-authority';
 import {
@@ -8,9 +7,13 @@ import {
   createMemo,
   type Accessor,
 } from 'solid-js';
-import { createFloating, type OffsetOptions, type Placement } from './floating';
-import { tw } from './tw';
-import { composeEventHandlers } from './utils';
+import {
+  createFloating,
+  type OffsetOptions,
+  type Placement,
+} from '../popover/floating';
+import { tw } from '../tw';
+import { composeEventHandlers } from '../utils';
 
 const popupVariants = cva(
   'rounded-md m-0 bg-surface shadow-md p-1 overflow-y-auto max-h-60 empty:hidden',
@@ -35,7 +38,7 @@ interface PopupProps
   placement?: Placement;
   offset?: OffsetOptions;
 }
-const Popup = (ownProps: PopupProps) => {
+const Popover = (ownProps: PopupProps) => {
   const [popover, setPopover] = createSignal<HTMLDivElement | null>(null);
   const [trigger, setTrigger] = createSignal<HTMLElement | null>(null);
   const [rendered, setRendered] = createSignal(false);
@@ -82,8 +85,12 @@ const Popup = (ownProps: PopupProps) => {
         }
       })}
       onBlur={composeEventHandlers(props.onBlur, (event) => {
-        if (!popover()?.contains(event.relatedTarget as Node)) {
-          trigger()?.focus();
+        if (
+          !(
+            popover()?.contains(event.relatedTarget as Node) ||
+            event.relatedTarget === trigger()
+          )
+        ) {
           popover()?.hidePopover();
         }
       })}
@@ -92,8 +99,9 @@ const Popup = (ownProps: PopupProps) => {
   );
 };
 
-export { Popup };
+export { Popover };
 
+/* eslint-disable @typescript-eslint/no-namespace */
 declare module 'solid-js' {
   namespace JSX {
     interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
