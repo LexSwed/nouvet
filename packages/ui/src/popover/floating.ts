@@ -12,17 +12,9 @@ import {
 import { createEffect, createSignal, onCleanup, type JSX } from 'solid-js';
 export { type Placement, type OffsetOptions } from '@floating-ui/dom';
 
-export interface FloatingOptions<
-  R extends ReferenceElement,
-  F extends HTMLElement,
-> {
+export interface FloatingOptions {
   placement?: ComputePositionConfig['placement'];
   offset?: OffsetOptions;
-  whileElementsMounted?: (
-    reference: R,
-    floating: F,
-    update: () => void,
-  ) => void | (() => void);
 }
 
 interface FloatingState extends Omit<ComputePositionReturn, 'x' | 'y'> {
@@ -43,7 +35,7 @@ export function createFloating<
 >(
   reference: () => R | undefined | null,
   floating: () => F | undefined | null,
-  options?: FloatingOptions<R, F>,
+  options?: FloatingOptions,
 ): FloatingResult {
   const placement = () => options?.placement ?? 'bottom';
   const offset = () => options?.offset ?? 8;
@@ -56,30 +48,34 @@ export function createFloating<
     middlewareData: {},
   });
 
-  function update() {
+  async function update() {
     const currentReference = reference();
     const currentFloating = floating();
 
     if (currentReference && currentFloating) {
-      computePosition(currentReference, currentFloating, {
-        middleware: [
-          inline(),
-          flip({ padding: 8 }),
-          offsetMiddleware(offset()),
-        ],
-        placement: placement(),
-        strategy,
-      })
-        .then((currentData) => {
-          // Check if it's still valid
-          if (
-            currentFloating === floating() &&
-            currentReference === reference()
-          ) {
-            setData(currentData);
-          }
-        })
-        .catch(() => {});
+      try {
+        const currentData = await computePosition(
+          currentReference,
+          currentFloating,
+          {
+            middleware: [
+              inline(),
+              flip({ padding: 8 }),
+              offsetMiddleware(offset()),
+            ],
+            placement: placement(),
+            strategy,
+          },
+        );
+        if (
+          currentFloating === floating() &&
+          currentReference === reference()
+        ) {
+          setData(currentData);
+        }
+      } catch {
+        /* empty */
+      }
     }
   }
 

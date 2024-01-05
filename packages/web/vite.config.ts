@@ -4,11 +4,11 @@ import viteSvgSpriteWrapper from 'vite-svg-sprite-wrapper';
 
 const config = {
   css: {
-    postcss: '../config/postcss.config.cjs'
+    postcss: '../config/postcss.config.cjs',
   },
   server: {
     fs: {
-      allow: [searchForWorkspaceRoot(process.cwd()),'../config/global.css'],
+      allow: [searchForWorkspaceRoot(process.cwd()), '../config/global.css'],
     },
   },
   plugins: [
@@ -33,7 +33,10 @@ export default defineConfig({
     ssr: 'async',
     middleware: './src/middleware.ts',
     server: {
-      preset: "cloudflare_pages",
+      preset: 'cloudflare_pages',
+      rollupConfig: {
+        external: ['node:async_hooks'],
+      },
     },
   },
 });

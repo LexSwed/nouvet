@@ -1,0 +1,22 @@
+@tailwind components;
+
+@layer components {
+  .popover {
+    opacity: 0;
+    transition:
+      opacity 0.2s ease-out,
+      overlay 0.2s allow-discrete,
+      display 0.2s allow-discrete;
+    @apply bg-surface m-0 max-h-60 overflow-y-auto rounded-md shadow-md;
+
+    &:not(:popover-open) {
+      display: none;
+    }
+    &:popover-open {
+      opacity: 1;
+      @starting-style {
+        opacity: 0;
+      }
+    }
+  }
+}

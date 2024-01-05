@@ -6,50 +6,64 @@ import {
   createSignal,
   createMemo,
   type Accessor,
+  type ValidComponent,
+  type ComponentProps,
 } from 'solid-js';
+import { Dynamic } from 'solid-js/web';
 import {
   createFloating,
   type OffsetOptions,
   type Placement,
 } from '../popover/floating';
 import { tw } from '../tw';
-import { composeEventHandlers } from '../utils';
+import { composeEventHandlers, mergeDefaultProps } from '../utils';
 
-const popupVariants = cva(
-  'rounded-md m-0 bg-surface shadow-md p-1 overflow-y-auto max-h-60 empty:hidden',
-  {
-    variants: {
-      variant: {
-        list: 'p-1',
-        popup: 'p-3',
-      },
-    },
-    defaultVariants: {
-      variant: 'popup',
+import * as cssStyles from './popover.module.css';
+
+const popupVariants = cva(cssStyles.popover, {
+  variants: {
+    variant: {
+      list: 'p-1',
+      popup: 'p-3',
     },
   },
-);
+  defaultVariants: {
+    variant: 'popup',
+  },
+});
 
-interface PopupProps
-  extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'children'>,
-    VariantProps<typeof popupVariants> {
-  id: string;
-  children?: JSX.Element | ((open: Accessor<boolean>) => JSX.Element);
-  placement?: Placement;
-  offset?: OffsetOptions;
-}
-const Popover = (ownProps: PopupProps) => {
-  const [popover, setPopover] = createSignal<HTMLDivElement | null>(null);
+type BaseProps<T extends ValidComponent, P = ComponentProps<T>> = {
+  [K in keyof P]: P[K];
+};
+type Override<T1, T2> = Omit<T1, keyof T2> & T2;
+
+type PopupProps<T extends ValidComponent> = Override<
+  BaseProps<T>,
+  {
+    id: string;
+    children?: JSX.Element | ((open: Accessor<boolean>) => JSX.Element);
+    placement?: Placement;
+    offset?: OffsetOptions;
+    /** @default 'div' */
+    as?: T | undefined;
+  } & VariantProps<typeof popupVariants>
+>;
+
+const Popover = <T extends ValidComponent = 'div'>(ownProps: PopupProps<T>) => {
+  const [popover, setPopover] = createSignal<HTMLElement | null>(null);
   const [trigger, setTrigger] = createSignal<HTMLElement | null>(null);
   const [rendered, setRendered] = createSignal(false);
 
-  const data = createFloating(trigger, popover, ownProps);
-
-  const [local, styles, props] = splitProps(
-    ownProps,
-    ['id', 'ref', 'class', 'children'],
+  const [local, styles, floatingProps, props] = splitProps(
+    mergeDefaultProps(ownProps, { as: 'div' as T }) as PopupProps<'div'>,
+    ['id', 'ref', 'class', 'as', 'children'],
     ['variant'],
+    ['offset', 'placement'],
   );
+
+  const data = createFloating(trigger, popover, floatingProps);
+
+  const component = () => local.as ?? 'div';
 
   const children = createMemo(() => {
     const child = local.children;
@@ -58,8 +72,9 @@ const Popover = (ownProps: PopupProps) => {
   });
 
   return (
-    <div
+    <Dynamic
       popover="auto"
+      component={component()}
       {...props}
       id={local.id}
       style={data.style}
@@ -84,13 +99,8 @@ const Popover = (ownProps: PopupProps) => {
           popover()?.focus();
         }
       })}
-      onBlur={composeEventHandlers(props.onBlur, (event) => {
-        if (
-          !(
-            popover()?.contains(event.relatedTarget as Node) ||
-            event.relatedTarget === trigger()
-          )
-        ) {
+      onFocusOut={composeEventHandlers(props.onFocusOut, (event) => {
+        if (!popover()?.contains(event.relatedTarget as Node)) {
           popover()?.hidePopover();
         }
       })}
