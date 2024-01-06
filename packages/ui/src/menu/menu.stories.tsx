@@ -1,8 +1,9 @@
 import { type Meta } from 'storybook-solidjs';
 
-import { Menu, MenuItem } from '.';
 import { Avatar } from '../avatar';
 import { Button } from '../button';
+
+import { Menu, MenuItem } from '.';
 
 const meta = {
   title: 'Menu',

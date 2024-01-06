@@ -2,12 +2,14 @@ import { deleteCookie, getCookie, sendRedirect } from '@solidjs/start/server';
 import { type PageEvent } from '@solidjs/start/server/types';
 import { OAuth2RequestError } from 'arctic';
 import { object, parse, string } from 'valibot';
-import { getFacebookOAuthStateCookie, useFacebookAuth } from './_shared';
+
 import { getLocale } from '~/i18n/locale';
 import { createUserSession } from '~/server/auth/user-session';
 import { RETURN_URL_COOKIE } from '~/server/const';
 import { createUser } from '~/server/db/queries/createUser';
 import { getUserByAuthProviderId } from '~/server/db/queries/getUserByAuthProviderId';
+
+import { getFacebookOAuthStateCookie, useFacebookAuth } from './_shared';
 
 export const GET = async (event: PageEvent) => {
   const { request } = event;

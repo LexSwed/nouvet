@@ -1,7 +1,6 @@
-import { clsx } from 'clsx';
-
-import { cva, type VariantProps } from 'class-variance-authority';
 import type { JSX } from 'solid-js';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { clsx } from 'clsx';
 
 interface Props
   extends JSX.SvgSVGAttributes<SVGSVGElement>,

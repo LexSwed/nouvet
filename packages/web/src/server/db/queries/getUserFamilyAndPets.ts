@@ -1,7 +1,13 @@
 import { eq } from 'drizzle-orm';
-import  { type DatabaseUser } from 'lucia';
-import { useDb } from '..';
-import { userTable, familyTable, petTable, userProfileTable } from '../schema';
+import { type DatabaseUser } from 'lucia';
+
+import { useDb } from '~/server/db';
+import {
+  familyTable,
+  petTable,
+  userProfileTable,
+  userTable,
+} from '~/server/db/schema';
 
 export const getDbUserFamilyAndPets = async (userId: DatabaseUser['id']) => {
   const db = useDb();

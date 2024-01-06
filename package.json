@@ -14,7 +14,7 @@
     "dev": "npm run dev -w @nou/web",
     "dev:ui": "npm run dev -w @nou/ui",
     "dev:web": "npm run dev -w @nou/web",
-    "format": "",
+    "format": "npx turbo run format",
     "lint": "npx turbo run lint",
     "typecheck": "tsc"
   },

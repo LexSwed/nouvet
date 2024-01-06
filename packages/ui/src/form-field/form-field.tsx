@@ -1,16 +1,17 @@
 import {
+  createUniqueId,
+  Match,
   Show,
   Switch,
-  Match,
   type Accessor,
   type JSX,
-  createUniqueId,
   type JSXElement,
 } from 'solid-js';
 
 import { useFormContext } from '../form';
 import { Text } from '../text';
 import { tw } from '../tw';
+
 import * as cssStyle from './form-field.module.css';
 
 export interface FormFieldProps {

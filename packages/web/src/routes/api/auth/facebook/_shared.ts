@@ -1,6 +1,7 @@
-import { Facebook } from 'arctic';
 import { getRequestEvent, type RequestEvent } from 'solid-js/web';
+import { Facebook } from 'arctic';
 import { deleteCookie, getCookie, setCookie } from 'vinxi/server';
+
 import { env } from '~/server/env';
 
 const FACEBOOK_OAUTH_STATE_COOKIE = 'oauth_state';

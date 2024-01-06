@@ -1,7 +1,7 @@
 import { A, type AnchorProps } from '@solidjs/router';
-import { cva, type VariantProps } from 'class-variance-authority';
 import { Show, splitProps, type JSX, type ValidComponent } from 'solid-js';
 import { Dynamic, type DynamicProps } from 'solid-js/web';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 import { Spinner } from './spinner';
 import { tw } from './tw';

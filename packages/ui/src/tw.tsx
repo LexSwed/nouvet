@@ -1,4 +1,4 @@
-import { type ClassNameValue, extendTailwindMerge } from 'tailwind-merge';
+import { extendTailwindMerge, type ClassNameValue } from 'tailwind-merge';
 
 const customTwMerge = extendTailwindMerge({
   extend: {

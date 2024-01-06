@@ -1,15 +1,16 @@
-import {
-  type User,
-  verifyRequestOrigin,
-  TimeSpan,
-  type CookieAttributes,
-} from 'lucia';
 import { getRequestEvent, type RequestEvent } from 'solid-js/web';
-import { object, picklist, string, type Output, parse } from 'valibot';
-import { sendRedirect, useSession, updateSession } from 'vinxi/server';
-import { type DatabaseUserProfile } from '../db/schema';
-import { env } from '../env';
-import { useLucia } from './lucia';
+import {
+  TimeSpan,
+  verifyRequestOrigin,
+  type CookieAttributes,
+  type User,
+} from 'lucia';
+import { object, parse, picklist, string, type Output } from 'valibot';
+import { sendRedirect, updateSession, useSession } from 'vinxi/server';
+
+import { useLucia } from '~/server/auth/lucia';
+import { type DatabaseUserProfile } from '~/server/db/schema';
+import { env } from '~/server/env';
 
 const SESSION_COOKIE = '_nouvet_user';
 /**

@@ -1,6 +1,5 @@
-import { For, createSignal } from 'solid-js';
+import { createSignal, For } from 'solid-js';
 import { type Meta } from 'storybook-solidjs';
-
 import {
   coerce,
   maxValue,
@@ -12,6 +11,7 @@ import {
   safeParse,
   string,
 } from 'valibot';
+
 import { Button } from './button';
 import { Card } from './card';
 import { Form } from './form';

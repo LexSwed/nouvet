@@ -1,9 +1,9 @@
 import {
-  parse,
   boolean,
+  object,
+  parse,
   picklist,
   string,
-  object,
   ValiError,
   type Output,
 } from 'valibot';

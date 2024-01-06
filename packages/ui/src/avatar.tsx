@@ -1,5 +1,6 @@
-import { cva, type VariantProps } from 'class-variance-authority';
 import { Show } from 'solid-js';
+import { cva, type VariantProps } from 'class-variance-authority';
+
 import { tw } from './tw';
 
 const avatarVariants = cva('rounded-full shadow-inner', {

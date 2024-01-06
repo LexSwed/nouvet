@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  plugins: ['tailwindcss', '@typescript-eslint', 'solid', 'import'],
+  plugins: ['tailwindcss', '@typescript-eslint', 'solid'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',

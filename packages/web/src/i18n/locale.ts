@@ -1,5 +1,6 @@
 import { getHeader } from '@solidjs/start/server';
 import { type RequestEvent } from 'solid-js/web';
+
 // import { getRequestUser } from '~/server/auth/user-session';
 
 // TODO: take into account the cookie when start support async in createHandler

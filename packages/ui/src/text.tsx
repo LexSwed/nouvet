@@ -1,6 +1,7 @@
-import { cva, type VariantProps } from 'class-variance-authority';
 import { splitProps, type ValidComponent } from 'solid-js';
 import { Dynamic, type DynamicProps } from 'solid-js/web';
+import { cva, type VariantProps } from 'class-variance-authority';
+
 import { tw } from './tw';
 
 const textVariants = cva('font-sans m-0', {

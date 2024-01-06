@@ -1,14 +1,14 @@
 import { mergeRefs } from '@solid-primitives/refs';
 import {
   createContext,
-  type ComponentProps,
-  useContext,
-  type ParentProps,
-  type Accessor,
-  createSignal,
-  splitProps,
   createEffect,
+  createSignal,
   on,
+  splitProps,
+  useContext,
+  type Accessor,
+  type ComponentProps,
+  type ParentProps,
 } from 'solid-js';
 
 interface FormContext {

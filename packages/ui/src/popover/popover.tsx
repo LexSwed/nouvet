@@ -1,15 +1,16 @@
 import { mergeRefs } from '@solid-primitives/refs';
-import { cva, type VariantProps } from 'class-variance-authority';
 import {
-  splitProps,
-  type JSX,
-  createSignal,
   createMemo,
+  createSignal,
+  splitProps,
   type Accessor,
-  type ValidComponent,
   type ComponentProps,
+  type JSX,
+  type ValidComponent,
 } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
+import { cva, type VariantProps } from 'class-variance-authority';
+
 import {
   createFloating,
   type OffsetOptions,

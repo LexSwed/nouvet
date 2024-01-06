@@ -1,6 +1,7 @@
-import { Card, ButtonLink, Icon } from '@nou/ui';
 import { Title } from '@solidjs/meta';
-import { T, createTranslator } from '~/i18n';
+import { ButtonLink, Card, Icon } from '@nou/ui';
+
+import { createTranslator, T } from '~/i18n';
 import { HeroImage } from '~/lib/hero-image';
 
 export default function WWW() {

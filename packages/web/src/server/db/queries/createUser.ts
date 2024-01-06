@@ -1,17 +1,17 @@
 import { createId } from '@paralleldrive/cuid2';
 import {
-  type Output,
-  ValiError,
   maxLength,
   minLength,
   object,
   parse,
   picklist,
   string,
+  ValiError,
+  type Output,
 } from 'valibot';
 
-import { useDb } from '..';
-import { userTable, authAccount, userProfileTable } from '../schema';
+import { useDb } from '~/server/db';
+import { authAccount, userProfileTable, userTable } from '~/server/db/schema';
 
 const createUserSchema = object({
   provider: picklist(['facebook']),

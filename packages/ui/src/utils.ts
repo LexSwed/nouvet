@@ -1,4 +1,4 @@
-import { mergeProps, type MergeProps, type JSX } from 'solid-js';
+import { mergeProps, type JSX, type MergeProps } from 'solid-js';
 
 export type DefaultProps<T, K extends keyof T> = MergeProps<
   [Required<Pick<T, K>>, T]

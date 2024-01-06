@@ -8,6 +8,7 @@
     "start": "vinxi start",
     "typecheck": "tsc",
     "lint": "eslint src",
+    "format": "prettier . --write",
     "db:up": "npx drizzle-kit generate:sqlite",
     "db:push": "npx drizzle-kit push:sqlite"
   },

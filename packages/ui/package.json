@@ -9,6 +9,7 @@
   "scripts": {
     "typecheck": "tsc",
     "lint": "eslint src",
+    "format": "prettier . --write",
     "dev": "storybook dev -p 6006",
     "build": "storybook build"
   },

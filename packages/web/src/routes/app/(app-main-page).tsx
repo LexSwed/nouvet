@@ -1,14 +1,11 @@
-import { Avatar, ButtonLink, Card, Icon, TextField } from '@nou/ui';
 import { Title } from '@solidjs/meta';
-import {
-  A,
-  createAsync,
-  type RouteDefinition,
-} from '@solidjs/router';
+import { A, createAsync, type RouteDefinition } from '@solidjs/router';
 import { Show } from 'solid-js';
-import { getUserFamilyAndPets } from './_queries';
+import { Avatar, ButtonLink, Card, Icon, TextField } from '@nou/ui';
+
 import { createTranslator, getDictionary } from '~/i18n';
 
+import { getUserFamilyAndPets } from './_queries';
 
 export const route = {
   load() {
@@ -32,7 +29,7 @@ function AppMainPage() {
                 familyName: user().family!.name!,
               })}
               fallback={t('app.meta.title-new-user')}
-             />
+            />
           </Title>
           <div class="bg-background min-h-full">
             <header class="align-center flex justify-between p-4">

@@ -1,4 +1,5 @@
 import { type RouteDefinition, type RouteSectionProps } from '@solidjs/router';
+
 import { getDictionary } from '~/i18n';
 
 export const route = {

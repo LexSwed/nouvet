@@ -1,15 +1,16 @@
+import { createEffect, createSignal, onCleanup, type JSX } from 'solid-js';
 import {
+  autoUpdate,
   computePosition,
+  flip,
+  inline,
   offset as offsetMiddleware,
   type ComputePositionConfig,
   type ComputePositionReturn,
-  type ReferenceElement,
   type OffsetOptions,
-  inline,
-  autoUpdate,
-  flip,
+  type ReferenceElement,
 } from '@floating-ui/dom';
-import { createEffect, createSignal, onCleanup, type JSX } from 'solid-js';
+
 export { type Placement, type OffsetOptions } from '@floating-ui/dom';
 
 export interface FloatingOptions {

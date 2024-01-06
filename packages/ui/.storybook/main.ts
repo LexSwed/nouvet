@@ -11,7 +11,7 @@ const config = {
     return mergeConfig(config, {
       assetsInclude: ['/sb-preview/**'],
       css: {
-        postcss: '../config/postcss.config.cjs'
+        postcss: '../config/postcss.config.cjs',
       },
       plugins: [
         viteSvgSpriteWrapper({

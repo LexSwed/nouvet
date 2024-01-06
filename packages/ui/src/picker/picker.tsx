@@ -1,9 +1,9 @@
 import { splitProps, type JSX } from 'solid-js';
 
 import { FormField, type FormFieldProps } from '../form-field';
-
 import { Icon } from '../icon';
 import { tw } from '../tw';
+
 import * as cssStyle from './picker.module.css';
 
 interface PickerProps

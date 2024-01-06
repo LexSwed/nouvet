@@ -1,7 +1,9 @@
 import { type Meta } from 'storybook-solidjs';
+
 import { Avatar } from '../avatar';
 import { Button, ButtonLink } from '../button';
-import { MenuList, MenuItem } from '../menu';
+import { MenuItem, MenuList } from '../menu';
+
 import { Popover } from './popover';
 
 const meta = {

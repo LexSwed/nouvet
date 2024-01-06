@@ -1,11 +1,14 @@
-import { cva, type VariantProps } from 'class-variance-authority';
 import { splitProps, type JSX } from 'solid-js';
+import { cva, type VariantProps } from 'class-variance-authority';
+
 import spriteHref from '../../web/public/assets/sprite.svg';
 import { type SvgIcons } from '../../web/src/assets/icons/svg-icons';
+
 import { tw } from './tw';
+
 export type { SvgIcons } from '../../web/src/assets/icons/svg-icons';
 
-const iconVariants = cva('shrink-0 inline', {
+const iconVariants = cva('inline shrink-0', {
   variants: {
     size: {
       font: 'w-font h-font',

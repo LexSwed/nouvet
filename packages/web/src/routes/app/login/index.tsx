@@ -1,6 +1,6 @@
-import { ButtonLink, Icon } from '@nou/ui';
 import { Title } from '@solidjs/meta';
 import { createSignal, onCleanup } from 'solid-js';
+import { ButtonLink, Icon } from '@nou/ui';
 
 import { createTranslator } from '~/i18n';
 import { HeroImage } from '~/lib/hero-image';

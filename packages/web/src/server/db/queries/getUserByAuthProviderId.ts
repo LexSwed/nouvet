@@ -1,10 +1,11 @@
 import { and, eq } from 'drizzle-orm';
-import { useDb } from '..';
+
+import { useDb } from '~/server/db';
 import {
-  type SupportedAuthProvider,
   authAccount,
   userProfileTable,
-} from '../schema';
+  type SupportedAuthProvider,
+} from '~/server/db/schema';
 
 export const getUserByAuthProviderId = async (
   provider: SupportedAuthProvider,

@@ -1,4 +1,5 @@
 import preset from '@nou/config/tailwind';
+
 import { type Config } from 'tailwindcss';
 
 const config = {

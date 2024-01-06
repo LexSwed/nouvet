@@ -1,9 +1,10 @@
 import {
   createMiddleware,
+  sendRedirect,
   setCookie,
   type FetchEvent,
-  sendRedirect,
 } from '@solidjs/start/server';
+
 import { validateAuthSession } from './server/auth/user-session';
 import { RETURN_URL_COOKIE } from './server/const';
 

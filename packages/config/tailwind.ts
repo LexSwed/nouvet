@@ -1,8 +1,9 @@
 import containerQueryPlugin from '@tailwindcss/container-queries';
-import { type Config } from 'tailwindcss';
+import animatePlugin from 'tailwindcss-animate';
 import defaultConfig from 'tailwindcss/defaultConfig';
 import plugin from 'tailwindcss/plugin';
-import animatePlugin from 'tailwindcss-animate';
+
+import { type Config } from 'tailwindcss';
 
 const colors = {
   'primary': 'hsl(var(--nou-primary) / <alpha-value>)',

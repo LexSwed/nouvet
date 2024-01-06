@@ -1,4 +1,5 @@
-import { splitProps, type JSX, createUniqueId, Show } from 'solid-js';
+import { createUniqueId, Show, splitProps, type JSX } from 'solid-js';
+
 import { Text } from '../text';
 import { tw } from '../tw';
 
