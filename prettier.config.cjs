@@ -1,11 +1,25 @@
 /** @type {import("prettier").Config} */
 const config = {
   // see https://github.com/withastro/prettier-plugin-astro
-  plugins: [require.resolve('prettier-plugin-tailwindcss')],
+  plugins: [
+    require.resolve('prettier-plugin-tailwindcss'),
+    require.resolve('@ianvs/prettier-plugin-sort-imports'),
+  ],
   // custom rules
   quoteProps: 'consistent',
   trailingComma: 'all',
   singleQuote: true,
+  importOrderGroupNamespaceSpecifiers: true,
+  importOrderSeparation: true,
+  importOrder: [
+    '^@?solid/(.*)$',
+    '^@nou/(.*)$',
+    '<THIRD_PARTY_MODULES>',
+    '',
+    '^(?!.*[.]css$)[./].*$',
+    '',
+    '.css$',
+  ],
 };
 
 module.exports = config;

@@ -1,13 +1,14 @@
 import { A, type AnchorProps } from '@solidjs/router';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { type JSX, splitProps, type ValidComponent, Show } from 'solid-js';
+import { Show, splitProps, type JSX, type ValidComponent } from 'solid-js';
 import { Dynamic, type DynamicProps } from 'solid-js/web';
+
 import { Spinner } from './spinner';
 import { tw } from './tw';
-import { mergeDefaultProps } from './utils';
+import { composeEventHandlers, mergeDefaultProps } from './utils';
 
 const buttonVariants = cva(
-  'relative ring-offset-background focus-visible:ring-outline inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'ring-offset-background focus-visible:ring-outline relative inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -19,7 +20,7 @@ const buttonVariants = cva(
           'border-input bg-background intent:bg-accent intent:text-on-accent border',
         secondary: 'bg-secondary text-on-secondary intent:bg-secondary/80',
         ghost: 'intent:bg-accent intent:text-on-accent',
-        link: 'text-primary underline-offset-4 intent:underline',
+        link: 'text-primary intent:underline underline-offset-4',
       },
       size: {
         default: 'h-12 min-w-12 px-4 py-2 text-base',
@@ -32,7 +33,7 @@ const buttonVariants = cva(
         false: '',
       },
       icon: {
-        true: 'p-0 rounded-full',
+        true: 'rounded-full p-0',
       },
     },
     defaultVariants: {
@@ -93,7 +94,17 @@ const Button = (ownProps: ButtonProps) => {
       component="button"
       aria-label={props.label}
       title={props.title}
+      aria-haspopup={props.popoverTarget ? 'true' : undefined}
+      aria-controls={props.popoverTarget}
       {...props}
+      onFocusOut={composeEventHandlers(props.onFocusOut, (event) => {
+        if (props.popoverTarget) {
+          const popover = document.getElementById(props.popoverTarget);
+          if (!popover?.contains(event.relatedTarget as Node)) {
+            popover?.hidePopover();
+          }
+        }
+      })}
     />
   );
 };

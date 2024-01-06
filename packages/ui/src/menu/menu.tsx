@@ -1,25 +1,10 @@
 import { type ComponentProps } from 'solid-js';
-import { Button } from '../button';
-import { Popover } from '../popover/popover';
+
+import { Popover } from '../popover';
 import { tw } from '../tw';
 import { composeEventHandlers } from '../utils';
-import * as cssStyle from './menu.module.css';
 
-interface MenuTriggerProps extends ComponentProps<typeof Button> {
-  /**
-   * ID of the Popover element this trigger opens.
-   */
-  popoverTarget: string;
-}
-const MenuTrigger = (ownProps: MenuTriggerProps) => {
-  return (
-    <Button
-      aria-haspopup="true"
-      aria-controls={ownProps.popoverTarget}
-      {...ownProps}
-    />
-  );
-};
+import * as cssStyle from './menu.module.css';
 
 interface MenuProps
   extends Omit<ComponentProps<'div'>, 'children'>,
@@ -46,11 +31,9 @@ const MenuItem = (ownProps: MenuItemProps) => {
           (popover as HTMLDivElement).hidePopover();
         }
       })}
-      // mix of keyboard and mouse usage can lead to weird visuals,
-      // but I don't think this is important enough
-      // onMouseEnter={composeEventHandlers(ownProps.onMouseEnter, (event) => {
-      //   event.currentTarget.focus();
-      // })}
+      onMouseEnter={composeEventHandlers(ownProps.onMouseEnter, (event) => {
+        event.currentTarget.focus();
+      })}
       class={tw(cssStyle.listItem, ownProps.class)}
     />
   );
@@ -92,4 +75,4 @@ const MenuList = (ownProps: MenuListProps) => {
   );
 };
 
-export { Menu, MenuList, MenuTrigger, MenuItem };
+export { Menu, MenuList, MenuItem };

@@ -1,6 +1,8 @@
 import { type Meta } from 'storybook-solidjs';
+
+import { Menu, MenuItem } from '.';
 import { Avatar } from '../avatar';
-import { Menu, MenuItem, MenuTrigger } from '.';
+import { Button } from '../button';
 
 const meta = {
   title: 'Menu',
@@ -13,9 +15,9 @@ export default meta;
 export const SimpleMenu = () => {
   return (
     <>
-      <MenuTrigger popoverTarget="menu" variant="ghost" icon>
+      <Button popoverTarget="menu" variant="ghost" icon>
         <Avatar name="John Doe" avatarUrl={null} />
-      </MenuTrigger>
+      </Button>
       <Menu id="menu" placement="bottom-start">
         <MenuItem>Account</MenuItem>
         <MenuItem>Install for offline</MenuItem>
@@ -31,7 +33,7 @@ export const LazyRender = () => {
   };
   return (
     <>
-      <MenuTrigger popoverTarget="menu">Open menu</MenuTrigger>
+      <Button popoverTarget="menu">Open menu</Button>
       <Menu id="menu">
         {(open) => (open() ? <AsyncOrHeavyComponent /> : null)}
       </Menu>
@@ -43,9 +45,9 @@ export const WithoutAutoClosingOnItemClick = () => {
   const nope = (event: MouseEvent) => event.preventDefault();
   return (
     <>
-      <MenuTrigger popoverTarget="menu" variant="ghost" icon>
+      <Button popoverTarget="menu" variant="ghost" icon>
         <Avatar name="John Doe" avatarUrl={null} />
-      </MenuTrigger>
+      </Button>
       <Menu id="menu" placement="bottom-end">
         <MenuItem onClick={nope}>Account</MenuItem>
         <MenuItem onClick={nope}>Install for offline</MenuItem>
