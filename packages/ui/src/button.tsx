@@ -17,9 +17,9 @@ const buttonVariants = cva(
         destructive:
           'bg-destructive text-on-destructive intent:bg-destructive/90',
         outline:
-          'border-input bg-background intent:bg-accent intent:text-on-accent border',
+          'border-input bg-background intent:bg-primary intent:text-on-primary border',
         secondary: 'bg-secondary text-on-secondary intent:bg-secondary/80',
-        ghost: 'intent:bg-accent intent:text-on-accent',
+        ghost: 'intent:bg-surface-container-high text-on-surface-container',
         link: 'text-primary intent:underline underline-offset-4',
       },
       size: {

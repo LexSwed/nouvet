@@ -36,7 +36,7 @@ const Icon = (ownProps: IconProps) => {
     <svg
       {...props}
       class={tw(iconVariants(local), props.class)}
-      aria-hidden="true"
+      aria-hidden={!(props['aria-label'] || props['aria-labelledby'])}
     >
       <use href={`${spriteHref}#${local.use}`} />
     </svg>
