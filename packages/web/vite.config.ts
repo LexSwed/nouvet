@@ -13,9 +13,10 @@ const config = {
   },
   plugins: [
     viteSvgSpriteWrapper({
-      icons: './src/assets/icons/*.svg',
-      outputDir: './public/assets',
+      icons: '../config/icons/source/*.svg',
+      outputDir: '../config/icons',
       generateType: true,
+      typeOutputDir: '../ui/src/icon',
       sprite: {
         shape: {
           dimension: {
@@ -32,6 +33,8 @@ export default defineConfig({
   start: {
     ssr: 'async',
     middleware: './src/middleware.ts',
+    // @ts-expect-error Ryan oh Ryan
+    solid: {},
     server: {
       preset: 'cloudflare_pages',
       rollupConfig: {

@@ -15,9 +15,10 @@ const config = {
       },
       plugins: [
         viteSvgSpriteWrapper({
-          icons: '../web/src/assets/icons/*.svg',
-          outputDir: '../web/public/assets',
+          icons: '../config/icons/source/*.svg',
+          outputDir: '../config/icons',
           generateType: true,
+          typeOutputDir: '../../ui/src/icon',
           sprite: {
             shape: {
               dimension: {

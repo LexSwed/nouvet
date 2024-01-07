@@ -1,5 +1,7 @@
-import { getHeader } from '@solidjs/start/server';
+'use server';
+
 import { type RequestEvent } from 'solid-js/web';
+import { getHeader } from 'vinxi/server';
 
 // import { getRequestUser } from '~/server/auth/user-session';
 

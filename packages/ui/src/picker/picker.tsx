@@ -1,7 +1,7 @@
 import { splitProps, type JSX } from 'solid-js';
 
 import { FormField, type FormFieldProps } from '../form-field';
-import { Icon } from '../icon';
+import { Icon } from '../icon/icon';
 import { tw } from '../tw';
 
 import * as cssStyle from './picker.module.css';

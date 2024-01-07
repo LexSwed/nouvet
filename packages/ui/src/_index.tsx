@@ -4,7 +4,7 @@ export { Card, NavCard } from './card';
 export { Form } from './form';
 export { Picker } from './picker';
 export { TextField } from './text-field';
-export { Icon, type SvgIcons } from './icon';
+export { Icon, type SvgIcons } from './icon/icon';
 export { Spinner } from './spinner';
 export { Text } from './text';
 export { tw } from './tw';

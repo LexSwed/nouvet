@@ -15,7 +15,7 @@ import {
 import { Button } from './button';
 import { Card } from './card';
 import { Form } from './form';
-import { Icon } from './icon';
+import { Icon } from './icon/icon';
 import { Option, Picker } from './picker';
 import { RadioCard } from './radio';
 import { Text } from './text';

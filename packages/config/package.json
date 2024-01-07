@@ -6,7 +6,8 @@
     "./eslint": "./eslint.cjs",
     "./tailwind": "./tailwind.ts",
     "./tsconfig": "./tsconfig.json",
-    "./global.css": "./global.css"
+    "./global.css": "./global.css",
+    "./icons/sprite.svg": "./icons/sprite.svg"
   },
   "engines": {
     "node": ">=20"

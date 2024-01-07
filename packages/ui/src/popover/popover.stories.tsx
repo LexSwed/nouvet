@@ -2,7 +2,7 @@ import { type Meta } from 'storybook-solidjs';
 
 import { Avatar } from '../avatar';
 import { Button, ButtonLink } from '../button';
-import { Icon } from '../icon';
+import { Icon } from '../icon/icon';
 import { MenuItem, MenuList } from '../menu';
 
 import { Popover } from './popover';

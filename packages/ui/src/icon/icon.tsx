@@ -1,12 +1,12 @@
 import { splitProps, type JSX } from 'solid-js';
+import spriteHref from '@nou/config/icons/sprite.svg';
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import spriteHref from '../../web/public/assets/sprite.svg';
-import { type SvgIcons } from '../../web/src/assets/icons/svg-icons';
+import { tw } from '../tw';
 
-import { tw } from './tw';
+import { type SvgIcons } from './svg-icons';
 
-export type { SvgIcons } from '../../web/src/assets/icons/svg-icons';
+export type { SvgIcons } from './svg-icons';
 
 const iconVariants = cva('inline shrink-0', {
   variants: {
