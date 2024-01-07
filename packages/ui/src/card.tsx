@@ -5,16 +5,16 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { tw } from './tw';
 import { mergeDefaultProps } from './utils';
 
-const cardVariants = cva('rounded-lg p-6 transition-shadow', {
+const cardVariants = cva('rounded-lg p-6 transition-shadow duration-200', {
   variants: {
     _link: {
       true: '',
       false: '',
     },
     variant: {
-      flat: 'bg-surface-container text-on-surface-container',
-      filled:
-        'bg-primary-container focus:outline-background text-on-primary-container',
+      elevated: 'bg-surface text-on-surface shadow-sm',
+      flat: 'bg-surface text-on-surface',
+      filled: 'bg-secondary-container text-on-secondary-container',
       outlined: 'bg-surface text-on-surface border-outline/20 border',
     },
   },
@@ -26,12 +26,13 @@ const cardVariants = cva('rounded-lg p-6 transition-shadow', {
     },
     {
       _link: true,
-      variant: 'flat',
-      class: 'intent:bg-primary-container/90',
+      variant: 'filled',
+      class:
+        'outline-primary intent:bg-secondary-container/90 intent:text-on-secondary-container intent:outline-2 outline-offset-4',
     },
   ],
   defaultVariants: {
-    variant: 'flat',
+    variant: 'elevated',
   },
 });
 

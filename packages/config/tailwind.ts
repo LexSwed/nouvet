@@ -11,31 +11,16 @@ const colors = {
   'primary-container': 'hsl(var(--nou-primary-container) / <alpha-value>)',
   'on-primary-container':
     'hsl(var(--nou-on-primary-container) / <alpha-value>)',
-  'primary-fixed': 'hsl(var(--nou-primary-fixed) / <alpha-value>)',
-  'on-primary-fixed': 'hsl(var(--nou-on-primary-fixed) / <alpha-value>)',
-  'primary-fixed-dim': 'hsl(var(--nou-primary-fixed-dim) / <alpha-value>)',
-  'on-primary-fixed-variant':
-    'hsl(var(--nou-on-primary-fixed-variant) / <alpha-value>)',
   'secondary': 'hsl(var(--nou-secondary) / <alpha-value>)',
   'on-secondary': 'hsl(var(--nou-on-secondary) / <alpha-value>)',
   'secondary-container': 'hsl(var(--nou-secondary-container) / <alpha-value>)',
   'on-secondary-container':
     'hsl(var(--nou-on-secondary-container) / <alpha-value>)',
-  'secondary-fixed': 'hsl(var(--nou-secondary-fixed) / <alpha-value>)',
-  'on-secondary-fixed': 'hsl(var(--nou-on-secondary-fixed) / <alpha-value>)',
-  'secondary-fixed-dim': 'hsl(var(--nou-secondary-fixed-dim) / <alpha-value>)',
-  'on-secondary-fixed-variant':
-    'hsl(var(--nou-on-secondary-fixed-variant) / <alpha-value>)',
   'tertiary': 'hsl(var(--nou-tertiary) / <alpha-value>)',
   'on-tertiary': 'hsl(var(--nou-on-tertiary) / <alpha-value>)',
   'tertiary-container': 'hsl(var(--nou-tertiary-container) / <alpha-value>)',
   'on-tertiary-container':
     'hsl(var(--nou-on-tertiary-container) / <alpha-value>)',
-  'tertiary-fixed': 'hsl(var(--nou-tertiary-fixed) / <alpha-value>)',
-  'on-tertiary-fixed': 'hsl(var(--nou-on-tertiary-fixed) / <alpha-value>)',
-  'tertiary-fixed-dim': 'hsl(var(--nou-tertiary-fixed-dim) / <alpha-value>)',
-  'on-tertiary-fixed-variant':
-    'hsl(var(--nou-on-tertiary-fixed-variant) / <alpha-value>)',
   'error': 'hsl(var(--nou-error) / <alpha-value>)',
   'on-error': 'hsl(var(--nou-on-error) / <alpha-value>)',
   'error-container': 'hsl(var(--nou-error-container) / <alpha-value>)',
@@ -50,7 +35,6 @@ const colors = {
   'inverse-surface': 'hsl(var(--nou-inverse-surface) / <alpha-value>)',
   'inverse-on-surface': 'hsl(var(--nou-inverse-on-surface) / <alpha-value>)',
   'inverse-primary': 'hsl(var(--nou-inverse-primary) / <alpha-value>)',
-  'shadow': 'hsl(var(--nou-shadow) / <alpha-value>)',
   'surface-tint': 'hsl(var(--nou-surface-tint) / <alpha-value>)',
   'outline-variant': 'hsl(var(--nou-outline-variant) / <alpha-value>)',
   'scrim': 'hsl(var(--nou-scrim) / <alpha-value>)',
@@ -63,8 +47,6 @@ const colors = {
     'hsl(var(--nou-surface-container-low) / <alpha-value>)',
   'surface-container-lowest':
     'hsl(var(--nou-surface-container-lowest) / <alpha-value>)',
-  'surface-bright': 'hsl(var(--nou-surface-bright) / <alpha-value>)',
-  'surface-dim': 'hsl(var(--nou-surface-dim) / <alpha-value>)',
 };
 
 export default {
@@ -107,11 +89,6 @@ export default {
         main: 'linear-gradient(135deg, hsl(var(--nou-secondary-container)/0.3) 0%, hsl(var(--nou-tertiary-container)/0.3) 100%)',
       },
       colors,
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
       keyframes: {
         'accordion-down': {
           from: { height: '0' },
@@ -126,13 +103,6 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'spinner-circle': 'spinner-circle 1.8s linear infinite',
-      },
-      boxShadow: {
-        '1': 'var(--nou-elevation-1)',
-        '2': 'var(--nou-elevation-2)',
-        '3': 'var(--nou-elevation-3)',
-        '4': 'var(--nou-elevation-4)',
-        '5': 'var(--nou-elevation-5)',
       },
     },
     keyframes: {

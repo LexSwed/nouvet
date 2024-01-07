@@ -39,8 +39,11 @@
         var(--border-color)
       );
     }
-    &:where(:hover, :focus-within) {
-      background-color: theme('colors.on-primary/0.08');
+    &:where(:hover) {
+      background-color: theme('colors.on-surface/0.05');
+    }
+    &:where(:focus-within) {
+      background-color: theme('colors.on-surface/0.08');
     }
     &:where(:focus-within) {
       --border-color: theme('colors.primary');
