@@ -17,9 +17,7 @@ function generateHslThemeFromMaterialThemeBuilder(theme) {
     .join(';\n');
 }
 
-const mdTheme = JSON.parse(
-  await fs.readFile(new URL('./md-theme.json', import.meta.url)),
-);
+const mdTheme = JSON.parse(await fs.readFile(process.argv.at(3)));
 const lightColors = generateHslThemeFromMaterialThemeBuilder(
   mdTheme.schemes.light,
 );

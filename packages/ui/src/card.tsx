@@ -12,12 +12,24 @@ const cardVariants = cva('rounded-lg p-6 transition-shadow', {
       false: '',
     },
     variant: {
-      flat: 'bg-primary/8 text-on-surface',
+      flat: 'bg-surface-container text-on-surface-container',
       filled:
         'bg-primary-container focus:outline-background text-on-primary-container',
       outlined: 'bg-surface text-on-surface border-outline/20 border',
     },
   },
+  compoundVariants: [
+    {
+      _link: true,
+      variant: 'flat',
+      class: 'intent:bg-surface-container-high',
+    },
+    {
+      _link: true,
+      variant: 'flat',
+      class: 'intent:bg-primary-container/90',
+    },
+  ],
   defaultVariants: {
     variant: 'flat',
   },

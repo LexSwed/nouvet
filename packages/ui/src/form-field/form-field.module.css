@@ -40,7 +40,7 @@
       );
     }
     &:where(:hover, :focus-within) {
-      background-color: theme('colors.surface-container-high');
+      background-color: theme('colors.on-primary/0.08');
     }
     &:where(:focus-within) {
       --border-color: theme('colors.primary');
