@@ -8,58 +8,6 @@
   :root {
     --nou-font-sans: 'Rubik Variable';
 
-    --nou-white: 0 0% 100%;
-    --nou-black: 0 0% 0%;
-    --nou-primary: 349 50.9% 43.1%;
-    --nou-on-primary: 0 0% 100%;
-    --nou-primary-container: 357 100% 92.7%;
-    --nou-on-primary-container: 345 100% 12.5%;
-    --nou-primary-fixed: 357 100% 92.7%;
-    --nou-on-primary-fixed: 345 100% 12.5%;
-    --nou-primary-fixed-dim: 355 100% 84.9%;
-    --nou-on-primary-fixed-variant: 348 63.4% 32.2%;
-    --nou-secondary: 354 15.7% 40%;
-    --nou-on-secondary: 0 0% 100%;
-    --nou-secondary-container: 357 100% 92.7%;
-    --nou-on-secondary-container: 355 35.4% 12.7%;
-    --nou-secondary-fixed: 357 100% 92.7%;
-    --nou-on-secondary-fixed: 355 35.4% 12.7%;
-    --nou-secondary-fixed-dim: 357 43.5% 82%;
-    --nou-on-secondary-fixed-variant: 354 18.7% 30.4%;
-    --nou-tertiary: 191 100% 24.5%;
-    --nou-on-tertiary: 0 0% 100%;
-    --nou-tertiary-container: 196 100% 84.9%;
-    --nou-on-tertiary-container: 192 100% 7.6%;
-    --nou-tertiary-fixed: 196 100% 84.9%;
-    --nou-on-tertiary-fixed: 192 100% 7.6%;
-    --nou-tertiary-fixed-dim: 193 91.9% 66.1%;
-    --nou-on-tertiary-fixed-variant: 191 100% 18.6%;
-    --nou-error: 352 79.8% 40.8%;
-    --nou-on-error: 0 0% 100%;
-    --nou-error-container: 3 100% 92.4%;
-    --nou-on-error-container: 354 100% 12.7%;
-    --nou-outline: 349 6.9% 10.4%;
-    --nou-background: 240 100% 99.4%;
-    --nou-on-background: 204 9.1% 10.8%;
-    --nou-surface: 240 33.3% 98.2%;
-    --nou-on-surface: 204 9.1% 10.8%;
-    --nou-surface-variant: 349 47.8% 91%;
-    --nou-on-surface-variant: 347 9.5% 29%;
-    --nou-inverse-surface: 204 5.2% 19%;
-    --nou-inverse-on-surface: 240 11.1% 94.7%;
-    --nou-inverse-primary: 355 100% 84.9%;
-    --nou-shadow: 0 0% 0%;
-    --nou-surface-tint: 349 50.9% 43.1%;
-    --nou-outline-variant: 351 19.6% 80%;
-    --nou-scrim: 0 0% 0%;
-    --nou-surface-container-highest: 240 5.5% 89.2%;
-    --nou-surface-container-high: 225 9.1% 91.4%;
-    --nou-surface-container: 220 9.1% 93.5%;
-    --nou-surface-container-low: 240 14.3% 95.9%;
-    --nou-surface-container-lowest: 0 0% 100%;
-    --nou-surface-bright: 240 33.3% 98.2%;
-    --nou-surface-dim: 225 5.6% 85.9%;
-
     --nou-elevation-1: 0px 1px 3px rgba(0, 0, 0, 0.15),
       0px 1px 2px rgba(0, 0, 0, 0.3);
     --nou-elevation-2: 0px 2px 6px rgba(0, 0, 0, 0.15),
@@ -75,56 +23,6 @@
   }
 
   .dark {
-    --nou-primary: 355 100% 84.9%;
-    --nou-on-primary: 342 98.1% 20.4%;
-    --nou-primary-container: 348 63.4% 32.2%;
-    --nou-on-primary-container: 357 100% 92.7%;
-    --nou-primary-fixed: 357 100% 92.7%;
-    --nou-on-primary-fixed: 345 100% 12.5%;
-    --nou-primary-fixed-dim: 355 100% 84.9%;
-    --nou-on-primary-fixed-variant: 348 63.4% 32.2%;
-    --nou-secondary: 357 43.5% 82%;
-    --nou-on-secondary: 353 24.8% 21.4%;
-    --nou-secondary-container: 354 18.7% 30.4%;
-    --nou-on-secondary-container: 357 100% 92.7%;
-    --nou-secondary-fixed: 357 100% 92.7%;
-    --nou-on-secondary-fixed: 355 35.4% 12.7%;
-    --nou-secondary-fixed-dim: 357 43.5% 82%;
-    --nou-on-secondary-fixed-variant: 354 18.7% 30.4%;
-    --nou-tertiary: 193 91.9% 66.1%;
-    --nou-on-tertiary: 191 100% 12.9%;
-    --nou-tertiary-container: 191 100% 18.6%;
-    --nou-on-tertiary-container: 196 100% 84.9%;
-    --nou-tertiary-fixed: 196 100% 84.9%;
-    --nou-on-tertiary-fixed: 192 100% 7.6%;
-    --nou-tertiary-fixed-dim: 193 91.9% 66.1%;
-    --nou-on-tertiary-fixed-variant: 191 100% 18.6%;
-    --nou-error: 2 100% 84.7%;
-    --nou-on-error: 350 100% 20.4%;
-    --nou-error-container: 348 100% 28.6%;
-    --nou-on-error-container: 3 100% 92.4%;
-    --nou-outline: 347 8.5% 58.4%;
-    --nou-background: 204 9.1% 10.8%;
-    --nou-on-background: 240 5.5% 89.2%;
-    --nou-surface: 204 12.8% 7.6%;
-    --nou-on-surface: 225 3.6% 78%;
-    --nou-surface-variant: 347 9.5% 29%;
-    --nou-on-surface-variant: 351 19.6% 80%;
-    --nou-inverse-surface: 240 5.5% 89.2%;
-    --nou-inverse-on-surface: 204 9.1% 10.8%;
-    --nou-inverse-primary: 349 50.9% 43.1%;
-    --nou-shadow: 0 0% 0%;
-    --nou-surface-tint: 355 100% 84.9%;
-    --nou-outline-variant: 347 9.5% 29%;
-    --nou-scrim: 0 0% 0%;
-    --nou-surface-container-highest: 210 3.8% 20.8%;
-    --nou-surface-container-high: 210 4.8% 16.5%;
-    --nou-surface-container: 210 6.2% 12.5%;
-    --nou-surface-container-low: 204 9.1% 10.8%;
-    --nou-surface-container-lowest: 216 17.2% 5.7%;
-    --nou-surface-bright: 216 4.3% 22.5%;
-    --nou-surface-dim: 204 12.8% 7.6%;
-
     --nou-elevation-1: 0px 1px 2px rgba(0, 0, 0, 0.3),
       0px 1px 3px rgba(0, 0, 0, 0.15);
     --nou-elevation-2: 0px 1px 2px rgba(0, 0, 0, 0.3),
@@ -149,5 +47,110 @@
   }
   #app {
     @apply overflow-x-hidden;
+  }
+}
+
+@layer base {
+  :root {
+    --nou-primary: 351 32.4% 42.4%;
+    --nou-surface-tint: 351 32.4% 42.4%;
+    --nou-on-primary: 0 0% 100%;
+    --nou-primary-container: 355 100% 92.5%;
+    --nou-on-primary-container: 346 78.8% 12.9%;
+    --nou-secondary: 204 54.2% 35.1%;
+    --nou-on-secondary: 0 0% 100%;
+    --nou-secondary-container: 209 100% 89.8%;
+    --nou-on-secondary-container: 203 100% 9.41%;
+    --nou-tertiary: 204 54.2% 35.1%;
+    --nou-on-tertiary: 0 0% 100%;
+    --nou-tertiary-container: 209 100% 89.8%;
+    --nou-on-tertiary-container: 203 100% 9.41%;
+    --nou-error: 0 75.5% 41.6%;
+    --nou-on-error: 0 0% 100%;
+    --nou-error-container: 5.85 100% 92%;
+    --nou-on-error-container: 358 100% 12.7%;
+    --nou-background: 7.5 100% 99.4%;
+    --nou-on-background: 353 15.3% 11.6%;
+    --nou-surface: 7.5 100% 98.4%;
+    --nou-on-surface: 353 15.3% 11.6%;
+    --nou-surface-variant: 357 51.1% 91.2%;
+    --nou-on-surface-variant: 356 10.1% 29.2%;
+    --nou-outline: 356 6.88% 48.4%;
+    --nou-outline-variant: 355 21.6% 80%;
+    --nou-shadow: 0 0% 0%;
+    --nou-scrim: 0 0% 0%;
+    --nou-inverse-surface: 354 9.8% 20%;
+    --nou-inverse-on-surface: 0 100% 96.5%;
+    --nou-inverse-primary: 354 100% 84.9%;
+    --nou-primary-fixed: 355 100% 92.5%;
+    --nou-on-primary-fixed: 346 78.8% 12.9%;
+    --nou-primary-fixed-dim: 354 100% 84.9%;
+    --nou-on-primary-fixed-variant: 351 38.2% 32.4%;
+    --nou-secondary-fixed: 209 100% 89.8%;
+    --nou-on-secondary-fixed: 203 100% 9.41%;
+    --nou-secondary-fixed-dim: 207 87.4% 78.2%;
+    --nou-on-secondary-fixed-variant: 200 100% 22.2%;
+    --nou-tertiary-fixed: 209 100% 89.8%;
+    --nou-on-tertiary-fixed: 203 100% 9.41%;
+    --nou-tertiary-fixed-dim: 207 87.4% 78.2%;
+    --nou-on-tertiary-fixed-variant: 200 100% 22.2%;
+    --nou-surface-dim: 356 26.2% 87.3%;
+    --nou-surface-bright: 7.5 100% 98.4%;
+    --nou-surface-container-lowest: 0 0% 100%;
+    --nou-surface-container-low: 0 100% 97.1%;
+    --nou-surface-container: 0 75% 95.3%;
+    --nou-surface-container-high: 357 50% 92.9%;
+    --nou-surface-container-highest: 357 37.5% 90.6%;
+  }
+  .dark {
+    --nou-primary: 354 100% 84.9%;
+    --nou-surface-tint: 354 100% 84.9%;
+    --nou-on-primary: 349 49.6% 22.5%;
+    --nou-primary-container: 351 38.2% 32.4%;
+    --nou-on-primary-container: 355 100% 92.5%;
+    --nou-secondary: 207 87.4% 78.2%;
+    --nou-on-secondary: 201 100% 15.5%;
+    --nou-secondary-container: 200 100% 22.2%;
+    --nou-on-secondary-container: 209 100% 89.8%;
+    --nou-tertiary: 207 87.4% 78.2%;
+    --nou-on-tertiary: 201 100% 15.5%;
+    --nou-tertiary-container: 200 100% 22.2%;
+    --nou-on-tertiary-container: 209 100% 89.8%;
+    --nou-error: 6.43 100% 83.5%;
+    --nou-on-error: 357 100% 20.6%;
+    --nou-error-container: 356 100% 28.8%;
+    --nou-on-error-container: 5.85 100% 92%;
+    --nou-background: 353 20.9% 8.43%;
+    --nou-on-background: 357 37.5% 90.6%;
+    --nou-surface: 353 20.9% 8.43%;
+    --nou-on-surface: 357 37.5% 90.6%;
+    --nou-surface-variant: 356 10.1% 29.2%;
+    --nou-on-surface-variant: 355 21.6% 80%;
+    --nou-outline: 357 9% 58.6%;
+    --nou-outline-variant: 356 10.1% 29.2%;
+    --nou-shadow: 0 0% 0%;
+    --nou-scrim: 0 0% 0%;
+    --nou-inverse-surface: 357 37.5% 90.6%;
+    --nou-inverse-on-surface: 354 9.8% 20%;
+    --nou-inverse-primary: 351 32.4% 42.4%;
+    --nou-primary-fixed: 355 100% 92.5%;
+    --nou-on-primary-fixed: 346 78.8% 12.9%;
+    --nou-primary-fixed-dim: 354 100% 84.9%;
+    --nou-on-primary-fixed-variant: 351 38.2% 32.4%;
+    --nou-secondary-fixed: 209 100% 89.8%;
+    --nou-on-secondary-fixed: 203 100% 9.41%;
+    --nou-secondary-fixed-dim: 207 87.4% 78.2%;
+    --nou-on-secondary-fixed-variant: 200 100% 22.2%;
+    --nou-tertiary-fixed: 209 100% 89.8%;
+    --nou-on-tertiary-fixed: 203 100% 9.41%;
+    --nou-tertiary-fixed-dim: 207 87.4% 78.2%;
+    --nou-on-tertiary-fixed-variant: 200 100% 22.2%;
+    --nou-surface-dim: 353 20.9% 8.43%;
+    --nou-surface-bright: 0 8.33% 23.5%;
+    --nou-surface-container-lowest: 353 25% 6.27%;
+    --nou-surface-container-low: 353 15.3% 11.6%;
+    --nou-surface-container: 353 13.4% 13.1%;
+    --nou-surface-container-high: 0 10.1% 17.5%;
+    --nou-surface-container-highest: 355 9.91% 21.8%;
   }
 }

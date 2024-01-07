@@ -50,7 +50,7 @@ function AppMainPage() {
             </header>
             <div class="flex flex-col gap-6">
               <section class="container">
-                <Card variant="outlined" class="p-0">
+                <Card class="p-0">
                   <div class="flex flex-col gap-4 p-4 ">
                     <h3 class="text-2xl">{t('app.new-pet-heading')}</h3>
                     <TextField

@@ -89,6 +89,10 @@ export default {
       '2xl': '1400px',
     },
     extend: {
+      opacity: {
+        8: '0.08',
+        12: '0.12',
+      },
       spacing: {
         font: '1em',
       },

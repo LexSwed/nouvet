@@ -1,5 +1,5 @@
 import { A, type AnchorProps } from '@solidjs/router';
-import { type JSX } from 'solid-js';
+import { splitProps, type JSX } from 'solid-js';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { tw } from './tw';
@@ -12,42 +12,30 @@ const cardVariants = cva('rounded-lg p-6 transition-shadow', {
       false: '',
     },
     variant: {
-      'elevated': 'bg-surface text-on-surface shadow-1',
-      'flat': 'bg-surface text-on-surface',
-      'filled':
-        'bg-secondary-container focus:outline-background text-on-secondary-container',
-      'filled-secondary':
-        'bg-tertiary-container focus:outline-background text-on-tertiary-container',
-      'outlined': 'bg-surface text-on-surface border border-outline/20',
+      flat: 'bg-primary/8 text-on-surface',
+      filled:
+        'bg-primary-container focus:outline-background text-on-primary-container',
+      outlined: 'bg-surface text-on-surface border-outline/20 border',
     },
   },
   defaultVariants: {
-    variant: 'elevated',
+    variant: 'flat',
   },
-  compoundVariants: [
-    {
-      variant: 'filled',
-      _link: true,
-      class: 'intent:ring-8 intent:ring-secondary-container',
-    },
-    {
-      variant: 'filled-secondary',
-      _link: true,
-      class: 'intent:ring-8 intent:ring-tertiary-container',
-    },
-  ],
 });
 
 type CardVariants = Omit<VariantProps<typeof cardVariants>, '_link'>;
 
 interface CardProps extends JSX.HTMLAttributes<HTMLDivElement>, CardVariants {}
 
-const Card = (props: CardProps) => (
-  <div
-    {...props}
-    class={tw(cardVariants({ variant: props.variant }), props.class)}
-  />
-);
+const Card = (ownProps: CardProps) => {
+  const [local, props] = splitProps(ownProps, ['variant', 'class']);
+  return (
+    <div
+      {...props}
+      class={tw(cardVariants({ variant: local.variant }), local.class)}
+    />
+  );
+};
 
 interface NavCardProps extends AnchorProps, CardVariants {
   /**
@@ -56,14 +44,17 @@ interface NavCardProps extends AnchorProps, CardVariants {
   variant?: CardVariants['variant'];
 }
 export const NavCard = (ownProps: NavCardProps) => {
-  const props = mergeDefaultProps(ownProps, { variant: 'filled' });
+  const [local, props] = splitProps(
+    mergeDefaultProps(ownProps, { variant: 'filled' }),
+    ['variant', 'class'],
+  );
 
   return (
     <A
       {...props}
       class={tw(
-        cardVariants({ variant: props.variant, _link: true }),
-        props.class,
+        cardVariants({ variant: local.variant, _link: true }),
+        local.class,
       )}
     />
   );

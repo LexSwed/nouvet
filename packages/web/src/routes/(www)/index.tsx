@@ -31,7 +31,7 @@ export default function WWW() {
           </div>
         </div>
       </section>
-      <section aria-labelledby="features" class="relative -mt-32">
+      <section aria-labelledby="features" class="relative -mt-32 lg:mt-12">
         <h2 class="sr-only" id="features">
           {t('www.heading-features')}
         </h2>
