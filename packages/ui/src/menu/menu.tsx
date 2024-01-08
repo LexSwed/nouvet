@@ -7,13 +7,16 @@ import { composeEventHandlers } from '../utils';
 import * as cssStyle from './menu.module.css';
 
 interface MenuProps
-  extends Omit<ComponentProps<'div'>, 'children'>,
-    Pick<ComponentProps<typeof Popover>, 'placement' | 'offset' | 'children'> {
+  extends Omit<ComponentProps<'div'>, 'children' | 'role'>,
+    Pick<
+      ComponentProps<typeof Popover>,
+      'placement' | 'offset' | 'children' | 'role'
+    > {
   id: string;
 }
 
 const Menu = (ownProps: MenuProps) => {
-  return <Popover variant="list" as={MenuList} {...ownProps} />;
+  return <Popover role="menu" variant="list" as={MenuList} {...ownProps} />;
 };
 
 interface MenuItemProps extends ComponentProps<'div'> {}
@@ -44,8 +47,8 @@ interface MenuListProps extends ComponentProps<'div'> {}
 const MenuList = (ownProps: MenuListProps) => {
   return (
     <div
-      role="menu"
       tabIndex={0}
+      role="menu"
       {...ownProps}
       onKeyDown={composeEventHandlers(ownProps.onKeyDown, (event) => {
         switch (event.key) {

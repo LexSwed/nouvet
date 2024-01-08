@@ -1,7 +1,17 @@
 import { Title } from '@solidjs/meta';
 import { A, createAsync, type RouteDefinition } from '@solidjs/router';
 import { Show } from 'solid-js';
-import { Avatar, ButtonLink, Card, Icon, TextField } from '@nou/ui';
+import {
+  Avatar,
+  Button,
+  ButtonLink,
+  Card,
+  Form,
+  Icon,
+  RadioCard,
+  Text,
+  TextField,
+} from '@nou/ui';
 
 import { createTranslator, getDictionary } from '~/i18n';
 
@@ -51,13 +61,75 @@ function AppMainPage() {
             <div class="flex flex-col gap-6">
               <section class="container">
                 <Card class="p-0">
-                  <div class="flex flex-col gap-4 p-4 ">
-                    <h3 class="text-2xl">{t('app.new-pet-heading')}</h3>
+                  <Form
+                    aria-labelledby="new-pet"
+                    class="flex flex-col gap-4 p-4"
+                    method="get"
+                    action="/new"
+                  >
+                    <Text with="headline-2" as="h3" id="new-pet">
+                      {t('app.new-pet-heading')}
+                    </Text>
                     <TextField
                       label={t('app.new-pet-text-field-label')}
                       placeholder={t('app.new-pet-text-field-placeholder')}
+                      name="name"
+                      required
                     />
-                  </div>
+                    <div class="scrollbar-none -mx-2 flex snap-mandatory snap-start scroll-px-2 flex-row gap-2 overflow-auto px-2 pb-2 pt-0">
+                      <RadioCard
+                        class="w-[8rem] snap-x"
+                        name="animal-type"
+                        value="dog"
+                        label="Dog"
+                        icon={<Icon size="sm" use="dog" />}
+                        checked
+                      />
+                      {/*  <RadioCard
+                        class="w-[8rem] snap-x"
+                        name="animal-type"
+                        value="cat"
+                        label="Cat"
+                        icon={<Icon size="sm" use="cat" />}
+                      />
+                      <RadioCard
+                        class="w-[8rem] snap-x"
+                        name="animal-type"
+                        value="parrot"
+                        label="Parrot"
+                        icon={<Icon size="sm" use="bird" />}
+                      />
+                      <RadioCard
+                        class="w-[8rem] snap-x"
+                        name="animal-type"
+                        value="rabbit"
+                        label="Rabbit"
+                        icon={<Icon size="sm" use="rabbit" />}
+                      />
+                      <RadioCard
+                        class="w-[8rem] snap-x"
+                        name="animal-type"
+                        value="horse"
+                        label="Horse"
+                        icon={<Icon size="sm" use="horse" />}
+                      />
+                      <RadioCard
+                        class="w-[8rem] snap-x"
+                        name="animal-type"
+                        value="fish"
+                        label="Fish"
+                        icon={<Icon size="sm" use="fish" />}
+                      />
+                      <RadioCard
+                        class="w-[8rem] snap-x"
+                        name="animal-type"
+                        value="other"
+                        label="Other"
+                        icon={<Icon size="sm" use="alien" />}
+                      /> */}
+                    </div>
+                    <Button type="submit">Create</Button>
+                  </Form>
                   <Show when={!user().family && user().pets.length === 0}>
                     <>
                       <hr class="border-outline/20" />

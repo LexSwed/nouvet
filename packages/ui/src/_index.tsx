@@ -3,6 +3,8 @@ export { Button, ButtonLink } from './button';
 export { Card, NavCard } from './card';
 export { Form } from './form';
 export { Picker } from './picker';
+export { RadioCard } from './radio';
+export { Menu, MenuList, MenuItem } from './menu';
 export { TextField } from './text-field';
 export { Icon, type SvgIcons } from './icon/icon';
 export { Spinner } from './spinner';

@@ -47,6 +47,7 @@ type PopupProps<T extends ValidComponent> = Override<
     offset?: OffsetOptions;
     /** @default 'div' */
     as?: T | undefined;
+    role?: 'menu' | 'dialog';
   } & VariantProps<typeof popupVariants>
 >;
 
