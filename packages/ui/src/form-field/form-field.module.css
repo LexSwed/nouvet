@@ -1,6 +1,4 @@
-@tailwind components;
-
-@layer components {
+@layer nou-ui {
   .field {
     --border-color: theme('colors.outline');
     --border-scale-y: 1;

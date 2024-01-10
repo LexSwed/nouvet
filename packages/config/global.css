@@ -1,6 +1,9 @@
-@import '@fontsource-variable/rubik/index.css';
+@layer tailwind-base, nou-ui;
 
-@tailwind base;
+@layer tailwind-base {
+  @tailwind base;
+}
+
 @tailwind components;
 @tailwind utilities;
 

@@ -1,6 +1,4 @@
-@tailwind components;
-
-@layer components {
+@layer nou-ui {
   .card {
     position: relative;
     flex-shrink: 0;
@@ -40,7 +38,7 @@
   }
   .icon {
     padding: theme('spacing.2');
-    background-color: theme('colors.on-surface/0.08');
+    background-color: theme('colors.on-surface/0.12');
     border-radius: theme('borderRadius.full');
   }
   .label {

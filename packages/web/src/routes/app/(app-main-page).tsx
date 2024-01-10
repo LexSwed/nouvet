@@ -101,7 +101,7 @@ function AppMainPage() {
                 <Card class="p-0">
                   <Form
                     aria-labelledby="new-pet"
-                    class="flex flex-col gap-4 p-4"
+                    class="group/form flex flex-col gap-4 p-4"
                     method="get"
                     action="/new"
                   >
@@ -127,50 +127,14 @@ function AppMainPage() {
                           />
                         )}
                       </For>
-
-                      {/*  <RadioCard
-                        class="w-[8rem] snap-x"
-                        name="animal-type"
-                        value="cat"
-                        label="Cat"
-                        icon={<Icon size="sm" use="cat" />}
-                      />
-                      <RadioCard
-                        class="w-[8rem] snap-x"
-                        name="animal-type"
-                        value="parrot"
-                        label="Parrot"
-                        icon={<Icon size="sm" use="bird" />}
-                      />
-                      <RadioCard
-                        class="w-[8rem] snap-x"
-                        name="animal-type"
-                        value="rabbit"
-                        label="Rabbit"
-                        icon={<Icon size="sm" use="rabbit" />}
-                      />
-                      <RadioCard
-                        class="w-[8rem] snap-x"
-                        name="animal-type"
-                        value="horse"
-                        label="Horse"
-                        icon={<Icon size="sm" use="horse" />}
-                      />
-                      <RadioCard
-                        class="w-[8rem] snap-x"
-                        name="animal-type"
-                        value="fish"
-                        label="Fish"
-                        icon={<Icon size="sm" use="fish" />}
-                      />
-                      <RadioCard
-                        class="w-[8rem] snap-x"
-                        name="animal-type"
-                        value="other"
-                        label="Other"
-                        icon={<Icon size="sm" use="alien" />}
-                      /> */}
                     </div>
+                    <TextField
+                      name="animal-type-other"
+                      label={t('app.animal-type-other.label')}
+                      placeholder={t('app.animal-type-other.placeholder')}
+                      description={t('app.animal-type-other.placeholder')}
+                      class="hidden group-has-[input[name=animal-type][value=other]:checked]/form:flex"
+                    />
                     <Button type="submit">Create</Button>
                   </Form>
                   <Show when={!user().family && user().pets.length === 0}>

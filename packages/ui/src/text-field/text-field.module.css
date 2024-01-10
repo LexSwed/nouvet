@@ -1,6 +1,4 @@
-@tailwind components;
-
-@layer components {
+@layer nou-ui {
   .input {
     padding: theme(spacing.3) var(--start-padding);
     background: transparent;

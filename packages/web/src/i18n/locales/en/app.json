@@ -15,5 +15,8 @@
   "animal-type.fish": "Fish",
   "animal-type.rabbit": "Rabbit",
   "animal-type.horse": "Horse",
-  "animal-type.other": "Other"
+  "animal-type.other": "Other",
+  "animal-type-other.label": "A different pet type",
+  "animal-type-other.placeholder": "Snake? Crocodile?",
+  "animal-type-other.help": "This is helpful for doctors to see who they are dealing with"
 }
