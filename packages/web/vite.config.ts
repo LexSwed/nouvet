@@ -33,8 +33,6 @@ export default defineConfig({
   start: {
     ssr: 'async',
     middleware: './src/middleware.ts',
-    // @ts-expect-error Ryan oh Ryan
-    solid: {},
     server: {
       preset: 'cloudflare_pages',
       rollupConfig: {

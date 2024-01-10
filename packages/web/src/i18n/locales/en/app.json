@@ -8,5 +8,12 @@
   "cta-invite-join": "Join",
   "new-pet-heading": "Your pet",
   "new-pet-text-field-label": "Name",
-  "new-pet-text-field-placeholder": "Garfield"
+  "new-pet-text-field-placeholder": "Garfield",
+  "animal-type.dog": "Dog",
+  "animal-type.cat": "Cat",
+  "animal-type.bird": "Bird",
+  "animal-type.fish": "Fish",
+  "animal-type.rabbit": "Rabbit",
+  "animal-type.horse": "Horse",
+  "animal-type.other": "Other"
 }

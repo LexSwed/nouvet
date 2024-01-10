@@ -1,6 +1,6 @@
 import { Title } from '@solidjs/meta';
 import { A, createAsync, type RouteDefinition } from '@solidjs/router';
-import { Show } from 'solid-js';
+import { For, Show } from 'solid-js';
 import {
   Avatar,
   Button,
@@ -11,6 +11,7 @@ import {
   RadioCard,
   Text,
   TextField,
+  type SvgIcons,
 } from '@nou/ui';
 
 import { createTranslator, getDictionary } from '~/i18n';
@@ -28,6 +29,43 @@ function AppMainPage() {
   const t = createTranslator('app');
   const user = createAsync(() => getUserFamilyAndPets());
 
+  const animalTypes: Array<{ value: string; label: string; icon: SvgIcons }> = [
+    {
+      value: 'dog',
+      label: t('app.animal-type.dog')!,
+      icon: 'dog',
+    },
+    {
+      value: 'cat',
+      label: t('app.animal-type.cat')!,
+      icon: 'cat',
+    },
+    {
+      value: 'bird',
+      label: t('app.animal-type.bird')!,
+      icon: 'bird',
+    },
+    {
+      value: 'fish',
+      label: t('app.animal-type.fish')!,
+      icon: 'fish',
+    },
+    {
+      value: 'rabbit',
+      label: t('app.animal-type.rabbit')!,
+      icon: 'rabbit',
+    },
+    {
+      value: 'horse',
+      label: t('app.animal-type.horse')!,
+      icon: 'horse',
+    },
+    {
+      value: 'other',
+      label: t('app.animal-type.other')!,
+      icon: 'alien',
+    },
+  ];
   return (
     <Show when={user()}>
       {(user) => (
@@ -77,14 +115,19 @@ function AppMainPage() {
                       required
                     />
                     <div class="scrollbar-none -mx-2 flex snap-mandatory snap-start scroll-px-2 flex-row gap-2 overflow-auto px-2 pb-2 pt-0">
-                      <RadioCard
-                        class="w-[8rem] snap-x"
-                        name="animal-type"
-                        value="dog"
-                        label="Dog"
-                        icon={<Icon size="sm" use="dog" />}
-                        checked
-                      />
+                      <For each={animalTypes}>
+                        {(item, index) => (
+                          <RadioCard
+                            class="w-[8rem] snap-x"
+                            name="animal-type"
+                            value={item.value}
+                            label={item.label}
+                            icon={<Icon size="sm" use={item.icon} />}
+                            checked={index() === 0}
+                          />
+                        )}
+                      </For>
+
                       {/*  <RadioCard
                         class="w-[8rem] snap-x"
                         name="animal-type"
