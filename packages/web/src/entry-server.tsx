@@ -1,9 +1,8 @@
-import { createHandler, StartServer } from '@solidjs/start/server';
-
-import { getLocale } from './i18n/locale';
+import { createHandler } from '@solidjs/start/entry';
+import { StartServer } from '@solidjs/start/server';
 
 export default createHandler((ctx) => {
-  const locale = getLocale(ctx);
+  const { locale } = ctx.locals as { locale: Intl.Locale };
   return (
     <StartServer
       document={({ assets, children, scripts }) => (

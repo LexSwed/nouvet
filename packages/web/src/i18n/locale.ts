@@ -1,15 +1,12 @@
-'use server';
-
 import { type RequestEvent } from 'solid-js/web';
 import { getHeader } from 'vinxi/server';
 
-// import { getRequestUser } from '~/server/auth/user-session';
+import { getRequestUser } from '~/server/auth/user-session';
 
-// TODO: take into account the cookie when start support async in createHandler
-export function getLocale(event: RequestEvent): Intl.Locale {
+export async function getLocale(event: RequestEvent): Promise<Intl.Locale> {
   try {
-    for (const fn of [header]) {
-      const locale = fn(event);
+    for (const fn of [header, cookie]) {
+      const locale = await fn(event);
       if (locale) {
         return locale;
       }
@@ -17,21 +14,24 @@ export function getLocale(event: RequestEvent): Intl.Locale {
   } catch (error) {
     console.error(error);
   }
+  console.error(
+    `Couldn't initialise locale based on headers nor cookies, defaulting to En`,
+  );
   return new Intl.Locale('en');
 }
 
 /**
  * Attempts to get preferred language from cookies, for when the user manually updated it from the UI.
  */
-// async function cookie(event: RequestEvent): Promise<Intl.Locale | null> {
-//   try {
-//     const user = await getRequestUser(event);
-//     return new Intl.Locale(user?.locale!);
-//   } catch (error) {
-//     // TODO: if the app is migrated to new values, where does invalidation of cookies happen?
-//     return null;
-//   }
-// }
+async function cookie(event: RequestEvent): Promise<Intl.Locale | null> {
+  try {
+    const user = await getRequestUser(event);
+    return new Intl.Locale(user?.locale);
+  } catch (error) {
+    // TODO: if the app is migrated to new values, where does invalidation of cookies happen?
+    return null;
+  }
+}
 
 /**
  * Attempts to get preferred language from Accept-Language header.

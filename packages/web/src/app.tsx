@@ -8,20 +8,22 @@ import '@nou/config/global.css';
 
 export default function App() {
   return (
-    <Router
-      explicitLinks={true}
-      preload={false}
-      root={(props) => {
-        return (
-          <>
-            <MetaProvider>
-              <Suspense>{props.children}</Suspense>
-            </MetaProvider>
-          </>
-        );
-      }}
-    >
-      <FileRoutes />
-    </Router>
+    <>
+      <Router
+        explicitLinks={true}
+        preload={false}
+        root={(props) => {
+          return (
+            <>
+              <MetaProvider>
+                <Suspense>{props.children}</Suspense>
+              </MetaProvider>
+            </>
+          );
+        }}
+      >
+        <FileRoutes />
+      </Router>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 import { Title } from '@solidjs/meta';
-import { A, createAsync, type RouteDefinition } from '@solidjs/router';
+import { A, action, createAsync, type RouteDefinition } from '@solidjs/router';
 import { For, Show } from 'solid-js';
 import {
   Avatar,
@@ -24,6 +24,13 @@ export const route = {
     getUserFamilyAndPets();
   },
 } satisfies RouteDefinition;
+
+const createPet = action(async () => {
+  'use server';
+  // validate
+  // db query
+  // return data
+}, 'createPet');
 
 function AppMainPage() {
   const t = createTranslator('app');
@@ -102,8 +109,7 @@ function AppMainPage() {
                   <Form
                     aria-labelledby="new-pet"
                     class="group/form flex flex-col gap-4 p-4"
-                    method="get"
-                    action="/new"
+                    action={createPet}
                   >
                     <Text with="headline-2" as="h3" id="new-pet">
                       {t('app.new-pet-heading')}

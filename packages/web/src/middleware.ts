@@ -5,12 +5,21 @@ import {
   type FetchEvent,
 } from '@solidjs/start/server';
 
+import { getLocale } from './i18n/locale';
 import { validateAuthSession } from './server/auth/user-session';
 import { RETURN_URL_COOKIE } from './server/const';
 
 export default createMiddleware({
-  onRequest: [checkUserAuth],
+  onRequest: [
+    locale,
+    // @ts-expect-error solid-start types seems to be wrong?
+    checkUserAuth,
+  ],
 });
+
+async function locale(event: FetchEvent) {
+  event.locals.locale = await getLocale(event);
+}
 
 async function checkUserAuth(event: FetchEvent) {
   const { pathname } = new URL(event.request.url);
