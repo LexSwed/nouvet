@@ -10,11 +10,7 @@ import { validateAuthSession } from './server/auth/user-session';
 import { RETURN_URL_COOKIE } from './server/const';
 
 export default createMiddleware({
-  onRequest: [
-    locale,
-    // @ts-expect-error solid-start types seems to be wrong?
-    checkUserAuth,
-  ],
+  onRequest: [locale, checkUserAuth],
 });
 
 async function locale(event: FetchEvent) {
@@ -41,13 +37,11 @@ async function checkUserAuth(event: FetchEvent) {
         httpOnly: true,
         maxAge: 15 * 60, // 10 minutes
       });
-      return sendRedirect(event, `/app/login`);
+      return sendRedirect(event, `/app/login`, 401);
     }
   } catch (error) {
     console.error(error);
-    return new Response(null, {
-      status: 403,
-    });
+    return sendRedirect(event, `/houston`, 500);
   }
   return;
 }

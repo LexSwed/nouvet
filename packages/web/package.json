@@ -30,7 +30,7 @@
     "oslo": "^0.27.1",
     "solid-js": "^1.8.10",
     "valibot": "^0.25.0",
-    "vinxi": "^0.1.1"
+    "vinxi": "^0.1.2"
   },
   "devDependencies": {
     "@nou/config": "^1.0.0",
