@@ -2,6 +2,8 @@
 
 @layer components {
   .wrapper {
+    --extended: 14rem;
+    display: grid;
     grid-template-columns:
       var(--col-1, 8rem)
       var(--col-2, 8rem)
@@ -10,7 +12,7 @@
       var(--col-5, 8rem)
       var(--col-6, 8rem)
       var(--col-7, 8rem);
-    max-width: calc(100% + theme(spacing.4) * 2);
+    max-width: fit-content;
     align-items: flex-start;
 
     @apply scrollbar-none -mx-4 grid snap-mandatory snap-start scroll-px-2 gap-2 overflow-auto px-4;
@@ -20,55 +22,107 @@
     }
 
     &:has(.card:nth-child(1) input:not(.genderSwitchInput):checked) {
-      --col-1: 12rem;
+      --col-1: var(--extended);
     }
     &:has(.card:nth-child(2) input:not(.genderSwitchInput):checked) {
-      --col-2: 12rem;
+      --col-2: var(--extended);
     }
     &:has(.card:nth-child(3) input:not(.genderSwitchInput):checked) {
-      --col-3: 12rem;
+      --col-3: var(--extended);
     }
     &:has(.card:nth-child(4) input:not(.genderSwitchInput):checked) {
-      --col-4: 12rem;
+      --col-4: var(--extended);
     }
     &:has(.card:nth-child(5) input:not(.genderSwitchInput):checked) {
-      --col-5: 12rem;
+      --col-5: var(--extended);
     }
     &:has(.card:nth-child(6) input:not(.genderSwitchInput):checked) {
-      --col-6: 12rem;
+      --col-6: var(--extended);
     }
     &:has(.card:nth-child(7) input:not(.genderSwitchInput):checked) {
-      --col-7: 12rem;
+      --col-7: var(--extended);
     }
   }
 
   .card {
-    min-width: 0;
     display: grid;
+    &:not(:has(input:not(.genderSwitchInput):checked)) {
+      margin-block-end: 5rem;
+    }
   }
 
   .genderSwitch {
-    padding: theme('spacing.3');
-    padding-top: 0;
     overflow: hidden;
     opacity: 1;
     transition: opacity 0.2s ease-in-out;
     @starting-style {
       opacity: 0;
     }
+
+    &:has(input[value='male']:checked) {
+      & .genderSwitchLabel:has(input[value='male']) {
+        color: theme('colors.tertiary');
+        &:before {
+          background-color: theme('colors.tertiary/0.08');
+        }
+      }
+      & .genderIcon {
+        color: theme('colors.tertiary');
+        & [data-male] {
+          opacity: 1;
+        }
+      }
+    }
+
+    &:has(input[value='female']:checked) {
+      & .genderSwitchLabel:before {
+        background-color: theme('colors.primary/0.08');
+        transform: translateX(
+          calc(100% + theme(spacing.2) + theme('spacing.10'))
+        );
+      }
+      & .genderSwitchLabel:has(input[value='female']) {
+        color: theme('colors.primary');
+      }
+      & .genderIcon {
+        color: theme('colors.primary');
+        & [data-female] {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .genderSwitchLabel {
+    position: relative;
+    @apply text-on-surface my-2 w-20 rounded-md p-2 text-center transition-colors duration-200;
+    &:where(:hover) {
+      background-color: theme('colors.on-surface/0.05');
+    }
+    &:where(:has(:focus-visible):focus-within) {
+      outline: 2px auto currentColor;
+      outline-offset: 4px;
+    }
+    &:first-of-type::before {
+      display: block;
+      position: absolute;
+      inset: 0;
+      border-radius: theme('borderRadius.md');
+      pointer-events: none;
+      content: '';
+      transition: 0.24s ease-out;
+    }
+  }
+
+  .genderWrapper {
+    @apply flex flex-row items-center gap-2;
   }
 
   .genderSwitchInput {
     @apply sr-only;
   }
 
-  .genderSwitchLabel {
-    @apply bg-surface text-on-surface rounded-md p-2;
-    &:where(:hover, :focus-within) {
-      @apply bg-on-surface/5;
-    }
-    &:has(> input:checked) {
-      color: theme('colors.primary');
-    }
+  .genderIcon {
+    @apply relative mt-1 size-10 transition-colors duration-300;
   }
 }

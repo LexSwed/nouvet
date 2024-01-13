@@ -90,11 +90,17 @@ const GenderSwitch = (props: { name: AnimalTypeSelectProps['genderName'] }) => {
   const t = createTranslator('app');
   const id = createUniqueId();
   return (
-    <fieldset class={cssStyles.genderSwitch} aria-labelledby="">
-      <Text with="label" as="label" id={id}>
+    <fieldset
+      class={tw(
+        cssStyles.genderSwitch,
+        'p-3 pt-0 opacity-100 overflow-hidden flex flex-col gap-2',
+      )}
+      aria-labelledby={id}
+    >
+      <Text with="label" as="label" id={id} class="sr-only">
         {t('app.animal-gender')}
       </Text>
-      <div class="flex flex-row items-center gap-4">
+      <div class={cssStyles.genderWrapper}>
         <label class={cssStyles.genderSwitchLabel}>
           <input
             type="radio"
@@ -102,10 +108,16 @@ const GenderSwitch = (props: { name: AnimalTypeSelectProps['genderName'] }) => {
             class={cssStyles.genderSwitchInput}
             value="male"
           />
-          <Text with="label">{t('app.animal-gender.male')}</Text>
+          <Text
+            with="label"
+            class="inline-block text-ellipsis text-nowrap"
+            title={t('app.animal-gender.male')}
+          >
+            {t('app.animal-gender.male')}
+          </Text>
         </label>
-        <div class="inline-grid">
-          <SvgGender class="size-10" aria-hidden />
+        <div class="-ml-1 inline-grid">
+          <SvgGender class={cssStyles.genderIcon} aria-hidden />
         </div>
         <label class={cssStyles.genderSwitchLabel}>
           <input
@@ -114,7 +126,13 @@ const GenderSwitch = (props: { name: AnimalTypeSelectProps['genderName'] }) => {
             class={cssStyles.genderSwitchInput}
             value="female"
           />
-          <Text with="label">{t('app.animal-gender.female')}</Text>
+          <Text
+            with="label"
+            class="inline-block text-ellipsis text-nowrap"
+            title={t('app.animal-gender.female')}
+          >
+            {t('app.animal-gender.female')}
+          </Text>
         </label>
       </div>
     </fieldset>
@@ -125,7 +143,7 @@ const SvgGender = (props: ComponentProps<'svg'>) => {
   return (
     <svg viewBox="0 0 236 272" xmlns="http://www.w3.org/2000/svg" {...props}>
       <defs />
-      <circle cx="116" cy="120" r="72" opacity="0.2" />
+      <circle cx="116" cy="120" r="72" fill="currentColor" opacity="0.2" />
       <circle
         cx="116"
         cy="120"
@@ -136,47 +154,51 @@ const SvgGender = (props: ComponentProps<'svg'>) => {
         stroke-linejoin="round"
         stroke-width="16"
       />
-      <line
-        x1="166.91"
-        y1="69.09"
-        x2="228"
-        y2="8"
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="16"
-      />
-      <polyline
-        points="180 8 228 8 228 56"
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="16"
-      />
-      <line
-        x1="116"
-        y1="192"
-        x2="116"
-        y2="264"
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="16"
-      />
-      <line
-        x1="76"
-        y1="232"
-        x2="156"
-        y2="232"
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="16"
-      />
+      <g data-male class="opacity-0 transition-opacity duration-300">
+        <line
+          x1="166.91"
+          y1="69.09"
+          x2="228"
+          y2="8"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="16"
+        />
+        <polyline
+          points="180 8 228 8 228 56"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="16"
+        />
+      </g>
+      <g data-female class="opacity-0 transition-opacity duration-300">
+        <line
+          x1="116"
+          y1="192"
+          x2="116"
+          y2="264"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="16"
+        />
+        <line
+          x1="76"
+          y1="232"
+          x2="156"
+          y2="232"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="16"
+        />
+      </g>
     </svg>
   );
 };

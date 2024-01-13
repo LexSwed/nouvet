@@ -2,7 +2,8 @@
   .card {
     flex-shrink: 0;
     border-radius: theme('borderRadius.lg');
-    transition: all 0.24s ease-out;
+    transition: 0.24s ease-out;
+    transition-property: background-color, border-color;
     background-color: theme('colors.surface');
     border: theme('borderWidth.2') solid theme('colors.on-surface/0.05');
     &:has(.input:checked) {
@@ -21,6 +22,10 @@
   }
   .input {
     @apply sr-only;
+    &:focus-visible + .wrapper .label {
+      outline: 2px auto currentColor;
+      outline-offset: 4px;
+    }
   }
   .wrapper {
     padding: theme('spacing.3');
