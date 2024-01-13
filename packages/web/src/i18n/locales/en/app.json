@@ -18,5 +18,8 @@
   "animal-type.other": "Other",
   "animal-type-other.label": "A different pet type",
   "animal-type-other.placeholder": "Snake? Crocodile?",
-  "animal-type-other.help": "This is helpful for doctors to see who they are dealing with"
+  "animal-type-other.help": "This is helpful for doctors to see who they are dealing with",
+  "animal-gender": "Gender",
+  "animal-gender.male": "Male",
+  "animal-gender.female": "Female"
 }

@@ -7,7 +7,7 @@ import * as cssStyle from './radio.module.css';
 
 interface RadioCardProps
   extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type'> {
-  label?: JSX.Element;
+  label: JSX.Element;
   icon?: JSX.Element;
 }
 
@@ -24,21 +24,20 @@ const RadioCard = (ownProps: RadioCardProps) => {
   const id = () => local.id || localId;
   const icon = children(() => local.icon);
   const label = children(() => local.label);
+  const child = children(() => local.children);
   return (
-    <label class={tw(cssStyle.card, local.class)} style={local.style}>
-      <input type="radio" id={id()} {...props} class="sr-only" />
-      <div class={cssStyle.wrapper}>
+    <div class={tw(cssStyle.card, local.class)} style={local.style}>
+      <input type="radio" id={id()} {...props} class={cssStyle.input} />
+      <label class={cssStyle.wrapper} for={id()}>
         <Show when={icon.toArray().length > 0}>
           <div class={cssStyle.icon}>{icon()}</div>
         </Show>
-        <Show when={label()}>
-          <Text as="label" with="label" for={id()} class={cssStyle.label}>
-            {label()}
-          </Text>
-        </Show>
-      </div>
-      {local.children}
-    </label>
+        <Text with="label" class={cssStyle.label}>
+          {label()}
+        </Text>
+      </label>
+      {child()}
+    </div>
   );
 };
 

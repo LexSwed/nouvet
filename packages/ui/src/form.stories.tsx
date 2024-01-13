@@ -22,7 +22,7 @@ import { Text } from './text';
 import { TextField } from './text-field';
 
 const meta = {
-  title: 'TextField',
+  title: 'Form',
   component: TextField,
   argTypes: {},
 } satisfies Meta<typeof TextField>;
@@ -31,7 +31,7 @@ export default meta;
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const BigForm = () => {
+export const CreatePet = () => {
   const [loading, setLoading] = createSignal(false);
   const [errors, setErrors] = createSignal<Record<string, string> | null>(null);
 

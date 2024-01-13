@@ -1,16 +1,15 @@
 @layer nou-ui {
   .card {
-    position: relative;
     flex-shrink: 0;
     border-radius: theme('borderRadius.lg');
-    padding: theme('spacing.3');
     transition: all 0.24s ease-out;
     background-color: theme('colors.surface');
-    border: theme('borderWidth.2') solid theme('colors.surface-container-high');
-    cursor: default;
-    &:has(input:checked) {
+    border: theme('borderWidth.2') solid theme('colors.on-surface/0.05');
+    &:has(.input:checked) {
       border-color: theme('colors.primary');
-      background-color: theme('colors.surface-container-lowest');
+      & .wrapper {
+        background-color: theme('colors.surface-container-lowest');
+      }
       & .label {
         color: theme('colors.primary');
       }
@@ -19,28 +18,31 @@
         background-color: theme('colors.primary/0.12');
       }
     }
-    &:where(:hover, :focus-within) {
-      background-color: theme('colors.surface-container-high');
-    }
   }
   .input {
-    appearance: none;
-    position: absolute;
-    inset: 0;
+    @apply sr-only;
   }
   .wrapper {
+    padding: theme('spacing.3');
     display: flex;
     gap: theme('spacing.3');
     align-items: center;
-    &:empty {
-      display: none;
+    border-radius: inherit;
+    cursor: default;
+    &:where(:hover, :focus-within) {
+      background-color: theme('colors.on-surface/0.05');
+    }
+    &:where(:active) {
+      background-color: theme('colors.on-surface/0.08');
     }
   }
   .icon {
+    transition: all 0.24s ease-out;
     padding: theme('spacing.2');
     background-color: theme('colors.on-surface/0.12');
     border-radius: theme('borderRadius.full');
   }
   .label {
+    transition: color 0.24s ease-out;
   }
 }

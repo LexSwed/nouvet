@@ -8,6 +8,7 @@ export { Menu, MenuList, MenuItem } from './menu';
 export { TextField } from './text-field';
 export { Icon, type SvgIcons } from './icon/icon';
 export { Spinner } from './spinner';
+export { Stack } from './stack';
 export { Text } from './text';
 export { tw } from './tw';
 export { mergeDefaultProps } from './utils';

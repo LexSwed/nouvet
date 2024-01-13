@@ -1,0 +1,74 @@
+@tailwind components;
+
+@layer components {
+  .wrapper {
+    grid-template-columns:
+      var(--col-1, 8rem)
+      var(--col-2, 8rem)
+      var(--col-3, 8rem)
+      var(--col-4, 8rem)
+      var(--col-5, 8rem)
+      var(--col-6, 8rem)
+      var(--col-7, 8rem);
+    max-width: calc(100% + theme(spacing.4) * 2);
+    align-items: flex-start;
+
+    @apply scrollbar-none -mx-4 grid snap-mandatory snap-start scroll-px-2 gap-2 overflow-auto px-4;
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: grid-template-columns 0.3s ease-in-out;
+    }
+
+    &:has(.card:nth-child(1) input:not(.genderSwitchInput):checked) {
+      --col-1: 12rem;
+    }
+    &:has(.card:nth-child(2) input:not(.genderSwitchInput):checked) {
+      --col-2: 12rem;
+    }
+    &:has(.card:nth-child(3) input:not(.genderSwitchInput):checked) {
+      --col-3: 12rem;
+    }
+    &:has(.card:nth-child(4) input:not(.genderSwitchInput):checked) {
+      --col-4: 12rem;
+    }
+    &:has(.card:nth-child(5) input:not(.genderSwitchInput):checked) {
+      --col-5: 12rem;
+    }
+    &:has(.card:nth-child(6) input:not(.genderSwitchInput):checked) {
+      --col-6: 12rem;
+    }
+    &:has(.card:nth-child(7) input:not(.genderSwitchInput):checked) {
+      --col-7: 12rem;
+    }
+  }
+
+  .card {
+    min-width: 0;
+    display: grid;
+  }
+
+  .genderSwitch {
+    padding: theme('spacing.3');
+    padding-top: 0;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  .genderSwitchInput {
+    @apply sr-only;
+  }
+
+  .genderSwitchLabel {
+    @apply bg-surface text-on-surface rounded-md p-2;
+    &:where(:hover, :focus-within) {
+      @apply bg-on-surface/5;
+    }
+    &:has(> input:checked) {
+      color: theme('colors.primary');
+    }
+  }
+}
