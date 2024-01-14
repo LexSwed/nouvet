@@ -22,6 +22,7 @@ export const getDbUserFamilyAndPets = async (userId: DatabaseUser['id']) => {
       name: userProfileTable.name,
     })
     .from(userTable)
+    .orderBy(userTable.id, petTable.id)
     .leftJoin(familyTable, eq(userTable.familyId, familyTable.id))
     .leftJoin(petTable, eq(petTable.ownerId, userTable.id))
     .leftJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))

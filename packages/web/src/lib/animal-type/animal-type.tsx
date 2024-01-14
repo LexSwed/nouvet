@@ -1,11 +1,4 @@
-import {
-  createSignal,
-  createUniqueId,
-  For,
-  Show,
-  Suspense,
-  type ComponentProps,
-} from 'solid-js';
+import { createUniqueId, For, type ComponentProps } from 'solid-js';
 import { Icon, RadioCard, Text, TextField, tw, type SvgIcons } from '@nou/ui';
 
 import { createTranslator } from '~/i18n';
@@ -14,9 +7,7 @@ import * as cssStyles from './animal-type.module.css';
 
 interface AnimalTypeSelectProps {
   /** input radio element name attribute for animal type */
-  typeName: string;
-  /** input radio element `name` attribute for animal gender */
-  genderName: string;
+  name: string;
 }
 
 const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
@@ -38,11 +29,6 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
       icon: 'bird',
     },
     {
-      value: 'fish',
-      label: t('app.animal-type.fish')!,
-      icon: 'fish',
-    },
-    {
       value: 'rabbit',
       label: t('app.animal-type.rabbit')!,
       icon: 'rabbit',
@@ -58,61 +44,30 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
       icon: 'alien',
     },
   ];
-  /**
-   * NB!
-   * I choose to have this signal to control a card in which gender selection is rendering.
-   * If multiple fields are rendered with the same name and values within the same form, even with display: none,
-   * accessibility is still broken: not able to tab into radio, as only one group becomes "available".
-   * The alternative was to have different field names for genders to be stored. But in the end, I decided to go with simpler approach
-   * for the consumer (plus, less to render and calculate).
-   */
-  const [checked, setChecked] = createSignal<number | undefined>();
 
-  let animating: HTMLElement | null;
   return (
     <div class="group/animal-type flex flex-col gap-4">
-      <div class={cssStyles.wrapper}>
+      <div
+        class={
+          'scrollbar-none -mx-4 flex w-[fit-content()] snap-x snap-mandatory scroll-px-4 gap-2 overflow-auto px-4'
+        }
+      >
         <For each={animalTypes}>
-          {(item, index) => {
+          {(item) => {
             return (
               <RadioCard
-                class={tw('snap-x', cssStyles.card)}
-                name={props.typeName}
+                class={tw(cssStyles.card)}
+                name={props.name}
                 value={item.value}
                 label={item.label}
                 icon={<Icon size="sm" use={item.icon} />}
-                checked={index() === checked()}
-                onChange={(event) => {
-                  setChecked(index());
-                  const card = event.currentTarget.closest(
-                    `.${cssStyles.card}`,
-                  );
-                  if (!(card instanceof HTMLElement)) return;
-                  animating = card;
-                  card.addEventListener('transitionend', () => {
-                    if (animating === card) {
-                      card.scrollIntoView({
-                        inline: 'start',
-                        block: 'nearest',
-                        behavior: 'smooth',
-                      });
-                      animating = null;
-                    }
-                  });
-                }}
-              >
-                <Show when={index() === checked()} fallback={null}>
-                  <Suspense>
-                    <GenderSwitch name={props.genderName} />
-                  </Suspense>
-                </Show>
-              </RadioCard>
+              />
             );
           }}
         </For>
       </div>
       <TextField
-        name={props.typeName}
+        name={props.name}
         label={t('app.animal-type-other.label')}
         placeholder={t('app.animal-type-other.placeholder')}
         description={t('app.animal-type-other.placeholder')}
@@ -122,56 +77,64 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
   );
 };
 
-const GenderSwitch = (props: { name: AnimalTypeSelectProps['genderName'] }) => {
+const GenderSwitch = (props: { name: string }) => {
   const t = createTranslator('app');
   const id = createUniqueId();
   return (
     <fieldset
-      class={tw(
-        cssStyles.genderSwitch,
-        'p-3 -mt-3 opacity-100 overflow-hidden flex flex-col gap-2',
-      )}
+      class={tw(cssStyles.genderSwitch, 'flex flex-col gap-2 max-w-xs')}
       aria-labelledby={id}
     >
-      <Text with="label" as="label" id={id} class="sr-only">
+      <Text with="label-sm" as="label" id={id} class="ms-2">
         {t('app.animal-gender')}
       </Text>
-      <div class={cssStyles.genderWrapper}>
-        <label class={cssStyles.genderSwitchLabel}>
-          <input
-            type="radio"
-            name={props.name}
-            class={cssStyles.genderSwitchInput}
-            value="male"
-          />
-          <Text
-            with="label"
-            class="inline-block text-ellipsis text-nowrap"
-            title={t('app.animal-gender.male')}
-          >
-            {t('app.animal-gender.male')}
-          </Text>
-        </label>
-        <div class="-ml-1 inline-grid">
-          <SvgGender class={cssStyles.genderIcon} aria-hidden />
-        </div>
-        <label class={cssStyles.genderSwitchLabel}>
-          <input
-            type="radio"
-            name={props.name}
-            class={cssStyles.genderSwitchInput}
-            value="female"
-          />
-          <Text
-            with="label"
-            class="inline-block text-ellipsis text-nowrap"
-            title={t('app.animal-gender.female')}
-          >
-            {t('app.animal-gender.female')}
-          </Text>
-        </label>
+      <div
+        class={tw(
+          cssStyles.genderWrapper,
+          'grid grid-cols-[1fr,auto,1fr] items-center gap-2',
+        )}
+      >
+        <GenderRadio
+          name={props.name}
+          value="male"
+          label={t('app.animal-gender.male')!}
+        />
+        <SvgGender
+          class={tw(cssStyles.genderIcon, 'relative mt-1 size-10')}
+          aria-hidden
+        />
+        <GenderRadio
+          name={props.name}
+          value="female"
+          label={t('app.animal-gender.female')!}
+        />
       </div>
     </fieldset>
+  );
+};
+
+const GenderRadio = (props: { name: string; value: string; label: string }) => {
+  return (
+    <label
+      class={tw(
+        cssStyles.genderSwitchLabel,
+        'relative text-on-surface border-2 border-on-surface/5 rounded-md py-3 px-2 text-center transition-colors duration-200',
+      )}
+    >
+      <input
+        type="radio"
+        name={props.name}
+        class={cssStyles.genderSwitchInput}
+        value={props.value}
+      />
+      <Text
+        with="label"
+        class="inline-block text-ellipsis text-nowrap"
+        title={props.label}
+      >
+        {props.label}
+      </Text>
+    </label>
   );
 };
 
@@ -239,4 +202,4 @@ const SvgGender = (props: ComponentProps<'svg'>) => {
   );
 };
 
-export { AnimalTypeSelect };
+export { AnimalTypeSelect, GenderSwitch };

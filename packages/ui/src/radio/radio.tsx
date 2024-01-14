@@ -6,7 +6,7 @@ import { tw } from '../tw';
 import * as cssStyle from './radio.module.css';
 
 interface RadioCardProps
-  extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type' | 'children'> {
   label: JSX.Element;
   icon?: JSX.Element;
 }
@@ -18,13 +18,11 @@ const RadioCard = (ownProps: RadioCardProps) => {
     'id',
     'label',
     'icon',
-    'children',
   ]);
   const localId = createUniqueId();
   const id = () => local.id || localId;
   const icon = children(() => local.icon);
   const label = children(() => local.label);
-  const child = children(() => local.children);
   return (
     <div class={tw(cssStyle.card, local.class)} style={local.style}>
       <input type="radio" id={id()} {...props} class={cssStyle.input} />
@@ -36,7 +34,6 @@ const RadioCard = (ownProps: RadioCardProps) => {
           {label()}
         </Text>
       </label>
-      {child()}
     </div>
   );
 };

@@ -14,6 +14,7 @@ import {
 
 import { createTranslator, getDictionary } from '~/i18n';
 import { AnimalTypeSelect } from '~/lib/animal-type';
+import { GenderSwitch } from '~/lib/animal-type/animal-type';
 
 import { getUserFamilyAndPets } from './_queries';
 
@@ -84,7 +85,8 @@ function AppMainPage() {
                       name="name"
                       required
                     />
-                    <AnimalTypeSelect typeName="type" genderName="gender" />
+                    <AnimalTypeSelect name="type" />
+                    <GenderSwitch name="gender" />
 
                     <Button type="submit">Create</Button>
                   </Form>

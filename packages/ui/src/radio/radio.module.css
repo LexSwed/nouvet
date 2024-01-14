@@ -1,16 +1,15 @@
 @layer nou-ui {
   .card {
+    position: relative;
     flex-shrink: 0;
     border-radius: theme('borderRadius.lg');
-    transition: 0.24s ease-out;
-    transition-property: background-color, border-color;
+    padding: theme('spacing.3');
+    transition: all 0.24s ease-out;
     background-color: theme('colors.surface');
     border: theme('borderWidth.2') solid theme('colors.on-surface/0.05');
-    &:has(.input:checked) {
+    &:has(input:checked) {
       border-color: theme('colors.primary');
-      & .wrapper {
-        background-color: theme('colors.surface-container-lowest');
-      }
+      background-color: theme('colors.surface-container-lowest');
       & .label {
         color: theme('colors.primary');
       }
@@ -18,6 +17,12 @@
         color: theme('colors.primary');
         background-color: theme('colors.primary/0.12');
       }
+    }
+    &:where(:hover, :focus-within) {
+      background-color: theme('colors.on-surface/0.05');
+    }
+    &:where(:active) {
+      background-color: theme('colors.on-surface/0.08');
     }
   }
   .input {
@@ -28,23 +33,19 @@
     }
   }
   .wrapper {
-    padding: theme('spacing.3');
     display: flex;
     gap: theme('spacing.3');
     align-items: center;
-    border-radius: inherit;
-    cursor: default;
-    &:where(:hover, :focus-within) {
-      background-color: theme('colors.on-surface/0.05');
-    }
-    &:where(:active) {
-      background-color: theme('colors.on-surface/0.08');
-    }
+  }
+  .icon,
+  .label {
+    transition: 0.24s ease-out;
+    transition-property: color, background-color;
   }
   .icon {
     transition: all 0.24s ease-out;
     padding: theme('spacing.2');
-    background-color: theme('colors.on-surface/0.12');
+    background-color: theme('colors.on-surface/0.08');
     border-radius: theme('borderRadius.full');
   }
   .label {
