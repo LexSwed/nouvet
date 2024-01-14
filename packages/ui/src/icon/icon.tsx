@@ -8,7 +8,7 @@ import { type SvgIcons } from './svg-icons';
 
 export type { SvgIcons } from './svg-icons';
 
-const iconVariants = cva('inline shrink-0', {
+const iconVariants = cva('inline shrink-0 select-none', {
   variants: {
     size: {
       font: 'w-font h-font',

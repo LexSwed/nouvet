@@ -58,7 +58,17 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
       icon: 'alien',
     },
   ];
+  /**
+   * NB!
+   * I choose to have this signal to control a card in which gender selection is rendering.
+   * If multiple fields are rendered with the same name and values within the same form, even with display: none,
+   * accessibility is still broken: not able to tab into radio, as only one group becomes "available".
+   * The alternative was to have different field names for genders to be stored. But in the end, I decided to go with simpler approach
+   * for the consumer (plus, less to render and calculate).
+   */
   const [checked, setChecked] = createSignal<number | undefined>();
+
+  let animating: HTMLElement | null;
   return (
     <div class="group/animal-type flex flex-col gap-4">
       <div class={cssStyles.wrapper}>
@@ -74,15 +84,20 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
                 checked={index() === checked()}
                 onChange={(event) => {
                   setChecked(index());
-
                   const card = event.currentTarget.closest(
                     `.${cssStyles.card}`,
                   );
-                  if (!card) return;
-                  card.scrollIntoView({
-                    inline: 'start',
-                    block: 'nearest',
-                    behavior: 'smooth',
+                  if (!(card instanceof HTMLElement)) return;
+                  animating = card;
+                  card.addEventListener('transitionend', () => {
+                    if (animating === card) {
+                      card.scrollIntoView({
+                        inline: 'start',
+                        block: 'nearest',
+                        behavior: 'smooth',
+                      });
+                      animating = null;
+                    }
                   });
                 }}
               >
