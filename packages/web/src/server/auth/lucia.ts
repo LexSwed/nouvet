@@ -12,6 +12,7 @@ export const useLucia = () => {
   const lucia = new Lucia(adapter, {
     sessionCookie: {
       attributes: {
+        sameSite: env.PROD ? 'lax' : undefined,
         secure: env.PROD,
       },
     },

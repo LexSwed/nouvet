@@ -24,8 +24,9 @@ export const route = {
   },
 } satisfies RouteDefinition;
 
-const createPet = action(async () => {
+const createPet = action(async (formData) => {
   'use server';
+  console.log(formData);
   // validate
   // db query
   // return data
@@ -70,7 +71,7 @@ function AppMainPage() {
                 <Card class="flex flex-col gap-6 p-4">
                   <Form
                     aria-labelledby="new-pet"
-                    class="group/form flex flex-col gap-6"
+                    class="flex flex-col gap-6"
                     action={createPet}
                     method="post"
                   >
@@ -83,17 +84,7 @@ function AppMainPage() {
                       name="name"
                       required
                     />
-                    <AnimalTypeSelect
-                      typeName="animal-type"
-                      genderName="animal-gender"
-                    />
-                    <TextField
-                      name="animal-type-other"
-                      label={t('app.animal-type-other.label')}
-                      placeholder={t('app.animal-type-other.placeholder')}
-                      description={t('app.animal-type-other.placeholder')}
-                      class="hidden group-has-[input[name=animal-type][value=other]:checked]/form:flex"
-                    />
+                    <AnimalTypeSelect typeName="type" genderName="gender" />
 
                     <Button type="submit">Create</Button>
                   </Form>

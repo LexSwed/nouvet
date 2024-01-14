@@ -6,7 +6,7 @@ import {
   Suspense,
   type ComponentProps,
 } from 'solid-js';
-import { Icon, RadioCard, Text, tw, type SvgIcons } from '@nou/ui';
+import { Icon, RadioCard, Text, TextField, tw, type SvgIcons } from '@nou/ui';
 
 import { createTranslator } from '~/i18n';
 
@@ -58,30 +58,51 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
       icon: 'alien',
     },
   ];
-  const [checked, setChecked] = createSignal(0);
+  const [checked, setChecked] = createSignal<number | undefined>();
   return (
-    <div class={cssStyles.wrapper}>
-      <For each={animalTypes}>
-        {(item, index) => {
-          return (
-            <RadioCard
-              class={tw('snap-x', cssStyles.card)}
-              name={props.typeName}
-              value={item.value}
-              label={item.label}
-              icon={<Icon size="sm" use={item.icon} />}
-              checked={index() === checked()}
-              onChange={() => setChecked(index())}
-            >
-              <Show when={index() === checked()} fallback={null}>
-                <Suspense>
-                  <GenderSwitch name={props.genderName} />
-                </Suspense>
-              </Show>
-            </RadioCard>
-          );
-        }}
-      </For>
+    <div class="group/animal-type flex flex-col gap-4">
+      <div class={cssStyles.wrapper}>
+        <For each={animalTypes}>
+          {(item, index) => {
+            return (
+              <RadioCard
+                class={tw('snap-x', cssStyles.card)}
+                name={props.typeName}
+                value={item.value}
+                label={item.label}
+                icon={<Icon size="sm" use={item.icon} />}
+                checked={index() === checked()}
+                onChange={(event) => {
+                  setChecked(index());
+
+                  const card = event.currentTarget.closest(
+                    `.${cssStyles.card}`,
+                  );
+                  if (!card) return;
+                  card.scrollIntoView({
+                    inline: 'start',
+                    block: 'nearest',
+                    behavior: 'smooth',
+                  });
+                }}
+              >
+                <Show when={index() === checked()} fallback={null}>
+                  <Suspense>
+                    <GenderSwitch name={props.genderName} />
+                  </Suspense>
+                </Show>
+              </RadioCard>
+            );
+          }}
+        </For>
+      </div>
+      <TextField
+        name={props.typeName}
+        label={t('app.animal-type-other.label')}
+        placeholder={t('app.animal-type-other.placeholder')}
+        description={t('app.animal-type-other.placeholder')}
+        class="hidden group-has-[input[value=other]:checked]/animal-type:flex"
+      />
     </div>
   );
 };
@@ -93,7 +114,7 @@ const GenderSwitch = (props: { name: AnimalTypeSelectProps['genderName'] }) => {
     <fieldset
       class={tw(
         cssStyles.genderSwitch,
-        'p-3 pt-0 opacity-100 overflow-hidden flex flex-col gap-2',
+        'p-3 -mt-3 opacity-100 overflow-hidden flex flex-col gap-2',
       )}
       aria-labelledby={id}
     >
@@ -154,7 +175,7 @@ const SvgGender = (props: ComponentProps<'svg'>) => {
         stroke-linejoin="round"
         stroke-width="16"
       />
-      <g data-male class="opacity-0 transition-opacity duration-300">
+      <g data-male>
         <line
           x1="166.91"
           y1="69.09"
@@ -175,7 +196,7 @@ const SvgGender = (props: ComponentProps<'svg'>) => {
           stroke-width="16"
         />
       </g>
-      <g data-female class="opacity-0 transition-opacity duration-300">
+      <g data-female>
         <line
           x1="116"
           y1="192"

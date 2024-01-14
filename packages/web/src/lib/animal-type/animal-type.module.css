@@ -12,13 +12,15 @@
       var(--col-5, 8rem)
       var(--col-6, 8rem)
       var(--col-7, 8rem);
-    max-width: fit-content;
     align-items: flex-start;
+    gap: theme(spacing.2);
+    max-width: fit-content;
+    overflow: auto;
 
-    @apply scrollbar-none -mx-4 grid snap-mandatory snap-start scroll-px-2 gap-2 overflow-auto px-4;
+    @apply scrollbar-none -mx-4 snap-x snap-mandatory scroll-px-4 px-4;
 
     @media (prefers-reduced-motion: no-preference) {
-      transition: grid-template-columns 0.3s ease-in-out;
+      transition: grid-template-columns 0.3s 0.4s ease-in-out;
     }
 
     &:has(.card:nth-child(1) input:not(.genderSwitchInput):checked) {
@@ -46,8 +48,9 @@
 
   .card {
     display: grid;
+    scroll-snap-align: start;
     &:not(:has(input:not(.genderSwitchInput):checked)) {
-      margin-block-end: 5rem;
+      margin-block-end: 3.5rem;
     }
   }
 
@@ -57,6 +60,7 @@
     transition: opacity 0.2s ease-in-out;
     @starting-style {
       opacity: 0;
+      transition: opacity 0.2s 0.4s ease-in-out;
     }
 
     &:has(input[value='male']:checked) {
@@ -70,6 +74,10 @@
         color: theme('colors.tertiary');
         & [data-male] {
           opacity: 1;
+        }
+        & [data-female] {
+          opacity: 0;
+          transform: rotate(-15deg);
         }
       }
     }
@@ -89,13 +97,17 @@
         & [data-female] {
           opacity: 1;
         }
+        & [data-male] {
+          opacity: 0;
+          transform: rotate(15deg);
+        }
       }
     }
   }
 
   .genderSwitchLabel {
     position: relative;
-    @apply text-on-surface my-2 w-20 rounded-md p-2 text-center transition-colors duration-200;
+    @apply text-on-surface w-20 rounded-md p-2 text-center transition-colors duration-200;
     &:where(:hover) {
       background-color: theme('colors.on-surface/0.05');
     }
@@ -110,7 +122,7 @@
       border-radius: theme('borderRadius.md');
       pointer-events: none;
       content: '';
-      transition: 0.24s ease-out;
+      transition: all 0.24s ease-out;
     }
   }
 
@@ -123,6 +135,9 @@
   }
 
   .genderIcon {
-    @apply relative mt-1 size-10 transition-colors duration-300;
+    @apply relative mt-1 size-10;
+    & g {
+      @apply origin-center opacity-0 transition-all duration-300;
+    }
   }
 }

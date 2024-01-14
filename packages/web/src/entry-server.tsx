@@ -33,12 +33,6 @@ export default createHandler((ctx) => {
             />
             <link rel="apple-touch-icon" href="/icons/icon-apple.png" />
             <link rel="manifest" href="/manifest.webmanifest" />
-            <link
-              rel="preload"
-              href="/assets/sprite.svg"
-              as="image"
-              type="image/svg+xml"
-            />
             {assets}
           </head>
           <body>
