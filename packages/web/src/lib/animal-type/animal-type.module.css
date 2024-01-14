@@ -72,17 +72,9 @@
   }
 
   .genderWrapper {
-    &:has(.genderSwitchInput:checked) {
-      & .genderIcon {
-        & circle {
-          transform: none;
-        }
-      }
+    &:has(input:checked) .genderIcon circle {
+      transform: none;
     }
-  }
-
-  .genderSwitchInput {
-    @apply sr-only;
   }
 
   .genderIcon {

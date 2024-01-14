@@ -124,7 +124,7 @@ const GenderRadio = (props: { name: string; value: string; label: string }) => {
       <input
         type="radio"
         name={props.name}
-        class={cssStyles.genderSwitchInput}
+        class="sr-only"
         value={props.value}
       />
       <Text
