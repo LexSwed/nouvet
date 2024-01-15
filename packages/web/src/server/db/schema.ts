@@ -14,41 +14,24 @@ export const familyTable = sqliteTable('family', {
 
 export const petTable = sqliteTable('pet', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
-  /** Pets have an official owner that has access to all the data. */
+  /** Pets have an official owner that has access to all the data. Other people have access to pets only through families. */
   ownerId: text('owner_id')
     .notNull()
+    // TODO: add constraint for Max amount of pets, when available
     .references(() => userTable.id),
   /** Name of a pet */
   name: text('name', { length: 200 }).notNull(),
-  sex: text('sex', { mode: 'text', enum: ['male', 'female'] as const }),
-  breedId: integer('breed_id')
-    .notNull()
-    .references(() => breedTable.id),
-  hairColor: text('color'),
+  gender: text('gender', { mode: 'text', enum: ['male', 'female'] as const }),
+  type: text('animal_type', {
+    mode: 'text',
+    length: 200,
+  }).notNull(),
+  breed: text('breed_name', { length: 200 }),
+  color: text('color'),
   /** Supports partial ISO, e.g. YYYY-MM */
   dateOfBirth: utcDatetime('date_of_birth', false),
 });
 export type DatabasePet = typeof petTable.$inferSelect;
-
-export const breedTable = sqliteTable('breed', {
-  id: integer('id').notNull().primaryKey({ autoIncrement: true }),
-  type: text('animal_type', {
-    mode: 'text',
-    enum: [
-      'dog',
-      'cat',
-      'bird',
-      'fish',
-      'reptile',
-      'rabbit',
-      'rodent',
-      'other',
-    ],
-  }).notNull(),
-  /** Has to include "Other" for people who don't know the breed */
-  name: text('name').notNull().unique(),
-  // photoUrl: string;
-});
 
 export const userTable = sqliteTable('user', {
   /** TODO: why this ID has to be text? */
