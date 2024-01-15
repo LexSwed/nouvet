@@ -48,7 +48,6 @@ export const Form = (
       },
     ),
   );
-
   return (
     <formContext.Provider value={value}>
       <form
@@ -57,10 +56,12 @@ export const Form = (
         ref={mergeRefs(ownProps.ref, (el) => (formRef = el))}
         onSubmit={(event) => {
           const errors = setNativeValidationMessages(event.currentTarget);
-
           setNativeErrors(Object.fromEntries(errors.entries()));
           if (errors.size > 0) {
+            // prevent actions from execution
             event.preventDefault();
+            event.stopPropagation();
+            return false;
           } else {
             // @ts-expect-error Solid issues
             props.onSubmit?.(event);
