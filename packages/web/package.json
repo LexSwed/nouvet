@@ -9,7 +9,7 @@
     "typecheck": "tsc",
     "lint": "eslint src",
     "format": "prettier . --write",
-    "db:up": "npx drizzle-kit generate:sqlite",
+    "db:generate": "npx drizzle-kit generate:sqlite",
     "db:push": "npx drizzle-kit push:sqlite"
   },
   "dependencies": {
@@ -30,7 +30,7 @@
     "oslo": "^0.27.1",
     "solid-js": "^1.8.11",
     "valibot": "^0.25.0",
-    "vinxi": "^0.1.3"
+    "vinxi": "^0.1.4"
   },
   "devDependencies": {
     "@nou/config": "^1.0.0",

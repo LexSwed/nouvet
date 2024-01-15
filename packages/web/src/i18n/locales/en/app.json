@@ -14,6 +14,7 @@
   "animal-type.bird": "Bird",
   "animal-type.fish": "Fish",
   "animal-type.rabbit": "Rabbit",
+  "animal-type.rodent": "Rodent",
   "animal-type.horse": "Horse",
   "animal-type.other": "Other",
   "animal-type-other.label": "A different pet type",

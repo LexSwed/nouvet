@@ -34,6 +34,11 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
       icon: 'rabbit',
     },
     {
+      value: 'rodent',
+      label: t('app.animal-type.rodent')!,
+      icon: 'rodent',
+    },
+    {
       value: 'horse',
       label: t('app.animal-type.horse')!,
       icon: 'horse',
@@ -118,7 +123,7 @@ const GenderRadio = (props: { name: string; value: string; label: string }) => {
     <label
       class={tw(
         cssStyles.genderSwitchLabel,
-        'relative text-on-surface border-2 border-on-surface/5 rounded-md py-3 px-2 text-center transition-colors duration-200',
+        'relative text-on-surface border-2 border-on-surface/5 rounded-md py-1 grid place-items-center h-12 px-2 text-center transition-colors duration-200',
       )}
     >
       <input
