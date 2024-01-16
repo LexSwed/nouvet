@@ -39,26 +39,35 @@ const createPet = action(async (formData) => {
   'use server';
   const event = getRequestEvent();
   const currentUser = await getRequestUser(event!);
-
-  const result = await createDbPet(
-    {
-      name: formData.get('name'),
-      type: formData.get('type'),
-      gender: formData.get('gender'),
-    },
-    currentUser.userId,
-  );
-  console.log(result);
-  if (!result.errors) {
+  try {
+    const result = await createDbPet(
+      {
+        name: formData.get('name'),
+        type: formData.get('type'),
+        gender: formData.get('gender'),
+      },
+      currentUser.userId,
+    );
+    if (result.errors) {
+      return { errors: result.errors };
+    }
     revalidate(getUserFamilyAndPets.key);
+    return result;
+  } catch (error) {
+    console.error(error);
+    return { failed: true };
   }
-  return result;
 }, 'createPet');
 
 function AppMainPage() {
   const t = createTranslator('app');
   const user = createAsync(() => getUserFamilyAndPets());
   const petSubmission = useSubmission(createPet);
+
+  const isFailed = () =>
+    petSubmission.result &&
+    'failed' in petSubmission.result &&
+    petSubmission.result.failed;
 
   return (
     <Show when={user()}>
@@ -99,6 +108,7 @@ function AppMainPage() {
                     action={createPet}
                     validationErrors={petSubmission.result?.errors || undefined}
                     method="post"
+                    aria-errormessage="error-message"
                   >
                     <Text with="headline-2" as="h3" id="new-pet">
                       {t('app.new-pet-heading')}
@@ -107,12 +117,29 @@ function AppMainPage() {
                       label={t('app.new-pet-text-field-label')}
                       placeholder={t('app.new-pet-text-field-placeholder')}
                       name="name"
-                      // required
+                      required
                     />
                     <AnimalTypeSelect name="type" />
                     <GenderSwitch name="gender" />
 
-                    <Button type="submit">Create</Button>
+                    <Show when={isFailed()}>
+                      <Card
+                        variant="filled"
+                        id="error-message"
+                        aria-live="polite"
+                      >
+                        <Text with="body">
+                          {t('app.new-pet-failure.title')}
+                        </Text>
+                        <Text with="body-sm" as="p">
+                          {t('app.new-pet-failure.message')}
+                        </Text>
+                      </Card>
+                    </Show>
+
+                    <Button loading={petSubmission.pending} type="submit">
+                      Create
+                    </Button>
                   </Form>
                   <Show when={!user().family && user().pets.length === 0}>
                     <A

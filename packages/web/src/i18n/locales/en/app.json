@@ -22,5 +22,7 @@
   "animal-type-other.help": "This is helpful for doctors to see who they are dealing with",
   "animal-gender": "Gender",
   "animal-gender.male": "Male",
-  "animal-gender.female": "Female"
+  "animal-gender.female": "Female",
+  "new-pet-failure.title": "Oooops... Faulty code on our side.",
+  "new-pet-failure.message": "This is not expected, but the fix is surely coming soon!"
 }

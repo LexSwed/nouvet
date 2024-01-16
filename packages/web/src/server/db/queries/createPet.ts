@@ -7,26 +7,54 @@ import {
   parse,
   picklist,
   string,
+  toTrimmed,
   ValiError,
-  type Output,
+  type Input,
 } from 'valibot';
 
+import type ErrorsDict from '~/i18n/locales/en/errors.json';
 import type { UserSession } from '~/server/auth/user-session';
 import { useDb } from '~/server/db';
-import { flatten } from '~/server/utils';
+import { translateErrorTokens } from '~/server/utils';
 import { petTable } from '../schema';
 
+type ErrorKeys = keyof typeof ErrorsDict;
+
 const CreatePetSchema = object({
-  name: string([minLength(1), maxLength(200)]),
-  type: string([minLength(2), maxLength(200)]),
-  gender: optional(picklist(['male', 'female'])),
-  breed: optional(string([minLength(2), maxLength(200)])),
-  color: optional(string([minLength(2), maxLength(200)])),
+  name: string('createPet.name.required' satisfies ErrorKeys, [
+    toTrimmed(),
+    minLength(1, 'createPet.name.required' satisfies ErrorKeys),
+    maxLength(200, 'createPet.name.length' satisfies ErrorKeys),
+  ]),
+  type: string([
+    toTrimmed(),
+    minLength(2, 'createPet.type' satisfies ErrorKeys),
+    maxLength(200, 'createPet.type' satisfies ErrorKeys),
+  ]),
+  gender: optional(
+    picklist(['male', 'female'], 'createPet.gender' satisfies ErrorKeys),
+  ),
+  breed: optional(
+    string([
+      toTrimmed(),
+      minLength(2, 'createPet.breed' satisfies ErrorKeys),
+      maxLength(200, 'createPet.breed' satisfies ErrorKeys),
+    ]),
+  ),
+  color: optional(
+    string([
+      toTrimmed(),
+      minLength(2, 'createPet.color' satisfies ErrorKeys),
+      maxLength(200, 'createPet.color' satisfies ErrorKeys),
+    ]),
+  ),
   dateOfBirth: optional(string([isoDate()])),
 });
 
+type CreatePetInput = Input<typeof CreatePetSchema>;
+
 export async function createPet(
-  petInput: Output<typeof CreatePetSchema>,
+  petInput: CreatePetInput,
   userId: UserSession['userId'],
 ) {
   try {
@@ -40,7 +68,7 @@ export async function createPet(
   } catch (error) {
     if (error instanceof ValiError) {
       return {
-        errors: flatten(error),
+        errors: await translateErrorTokens(error),
       };
     }
     throw error;

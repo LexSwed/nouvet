@@ -5,36 +5,49 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { tw } from './tw';
 import { mergeDefaultProps } from './utils';
 
-const cardVariants = cva('rounded-lg p-6 transition-shadow duration-200', {
-  variants: {
-    _link: {
-      true: '',
-      false: '',
+const cardVariants = cva(
+  'flex flex-col gap-2 rounded-lg p-4 transition-shadow duration-200',
+  {
+    variants: {
+      _link: {
+        true: '',
+        false: '',
+      },
+      variant: {
+        elevated: 'bg-surface text-on-surface shadow-sm',
+        flat: 'bg-surface text-on-surface',
+        filled: 'bg-secondary-container text-on-secondary-container',
+        outlined: 'bg-surface text-on-surface border-outline/20 border',
+      },
+      tone: {
+        failure: '',
+        success: '',
+      },
     },
-    variant: {
-      elevated: 'bg-surface text-on-surface shadow-sm',
-      flat: 'bg-surface text-on-surface',
-      filled: 'bg-secondary-container text-on-secondary-container',
-      outlined: 'bg-surface text-on-surface border-outline/20 border',
+    compoundVariants: [
+      {
+        _link: false,
+        variant: 'filled',
+        tone: 'failure',
+        class: 'bg-error-container text-on-error-container',
+      },
+      {
+        _link: true,
+        variant: 'flat',
+        class: 'intent:bg-surface-container-high',
+      },
+      {
+        _link: true,
+        variant: 'filled',
+        class:
+          'outline-primary intent:bg-secondary-container/90 intent:text-on-secondary-container intent:outline-2 outline-offset-4',
+      },
+    ],
+    defaultVariants: {
+      variant: 'elevated',
     },
   },
-  compoundVariants: [
-    {
-      _link: true,
-      variant: 'flat',
-      class: 'intent:bg-surface-container-high',
-    },
-    {
-      _link: true,
-      variant: 'filled',
-      class:
-        'outline-primary intent:bg-secondary-container/90 intent:text-on-secondary-container intent:outline-2 outline-offset-4',
-    },
-  ],
-  defaultVariants: {
-    variant: 'elevated',
-  },
-});
+);
 
 type CardVariants = Omit<VariantProps<typeof cardVariants>, '_link'>;
 
