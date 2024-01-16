@@ -9,7 +9,7 @@ import {
   userTable,
 } from '~/server/db/schema';
 
-export const getDbUserFamilyAndPets = async (userId: DatabaseUser['id']) => {
+export async function getDbUserFamilyAndPets(userId: DatabaseUser['id']) {
   const db = useDb();
   return db
     .select({
@@ -29,4 +29,4 @@ export const getDbUserFamilyAndPets = async (userId: DatabaseUser['id']) => {
     .where(eq(userTable.id, userId))
     .groupBy(userTable.id)
     .all();
-};
+}

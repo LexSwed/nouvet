@@ -1,6 +1,14 @@
 import { Title } from '@solidjs/meta';
-import { A, action, createAsync, type RouteDefinition } from '@solidjs/router';
+import {
+  A,
+  action,
+  createAsync,
+  revalidate,
+  useSubmission,
+  type RouteDefinition,
+} from '@solidjs/router';
 import { Show } from 'solid-js';
+import { getRequestEvent } from 'solid-js/web';
 import {
   Avatar,
   Button,
@@ -15,6 +23,8 @@ import {
 import { createTranslator, getDictionary } from '~/i18n';
 import { AnimalTypeSelect } from '~/lib/animal-type';
 import { GenderSwitch } from '~/lib/animal-type/animal-type';
+import { getRequestUser } from '~/server/auth/user-session';
+import { createPet as createDbPet } from '~/server/db/queries/createPet';
 
 import { getUserFamilyAndPets } from './_queries';
 
@@ -27,15 +37,28 @@ export const route = {
 
 const createPet = action(async (formData) => {
   'use server';
-  console.log(formData);
-  // validate
-  // db query
-  // return data
+  const event = getRequestEvent();
+  const currentUser = await getRequestUser(event!);
+
+  const result = await createDbPet(
+    {
+      name: formData.get('name'),
+      type: formData.get('type'),
+      gender: formData.get('gender'),
+    },
+    currentUser.userId,
+  );
+  console.log(result);
+  if (!result.errors) {
+    revalidate(getUserFamilyAndPets.key);
+  }
+  return result;
 }, 'createPet');
 
 function AppMainPage() {
   const t = createTranslator('app');
   const user = createAsync(() => getUserFamilyAndPets());
+  const petSubmission = useSubmission(createPet);
 
   return (
     <Show when={user()}>
@@ -74,6 +97,7 @@ function AppMainPage() {
                     aria-labelledby="new-pet"
                     class="flex flex-col gap-6"
                     action={createPet}
+                    validationErrors={petSubmission.result?.errors || undefined}
                     method="post"
                   >
                     <Text with="headline-2" as="h3" id="new-pet">
@@ -83,7 +107,7 @@ function AppMainPage() {
                       label={t('app.new-pet-text-field-label')}
                       placeholder={t('app.new-pet-text-field-placeholder')}
                       name="name"
-                      required
+                      // required
                     />
                     <AnimalTypeSelect name="type" />
                     <GenderSwitch name="gender" />

@@ -13,7 +13,7 @@ import {
 import { useDb } from '~/server/db';
 import { authAccount, userProfileTable, userTable } from '~/server/db/schema';
 
-const createUserSchema = object({
+const CreateUserSchema = object({
   provider: picklist(['facebook']),
   name: string('Name cannot be empty', [minLength(2), maxLength(200)]),
   accountProviderId: string('Auth Provider ID cannot be empty', [
@@ -24,10 +24,10 @@ const createUserSchema = object({
   measurementSystem: picklist(['imperial', 'metrical']),
 });
 
-export const createUser = async (newUser: Output<typeof createUserSchema>) => {
+export const createUser = async (newUser: Output<typeof CreateUserSchema>) => {
   try {
     const userId = createId();
-    const userInfo = parse(createUserSchema, newUser);
+    const userInfo = parse(CreateUserSchema, newUser);
     const db = useDb();
     const user = await db.transaction(async (tx) => {
       const user = await tx
