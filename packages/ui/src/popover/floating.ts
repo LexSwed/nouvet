@@ -54,7 +54,6 @@ export function createFloating<
     const currentFloating = floating();
 
     if (currentReference && currentFloating) {
-      console.log('calculate', currentReference, currentFloating);
       try {
         const currentData = await computePosition(
           currentReference,
@@ -69,7 +68,6 @@ export function createFloating<
             strategy,
           },
         );
-        console.log(currentData);
         if (
           currentData &&
           currentFloating === floating() &&
@@ -86,13 +84,9 @@ export function createFloating<
   createEffect(() => {
     const currentReference = reference();
     const currentFloating = floating();
-    console.log('create effect with', currentFloating, currentReference);
     if (currentReference && currentFloating) {
       const clear = autoUpdate(currentReference, currentFloating, update);
-      onCleanup(() => {
-        console.log('cleanup');
-        return clear();
-      });
+      onCleanup(clear);
     }
   });
 

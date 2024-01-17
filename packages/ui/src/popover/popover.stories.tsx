@@ -17,18 +17,18 @@ export default meta;
 
 export const AccountMenu = () => {
   return (
-    <div class="flex h-full w-full justify-end">
+    <div class="flex size-full justify-end">
       <Button popoverTarget="settings" variant="ghost" icon>
         <Avatar name="John Doe" avatarUrl={null} />
       </Button>
       <Popover
         id="settings"
         placement="bottom-end"
-        // offset={(state) => ({
-        //   mainAxis:
-        //     -1 * (state.elements.reference as HTMLElement).offsetHeight - 12,
-        //   crossAxis: -12,
-        // })}
+        offset={(state) => ({
+          mainAxis:
+            -1 * (state.elements.reference as HTMLElement).offsetHeight - 12,
+          crossAxis: -12,
+        })}
         class="flex flex-col gap-4"
       >
         <ButtonLink
@@ -52,7 +52,7 @@ export const AccountMenu = () => {
 
 export const ContextualHelp = () => {
   return (
-    <div class="flex h-full w-full items-center justify-center">
+    <div class="flex size-full items-center justify-center">
       <Button aria-label="Info" popoverTarget="info" variant="ghost" icon>
         <Icon use="info" size="md" />
       </Button>

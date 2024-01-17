@@ -1,6 +1,7 @@
 @layer nou-ui {
   .popover {
     opacity: 0;
+    transform: scale(0.94);
     isolation: isolate;
     transition-property: opacity, transform, display;
     transition-duration: 0.1s;

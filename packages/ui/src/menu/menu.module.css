@@ -10,7 +10,7 @@
     color: theme('colors.on-surface');
     background: transparent;
     padding-inline: theme('spacing.3');
-    transition: background-color 100ms ease-in;
+    transition: background-color 0.2s ease-out;
     outline: none;
     min-height: theme('spacing.10');
     padding-block: theme('spacing.2');
@@ -20,8 +20,11 @@
     &:where(:hover, [aria-selected='true'], [aria-current='true']) {
       background-color: theme('colors.on-surface/0.08');
     }
-    &:where(:focus, :active) {
+    &:where(:focus, :focus-within, :active) {
       background-color: theme('colors.on-surface/0.12');
+    }
+    &:where(:focus-visible:focus, :has(:focus-visible):focus-within) {
+      outline: 2px auto currentColor;
     }
     &:where(:disabled, [aria-disabled='true']) {
       /* background-color: theme('colors.disabled');

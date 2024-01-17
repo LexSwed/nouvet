@@ -4,7 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { tw } from './tw';
 
-const textVariants = cva('font-sans m-0', {
+const textVariants = cva('m-0 font-sans', {
   variants: {
     with: {
       'body': 'text-base',

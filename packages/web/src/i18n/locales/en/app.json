@@ -24,5 +24,6 @@
   "animal-gender.male": "Male",
   "animal-gender.female": "Female",
   "new-pet-failure.title": "Oooops... Faulty code on our side.",
-  "new-pet-failure.message": "This is not expected, but the fix is surely coming soon!"
+  "new-pet-failure.message": "This is not expected, but the fix is surely coming soon!",
+  "account-menu.account": "Account preferences"
 }
