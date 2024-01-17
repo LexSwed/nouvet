@@ -93,14 +93,14 @@ const Popover = <T extends ValidComponent = 'div'>(ownProps: PopupProps<T>) => {
         );
         if (event.newState === 'open') {
           setTrigger(trigger as HTMLElement);
-        } else {
-          // we need to remove the reference for floating to remove listeners
-          setTrigger(null);
         }
       })}
       onToggle={composeEventHandlers(props.onToggle, (event) => {
         if (event.newState === 'open') {
           popover()?.focus();
+        } else {
+          // we need to remove the reference for floating to remove listeners
+          setTrigger(null);
         }
       })}
       onFocusOut={composeEventHandlers(props.onFocusOut, (event) => {
