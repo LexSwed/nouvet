@@ -52,7 +52,6 @@ export function createFloating<
   async function update() {
     const currentReference = reference();
     const currentFloating = floating();
-
     if (currentReference && currentFloating) {
       try {
         const currentData = await computePosition(
@@ -73,7 +72,10 @@ export function createFloating<
           currentFloating === floating() &&
           currentReference === reference()
         ) {
-          setData(currentData);
+          // avoids "ResizeObserver loop completed with undelivered notifications."
+          requestAnimationFrame(() => {
+            setData(currentData);
+          });
         }
       } catch (error) {
         console.error(error);
@@ -92,9 +94,6 @@ export function createFloating<
 
   return {
     get style() {
-      if (typeof data().x !== 'number' || typeof data().y !== 'number') {
-        return undefined;
-      }
       return {
         inset: 'unset',
         top: `${data().y}px`,
