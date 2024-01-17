@@ -54,6 +54,7 @@ export function createFloating<
     const currentFloating = floating();
 
     if (currentReference && currentFloating) {
+      console.log('calculate', currentReference, currentFloating);
       try {
         const currentData = await computePosition(
           currentReference,
@@ -68,14 +69,16 @@ export function createFloating<
             strategy,
           },
         );
+        console.log(currentData);
         if (
+          currentData &&
           currentFloating === floating() &&
           currentReference === reference()
         ) {
           setData(currentData);
         }
-      } catch {
-        /* empty */
+      } catch (error) {
+        console.error(error);
       }
     }
   }
@@ -83,13 +86,13 @@ export function createFloating<
   createEffect(() => {
     const currentReference = reference();
     const currentFloating = floating();
-
-    let clear: ReturnType<typeof autoUpdate> | undefined;
+    console.log('create effect with', currentFloating, currentReference);
     if (currentReference && currentFloating) {
-      clear = autoUpdate(currentReference, currentFloating, update);
-      onCleanup(clear);
-    } else {
-      clear?.();
+      const clear = autoUpdate(currentReference, currentFloating, update);
+      onCleanup(() => {
+        console.log('cleanup');
+        return clear();
+      });
     }
   });
 

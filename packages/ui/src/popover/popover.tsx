@@ -66,11 +66,9 @@ const Popover = <T extends ValidComponent = 'div'>(ownProps: PopupProps<T>) => {
   const data = createFloating(trigger, popover, floatingProps);
 
   const component = () => local.as ?? 'div';
-
   const children = createMemo(() => {
     const child = local.children;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return typeof child === 'function' ? (child as any)(rendered) : child;
+    return typeof child === 'function' ? child?.(rendered) : child;
   });
 
   return (

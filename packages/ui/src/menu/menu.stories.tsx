@@ -1,3 +1,4 @@
+import { Show } from 'solid-js';
 import { type Meta } from 'storybook-solidjs';
 
 import { Avatar } from '../avatar';
@@ -36,7 +37,11 @@ export const LazyRender = () => {
     <>
       <Button popoverTarget="menu">Open menu</Button>
       <Menu id="menu">
-        {(open) => (open() ? <AsyncOrHeavyComponent /> : null)}
+        {(open) => (
+          <Show when={open()}>
+            <AsyncOrHeavyComponent />
+          </Show>
+        )}
       </Menu>
     </>
   );

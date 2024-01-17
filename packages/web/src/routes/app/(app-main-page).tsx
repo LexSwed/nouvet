@@ -1,9 +1,10 @@
 import { Title } from '@solidjs/meta';
 import { A, createAsync, type RouteDefinition } from '@solidjs/router';
 import { Match, Show, Switch } from 'solid-js';
-import { Avatar, ButtonLink, Icon } from '@nou/ui';
+import { ButtonLink, Icon } from '@nou/ui';
 
 import { createTranslator, getDictionary } from '~/i18n';
+import { AccountMenu } from '~/lib/account-menu';
 import { CreateNewPetForm } from '../../lib/create-new-pet-form';
 
 import { getUserFamilyAndPets } from './_queries';
@@ -47,7 +48,10 @@ function AppMainPage() {
                   </ButtonLink>
                 }
               />
-              <Avatar name={user().name || ''} avatarUrl={user().avatarUrl} />
+              <AccountMenu
+                name={user().name || ''}
+                avatarUrl={user().avatarUrl}
+              />
             </header>
             <div class="flex flex-col gap-6">
               <section class="container">

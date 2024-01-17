@@ -5,6 +5,8 @@
     transition-property: opacity, transform, display;
     transition-duration: 0.1s;
     transition-behavior: allow-discrete;
+    content-visibility: hidden;
+    width: max-content;
     @apply bg-surface-container-lowest m-0 max-h-60 overflow-y-auto rounded-md shadow-md;
 
     &:not(:popover-open) {
@@ -14,6 +16,7 @@
       opacity: 1;
       transform: none;
       transition-duration: 0.24s;
+      content-visibility: visible;
       @starting-style {
         opacity: 0;
         transform: scale(0.94);

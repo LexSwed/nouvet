@@ -42,7 +42,7 @@ function CreateNewPetForm(props: CreateNewPetForm) {
   const t = createTranslator('app');
   const petSubmission = useSubmission(createPet);
 
-  const isFailed = () =>
+  const hasFailed = () =>
     petSubmission.result &&
     'failed' in petSubmission.result &&
     petSubmission.result.failed;
@@ -69,7 +69,7 @@ function CreateNewPetForm(props: CreateNewPetForm) {
         <AnimalTypeSelect name="type" />
         <GenderSwitch name="gender" />
 
-        <Show when={isFailed()}>
+        <Show when={hasFailed()}>
           <Card variant="filled" id="error-message" aria-live="polite">
             <Text with="body">{t('app.new-pet-failure.title')}</Text>
             <Text with="body-sm" as="p">
