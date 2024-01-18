@@ -87,4 +87,4 @@ function CreateNewPetForm(props: CreateNewPetForm) {
   );
 }
 
-export { CreateNewPetForm };
+export default CreateNewPetForm;

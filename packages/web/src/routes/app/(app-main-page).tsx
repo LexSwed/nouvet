@@ -1,13 +1,14 @@
 import { Title } from '@solidjs/meta';
 import { A, createAsync, type RouteDefinition } from '@solidjs/router';
-import { Match, Show, Switch } from 'solid-js';
+import { lazy, Match, Show, Switch } from 'solid-js';
 import { ButtonLink, Icon } from '@nou/ui';
 
 import { createTranslator, getDictionary } from '~/i18n';
 import { AccountMenu } from '~/lib/account-menu';
-import { CreateNewPetForm } from '../../lib/create-new-pet-form';
 
 import { getUserFamilyAndPets } from './_queries';
+
+const CreateNewPetForm = lazy(() => import('~/lib/create-new-pet-form'));
 
 export const route = {
   load() {
