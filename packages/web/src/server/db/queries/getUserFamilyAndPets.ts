@@ -18,6 +18,7 @@ export async function getDbUserFamilyAndPets(userId: DatabaseUser['id']) {
       familyName: familyTable.name,
       petId: petTable.id,
       petName: petTable.name,
+      petPicture: petTable.pictureUrl,
       avatarUrl: userProfileTable.avatarUrl,
       name: userProfileTable.name,
     })

@@ -26,11 +26,10 @@ const CreatePetSchema = object({
     minLength(1, 'createPet.name.required' satisfies ErrorKeys),
     maxLength(200, 'createPet.name.length' satisfies ErrorKeys),
   ]),
-  type: string([
-    toTrimmed(),
-    minLength(2, 'createPet.type' satisfies ErrorKeys),
-    maxLength(200, 'createPet.type' satisfies ErrorKeys),
-  ]),
+  type: picklist(
+    ['dog', 'cat', 'bird', 'rabbit', 'rodent', 'horse'],
+    'createPet.type' satisfies ErrorKeys,
+  ),
   gender: optional(
     picklist(['male', 'female'], 'createPet.gender' satisfies ErrorKeys),
   ),

@@ -1,7 +1,7 @@
 import { Title } from '@solidjs/meta';
 import { A, createAsync, type RouteDefinition } from '@solidjs/router';
-import { lazy, Match, Show, Switch } from 'solid-js';
-import { ButtonLink, Icon } from '@nou/ui';
+import { For, lazy, Match, Show, Switch } from 'solid-js';
+import { ButtonLink, Card, Icon, Text } from '@nou/ui';
 
 import { createTranslator, getDictionary } from '~/i18n';
 import { AccountMenu } from '~/lib/account-menu';
@@ -57,22 +57,43 @@ function AppMainPage() {
             <div class="flex flex-col gap-6">
               <section class="container">
                 <Switch>
-                  <Match when={!user().family && user().pets.length === 0}>
+                  <Match when={user().pets.length === 0}>
                     <CreateNewPetForm minimal>
-                      <A
-                        href="/app/join"
-                        class="bg-surface-container-high flex flex-row items-center justify-between gap-2 text-balance rounded-[inherit] p-4"
-                      >
-                        <h3 class="text-primary text-sm">
-                          {t('app.invite-card-heading')}
-                        </h3>
-                        <Icon
-                          use="arrow-circle-up-right"
-                          class="text-primary"
-                          size="sm"
-                        />
-                      </A>
+                      <Show when={!user().family}>
+                        <A
+                          href="/app/join"
+                          class="bg-surface-container-high flex flex-row items-center justify-between gap-2 text-balance rounded-[inherit] p-4"
+                        >
+                          <h3 class="text-primary text-sm">
+                            {t('app.invite-card-heading')}
+                          </h3>
+                          <Icon
+                            use="arrow-circle-up-right"
+                            class="text-primary"
+                            size="sm"
+                          />
+                        </A>
+                      </Show>
                     </CreateNewPetForm>
+                  </Match>
+                  <Match when={user().pets.length > 0}>
+                    <ul class="scrollbar-none -mx-3 snap-mandatory scroll-p-3 overflow-auto px-3 pb-2">
+                      <For each={user().pets}>
+                        {(pet) => (
+                          <Card variant="flat">
+                            <div class="flex flex-col gap-4">
+                              <div class="flex flex-row gap-4">
+                                <div class="bg-tertiary/10 -ms-2 -mt-2 size-24 rounded-md">
+                                  Avatar
+                                </div>
+                                <Text with="body-lg">{pet.name}</Text>
+                              </div>
+                              Lazy loaded list of actions
+                            </div>
+                          </Card>
+                        )}
+                      </For>
+                    </ul>
                   </Match>
                 </Switch>
               </section>

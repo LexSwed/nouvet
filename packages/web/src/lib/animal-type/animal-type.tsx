@@ -1,5 +1,5 @@
 import { createUniqueId, For, type ComponentProps } from 'solid-js';
-import { Icon, RadioCard, Text, TextField, tw, type SvgIcons } from '@nou/ui';
+import { Icon, RadioCard, Text, tw, type SvgIcons } from '@nou/ui';
 
 import { createTranslator } from '~/i18n';
 
@@ -43,41 +43,27 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
       label: t('app.animal-type.horse')!,
       icon: 'horse',
     },
-    {
-      value: 'other',
-      label: t('app.animal-type.other')!,
-      icon: 'alien',
-    },
   ];
 
   return (
-    <div class="group/animal-type flex flex-col gap-4">
-      <div
-        class={
-          'scrollbar-none -mx-4 flex w-[fit-content()] snap-x snap-mandatory scroll-px-4 gap-2 overflow-auto px-4'
-        }
-      >
-        <For each={animalTypes}>
-          {(item) => {
-            return (
-              <RadioCard
-                class={tw(cssStyles.card)}
-                name={props.name}
-                value={item.value}
-                label={item.label}
-                icon={<Icon size="sm" use={item.icon} />}
-              />
-            );
-          }}
-        </For>
-      </div>
-      <TextField
-        name={props.name}
-        label={t('app.animal-type-other.label')}
-        placeholder={t('app.animal-type-other.placeholder')}
-        description={t('app.animal-type-other.placeholder')}
-        class="hidden group-has-[input[value=other]:checked]/animal-type:flex"
-      />
+    <div
+      class={
+        'scrollbar-none -mx-4 flex w-[fit-content()] snap-x snap-mandatory scroll-px-4 gap-2 overflow-auto px-4'
+      }
+    >
+      <For each={animalTypes}>
+        {(item) => {
+          return (
+            <RadioCard
+              class={tw(cssStyles.card)}
+              name={props.name}
+              value={item.value}
+              label={item.label}
+              icon={<Icon size="sm" use={item.icon} />}
+            />
+          );
+        }}
+      </For>
     </div>
   );
 };
