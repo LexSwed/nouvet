@@ -96,8 +96,8 @@ export function createFloating<
     get style() {
       return {
         inset: 'unset',
-        top: `${data().y}px`,
-        left: `${data().x}px`,
+        top: `${data().y ?? 0}px`,
+        left: `${data().x ?? 0}px`,
         position: strategy,
       };
     },

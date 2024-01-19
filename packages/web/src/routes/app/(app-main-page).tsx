@@ -82,12 +82,24 @@ function AppMainPage() {
                         {(pet) => (
                           <Card variant="flat">
                             <div class="flex flex-col gap-4">
-                              <div class="flex flex-row gap-4">
+                              <A
+                                href={`/app/${pet.id}/`}
+                                class="flex flex-row gap-4"
+                              >
                                 <div class="bg-tertiary/10 -ms-2 -mt-2 size-24 rounded-md">
-                                  Avatar
+                                  <Show
+                                    when={pet.pictureUrl}
+                                    children={
+                                      <img
+                                        src={pet.pictureUrl!}
+                                        class="aspect-square w-full"
+                                        alt=""
+                                      />
+                                    }
+                                  />
+                                  <Text with="body-xl">{pet.name}</Text>
                                 </div>
-                                <Text with="body-lg">{pet.name}</Text>
-                              </div>
+                              </A>
                               Lazy loaded list of actions
                             </div>
                           </Card>

@@ -26,11 +26,11 @@ export const getUserFamilyAndPets = cache(async () => {
     pets: userData.reduce(
       (res, pet) => {
         if (pet.petId !== null && pet.petName !== null) {
-          res.push({ id: pet.petId, name: pet.petName });
+          res.push({ id: pet.petId, name: pet.petName, pictureUrl: pet.petPictureUrl });
         }
         return res;
       },
-      [] as Array<{ id: number; name: string }>,
+      [] as Array<{ id: number; name: string; pictureUrl: string | null }>,
     ),
   } as const;
 
