@@ -1,38 +1,11 @@
-import { action, revalidate, useSubmission } from '@solidjs/router';
+import { useSubmission } from '@solidjs/router';
 import { Show, type ParentProps } from 'solid-js';
-import { getRequestEvent } from 'solid-js/web';
 import { Button, Card, Form, Text, TextField } from '@nou/ui';
 
 import { createTranslator } from '~/i18n';
 import { AnimalTypeSelect } from '~/lib/animal-type';
 import { GenderSwitch } from '~/lib/animal-type/animal-type';
-import { getRequestUser } from '~/server/auth/user-session';
-import { createPet as createDbPet } from '~/server/db/queries/createPet';
-import { getUserFamilyAndPets } from '../routes/app/_queries';
-
-const createPet = action(async (formData) => {
-  'use server';
-  const event = getRequestEvent();
-  const currentUser = await getRequestUser(event!);
-  try {
-    const result = await createDbPet(
-      {
-        name: formData.get('name'),
-        type: formData.get('type'),
-        gender: formData.get('gender'),
-      },
-      currentUser.userId,
-    );
-    if (result.errors) {
-      return { errors: result.errors };
-    }
-    revalidate(getUserFamilyAndPets.key);
-    return result;
-  } catch (error) {
-    console.error(error);
-    return { failed: true };
-  }
-}, 'createPet');
+import { createPet } from '~/server/queries/user';
 
 interface CreateNewPetForm extends ParentProps {
   minimal: boolean;

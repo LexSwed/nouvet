@@ -52,7 +52,7 @@ const CreatePetSchema = object({
 
 type CreatePetInput = Input<typeof CreatePetSchema>;
 
-export async function createPet(
+export async function dbCreatePet(
   petInput: CreatePetInput,
   userId: UserSession['userId'],
 ) {

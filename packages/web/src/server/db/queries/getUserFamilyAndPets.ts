@@ -2,32 +2,23 @@ import { eq } from 'drizzle-orm';
 import { type DatabaseUser } from 'lucia';
 
 import { useDb } from '~/server/db';
-import {
-  familyTable,
-  petTable,
-  userProfileTable,
-  userTable,
-} from '~/server/db/schema';
+import { familyTable, userProfileTable, userTable } from '~/server/db/schema';
 
-export async function getDbUserFamilyAndPets(userId: DatabaseUser['id']) {
+export async function dbGetUserFamily(userId: DatabaseUser['id']) {
   const db = useDb();
   return db
     .select({
-      userId: userTable.id,
-      familyId: userTable.familyId,
-      familyName: familyTable.name,
-      petId: petTable.id,
-      petName: petTable.name,
-      petPictureUrl: petTable.pictureUrl,
-      avatarUrl: userProfileTable.avatarUrl,
+      id: userTable.id,
       name: userProfileTable.name,
+      avatarUrl: userProfileTable.avatarUrl,
+      family: {
+        id: familyTable.id,
+        name: familyTable.name,
+      },
     })
     .from(userTable)
-    .orderBy(userTable.id, petTable.id)
-    .leftJoin(familyTable, eq(userTable.familyId, familyTable.id))
-    .leftJoin(petTable, eq(petTable.ownerId, userTable.id))
-    .leftJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))
     .where(eq(userTable.id, userId))
-    .groupBy(userTable.id)
-    .all();
+    .leftJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))
+    .leftJoin(familyTable, eq(userTable.familyId, familyTable.id))
+    .get();
 }
