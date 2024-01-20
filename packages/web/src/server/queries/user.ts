@@ -2,8 +2,8 @@ import { action, cache, revalidate } from '@solidjs/router';
 import { getRequestEvent } from 'solid-js/web';
 
 import { dbCreatePet } from '~/server/db/queries/createPet';
-import { dbGetUserFamily } from '~/server/db/queries/getUserFamilyAndPets';
 import { getRequestUser } from '../auth/user-session';
+import { dbGetUserFamily } from '../db/queries/getUserFamily';
 import { dbGetUserPets } from '../db/queries/getUserPets';
 
 export const getUserFamily = cache(async () => {

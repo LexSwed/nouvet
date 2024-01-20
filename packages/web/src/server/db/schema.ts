@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm';
 import {
+  index,
   integer,
   primaryKey,
   sqliteTable,
@@ -35,12 +36,20 @@ export const petTable = sqliteTable('pet', {
 });
 export type DatabasePet = typeof petTable.$inferSelect;
 
-export const userTable = sqliteTable('user', {
-  /** TODO: why this ID has to be text? */
-  id: text('id').notNull().primaryKey(),
-  familyId: integer('family_id').references(() => familyTable.id),
-  createdAt: utcDatetime('created_at'),
-});
+export const userTable = sqliteTable(
+  'user',
+  {
+    /** TODO: why this ID has to be text? */
+    id: text('id').notNull().primaryKey(),
+    familyId: integer('family_id').references(() => familyTable.id),
+    createdAt: utcDatetime('created_at'),
+  },
+  (table) => {
+    return {
+      familyIdx: index('family_idx').on(table.familyId),
+    };
+  },
+);
 
 // export const mediaTable = sqliteTable('user-media', {
 //   id: integer('id').notNull().primaryKey({ autoIncrement: true }),

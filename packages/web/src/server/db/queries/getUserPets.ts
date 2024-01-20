@@ -1,11 +1,27 @@
-import { eq } from 'drizzle-orm';
+import { eq, inArray, or } from 'drizzle-orm';
 import { type DatabaseUser } from 'lucia';
 
 import { useDb } from '~/server/db';
-import { petTable } from '~/server/db/schema';
+import { petTable, userTable } from '~/server/db/schema';
 
 export async function dbGetUserPets(userId: DatabaseUser['id']) {
   const db = useDb();
+  const familyUsers = db
+    .selectDistinct({ ownerId: userTable.id })
+    .from(userTable)
+    .where(
+      or(
+        eq(userTable.id, userId),
+        inArray(
+          userTable.familyId,
+          db
+            .select({ familyId: userTable.familyId })
+            .from(userTable)
+            .where(eq(userTable.id, userId)),
+        ),
+      ),
+    );
+
   return db
     .select({
       id: petTable.id,
@@ -18,6 +34,6 @@ export async function dbGetUserPets(userId: DatabaseUser['id']) {
       color: petTable.color,
     })
     .from(petTable)
-    .where(eq(petTable.ownerId, userId))
+    .where(inArray(petTable.ownerId, familyUsers))
     .all();
 }
