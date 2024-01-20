@@ -1,7 +1,7 @@
 import { Title } from '@solidjs/meta';
 import { A, createAsync, type RouteDefinition } from '@solidjs/router';
 import { For, lazy, Match, Show, Suspense, Switch } from 'solid-js';
-import { ButtonLink, Card, Icon, Text } from '@nou/ui';
+import { Button, ButtonLink, Card, Icon, Text } from '@nou/ui';
 
 import { createTranslator, getDictionary } from '~/i18n';
 import { AccountMenu } from '~/lib/account-menu';
@@ -73,28 +73,48 @@ const UserPets = (props: { familyId: number | undefined }) => {
   return (
     <Switch>
       <Match when={pets()?.length ?? 0 > 0}>
-        <ul class="scrollbar-none -mx-3 snap-mandatory scroll-p-3 overflow-auto px-3 pb-2">
+        <ul class="scrollbar-none -mx-3 snap-mandatory scroll-p-3 overflow-auto px-3 py-2 [&>*]:snap-x">
           <For each={pets()}>
             {(pet) => (
-              <Card variant="flat">
-                <div class="flex flex-col gap-4">
-                  <A href={`/app/pet/${pet.id}/`} class="flex flex-row gap-4">
-                    <div class="bg-tertiary/10 -ms-2 -mt-2 size-24 rounded-md">
-                      <Show
-                        when={pet.pictureUrl}
-                        children={
-                          <img
-                            src={pet.pictureUrl!}
-                            class="aspect-square w-full"
-                            alt=""
-                          />
-                        }
-                      />
-                      <Text with="body-xl">{pet.name}</Text>
-                    </div>
-                  </A>
-                  Lazy loaded list of actions
-                </div>
+              <Card role="listitem" variant="flat" class="flex flex-col gap-4">
+                <A
+                  href={`/app/pet/${pet.id}/`}
+                  class="-m-4 flex flex-row gap-4 p-4"
+                >
+                  <div class="bg-tertiary/10 -ms-2 -mt-2 size-24 rounded-md">
+                    <Show
+                      when={pet.pictureUrl}
+                      children={
+                        <img
+                          src={pet.pictureUrl!}
+                          class="aspect-square w-full"
+                          alt=""
+                        />
+                      }
+                    />
+                  </div>
+                  <Text with="body-xl">{pet.name}</Text>
+                </A>
+                <ul class="scrollbar-none -mx-4 flex snap-mandatory scroll-p-4 flex-row gap-3 overflow-auto px-4 py-2 [&>*]:snap-x">
+                  <li class="shrink-0">
+                    <Button size="sm" variant="secondary" class="flex gap-1">
+                      <Icon use="calendar-plus" size="sm" />
+                      Birth date
+                    </Button>
+                  </li>
+                  <li class="shrink-0">
+                    <Button size="sm" variant="secondary" class="flex gap-1">
+                      <Icon use="scales" size="sm" />
+                      Weight
+                    </Button>
+                  </li>
+                  <li class="shrink-0">
+                    <Button size="sm" variant="secondary" class="flex gap-1">
+                      <Icon use="carrot" size="sm" />
+                      Nutrition
+                    </Button>
+                  </li>
+                </ul>
               </Card>
             )}
           </For>
