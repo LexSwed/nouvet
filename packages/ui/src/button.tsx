@@ -16,8 +16,7 @@ const buttonVariants = cva(
           'bg-primary text-on-primary intent:bg-primary/90 focus-visible:outline-primary',
         destructive:
           'bg-destructive text-on-destructive intent:bg-destructive/90 focus-visible:outline-destructive',
-        outline:
-          'border-input bg-background intent:bg-primary intent:text-on-primary border',
+        outline: 'border-outline text-on-surface border bg-transparent',
         secondary:
           'bg-tertiary-container text-on-tertiary-container intent:bg-tertiary-container/80 focus-visible:outline-tertiary rounded-full',
         ghost: 'hover:bg-on-surface/5 focus:bg-on-surface/8 text-on-surface',
@@ -25,7 +24,7 @@ const buttonVariants = cva(
       },
       size: {
         default: 'h-12 min-w-12 px-4 py-2 text-base',
-        sm: 'h-10 min-w-10 px-3 text-base',
+        sm: 'h-10 min-w-10 px-3 text-sm',
         lg: 'h-14 min-w-14 px-8 text-lg',
         cta: 'h-16 min-w-16 rounded-full px-8 text-lg',
       },

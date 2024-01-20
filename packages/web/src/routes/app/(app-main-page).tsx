@@ -79,9 +79,9 @@ const UserPets = (props: { familyId: number | undefined }) => {
               <Card role="listitem" variant="flat" class="flex flex-col gap-4">
                 <A
                   href={`/app/pet/${pet.id}/`}
-                  class="-m-4 flex flex-row gap-4 p-4"
+                  class="-m-4 flex flex-row items-start gap-4 p-4"
                 >
-                  <div class="bg-tertiary/10 -ms-2 -mt-2 size-24 rounded-md">
+                  <div class="bg-tertiary/10 -ms-2 -mt-2 size-24 shrink-0 rounded-md">
                     <Show
                       when={pet.pictureUrl}
                       children={
@@ -93,28 +93,44 @@ const UserPets = (props: { familyId: number | undefined }) => {
                       }
                     />
                   </div>
-                  <Text with="body-xl">{pet.name}</Text>
+                  <div class="flex flex-row items-center gap-2">
+                    <Text with="body-xl">{pet.name}</Text>
+                    <Button
+                      icon
+                      variant="ghost"
+                      size="sm"
+                      aria-hidden
+                      tabIndex={-1}
+                    >
+                      <Icon use="pencil" size="sm" />
+                    </Button>
+                  </div>
                 </A>
-                <ul class="scrollbar-none -mx-4 flex snap-mandatory scroll-p-4 flex-row gap-3 overflow-auto px-4 py-2 [&>*]:snap-x">
-                  <li class="shrink-0">
-                    <Button size="sm" variant="secondary" class="flex gap-1">
-                      <Icon use="calendar-plus" size="sm" />
-                      Birth date
-                    </Button>
-                  </li>
-                  <li class="shrink-0">
-                    <Button size="sm" variant="secondary" class="flex gap-1">
-                      <Icon use="scales" size="sm" />
-                      Weight
-                    </Button>
-                  </li>
-                  <li class="shrink-0">
-                    <Button size="sm" variant="secondary" class="flex gap-1">
-                      <Icon use="carrot" size="sm" />
-                      Nutrition
-                    </Button>
-                  </li>
-                </ul>
+                <div class="mt-2 flex flex-col">
+                  <Text with="label-sm" class="ms-2">
+                    Be informed
+                  </Text>
+                  <ul class="scrollbar-none -mx-4 -mb-2 flex snap-mandatory scroll-p-4 flex-row gap-3 overflow-auto px-3 py-2 [&>*]:snap-x">
+                    <li class="shrink-0">
+                      <Button size="sm" variant="secondary" class="flex gap-1">
+                        <Icon use="calendar-plus" size="sm" />
+                        Birth date
+                      </Button>
+                    </li>
+                    <li class="shrink-0">
+                      <Button size="sm" variant="secondary" class="flex gap-1">
+                        <Icon use="scales" size="sm" />
+                        Weight
+                      </Button>
+                    </li>
+                    <li class="shrink-0">
+                      <Button size="sm" variant="secondary" class="flex gap-1">
+                        <Icon use="carrot" size="sm" />
+                        Nutrition
+                      </Button>
+                    </li>
+                  </ul>
+                </div>
               </Card>
             )}
           </For>
