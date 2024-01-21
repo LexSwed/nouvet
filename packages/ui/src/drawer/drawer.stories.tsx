@@ -18,17 +18,13 @@ export default meta;
 export const AnimalShortcut = () => {
   return (
     <Drawer.Root>
-      {() => (
-        <>
-          <Drawer.Trigger>Open Drawer</Drawer.Trigger>
-          <Drawer.Content>
-            <Form class="flex flex-col gap-4" data-corvu-no-drag>
-              <TextField label="Weight" />
-              <Button>Save</Button>
-            </Form>
-          </Drawer.Content>
-        </>
-      )}
+      <Drawer.Trigger popoverTarget="weight">Open Drawer</Drawer.Trigger>
+      <Drawer.Content id="weight">
+        <Form class="flex flex-col gap-4" data-corvu-no-drag>
+          <TextField label="Weight" />
+          <Button>Save</Button>
+        </Form>
+      </Drawer.Content>
     </Drawer.Root>
   );
 };
