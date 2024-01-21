@@ -57,10 +57,10 @@
     min-width: 20rem;
     transform: none;
     opacity: 1;
-    @starting-style {
-      &:popover-open {
-        transform: translateY(0.5rem);
-      }
+  }
+  @starting-style {
+    .popover:popover-open {
+      transform: translateY(0.5rem);
     }
   }
 }

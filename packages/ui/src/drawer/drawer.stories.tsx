@@ -18,11 +18,22 @@ export default meta;
 export const AnimalShortcut = () => {
   return (
     <Drawer.Root>
-      <Drawer.Trigger popoverTarget="weight">Open Drawer</Drawer.Trigger>
+      <Drawer.Trigger popoverTarget="weight" variant="secondary">
+        Add pet's weight info
+      </Drawer.Trigger>
       <Drawer.Content id="weight">
         <Form class="flex flex-col gap-4" data-corvu-no-drag>
           <TextField label="Weight" />
-          <Button>Save</Button>
+          <div class="flex flex-row gap-2 self-end">
+            <Button
+              variant="ghost"
+              popoverTargetAction="hide"
+              popoverTarget="weight"
+            >
+              Later
+            </Button>
+            <Button>Save</Button>
+          </div>
         </Form>
       </Drawer.Content>
     </Drawer.Root>

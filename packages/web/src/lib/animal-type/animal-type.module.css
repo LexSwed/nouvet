@@ -1,28 +1,6 @@
 @tailwind components;
 
 @layer components {
-  .wrapper {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: theme(spacing.2);
-    width: calc(100% + theme('spacing.4') * 2);
-    overflow: auto;
-
-    @apply scrollbar-none -mx-4 snap-x snap-mandatory scroll-px-4 px-4;
-  }
-
-  .card {
-    flex-basis: 8rem;
-    scroll-snap-align: start;
-    &:last-of-type {
-      scroll-snap-align: end;
-    }
-    &:has(input:checked) {
-      flex-basis: 9rem;
-    }
-  }
-
   .genderSwitch {
     &:has(input[value='male']:checked) {
       & .genderSwitchLabel:has(input[value='male']) {
