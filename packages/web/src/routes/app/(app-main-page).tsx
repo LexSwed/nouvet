@@ -73,7 +73,7 @@ const UserPets = (props: { familyId: number | undefined }) => {
   return (
     <Switch>
       <Match when={pets()?.length ?? 0 > 0}>
-        <ul class="scrollbar-none -mx-3 snap-mandatory scroll-p-3 overflow-auto px-3 py-2 [&>*]:snap-x">
+        <ul class="scrollbar-none -mx-3 grid snap-x snap-mandatory scroll-p-3 grid-flow-col grid-cols-[repeat(auto-fit,100%)] gap-2 overflow-auto px-3 py-2 [&>*]:snap-start">
           <For each={pets()}>
             {(pet) => (
               <Card role="listitem" variant="flat" class="flex flex-col gap-4">
@@ -81,7 +81,7 @@ const UserPets = (props: { familyId: number | undefined }) => {
                   href={`/app/pet/${pet.id}/`}
                   class="-m-4 flex flex-row items-start gap-4 p-4"
                 >
-                  <div class="bg-tertiary/10 -ms-2 -mt-2 size-24 shrink-0 rounded-md">
+                  <div class="bg-tertiary/10 text-tertiary grid size-24 shrink-0 place-content-center rounded-md">
                     <Show
                       when={pet.pictureUrl}
                       children={
@@ -91,6 +91,7 @@ const UserPets = (props: { familyId: number | undefined }) => {
                           alt=""
                         />
                       }
+                      fallback={<Icon use="camera-plus" size="md" />}
                     />
                   </div>
                   <div class="flex flex-row items-center gap-2">
@@ -106,27 +107,42 @@ const UserPets = (props: { familyId: number | undefined }) => {
                     </Button>
                   </div>
                 </A>
-                <div class="mt-2 flex flex-col">
-                  <Text with="label-sm" class="ms-2">
-                    Be informed
-                  </Text>
-                  <ul class="scrollbar-none -mx-4 -mb-2 flex snap-mandatory scroll-p-4 flex-row gap-3 overflow-auto px-3 py-2 [&>*]:snap-x">
-                    <li class="shrink-0">
-                      <Button size="sm" variant="secondary" class="flex gap-1">
+                <div class="flex flex-col">
+                  <ul class="scrollbar-none -mx-4 -mb-2 grid snap-mandatory scroll-p-4 grid-flow-col justify-start gap-3 overflow-auto px-4 py-2 [grid-auto-columns:minmax(auto,8rem)] [&>*]:snap-x">
+                    <li class="contents">
+                      <Button
+                        size="default"
+                        variant="ghost"
+                        class="bg-on-surface/5 flex h-auto flex-1 flex-col items-center gap-2 rounded-lg px-3 py-5"
+                      >
                         <Icon use="calendar-plus" size="sm" />
-                        Birth date
+                        <Text with="label-sm">
+                          {t('app.animal-shortcut.birth-date')}
+                        </Text>
                       </Button>
                     </li>
-                    <li class="shrink-0">
-                      <Button size="sm" variant="secondary" class="flex gap-1">
+                    <li class="contents">
+                      <Button
+                        size="default"
+                        variant="ghost"
+                        class="bg-on-surface/5 flex h-auto flex-1 flex-col items-center gap-2 rounded-lg px-3 py-5"
+                      >
                         <Icon use="scales" size="sm" />
-                        Weight
+                        <Text with="label-sm">
+                          {t('app.animal-shortcut.weight')}
+                        </Text>
                       </Button>
                     </li>
-                    <li class="shrink-0">
-                      <Button size="sm" variant="secondary" class="flex gap-1">
+                    <li class="contents">
+                      <Button
+                        size="default"
+                        variant="ghost"
+                        class="bg-on-surface/5 flex h-auto flex-1 flex-col items-center gap-2 rounded-lg px-3 py-5"
+                      >
                         <Icon use="carrot" size="sm" />
-                        Nutrition
+                        <Text with="label-sm">
+                          {t('app.animal-shortcut.nutrition')}
+                        </Text>
                       </Button>
                     </li>
                   </ul>
