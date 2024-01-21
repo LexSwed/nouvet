@@ -1,0 +1,19 @@
+@layer nou-ui {
+  .content {
+    transition-property: transform, display;
+    transition-behavior: allow-discrete;
+    &[data-opening] {
+      transition-duration: 400ms;
+    }
+    &[data-closing] {
+      transition-duration: 200ms;
+    }
+
+    &[data-open]::backdrop {
+      background-color: theme('colors.on-surface/30');
+      @apply fade-in-100 animate-in;
+      animation-duration: 700ms;
+      animation-fill-mode: forwards;
+    }
+  }
+}
