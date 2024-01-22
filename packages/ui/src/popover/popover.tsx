@@ -1,7 +1,10 @@
 import { mergeRefs } from '@solid-primitives/refs';
 import {
+  createEffect,
   createMemo,
   createSignal,
+  on,
+  onCleanup,
   splitProps,
   type Accessor,
   type ComponentProps,
@@ -48,6 +51,7 @@ type PopupProps<T extends ValidComponent> = Override<
     /** @default 'div' */
     as?: T | undefined;
     role?: 'menu' | 'dialog';
+    lazy?: boolean;
   } & VariantProps<typeof popupVariants>
 >;
 
@@ -57,8 +61,11 @@ const Popover = <T extends ValidComponent = 'div'>(ownProps: PopupProps<T>) => {
   const [rendered, setRendered] = createSignal(false);
 
   const [local, styles, floatingProps, props] = splitProps(
-    mergeDefaultProps(ownProps, { as: 'div' as T }) as PopupProps<'div'>,
-    ['id', 'ref', 'class', 'as', 'children'],
+    mergeDefaultProps(ownProps, {
+      as: 'div' as T,
+      role: 'dialog' as const,
+    }) as PopupProps<'div'>,
+    ['id', 'ref', 'class', 'as', 'role', 'children'],
     ['variant'],
     ['offset', 'placement'],
   );
@@ -71,12 +78,38 @@ const Popover = <T extends ValidComponent = 'div'>(ownProps: PopupProps<T>) => {
     return typeof child === 'function' ? child?.(rendered) : child;
   });
 
+  createEffect(
+    on(
+      () => local.id,
+      () => {
+        const trigger = Array.from(
+          document.querySelectorAll(`[popovertarget="${local.id}"]`),
+        ).find((button) => !popover()?.contains(button));
+        if (!(trigger instanceof HTMLElement)) return;
+        trigger.setAttribute('aria-haspopup', local.role!);
+        trigger.setAttribute('aria-controls', local.id);
+        const hideOnBlur = (event: FocusEvent) => {
+          if (!popover()?.contains(event.relatedTarget as Node)) {
+            popover()!.hidePopover();
+          }
+        };
+        trigger.addEventListener('focusout', hideOnBlur);
+        onCleanup(() => {
+          trigger.removeAttribute('aria-haspopup');
+          trigger.removeAttribute('aria-controls');
+          trigger.removeEventListener('focusout', hideOnBlur);
+        });
+      },
+    ),
+  );
+
   return (
     <Dynamic
       popover="auto"
       component={component()}
       {...props}
       id={local.id}
+      role={local.role}
       style={data.style}
       tabIndex={0}
       data-placement={data.placement}
@@ -85,7 +118,10 @@ const Popover = <T extends ValidComponent = 'div'>(ownProps: PopupProps<T>) => {
       onBeforeToggle={composeEventHandlers(props.onBeforeToggle, (event) => {
         setRendered(event.newState === 'open');
         if (!local.id) return;
-        const trigger = document.querySelector(`[popovertarget="${local.id}"]`);
+        // filter out potential close buttons inside the popover
+        const trigger = Array.from(
+          document.querySelectorAll(`[popovertarget="${local.id}"]`),
+        ).find((button) => !popover()?.contains(button));
         if (!trigger) return;
         trigger.setAttribute(
           'aria-expanded',

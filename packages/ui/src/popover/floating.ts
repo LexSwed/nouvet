@@ -68,33 +68,31 @@ export function createFloating<
     ) {
       // avoids "ResizeObserver loop completed with undelivered notifications."
       // and invalid initial positioning (initial calculations happening multiple times, we only care about the last one);
-      batch(async () => {
-        try {
-          const currentData = await computePosition(
-            currentReference,
-            currentFloating,
-            {
-              middleware: [
-                inline(),
-                shift({ padding: 16 }),
-                flip({ padding: 16 }),
-                offsetMiddleware(offset()),
-              ],
-              placement: placement(),
-              strategy,
-            },
-          );
-          if (
-            currentData &&
-            currentFloating === floating() &&
-            currentReference === reference()
-          ) {
-            setData(currentData);
-          }
-        } catch (error) {
-          console.error(error);
+      try {
+        const currentData = await computePosition(
+          currentReference,
+          currentFloating,
+          {
+            middleware: [
+              inline(),
+              shift({ padding: 16 }),
+              flip({ padding: 16 }),
+              offsetMiddleware(offset()),
+            ],
+            placement: placement(),
+            strategy,
+          },
+        );
+        if (
+          currentData &&
+          currentFloating === floating() &&
+          currentReference === reference()
+        ) {
+          setData(currentData);
         }
-      });
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 
@@ -102,7 +100,11 @@ export function createFloating<
     const currentReference = reference();
     const currentFloating = floating();
     if (currentReference && currentFloating) {
-      const clear = autoUpdate(currentReference, currentFloating, update);
+      const clear = autoUpdate(currentReference, currentFloating, () =>
+        batch(() => {
+          update();
+        }),
+      );
       onCleanup(clear);
     }
   });

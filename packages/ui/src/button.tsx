@@ -5,7 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { Spinner } from './spinner';
 import { tw } from './tw';
-import { composeEventHandlers, mergeDefaultProps } from './utils';
+import { mergeDefaultProps } from './utils';
 
 const buttonVariants = cva(
   'relative inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-4 focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50',
@@ -94,17 +94,7 @@ const Button = (ownProps: ButtonProps) => {
       component="button"
       aria-label={props.label}
       title={props.title}
-      aria-haspopup={props.popoverTarget ? 'true' : undefined}
-      aria-controls={props.popoverTarget}
       {...props}
-      onFocusOut={composeEventHandlers(props.onFocusOut, (event) => {
-        if (props.popoverTarget) {
-          const popover = document.getElementById(props.popoverTarget);
-          if (!popover?.contains(event.relatedTarget as Node)) {
-            popover?.hidePopover();
-          }
-        }
-      })}
     />
   );
 };

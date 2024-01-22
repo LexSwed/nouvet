@@ -21,7 +21,10 @@ export const AnimalShortcut = () => {
       <Drawer.Trigger popoverTarget="weight" variant="secondary">
         Add pet's weight info
       </Drawer.Trigger>
-      <Drawer.Content id="weight">
+      <Drawer.Content id="weight" aria-labelledby="weight-popup-label">
+        <span id="weight-popup-label" class="sr-only">
+          Add pet's weight info
+        </span>
         <Form
           class="flex flex-col gap-4"
           onSubmit={(e) => {

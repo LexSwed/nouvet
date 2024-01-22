@@ -31,6 +31,7 @@ export const SimpleMenu = () => {
 
 export const LazyRender = () => {
   const AsyncOrHeavyComponent = () => {
+    console.log('rendered');
     return <div>This won't be rendered until the popover is open</div>;
   };
   return (

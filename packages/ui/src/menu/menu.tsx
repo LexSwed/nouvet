@@ -10,7 +10,7 @@ interface MenuProps
   extends Omit<ComponentProps<'div'>, 'children' | 'role'>,
     Pick<
       ComponentProps<typeof Popover>,
-      'placement' | 'offset' | 'children' | 'role'
+      'placement' | 'offset' | 'children' | 'role' | 'lazy'
     > {
   id: string;
 }

@@ -1,5 +1,5 @@
 import { createMediaQuery } from '@solid-primitives/media';
-import { Show, type ComponentProps } from 'solid-js';
+import { Show, splitProps, type ComponentProps } from 'solid-js';
 import CorvuDrawer from 'corvu/drawer';
 
 import { Button } from '../button';
@@ -34,9 +34,10 @@ const Trigger = (props: ComponentProps<typeof Button>) => {
 
 const DrawerContent = (ownProps: ComponentProps<'div'>) => {
   const context = CorvuDrawer.useDialogContext();
+  const [local, props] = splitProps(ownProps, ['children', 'class']);
   return (
     <CorvuDrawer.Content
-      {...(ownProps as ComponentProps<typeof CorvuDrawer.Content>)}
+      {...(props as ComponentProps<typeof CorvuDrawer.Content>)}
       popover="auto"
       onToggle={composeEventHandlers(ownProps.onToggle, (event) => {
         if (event.newState === 'open') {
@@ -45,8 +46,13 @@ const DrawerContent = (ownProps: ComponentProps<'div'>) => {
           context.setOpen(false);
         }
       })}
-      class={tw(cssStyles.drawer, ownProps.class)}
-    />
+      class={tw(cssStyles.drawer, local.class)}
+    >
+      <div class="grid w-full place-content-center py-2">
+        <div class="bg-on-surface/30 h-1 w-8 rounded-full" />
+      </div>
+      {local.children}
+    </CorvuDrawer.Content>
   );
 };
 
