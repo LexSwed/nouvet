@@ -5,6 +5,7 @@ import CorvuDrawer from 'corvu/drawer';
 import { Button } from '../button';
 import { Popover } from '../popover';
 import { tw } from '../tw';
+import { composeEventHandlers } from '../utils';
 
 import cssStyles from './drawer.module.css';
 
@@ -31,22 +32,35 @@ const Trigger = (props: ComponentProps<typeof Button>) => {
   );
 };
 
-const Content = (
-  ownProps: ComponentProps<typeof CorvuDrawer.Content> & { id: string },
-) => {
+const Content = (ownProps: ComponentProps<'div'> & { id: string }) => {
   const [local, props] = splitProps(ownProps, ['class']);
   const isSmall = createMediaQuery('(max-width: 600px)');
+  const context = CorvuDrawer.useDialogContext();
   return (
     <Show
       when={isSmall()}
       children={
         <CorvuDrawer.Content
-          popover
-          {...props}
+          as="div"
+          popover="auto"
+          {...(props as ComponentProps<typeof CorvuDrawer.Content>)}
+          onToggle={composeEventHandlers(props.onToggle, (event) => {
+            if (event.newState === 'open') {
+              context.setOpen(true);
+            } else {
+              context.setOpen(false);
+            }
+          })}
           class={tw(cssStyles.content, cssStyles.drawer, local.class)}
         />
       }
-      fallback={<Popover role="dialog" class={tw(local.class)} {...props} />}
+      fallback={
+        <Popover
+          id={props.id}
+          class={tw(cssStyles.drawer, local.class)}
+          role="dialog"
+        />
+      }
     />
   );
 };
