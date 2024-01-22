@@ -1,5 +1,5 @@
 import { createMediaQuery } from '@solid-primitives/media';
-import { Show, splitProps, type ComponentProps } from 'solid-js';
+import { Show, type ComponentProps } from 'solid-js';
 import CorvuDrawer from 'corvu/drawer';
 
 import { Button } from '../button';
@@ -32,32 +32,34 @@ const Trigger = (props: ComponentProps<typeof Button>) => {
   );
 };
 
-const Content = (ownProps: ComponentProps<'div'> & { id: string }) => {
-  const [local, props] = splitProps(ownProps, ['class']);
-  const isSmall = createMediaQuery('(max-width: 600px)');
+const DrawerContent = (ownProps: ComponentProps<'div'>) => {
   const context = CorvuDrawer.useDialogContext();
+  return (
+    <CorvuDrawer.Content
+      {...(ownProps as ComponentProps<typeof CorvuDrawer.Content>)}
+      popover="auto"
+      onToggle={composeEventHandlers(ownProps.onToggle, (event) => {
+        if (event.newState === 'open') {
+          context.setOpen(true);
+        } else {
+          context.setOpen(false);
+        }
+      })}
+      class={tw(cssStyles.drawer, ownProps.class)}
+    />
+  );
+};
+
+const Content = (ownProps: ComponentProps<'div'> & { id: string }) => {
+  const isSmall = createMediaQuery('(max-width: 600px)');
   return (
     <Show
       when={isSmall()}
-      children={
-        <CorvuDrawer.Content
-          as="div"
-          popover="auto"
-          {...(props as ComponentProps<typeof CorvuDrawer.Content>)}
-          onToggle={composeEventHandlers(props.onToggle, (event) => {
-            if (event.newState === 'open') {
-              context.setOpen(true);
-            } else {
-              context.setOpen(false);
-            }
-          })}
-          class={tw(cssStyles.content, cssStyles.drawer, local.class)}
-        />
-      }
+      children={<DrawerContent {...ownProps} />}
       fallback={
         <Popover
-          id={props.id}
-          class={tw(cssStyles.drawer, local.class)}
+          {...ownProps}
+          class={tw(cssStyles.popover, ownProps.class)}
           role="dialog"
         />
       }

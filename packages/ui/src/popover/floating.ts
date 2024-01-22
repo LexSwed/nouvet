@@ -1,10 +1,17 @@
-import { createEffect, createSignal, onCleanup, type JSX } from 'solid-js';
+import {
+  batch,
+  createEffect,
+  createSignal,
+  onCleanup,
+  type JSX,
+} from 'solid-js';
 import {
   autoUpdate,
   computePosition,
   flip,
   inline,
   offset as offsetMiddleware,
+  shift,
   type ComputePositionConfig,
   type ComputePositionReturn,
   type OffsetOptions,
@@ -52,34 +59,42 @@ export function createFloating<
   async function update() {
     const currentReference = reference();
     const currentFloating = floating();
-    if (currentReference && currentFloating) {
-      try {
-        const currentData = await computePosition(
-          currentReference,
-          currentFloating,
-          {
-            middleware: [
-              inline(),
-              flip({ padding: 8 }),
-              offsetMiddleware(offset()),
-            ],
-            placement: placement(),
-            strategy,
-          },
-        );
-        if (
-          currentData &&
-          currentFloating === floating() &&
-          currentReference === reference()
-        ) {
-          // avoids "ResizeObserver loop completed with undelivered notifications."
-          requestAnimationFrame(() => {
+    if (
+      currentReference &&
+      currentFloating &&
+      (currentFloating.getAttribute('popover')
+        ? currentFloating.matches(':popover-open')
+        : true)
+    ) {
+      // avoids "ResizeObserver loop completed with undelivered notifications."
+      // and invalid initial positioning (initial calculations happening multiple times, we only care about the last one);
+      batch(async () => {
+        try {
+          const currentData = await computePosition(
+            currentReference,
+            currentFloating,
+            {
+              middleware: [
+                inline(),
+                shift({ padding: 16 }),
+                flip({ padding: 16 }),
+                offsetMiddleware(offset()),
+              ],
+              placement: placement(),
+              strategy,
+            },
+          );
+          if (
+            currentData &&
+            currentFloating === floating() &&
+            currentReference === reference()
+          ) {
             setData(currentData);
-          });
+          }
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
-      }
+      });
     }
   }
 
