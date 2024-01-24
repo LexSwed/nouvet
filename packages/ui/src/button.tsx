@@ -7,18 +7,19 @@ import { Spinner } from './spinner';
 import { tw } from './tw';
 import { mergeDefaultProps } from './utils';
 
-const buttonVariants = cva(
+export const buttonVariants = cva(
   'relative inline-flex cursor-default items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-4 focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
         default:
-          'bg-primary text-on-primary intent:bg-primary/90 focus-visible:outline-primary',
+          'bg-primary text-on-primary intent:bg-primary/90 outline-primary',
         destructive:
-          'bg-destructive text-on-destructive intent:bg-destructive/90 focus-visible:outline-destructive',
-        outline: 'border-outline text-on-surface border bg-transparent',
+          'bg-destructive text-on-destructive intent:bg-destructive/90 outline-destructive',
+        outline:
+          'border-outline text-on-surface outline-primary border bg-transparent',
         secondary:
-          'bg-tertiary-container text-on-tertiary-container intent:bg-tertiary-container/80 focus-visible:outline-tertiary rounded-full',
+          'bg-tertiary-container text-on-tertiary-container intent:bg-tertiary-container/80 outline-tertiary rounded-full',
         ghost: 'hover:bg-on-surface/5 focus:bg-on-surface/8 text-on-surface',
         link: 'text-primary intent:underline underline-offset-4',
       },

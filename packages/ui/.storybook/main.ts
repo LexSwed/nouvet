@@ -1,3 +1,4 @@
+import path from 'path';
 import type { StorybookConfig } from 'storybook-solidjs-vite';
 import { mergeConfig } from 'vite';
 import viteSvgSpriteWrapper from 'vite-svg-sprite-wrapper';
@@ -18,7 +19,7 @@ const config = {
           icons: '../config/icons/source/*.svg',
           outputDir: '../config/icons',
           generateType: true,
-          typeOutputDir: '../../ui/src/icon',
+          typeOutputDir: './src/icon',
           sprite: {
             shape: {
               dimension: {

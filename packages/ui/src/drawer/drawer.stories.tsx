@@ -2,6 +2,8 @@ import type { Meta } from 'storybook-solidjs';
 
 import { Button } from '../button';
 import { Form } from '../form';
+import { SegmentedButton } from '../radio';
+import { Text } from '../text';
 import { TextField } from '../text-field';
 
 import { Drawer } from './drawer';
@@ -37,6 +39,13 @@ export const AnimalShortcut = () => {
             }
           }}
         >
+          <div class="flex items-center gap-4 self-end">
+            <Text with="label-sm">Unit</Text>
+            <div class="grid grid-cols-2">
+              <SegmentedButton name="unit" label="Lbs" />
+              <SegmentedButton name="unit" label="Kg" />
+            </div>
+          </div>
           <TextField
             label="Weight"
             type="number"

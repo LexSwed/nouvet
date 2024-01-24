@@ -4,9 +4,9 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { tw } from '../tw';
 
-import { type SvgIcons } from './svg-icons';
+import type { SvgIcons } from './svg-icons.d.ts';
 
-export type { SvgIcons } from './svg-icons';
+export type { SvgIcons } from './svg-icons.d.ts';
 
 const iconVariants = cva('inline shrink-0 select-none', {
   variants: {

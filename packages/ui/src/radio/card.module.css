@@ -26,7 +26,6 @@
     }
   }
   .input {
-    @apply sr-only;
     &:focus-visible + .wrapper .label {
       outline: 2px auto currentColor;
       outline-offset: 4px;
