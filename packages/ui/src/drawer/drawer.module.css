@@ -23,19 +23,18 @@
       display: none;
     }
     &[data-opening] {
-      transition-duration: 400ms;
+      transition-duration: 0.3s;
     }
     &[data-closing] {
-      transition-duration: 200ms;
-    }
-    &[data-closing]::backdrop {
-      transition: all 0.2s ease-in allow-discrete;
-      opacity: 0;
+      transition-duration: 0.1s;
+      &::backdrop {
+        opacity: 0;
+      }
     }
 
     &::backdrop {
       background-color: theme('colors.on-surface/0.3');
-      transition: all 0.3s ease-out allow-discrete;
+      transition: opacity 0.2s ease-out allow-discrete;
       opacity: 1;
     }
   }
