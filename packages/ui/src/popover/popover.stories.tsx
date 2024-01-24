@@ -1,7 +1,7 @@
 import { type Meta } from 'storybook-solidjs';
 
 import { Avatar } from '../avatar';
-import { Button, ButtonLink } from '../button';
+import { Button } from '../button';
 import { Icon } from '../icon/icon';
 import { MenuItem, MenuList } from '../menu';
 
@@ -25,21 +25,19 @@ export const AccountMenu = () => {
         id="settings"
         placement="bottom-end"
         offset={(state) => ({
-          mainAxis:
-            -1 * (state.elements.reference as HTMLElement).offsetHeight - 12,
-          crossAxis: -12,
+          mainAxis: -(state.elements.reference as HTMLElement).offsetWidth - 12,
+          crossAxis: 12,
         })}
-        class="flex flex-col gap-4"
+        class="flex w-[240px] flex-col gap-4"
       >
-        <ButtonLink
-          variant="link"
-          href="/"
+        <a
+          href="#"
           link={false}
-          class="flex items-center justify-start gap-4 p-3"
+          class="text-primary flex w-full items-center justify-start gap-4 ps-3"
         >
-          <Avatar class="-ms-3" name="John Doe" avatarUrl={null} />
           John Doe
-        </ButtonLink>
+          <Avatar name="John Doe" class="ms-auto" avatarUrl={null} />
+        </a>
         <MenuList>
           <MenuItem>Account</MenuItem>
           <MenuItem>Install for offline</MenuItem>

@@ -31,7 +31,9 @@
 }
 
 @layer base {
-  :root {
+  :root,
+  ::backdrop,
+  ::selection {
     --nou-white: 0 0% 100%;
     --nou-black: 0 0% 0%;
     --nou-primary: 349 50.9% 43.1%;

@@ -1,82 +1,83 @@
-import { createMediaQuery } from '@solid-primitives/media';
-import { Show, splitProps, type ComponentProps } from 'solid-js';
-import CorvuDrawer from 'corvu/drawer';
+import { mergeRefs } from '@solid-primitives/refs';
+import {
+  Show,
+  splitProps,
+  type ComponentProps,
+  type ParentProps,
+} from 'solid-js';
+import Corvu from 'corvu/drawer';
 
-import { Button } from '../button';
-import { Popover } from '../popover';
+import { type Popup } from '../popover/popover';
 import { tw } from '../tw';
 import { composeEventHandlers } from '../utils';
 
 import cssStyles from './drawer.module.css';
 
-const Root = (props: ComponentProps<typeof CorvuDrawer.Root>) => {
-  const isSmall = createMediaQuery('(max-width: 600px)');
-  return (
-    <Show
-      when={isSmall()}
-      children={<CorvuDrawer.Root {...props} />}
-      fallback={<>{props.children}</>}
-    />
-  );
-};
-
-const Trigger = (props: ComponentProps<typeof Button>) => {
-  const isSmall = createMediaQuery('(max-width: 600px)');
-  return (
-    <Show
-      when={isSmall()}
-      // @ts-expect-error Trigger props mismatch with custom Button
-      children={<CorvuDrawer.Trigger {...props} as={Button} />}
-      fallback={<Button {...props} />}
-    />
-  );
-};
-
-const DrawerContent = (ownProps: ComponentProps<'div'>) => {
-  const context = CorvuDrawer.useDialogContext();
+const Content = (ownProps: ComponentProps<'div'>) => {
   const [local, props] = splitProps(ownProps, ['children', 'class']);
+  const context = Corvu.useDialogContext();
+
   return (
-    <CorvuDrawer.Content
-      {...(props as ComponentProps<typeof CorvuDrawer.Content>)}
+    <Corvu.Content
+      as="div"
       popover="auto"
-      onToggle={composeEventHandlers(ownProps.onToggle, (event) => {
+      role="dialog"
+      forceMount
+      tabIndex={0}
+      class={tw(cssStyles.drawer, local.class)}
+      onBeforeToggle={composeEventHandlers(props.onBeforeToggle, (event) => {
+        context.setOpen(event.newState === 'open');
+      })}
+      onToggle={composeEventHandlers(props.onToggle, (event) => {
         if (event.newState === 'open') {
-          context.setOpen(true);
-        } else {
-          context.setOpen(false);
+          (event.currentTarget as HTMLElement).focus();
         }
       })}
-      class={tw(cssStyles.drawer, local.class)}
+      onFocusOut={composeEventHandlers(props.onFocusOut, (event) => {
+        if (
+          !(event.currentTarget as HTMLElement).contains(
+            event.relatedTarget as Node,
+          )
+        ) {
+          (event.currentTarget as HTMLElement).hidePopover();
+        }
+      })}
+      {...(props as ComponentProps<typeof Corvu.Content>)}
     >
-      <div class="grid w-full place-content-center py-2">
-        <div class="bg-on-surface/30 h-1 w-8 rounded-full" />
-      </div>
-      {local.children}
-    </CorvuDrawer.Content>
+      <Show when={context.open()}>
+        <div class="grid w-full place-content-center pb-3 pt-2">
+          <div class="bg-on-surface/30 h-1 w-8 rounded-full" />
+        </div>
+        {local.children}
+      </Show>
+    </Corvu.Content>
   );
 };
 
-const Content = (ownProps: ComponentProps<'div'> & { id: string }) => {
-  const isSmall = createMediaQuery('(max-width: 600px)');
+const Drawer = (
+  ownProps: ParentProps<Omit<ComponentProps<typeof Popup>, 'children'>>,
+) => {
+  let popoverEl: HTMLElement | null;
   return (
-    <Show
-      when={isSmall()}
-      children={<DrawerContent {...ownProps} />}
-      fallback={
-        <Popover
-          {...ownProps}
-          class={tw(cssStyles.popover, ownProps.class)}
-          role="dialog"
-        />
-      }
-    />
+    <Corvu.Root
+      closeOnEscapeKeyDown={false}
+      closeOnOutsidePointerDown={false}
+      trapFocus={false}
+      restoreFocus={false}
+      role="dialog"
+      onOpenChange={(open) => {
+        // swiped away
+        if (!open && popoverEl?.matches(':popover-open')) {
+          popoverEl.hidePopover();
+        }
+      }}
+    >
+      <Content
+        {...ownProps}
+        ref={mergeRefs(ownProps.ref, (el: HTMLElement) => (popoverEl = el))}
+      />
+    </Corvu.Root>
   );
-};
-
-const Drawer = {
-  Root,
-  Trigger,
-  Content,
 };
 
 export { Drawer };

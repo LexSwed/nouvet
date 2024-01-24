@@ -8,10 +8,7 @@ import * as cssStyle from './menu.module.css';
 
 interface MenuProps
   extends Omit<ComponentProps<'div'>, 'children' | 'role'>,
-    Pick<
-      ComponentProps<typeof Popover>,
-      'placement' | 'offset' | 'children' | 'role' | 'lazy'
-    > {
+    Pick<ComponentProps<typeof Popover>, 'placement' | 'offset' | 'children'> {
   id: string;
 }
 
