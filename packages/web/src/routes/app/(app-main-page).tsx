@@ -3,9 +3,9 @@ import { A, createAsync, type RouteDefinition } from '@solidjs/router';
 import { For, lazy, Match, Show, Suspense, Switch } from 'solid-js';
 import { Button, ButtonLink, Card, Icon, Text } from '@nou/ui';
 
+import { getUserFamily, getUserPets } from '~/api/user';
 import { AccountMenu } from '~/lib/account-menu';
 import { createTranslator, getDictionary } from '~/server/i18n';
-import { getUserFamily, getUserPets } from '~/server/queries/user';
 
 const CreateNewPetForm = lazy(() => import('~/lib/create-new-pet-form'));
 

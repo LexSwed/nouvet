@@ -2,10 +2,10 @@ import { useSubmission } from '@solidjs/router';
 import { Show, type ParentProps } from 'solid-js';
 import { Button, Card, Form, Text, TextField } from '@nou/ui';
 
+import { createPet } from '~/api/pet';
 import { AnimalTypeSelect } from '~/lib/animal-type';
 import { GenderSwitch } from '~/lib/animal-type/animal-type';
 import { createTranslator } from '~/server/i18n';
-import { createPet } from '~/server/queries/user';
 
 interface CreateNewPetForm extends ParentProps {
   minimal: boolean;
