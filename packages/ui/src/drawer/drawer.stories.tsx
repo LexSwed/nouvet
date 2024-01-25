@@ -10,8 +10,7 @@ import { Drawer } from './drawer';
 
 const meta = {
   title: 'Drawer',
-  // @ts-expect-error types mismatch
-  component: Drawer.Root,
+  component: Drawer,
   argTypes: {},
 } satisfies Meta<typeof Drawer>;
 
@@ -40,11 +39,13 @@ export const AnimalShortcut = () => {
           }}
         >
           <div class="flex items-center gap-4 self-end">
-            <Text with="label-sm">Unit</Text>
-            <div class="grid grid-cols-2">
+            <Text with="label-sm" as="label" for="weight-unit">
+              Unit
+            </Text>
+            <fieldset id="weight-unit" class="grid grid-cols-2">
               <SegmentedButton name="unit" label="Lbs" />
               <SegmentedButton name="unit" label="Kg" />
-            </div>
+            </fieldset>
           </div>
           <TextField
             label="Weight"
