@@ -1,13 +1,16 @@
+import { createMediaQuery } from '@solid-primitives/media';
 import { mergeRefs } from '@solid-primitives/refs';
 import {
+  Match,
   Show,
   splitProps,
+  Switch,
   type ComponentProps,
   type ParentProps,
 } from 'solid-js';
 import Corvu from 'corvu/drawer';
 
-import { type Popup } from '../popover/popover';
+import { Popover, type Popup } from '../popover/popover';
 import { tw } from '../tw';
 import { composeEventHandlers } from '../utils';
 
@@ -20,9 +23,9 @@ const Content = (ownProps: ComponentProps<'div'>) => {
   return (
     <Corvu.Content
       as="div"
+      forceMount
       popover="auto"
       role="dialog"
-      forceMount
       tabIndex={0}
       class={tw(cssStyles.drawer, local.class)}
       onBeforeToggle={composeEventHandlers(props.onBeforeToggle, (event) => {
@@ -54,29 +57,36 @@ const Content = (ownProps: ComponentProps<'div'>) => {
   );
 };
 
-const Drawer = (
-  ownProps: ParentProps<Omit<ComponentProps<typeof Popup>, 'children'>>,
-) => {
+const Drawer = (ownProps: ComponentProps<typeof Popup> & ParentProps) => {
   let popoverEl: HTMLElement | null;
+  // @screen(sm)
+  const isDesktop = createMediaQuery('(max-width: 640px)');
   return (
-    <Corvu.Root
-      closeOnEscapeKeyDown={false}
-      closeOnOutsidePointerDown={false}
-      trapFocus={false}
-      restoreFocus={false}
-      role="dialog"
-      onOpenChange={(open) => {
-        // swiped away
-        if (!open && popoverEl?.matches(':popover-open')) {
-          popoverEl.hidePopover();
-        }
-      }}
-    >
-      <Content
-        {...ownProps}
-        ref={mergeRefs(ownProps.ref, (el: HTMLElement) => (popoverEl = el))}
-      />
-    </Corvu.Root>
+    <Switch>
+      <Match when={!isDesktop()}>
+        <Popover {...ownProps} />
+      </Match>
+      <Match when={isDesktop()}>
+        <Corvu.Root
+          closeOnEscapeKeyDown={false}
+          closeOnOutsidePointerDown={false}
+          trapFocus={false}
+          restoreFocus={false}
+          role="dialog"
+          onOpenChange={(open) => {
+            // swiped away
+            if (!open && popoverEl?.matches(':popover-open')) {
+              popoverEl.hidePopover();
+            }
+          }}
+        >
+          <Content
+            {...ownProps}
+            ref={mergeRefs(ownProps.ref, (el: HTMLElement) => (popoverEl = el))}
+          />
+        </Corvu.Root>
+      </Match>
+    </Switch>
   );
 };
 

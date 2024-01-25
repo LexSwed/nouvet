@@ -27,7 +27,7 @@ export const AnimalShortcut = () => {
           Add pet's weight info
         </span>
         <Form
-          class="flex flex-col gap-4"
+          class="flex flex-col gap-4 sm:min-w-[340px]"
           onSubmit={(e) => {
             e.preventDefault();
             console.log('valid!');
@@ -54,7 +54,7 @@ export const AnimalShortcut = () => {
             step="0.1"
             name="weight"
           />
-          <div class="flex flex-row gap-2 self-end">
+          <div class="grid grid-cols-2 gap-2 sm:flex sm:self-end">
             <Button
               variant="ghost"
               popoverTargetAction="hide"
