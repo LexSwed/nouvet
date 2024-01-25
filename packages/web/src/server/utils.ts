@@ -1,5 +1,3 @@
-'use server';
-
 import { flatten as valiFlatten, type ValiError } from 'valibot';
 
 import { getDictionary } from '~/server/i18n';

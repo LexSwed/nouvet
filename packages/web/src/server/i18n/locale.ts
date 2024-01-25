@@ -1,9 +1,10 @@
-import { type RequestEvent } from 'solid-js/web';
-import { getHeader } from 'vinxi/server';
+import { getHeader, type FetchEvent } from '@solidjs/start/server';
 
 import { getRequestUser } from '~/server/auth/user-session';
 
-export async function getLocale(event: RequestEvent): Promise<Intl.Locale> {
+import { acceptedLocaleLanguageTag } from './index';
+
+export async function getLocale(event: FetchEvent): Promise<Intl.Locale> {
   try {
     for (const fn of [header, cookie]) {
       const locale = await fn(event);
@@ -23,7 +24,7 @@ export async function getLocale(event: RequestEvent): Promise<Intl.Locale> {
 /**
  * Attempts to get preferred language from cookies, for when the user manually updated it from the UI.
  */
-async function cookie(event: RequestEvent): Promise<Intl.Locale | null> {
+async function cookie(event: FetchEvent): Promise<Intl.Locale | null> {
   try {
     const user = await getRequestUser(event);
     return new Intl.Locale(user?.locale);
@@ -37,7 +38,7 @@ async function cookie(event: RequestEvent): Promise<Intl.Locale | null> {
  * Attempts to get preferred language from Accept-Language header.
  * Verifies it's a correct language. Matches only to one of the supported locales.
  */
-function header(event: RequestEvent): Intl.Locale | null {
+function header(event: FetchEvent): Intl.Locale | null {
   /** @example en-GB,en;q=0.9,en-US;q=0.8,es;q=0.7. */
   const rawHeader = getHeader(event, 'Accept-Language');
   if (!rawHeader) return null;
@@ -67,8 +68,9 @@ function header(event: RequestEvent): Intl.Locale | null {
     .toSorted((a, b) => b[1] - a[1])
     .find(([locale]) => {
       try {
-        // @ts-expect-error thanks TypeScript
-        return acceptedLocaleLanguageTag.includes(locale.language);
+        return acceptedLocaleLanguageTag.includes(
+          locale.language as (typeof acceptedLocaleLanguageTag)[number],
+        );
       } catch (error) {
         return false;
       }
@@ -79,7 +81,3 @@ function header(event: RequestEvent): Intl.Locale | null {
   }
   return null;
 }
-
-export const acceptedLocaleLanguageTag = ['en', 'es'] as const satisfies Array<
-  Intl.Locale['language']
->;

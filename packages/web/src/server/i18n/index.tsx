@@ -3,7 +3,6 @@ import { cache, createAsync } from '@solidjs/router';
 import { type JSX, type ParentProps } from 'solid-js';
 import { getRequestEvent } from 'solid-js/web';
 
-import type { acceptedLocaleLanguageTag } from './locale';
 import type AppDict from './locales/en/app.json';
 import type CommonDict from './locales/en/common.json';
 import type ErrorsDict from './locales/en/errors.json';
@@ -20,6 +19,10 @@ type NamespaceMap = {
   errors: typeof ErrorsDict;
 };
 type Namespace = keyof NamespaceMap;
+
+export const acceptedLocaleLanguageTag = ['en', 'es'] as const satisfies Array<
+  Intl.Locale['language']
+>;
 
 const localeFiles = import.meta.glob('./locales/*/*.json', {
   import: 'default',

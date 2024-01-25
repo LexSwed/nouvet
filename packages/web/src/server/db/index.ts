@@ -10,8 +10,6 @@ const sqlite = new Database(env.DB);
 let _db: BetterSQLite3Database | null = null;
 
 export const useDb = () => {
-  'use server';
-
   if (!_db) {
     _db = drizzle(sqlite, { logger: env.DEV });
   }

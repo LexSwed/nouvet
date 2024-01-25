@@ -9,6 +9,10 @@ import { validateAuthSession } from './server/auth/user-session';
 import { RETURN_URL_COOKIE } from './server/const';
 import { getLocale } from './server/i18n/locale';
 
+export default createMiddleware({
+  onRequest: [locale, checkUserAuth],
+});
+
 async function locale(event: FetchEvent) {
   event.locals.locale = await getLocale(event);
 }
@@ -41,7 +45,3 @@ async function checkUserAuth(event: FetchEvent) {
   }
   return;
 }
-
-export default createMiddleware({
-  onRequest: [locale, checkUserAuth],
-});

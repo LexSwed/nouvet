@@ -9,7 +9,7 @@ import { object, parse, picklist, string, type Output } from 'valibot';
 import { sendRedirect, updateSession, useSession } from 'vinxi/server';
 
 import { useLucia } from '~/server/auth/lucia';
-import { type DatabaseUserProfile } from '~/server/db/schema';
+import type { DatabaseUserProfile } from '~/server/db/schema';
 import { env } from '~/server/env';
 
 const SESSION_COOKIE = '_nouvet_user';
