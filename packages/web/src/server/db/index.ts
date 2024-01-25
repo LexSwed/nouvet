@@ -1,5 +1,3 @@
-'use server';
-
 import Database from 'better-sqlite3';
 import {
   drizzle,

@@ -1,5 +1,3 @@
-'use server';
-
 import { type RequestEvent } from 'solid-js/web';
 import { getHeader } from 'vinxi/server';
 

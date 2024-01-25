@@ -1,5 +1,3 @@
-'use server';
-
 import { boolean, object, parse, picklist, string } from 'valibot';
 
 const schema = object({

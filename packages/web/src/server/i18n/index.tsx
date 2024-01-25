@@ -3,7 +3,7 @@ import { cache, createAsync } from '@solidjs/router';
 import { type JSX, type ParentProps } from 'solid-js';
 import { getRequestEvent } from 'solid-js/web';
 
-import { getLocale, type acceptedLocaleLanguageTag } from './locale';
+import type { acceptedLocaleLanguageTag } from './locale';
 import type AppDict from './locales/en/app.json';
 import type CommonDict from './locales/en/common.json';
 import type ErrorsDict from './locales/en/errors.json';
@@ -21,20 +21,22 @@ type NamespaceMap = {
 };
 type Namespace = keyof NamespaceMap;
 
+const localeFiles = import.meta.glob('./locales/*/*.json', {
+  import: 'default',
+});
+
 async function fetchDictionary<T extends Namespace>(
   locale: Locale = 'en',
   namespace: T,
 ) {
-  const commonDict = await (import(`./locales/${locale}/common.json`).then(
-    (commonModule) => commonModule.default,
-  ) as Promise<typeof CommonDict>);
+  const commonDict = (await localeFiles[
+    `./locales/${locale}/common.json`
+  ]()) as typeof CommonDict;
 
   const commonPrefixedDict = prefix(commonDict, 'common');
-  const routeModuleDict = await (import(
+  const routeModuleDict = (await localeFiles[
     `./locales/${locale}/${namespace}.json`
-  ).then((namespaceModule) => namespaceModule.default) as Promise<
-    NamespaceMap[T]
-  >);
+  ]()) as NamespaceMap[T];
   const modulePrefixedDict = prefix(routeModuleDict, namespace);
 
   return {
@@ -52,8 +54,11 @@ export const getDictionary = cache(
         "Wrong execution environment. Check if 'use server' directive is correctly applied.",
       );
     }
-    const locale = await getLocale(event);
-    return fetchDictionary(locale.language as Locale, namespace);
+    const { locale } = event.locals;
+    return fetchDictionary(
+      (locale as Intl.Locale).language as Locale,
+      namespace,
+    );
   },
   'translations',
 );

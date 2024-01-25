@@ -20,6 +20,7 @@ export default function WWW() {
               href="/app"
               size="cta"
               link={false}
+              preload={false}
               class="relative -me-12 mt-16 flex shrink-0 items-center gap-4 self-start text-lg sm:me-0"
             >
               {t('www.cta-start')}
