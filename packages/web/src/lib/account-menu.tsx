@@ -10,7 +10,7 @@ import {
 } from '@nou/ui';
 import { Popover } from '@nou/ui/src/popover';
 
-import { createTranslator } from '~/i18n';
+import { createTranslator } from '~/server/i18n';
 
 interface AccountMenu {
   name: string;

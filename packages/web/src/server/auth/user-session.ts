@@ -1,3 +1,5 @@
+'use server';
+
 import { getRequestEvent, type RequestEvent } from 'solid-js/web';
 import {
   TimeSpan,
@@ -108,6 +110,7 @@ const userCookieSchema = object({
 export type UserSession = Output<typeof userCookieSchema>;
 
 function useUserSession(event: RequestEvent) {
+  console.log(env);
   return useSession<UserSession>(event, {
     name: SESSION_COOKIE,
     password: env.SESSION_SECRET,

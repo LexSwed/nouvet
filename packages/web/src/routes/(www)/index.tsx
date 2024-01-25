@@ -1,8 +1,8 @@
 import { Title } from '@solidjs/meta';
 import { ButtonLink, Card, Icon } from '@nou/ui';
 
-import { createTranslator, T } from '~/i18n';
 import { HeroImage } from '~/lib/hero-image';
+import { createTranslator, T } from '~/server/i18n';
 
 export default function WWW() {
   const t = createTranslator('www');
@@ -23,7 +23,7 @@ export default function WWW() {
               class="relative -me-12 mt-16 flex shrink-0 items-center gap-4 self-start text-lg sm:me-0"
             >
               {t('www.cta-start')}
-              <Icon use="arrow-circle-up-right" class="h-8 w-8 shrink-0" />
+              <Icon use="arrow-circle-up-right" class="size-8 shrink-0" />
             </ButtonLink>
             <div class="h-full w-[85%] min-w-[320px] overflow-hidden rounded-2xl sm:top-36 sm:w-full lg:absolute lg:right-4 lg:top-4 lg:max-h-[calc(100%-theme(spacing.8))] lg:w-[65%] xl:w-[45%]">
               <HeroImage alt={t('www.hero-image')} />

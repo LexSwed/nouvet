@@ -1,3 +1,5 @@
+'use server';
+
 import { action, cache, revalidate } from '@solidjs/router';
 import { getRequestEvent } from 'solid-js/web';
 
@@ -7,7 +9,6 @@ import { dbGetUserFamily } from '../db/queries/getUserFamily';
 import { dbGetUserPets } from '../db/queries/getUserPets';
 
 export const getUserFamily = cache(async () => {
-  'use server';
   const event = getRequestEvent();
   const currentUser = await getRequestUser(event!);
   const user = await dbGetUserFamily(currentUser.userId);
@@ -16,7 +17,6 @@ export const getUserFamily = cache(async () => {
 }, 'user-family');
 
 export const getUserPets = cache(async () => {
-  'use server';
   const event = getRequestEvent();
   const currentUser = await getRequestUser(event!);
   const pets = await dbGetUserPets(currentUser.userId);
@@ -25,7 +25,6 @@ export const getUserPets = cache(async () => {
 }, 'user-pets');
 
 export const createPet = action(async (formData) => {
-  'use server';
   const event = getRequestEvent();
   const currentUser = await getRequestUser(event!);
   try {

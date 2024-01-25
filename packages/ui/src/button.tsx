@@ -1,5 +1,5 @@
-import { A, type AnchorProps } from '@solidjs/router';
-import { Show, splitProps, type JSX, type ValidComponent } from 'solid-js';
+import { A } from '@solidjs/router';
+import { Show, splitProps, type ValidComponent } from 'solid-js';
 import { Dynamic, type DynamicProps } from 'solid-js/web';
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -45,27 +45,36 @@ export const buttonVariants = cva(
   },
 );
 
-type ButtonVariants = VariantProps<typeof buttonVariants>;
+type ButtonVariants = Omit<VariantProps<typeof buttonVariants>, 'icon'>;
+type ButtonWithIcon<P extends ButtonVariants> = P extends { icon: true }
+  ? { icon: true; label: string }
+  : { icon?: boolean; label?: string };
+type BaseProps<T extends ValidComponent> = DynamicProps<T> &
+  ButtonVariants &
+  ButtonWithIcon<ButtonVariants>;
 
-const BaseComponent = <T extends ValidComponent>(
-  ownProps: ButtonVariants & DynamicProps<T>,
-) => {
-  const [local, props] = splitProps(ownProps, [
+const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
+  const [local, props] = splitProps(ownProps as BaseProps<'button'>, [
     'size',
     'loading',
     'variant',
     'icon',
+    'label',
+    'title',
   ]);
   return (
     <Dynamic
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       {...(props as any)}
+      aria-label={local.label}
+      title={local.title ?? local.label}
       class={tw(buttonVariants(local), props.class)}
       onClick={(event: MouseEvent) => {
         if (local.loading) {
           event.preventDefault();
           return;
         }
+        // @ts-expect-error Not all constituents of type 'EventHandlerUnion<HTMLButtonElement, MouseEvent>' are callable.Type 'BoundEventHandler<HTMLButtonElement, MouseEvent>' has no call signatures.ts(2349)
         props.onClick?.(event);
       }}
       aria-disabled={local.loading}
@@ -80,43 +89,21 @@ const BaseComponent = <T extends ValidComponent>(
   );
 };
 
-interface ButtonProps
-  extends JSX.ButtonHTMLAttributes<HTMLButtonElement>,
-    ButtonVariants {
-  label?: string;
-}
-
-const Button = (ownProps: ButtonProps) => {
+const Button = (ownProps: Omit<BaseProps<'button'>, 'component'>) => {
   const props = mergeDefaultProps(ownProps, {
     type: 'button',
   });
-  return (
-    <BaseComponent
-      component="button"
-      aria-label={props.label}
-      title={props.title}
-      {...props}
-    />
-  );
+  return <BaseComponent {...props} component="button" />;
 };
 
-interface LinkProps extends AnchorProps, ButtonVariants {
-  label?: string;
-}
-
-const ButtonLink = (ownProps: LinkProps) => {
+const ButtonLink = (ownProps: Omit<BaseProps<typeof A>, 'component'>) => {
   /**
    * When link={false} should use <a> without any link attribute
    * @link https://github.com/solidjs/solid-router/discussions/321
    */
   const [local, props] = splitProps(ownProps, ['link']);
   return (
-    <BaseComponent
-      {...props}
-      aria-label={props.label}
-      title={props.title}
-      component={local.link === false ? 'a' : A}
-    />
+    <BaseComponent {...props} component={local.link === false ? 'a' : A} />
   );
 };
 

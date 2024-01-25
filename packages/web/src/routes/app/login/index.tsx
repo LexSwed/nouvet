@@ -2,9 +2,9 @@ import { Title } from '@solidjs/meta';
 import { createSignal, onCleanup } from 'solid-js';
 import { ButtonLink, Icon } from '@nou/ui';
 
-import { createTranslator } from '~/i18n';
 import { HeroImage } from '~/lib/hero-image';
 import { LogoLink } from '~/lib/logo-link';
+import { createTranslator } from '~/server/i18n';
 
 function AppLoginPage() {
   const t = createTranslator('login');
@@ -42,13 +42,13 @@ function AppLoginPage() {
               loading={loading()}
               onClick={onClick}
             >
-              <img src="/assets/facebook.svg" class="h-8 w-8" alt="" />
+              <img src="/assets/facebook.svg" class="size-8" alt="" />
               {t('login.with-facebook')}
             </ButtonLink>
           </div>
           <ButtonLink
             href="/"
-            class="border-outline mt-auto flex h-16 w-16 items-center justify-center rounded-full border-2 p-0"
+            class="border-outline mt-auto flex size-16 items-center justify-center rounded-full border-2 p-0"
             variant="ghost"
             label={t('login.back-home')}
           >

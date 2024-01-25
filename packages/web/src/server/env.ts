@@ -1,12 +1,6 @@
-import {
-  boolean,
-  object,
-  parse,
-  picklist,
-  string,
-  ValiError,
-  type Output,
-} from 'valibot';
+'use server';
+
+import { boolean, object, parse, picklist, string } from 'valibot';
 
 const schema = object({
   // Vite defaults
@@ -22,19 +16,10 @@ const schema = object({
   SESSION_SECRET: string(),
 });
 
-('use server');
-export let env: Output<typeof schema>;
-
-try {
-  env = parse(schema, {
-    ...import.meta.env,
-    SESSION_SECRET: process.env.SESSION_SECRET,
-    FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
-    FACEBOOK_APP_SECRET: process.env.FACEBOOK_APP_SECRET,
-    DB: process.env.DB,
-  });
-} catch (error) {
-  if (error instanceof ValiError) {
-    console.error(error.cause, error.issues);
-  }
-}
+export const env = parse(schema, {
+  ...import.meta.env,
+  SESSION_SECRET: process.env.SESSION_SECRET,
+  FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
+  FACEBOOK_APP_SECRET: process.env.FACEBOOK_APP_SECRET,
+  DB: process.env.DB,
+});

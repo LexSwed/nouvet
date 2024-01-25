@@ -1,7 +1,7 @@
 import { createUniqueId, For, type ComponentProps } from 'solid-js';
 import { Icon, RadioCard, Text, tw, type SvgIcons } from '@nou/ui';
 
-import { createTranslator } from '~/i18n';
+import { createTranslator } from '~/server/i18n';
 
 import * as cssStyles from './animal-type.module.css';
 

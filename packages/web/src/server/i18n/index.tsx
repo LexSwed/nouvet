@@ -25,7 +25,6 @@ async function fetchDictionary<T extends Namespace>(
   locale: Locale = 'en',
   namespace: T,
 ) {
-  'use server';
   const commonDict = await (import(`./locales/${locale}/common.json`).then(
     (commonModule) => commonModule.default,
   ) as Promise<typeof CommonDict>);
@@ -61,7 +60,6 @@ export const getDictionary = cache(
 
 export const createTranslator = <T extends Namespace>(namespace: T) => {
   const dict = createAsync(() => getDictionary(namespace));
-
   return translator(dict, resolveTemplate);
 };
 

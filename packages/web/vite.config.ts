@@ -31,7 +31,7 @@ const config = {
 export default defineConfig({
   ...config,
   start: {
-    ssr: 'async',
+    ssr: true,
     middleware: './src/middleware.ts',
     server: {
       preset: 'cloudflare_pages',

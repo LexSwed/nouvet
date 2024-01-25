@@ -1,9 +1,10 @@
+'use server';
+
 import { flatten as valiFlatten, type ValiError } from 'valibot';
 
-import { getDictionary } from '~/i18n';
+import { getDictionary } from '~/server/i18n';
 
 export async function translateErrorTokens(error: ValiError) {
-  'use server';
   const t = await getDictionary('errors');
   const flat: Record<string, string> = {};
   for (const [key, issue] of Object.entries(valiFlatten(error).nested)) {
