@@ -52,20 +52,23 @@ const colors = {
 export default {
   darkMode: ['class'],
   content: [],
+  corePlugins: {
+    container: false,
+  },
   theme: {
-    container: {
-      center: true,
-      padding: {
-        'DEFAULT': '1rem',
-        'sm': '2rem',
-        'lg': '4rem',
-        'xl': '5rem',
-        '2xl': '6rem',
-      },
-      screens: {
-        '2xl': '1400px',
-      },
-    },
+    // container: {
+    //   center: true,
+    //   padding: {
+    //     'DEFAULT': '1rem',
+    //     'sm': '2rem',
+    //     'lg': '4rem',
+    //     'xl': '5rem',
+    //     '2xl': '6rem',
+    //   },
+    //   screens: {
+    //     '2xl': '1400px',
+    //   },
+    // },
     screens: {
       ...defaultConfig.theme?.screens,
       '2xl': '1400px',
@@ -125,17 +128,6 @@ export default {
   plugins: [
     containerQueryPlugin,
     animatePlugin,
-    plugin(function noScrollBarPlugin({ addUtilities }) {
-      addUtilities({
-        '.scrollbar-none': {
-          '-ms-overflow-style': 'none',
-          'scrollbar-width': 'none',
-          '&::-webkit-scrollbar': {
-            display: 'none',
-          },
-        },
-      });
-    }),
     plugin(function hoverAndFocusVariant({ addVariant }) {
       addVariant('intent', ['&:where(:hover,:focus)']);
     }),

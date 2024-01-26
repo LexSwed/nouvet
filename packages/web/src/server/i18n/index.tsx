@@ -58,6 +58,10 @@ export const getDictionary = cache(
       );
     }
     const { locale } = event.locals;
+    if (!locale) {
+      console.error('Probably HMR, defaulting to en');
+      return fetchDictionary('en', namespace);
+    }
     return fetchDictionary(
       (locale as Intl.Locale).language as Locale,
       namespace,

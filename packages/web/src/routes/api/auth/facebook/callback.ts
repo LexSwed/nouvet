@@ -1,5 +1,9 @@
-import { deleteCookie, getCookie, sendRedirect } from '@solidjs/start/server';
-import { type PageEvent } from '@solidjs/start/server/types';
+import {
+  deleteCookie,
+  getCookie,
+  sendRedirect,
+  type PageEvent,
+} from '@solidjs/start/server';
 import { OAuth2RequestError } from 'arctic';
 import { object, parse, string } from 'valibot';
 

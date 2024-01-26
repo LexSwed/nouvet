@@ -73,84 +73,93 @@ const UserPets = (props: { familyId: number | undefined }) => {
   return (
     <Switch>
       <Match when={pets()?.length ?? 0 > 0}>
-        <ul class="scrollbar-none -mx-3 grid snap-x snap-mandatory scroll-p-3 grid-flow-col grid-cols-[repeat(auto-fit,100%)] gap-2 overflow-auto px-3 py-2 [&>*]:snap-start">
-          <For each={pets()}>
-            {(pet) => (
-              <Card role="listitem" variant="flat" class="flex flex-col gap-4">
-                <A
-                  href={`/app/pet/${pet.id}/`}
-                  class="-m-4 flex flex-row items-start gap-4 p-4"
+        <>
+          <ul class="scrollbar-none -mx-3 grid snap-x snap-mandatory scroll-p-3 grid-flow-col grid-cols-[repeat(auto-fit,100%)] gap-2 overflow-auto px-3 py-2 [&>*]:snap-start">
+            <For each={pets()}>
+              {(pet) => (
+                <Card
+                  role="listitem"
+                  variant="flat"
+                  class="flex w-full flex-col gap-4"
                 >
-                  <div class="bg-tertiary/10 text-tertiary grid size-24 shrink-0 place-content-center rounded-md">
-                    <Show
-                      when={pet.pictureUrl}
-                      children={
-                        <img
-                          src={pet.pictureUrl!}
-                          class="aspect-square w-full"
-                          alt=""
-                        />
-                      }
-                      fallback={<Icon use="camera-plus" size="md" />}
-                    />
+                  <A
+                    href={`/app/pet/${pet.id}/`}
+                    class="-m-4 flex flex-row items-start gap-4 p-4"
+                  >
+                    <div class="bg-tertiary/10 text-tertiary grid size-24 shrink-0 place-content-center rounded-md">
+                      <Show
+                        when={pet.pictureUrl}
+                        children={
+                          <img
+                            src={pet.pictureUrl!}
+                            class="aspect-square w-full"
+                            alt=""
+                          />
+                        }
+                        fallback={<Icon use="camera-plus" size="md" />}
+                      />
+                    </div>
+                    <div class="flex flex-row items-center gap-2">
+                      <Text with="body-xl">{pet.name}</Text>
+                      <Button
+                        icon
+                        variant="ghost"
+                        size="sm"
+                        aria-hidden
+                        tabIndex={-1}
+                      >
+                        <Icon use="pencil" size="sm" />
+                      </Button>
+                    </div>
+                  </A>
+                  <div class="flex flex-col">
+                    <ul class="overflow-snap -mx-4 grid scroll-p-4 grid-flow-col justify-start gap-2 px-4 py-2 [grid-auto-columns:min-content]">
+                      <li class="contents">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          class="gap-2 text-nowrap"
+                        >
+                          <Icon use="calendar-plus" size="sm" />
+                          <Text with="label-sm">
+                            {t('app.animal-shortcut.birth-date')}
+                          </Text>
+                        </Button>
+                      </li>
+                      <li class="contents">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          class="gap-2 text-nowrap"
+                        >
+                          <Icon use="scales" size="sm" />
+                          <Text with="label-sm">
+                            {t('app.animal-shortcut.weight')}
+                          </Text>
+                        </Button>
+                      </li>
+                      <li class="contents">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          class="gap-2 text-nowrap"
+                        >
+                          <Icon use="carrot" size="sm" />
+                          <Text with="label-sm">
+                            {t('app.animal-shortcut.nutrition')}
+                          </Text>
+                        </Button>
+                      </li>
+                    </ul>
                   </div>
-                  <div class="flex flex-row items-center gap-2">
-                    <Text with="body-xl">{pet.name}</Text>
-                    <Button
-                      icon
-                      variant="ghost"
-                      size="sm"
-                      aria-hidden
-                      tabIndex={-1}
-                    >
-                      <Icon use="pencil" size="sm" />
-                    </Button>
-                  </div>
-                </A>
-                <div class="flex flex-col">
-                  <ul class="scrollbar-none -mx-4 -mb-2 grid snap-mandatory scroll-p-4 grid-flow-col justify-start gap-3 overflow-auto px-4 py-2 [grid-auto-columns:minmax(auto,8rem)] [&>*]:snap-x">
-                    <li class="contents">
-                      <Button
-                        size="default"
-                        variant="ghost"
-                        class="bg-on-surface/5 flex h-auto flex-1 flex-col items-center gap-2 rounded-lg px-3 py-5"
-                      >
-                        <Icon use="calendar-plus" size="sm" />
-                        <Text with="label-sm">
-                          {t('app.animal-shortcut.birth-date')}
-                        </Text>
-                      </Button>
-                    </li>
-                    <li class="contents">
-                      <Button
-                        size="default"
-                        variant="ghost"
-                        class="bg-on-surface/5 flex h-auto flex-1 flex-col items-center gap-2 rounded-lg px-3 py-5"
-                      >
-                        <Icon use="scales" size="sm" />
-                        <Text with="label-sm">
-                          {t('app.animal-shortcut.weight')}
-                        </Text>
-                      </Button>
-                    </li>
-                    <li class="contents">
-                      <Button
-                        size="default"
-                        variant="ghost"
-                        class="bg-on-surface/5 flex h-auto flex-1 flex-col items-center gap-2 rounded-lg px-3 py-5"
-                      >
-                        <Icon use="carrot" size="sm" />
-                        <Text with="label-sm">
-                          {t('app.animal-shortcut.nutrition')}
-                        </Text>
-                      </Button>
-                    </li>
-                  </ul>
-                </div>
-              </Card>
-            )}
-          </For>
-        </ul>
+                </Card>
+              )}
+            </For>
+          </ul>
+          <Button variant="ghost" class="w-full">
+            Add More
+          </Button>
+        </>
       </Match>
       <Match when={pets()?.length === 0}>
         <CreateNewPetForm minimal>

@@ -31,11 +31,11 @@
     "oslo": "^1.0.1",
     "solid-js": "^1.8.12",
     "valibot": "^0.27.0",
-    "vinxi": "^0.1.5"
+    "vinxi": "^0.1.6"
   },
   "devDependencies": {
     "@nou/config": "^1.0.0",
-    "@types/better-sqlite3": "^7.6.8",
+    "@types/better-sqlite3": "^7.6.9",
     "drizzle-kit": "^0.20.13",
     "eslint-plugin-drizzle": "^0.2.3",
     "tailwindcss": "^3.4.1",

@@ -17,10 +17,10 @@ export const buttonVariants = cva(
         destructive:
           'bg-destructive text-on-destructive intent:bg-destructive/90 outline-destructive',
         outline:
-          'border-outline text-on-surface outline-primary border bg-transparent',
+          'border-outline text-on-surface outline-on-surface intent:bg-on-surface/8 rounded-full border bg-transparent',
         secondary:
           'bg-tertiary-container text-on-tertiary-container intent:bg-tertiary-container/80 outline-tertiary rounded-full',
-        ghost: 'hover:bg-on-surface/5 focus:bg-on-surface/8 text-on-surface',
+        ghost: 'intent:bg-on-surface/8 text-on-surface outline-on-surface',
         link: 'text-primary intent:underline underline-offset-4',
       },
       size: {

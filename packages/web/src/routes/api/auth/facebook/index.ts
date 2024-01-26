@@ -1,5 +1,4 @@
-import { sendRedirect } from '@solidjs/start/server';
-import { type PageEvent } from '@solidjs/start/server/types';
+import { sendRedirect, type PageEvent } from '@solidjs/start/server';
 import { generateState } from 'arctic';
 
 import { setFacebookOAuthStateCookie, useFacebookAuth } from './_shared';
