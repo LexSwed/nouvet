@@ -9,16 +9,16 @@
     transition-timing-function: ease-out;
     isolation: isolate;
     top: unset;
-    bottom: theme('spacing.1');
-    inset-inline: theme('spacing.1');
+    bottom: theme('spacing.2');
+    inset-inline: theme('spacing.2');
     margin: 0;
     height: max-content;
-    width: calc(100% - theme('spacing.1') * 2);
+    width: calc(100% - theme('spacing.2') * 2);
     max-height: 100%;
     will-change: transform;
     background-color: theme('colors.surface');
     padding: 0 theme('spacing.4') theme('spacing.4');
-    border-radius: theme('borderRadius.lg');
+    border-radius: theme('borderRadius.xl');
     outline: none;
 
     &:focus-visible {

@@ -1,24 +1,10 @@
 'use server';
 
 import { cache } from '@solidjs/router';
-import { getRequestEvent } from 'solid-js/web';
 
-import { getRequestUser } from '../server/auth/user-session';
-import { dbGetUserFamily } from '../server/db/queries/getUserFamily';
-import { dbGetUserPets } from '../server/db/queries/getUserPets';
+import { userPets } from '~/server/queries/userPets';
+import { userFamily } from '../server/queries/userFamily';
 
-export const getUserFamily = cache(async () => {
-  const event = getRequestEvent();
-  const currentUser = await getRequestUser(event!);
-  const user = await dbGetUserFamily(currentUser.userId);
+export const getUserFamily = cache(userFamily, 'user-family');
 
-  return user;
-}, 'user-family');
-
-export const getUserPets = cache(async () => {
-  const event = getRequestEvent();
-  const currentUser = await getRequestUser(event!);
-  const pets = await dbGetUserPets(currentUser.userId);
-
-  return pets;
-}, 'user-pets');
+export const getUserPets = cache(userPets, 'user-pets');

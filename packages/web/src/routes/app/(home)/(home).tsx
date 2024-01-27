@@ -5,13 +5,13 @@ import { ButtonLink } from '@nou/ui';
 
 import { getUserFamily } from '~/api/user';
 import { AccountMenu } from '~/lib/account-menu';
-import { createTranslator, getDictionary } from '~/server/i18n';
+import { createTranslator, getDictionaryCached } from '~/server/i18n';
 
 import { UserPets } from './_user-pets';
 
 export const route = {
   load() {
-    getDictionary('app');
+    getDictionaryCached('app');
     getUserFamily();
   },
 } satisfies RouteDefinition;

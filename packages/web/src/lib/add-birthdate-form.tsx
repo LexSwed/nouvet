@@ -1,5 +1,6 @@
+import { useSubmission } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
-import { createMemo, For } from 'solid-js';
+import { createMemo, For, Show } from 'solid-js';
 import {
   Button,
   Fieldset,
@@ -11,15 +12,17 @@ import {
   TextField,
 } from '@nou/ui';
 
+import { updatePetAction } from '~/api/pet';
 import { createTranslator, userLocale } from '~/server/i18n';
 
 const Drawer = clientOnly(() =>
   import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
 );
 
-const AddBirthDateForm = (props: { id: string }) => {
+const AddBirthDateForm = (props: { id: string; petId: number }) => {
   const t = createTranslator('app');
   const locale = userLocale();
+  const petSubmission = useSubmission(updatePetAction);
 
   const monthNames = createMemo(() => {
     const formatter = Intl.DateTimeFormat(locale(), {
@@ -31,13 +34,19 @@ const AddBirthDateForm = (props: { id: string }) => {
       return formatter.format(date);
     });
   });
-
+  const dateOfBirthError = () =>
+    petSubmission.result?.errors && 'dateOfBirth' in petSubmission.result.errors
+      ? petSubmission.result.errors.dateOfBirth
+      : null;
   return (
     <Drawer id={props.id}>
       <Form
-        onSubmit={(e) => e.preventDefault()}
-        class="max-w-[380px] flex flex-col gap-6"
+        class="w-[360px] flex flex-col gap-6"
+        action={updatePetAction}
+        method="post"
+        validationErrors={petSubmission.result?.errors}
       >
+        <input type="hidden" name="petId" value={props.petId} />
         <Fieldset>
           <Text as="legend" with="label" class="mb-6 flex items-center gap-2">
             <span class="bg-on-surface/5 p-3 rounded-full">
@@ -45,7 +54,7 @@ const AddBirthDateForm = (props: { id: string }) => {
             </span>
             {t('app.animal-add-birth-date.label')}
           </Text>
-          <div class="grid grid-cols-[3.5rem_1fr_5rem] gap-2">
+          <div class="grid grid-cols-[4rem_1fr_5rem] gap-2">
             <TextField
               name="bday"
               label={t('app.animal-add-birth-date.day')}
@@ -55,13 +64,11 @@ const AddBirthDateForm = (props: { id: string }) => {
               min="1"
               max="31"
               step="1"
-              pattern="\d{1,2}"
             />
             <Picker
               label={t('app.animal-add-birth-date.month')}
               name="bmonth"
               autocomplete="off"
-              required
             >
               <Option value="" />
               <For each={monthNames()}>
@@ -73,10 +80,18 @@ const AddBirthDateForm = (props: { id: string }) => {
               label={t('app.animal-add-birth-date.year')}
               autocomplete="off"
               type="number"
-              min="1990"
+              min="1980"
               max={new Date().getFullYear()}
+              required
             />
           </div>
+          <Show when={dateOfBirthError()}>
+            {(text) => (
+              <Text class="text-error" with="body-sm">
+                {text()}
+              </Text>
+            )}
+          </Show>
         </Fieldset>
         <div class="grid grid-cols-2 gap-2 sm:flex sm:self-end">
           <Button

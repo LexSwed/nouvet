@@ -11,8 +11,8 @@ import { sendRedirect, updateSession, useSession } from 'vinxi/server';
 import { useLucia } from '~/server/auth/lucia';
 import type { DatabaseUserProfile } from '~/server/db/schema';
 import { env } from '~/server/env';
+import { SESSION_COOKIE } from '../const';
 
-const SESSION_COOKIE = '_nouvet_user';
 /**
  * Creates new auth session and stores it in cookie with other user basic user info.
  * @throws {ValiError} if user info provided is not correct.
@@ -94,17 +94,6 @@ export async function deleteUserSession(event: RequestEvent) {
   const session = await useUserSession(event);
   await session.clear();
 }
-
-const userCookieSchema = object({
-  userId: string(),
-  sessionId: string(),
-  locale: string('locale cannot be empty'),
-  // timeZone: date(),
-  measurementSystem: picklist(['imperial', 'metrical'] as const satisfies Array<
-    DatabaseUserProfile['measurementSystem']
-  >),
-});
-
 export type UserSession = Output<typeof userCookieSchema>;
 
 function useUserSession(event: RequestEvent) {
@@ -121,6 +110,7 @@ function useUserSession(event: RequestEvent) {
 export async function getRequestUser(
   event: RequestEvent,
 ): Promise<UserSession> {
+  'use server';
   try {
     const session = await useUserSession(event);
     return parse(userCookieSchema, session.data);
@@ -128,6 +118,16 @@ export async function getRequestUser(
     throw sendRedirect(getRequestEvent()!, '/app/login');
   }
 }
+
+export const userCookieSchema = object({
+  userId: string(),
+  sessionId: string(),
+  locale: string('locale cannot be empty'),
+  // timeZone: date(),
+  measurementSystem: picklist(['imperial', 'metrical'] as const satisfies Array<
+    DatabaseUserProfile['measurementSystem']
+  >),
+});
 
 /**
  * Sets current user to the cookies.

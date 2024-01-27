@@ -48,25 +48,21 @@ async function fetchDictionary<T extends Namespace>(
   };
 }
 
-export const getDictionary = cache(
-  async <T extends Namespace>(namespace: T) => {
-    'use server';
-    const event = getRequestEvent();
-    const { locale } = event!.locals;
-    if (!locale) {
-      console.error('Probably HMR, defaulting to en');
-      return fetchDictionary('en', namespace);
-    }
-    return fetchDictionary(
-      (locale as Intl.Locale).language as Locale,
-      namespace,
-    );
-  },
-  'translations',
-);
+export const getDictionary = async <T extends Namespace>(namespace: T) => {
+  'use server';
+  const event = getRequestEvent();
+  const { locale } = event!.locals;
+  if (!locale) {
+    console.error('Probably HMR, defaulting to en');
+    return fetchDictionary('en', namespace);
+  }
+  return fetchDictionary((locale as Intl.Locale).language as Locale, namespace);
+};
+
+export const getDictionaryCached = cache(getDictionary, 'translations');
 
 export const createTranslator = <T extends Namespace>(namespace: T) => {
-  const dict = createAsync(() => getDictionary(namespace));
+  const dict = createAsync(() => getDictionaryCached(namespace));
   return translator(dict, resolveTemplate);
 };
 

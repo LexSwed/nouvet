@@ -2,7 +2,7 @@ import { useSubmission } from '@solidjs/router';
 import { Show, type ParentProps } from 'solid-js';
 import { Button, Card, Form, Text, TextField } from '@nou/ui';
 
-import { createPet } from '~/api/pet';
+import { createPetAction } from '~/api/pet';
 import { AnimalTypeSelect } from '~/lib/animal-type';
 import { GenderSwitch } from '~/lib/animal-type/animal-type';
 import { createTranslator } from '~/server/i18n';
@@ -13,7 +13,7 @@ interface CreateNewPetForm extends ParentProps {
 
 function CreateNewPetForm(props: CreateNewPetForm) {
   const t = createTranslator('app');
-  const petSubmission = useSubmission(createPet);
+  const petSubmission = useSubmission(createPetAction);
 
   const hasFailed = () =>
     petSubmission.result &&
@@ -25,7 +25,7 @@ function CreateNewPetForm(props: CreateNewPetForm) {
       <Form
         aria-labelledby="new-pet"
         class="flex flex-col gap-6"
-        action={createPet}
+        action={createPetAction}
         validationErrors={petSubmission.result?.errors || undefined}
         method="post"
         aria-errormessage="error-message"

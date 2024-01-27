@@ -1,12 +1,18 @@
+'use server';
+
 import { flatten as valiFlatten, type ValiError } from 'valibot';
 
 import { getDictionary } from '~/server/i18n';
+import type ErrorsDict from '~/server/i18n/locales/en/errors.json';
 
-export async function translateErrorTokens(error: ValiError) {
+export async function translateErrorTokens<T extends Record<string, any>>(
+  error: ValiError,
+): Promise<Partial<Record<keyof T, string>>> {
   const t = await getDictionary('errors');
-  const flat: Record<string, string> = {};
+  const flat: Partial<Record<keyof T, string>> = {};
   for (const [key, issue] of Object.entries(valiFlatten(error).nested)) {
     if (issue) {
+      // @ts-expect-error
       flat[key] =
         `errors.${issue[0]}` in t
           ? // @ts-expect-error dictionary type is too correct
@@ -16,3 +22,5 @@ export async function translateErrorTokens(error: ValiError) {
   }
   return flat;
 }
+
+export type ErrorKeys = keyof typeof ErrorsDict;

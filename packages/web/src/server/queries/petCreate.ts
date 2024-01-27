@@ -1,3 +1,6 @@
+'use server';
+
+import { getRequestEvent } from 'solid-js/web';
 import {
   isoDate,
   maxLength,
@@ -10,15 +13,13 @@ import {
   toTrimmed,
   ValiError,
   type Input,
+  type Output,
 } from 'valibot';
 
-import type ErrorsDict from '~/i18n/locales/en/errors.json';
-import type { UserSession } from '~/server/auth/user-session';
+import { getRequestUser, type UserSession } from '~/server/auth/user-session';
 import { useDb } from '~/server/db';
-import { translateErrorTokens } from '~/server/utils';
-import { petTable } from '../schema';
-
-type ErrorKeys = keyof typeof ErrorsDict;
+import { petTable } from '~/server/db/schema';
+import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
 
 const CreatePetSchema = object({
   name: string('createPet.name.required' satisfies ErrorKeys, [
@@ -51,13 +52,16 @@ const CreatePetSchema = object({
 });
 
 type CreatePetInput = Input<typeof CreatePetSchema>;
+type CreatePetOutput = Output<typeof CreatePetSchema>;
 
-export async function dbCreatePet(
-  petInput: CreatePetInput,
+export async function petCreate(
+  input: {
+    [K in keyof CreatePetInput]?: unknown;
+  },
   userId: UserSession['userId'],
 ) {
   try {
-    const petInfo = parse(CreatePetSchema, petInput);
+    const petInfo = parse(CreatePetSchema, input);
     const db = useDb();
     const pet = await db
       .insert(petTable)
@@ -67,7 +71,7 @@ export async function dbCreatePet(
   } catch (error) {
     if (error instanceof ValiError) {
       return {
-        errors: await translateErrorTokens(error),
+        errors: await translateErrorTokens<CreatePetOutput>(error),
       };
     }
     throw error;

@@ -9,9 +9,9 @@ import { object, parse, string } from 'valibot';
 
 import { createUserSession } from '~/server/auth/user-session';
 import { RETURN_URL_COOKIE } from '~/server/const';
-import { createUser } from '~/server/db/queries/createUser';
-import { getUserByAuthProviderId } from '~/server/db/queries/getUserByAuthProviderId';
 import { getLocale } from '~/server/i18n/locale';
+import { getUserByAuthProviderId } from '~/server/queries/getUserByAuthProviderId';
+import { userCreate } from '~/server/queries/userCreate';
 
 import { getFacebookOAuthStateCookie, useFacebookAuth } from './_shared';
 
@@ -62,7 +62,7 @@ export const GET = async (event: PageEvent) => {
         ? 'imperial'
         : 'metrical';
 
-    const user = await createUser({
+    const user = await userCreate({
       provider: 'facebook',
       accountProviderId: facebookUser.id,
       name: facebookUser.name,

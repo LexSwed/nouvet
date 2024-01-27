@@ -1,3 +1,5 @@
+'use server';
+
 import { createId } from '@paralleldrive/cuid2';
 import {
   maxLength,
@@ -7,7 +9,7 @@ import {
   picklist,
   string,
   ValiError,
-  type Output,
+  type Input,
 } from 'valibot';
 
 import { useDb } from '~/server/db';
@@ -24,7 +26,11 @@ const CreateUserSchema = object({
   measurementSystem: picklist(['imperial', 'metrical']),
 });
 
-export const createUser = async (newUser: Output<typeof CreateUserSchema>) => {
+type CreateUserInput = Input<typeof CreateUserSchema>;
+
+export const userCreate = async (newUser: {
+  [K in keyof CreateUserInput]?: unknown;
+}) => {
   try {
     const userId = createId();
     const userInfo = parse(CreateUserSchema, newUser);

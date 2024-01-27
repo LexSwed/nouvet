@@ -3,11 +3,11 @@ import { For, Show, type ParentProps } from 'solid-js';
 import { Icon, NavCard, type SvgIcons } from '@nou/ui';
 
 import { LogoLink } from '~/lib/logo-link';
-import { createTranslator, getDictionary } from '~/server/i18n';
+import { createTranslator, getDictionaryCached } from '~/server/i18n';
 
 export const route = {
   load() {
-    getDictionary('www');
+    getDictionaryCached('www');
   },
 } satisfies RouteDefinition;
 
