@@ -8,5 +8,12 @@
       color: theme('colors.on-surface/0.6');
       font-weight: 400;
     }
+    &[type='number'] {
+      font-variant-numeric: tabular-nums;
+      padding-inline-end: theme('spacing.1');
+      &::-webkit-inner-spin-button {
+        margin-inline-start: theme('spacing.1');
+      }
+    }
   }
 }

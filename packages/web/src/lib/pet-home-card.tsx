@@ -55,9 +55,7 @@ export const PetHomeCard = (props: PetHomeCard) => {
               <Icon use="calendar-plus" size="sm" />
               <Text with="label-sm">{t('app.animal-shortcut.birth-date')}</Text>
             </Button>
-            <Drawer id={`${props.pet.id}-birth-date`}>
-              <AddBirthDateForm />
-            </Drawer>
+            <AddBirthDateForm id={`${props.pet.id}-birth-date`} />
           </li>
           <li class="contents">
             <Button

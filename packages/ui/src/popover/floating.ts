@@ -62,18 +62,6 @@ export function createFloating<
       }),
   });
 
-  createEffect(() => {
-    console.log(
-      {
-        inset: 'unset',
-        top: `${position.y ?? 0}px`,
-        left: `${position.x ?? 0}px`,
-        position: strategy,
-      },
-      position.middlewareData,
-    );
-  });
-
   return {
     get style() {
       return {
