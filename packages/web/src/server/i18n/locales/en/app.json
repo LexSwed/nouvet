@@ -28,5 +28,11 @@
   "account-menu.account": "Account preferences",
   "animal-shortcut.birth-date": "Birth date",
   "animal-shortcut.weight": "Weight",
-  "animal-shortcut.nutrition": "Nutrition"
+  "animal-shortcut.nutrition": "Nutrition",
+  "animal-add-birth-date.label": "Pet's birth date",
+  "animal-add-birth-date.day": "Day",
+  "animal-add-birth-date.month": "Month",
+  "animal-add-birth-date.year": "Year",
+  "animal-add-birth-date.cancel": "Cancel",
+  "animal-add-birth-date.save": "Save"
 }

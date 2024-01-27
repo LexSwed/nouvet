@@ -6,22 +6,21 @@
     flex-shrink: 0;
     cursor: default;
     user-select: none;
-    border-radius: theme('borderRadius.sm');
+    border-radius: inherit;
     color: theme('colors.on-surface');
     background: transparent;
-    padding-inline: theme('spacing.3');
     transition: background-color 0.2s ease-out;
     outline: none;
     min-height: theme('spacing.10');
-    padding-block: theme('spacing.2');
+    padding: theme('spacing.3');
 
     @apply text-sm;
 
     &:where(:hover, [aria-selected='true'], [aria-current='true']) {
-      background-color: theme('colors.on-surface/0.08');
+      background-color: theme('colors.surface-container');
     }
     &:where(:focus, :focus-within, :active) {
-      background-color: theme('colors.on-surface/0.12');
+      background-color: theme('colors.surface-container');
     }
     &:where(:focus-visible:focus, :has(:focus-visible):focus-within) {
       outline: 2px auto currentColor;

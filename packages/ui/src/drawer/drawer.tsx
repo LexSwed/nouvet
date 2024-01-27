@@ -64,7 +64,7 @@ const Drawer = (
 ) => {
   let popoverEl: HTMLElement | null;
   // @screen(sm)
-  const isMobile = createMediaQuery('(max-width: 640px)');
+  const isMobile = createMediaQuery('(max-width: 640px)', true);
   const [local, props] = splitProps(ownProps, ['children']);
   const child = children(() => local.children);
   return (

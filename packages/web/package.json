@@ -14,7 +14,7 @@
     "db:push": "npx drizzle-kit push:sqlite"
   },
   "dependencies": {
-    "@lucia-auth/adapter-drizzle": "^1.0.0-beta.4",
+    "@lucia-auth/adapter-drizzle": "^1.0.0",
     "@nou/ui": "^0.0.1",
     "@paralleldrive/cuid2": "^2.2.2",
     "@solid-primitives/i18n": "^2.0.1",
@@ -27,8 +27,8 @@
     "class-variance-authority": "^0.7.0",
     "drizzle-orm": "^0.29.3",
     "drizzle-valibot": "^0.1.1",
-    "lucia": "^3.0.0-beta.13",
-    "oslo": "^1.0.1",
+    "lucia": "^3.0.0",
+    "oslo": "^1.0.2",
     "solid-js": "^1.8.12",
     "valibot": "^0.27.0",
     "vinxi": "^0.1.6"

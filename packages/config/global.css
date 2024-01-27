@@ -13,9 +13,6 @@
 
     --radius: 0.5rem;
   }
-}
-
-@layer base {
   * {
     @apply border-outline min-w-0 font-sans;
   }
@@ -92,6 +89,10 @@
     @media screen(xl) {
       max-width: theme(screens.xl);
     }
+  }
+
+  .filter-darker {
+    filter: brightness(0.96) saturate(1.2);
   }
 
   .overflow-snap {

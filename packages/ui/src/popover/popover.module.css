@@ -17,7 +17,10 @@
     content-visibility: auto;
     margin: 0;
     max-height: 20rem;
-    @apply bg-surface-container-lowest overflow-y-auto rounded-md shadow-md;
+    box-shadow:
+      0 0 2px theme('colors.on-surface-variant/0.2'),
+      theme('boxShadow.lg');
+    @apply bg-surface overflow-y-auto rounded-2xl;
 
     &:popover-open {
       opacity: 1;

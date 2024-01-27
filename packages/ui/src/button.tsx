@@ -8,12 +8,12 @@ import { tw } from './tw';
 import { mergeDefaultProps } from './utils';
 
 export const buttonVariants = cva(
-  'relative inline-flex cursor-default items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-4 focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50',
+  'relative inline-flex cursor-default items-center justify-center rounded-md text-sm font-medium transition-[filter,colors] focus-visible:outline-4 focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
         default:
-          'bg-primary text-on-primary intent:bg-primary/90 outline-primary',
+          'bg-primary-container text-on-primary-container intent:filter-darker outline-primary',
         destructive:
           'bg-destructive text-on-destructive intent:bg-destructive/90 outline-destructive',
         outline:

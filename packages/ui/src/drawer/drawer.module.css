@@ -9,16 +9,22 @@
     transition-timing-function: ease-out;
     isolation: isolate;
     top: unset;
-    bottom: 0;
-    inset-inline: 0;
+    bottom: theme('spacing.1');
+    inset-inline: theme('spacing.1');
     margin: 0;
     height: max-content;
-    width: 100%;
+    width: calc(100% - theme('spacing.1') * 2);
     max-height: 100%;
     will-change: transform;
     background-color: theme('colors.surface');
     padding: 0 theme('spacing.4') theme('spacing.4');
-    border-radius: theme('borderRadius.lg') theme('borderRadius.lg') 0 0;
+    border-radius: theme('borderRadius.lg');
+    outline: none;
+
+    &:focus-visible {
+      outline: 2px auto theme('colors.on-surface');
+      outline-offset: -2px;
+    }
 
     &[data-closed] {
       display: none;

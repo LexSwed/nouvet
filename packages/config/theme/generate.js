@@ -17,7 +17,7 @@ function generateHslThemeFromMaterialThemeBuilder(theme) {
     .join(';\n');
 }
 
-const mdTheme = JSON.parse(await fs.readFile(process.argv.at(3)));
+const mdTheme = JSON.parse(await fs.readFile(process.argv.at(2)));
 const lightColors = generateHslThemeFromMaterialThemeBuilder(
   mdTheme.schemes.light,
 );
@@ -28,7 +28,9 @@ const baseCss = await fs.readFile(new URL('./base.css', import.meta.url));
 
 const themeCss = /* css */ `
 @layer base {
-  :root {
+  :root,
+  ::backdrop,
+  ::selection {
     ${lightColors}
   }
   .dark {
@@ -38,7 +40,7 @@ const themeCss = /* css */ `
 `;
 
 await fs.writeFile(
-  new URL('../global.css', import.meta.url),
+  new URL('./global.css', import.meta.url),
   `${baseCss}\n${themeCss}`,
 );
 

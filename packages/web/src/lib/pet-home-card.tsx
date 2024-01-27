@@ -1,9 +1,10 @@
 import { A } from '@solidjs/router';
-import { clientOnly } from '@solidjs/start';
 import { Show } from 'solid-js';
-import { Button, Card, Drawer, Icon, Text } from '@nou/ui';
+import { Button, Card, Icon, Text } from '@nou/ui';
 
 import { createTranslator } from '~/server/i18n';
+
+import AddBirthDateForm from './add-birthdate-form';
 
 interface PetHomeCard {
   pet: {
@@ -12,8 +13,6 @@ interface PetHomeCard {
     name: string;
   };
 }
-
-const AddBirthDateForm = clientOnly(() => import('./add-birthdate-form'));
 
 export const PetHomeCard = (props: PetHomeCard) => {
   const t = createTranslator('app');

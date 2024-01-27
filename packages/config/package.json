@@ -13,7 +13,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "generate-themed-css": "node ./theme/generate.js"
   },
   "dependencies": {
     "@fontsource-variable/rubik": "^5.0.20",

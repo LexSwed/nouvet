@@ -52,12 +52,7 @@ export const getDictionary = cache(
   async <T extends Namespace>(namespace: T) => {
     'use server';
     const event = getRequestEvent();
-    if (!event) {
-      throw new Error(
-        "Wrong execution environment. Check if 'use server' directive is correctly applied.",
-      );
-    }
-    const { locale } = event.locals;
+    const { locale } = event!.locals;
     if (!locale) {
       console.error('Probably HMR, defaulting to en');
       return fetchDictionary('en', namespace);
@@ -73,6 +68,17 @@ export const getDictionary = cache(
 export const createTranslator = <T extends Namespace>(namespace: T) => {
   const dict = createAsync(() => getDictionary(namespace));
   return translator(dict, resolveTemplate);
+};
+
+const getLocale = cache(async () => {
+  'use server';
+  const event = getRequestEvent();
+  return (event!.locals.locale as Intl.Locale).baseName;
+}, 'locale');
+
+export const userLocale = () => {
+  const lang = createAsync(() => getLocale());
+  return lang;
 };
 
 /**
