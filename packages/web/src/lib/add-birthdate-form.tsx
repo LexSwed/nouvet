@@ -1,6 +1,15 @@
 import { clientOnly } from '@solidjs/start';
 import { createMemo, For } from 'solid-js';
-import { Button, Form, Icon, Option, Picker, Text, TextField } from '@nou/ui';
+import {
+  Button,
+  Fieldset,
+  Form,
+  Icon,
+  Option,
+  Picker,
+  Text,
+  TextField,
+} from '@nou/ui';
 
 import { createTranslator, userLocale } from '~/server/i18n';
 
@@ -29,7 +38,7 @@ const AddBirthDateForm = (props: { id: string }) => {
         onSubmit={(e) => e.preventDefault()}
         class="max-w-[380px] flex flex-col gap-6"
       >
-        <fieldset>
+        <Fieldset>
           <Text as="legend" with="label" class="mb-6 flex items-center gap-2">
             <span class="bg-on-surface/5 p-3 rounded-full">
               <Icon use="calendar-plus" size="md" />
@@ -52,6 +61,7 @@ const AddBirthDateForm = (props: { id: string }) => {
               label={t('app.animal-add-birth-date.month')}
               name="bmonth"
               autocomplete="off"
+              required
             >
               <Option value="" />
               <For each={monthNames()}>
@@ -67,7 +77,7 @@ const AddBirthDateForm = (props: { id: string }) => {
               max={new Date().getFullYear()}
             />
           </div>
-        </fieldset>
+        </Fieldset>
         <div class="grid grid-cols-2 gap-2 sm:flex sm:self-end">
           <Button
             variant="ghost"

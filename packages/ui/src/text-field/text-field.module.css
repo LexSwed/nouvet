@@ -10,9 +10,11 @@
     }
     &[type='number'] {
       font-variant-numeric: tabular-nums;
-      padding-inline-end: theme('spacing.1');
-      &::-webkit-inner-spin-button {
-        margin-inline-start: theme('spacing.1');
+      @media screen(md) {
+        padding-inline-end: theme('spacing.1');
+        &::-webkit-inner-spin-button {
+          margin-inline-start: theme('spacing.1');
+        }
       }
     }
   }

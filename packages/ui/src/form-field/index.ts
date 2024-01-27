@@ -1,1 +1,1 @@
-export { FormField, type FormFieldProps } from './form-field';
+export { FormField, type FormFieldProps, Fieldset } from './form-field';

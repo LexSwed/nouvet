@@ -4,6 +4,7 @@ import {
   Show,
   Switch,
   type Accessor,
+  type ComponentProps,
   type JSX,
   type JSXElement,
 } from 'solid-js';
@@ -71,4 +72,8 @@ const FormField = (props: FieldInnerProps) => {
   );
 };
 
-export { FormField };
+const Fieldset = (props: ComponentProps<'fieldset'>) => {
+  return <fieldset {...props} class={tw(cssStyle.fieldset, props.class)} />;
+};
+
+export { FormField, Fieldset };

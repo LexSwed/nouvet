@@ -6,6 +6,7 @@ export { Drawer } from './drawer';
 export { Form } from './form';
 export { Picker, Option } from './picker';
 export { Menu, MenuList, MenuItem } from './menu';
+export { Fieldset } from './form-field';
 export { TextField } from './text-field';
 export { Icon, type SvgIcons } from './icon/icon';
 export { RadioCard, SegmentedButton } from './radio';
