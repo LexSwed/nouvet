@@ -1,5 +1,5 @@
 import { useFloating } from 'solid-floating-ui';
-import { createEffect, type JSX } from 'solid-js';
+import { batch, createEffect, type JSX } from 'solid-js';
 import {
   autoUpdate,
   flip,
