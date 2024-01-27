@@ -1,3 +1,4 @@
+import { createPresence } from '@solid-primitives/presence';
 import { mergeRefs } from '@solid-primitives/refs';
 import {
   createEffect,
@@ -41,9 +42,11 @@ type BaseProps<T extends ValidComponent, P = ComponentProps<T>> = {
 };
 type Override<T1, T2> = Omit<T1, keyof T2> & T2;
 
-type PopupProps<T extends ValidComponent> = Override<
+type PopoverProps<T extends ValidComponent> = Override<
   BaseProps<T>,
   {
+    placement?: Placement;
+    offset?: OffsetOptions;
     id: string;
     children?: JSX.Element | ((open: Accessor<boolean>) => JSX.Element);
     /** @default 'div' */
@@ -51,116 +54,79 @@ type PopupProps<T extends ValidComponent> = Override<
   } & VariantProps<typeof popupVariants>
 >;
 
-const Popup = <T extends ValidComponent = 'div'>(ownProps: PopupProps<T>) => {
+const Popover = <T extends ValidComponent = 'div'>(
+  ownProps: PopoverProps<T>,
+) => {
   const [popover, setPopover] = createSignal<HTMLElement | null>(null);
   const [trigger, setTrigger] = createSignal<HTMLElement | null>(null);
   const [rendered, setRendered] = createSignal(false);
 
-  const [local, styles, props] = splitProps(
-    mergeDefaultProps(ownProps as PopupProps<'div'>, {
+  const [local, styles, floatingProps, props] = splitProps(
+    mergeDefaultProps(ownProps as PopoverProps<'div'>, {
       as: 'div',
       role: 'dialog' as const,
     }),
     ['id', 'ref', 'class', 'as', 'role', 'children'],
     ['variant'],
+    ['offset', 'placement'],
   );
+
+  const { isMounted } = createPresence(rendered, {
+    enterDuration: 240,
+    exitDuration: 100,
+  });
 
   const component = () => local.as ?? 'div';
   const children = createMemo(() => {
     const child = local.children;
-    return typeof child === 'function' ? child?.(rendered) : child;
+    return typeof child === 'function' ? child?.(isMounted) : child;
   });
 
   createEffect(
-    on(
-      () => local.id,
-      () => {
-        const trigger = Array.from(
-          document.querySelectorAll(`[popovertarget="${local.id}"]`),
-        ).find((button) => !popover()?.contains(button));
-        if (!(trigger instanceof HTMLElement)) return;
-        // trigger.setAttribute('aria-haspopup', local.role!);
-        // trigger.setAttribute('aria-controls', local.id);
-        setTrigger(trigger);
-        const hideOnBlur = (event: FocusEvent) => {
-          if (!popover()?.contains(event.relatedTarget as Node)) {
-            popover()!.hidePopover();
-          }
-        };
-        trigger.addEventListener('focusout', hideOnBlur);
-        onCleanup(() => {
-          // trigger.removeAttribute('aria-haspopup');
-          // trigger.removeAttribute('aria-controls');
-          trigger.removeEventListener('focusout', hideOnBlur);
-        });
-      },
-    ),
+    on([() => local.id, trigger], ([id, trigger]) => {
+      if (!(trigger instanceof HTMLElement)) return;
+      const hideOnBlur = (event: FocusEvent) => {
+        if (!popover()?.contains(event.relatedTarget as Node)) {
+          popover()!.hidePopover();
+        }
+      };
+      trigger.addEventListener('focusout', hideOnBlur);
+      onCleanup(() => {
+        trigger.removeEventListener('focusout', hideOnBlur);
+      });
+    }),
   );
+
+  const data = createFloating(trigger, popover, floatingProps);
 
   return (
     <Dynamic
       popover="auto"
       component={component()}
       {...props}
+      style={data.style}
+      data-placement={data.placement}
       id={local.id}
       role={local.role}
       tabIndex={0}
       ref={mergeRefs(local.ref, setPopover)}
       class={tw(popupVariants(styles), local.class)}
-      onBeforeToggle={composeEventHandlers(props.onBeforeToggle, (event) => {
-        setRendered(event.newState === 'open');
-      })}
-      onToggle={composeEventHandlers(props.onToggle, (event) => {
-        if (event.newState === 'open') {
-          popover()?.focus();
-        }
-      })}
       onFocusOut={composeEventHandlers(props.onFocusOut, (event) => {
         if (
           !popover()?.contains(event.relatedTarget as Node) &&
-          // do no hide popup on toggle element pointerdown - it will toggle popup back on on pointerup
+          // do no hide popup on trigger pointerdown, trigger click will hide the popover
           event.relatedTarget !== trigger()
         ) {
           popover()?.hidePopover();
         }
       })}
       children={children()}
-    />
-  );
-};
-
-type PopoverProps<T extends ValidComponent> = PopupProps<T> & {
-  placement?: Placement;
-  offset?: OffsetOptions;
-};
-
-const Popover = <T extends ValidComponent = 'div'>(
-  ownProps: PopoverProps<T>,
-) => {
-  const [popover, setPopover] = createSignal<HTMLElement | null>(null);
-  const [trigger, setTrigger] = createSignal<HTMLElement | null>(null);
-
-  const [floatingProps, props] = splitProps(
-    mergeDefaultProps(ownProps as PopoverProps<'div'>, {
-      as: 'div',
-      role: 'dialog' as const,
-    }),
-    ['offset', 'placement'],
-  );
-
-  const data = createFloating(trigger, popover, floatingProps);
-
-  return (
-    <Popup
-      style={data.style}
-      data-placement={data.placement}
-      {...props}
-      ref={mergeRefs(props.ref, setPopover)}
       onBeforeToggle={composeEventHandlers(props.onBeforeToggle, (event) => {
-        if (!props.id) return;
+        if (!local.id) return;
+        setRendered(event.newState === 'open');
         // filter out potential close buttons inside the popover
         const trigger = Array.from(
-          document.querySelectorAll(`[popovertarget="${props.id}"]`),
+          document.querySelectorAll(`[popovertarget="${local.id}"]`),
         ).find((button) => !popover()?.contains(button));
         if (!(trigger instanceof HTMLElement)) return;
         if (event.newState === 'open') {
@@ -168,7 +134,9 @@ const Popover = <T extends ValidComponent = 'div'>(
         }
       })}
       onToggle={composeEventHandlers(props.onToggle, (event) => {
-        if (event.newState === 'closed') {
+        if (event.newState === 'open') {
+          popover()?.focus();
+        } else {
           // we need to remove the reference for floating to remove listeners
           setTrigger(null);
         }
@@ -177,7 +145,7 @@ const Popover = <T extends ValidComponent = 'div'>(
   );
 };
 
-export { Popup, Popover };
+export { Popover };
 
 /* eslint-disable @typescript-eslint/no-namespace */
 declare module 'solid-js' {

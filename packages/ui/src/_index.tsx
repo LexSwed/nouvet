@@ -4,7 +4,7 @@ export { Card, NavCard } from './card';
 export { Divider } from './divider';
 export { Drawer } from './drawer';
 export { Form } from './form';
-export { Picker } from './picker';
+export { Picker, Option } from './picker';
 export { Menu, MenuList, MenuItem } from './menu';
 export { TextField } from './text-field';
 export { Icon, type SvgIcons } from './icon/icon';

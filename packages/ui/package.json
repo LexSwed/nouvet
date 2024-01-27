@@ -16,9 +16,11 @@
   "dependencies": {
     "@floating-ui/dom": "^1.6.0",
     "@solid-primitives/media": "^2.2.6",
+    "@solid-primitives/presence": "^0.0.4",
     "@solid-primitives/refs": "^1.0.6",
     "class-variance-authority": "^0.7.0",
     "corvu": "^0.2.4",
+    "solid-floating-ui": "^0.3.1",
     "solid-js": "^1.8.12",
     "tailwind-merge": "^2.2.1"
   },

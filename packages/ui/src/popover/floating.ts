@@ -1,13 +1,7 @@
-import {
-  batch,
-  createEffect,
-  createSignal,
-  onCleanup,
-  type JSX,
-} from 'solid-js';
+import { useFloating } from 'solid-floating-ui';
+import { createEffect, type JSX } from 'solid-js';
 import {
   autoUpdate,
-  computePosition,
   flip,
   inline,
   offset as offsetMiddleware,
@@ -32,7 +26,6 @@ interface FloatingState extends Omit<ComputePositionReturn, 'x' | 'y'> {
 
 export interface FloatingResult extends FloatingState {
   style: JSX.CSSProperties | undefined;
-  update(): void;
 }
 
 const strategy = 'absolute' as const;
@@ -47,90 +40,61 @@ export function createFloating<
 ): FloatingResult {
   const placement = () => options?.placement ?? 'bottom';
   const offset = () => options?.offset ?? 8;
-
-  const [data, setData] = createSignal<FloatingState>({
-    x: null,
-    y: null,
+  const position = useFloating(reference, floating, {
+    middleware: [
+      inline(),
+      shift({ padding: 16 }),
+      flip({ padding: 16 }),
+      offsetMiddleware(offset()),
+    ],
     placement: placement(),
     strategy,
-    middlewareData: {},
+    whileElementsMounted: (reference, floating, update) =>
+      autoUpdate(reference, floating, () => {
+        // do not calculate the position while popover is opening
+        if (
+          floating.getAttribute('popover')
+            ? floating.matches(':popover-open')
+            : true
+        ) {
+          requestAnimationFrame(update);
+        }
+      }),
   });
 
-  async function update() {
-    const currentReference = reference();
-    const currentFloating = floating();
-    if (
-      currentReference &&
-      currentFloating &&
-      (currentFloating.getAttribute('popover')
-        ? currentFloating.matches(':popover-open')
-        : true)
-    ) {
-      // avoids "ResizeObserver loop completed with undelivered notifications."
-      // and invalid initial positioning (initial calculations happening multiple times, we only care about the last one);
-      try {
-        const currentData = await computePosition(
-          currentReference,
-          currentFloating,
-          {
-            middleware: [
-              inline(),
-              shift({ padding: 16 }),
-              flip({ padding: 16 }),
-              offsetMiddleware(offset()),
-            ],
-            placement: placement(),
-            strategy,
-          },
-        );
-        if (
-          currentData &&
-          currentFloating === floating() &&
-          currentReference === reference()
-        ) {
-          setData(currentData);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }
-
   createEffect(() => {
-    const currentReference = reference();
-    const currentFloating = floating();
-    if (currentReference && currentFloating) {
-      const clear = autoUpdate(currentReference, currentFloating, () =>
-        batch(() => {
-          update();
-        }),
-      );
-      onCleanup(clear);
-    }
+    console.log(
+      {
+        inset: 'unset',
+        top: `${position.y ?? 0}px`,
+        left: `${position.x ?? 0}px`,
+        position: strategy,
+      },
+      position.middlewareData,
+    );
   });
 
   return {
     get style() {
       return {
         inset: 'unset',
-        top: `${data().y ?? 0}px`,
-        left: `${data().x ?? 0}px`,
+        top: `${position.y ?? 0}px`,
+        left: `${position.x ?? 0}px`,
         position: strategy,
       };
     },
     get x() {
-      return data().x;
+      return position.x;
     },
     get y() {
-      return data().y;
+      return position.y;
     },
     get placement() {
-      return data().placement;
+      return position.placement;
     },
     get middlewareData() {
-      return data().middlewareData;
+      return position.middlewareData;
     },
     strategy,
-    update,
   };
 }

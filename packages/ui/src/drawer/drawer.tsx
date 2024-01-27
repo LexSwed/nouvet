@@ -1,6 +1,8 @@
 import { createMediaQuery } from '@solid-primitives/media';
 import { mergeRefs } from '@solid-primitives/refs';
 import {
+  children,
+  createEffect,
   Match,
   Show,
   splitProps,
@@ -10,7 +12,7 @@ import {
 } from 'solid-js';
 import Corvu from 'corvu/drawer';
 
-import { Popover, type Popup } from '../popover/popover';
+import { Popover } from '../popover/popover';
 import { tw } from '../tw';
 import { composeEventHandlers } from '../utils';
 
@@ -57,16 +59,17 @@ const Content = (ownProps: ComponentProps<'div'>) => {
   );
 };
 
-const Drawer = (ownProps: ComponentProps<typeof Popup> & ParentProps) => {
+const Drawer = (
+  ownProps: Omit<ComponentProps<typeof Popover>, 'children'> & ParentProps,
+) => {
   let popoverEl: HTMLElement | null;
   // @screen(sm)
-  const isDesktop = createMediaQuery('(max-width: 640px)');
+  const isMobile = createMediaQuery('(max-width: 640px)');
+  const [local, props] = splitProps(ownProps, ['children']);
+  const child = children(() => local.children);
   return (
     <Switch>
-      <Match when={!isDesktop()}>
-        <Popover {...ownProps} />
-      </Match>
-      <Match when={isDesktop()}>
+      <Match when={isMobile()}>
         <Corvu.Root
           closeOnEscapeKeyDown={false}
           closeOnOutsidePointerDown={false}
@@ -81,10 +84,16 @@ const Drawer = (ownProps: ComponentProps<typeof Popup> & ParentProps) => {
           }}
         >
           <Content
-            {...ownProps}
+            {...props}
+            children={child()}
             ref={mergeRefs(ownProps.ref, (el: HTMLElement) => (popoverEl = el))}
           />
         </Corvu.Root>
+      </Match>
+      <Match when={!isMobile()}>
+        <Popover {...props} id={props.id}>
+          {(open) => <Show when={open()}>{child()}</Show>}
+        </Popover>
       </Match>
     </Switch>
   );
