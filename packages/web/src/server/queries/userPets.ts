@@ -5,11 +5,9 @@ import { eq, inArray, or } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
 import { petTable, userTable } from '~/server/db/schema';
-import { getRequestUser } from '../auth/user-session';
+import { getRequestUser, type UserSession } from '../auth/user-session';
 
-export async function userPets() {
-  const event = getRequestEvent();
-  const currentUser = await getRequestUser(event!);
+export async function userPets(userId: UserSession['userId']) {
 
   const db = useDb();
   const familyUsers = db
@@ -17,13 +15,13 @@ export async function userPets() {
     .from(userTable)
     .where(
       or(
-        eq(userTable.id, currentUser.userId),
+        eq(userTable.id, userId),
         inArray(
           userTable.familyId,
           db
             .select({ familyId: userTable.familyId })
             .from(userTable)
-            .where(eq(userTable.id, currentUser.userId)),
+            .where(eq(userTable.id, userId)),
         ),
       ),
     );
@@ -38,6 +36,7 @@ export async function userPets() {
       gender: petTable.gender,
       dateOfBirth: petTable.dateOfBirth,
       color: petTable.color,
+      weight: petTable.weight,
     })
     .from(petTable)
     .where(inArray(petTable.ownerId, familyUsers))

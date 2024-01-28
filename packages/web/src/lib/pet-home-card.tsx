@@ -11,6 +11,7 @@ interface PetHomeCard {
     id: number;
     pictureUrl: string | null;
     name: string;
+    weight: string | null;
   };
 }
 
@@ -44,6 +45,7 @@ export const PetHomeCard = (props: PetHomeCard) => {
       </A>
       <div class="flex flex-col">
         <ul class="overflow-snap -mx-4 grid scroll-p-4 grid-flow-col justify-start gap-2 px-4 py-2 [grid-auto-columns:min-content]">
+          <Show when={props.pet}>
           <li class="contents">
             <Button
               variant="outline"
@@ -58,7 +60,7 @@ export const PetHomeCard = (props: PetHomeCard) => {
               id={`${props.pet.id}-birth-date`}
               petId={props.pet.id}
             />
-          </li>
+          </li></Show>
           <li class="contents">
             <Button
               variant="outline"

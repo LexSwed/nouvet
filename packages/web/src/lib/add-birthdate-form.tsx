@@ -12,7 +12,7 @@ import {
   TextField,
 } from '@nou/ui';
 
-import { updatePetAction } from '~/api/pet';
+import { updatePetBirthDate } from '~/api/pet';
 import { createTranslator, userLocale } from '~/server/i18n';
 
 const Drawer = clientOnly(() =>
@@ -22,7 +22,7 @@ const Drawer = clientOnly(() =>
 const AddBirthDateForm = (props: { id: string; petId: number }) => {
   const t = createTranslator('app');
   const locale = userLocale();
-  const petSubmission = useSubmission(updatePetAction);
+  const petSubmission = useSubmission(updatePetBirthDate);
 
   const monthNames = createMemo(() => {
     const formatter = Intl.DateTimeFormat(locale(), {
@@ -42,7 +42,7 @@ const AddBirthDateForm = (props: { id: string; petId: number }) => {
     <Drawer id={props.id}>
       <Form
         class="w-[360px] flex flex-col gap-6"
-        action={updatePetAction}
+        action={updatePetBirthDate}
         method="post"
         validationErrors={petSubmission.result?.errors}
       >
@@ -98,12 +98,17 @@ const AddBirthDateForm = (props: { id: string; petId: number }) => {
             variant="ghost"
             popoverTargetAction="hide"
             popoverTarget={props.id}
-            size="sm"
             class="px-6"
           >
             {t('app.animal-add-birth-date.cancel')}
           </Button>
-          <Button type="submit" size="sm" class="px-6">
+          <Button
+            type="submit"
+            class="px-6"
+            loading={petSubmission.pending}
+            popoverTargetAction="hide"
+            popoverTarget={props.id}
+          >
             {t('app.animal-add-birth-date.save')}
           </Button>
         </div>

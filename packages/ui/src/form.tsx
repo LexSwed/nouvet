@@ -74,7 +74,7 @@ export const Form = (
 
 /**
  * Checks validatable form elements for native validation errors,
- * like `required` or `minlenght`. Keeps custom error message, if it was set.
+ * like `required` or `minLength`. Keeps custom error message, if it was set.
  * @returns native validation errors.
  */
 function setNativeValidationMessages(form: HTMLFormElement) {

@@ -38,6 +38,9 @@ export default defineConfig({
       rollupConfig: {
         external: ['node:async_hooks'],
       },
+      experimental: {
+        asyncContext: true,
+      },
     },
   },
 });

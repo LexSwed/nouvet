@@ -55,7 +55,7 @@ const BirthDateSchema = object({
   ),
 });
 
-export const updatePetAction = action(async (formData: FormData) => {
+export const updatePetBirthDate = action(async (formData: FormData) => {
   'use server';
   try {
     const { bday, bmonth, byear } = parse(BirthDateSchema, {

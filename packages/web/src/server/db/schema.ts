@@ -31,6 +31,9 @@ export const petTable = sqliteTable('pet', {
   color: text('color'),
   /** Supports partial ISO, e.g. YYYY-MM */
   dateOfBirth: utcDatetime('date_of_birth', false),
+  /** Weight in user's measurement system */
+  weight: text('weight', { mode: 'text', length: 200 }),
+  /** A signed URL to animal picture */
   pictureUrl: text('picture_url', { length: 120 }),
   createdAt: utcDatetime('created_at'),
 });

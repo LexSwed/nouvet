@@ -30,10 +30,11 @@ export const Spinner = (props: Props) => {
 const spinnerCss = cva('animate-spin', {
   variants: {
     size: {
-      base: 'size-8',
+      base: 'size-6',
       sm: 'size-5',
       lg: 'size-16',
       xl: 'size-24',
+      cta: 'size-24'
     },
   },
   defaultVariants: {
