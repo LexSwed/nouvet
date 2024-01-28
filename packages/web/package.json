@@ -11,7 +11,8 @@
     "format": "prettier . --write",
     "db:generate": "npx drizzle-kit generate:sqlite",
     "db:migrate": "npx tsx .drizzle/migrate.ts --env-file=.env",
-    "db:push": "npx drizzle-kit push:sqlite"
+    "db:push": "npx drizzle-kit push:sqlite",
+    "db:studio": "npx drizzle-kit studio --port=3001"
   },
   "dependencies": {
     "@lucia-auth/adapter-drizzle": "^1.0.0",

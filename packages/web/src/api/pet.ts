@@ -1,4 +1,4 @@
-import { action, revalidate } from '@solidjs/router';
+import { action, cache, revalidate } from '@solidjs/router';
 import {
   coerce,
   maxValue,
@@ -14,9 +14,8 @@ import { getRequestUserSafe } from '~/server/auth/session-safe';
 import { getDictionary } from '~/server/i18n';
 import { petCreate } from '~/server/queries/petCreate';
 import { petUpdate } from '~/server/queries/petUpdate';
+import { userPets } from '~/server/queries/userPets';
 import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
-
-import { getUserPets } from './user';
 
 export const createPetAction = action(async (formData: FormData) => {
   'use server';
@@ -89,7 +88,9 @@ export const updatePetBirthDate = action(async (formData: FormData) => {
       petId,
       currentUser.userId,
     );
-    revalidate(getUserPets.key);
+    if (result.pet) {
+      await revalidate(getUserPets.key);
+    }
     return result;
   } catch (error) {
     if (error instanceof ValiError) {
@@ -101,3 +102,8 @@ export const updatePetBirthDate = action(async (formData: FormData) => {
     return { failure: true, errors: null };
   }
 }, 'update-pet');
+
+export const getUserPets = cache(async () => {
+  const currentUser = await getRequestUserSafe();
+  return userPets(currentUser.userId);
+}, 'user-pets');

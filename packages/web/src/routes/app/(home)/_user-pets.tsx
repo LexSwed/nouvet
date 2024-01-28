@@ -2,7 +2,7 @@ import { A, createAsync } from '@solidjs/router';
 import { For, lazy, Match, Show, Switch } from 'solid-js';
 import { Button, Icon } from '@nou/ui';
 
-import { getUserPets } from '~/api/user';
+import { getUserPets } from '~/api/pet';
 import { PetHomeCard } from '~/lib/pet-home-card';
 import { createTranslator } from '~/server/i18n';
 

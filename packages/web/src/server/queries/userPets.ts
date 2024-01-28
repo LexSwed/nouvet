@@ -1,14 +1,12 @@
 'use server';
 
-import { getRequestEvent } from 'solid-js/web';
 import { eq, inArray, or } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
 import { petTable, userTable } from '~/server/db/schema';
-import { getRequestUser, type UserSession } from '../auth/user-session';
+import { type UserSession } from '../auth/user-session';
 
 export async function userPets(userId: UserSession['userId']) {
-
   const db = useDb();
   const familyUsers = db
     .selectDistinct({ ownerId: userTable.id })

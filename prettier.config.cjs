@@ -21,6 +21,14 @@ const config = {
     '',
     '.css$',
   ],
+  overrides: [
+    {
+      files: ['*.json', '.*rc'],
+      options: {
+        trailingComma: 'none',
+      },
+    },
+  ],
 };
 
 module.exports = config;

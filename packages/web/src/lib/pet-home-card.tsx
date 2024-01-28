@@ -2,6 +2,7 @@ import { A } from '@solidjs/router';
 import { Show } from 'solid-js';
 import { Button, Card, Icon, Text } from '@nou/ui';
 
+import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
 
 import AddBirthDateForm from './add-birthdate-form';
@@ -11,6 +12,11 @@ interface PetHomeCard {
     id: number;
     pictureUrl: string | null;
     name: string;
+    type: DatabasePet['type'];
+    gender: DatabasePet['gender'];
+    breed: string | null;
+    dateOfBirth: string | null;
+    color: string | null;
     weight: string | null;
   };
 }
@@ -45,44 +51,51 @@ export const PetHomeCard = (props: PetHomeCard) => {
       </A>
       <div class="flex flex-col">
         <ul class="overflow-snap -mx-4 grid scroll-p-4 grid-flow-col justify-start gap-2 px-4 py-2 [grid-auto-columns:min-content]">
-          <Show when={props.pet}>
-          <li class="contents">
-            <Button
-              variant="outline"
-              size="sm"
-              class="gap-2 text-nowrap"
-              popoverTarget={`${props.pet.id}-birth-date`}
-            >
-              <Icon use="calendar-plus" size="sm" />
-              <Text with="label-sm">{t('app.animal-shortcut.birth-date')}</Text>
-            </Button>
-            <AddBirthDateForm
-              id={`${props.pet.id}-birth-date`}
-              petId={props.pet.id}
-            />
-          </li></Show>
-          <li class="contents">
-            <Button
-              variant="outline"
-              size="sm"
-              class="gap-2 text-nowrap"
-              popoverTarget={`${props.pet.id}-weight`}
-            >
-              <Icon use="scales" size="sm" />
-              <Text with="label-sm">{t('app.animal-shortcut.weight')}</Text>
-            </Button>
-          </li>
-          <li class="contents">
-            <Button
-              variant="outline"
-              size="sm"
-              class="gap-2 text-nowrap"
-              popoverTarget={`${props.pet.id}-nutrition`}
-            >
-              <Icon use="carrot" size="sm" />
-              <Text with="label-sm">{t('app.animal-shortcut.nutrition')}</Text>
-            </Button>
-          </li>
+          <Show when={!props.pet.dateOfBirth}>
+            <li class="contents">
+              <Button
+                variant="outline"
+                size="sm"
+                class="gap-2 text-nowrap"
+                popoverTarget={`${props.pet.id}-birth-date`}
+              >
+                <Icon use="calendar-plus" size="sm" />
+                <Text with="label-sm">
+                  {t('app.animal-shortcut.birth-date')}
+                </Text>
+              </Button>
+              <AddBirthDateForm
+                id={`${props.pet.id}-birth-date`}
+                petId={props.pet.id}
+              />
+            </li>
+          </Show>
+          <Show when={!props.pet.weight}>
+            <li class="contents">
+              <Button
+                variant="outline"
+                size="sm"
+                class="gap-2 text-nowrap"
+                popoverTarget={`${props.pet.id}-weight`}
+              >
+                <Icon use="scales" size="sm" />
+                <Text with="label-sm">{t('app.animal-shortcut.weight')}</Text>
+              </Button>
+            </li>
+          </Show>
+          <Show when={props.pet.type === 'dog' && !props.pet.breed}>
+            <li class="contents">
+              <Button
+                variant="outline"
+                size="sm"
+                class="gap-2 text-nowrap"
+                popoverTarget={`${props.pet.id}-breed`}
+              >
+                <Icon use="paw-print" size="sm" />
+                <Text with="label-sm">{t('app.animal-shortcut.breed')}</Text>
+              </Button>
+            </li>
+          </Show>
         </ul>
       </div>
     </Card>

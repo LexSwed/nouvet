@@ -97,7 +97,9 @@ export async function petUpdate(
         breed: petTable.breed,
         color: petTable.color,
         dateOfBirth: petTable.dateOfBirth,
-      });
+      })
+      .get();
+
     return { errors: null, pet };
   } catch (error) {
     if (error instanceof ValiError) {

@@ -34,7 +34,7 @@ const spinnerCss = cva('animate-spin', {
       sm: 'size-5',
       lg: 'size-16',
       xl: 'size-24',
-      cta: 'size-24'
+      cta: 'size-24',
     },
   },
   defaultVariants: {

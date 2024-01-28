@@ -41,7 +41,7 @@ const AddBirthDateForm = (props: { id: string; petId: number }) => {
   return (
     <Drawer id={props.id}>
       <Form
-        class="w-[360px] flex flex-col gap-6"
+        class="w-[360px] max-w-full flex flex-col gap-6"
         action={updatePetBirthDate}
         method="post"
         validationErrors={petSubmission.result?.errors}
