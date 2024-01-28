@@ -14,14 +14,9 @@ export const UserPets = (props: { familyId: number | undefined }) => {
   return (
     <Switch>
       <Match when={pets()?.length ?? 0 > 0}>
-        <>
-          <ul class="scrollbar-none -mx-3 grid snap-x snap-mandatory scroll-p-3 grid-flow-col grid-cols-[repeat(auto-fit,100%)] gap-2 overflow-auto px-3 py-2 [&>*]:snap-start">
-            <For each={pets()}>{(pet) => <PetHomeCard pet={pet} />}</For>
-          </ul>
-          <Button variant="ghost" class="w-full">
-            Add More
-          </Button>
-        </>
+        <ul class="scrollbar-none -mx-3 grid snap-x snap-mandatory scroll-p-3 grid-flow-col grid-cols-[repeat(auto-fit,100%)] gap-2 overflow-auto px-3 py-2 [&>*]:snap-start">
+          <For each={pets()}>{(pet) => <PetHomeCard pet={pet} />}</For>
+        </ul>
       </Match>
       <Match when={pets()?.length === 0}>
         <CreateNewPetForm minimal>

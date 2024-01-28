@@ -1,6 +1,6 @@
 import { A } from '@solidjs/router';
 import { Show } from 'solid-js';
-import { Button, Card, Icon, Text } from '@nou/ui';
+import { Button, Card, Icon, Presence, Text } from '@nou/ui';
 
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
@@ -23,6 +23,7 @@ interface PetHomeCard {
 
 export const PetHomeCard = (props: PetHomeCard) => {
   const t = createTranslator('app');
+
   return (
     <Card role="listitem" variant="flat" class="flex w-full flex-col gap-4">
       <A
@@ -51,7 +52,7 @@ export const PetHomeCard = (props: PetHomeCard) => {
       </A>
       <div class="flex flex-col">
         <ul class="overflow-snap -mx-4 grid scroll-p-4 grid-flow-col justify-start gap-2 px-4 py-2 [grid-auto-columns:min-content]">
-          <Show when={!props.pet.dateOfBirth}>
+          <Presence when={!props.pet.dateOfBirth}>
             <li class="contents">
               <Button
                 variant="outline"
@@ -69,8 +70,8 @@ export const PetHomeCard = (props: PetHomeCard) => {
                 petId={props.pet.id}
               />
             </li>
-          </Show>
-          <Show when={!props.pet.weight}>
+          </Presence>
+          <Presence when={!props.pet.weight}>
             <li class="contents">
               <Button
                 variant="outline"
@@ -82,8 +83,8 @@ export const PetHomeCard = (props: PetHomeCard) => {
                 <Text with="label-sm">{t('app.animal-shortcut.weight')}</Text>
               </Button>
             </li>
-          </Show>
-          <Show when={props.pet.type === 'dog' && !props.pet.breed}>
+          </Presence>
+          <Presence when={props.pet.type === 'dog' && !props.pet.breed}>
             <li class="contents">
               <Button
                 variant="outline"
@@ -95,7 +96,7 @@ export const PetHomeCard = (props: PetHomeCard) => {
                 <Text with="label-sm">{t('app.animal-shortcut.breed')}</Text>
               </Button>
             </li>
-          </Show>
+          </Presence>
         </ul>
       </div>
     </Card>
