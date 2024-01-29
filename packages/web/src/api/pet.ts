@@ -6,11 +6,14 @@ import {
   nullish,
   number,
   object,
+  optional,
   parse,
+  picklist,
   ValiError,
 } from 'valibot';
 
 import { getRequestUserSafe } from '~/server/auth/session-safe';
+import type { DatabaseUser, DatabaseUserProfile } from '~/server/db/schema';
 import { getDictionary } from '~/server/i18n';
 import { petCreate } from '~/server/queries/petCreate';
 import { petUpdate } from '~/server/queries/petUpdate';
@@ -78,11 +81,6 @@ export const updatePetBirthDate = action(async (formData: FormData) => {
     const currentUser = await getRequestUserSafe();
     const result = await petUpdate(
       {
-        name: formData.get('name')?.toString(),
-        type: formData.get('type')?.toString(),
-        gender: formData.get('gender')?.toString(),
-        breed: formData.get('breed')?.toString(),
-        color: formData.get('color')?.toString(),
         dateOfBirth,
       },
       petId,
@@ -101,9 +99,44 @@ export const updatePetBirthDate = action(async (formData: FormData) => {
     console.error(error);
     return { failure: true, errors: null };
   }
-}, 'update-pet');
+}, 'update-pet-birth-date');
 
 export const getUserPets = cache(async () => {
   const currentUser = await getRequestUserSafe();
   return userPets(currentUser.userId);
 }, 'user-pets');
+
+const WeightSchema = object({
+  weight: coerce(number(), Number),
+});
+
+export const updatePetWeight = action(async (formData: FormData) => {
+  'use server';
+  try {
+    const { weight } = parse(WeightSchema, { weight: formData.get('weight') });
+    const petId = Number(formData.get('petId'));
+    if (Number.isNaN(petId)) {
+      throw new Error('petId is not provided');
+    }
+    const currentUser = await getRequestUserSafe();
+    const result = await petUpdate(
+      {
+        weight,
+      },
+      petId,
+      currentUser.userId,
+    );
+    if (result.pet) {
+      await revalidate(getUserPets.key);
+    }
+    return result;
+  } catch (error) {
+    if (error instanceof ValiError) {
+      return {
+        errors: await translateErrorTokens(error),
+      };
+    }
+    console.error(error);
+    return { failure: true, errors: null };
+  }
+}, 'update-pet-weight');

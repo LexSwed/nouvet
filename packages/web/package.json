@@ -29,9 +29,9 @@
     "drizzle-orm": "^0.29.3",
     "drizzle-valibot": "^0.1.1",
     "lucia": "^3.0.1",
-    "oslo": "^1.0.2",
+    "oslo": "^1.0.3",
     "solid-js": "^1.8.12",
-    "valibot": "^0.27.0",
+    "valibot": "^0.27.1",
     "vinxi": "0.1.6"
   },
   "devDependencies": {

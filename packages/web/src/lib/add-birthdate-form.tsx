@@ -19,10 +19,13 @@ const Drawer = clientOnly(() =>
   import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
 );
 
-const AddBirthDateForm = (props: { id: string; petId: number }) => {
+const AddBirthDateForm = (props: {
+  id: string;
+  pet: { id: number; name: string };
+}) => {
   const t = createTranslator('app');
   const locale = userLocale();
-  const petSubmission = useSubmission(updatePetBirthDate);
+  const birthDateSubmission = useSubmission(updatePetBirthDate);
 
   const monthNames = createMemo(() => {
     const formatter = Intl.DateTimeFormat(locale(), {
@@ -35,8 +38,9 @@ const AddBirthDateForm = (props: { id: string; petId: number }) => {
     });
   });
   const dateOfBirthError = () =>
-    petSubmission.result?.errors && 'dateOfBirth' in petSubmission.result.errors
-      ? petSubmission.result.errors.dateOfBirth
+    birthDateSubmission.result?.errors &&
+    'dateOfBirth' in birthDateSubmission.result.errors
+      ? birthDateSubmission.result.errors.dateOfBirth
       : null;
   return (
     <Drawer id={props.id}>
@@ -44,15 +48,15 @@ const AddBirthDateForm = (props: { id: string; petId: number }) => {
         class="w-[360px] max-w-full flex flex-col gap-6"
         action={updatePetBirthDate}
         method="post"
-        validationErrors={petSubmission.result?.errors}
+        validationErrors={birthDateSubmission.result?.errors}
       >
-        <input type="hidden" name="petId" value={props.petId} />
+        <input type="hidden" name="petId" value={props.pet.id} />
         <Fieldset>
           <Text as="legend" with="label" class="mb-6 flex items-center gap-2">
             <span class="bg-on-surface/5 p-3 rounded-full">
               <Icon use="calendar-plus" size="md" />
             </span>
-            {t('app.animal-add-birth-date.label')}
+            {t('app.animal-add-birth-date.label', { name: props.pet.name })}
           </Text>
           <div class="grid grid-cols-[4rem_1fr_5rem] gap-2">
             <TextField
@@ -100,16 +104,16 @@ const AddBirthDateForm = (props: { id: string; petId: number }) => {
             popoverTarget={props.id}
             class="px-6"
           >
-            {t('app.animal-add-birth-date.cancel')}
+            {t('app.animal.drawer.cancel')}
           </Button>
           <Button
             type="submit"
             class="px-6"
-            loading={petSubmission.pending}
+            loading={birthDateSubmission.pending}
             popoverTargetAction="hide"
             popoverTarget={props.id}
           >
-            {t('app.animal-add-birth-date.save')}
+            {t('app.animal.drawer.save')}
           </Button>
         </div>
       </Form>

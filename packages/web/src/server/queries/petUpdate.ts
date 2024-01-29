@@ -7,6 +7,7 @@ import {
   maxValue,
   minLength,
   minValue,
+  number,
   object,
   optional,
   parse,
@@ -60,6 +61,7 @@ const UpdatePetSchema = object({
       maxValue(new Date(), 'birthdate.range' satisfies ErrorKeys),
     ]),
   ),
+  weight: optional(number([minValue(0.1), maxValue(999)])),
 });
 
 type UpdatePetInput = Input<typeof UpdatePetSchema>;

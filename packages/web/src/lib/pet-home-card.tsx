@@ -6,6 +6,7 @@ import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
 
 import AddBirthDateForm from './add-birthdate-form';
+import AddWeightForm from './add-weight-form';
 
 interface PetHomeCard {
   pet: {
@@ -67,7 +68,7 @@ export const PetHomeCard = (props: PetHomeCard) => {
               </Button>
               <AddBirthDateForm
                 id={`${props.pet.id}-birth-date`}
-                petId={props.pet.id}
+                pet={props.pet}
               />
             </li>
           </Presence>
@@ -82,6 +83,7 @@ export const PetHomeCard = (props: PetHomeCard) => {
                 <Icon use="scales" size="sm" />
                 <Text with="label-sm">{t('app.animal-shortcut.weight')}</Text>
               </Button>
+              <AddWeightForm id={`${props.pet.id}-weight`} pet={props.pet} />
             </li>
           </Presence>
           <Presence when={props.pet.type === 'dog' && !props.pet.breed}>
