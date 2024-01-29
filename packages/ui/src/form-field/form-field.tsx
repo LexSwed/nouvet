@@ -1,4 +1,5 @@
 import {
+  children,
   createUniqueId,
   Match,
   Show,
@@ -30,6 +31,8 @@ interface FieldInnerProps
     id: Accessor<string>;
     describedBy: Accessor<string | undefined>;
   }) => JSX.Element;
+  /** Prefix text or an icon */
+  prefix?: JSX.Element;
 }
 const FormField = (props: FieldInnerProps) => {
   const formContext = useFormContext();
@@ -38,19 +41,25 @@ const FormField = (props: FieldInnerProps) => {
   const descriptionId = () => `${id()}-description`;
   const errorMessage = () =>
     props.name ? formContext().validationErrors?.[props.name] : null;
+  const prefix = children(() => props.prefix);
   return (
     <div class={tw(cssStyle.field, props.class)} style={props.style}>
-      <div class={cssStyle.inputWrapper}>
+      <div class={cssStyle.wrapper}>
         <Show when={props.label}>
           <Text as="label" for={id()} with="label-sm" class={cssStyle.label}>
             {props.label}
           </Text>
         </Show>
-        {props.children({
-          id,
-          describedBy: () =>
-            errorMessage() || props.description ? descriptionId() : undefined,
-        })}
+        <div class={cssStyle.inputWrapper}>
+          <Show when={prefix()}>
+            <span class={cssStyle.prefix}>{prefix()}</span>
+          </Show>
+          {props.children({
+            id,
+            describedBy: () =>
+              errorMessage() || props.description ? descriptionId() : undefined,
+          })}
+        </div>
       </div>
       <Switch>
         <Match when={errorMessage()}>

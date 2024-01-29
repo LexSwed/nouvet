@@ -15,7 +15,7 @@
       }
     }
   }
-  .inputWrapper {
+  .wrapper {
     position: relative;
     display: flex;
     width: 100%;
@@ -49,6 +49,21 @@
       --border-scale: 1.5;
     }
   }
+  .inputWrapper {
+    display: grid;
+    grid-template: 1fr / auto 1fr auto;
+    gap: theme('spacing.2');
+    align-items: baseline;
+    & > * {
+      grid-row: 1;
+    }
+    & > *:not(.prefix):not(.suffix) {
+      grid-column: 1 / -1;
+    }
+    /* &:has(.prefix) > *:not(.prefix):not(.suffix) {
+      padding-inline-start: calc(theme('spacing.8') + theme('spacing.2'));
+    } */
+  }
   .label {
     padding-inline: var(--start-padding);
     padding-block-start: theme('spacing.2');
@@ -58,6 +73,10 @@
     padding-inline: var(--start-padding);
     color: theme('colors.on-surface');
     @apply text-sm;
+  }
+
+  .prefix {
+    grid-column: 1;
   }
 
   .fieldset {

@@ -1,5 +1,6 @@
 @layer nou-ui {
   .input {
+    flex-basis: 100%;
     padding: theme(spacing.3) var(--start-padding);
     background: transparent;
     outline: none;

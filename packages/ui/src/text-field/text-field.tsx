@@ -11,7 +11,7 @@ export interface TextFieldProps
 const TextField = (ownProps: TextFieldProps) => {
   const [fieldProps, props] = splitProps(
     mergeDefaultProps(ownProps, { type: 'text' }),
-    ['class', 'style', 'id', 'label'],
+    ['class', 'style', 'id', 'label', 'prefix'],
   );
 
   return (
