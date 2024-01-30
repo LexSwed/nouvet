@@ -1,3 +1,5 @@
+'use client';
+
 import { createMediaQuery } from '@solid-primitives/media';
 import { mergeRefs } from '@solid-primitives/refs';
 import {
@@ -10,9 +12,10 @@ import {
   type ComponentProps,
   type ParentProps,
 } from 'solid-js';
+import { isServer } from 'solid-js/web';
 import Corvu from 'corvu/drawer';
 
-import { Popover } from '../popover/popover';
+import { Popover } from '../popover';
 import { tw } from '../tw';
 import { composeEventHandlers } from '../utils';
 
@@ -72,7 +75,7 @@ const Drawer = (
       <Match when={isMobile()}>
         <Corvu.Root
           closeOnEscapeKeyDown={false}
-          closeOnOutsidePointerDown={false}
+          closeOnOutsidePointer={false}
           trapFocus={false}
           restoreFocus={false}
           role="dialog"

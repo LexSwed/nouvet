@@ -15,9 +15,7 @@ import {
 import { updatePetBirthDate } from '~/api/pet';
 import { createTranslator, userLocale } from '~/server/i18n';
 
-const Drawer = clientOnly(() =>
-  import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
-);
+const Drawer = clientOnly(() => import('@nou/ui/src/drawer'));
 
 const AddBirthDateForm = (props: {
   id: string;
@@ -43,7 +41,7 @@ const AddBirthDateForm = (props: {
       ? birthDateSubmission.result.errors.dateOfBirth
       : null;
   return (
-    <Drawer id={props.id}>
+    <Drawer id={props.id} placement="bottom-start">
       <Form
         class="w-[360px] max-w-full flex flex-col gap-6"
         action={updatePetBirthDate}

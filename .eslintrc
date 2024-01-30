@@ -1,0 +1,3 @@
+{
+  "extends": ["@nou/config/eslint"]
+}

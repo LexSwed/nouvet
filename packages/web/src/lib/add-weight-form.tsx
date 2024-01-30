@@ -17,9 +17,7 @@ import { getUserMeasurementSystem } from '~/api/user';
 import { getRequestUserSafe } from '~/server/auth/session-safe';
 import { createTranslator, userLocale } from '~/server/i18n';
 
-const Drawer = clientOnly(() =>
-  import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
-);
+const Drawer = clientOnly(() => import('@nou/ui/src/drawer'));
 
 const AddWeightForm = (props: {
   id: string;

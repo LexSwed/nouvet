@@ -1,1 +1,1 @@
-export { Drawer } from './drawer';
+export { Drawer as default } from './drawer';

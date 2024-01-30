@@ -2,7 +2,7 @@ export { Avatar } from './avatar';
 export { Button, ButtonLink } from './button';
 export { Card, NavCard } from './card';
 export { Divider } from './divider';
-export { Drawer } from './drawer';
+export { default as Drawer } from './drawer';
 export { Form } from './form';
 export { Picker, Option } from './picker';
 export { Menu, MenuList, MenuItem } from './menu';

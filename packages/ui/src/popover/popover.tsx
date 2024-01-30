@@ -37,22 +37,17 @@ const popupVariants = cva(cssStyles.popover, {
   },
 });
 
-type BaseProps<T extends ValidComponent, P = ComponentProps<T>> = {
-  [K in keyof P]: P[K];
-};
-type Override<T1, T2> = Omit<T1, keyof T2> & T2;
-
-type PopoverProps<T extends ValidComponent> = Override<
-  BaseProps<T>,
-  {
-    placement?: Placement;
-    offset?: OffsetOptions;
-    id: string;
-    children?: JSX.Element | ((open: Accessor<boolean>) => JSX.Element);
-    /** @default 'div' */
-    as?: T | undefined;
-  } & VariantProps<typeof popupVariants>
->;
+type PopoverProps<T extends ValidComponent> = Omit<
+  ComponentProps<T>,
+  'id' | 'children'
+> & {
+  placement?: Placement;
+  offset?: OffsetOptions;
+  id: string;
+  children?: JSX.Element | ((open: Accessor<boolean>) => JSX.Element);
+  /** @default 'div' */
+  as?: T | undefined;
+} & VariantProps<typeof popupVariants>;
 
 const Popover = <T extends ValidComponent = 'div'>(
   ownProps: PopoverProps<T>,
