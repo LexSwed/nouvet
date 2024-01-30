@@ -15,7 +15,9 @@ import {
 import { updatePetBirthDate } from '~/api/pet';
 import { createTranslator, userLocale } from '~/server/i18n';
 
-const Drawer = clientOnly(() => import('@nou/ui/src/drawer'));
+const Drawer = clientOnly(() =>
+  import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
+);
 
 const AddBirthDateForm = (props: {
   id: string;

@@ -6,9 +6,9 @@ import {
   Icon,
   MenuItem,
   MenuList,
+  Popover,
   Text,
 } from '@nou/ui';
-import { Popover } from '@nou/ui/src/popover';
 
 import { createTranslator } from '~/server/i18n';
 

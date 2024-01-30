@@ -14,10 +14,11 @@ import {
 
 import { updatePetBirthDate } from '~/api/pet';
 import { getUserMeasurementSystem } from '~/api/user';
-import { getRequestUserSafe } from '~/server/auth/session-safe';
-import { createTranslator, userLocale } from '~/server/i18n';
+import { createTranslator } from '~/server/i18n';
 
-const Drawer = clientOnly(() => import('@nou/ui/src/drawer'));
+const Drawer = clientOnly(() =>
+  import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
+);
 
 const AddWeightForm = (props: {
   id: string;
@@ -28,7 +29,11 @@ const AddWeightForm = (props: {
   const petSubmission = useSubmission(updatePetBirthDate);
 
   return (
-    <Drawer id={props.id} aria-labelledby={`${props.id}-drawer`}>
+    <Drawer
+      id={props.id}
+      aria-labelledby={`${props.id}-drawer`}
+      placement="bottom-start"
+    >
       <Form
         class="w-[360px] max-w-full flex flex-col gap-6"
         action={updatePetBirthDate}

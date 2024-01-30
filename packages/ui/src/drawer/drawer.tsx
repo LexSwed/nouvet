@@ -12,7 +12,6 @@ import {
   type ComponentProps,
   type ParentProps,
 } from 'solid-js';
-import { isServer } from 'solid-js/web';
 import Corvu from 'corvu/drawer';
 
 import { Popover } from '../popover';
@@ -70,6 +69,7 @@ const Drawer = (
   const isMobile = createMediaQuery('(max-width: 640px)', true);
   const [local, props] = splitProps(ownProps, ['children']);
   const child = children(() => local.children);
+  console.log({ isMobile: isMobile() });
   return (
     <Switch>
       <Match when={isMobile()}>
