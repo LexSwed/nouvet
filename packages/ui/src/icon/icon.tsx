@@ -11,7 +11,7 @@ export type { SvgIcons } from './svg-icons.d.ts';
 const iconVariants = cva('inline shrink-0 select-none', {
   variants: {
     size: {
-      font: 'w-font h-font',
+      font: 'size-font',
       xs: 'size-4',
       sm: 'size-6',
       md: 'size-8',

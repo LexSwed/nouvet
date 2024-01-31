@@ -17,7 +17,7 @@ const cardVariants = cva(
         elevated: 'bg-surface text-on-surface shadow-sm',
         flat: 'bg-surface text-on-surface',
         filled: 'bg-secondary-container text-on-secondary-container',
-        outlined: 'bg-surface text-on-surface border-outline/20 border',
+        outlined: 'border border-outline/20 bg-surface text-on-surface',
       },
       tone: {
         failure: '',
@@ -40,7 +40,7 @@ const cardVariants = cva(
         _link: true,
         variant: 'filled',
         class:
-          'outline-primary intent:bg-secondary-container/90 intent:text-on-secondary-container intent:outline-2 outline-offset-4',
+          'outline-offset-4 outline-primary intent:bg-secondary-container/90 intent:text-on-secondary-container intent:outline-2',
       },
     ],
     defaultVariants: {

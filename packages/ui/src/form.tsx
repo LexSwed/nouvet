@@ -10,7 +10,6 @@ import {
   type ComponentProps,
   type ParentProps,
 } from 'solid-js';
-import { isServer } from 'solid-js/web';
 
 interface FormContext {
   validationErrors?: Record<string, string> | null;

@@ -1,16 +1,6 @@
 import { createAsync, useSubmission } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
-import { createMemo, For, Show } from 'solid-js';
-import {
-  Button,
-  Fieldset,
-  Form,
-  Icon,
-  Option,
-  Picker,
-  Text,
-  TextField,
-} from '@nou/ui';
+import { Button, Form, Icon, Text, TextField } from '@nou/ui';
 
 import { updatePetBirthDate } from '~/api/pet';
 import { getUserMeasurementSystem } from '~/api/user';
@@ -35,7 +25,7 @@ const AddWeightForm = (props: {
       placement="bottom-start"
     >
       <Form
-        class="w-[360px] max-w-full flex flex-col gap-6"
+        class="flex w-[360px] max-w-full flex-col gap-6"
         action={updatePetBirthDate}
         method="post"
         validationErrors={petSubmission.result?.errors}
@@ -46,7 +36,7 @@ const AddWeightForm = (props: {
           class="flex items-center gap-2"
           id={`${props.id}-drawer`}
         >
-          <span class="bg-on-surface/5 p-3 rounded-full">
+          <span class="bg-on-surface/5 rounded-full p-3">
             <Icon use="scales" size="md" />
           </span>
           {t('app.animal-add-weight.label', { name: props.pet.name })}

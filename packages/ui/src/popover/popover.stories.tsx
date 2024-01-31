@@ -33,7 +33,7 @@ export const AccountMenu = () => {
         <a
           href="#"
           link={false}
-          class="text-primary flex w-full items-center justify-start gap-4 ps-3"
+          class="flex w-full items-center justify-start gap-4 ps-3 text-primary"
         >
           John Doe
           <Avatar name="John Doe" class="ms-auto" avatarUrl={null} />

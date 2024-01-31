@@ -13,15 +13,15 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-primary-container text-on-primary-container intent:filter-darker outline-primary',
+          'intent:filter-darker bg-primary-container text-on-primary-container outline-primary',
         destructive:
           'bg-destructive text-on-destructive intent:bg-destructive/90 outline-destructive',
         outline:
-          'border-outline text-on-surface outline-on-surface intent:bg-on-surface/8 rounded-full border bg-transparent',
+          'rounded-full border border-outline bg-transparent text-on-surface outline-on-surface intent:bg-on-surface/8',
         secondary:
-          'bg-tertiary-container text-on-tertiary-container intent:bg-tertiary-container/80 outline-tertiary rounded-full',
-        ghost: 'intent:bg-on-surface/8 text-on-surface outline-on-surface',
-        link: 'text-primary intent:underline underline-offset-4',
+          'rounded-full bg-tertiary-container text-on-tertiary-container outline-tertiary intent:bg-tertiary-container/80',
+        ghost: 'text-on-surface outline-on-surface intent:bg-on-surface/8',
+        link: 'text-primary underline-offset-4 intent:underline',
       },
       size: {
         base: 'h-12 min-w-12 px-6 py-2 text-base',

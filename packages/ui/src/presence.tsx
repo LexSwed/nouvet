@@ -1,16 +1,14 @@
 import { createPresence } from '@solid-primitives/presence';
-import { Show, type Accessor, type ComponentProps } from 'solid-js';
+import { Show, type Accessor, type JSX } from 'solid-js';
 
 import { mergeDefaultProps } from './utils';
 
-type RequiredParameter<T> = T extends () => unknown ? never : T;
-function Presence<
-  T,
-  TRenderFunction extends (item: Accessor<NonNullable<T>>) => JSX.Element,
->(ownProps: {
-  when: T | undefined | null | false;
+function Presence(ownProps: {
+  when: boolean | undefined | null | false;
   fallback?: JSX.Element;
-  children: JSX.Element | RequiredParameter<TRenderFunction>;
+  children:
+    | JSX.Element
+    | ((present: Accessor<NonNullable<boolean>>) => JSX.Element);
   transitionDuration?: number;
 }) {
   const props = mergeDefaultProps(ownProps, {
@@ -22,8 +20,8 @@ function Presence<
   return (
     <Show
       when={presence.isMounted()}
-      fallback={props.fallback as any}
-      children={props.children as any}
+      fallback={props.fallback}
+      children={props.children}
     />
   );
 }

@@ -4,7 +4,6 @@ import {
   createEffect,
   createMemo,
   createSignal,
-  on,
   onCleanup,
   splitProps,
   type Accessor,

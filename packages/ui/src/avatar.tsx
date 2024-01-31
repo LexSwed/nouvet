@@ -45,6 +45,7 @@ function BoringAvatar(props: AvatarProps) {
   // TODO: More brand like custom colors?
   const colors = ['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90'];
 
+  // eslint-disable-next-line solid/reactivity
   const data = generateData(props.name, colors);
 
   function getRectTransform() {
