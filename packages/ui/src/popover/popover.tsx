@@ -77,22 +77,26 @@ const Popover = <T extends ValidComponent = 'div'>(
     return typeof child === 'function' ? child?.(isMounted) : child;
   });
 
-  createEffect(
-    on([() => local.id, trigger], ([id, trigger]) => {
-      if (!(trigger instanceof HTMLElement)) return;
-      const hideOnBlur = (event: FocusEvent) => {
-        if (!popover()?.contains(event.relatedTarget as Node)) {
-          popover()!.hidePopover();
-        }
-      };
-      trigger.addEventListener('focusout', hideOnBlur);
-      onCleanup(() => {
-        trigger.removeEventListener('focusout', hideOnBlur);
-      });
-    }),
-  );
-
   const data = createFloating(trigger, popover, floatingProps);
+
+  let outsidePointerDown = false;
+  createEffect(() => {
+    function onPointerDown() {
+      outsidePointerDown = true;
+    }
+    function onPointerUp(event: PointerEvent) {
+      outsidePointerDown = false;
+      if (!popover()?.contains(event.target as HTMLElement)) {
+        popover()?.hidePopover();
+      }
+    }
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('pointerup', onPointerUp);
+    onCleanup(() => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('pointerup', onPointerUp);
+    });
+  });
 
   return (
     <Dynamic
@@ -109,8 +113,8 @@ const Popover = <T extends ValidComponent = 'div'>(
       onFocusOut={composeEventHandlers(props.onFocusOut, (event) => {
         if (
           !popover()?.contains(event.relatedTarget as Node) &&
-          // do no hide popup on trigger pointerdown, trigger click will hide the popover
-          event.relatedTarget !== trigger()
+          // do not hide popover on outside click, it will be handled separately
+          !outsidePointerDown
         ) {
           popover()?.hidePopover();
         }
