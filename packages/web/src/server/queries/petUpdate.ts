@@ -75,7 +75,7 @@ export async function petUpdate(
   userId: UserSession['userId'],
 ) {
   try {
-    const { name, type, gender, breed, color, dateOfBirth } = parse(
+    const { name, type, gender, breed, color, dateOfBirth, weight } = parse(
       UpdatePetSchema,
       petData,
     );
@@ -83,6 +83,7 @@ export async function petUpdate(
     const pet = await db
       .update(petTable)
       .set({
+        weight,
         name,
         type,
         gender,
@@ -99,6 +100,7 @@ export async function petUpdate(
         breed: petTable.breed,
         color: petTable.color,
         dateOfBirth: petTable.dateOfBirth,
+        weight: petTable.weight,
       })
       .get();
 

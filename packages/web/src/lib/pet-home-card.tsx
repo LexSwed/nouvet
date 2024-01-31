@@ -18,7 +18,7 @@ interface PetHomeCard {
     breed: string | null;
     dateOfBirth: string | null;
     color: string | null;
-    weight: string | null;
+    weight: number | null;
   };
 }
 

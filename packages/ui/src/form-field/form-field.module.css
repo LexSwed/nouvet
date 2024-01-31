@@ -52,9 +52,9 @@
   .inputWrapper {
     display: grid;
     align-items: baseline;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr auto;
     cursor: default;
-    &:has(.prefix, .suffix) {
+    &:has(.prefix) {
       grid-template-columns: auto 1fr auto;
     }
   }

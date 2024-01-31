@@ -25,7 +25,7 @@ export interface FormFieldProps {
 interface FieldInnerProps
   extends FormFieldProps,
     Pick<JSX.HTMLAttributes<HTMLDivElement>, 'class' | 'id' | 'style'> {
-  /* Name of the input field */
+  /* Name of the input field to assign validation description */
   name?: string;
   children: (ariaProps: {
     id: Accessor<string>;
@@ -33,6 +33,8 @@ interface FieldInnerProps
   }) => JSX.Element;
   /** Prefix text or an icon */
   prefix?: JSX.Element;
+  /** Prefix text or an icon */
+  suffix?: JSX.Element;
 }
 const FormField = (props: FieldInnerProps) => {
   const formContext = useFormContext();
@@ -42,11 +44,13 @@ const FormField = (props: FieldInnerProps) => {
   const errorMessage = () =>
     props.name ? formContext().validationErrors?.[props.name] : null;
   const prefix = children(() => props.prefix);
+  const suffix = children(() => props.suffix);
   return (
     <div class={tw(cssStyle.field, props.class)} style={props.style}>
       <div
         class={cssStyle.wrapper}
         onClick={(e) => {
+          // suffix and prefix need dynamic width, click on them needs to trigger input focus anyway
           const input = e.currentTarget.querySelector('input');
           if (input instanceof HTMLInputElement) {
             input.focus();
@@ -67,6 +71,9 @@ const FormField = (props: FieldInnerProps) => {
             describedBy: () =>
               errorMessage() || props.description ? descriptionId() : undefined,
           })}
+          <Show when={suffix()}>
+            <span class={cssStyle.suffix}>{suffix()}</span>
+          </Show>
         </div>
       </div>
       <Switch>

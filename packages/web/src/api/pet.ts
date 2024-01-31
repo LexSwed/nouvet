@@ -6,14 +6,11 @@ import {
   nullish,
   number,
   object,
-  optional,
   parse,
-  picklist,
   ValiError,
 } from 'valibot';
 
 import { getRequestUserSafe } from '~/server/auth/session-safe';
-import type { DatabaseUser, DatabaseUserProfile } from '~/server/db/schema';
 import { getDictionary } from '~/server/i18n';
 import { petCreate } from '~/server/queries/petCreate';
 import { petUpdate } from '~/server/queries/petUpdate';

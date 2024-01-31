@@ -8,5 +8,6 @@
   "bday": "The day is not valid",
   "bmonth": "The month is not valid",
   "byear": "The year is not valid",
-  "birthdate.range": "The date cannot be before 1980 or after today"
+  "birthdate.range": "The date cannot be before 1980 or after today",
+  "weight.range": "The wight cannot be negative or too big"
 }

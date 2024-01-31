@@ -7,11 +7,13 @@ import * as cssStyle from './text-field.module.css';
 
 export interface TextFieldProps
   extends FormFieldProps,
-    JSX.InputHTMLAttributes<HTMLInputElement> {}
+    JSX.InputHTMLAttributes<HTMLInputElement> {
+  suffix?: JSX.Element;
+}
 const TextField = (ownProps: TextFieldProps) => {
   const [fieldProps, props] = splitProps(
     mergeDefaultProps(ownProps, { type: 'text' }),
-    ['class', 'style', 'id', 'label', 'prefix'],
+    ['class', 'style', 'id', 'label', 'prefix', 'suffix'],
   );
 
   return (
