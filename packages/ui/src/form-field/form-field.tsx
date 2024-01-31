@@ -44,7 +44,15 @@ const FormField = (props: FieldInnerProps) => {
   const prefix = children(() => props.prefix);
   return (
     <div class={tw(cssStyle.field, props.class)} style={props.style}>
-      <div class={cssStyle.wrapper}>
+      <div
+        class={cssStyle.wrapper}
+        onClick={(e) => {
+          const input = e.currentTarget.querySelector('input');
+          if (input instanceof HTMLInputElement) {
+            input.focus();
+          }
+        }}
+      >
         <Show when={props.label}>
           <Text as="label" for={id()} with="label-sm" class={cssStyle.label}>
             {props.label}

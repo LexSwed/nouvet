@@ -26,7 +26,7 @@ export const PetHomeCard = (props: PetHomeCard) => {
   const t = createTranslator('app');
 
   return (
-    <Card role="listitem" variant="flat" class="flex w-full flex-col gap-4">
+    <Card variant="flat" class="flex w-full flex-col gap-4">
       <A
         href={`/app/pet/${props.pet.id}/`}
         class="-m-4 flex flex-row items-start gap-4 p-4"

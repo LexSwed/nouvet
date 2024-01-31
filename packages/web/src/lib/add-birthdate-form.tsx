@@ -45,7 +45,7 @@ const AddBirthDateForm = (props: {
   return (
     <Drawer id={props.id} placement="bottom-start">
       <Form
-        class="w-[360px] max-w-full flex flex-col gap-6"
+        class="flex w-[360px] max-w-full flex-col gap-6"
         action={updatePetBirthDate}
         method="post"
         validationErrors={birthDateSubmission.result?.errors}
@@ -53,7 +53,7 @@ const AddBirthDateForm = (props: {
         <input type="hidden" name="petId" value={props.pet.id} />
         <Fieldset>
           <Text as="legend" with="label" class="mb-6 flex items-center gap-2">
-            <span class="bg-on-surface/5 p-3 rounded-full">
+            <span class="bg-on-surface/5 rounded-full p-3">
               <Icon use="calendar-plus" size="md" />
             </span>
             {t('app.animal-add-birth-date.label', { name: props.pet.name })}

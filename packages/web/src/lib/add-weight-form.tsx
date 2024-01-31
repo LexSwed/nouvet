@@ -42,7 +42,6 @@ const AddWeightForm = (props: {
           {t('app.animal-add-weight.label', { name: props.pet.name })}
         </Text>
         <TextField
-          prefix="$"
           name="weight"
           type="number"
           step="0.01"

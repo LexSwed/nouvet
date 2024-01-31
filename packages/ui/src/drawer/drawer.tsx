@@ -64,11 +64,13 @@ const Drawer = (
   ownProps: Omit<ComponentProps<typeof Popover>, 'children'> & ParentProps,
 ) => {
   let popoverEl: HTMLElement | null;
-  // @screen(sm)
-  const isMobile = createMediaQuery('(max-width: 640px)', true);
+  const isMobile = createMediaQuery(
+    // @screen(sm)
+    '(max-width: 640px)',
+    true,
+  );
   const [local, props] = splitProps(ownProps, ['children']);
   const child = children(() => local.children);
-  console.log({ isMobile: isMobile() });
   return (
     <Switch>
       <Match when={isMobile()}>

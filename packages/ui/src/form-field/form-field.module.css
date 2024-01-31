@@ -51,18 +51,12 @@
   }
   .inputWrapper {
     display: grid;
-    grid-template: 1fr / auto 1fr auto;
-    gap: theme('spacing.2');
     align-items: baseline;
-    & > * {
-      grid-row: 1;
+    grid-template-columns: 1fr;
+    cursor: default;
+    &:has(.prefix, .suffix) {
+      grid-template-columns: auto 1fr auto;
     }
-    & > *:not(.prefix):not(.suffix) {
-      grid-column: 1 / -1;
-    }
-    /* &:has(.prefix) > *:not(.prefix):not(.suffix) {
-      padding-inline-start: calc(theme('spacing.8') + theme('spacing.2'));
-    } */
   }
   .label {
     padding-inline: var(--start-padding);
@@ -77,6 +71,18 @@
 
   .prefix {
     grid-column: 1;
+    padding-inline-start: var(--start-padding);
+    &:empty {
+      display: none;
+    }
+  }
+
+  .suffix {
+    grid-column: 3;
+    padding-inline-end: var(--start-padding);
+    &:empty {
+      display: none;
+    }
   }
 
   .fieldset {
