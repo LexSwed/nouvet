@@ -28,6 +28,7 @@
 
     &[data-closed] {
       display: none;
+      transform: none;
     }
     &[data-opening] {
       transition-duration: 0.3s;
