@@ -29,9 +29,9 @@ export const PetHomeCard = (props: PetHomeCard) => {
     <Card variant="flat" class="flex w-full flex-col gap-4">
       <A
         href={`/app/pet/${props.pet.id}/`}
-        class="-m-4 flex flex-row items-start gap-4 p-4"
+        class="-m-4 flex flex-row items-start gap-4 p-3"
       >
-        <div class="bg-tertiary/10 text-tertiary grid size-24 shrink-0 place-content-center rounded-md">
+        <div class="bg-tertiary/10 text-tertiary grid size-24 shrink-0 place-content-center rounded-xl">
           <Show
             when={props.pet.pictureUrl}
             children={

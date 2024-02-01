@@ -51,9 +51,12 @@ const FormField = (props: FieldInnerProps) => {
         class={cssStyle.wrapper}
         onClick={(e) => {
           // suffix and prefix need dynamic width, click on them needs to trigger input focus anyway
-          const input = e.currentTarget.querySelector('input');
+          const input = e.currentTarget.querySelector('input, select');
           if (input instanceof HTMLInputElement) {
             input.focus();
+          } else if (input instanceof HTMLSelectElement) {
+            // @ts-expect-error libdom not supporting this yet
+            input.showPicker();
           }
         }}
       >
