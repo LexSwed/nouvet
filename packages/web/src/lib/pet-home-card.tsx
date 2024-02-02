@@ -1,8 +1,6 @@
 import { A } from '@solidjs/router';
-import { createEffect, createSignal, Match, Show, Switch } from 'solid-js';
-import { getRequestEvent, isServer } from 'solid-js/web';
+import { Match, Show, Switch } from 'solid-js';
 import { Button, Card, Icon, Text } from '@nou/ui';
-import { getCookie } from 'vinxi/server';
 
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';

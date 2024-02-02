@@ -27,21 +27,28 @@ function deserialize<T>(name: string): T | null {
   return JSON.parse(decodeURIComponent(string)) as T;
 }
 
-export function makePersistedSetting<T>(name: string, defaultValue?: T) {
+export function makePersistedSetting<T>(
+  name: string,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  defaultValue?: Exclude<T, Function>,
+) {
   const [cookie, setCookie] = createSignal<T | null>(
     deserialize<T>(name) || defaultValue || null,
   );
 
-  const updateCookie: Setter<T> = (newValue) => {
-    if (typeof newValue === 'function') {
-      setCookie((value) => {
-        const updated = newValue(value);
+  // @ts-expect-error what do you want from me
+  const updateCookie: Setter<T> = (value) => {
+    if (typeof value === 'function') {
+      setCookie((prev) => {
+        // @ts-expect-error what do you want from me
+        const updated = value(prev);
         document.cookie = `${name}=${serialize(updated)}`;
         return updated;
       });
     } else {
-      document.cookie = `${name}=${serialize(newValue)}`;
-      setCookie(newValue);
+      document.cookie = `${name}=${serialize(value)}`;
+      // @ts-expect-error what do you want from me
+      setCookie(value);
     }
   };
 
