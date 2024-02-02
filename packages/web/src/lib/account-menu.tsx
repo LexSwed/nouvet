@@ -27,9 +27,9 @@ const AccountMenu = (props: AccountMenu) => {
       <Popover
         id="account-menu"
         placement="bottom-end"
-        class="bg-surface-container-high flex max-h-96 w-[15rem] flex-col gap-3 rounded-3xl p-2"
+        class="bg-surface before:bg-surface flex max-h-96 w-[15rem] flex-col gap-3 rounded-3xl p-2"
       >
-        <div class="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-1 p-3">
+        <div class="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-1 px-3 pb-2">
           <Avatar
             name={props.name}
             avatarUrl={props.avatarUrl}
@@ -38,11 +38,11 @@ const AccountMenu = (props: AccountMenu) => {
           <Text with="label">{props.name}</Text>
         </div>
         <MenuList class="bg-surface flex flex-col rounded-2xl">
-          <MenuItem role="presentation">
+          <MenuItem role="presentation" class="p-0">
             <A
               href="/profile"
               role="menuitem"
-              class="flex w-full flex-row items-center gap-2 outline-none"
+              class="flex w-full flex-row items-center gap-2 p-3 outline-none"
             >
               <Icon use="user-circle" size="sm" />
               {t('app.account-menu.account')}
@@ -52,22 +52,22 @@ const AccountMenu = (props: AccountMenu) => {
             <Icon use="install" size="sm" />
             Install for offline
           </MenuItem>
-          <MenuItem role="presentation">
+          <MenuItem role="presentation" class="p-0">
             <A
               href="/help"
               role="menuitem"
-              class="flex w-full flex-row items-center gap-2 outline-none"
+              class="flex w-full flex-row items-center gap-2 p-3 outline-none"
             >
               <Icon use="support" size="sm" />
               Support
             </A>
           </MenuItem>
           <Divider role="separator" class="my-2" />
-          <MenuItem role="presentation">
+          <MenuItem role="presentation" class="p-0">
             <A
               href="/logout"
               role="menuitem"
-              class="flex w-full flex-row items-center gap-2 outline-none"
+              class="flex w-full flex-row items-center gap-2 p-3 outline-none"
             >
               <Icon use="sign-out" size="sm" />
               Log Out

@@ -76,16 +76,23 @@ const Popover = <T extends ValidComponent = 'div'>(
     return typeof child === 'function' ? child?.(isMounted) : child;
   });
 
-  const data = createFloating(trigger, popover, floatingProps);
+  const data = createFloating(
+    () => (rendered() ? trigger() : null),
+    popover,
+    floatingProps,
+  );
 
-  let outsidePointerDown = false;
+  let pointerDown = false;
   createEffect(() => {
     function onPointerDown() {
-      outsidePointerDown = true;
+      pointerDown = true;
     }
     function onPointerUp(event: PointerEvent) {
-      outsidePointerDown = false;
-      if (!popover()?.contains(event.target as HTMLElement)) {
+      pointerDown = false;
+      if (
+        !popover()?.contains(event.target as HTMLElement) &&
+        !trigger()?.contains(event.target as HTMLElement)
+      ) {
         popover()?.hidePopover();
       }
     }
@@ -95,6 +102,15 @@ const Popover = <T extends ValidComponent = 'div'>(
       document.removeEventListener('pointerdown', onPointerDown);
       document.removeEventListener('pointerup', onPointerUp);
     });
+  });
+
+  createEffect(() => {
+    // filter out potential close buttons inside the popover
+    const trigger = Array.from(
+      document.querySelectorAll(`[popovertarget="${local.id}"]`),
+    ).find((button) => !popover()?.contains(button));
+    if (!(trigger instanceof HTMLElement)) return;
+    setTrigger(trigger);
   });
 
   return (
@@ -113,7 +129,7 @@ const Popover = <T extends ValidComponent = 'div'>(
         if (
           !popover()?.contains(event.relatedTarget as Node) &&
           // do not hide popover on outside click, it will be handled separately
-          !outsidePointerDown
+          !pointerDown
         ) {
           popover()?.hidePopover();
         }
@@ -122,11 +138,6 @@ const Popover = <T extends ValidComponent = 'div'>(
       onBeforeToggle={composeEventHandlers(props.onBeforeToggle, (event) => {
         if (!local.id) return;
         setRendered(event.newState === 'open');
-        // filter out potential close buttons inside the popover
-        const trigger = Array.from(
-          document.querySelectorAll(`[popovertarget="${local.id}"]`),
-        ).find((button) => !popover()?.contains(button));
-        if (!(trigger instanceof HTMLElement)) return;
         if (event.newState === 'open') {
           setTrigger(trigger);
         }
@@ -134,9 +145,6 @@ const Popover = <T extends ValidComponent = 'div'>(
       onToggle={composeEventHandlers(props.onToggle, (event) => {
         if (event.newState === 'open') {
           popover()?.focus();
-        } else {
-          // we need to remove the reference for floating to remove listeners
-          setTrigger(null);
         }
       })}
     />

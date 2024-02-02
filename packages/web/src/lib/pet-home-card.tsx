@@ -1,6 +1,8 @@
 import { A } from '@solidjs/router';
-import { Show } from 'solid-js';
-import { Button, Card, Icon, Presence, Text } from '@nou/ui';
+import { createEffect, createSignal, Match, Show, Switch } from 'solid-js';
+import { getRequestEvent, isServer } from 'solid-js/web';
+import { Button, Card, Icon, Text } from '@nou/ui';
+import { getCookie } from 'vinxi/server';
 
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
@@ -8,7 +10,7 @@ import { createTranslator } from '~/server/i18n';
 import AddBirthDateForm from './add-birthdate-form';
 import AddWeightForm from './add-weight-form';
 
-interface PetHomeCard {
+interface PetHomeCardProps {
   pet: {
     id: number;
     pictureUrl: string | null;
@@ -22,16 +24,14 @@ interface PetHomeCard {
   };
 }
 
-export const PetHomeCard = (props: PetHomeCard) => {
-  const t = createTranslator('app');
-
+export const PetHomeCard = (props: PetHomeCardProps) => {
   return (
-    <Card variant="flat" class="flex w-full flex-col gap-4">
+    <Card variant="flat" class="inline-flex flex-col gap-4">
       <A
         href={`/app/pet/${props.pet.id}/`}
-        class="-m-4 flex flex-row items-start gap-4 p-3"
+        class="-m-4 flex flex-row items-center gap-4 p-3"
       >
-        <div class="bg-tertiary/10 text-tertiary grid size-24 shrink-0 place-content-center rounded-xl">
+        <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
           <Show
             when={props.pet.pictureUrl}
             children={
@@ -45,62 +45,86 @@ export const PetHomeCard = (props: PetHomeCard) => {
           />
         </div>
         <div class="flex flex-row items-center gap-2">
-          <Text with="body-xl">{props.pet.name}</Text>
+          <Text with="body-lg">{props.pet.name}</Text>
           <Button icon variant="ghost" size="sm" aria-hidden tabIndex={-1}>
             <Icon use="pencil" size="sm" />
           </Button>
         </div>
       </A>
-      <div class="flex flex-col">
-        <ul class="overflow-snap -mx-4 grid scroll-p-4 grid-flow-col justify-start gap-2 px-4 py-2 [grid-auto-columns:min-content]">
-          <Presence when={!props.pet.dateOfBirth}>
-            <li class="contents">
-              <Button
-                variant="outline"
-                size="sm"
-                class="gap-2 text-nowrap"
-                popoverTarget={`${props.pet.id}-birth-date`}
-              >
-                <Icon use="calendar-plus" size="sm" />
-                <Text with="label-sm">
-                  {t('app.animal-shortcut.birth-date')}
-                </Text>
-              </Button>
-              <AddBirthDateForm
-                id={`${props.pet.id}-birth-date`}
-                pet={props.pet}
-              />
-            </li>
-          </Presence>
-          <Presence when={!props.pet.weight}>
-            <li class="contents">
-              <Button
-                variant="outline"
-                size="sm"
-                class="gap-2 text-nowrap"
-                popoverTarget={`${props.pet.id}-weight`}
-              >
-                <Icon use="scales" size="sm" />
-                <Text with="label-sm">{t('app.animal-shortcut.weight')}</Text>
-              </Button>
-              <AddWeightForm id={`${props.pet.id}-weight`} pet={props.pet} />
-            </li>
-          </Presence>
-          <Presence when={props.pet.type === 'dog' && !props.pet.breed}>
-            <li class="contents">
-              <Button
-                variant="outline"
-                size="sm"
-                class="gap-2 text-nowrap"
-                popoverTarget={`${props.pet.id}-breed`}
-              >
-                <Icon use="paw-print" size="sm" />
-                <Text with="label-sm">{t('app.animal-shortcut.breed')}</Text>
-              </Button>
-            </li>
-          </Presence>
-        </ul>
-      </div>
+      <QuickSetters pet={props.pet} />
     </Card>
   );
 };
+
+function QuickSetters(props: PetHomeCardProps) {
+  const t = createTranslator('app');
+
+  const [qs, toggle] = makePersistedSetting('qs-toggles', {
+    showBirthDate: !props.pet.dateOfBirth,
+    showWeight: !props.pet.weight,
+    showBreed: !props.pet.breed && props.pet.type === 'dog',
+  });
+
+  console.log('render', qs().showBirthDate, props.pet.dateOfBirth);
+  createEffect(() => {
+    console.log('effect run', qs().showBirthDate);
+    document.cookie;
+  });
+  return (
+    <ul class="overflow-snap -mx-4 grid scroll-p-4 grid-flow-col justify-start gap-2 px-4 py-2 [grid-auto-columns:min-content] empty:hidden">
+      <Switch>
+        <Match when={qs().showBirthDate}>
+          <li class="contents">
+            <Button
+              variant="outline"
+              size="sm"
+              class="gap-2 text-nowrap"
+              popoverTarget={`${props.pet.id}-birth-date`}
+            >
+              <Icon use="calendar-plus" size="sm" />
+              <Text with="label-sm">{t('app.animal-shortcut.birth-date')}</Text>
+            </Button>
+            <AddBirthDateForm
+              id={`${props.pet.id}-birth-date`}
+              pet={props.pet}
+              onDismiss={() =>
+                toggle((old) => ({ ...old, showBirthDate: false }))
+              }
+            />
+          </li>
+        </Match>
+        <Match when={qs().showWeight}>
+          <li class="contents">
+            <Button
+              variant="outline"
+              size="sm"
+              class="gap-2 text-nowrap"
+              popoverTarget={`${props.pet.id}-weight`}
+            >
+              <Icon use="scales" size="sm" />
+              <Text with="label-sm">{t('app.animal-shortcut.weight')}</Text>
+            </Button>
+            <AddWeightForm
+              id={`${props.pet.id}-weight`}
+              pet={props.pet}
+              onDismiss={() => toggle((old) => ({ ...old, showWeight: false }))}
+            />
+          </li>
+        </Match>
+        <Match when={qs().showBreed}>
+          <li class="contents">
+            <Button
+              variant="outline"
+              size="sm"
+              class="gap-2 text-nowrap"
+              popoverTarget={`${props.pet.id}-breed`}
+            >
+              <Icon use="paw-print" size="sm" />
+              <Text with="label-sm">{t('app.animal-shortcut.breed')}</Text>
+            </Button>
+          </li>
+        </Match>
+      </Switch>
+    </ul>
+  );
+}

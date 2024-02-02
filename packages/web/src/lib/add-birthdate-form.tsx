@@ -19,10 +19,13 @@ const Drawer = clientOnly(() =>
   import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
 );
 
-const AddBirthDateForm = (props: {
+interface AddBirthDateFormProps {
   id: string;
   pet: { id: number; name: string };
-}) => {
+  onDismiss: () => void;
+}
+
+const AddBirthDateForm = (props: AddBirthDateFormProps) => {
   const t = createTranslator('app');
   const locale = userLocale();
   const birthDateSubmission = useSubmission(updatePetBirthDate);
@@ -103,6 +106,7 @@ const AddBirthDateForm = (props: {
             popoverTargetAction="hide"
             popoverTarget={props.id}
             class="px-6"
+            onClick={props.onDismiss}
           >
             {t('app.animal.drawer.cancel')}
           </Button>

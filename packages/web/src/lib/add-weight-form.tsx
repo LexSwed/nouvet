@@ -34,10 +34,13 @@ const petTypeToMetricMeasurement: {
   },
 };
 
-const AddWeightForm = (props: {
+interface AddWeightFormProps {
   id: string;
   pet: { id: number; name: string; type: DatabasePet['type'] };
-}) => {
+  onDismiss: () => void;
+}
+
+const AddWeightForm = (props: AddWeightFormProps) => {
   const t = createTranslator('app');
   const locale = userLocale();
   const measurementSystem = createAsync(() => getUserMeasurementSystem());
@@ -97,6 +100,7 @@ const AddWeightForm = (props: {
             popoverTargetAction="hide"
             popoverTarget={props.id}
             class="px-6"
+            onClick={props.onDismiss}
           >
             {t('app.animal.drawer.cancel')}
           </Button>
