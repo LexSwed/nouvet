@@ -77,7 +77,7 @@ const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
         // @ts-expect-error Not all constituents of type 'EventHandlerUnion<HTMLButtonElement, MouseEvent>' are callable.Type 'BoundEventHandler<HTMLButtonElement, MouseEvent>' has no call signatures.ts(2349)
         props.onClick?.(event);
       }}
-      aria-disabled={local.loading}
+      aria-disabled={local.loading || undefined}
     >
       {props.children}
       <Show when={local.loading}>

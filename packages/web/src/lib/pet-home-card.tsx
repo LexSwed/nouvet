@@ -9,6 +9,7 @@ import { createTranslator } from '~/server/i18n';
 
 import AddBirthDateForm from './add-birthdate-form';
 import AddWeightForm from './add-weight-form';
+import { makePersistedSetting } from './make-persisted-signal';
 
 interface PetHomeCardProps {
   pet: {
@@ -65,15 +66,12 @@ function QuickSetters(props: PetHomeCardProps) {
     showBreed: !props.pet.breed && props.pet.type === 'dog',
   });
 
-  console.log('render', qs().showBirthDate, props.pet.dateOfBirth);
-  createEffect(() => {
-    console.log('effect run', qs().showBirthDate);
-    document.cookie;
-  });
+  console.log('render', qs());
+
   return (
     <ul class="overflow-snap -mx-4 grid scroll-p-4 grid-flow-col justify-start gap-2 px-4 py-2 [grid-auto-columns:min-content] empty:hidden">
       <Switch>
-        <Match when={qs().showBirthDate}>
+        <Match when={qs()?.showBirthDate}>
           <li class="contents">
             <Button
               variant="outline"
@@ -93,7 +91,7 @@ function QuickSetters(props: PetHomeCardProps) {
             />
           </li>
         </Match>
-        <Match when={qs().showWeight}>
+        <Match when={qs()?.showWeight}>
           <li class="contents">
             <Button
               variant="outline"
@@ -111,7 +109,7 @@ function QuickSetters(props: PetHomeCardProps) {
             />
           </li>
         </Match>
-        <Match when={qs().showBreed}>
+        <Match when={qs()?.showBreed}>
           <li class="contents">
             <Button
               variant="outline"

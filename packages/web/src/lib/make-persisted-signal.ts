@@ -1,4 +1,4 @@
-import { createEffect, createSignal } from 'solid-js';
+import { createSignal, type Setter } from 'solid-js';
 import { getRequestEvent, isServer } from 'solid-js/web';
 import { getCookie } from 'vinxi/server';
 
@@ -29,18 +29,21 @@ function deserialize<T>(name: string): T | null {
 
 export function makePersistedSetting<T>(name: string, defaultValue?: T) {
   const [cookie, setCookie] = createSignal<T | null>(
-    deserialize<T>(
-      isServer
-        ? getCookie(getRequestEvent()!, name)
-        : parseCookies(document.cookie)[name],
-    ) ||
-      defaultValue ||
-      null,
+    deserialize<T>(name) || defaultValue || null,
   );
 
-  createEffect(() => {
-    document.cookie = `${name}=${serialize(cookie())}`;
-  });
+  const updateCookie: Setter<T> = (newValue) => {
+    if (typeof newValue === 'function') {
+      setCookie((value) => {
+        const updated = newValue(value);
+        document.cookie = `${name}=${serialize(updated)}`;
+        return updated;
+      });
+    } else {
+      document.cookie = `${name}=${serialize(newValue)}`;
+      setCookie(newValue);
+    }
+  };
 
-  return [cookie, setCookie] as const;
+  return [cookie, updateCookie] as const;
 }

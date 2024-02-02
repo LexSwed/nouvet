@@ -36,7 +36,7 @@ function AppLoginPage() {
             />
             <ButtonLink
               href="/api/auth/facebook"
-              class="flex items-center gap-3 !bg-[#1877F2]"
+              class="flex items-center gap-3 !bg-[#1877F2] text-white"
               size="lg"
               link={false}
               loading={loading()}
