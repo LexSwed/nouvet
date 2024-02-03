@@ -32,10 +32,10 @@
   "animal-shortcut.breed": "Breed",
   "animal-add-weight.label": "{{name}}'s weight",
   "animal-add-birth-date.label": "{{name}}'s birth date",
-  "animal-weight.measurement-label": "Unit",
   "animal-add-birth-date.day": "Day",
   "animal-add-birth-date.month": "Month",
   "animal-add-birth-date.year": "Year",
+  "animal-add-breed.label": "{{name}}'s breed",
   "animal.drawer.cancel": "Later",
   "animal.drawer.save": "Save"
 }

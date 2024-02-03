@@ -3,7 +3,7 @@
   "createPet.name.length": "Name should not be too short or too long",
   "createPet.type": "Only valid pet types are allowed",
   "createPet.gender": "Incorrect gender is provided",
-  "createPet.breed": "Only valid pet breeds are allowed",
+  "createPet.breed": "This breed name looks suspicious",
   "createPet.color": "Only valid colors are allowed",
   "bday": "The day is not valid",
   "bmonth": "The month is not valid",

@@ -7,6 +7,7 @@ import {
   number,
   object,
   parse,
+  string,
   ValiError,
 } from 'valibot';
 
@@ -29,6 +30,11 @@ export const createPetAction = action(async (formData: FormData) => {
     currentUser.userId,
   );
 }, 'create-pet');
+
+export const getUserPets = cache(async () => {
+  const currentUser = await getRequestUserSafe();
+  return userPets(currentUser.userId);
+}, 'user-pets');
 
 const BirthDateSchema = object({
   bday: nullish(
@@ -98,19 +104,15 @@ export const updatePetBirthDate = action(async (formData: FormData) => {
   }
 }, 'update-pet-birth-date');
 
-export const getUserPets = cache(async () => {
-  const currentUser = await getRequestUserSafe();
-  return userPets(currentUser.userId);
-}, 'user-pets');
-
-const WeightSchema = object({
-  weight: coerce(number(), Number),
-});
-
 export const updatePetWeight = action(async (formData: FormData) => {
   'use server';
   try {
-    const { weight } = parse(WeightSchema, { weight: formData.get('weight') });
+    const { weight } = parse(
+      object({
+        weight: coerce(number(), Number),
+      }),
+      { weight: formData.get('weight') },
+    );
     const petId = Number(formData.get('petId'));
     if (Number.isNaN(petId)) {
       throw new Error('petId is not provided');
@@ -126,6 +128,43 @@ export const updatePetWeight = action(async (formData: FormData) => {
     if (result.pet) {
       await revalidate(getUserPets.key);
     }
+    return result;
+  } catch (error) {
+    if (error instanceof ValiError) {
+      return {
+        errors: await translateErrorTokens(error),
+      };
+    }
+    console.error(error);
+    return { failure: true, errors: null };
+  }
+}, 'update-pet-weight');
+
+export const updatePetBreed = action(async (formData: FormData) => {
+  'use server';
+  try {
+    const { breed } = parse(
+      object({
+        breed: string(),
+      }),
+      { breed: formData.get('breed') },
+    );
+    const petId = Number(formData.get('petId'));
+    if (Number.isNaN(petId)) {
+      throw new Error('petId is not provided');
+    }
+    const currentUser = await getRequestUserSafe();
+    const result = await petUpdate(
+      {
+        breed,
+      },
+      petId,
+      currentUser.userId,
+    );
+    if (result.pet) {
+      await revalidate(getUserPets.key);
+    }
+    console.log(result);
     return result;
   } catch (error) {
     if (error instanceof ValiError) {

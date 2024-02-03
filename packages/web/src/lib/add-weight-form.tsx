@@ -1,6 +1,6 @@
 import { createAsync, useSubmission } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
-import { createMemo } from 'solid-js';
+import { createEffect, createMemo } from 'solid-js';
 import { Button, Form, Icon, Text, TextField } from '@nou/ui';
 
 import { updatePetWeight } from '~/api/pet';
@@ -44,7 +44,17 @@ const AddWeightForm = (props: AddWeightFormProps) => {
   const t = createTranslator('app');
   const locale = userLocale();
   const measurementSystem = createAsync(() => getUserMeasurementSystem());
-  const petSubmission = useSubmission(updatePetWeight);
+  const weightSubmission = useSubmission(updatePetWeight);
+
+  createEffect(() => {
+    if (
+      weightSubmission.result &&
+      'pet' in weightSubmission.result &&
+      weightSubmission.result.pet
+    ) {
+      props.onDismiss();
+    }
+  });
 
   const unit = createMemo(() => {
     let unit = 'kilogram';
@@ -69,7 +79,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
         class="flex w-[360px] max-w-full flex-col gap-6"
         action={updatePetWeight}
         method="post"
-        validationErrors={petSubmission.result?.errors}
+        validationErrors={weightSubmission.result?.errors}
       >
         <input type="hidden" name="petId" value={props.pet.id} />
         <div class="flex flex-row gap-4">
@@ -107,7 +117,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
           <Button
             type="submit"
             class="px-6"
-            loading={petSubmission.pending}
+            loading={weightSubmission.pending}
             popoverTargetAction="hide"
             popoverTarget={props.id}
           >

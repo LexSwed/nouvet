@@ -6,6 +6,7 @@ import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
 
 import AddBirthDateForm from './add-birthdate-form';
+import AddBreedForm from './add-pet-breed';
 import AddWeightForm from './add-weight-form';
 import { makePersistedSetting } from './make-persisted-signal';
 
@@ -25,10 +26,10 @@ interface PetHomeCardProps {
 
 export const PetHomeCard = (props: PetHomeCardProps) => {
   return (
-    <Card variant="flat" class="inline-flex flex-col gap-2">
+    <Card variant="flat" class="inline-flex flex-col gap-4">
       <A
         href={`/app/pet/${props.pet.id}/`}
-        class="-m-4 mb-0 flex flex-row items-center gap-4 p-3"
+        class="-m-4 flex flex-row items-center gap-4 p-3"
       >
         <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
           <Show
@@ -116,6 +117,11 @@ function QuickSetters(props: PetHomeCardProps) {
               <Icon use="paw-print" size="sm" />
               <Text with="label-sm">{t('app.animal-shortcut.breed')}</Text>
             </Button>
+            <AddBreedForm
+              id={`${props.pet.id}-breed`}
+              pet={props.pet}
+              onDismiss={() => toggle((old) => ({ ...old, showBreed: false }))}
+            />
           </li>
         </Match>
       </Switch>

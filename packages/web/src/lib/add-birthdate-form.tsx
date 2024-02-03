@@ -1,6 +1,6 @@
 import { useSubmission } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
-import { createMemo, For, Show } from 'solid-js';
+import { createEffect, createMemo, For, Show } from 'solid-js';
 import {
   Button,
   Fieldset,
@@ -29,6 +29,16 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
   const t = createTranslator('app');
   const locale = userLocale();
   const birthDateSubmission = useSubmission(updatePetBirthDate);
+
+  createEffect(() => {
+    if (
+      birthDateSubmission.result &&
+      'pet' in birthDateSubmission.result &&
+      birthDateSubmission.result.pet
+    ) {
+      props.onDismiss();
+    }
+  });
 
   const monthNames = createMemo(() => {
     const formatter = Intl.DateTimeFormat(locale(), {
