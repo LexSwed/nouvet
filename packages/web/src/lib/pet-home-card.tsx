@@ -57,7 +57,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 };
 
 function QuickSetters(props: PetHomeCardProps) {
-  const t = createTranslator('app');
+  const t = createTranslator('pet-form');
 
   const [qs, toggle] = makePersistedSetting('qs-toggles', {
     showBirthDate: !props.pet.dateOfBirth,
@@ -77,7 +77,9 @@ function QuickSetters(props: PetHomeCardProps) {
               popoverTarget={`${props.pet.id}-birth-date`}
             >
               <Icon use="calendar-plus" size="sm" />
-              <Text with="label-sm">{t('app.animal-shortcut.birth-date')}</Text>
+              <Text with="label-sm">
+                {t('pet-form.animal-shortcut.birth-date')}
+              </Text>
             </Button>
             <AddBirthDateForm
               id={`${props.pet.id}-birth-date`}
@@ -97,7 +99,9 @@ function QuickSetters(props: PetHomeCardProps) {
               popoverTarget={`${props.pet.id}-weight`}
             >
               <Icon use="scales" size="sm" />
-              <Text with="label-sm">{t('app.animal-shortcut.weight')}</Text>
+              <Text with="label-sm">
+                {t('pet-form.animal-shortcut.weight')}
+              </Text>
             </Button>
             <AddWeightForm
               id={`${props.pet.id}-weight`}
@@ -115,7 +119,7 @@ function QuickSetters(props: PetHomeCardProps) {
               popoverTarget={`${props.pet.id}-breed`}
             >
               <Icon use="paw-print" size="sm" />
-              <Text with="label-sm">{t('app.animal-shortcut.breed')}</Text>
+              <Text with="label-sm">{t('pet-form.animal-shortcut.breed')}</Text>
             </Button>
             <AddBreedForm
               id={`${props.pet.id}-breed`}

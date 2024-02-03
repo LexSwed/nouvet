@@ -7,16 +7,18 @@ import type AppDict from './locales/en/app.json';
 import type CommonDict from './locales/en/common.json';
 import type ErrorsDict from './locales/en/errors.json';
 import type LoginDict from './locales/en/login.json';
+import type PetFormsDict from './locales/en/pet-forms.json';
 import type WWWDict from './locales/en/www.json';
 
 export type Locale = (typeof acceptedLocaleLanguageTag)[number];
 
 type NamespaceMap = {
-  common: typeof CommonDict;
-  www: typeof WWWDict;
-  app: typeof AppDict;
-  login: typeof LoginDict;
-  errors: typeof ErrorsDict;
+  'common': typeof CommonDict;
+  'www': typeof WWWDict;
+  'app': typeof AppDict;
+  'login': typeof LoginDict;
+  'errors': typeof ErrorsDict;
+  'pet-form': typeof PetFormsDict;
 };
 type Namespace = keyof NamespaceMap;
 

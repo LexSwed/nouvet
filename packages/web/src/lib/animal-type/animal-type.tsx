@@ -11,36 +11,36 @@ interface AnimalTypeSelectProps {
 }
 
 const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
-  const t = createTranslator('app');
+  const t = createTranslator('pet-form');
   const animalTypes: Array<{ value: string; label: string; icon: SvgIcons }> = [
     {
       value: 'dog',
-      label: t('app.animal-type.dog')!,
+      label: t('pet-form.animal-type.dog')!,
       icon: 'dog',
     },
     {
       value: 'cat',
-      label: t('app.animal-type.cat')!,
+      label: t('pet-form.animal-type.cat')!,
       icon: 'cat',
     },
     {
       value: 'bird',
-      label: t('app.animal-type.bird')!,
+      label: t('pet-form.animal-type.bird')!,
       icon: 'bird',
     },
     {
       value: 'rabbit',
-      label: t('app.animal-type.rabbit')!,
+      label: t('pet-form.animal-type.rabbit')!,
       icon: 'rabbit',
     },
     {
       value: 'rodent',
-      label: t('app.animal-type.rodent')!,
+      label: t('pet-form.animal-type.rodent')!,
       icon: 'rodent',
     },
     {
       value: 'horse',
-      label: t('app.animal-type.horse')!,
+      label: t('pet-form.animal-type.horse')!,
       icon: 'horse',
     },
   ];
@@ -69,7 +69,7 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
 };
 
 const GenderSwitch = (props: { name: string }) => {
-  const t = createTranslator('app');
+  const t = createTranslator('pet-form');
   const id = createUniqueId();
   return (
     <fieldset
@@ -77,7 +77,7 @@ const GenderSwitch = (props: { name: string }) => {
       aria-labelledby={id}
     >
       <Text with="label-sm" as="label" id={id} class="ms-2">
-        {t('app.animal-gender')}
+        {t('pet-form.animal-gender')}
       </Text>
       <div
         class={tw(
@@ -88,7 +88,7 @@ const GenderSwitch = (props: { name: string }) => {
         <GenderRadio
           name={props.name}
           value="male"
-          label={t('app.animal-gender.male')!}
+          label={t('pet-form.animal-gender.male')!}
         />
         <SvgGender
           class={tw(cssStyles.genderIcon, 'relative mt-1 size-10')}
@@ -97,7 +97,7 @@ const GenderSwitch = (props: { name: string }) => {
         <GenderRadio
           name={props.name}
           value="female"
-          label={t('app.animal-gender.female')!}
+          label={t('pet-form.animal-gender.female')!}
         />
       </div>
     </fieldset>

@@ -12,7 +12,7 @@ interface CreateNewPetForm extends ParentProps {
 }
 
 function CreateNewPetForm(props: CreateNewPetForm) {
-  const t = createTranslator('app');
+  const t = createTranslator('pet-form');
   const petSubmission = useSubmission(createPetAction);
 
   const hasFailed = () =>
@@ -31,11 +31,11 @@ function CreateNewPetForm(props: CreateNewPetForm) {
         aria-errormessage="error-message"
       >
         <Text with="headline-2" as="h3" id="new-pet">
-          {t('app.new-pet-heading')}
+          {t('pet-form.new-pet-heading')}
         </Text>
         <TextField
-          label={t('app.new-pet-text-field-label')}
-          placeholder={t('app.new-pet-text-field-placeholder')}
+          label={t('pet-form.new-pet-text-field-label')}
+          placeholder={t('pet-form.new-pet-text-field-placeholder')}
           name="name"
           required
         />
@@ -44,9 +44,9 @@ function CreateNewPetForm(props: CreateNewPetForm) {
 
         <Show when={hasFailed()}>
           <Card variant="filled" id="error-message" aria-live="polite">
-            <Text with="body">{t('app.new-pet-failure.title')}</Text>
+            <Text with="body">{t('pet-form.new-pet-failure.title')}</Text>
             <Text with="body-sm" as="p">
-              {t('app.new-pet-failure.message')}
+              {t('pet-form.new-pet-failure.message')}
             </Text>
           </Card>
         </Show>

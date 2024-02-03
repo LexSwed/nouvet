@@ -26,7 +26,7 @@ interface AddBirthDateFormProps {
 }
 
 const AddBirthDateForm = (props: AddBirthDateFormProps) => {
-  const t = createTranslator('app');
+  const t = createTranslator('pet-form');
   const locale = userLocale();
   const birthDateSubmission = useSubmission(updatePetBirthDate);
 
@@ -69,12 +69,14 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
             <span class="bg-on-surface/5 rounded-full p-3">
               <Icon use="calendar-plus" size="md" />
             </span>
-            {t('app.animal-add-birth-date.label', { name: props.pet.name })}
+            {t('pet-form.animal-add-birth-date.label', {
+              name: props.pet.name,
+            })}
           </Text>
           <div class="grid grid-cols-[4rem_1fr_5rem] gap-2">
             <TextField
               name="bday"
-              label={t('app.animal-add-birth-date.day')}
+              label={t('pet-form.animal-add-birth-date.day')}
               autocomplete="off"
               type="number"
               inputMode="numeric"
@@ -83,7 +85,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
               step="1"
             />
             <Picker
-              label={t('app.animal-add-birth-date.month')}
+              label={t('pet-form.animal-add-birth-date.month')}
               name="bmonth"
               autocomplete="off"
             >
@@ -94,7 +96,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
             </Picker>
             <TextField
               name="byear"
-              label={t('app.animal-add-birth-date.year')}
+              label={t('pet-form.animal-add-birth-date.year')}
               autocomplete="off"
               type="number"
               min="1980"
@@ -118,7 +120,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
             class="px-6"
             onClick={props.onDismiss}
           >
-            {t('app.animal.drawer.cancel')}
+            {t('pet-form.animal.drawer.cancel')}
           </Button>
           <Button
             type="submit"
@@ -127,7 +129,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
             popoverTargetAction="hide"
             popoverTarget={props.id}
           >
-            {t('app.animal.drawer.save')}
+            {t('pet-form.animal.drawer.save')}
           </Button>
         </div>
       </Form>

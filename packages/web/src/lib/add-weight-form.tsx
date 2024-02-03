@@ -41,7 +41,7 @@ interface AddWeightFormProps {
 }
 
 const AddWeightForm = (props: AddWeightFormProps) => {
-  const t = createTranslator('app');
+  const t = createTranslator('pet-form');
   const locale = userLocale();
   const measurementSystem = createAsync(() => getUserMeasurementSystem());
   const weightSubmission = useSubmission(updatePetWeight);
@@ -91,7 +91,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
             <span class="bg-on-surface/5 rounded-full p-3">
               <Icon use="scales" size="md" />
             </span>
-            {t('app.animal-add-weight.label', { name: props.pet.name })}
+            {t('pet-form.animal-add-weight.label', { name: props.pet.name })}
           </Text>
         </div>
         <TextField
@@ -100,7 +100,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
           step="0.01"
           min="0"
           max="9999"
-          label={t('app.animal-shortcut.weight')}
+          label={t('pet-form.animal-shortcut.weight')}
           class="flex-[2]"
           suffix={unit()}
         />
@@ -112,7 +112,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
             class="px-6"
             onClick={props.onDismiss}
           >
-            {t('app.animal.drawer.cancel')}
+            {t('pet-form.animal.drawer.cancel')}
           </Button>
           <Button
             type="submit"
@@ -121,7 +121,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
             popoverTargetAction="hide"
             popoverTarget={props.id}
           >
-            {t('app.animal.drawer.save')}
+            {t('pet-form.animal.drawer.save')}
           </Button>
         </div>
       </Form>
