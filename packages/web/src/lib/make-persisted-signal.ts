@@ -55,23 +55,24 @@ const getServerSetting = async <T>(name: string) => {
 
 const setting = cache(async <T>(name: string) => {
   if (isServer) {
-    return getServerSetting(name);
+    return getServerSetting<T>(name);
   }
   return deserialize<T>(parseCookies(document.cookie)[name]);
 }, 'cookie-setting');
 
-export function makePersistedSetting<T>(
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function makePersistedSetting<T, U extends Exclude<T, Function>>(
   name: string,
   // eslint-disable-next-line @typescript-eslint/ban-types
-  defaultValue?: Exclude<T, Function>,
+  defaultValue?: U,
 ) {
-  const cookie = createAsync(async () => {
-    const stored = await setting(name);
-    return stored || defaultValue;
+  const cookie = createAsync(async (): Promise<U | null> => {
+    const stored = await setting<U>(name);
+    return stored || defaultValue || null;
   });
 
   // @ts-expect-error what do you want from me
-  const updateCookie: Setter<T> = (value) => {
+  const updateCookie: Setter<U> = (value) => {
     if (typeof value === 'function') {
       console.log(cookie);
       // @ts-expect-error what do you want from me
@@ -80,8 +81,14 @@ export function makePersistedSetting<T>(
     } else {
       document.cookie = `${name}=${serialize(value)}`;
     }
-    revalidate(setting.keyFor(name));
+    if (!document.startViewTransition) {
+      revalidate(setting.keyFor(name));
+      return;
+    }
+    document.startViewTransition(() => {
+      revalidate(setting.keyFor(name));
+    });
   };
 
-  return [cookie, updateCookie];
+  return [cookie, updateCookie] as const;
 }

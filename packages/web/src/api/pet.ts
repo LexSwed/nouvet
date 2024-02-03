@@ -32,6 +32,7 @@ export const createPetAction = action(async (formData: FormData) => {
 }, 'create-pet');
 
 export const getUserPets = cache(async () => {
+  'use server';
   const currentUser = await getRequestUser();
   return userPets(currentUser.userId);
 }, 'user-pets');

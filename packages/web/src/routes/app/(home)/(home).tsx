@@ -7,7 +7,7 @@ import { getUserFamily } from '~/api/user';
 import { AccountMenu } from '~/lib/account-menu';
 import { createTranslator, getDictionaryCached } from '~/server/i18n';
 
-import { UserPets } from './_user-pets';
+import { UserPets } from './user-pets';
 
 export const route = {
   load() {
