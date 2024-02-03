@@ -25,10 +25,10 @@ interface PetHomeCardProps {
 
 export const PetHomeCard = (props: PetHomeCardProps) => {
   return (
-    <Card variant="flat" class="inline-flex flex-col gap-4">
+    <Card variant="flat" class="inline-flex flex-col gap-2">
       <A
         href={`/app/pet/${props.pet.id}/`}
-        class="-m-4 flex flex-row items-center gap-4 p-3"
+        class="-m-4 mb-0 flex flex-row items-center gap-4 p-3"
       >
         <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
           <Show
@@ -64,10 +64,8 @@ function QuickSetters(props: PetHomeCardProps) {
     showBreed: !props.pet.breed && props.pet.type === 'dog',
   });
 
-  console.log('render', qs());
-
   return (
-    <ul class="overflow-snap -mx-4 grid scroll-p-4 grid-flow-col justify-start gap-2 px-4 py-2 [grid-auto-columns:min-content] empty:hidden">
+    <ul class="overflow-snap -mx-4 grid scroll-p-4 grid-flow-col justify-start gap-2 px-4 [grid-auto-columns:min-content] empty:hidden">
       <Switch>
         <Match when={qs()?.showBirthDate}>
           <li class="contents">
