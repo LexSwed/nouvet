@@ -1,6 +1,7 @@
 import { defineConfig } from '@solidjs/start/config';
 import { searchForWorkspaceRoot, type UserConfig } from 'vite';
 import viteSvgSpriteWrapper from 'vite-svg-sprite-wrapper';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 const config = {
   css: {
@@ -12,6 +13,7 @@ const config = {
     },
   },
   plugins: [
+    tsconfigPaths(),
     viteSvgSpriteWrapper({
       icons: '../config/icons/source/*.svg',
       outputDir: '../config/icons',
@@ -37,9 +39,6 @@ export default defineConfig({
       preset: 'cloudflare_pages',
       rollupConfig: {
         external: ['node:async_hooks'],
-      },
-      experimental: {
-        asyncContext: true,
       },
     },
   },

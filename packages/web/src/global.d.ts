@@ -1,5 +1,4 @@
 /// <reference types="@solidjs/start/env" />
-/// <reference types="vite/client" />
 
 interface ImportMetaEnv {
   readonly FACEBOOK_APP_ID: string;
@@ -10,3 +9,8 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+// declare module '@solidjs/start/server' {
+//   interface RequestEventLocals {
+//     locale: Intl.Locale;
+//   }
+// }

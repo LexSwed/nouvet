@@ -1,6 +1,7 @@
 import type { JSX } from 'solid-js';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { clsx } from 'clsx';
+
+import { tw } from './tw';
 
 interface Props
   extends JSX.SvgSVGAttributes<SVGSVGElement>,
@@ -10,7 +11,7 @@ export const Spinner = (props: Props) => {
   return (
     <svg
       {...props}
-      class={clsx(spinnerCss({ size: props.size }), props.class)}
+      class={tw(spinnerCss({ size: props.size }), props.class)}
       viewBox="0 0 50 50"
       role="progressbar"
       aria-valuemin={0}

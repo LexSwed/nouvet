@@ -19,9 +19,12 @@ import {
   type Output,
 } from 'valibot';
 
-import { type UserSession } from '~/server/auth/user-session';
 import { useDb } from '~/server/db';
-import { petTable, type DatabasePet } from '~/server/db/schema';
+import {
+  petTable,
+  type DatabasePet,
+  type DatabaseUser,
+} from '~/server/db/schema';
 import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
 
 const UpdatePetSchema = object({
@@ -72,7 +75,7 @@ export async function petUpdate(
     [K in keyof UpdatePetInput]?: NonNullable<unknown>;
   },
   petId: DatabasePet['id'],
-  userId: UserSession['userId'],
+  userId: DatabaseUser['id'],
 ) {
   try {
     const { name, type, gender, breed, color, dateOfBirth, weight } = parse(

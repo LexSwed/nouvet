@@ -3,10 +3,9 @@
 import { eq, inArray, or } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
-import { petTable, userTable } from '~/server/db/schema';
-import { type UserSession } from '../auth/user-session';
+import { petTable, userTable, type DatabaseUser } from '~/server/db/schema';
 
-export async function userPets(userId: UserSession['userId']) {
+export async function userPets(userId: DatabaseUser['id']) {
   const db = useDb();
   const familyUsers = db
     .selectDistinct({ ownerId: userTable.id })

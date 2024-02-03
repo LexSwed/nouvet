@@ -2,12 +2,15 @@
 
 import { cache } from '@solidjs/router';
 
-import { getRequestUserSafe } from '~/server/auth/session-safe';
-import { userFamily } from '../server/queries/userFamily';
+import { getRequestUser } from '~/server/queries/getUserSession';
+import { userFamily } from '~/server/queries/userFamily';
 
-export const getUserFamily = cache(userFamily, 'user-family');
+export const getUserFamily = cache(async () => {
+  const currentUser = await getRequestUser();
+  return userFamily(currentUser.userId);
+}, 'user-family');
 
 export const getUserMeasurementSystem = cache(async () => {
-  const user = await getRequestUserSafe();
+  const user = await getRequestUser();
   return user.measurementSystem;
 }, 'user-measurement-system');

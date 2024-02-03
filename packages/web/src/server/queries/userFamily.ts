@@ -1,16 +1,16 @@
 'use server';
 
-import { getRequestEvent } from 'solid-js/web';
 import { eq } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
-import { familyTable, userProfileTable, userTable } from '~/server/db/schema';
-import { getRequestUser } from '../auth/user-session';
+import {
+  familyTable,
+  userProfileTable,
+  userTable,
+  type DatabaseUser,
+} from '~/server/db/schema';
 
-export async function userFamily() {
-  const event = getRequestEvent();
-  const currentUser = await getRequestUser(event!);
-
+export async function userFamily(userId: DatabaseUser['id']) {
   const db = useDb();
   return db
     .select({
@@ -23,7 +23,7 @@ export async function userFamily() {
       },
     })
     .from(userTable)
-    .where(eq(userTable.id, currentUser.userId))
+    .where(eq(userTable.id, userId))
     .leftJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))
     .leftJoin(familyTable, eq(userTable.familyId, familyTable.id))
     .get();

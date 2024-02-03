@@ -8,7 +8,8 @@
     "packages/config"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+    "pnpm": ">=8"
   },
   "scripts": {
     "dev": "npm run dev -w @nou/web",
@@ -27,6 +28,11 @@
   },
   "overrides": {
     "vinxi": {
+      "vite": "^5"
+    }
+  },
+  "pnpm": {
+    "overrides": {
       "vite": "^5"
     }
   }

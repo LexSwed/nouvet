@@ -4,7 +4,7 @@ import {
   type BetterSQLite3Database,
 } from 'drizzle-orm/better-sqlite3';
 
-import { env } from '~/server/env';
+import { env } from '../env';
 
 const sqlite = new Database(env.DB);
 let _db: BetterSQLite3Database | null = null;

@@ -1,6 +1,5 @@
 'use server';
 
-import { getRequestEvent } from 'solid-js/web';
 import {
   isoDate,
   maxLength,
@@ -16,9 +15,8 @@ import {
   type Output,
 } from 'valibot';
 
-import { getRequestUser, type UserSession } from '~/server/auth/user-session';
 import { useDb } from '~/server/db';
-import { petTable } from '~/server/db/schema';
+import { petTable, type DatabaseUser } from '~/server/db/schema';
 import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
 
 const CreatePetSchema = object({
@@ -58,7 +56,7 @@ export async function petCreate(
   input: {
     [K in keyof CreatePetInput]?: unknown;
   },
-  userId: UserSession['userId'],
+  userId: DatabaseUser['id'],
 ) {
   try {
     const petInfo = parse(CreatePetSchema, input);

@@ -8,10 +8,11 @@ import {
 import { object, parse, picklist, string, type Output } from 'valibot';
 import { sendRedirect, updateSession, useSession } from 'vinxi/server';
 
-import { useLucia } from '~/server/auth/lucia';
-import type { DatabaseUserProfile } from '~/server/db/schema';
-import { env } from '~/server/env';
 import { SESSION_COOKIE } from '../const';
+import type { DatabaseUserProfile } from '../db/schema';
+import { env } from '../env';
+
+import { useLucia } from './lucia';
 
 /**
  * Creates new auth session and stores it in cookie with other user basic user info.
@@ -58,11 +59,11 @@ export async function validateAuthSession(
     }
   }
   const lucia = useLucia();
-  const userSession = await useUserSession(event);
+  const userSession = await useUserSession();
 
   if (!userSession.id) {
     // Cleanup just in case
-    await deleteUserSession(event);
+    await deleteUserSession();
     return null;
   }
 
@@ -70,7 +71,7 @@ export async function validateAuthSession(
 
   if (!session) {
     // Cleanup just in case
-    await deleteUserSession(event);
+    await deleteUserSession();
     return null;
   }
 
@@ -90,33 +91,21 @@ export async function validateAuthSession(
 /**
  * Logs user out, invalidating DB session and all associated cookies.
  */
-export async function deleteUserSession(event: RequestEvent) {
-  const session = await useUserSession(event);
+export async function deleteUserSession() {
+  const session = await useUserSession();
   await session.clear();
 }
 export type UserSession = Output<typeof userCookieSchema>;
 
-function useUserSession(event: RequestEvent) {
-  return useSession<UserSession>(event, {
+export async function useUserSession() {
+  const session = await useSession<UserSession>({
     name: SESSION_COOKIE,
     password: env.SESSION_SECRET,
   });
-}
-
-/**
- * Returns current user from request cookies.
- * @throws {ValiError} - when the cookie is missing, expired, or stores invalid data.
- */
-export async function getRequestUser(
-  event: RequestEvent,
-): Promise<UserSession> {
-  'use server';
-  try {
-    const session = await useUserSession(event);
-    return parse(userCookieSchema, session.data);
-  } catch (error) {
-    throw sendRedirect(getRequestEvent()!, '/app/login');
+  if (!session.data) {
+    throw sendRedirect('/app/login');
   }
+  return session;
 }
 
 export const userCookieSchema = object({

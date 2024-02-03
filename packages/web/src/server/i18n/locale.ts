@@ -1,14 +1,13 @@
-import { getHeader, type FetchEvent } from '@solidjs/start/server';
-import type { RequestEvent } from 'solid-js/web';
+import { getHeader } from 'vinxi/http';
 
-import { getRequestUser } from '~/server/auth/user-session';
+import { getRequestUser } from '../queries/getUserSession';
 
-import { acceptedLocaleLanguageTag } from './index';
+import { acceptedLocaleLanguageTag } from './shared';
 
-export async function getLocale(event: FetchEvent): Promise<Intl.Locale> {
+export async function getLocale(): Promise<Intl.Locale> {
   try {
     for (const fn of [header, cookie]) {
-      const locale = await fn(event);
+      const locale = await fn();
       if (locale) {
         return locale;
       }
@@ -25,9 +24,9 @@ export async function getLocale(event: FetchEvent): Promise<Intl.Locale> {
 /**
  * Attempts to get preferred language from cookies, for when the user manually updated it from the UI.
  */
-async function cookie(event: FetchEvent): Promise<Intl.Locale | null> {
+async function cookie(): Promise<Intl.Locale | null> {
   try {
-    const user = await getRequestUser(event as RequestEvent);
+    const user = await getRequestUser();
     return new Intl.Locale(user?.locale);
   } catch (error) {
     // TODO: if the app is migrated to new values, where does invalidation of cookies happen?
@@ -39,9 +38,9 @@ async function cookie(event: FetchEvent): Promise<Intl.Locale | null> {
  * Attempts to get preferred language from Accept-Language header.
  * Verifies it's a correct language. Matches only to one of the supported locales.
  */
-function header(event: FetchEvent): Intl.Locale | null {
+function header(): Intl.Locale | null {
   /** @example en-GB,en;q=0.9,en-US;q=0.8,es;q=0.7. */
-  const rawHeader = getHeader(event, 'Accept-Language');
+  const rawHeader = getHeader('Accept-Language');
   if (!rawHeader) return null;
   const maybeMatching = rawHeader
     .split(',')

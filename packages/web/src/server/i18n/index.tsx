@@ -9,8 +9,7 @@ import type ErrorsDict from './locales/en/errors.json';
 import type LoginDict from './locales/en/login.json';
 import type PetFormsDict from './locales/en/pet-forms.json';
 import type WWWDict from './locales/en/www.json';
-
-export type Locale = (typeof acceptedLocaleLanguageTag)[number];
+import type { SupportedLocale } from './shared';
 
 type NamespaceMap = {
   'common': typeof CommonDict;
@@ -22,12 +21,8 @@ type NamespaceMap = {
 };
 export type Namespace = keyof NamespaceMap;
 
-export const acceptedLocaleLanguageTag = ['en', 'es'] as const satisfies Array<
-  Intl.Locale['language']
->;
-
 async function fetchDictionary<T extends Namespace>(
-  locale: Locale = 'en',
+  locale: SupportedLocale = 'en',
   namespace: T,
 ) {
   'use server';
@@ -44,7 +39,10 @@ export const getDictionary = async <T extends Namespace>(namespace: T) => {
   'use server';
   const event = getRequestEvent();
   const { locale } = event!.locals;
-  return fetchDictionary((locale as Intl.Locale).language as Locale, namespace);
+  return fetchDictionary(
+    (locale as Intl.Locale).language as SupportedLocale,
+    namespace,
+  );
 };
 
 export const getDictionaryCached = cache(getDictionary, 'translations');

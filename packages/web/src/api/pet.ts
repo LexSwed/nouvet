@@ -11,8 +11,8 @@ import {
   ValiError,
 } from 'valibot';
 
-import { getRequestUserSafe } from '~/server/auth/session-safe';
 import { getDictionary } from '~/server/i18n';
+import { getRequestUser } from '~/server/queries/getUserSession';
 import { petCreate } from '~/server/queries/petCreate';
 import { petUpdate } from '~/server/queries/petUpdate';
 import { userPets } from '~/server/queries/userPets';
@@ -20,7 +20,7 @@ import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
 
 export const createPetAction = action(async (formData: FormData) => {
   'use server';
-  const currentUser = await getRequestUserSafe();
+  const currentUser = await getRequestUser();
   return petCreate(
     {
       name: formData.get('name'),
@@ -32,7 +32,7 @@ export const createPetAction = action(async (formData: FormData) => {
 }, 'create-pet');
 
 export const getUserPets = cache(async () => {
-  const currentUser = await getRequestUserSafe();
+  const currentUser = await getRequestUser();
   return userPets(currentUser.userId);
 }, 'user-pets');
 
@@ -81,7 +81,7 @@ export const updatePetBirthDate = action(async (formData: FormData) => {
     if (Number.isNaN(petId)) {
       throw new Error('petId is not provided');
     }
-    const currentUser = await getRequestUserSafe();
+    const currentUser = await getRequestUser();
     const result = await petUpdate(
       {
         dateOfBirth,
@@ -117,7 +117,7 @@ export const updatePetWeight = action(async (formData: FormData) => {
     if (Number.isNaN(petId)) {
       throw new Error('petId is not provided');
     }
-    const currentUser = await getRequestUserSafe();
+    const currentUser = await getRequestUser();
     const result = await petUpdate(
       {
         weight,
@@ -153,7 +153,7 @@ export const updatePetBreed = action(async (formData: FormData) => {
     if (Number.isNaN(petId)) {
       throw new Error('petId is not provided');
     }
-    const currentUser = await getRequestUserSafe();
+    const currentUser = await getRequestUser();
     const result = await petUpdate(
       {
         breed,
