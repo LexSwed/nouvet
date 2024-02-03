@@ -18,7 +18,7 @@ interface AddBreedFormProps {
 }
 
 const AddBreedForm = (props: AddBreedFormProps) => {
-  const t = createTranslator('pet-form');
+  const t = createTranslator('pet-forms');
 
   const breedSubmission = useSubmission(updatePetBreed);
 
@@ -54,13 +54,13 @@ const AddBreedForm = (props: AddBreedFormProps) => {
             <span class="bg-on-surface/5 rounded-full p-3">
               <Icon use="scales" size="md" />
             </span>
-            {t('pet-form.animal-add-breed.label', { name: props.pet.name })}
+            {t('animal-add-breed.label', { name: props.pet.name })}
           </Text>
         </div>
         <TextField
           name="breed"
           type="text"
-          label={t('pet-form.animal-shortcut.breed')}
+          label={t('animal-shortcut.breed')}
         />
         <div class="grid grid-cols-2 gap-2 sm:flex sm:self-end">
           <Button
@@ -70,7 +70,7 @@ const AddBreedForm = (props: AddBreedFormProps) => {
             class="px-6"
             onClick={props.onDismiss}
           >
-            {t('pet-form.animal.drawer.cancel')}
+            {t('animal.drawer.cancel')}
           </Button>
           <Button
             type="submit"
@@ -79,7 +79,7 @@ const AddBreedForm = (props: AddBreedFormProps) => {
             popoverTargetAction="hide"
             popoverTarget={props.id}
           >
-            {t('pet-form.animal.drawer.save')}
+            {t('animal.drawer.save')}
           </Button>
         </div>
       </Form>

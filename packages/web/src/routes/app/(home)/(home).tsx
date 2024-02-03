@@ -27,10 +27,10 @@ function AppMainPage() {
           <Title>
             <Show
               when={user().family?.name}
-              children={t('app.meta.title', {
+              children={t('meta.title', {
                 familyName: user().family!.name!,
               })}
-              fallback={t('app.meta.title-new-user')}
+              fallback={t('meta.title-new-user')}
             />
           </Title>
           <div class="bg-background min-h-full">
@@ -44,7 +44,7 @@ function AppMainPage() {
                 }
                 fallback={
                   <ButtonLink href={`/app/family`} variant="link">
-                    {t('app.my-family-cta')}
+                    {t('my-family-cta')}
                   </ButtonLink>
                 }
               />

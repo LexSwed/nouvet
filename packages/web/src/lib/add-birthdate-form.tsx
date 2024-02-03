@@ -1,4 +1,4 @@
-import { useSubmission } from '@solidjs/router';
+import { createAsync, useSubmission } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
 import { createEffect, createMemo, For, Show } from 'solid-js';
 import {
@@ -13,7 +13,7 @@ import {
 } from '@nou/ui';
 
 import { updatePetBirthDate } from '~/api/pet';
-import { createTranslator, userLocale } from '~/server/i18n';
+import { createTranslator, getLocale } from '~/server/i18n';
 
 const Drawer = clientOnly(() =>
   import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
@@ -26,8 +26,8 @@ interface AddBirthDateFormProps {
 }
 
 const AddBirthDateForm = (props: AddBirthDateFormProps) => {
-  const t = createTranslator('pet-form');
-  const locale = userLocale();
+  const t = createTranslator('pet-forms');
+  const locale = createAsync(() => getLocale());
   const birthDateSubmission = useSubmission(updatePetBirthDate);
 
   createEffect(() => {
@@ -69,14 +69,14 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
             <span class="bg-on-surface/5 rounded-full p-3">
               <Icon use="calendar-plus" size="md" />
             </span>
-            {t('pet-form.animal-add-birth-date.label', {
+            {t('animal-add-birth-date.label', {
               name: props.pet.name,
             })}
           </Text>
           <div class="grid grid-cols-[4rem_1fr_5rem] gap-2">
             <TextField
               name="bday"
-              label={t('pet-form.animal-add-birth-date.day')}
+              label={t('animal-add-birth-date.day')}
               autocomplete="off"
               type="number"
               inputMode="numeric"
@@ -85,7 +85,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
               step="1"
             />
             <Picker
-              label={t('pet-form.animal-add-birth-date.month')}
+              label={t('animal-add-birth-date.month')}
               name="bmonth"
               autocomplete="off"
             >
@@ -96,7 +96,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
             </Picker>
             <TextField
               name="byear"
-              label={t('pet-form.animal-add-birth-date.year')}
+              label={t('animal-add-birth-date.year')}
               autocomplete="off"
               type="number"
               min="1980"
@@ -120,7 +120,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
             class="px-6"
             onClick={props.onDismiss}
           >
-            {t('pet-form.animal.drawer.cancel')}
+            {t('animal.drawer.cancel')}
           </Button>
           <Button
             type="submit"
@@ -129,7 +129,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
             popoverTargetAction="hide"
             popoverTarget={props.id}
           >
-            {t('pet-form.animal.drawer.save')}
+            {t('animal.drawer.save')}
           </Button>
         </div>
       </Form>

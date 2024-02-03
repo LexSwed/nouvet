@@ -73,7 +73,7 @@ export const updatePetBirthDate = action(async (formData: FormData) => {
       const dict = await getDictionary('errors');
       return {
         errors: {
-          bday: dict['errors.bday'],
+          bday: dict['bday'],
         },
       };
     }

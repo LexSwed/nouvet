@@ -6,7 +6,7 @@ import { Button, Form, Icon, Text, TextField } from '@nou/ui';
 import { updatePetWeight } from '~/api/pet';
 import { getUserMeasurementSystem } from '~/api/user';
 import type { DatabasePet } from '~/server/db/schema';
-import { createTranslator, userLocale } from '~/server/i18n';
+import { createTranslator, getLocale } from '~/server/i18n';
 
 const Drawer = clientOnly(() =>
   import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
@@ -41,8 +41,8 @@ interface AddWeightFormProps {
 }
 
 const AddWeightForm = (props: AddWeightFormProps) => {
-  const t = createTranslator('pet-form');
-  const locale = userLocale();
+  const t = createTranslator('pet-forms');
+  const locale = createAsync(() => getLocale());
   const measurementSystem = createAsync(() => getUserMeasurementSystem());
   const weightSubmission = useSubmission(updatePetWeight);
 
@@ -91,7 +91,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
             <span class="bg-on-surface/5 rounded-full p-3">
               <Icon use="scales" size="md" />
             </span>
-            {t('pet-form.animal-add-weight.label', { name: props.pet.name })}
+            {t('animal-add-weight.label', { name: props.pet.name })}
           </Text>
         </div>
         <TextField
@@ -100,7 +100,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
           step="0.01"
           min="0"
           max="9999"
-          label={t('pet-form.animal-shortcut.weight')}
+          label={t('animal-shortcut.weight')}
           class="flex-[2]"
           suffix={unit()}
         />
@@ -112,7 +112,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
             class="px-6"
             onClick={props.onDismiss}
           >
-            {t('pet-form.animal.drawer.cancel')}
+            {t('animal.drawer.cancel')}
           </Button>
           <Button
             type="submit"
@@ -121,7 +121,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
             popoverTargetAction="hide"
             popoverTarget={props.id}
           >
-            {t('pet-form.animal.drawer.save')}
+            {t('animal.drawer.save')}
           </Button>
         </div>
       </Form>

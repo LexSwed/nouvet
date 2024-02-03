@@ -22,16 +22,16 @@ function AppLoginPage() {
 
   return (
     <>
-      <Title>{t('login.meta.title')}</Title>
+      <Title>{t('meta.title')}</Title>
       <div class="bg-main flex min-h-full flex-col gap-12 pb-8 pt-4">
         <header class="container">
-          <LogoLink label={t('common.link-home')!} />
+          <LogoLink />
         </header>
         <section class="container flex h-full flex-[2] flex-col items-center gap-12">
           <div class="flex max-w-2xl flex-col gap-8">
             {/* TODO: Replace with carousel of app features with screenshots */}
             <HeroImage
-              alt={t('login.hero-image')}
+              alt={t('hero-image')}
               class="aspect-square w-full rounded-2xl"
             />
             <ButtonLink
@@ -43,14 +43,14 @@ function AppLoginPage() {
               onClick={onClick}
             >
               <img src="/assets/facebook.svg" class="size-8" alt="" />
-              {t('login.with-facebook')}
+              {t('with-facebook')}
             </ButtonLink>
           </div>
           <ButtonLink
             href="/"
             class="border-outline mt-auto flex size-16 items-center justify-center rounded-full border-2 p-0"
             variant="ghost"
-            label={t('login.back-home')}
+            label={t('back-home')}
           >
             <Icon use="chevron-left" size="sm" />
           </ButtonLink>

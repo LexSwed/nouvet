@@ -6,7 +6,7 @@ export default function Privacy() {
   const t = createTranslator('www');
   return (
     <>
-      <Title>{t('www.meta.main-title')}</Title>
+      <Title>{t('meta.main-title')}</Title>
     </>
   );
 }

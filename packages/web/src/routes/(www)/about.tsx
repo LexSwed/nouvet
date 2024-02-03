@@ -6,7 +6,7 @@ export default function About() {
   const t = createTranslator('www');
   return (
     <>
-      <Title>{t('www.meta.about-title')}</Title>
+      <Title>{t('meta.about-title')}</Title>
       About
     </>
   );

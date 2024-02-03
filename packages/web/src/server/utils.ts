@@ -14,9 +14,9 @@ export async function translateErrorTokens<T extends Record<string, unknown>>(
     if (issue) {
       // @ts-expect-error I know what I'm doing
       flat[key] =
-        `errors.${issue[0]}` in t
-          ? // @ts-expect-error dictionary type is too correct
-            t[`errors.${issue[0]}`]
+        issue[0] in t
+          ? // @ts-expect-error I know what I'm doing
+            t[`${issue[0]}`]
           : issue[0];
     }
   }

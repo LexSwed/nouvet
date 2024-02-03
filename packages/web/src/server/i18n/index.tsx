@@ -1,4 +1,4 @@
-import { prefix, resolveTemplate, translator } from '@solid-primitives/i18n';
+import { resolveTemplate, translator } from '@solid-primitives/i18n';
 import { cache, createAsync } from '@solidjs/router';
 import { type JSX, type ParentProps } from 'solid-js';
 import { getRequestEvent } from 'solid-js/web';
@@ -18,66 +18,49 @@ type NamespaceMap = {
   'app': typeof AppDict;
   'login': typeof LoginDict;
   'errors': typeof ErrorsDict;
-  'pet-form': typeof PetFormsDict;
+  'pet-forms': typeof PetFormsDict;
 };
-type Namespace = keyof NamespaceMap;
+export type Namespace = keyof NamespaceMap;
 
 export const acceptedLocaleLanguageTag = ['en', 'es'] as const satisfies Array<
   Intl.Locale['language']
 >;
 
-const localeFiles = import.meta.glob('./locales/*/*.json', {
-  import: 'default',
-});
-
 async function fetchDictionary<T extends Namespace>(
   locale: Locale = 'en',
   namespace: T,
 ) {
-  const commonDict = (await localeFiles[
-    `./locales/${locale}/common.json`
-  ]()) as typeof CommonDict;
-
-  const commonPrefixedDict = prefix(commonDict, 'common');
+  'use server';
+  const localeFiles = import.meta.glob('./locales/*/*.json', {
+    import: 'default',
+  });
   const routeModuleDict = (await localeFiles[
     `./locales/${locale}/${namespace}.json`
   ]()) as NamespaceMap[T];
-  const modulePrefixedDict = prefix(routeModuleDict, namespace);
-
-  return {
-    ...commonPrefixedDict,
-    ...modulePrefixedDict,
-  };
+  return routeModuleDict;
 }
 
 export const getDictionary = async <T extends Namespace>(namespace: T) => {
   'use server';
   const event = getRequestEvent();
   const { locale } = event!.locals;
-  if (!locale) {
-    console.error('Probably HMR, defaulting to en');
-    return fetchDictionary('en', namespace);
-  }
   return fetchDictionary((locale as Intl.Locale).language as Locale, namespace);
 };
 
 export const getDictionaryCached = cache(getDictionary, 'translations');
 
 export const createTranslator = <T extends Namespace>(namespace: T) => {
-  const dict = createAsync(() => getDictionaryCached(namespace));
+  const dict = createAsync(() => {
+    return getDictionaryCached(namespace);
+  });
   return translator(dict, resolveTemplate);
 };
 
-const getLocale = cache(async () => {
+export const getLocale = cache(async () => {
   'use server';
   const event = getRequestEvent();
   return (event!.locals.locale as Intl.Locale).baseName;
 }, 'locale');
-
-export const userLocale = () => {
-  const lang = createAsync(() => getLocale());
-  return lang;
-};
 
 /**
  * Renders translations strings that might include HTML.

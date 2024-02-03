@@ -45,7 +45,7 @@ const AccountMenu = (props: AccountMenu) => {
               class="flex w-full flex-row items-center gap-2 p-3 outline-none"
             >
               <Icon use="user-circle" size="sm" />
-              {t('app.account-menu.account')}
+              {t('account-menu.account')}
             </A>
           </MenuItem>
           <MenuItem class="gap-2">

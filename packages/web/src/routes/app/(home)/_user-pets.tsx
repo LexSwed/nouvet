@@ -31,9 +31,7 @@ export const UserPets = (props: { familyId: number | undefined }) => {
               href="/app/join"
               class="bg-surface-container-high flex flex-row items-center justify-between gap-2 text-balance rounded-[inherit] p-4"
             >
-              <h3 class="text-primary text-sm">
-                {t('app.invite-card-heading')}
-              </h3>
+              <h3 class="text-primary text-sm">{t('invite-card-heading')}</h3>
               <Icon
                 use="arrow-circle-up-right"
                 class="text-primary"

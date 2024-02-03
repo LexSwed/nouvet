@@ -1,4 +1,5 @@
 import { getHeader, type FetchEvent } from '@solidjs/start/server';
+import type { RequestEvent } from 'solid-js/web';
 
 import { getRequestUser } from '~/server/auth/user-session';
 
@@ -26,7 +27,7 @@ export async function getLocale(event: FetchEvent): Promise<Intl.Locale> {
  */
 async function cookie(event: FetchEvent): Promise<Intl.Locale | null> {
   try {
-    const user = await getRequestUser(event);
+    const user = await getRequestUser(event as RequestEvent);
     return new Intl.Locale(user?.locale);
   } catch (error) {
     // TODO: if the app is migrated to new values, where does invalidation of cookies happen?

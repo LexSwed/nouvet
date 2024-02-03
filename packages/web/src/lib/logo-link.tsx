@@ -2,19 +2,22 @@ import { A } from '@solidjs/router';
 import { type JSX } from 'solid-js';
 import { Icon, tw } from '@nou/ui';
 
+import { createTranslator } from '~/server/i18n';
+
 function LogoLink(props: {
-  label: string;
   class?: JSX.AnchorHTMLAttributes<HTMLAnchorElement>['class'];
 }) {
+  const t = createTranslator('common');
+  const label = t('link-home');
   return (
     <A
       href="/"
-      aria-label={props.label}
-      title={props.label}
+      aria-label={label}
+      title={label}
       class={tw('flex flex-row items-center gap-4', props.class)}
     >
-      <Icon use="nouvet" class="h-14 w-14" />
-      <span class="hidden text-lg sm:inline-block">{props.label}</span>
+      <Icon use="nouvet" class="size-14" />
+      <span class="hidden text-lg sm:inline-block">{label}</span>
     </A>
   );
 }
