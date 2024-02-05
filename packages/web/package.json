@@ -31,7 +31,7 @@
     "drizzle-valibot": "^0.1.1",
     "lucia": "^3.0.1",
     "oslo": "^1.0.4",
-    "solid-js": "^1.8.13",
+    "solid-js": "^1.8.14",
     "valibot": "^0.27.1",
     "vinxi": "0.2.1"
   },
