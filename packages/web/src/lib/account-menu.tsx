@@ -27,9 +27,9 @@ const AccountMenu = (props: AccountMenu) => {
       <Popover
         id="account-menu"
         placement="bottom-end"
-        class="bg-surface before:bg-surface flex max-h-96 w-[15rem] flex-col gap-3 rounded-3xl p-2"
+        class="bg-surface flex max-h-96 w-[15rem] flex-col rounded-3xl p-2"
       >
-        <div class="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-1 px-3 pb-2">
+        <div class="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-1 px-3 py-4 pt-2">
           <Avatar
             name={props.name}
             avatarUrl={props.avatarUrl}

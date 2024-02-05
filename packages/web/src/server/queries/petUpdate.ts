@@ -60,7 +60,7 @@ const UpdatePetSchema = object({
   ),
   dateOfBirth: optional(
     date([
-      minValue(new Date(1980, 0, 1), 'birthdate.range' satisfies ErrorKeys),
+      minValue(new Date(2000, 0, 1), 'birthdate.range' satisfies ErrorKeys),
       maxValue(new Date(), 'birthdate.range' satisfies ErrorKeys),
     ]),
   ),

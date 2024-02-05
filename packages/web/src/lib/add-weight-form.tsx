@@ -1,12 +1,14 @@
 import { createAsync, useSubmission } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
-import { createEffect, createMemo } from 'solid-js';
+import { createEffect, createMemo, Show } from 'solid-js';
 import { Button, Form, Icon, Text, TextField } from '@nou/ui';
 
 import { updatePetWeight } from '~/api/pet';
 import { getUserMeasurementSystem } from '~/api/user';
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator, getLocale } from '~/server/i18n';
+
+import { FormErrorMessage } from './form-error-message';
 
 const Drawer = clientOnly(() =>
   import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
@@ -69,12 +71,20 @@ const AddWeightForm = (props: AddWeightFormProps) => {
       .split(' ')[1];
   });
 
+  const submissionFailed = () =>
+    weightSubmission.result &&
+    'failed' in weightSubmission.result &&
+    weightSubmission.result.failed;
+
   return (
     <Drawer
       id={props.id}
       aria-labelledby={`${props.id}-drawer`}
       placement="bottom-start"
     >
+      <Show when={submissionFailed()}>
+        <FormErrorMessage class="mb-3" />
+      </Show>
       <Form
         class="flex w-[360px] max-w-full flex-col gap-6"
         action={updatePetWeight}

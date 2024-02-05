@@ -16,7 +16,6 @@
     width: max-content;
     content-visibility: auto;
     margin: 0;
-    max-height: 20rem;
     box-shadow:
       0 0 2px theme('colors.on-surface-variant/0.2'),
       theme('boxShadow.lg');

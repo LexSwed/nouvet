@@ -48,9 +48,7 @@ export const getDictionary = async <T extends Namespace>(namespace: T) => {
 export const getDictionaryCached = cache(getDictionary, 'translations');
 
 export const createTranslator = <T extends Namespace>(namespace: T) => {
-  const dict = createAsync(() => {
-    return getDictionaryCached(namespace);
-  });
+  const dict = createAsync(() => getDictionaryCached(namespace));
   return translator(dict, resolveTemplate);
 };
 

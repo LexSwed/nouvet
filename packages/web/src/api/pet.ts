@@ -18,24 +18,29 @@ import { petUpdate } from '~/server/queries/petUpdate';
 import { userPets } from '~/server/queries/userPets';
 import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
 
-export const createPetAction = action(async (formData: FormData) => {
-  'use server';
-  const currentUser = await getRequestUser();
-  return petCreate(
-    {
-      name: formData.get('name'),
-      type: formData.get('type'),
-      gender: formData.get('gender'),
-    },
-    currentUser.userId,
-  );
-}, 'create-pet');
-
 export const getUserPets = cache(async () => {
   'use server';
   const currentUser = await getRequestUser();
   return userPets(currentUser.userId);
 }, 'user-pets');
+
+export const createPetAction = action(async (formData: FormData) => {
+  'use server';
+  const currentUser = await getRequestUser();
+  try {
+    return petCreate(
+      {
+        name: formData.get('name'),
+        type: formData.get('type'),
+        gender: formData.get('gender'),
+      },
+      currentUser.userId,
+    );
+  } catch (error) {
+    console.error(error);
+    return { failed: true, errors: null };
+  }
+}, 'create-pet');
 
 const BirthDateSchema = object({
   bday: nullish(
@@ -101,7 +106,8 @@ export const updatePetBirthDate = action(async (formData: FormData) => {
       };
     }
     console.error(error);
-    return { failure: true, errors: null };
+    // return json({ failed: true, errors: null }, { status: 500 });
+    return { failed: true, errors: null };
   }
 }, 'update-pet-birth-date');
 
@@ -137,7 +143,7 @@ export const updatePetWeight = action(async (formData: FormData) => {
       };
     }
     console.error(error);
-    return { failure: true, errors: null };
+    return { failed: true, errors: null };
   }
 }, 'update-pet-weight');
 
@@ -174,6 +180,6 @@ export const updatePetBreed = action(async (formData: FormData) => {
       };
     }
     console.error(error);
-    return { failure: true, errors: null };
+    return { failed: true, errors: null };
   }
-}, 'update-pet-weight');
+}, 'update-pet-breed');

@@ -7,6 +7,8 @@ import { AnimalTypeSelect } from '~/lib/animal-type';
 import { GenderSwitch } from '~/lib/animal-type/animal-type';
 import { createTranslator } from '~/server/i18n';
 
+import { FormErrorMessage } from './form-error-message';
+
 interface CreateNewPetForm extends ParentProps {
   minimal: boolean;
 }
@@ -43,12 +45,7 @@ function CreateNewPetForm(props: CreateNewPetForm) {
         <GenderSwitch name="gender" />
 
         <Show when={hasFailed()}>
-          <Card variant="filled" id="error-message" aria-live="polite">
-            <Text with="body">{t('new-pet-failure.title')}</Text>
-            <Text with="body-sm" as="p">
-              {t('new-pet-failure.message')}
-            </Text>
-          </Card>
+          <FormErrorMessage />
         </Show>
 
         <Button loading={petSubmission.pending} type="submit">

@@ -36,7 +36,7 @@
     "@storybook/builder-vite": "^7.6.12",
     "@storybook/testing-library": "^0.2.2",
     "autoprefixer": "^10.4.17",
-    "postcss": "^8.4.33",
+    "postcss": "^8.4.34",
     "storybook": "^7.6.12",
     "storybook-solidjs": "^1.0.0-beta.2",
     "storybook-solidjs-vite": "^1.0.0-beta.2",
@@ -47,6 +47,6 @@
   },
   "peerDependencies": {
     "@solidjs/router": "^0.11.0",
-    "solid-js": "^1.8.12"
+    "solid-js": "^1.8.13"
   }
 }

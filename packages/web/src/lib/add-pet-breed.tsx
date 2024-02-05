@@ -1,11 +1,13 @@
 import { useSubmission } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
-import { createEffect } from 'solid-js';
+import { createEffect, Show } from 'solid-js';
 import { Button, Form, Icon, Text, TextField } from '@nou/ui';
 
 import { updatePetBreed } from '~/api/pet';
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
+
+import { FormErrorMessage } from './form-error-message';
 
 const Drawer = clientOnly(() =>
   import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
@@ -32,12 +34,20 @@ const AddBreedForm = (props: AddBreedFormProps) => {
     }
   });
 
+  const submissionFailed = () =>
+    breedSubmission.result &&
+    'failed' in breedSubmission.result &&
+    breedSubmission.result.failed;
+
   return (
     <Drawer
       id={props.id}
       aria-labelledby={`${props.id}-drawer`}
       placement="bottom-start"
     >
+      <Show when={submissionFailed()}>
+        <FormErrorMessage class="mb-3" />
+      </Show>
       <Form
         class="flex w-[360px] max-w-full flex-col gap-6"
         action={updatePetBreed}

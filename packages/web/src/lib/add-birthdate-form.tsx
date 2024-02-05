@@ -15,6 +15,8 @@ import {
 import { updatePetBirthDate } from '~/api/pet';
 import { createTranslator, getLocale } from '~/server/i18n';
 
+import { FormErrorMessage } from './form-error-message';
+
 const Drawer = clientOnly(() =>
   import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
 );
@@ -55,8 +57,17 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
     'dateOfBirth' in birthDateSubmission.result.errors
       ? birthDateSubmission.result.errors.dateOfBirth
       : null;
+
+  const submissionFailed = () =>
+    birthDateSubmission.result &&
+    'failed' in birthDateSubmission.result &&
+    birthDateSubmission.result.failed;
+
   return (
     <Drawer id={props.id} placement="bottom-start">
+      <Show when={submissionFailed()}>
+        <FormErrorMessage class="mb-3" />
+      </Show>
       <Form
         class="flex w-[360px] max-w-full flex-col gap-6"
         action={updatePetBirthDate}
@@ -99,7 +110,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
               label={t('animal-add-birth-date.year')}
               autocomplete="off"
               type="number"
-              min="1980"
+              min="2000"
               max={new Date().getFullYear()}
               required
             />
@@ -126,8 +137,6 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
             type="submit"
             class="px-6"
             loading={birthDateSubmission.pending}
-            popoverTargetAction="hide"
-            popoverTarget={props.id}
           >
             {t('animal.drawer.save')}
           </Button>
