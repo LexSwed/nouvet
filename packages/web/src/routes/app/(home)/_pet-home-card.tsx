@@ -5,10 +5,10 @@ import { Button, Card, Icon, Text } from '@nou/ui';
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
 
-import AddBirthDateForm from './add-birthdate-form';
-import AddBreedForm from './add-pet-breed';
-import AddWeightForm from './add-weight-form';
-import { makePersistedSetting } from './make-persisted-signal';
+import AddBirthDateForm from '~/lib/add-birthdate-form';
+import AddBreedForm from '~/lib/add-pet-breed';
+import AddWeightForm from '~/lib/add-weight-form';
+import { makePersistedSetting } from '~/lib/make-persisted-signal';
 
 interface PetHomeCardProps {
   pet: {

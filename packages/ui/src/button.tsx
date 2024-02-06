@@ -46,12 +46,12 @@ export const buttonVariants = cva(
 );
 
 type ButtonVariants = Omit<VariantProps<typeof buttonVariants>, 'icon'>;
-type ButtonWithIcon<P extends ButtonVariants> = P extends { icon: true }
-  ? { icon: true; label: string }
-  : { icon?: boolean; label?: string };
+type ButtonWithIcon =
+  | { icon: true; label: string }
+  | { icon?: boolean; label?: string };
 type BaseProps<T extends ValidComponent> = DynamicProps<T> &
   ButtonVariants &
-  ButtonWithIcon<ButtonVariants>;
+  ButtonWithIcon;
 
 const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
   const [local, props] = splitProps(ownProps as BaseProps<'button'>, [

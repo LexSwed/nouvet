@@ -32,7 +32,7 @@
     "lucia": "^3.0.1",
     "oslo": "^1.0.4",
     "solid-js": "^1.8.14",
-    "valibot": "^0.28.0",
+    "valibot": "^0.28.1",
     "vinxi": "0.2.1"
   },
   "devDependencies": {

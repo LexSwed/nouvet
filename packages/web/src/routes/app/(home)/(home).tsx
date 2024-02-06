@@ -3,11 +3,13 @@ import { createAsync, type RouteDefinition } from '@solidjs/router';
 import { Show, Suspense } from 'solid-js';
 import { ButtonLink } from '@nou/ui';
 
-import { getUserFamily } from '~/api/user';
-import { AccountMenu } from '~/lib/account-menu';
 import { createTranslator, getDictionaryCached } from '~/server/i18n';
 
-import { UserPets } from './user-pets';
+import { getUserFamily } from '~/api/user';
+
+import { AccountMenu } from '~/lib/account-menu';
+
+import { UserPets } from './_user-pets';
 
 export const route = {
   load() {
