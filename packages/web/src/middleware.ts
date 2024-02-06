@@ -2,9 +2,9 @@ import { createMiddleware } from '@solidjs/start/middleware';
 import type { FetchEvent } from '@solidjs/start/server';
 import { sendRedirect, setCookie } from 'vinxi/http';
 
-import { validateAuthSession } from './server/auth/user-session';
-import { RETURN_URL_COOKIE } from './server/const';
-import { getLocale } from './server/i18n/locale';
+import { validateAuthSession } from '~/server/auth/user-session';
+import { RETURN_URL_COOKIE } from '~/server/const';
+import { getLocale } from '~/server/i18n/locale';
 
 export default createMiddleware({
   onRequest: [locale, checkUserAuth],

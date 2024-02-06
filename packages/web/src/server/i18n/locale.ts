@@ -1,6 +1,6 @@
 import { getHeader } from 'vinxi/http';
 
-import { getRequestUser } from '../queries/getUserSession';
+import { getRequestUser } from '~/server/queries/getUserSession';
 
 import { acceptedLocaleLanguageTag } from './shared';
 

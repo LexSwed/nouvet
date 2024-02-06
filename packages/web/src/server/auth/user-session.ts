@@ -8,11 +8,10 @@ import {
 import { object, parse, picklist, string, type Output } from 'valibot';
 import { sendRedirect, updateSession, useSession } from 'vinxi/server';
 
-import { SESSION_COOKIE } from '../const';
-import type { DatabaseUserProfile } from '../db/schema';
+import { useLucia } from '~/server/auth/lucia';
+import { SESSION_COOKIE } from '~/server/const';
+import type { DatabaseUserProfile } from '~/server/db/schema';
 import { env } from '../env';
-
-import { useLucia } from './lucia';
 
 /**
  * Creates new auth session and stores it in cookie with other user basic user info.

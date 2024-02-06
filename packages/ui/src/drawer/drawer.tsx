@@ -53,18 +53,12 @@ const Content = (ownProps: ComponentProps<'div'>) => {
           }
         })}
         onFocusOut={composeEventHandlers(props.onFocusOut, (event) => {
-          console.log(
-            event.relatedTarget,
-            !(event.currentTarget as HTMLElement).contains(
-              event.relatedTarget as Node,
-            ),
-          );
           if (
             !(event.currentTarget as HTMLElement).contains(
               event.relatedTarget as Node,
             )
           ) {
-            // (event.currentTarget as HTMLElement).hidePopover();
+            (event.currentTarget as HTMLElement).hidePopover();
           }
         })}
         {...(props as ComponentProps<typeof Corvu.Content>)}
