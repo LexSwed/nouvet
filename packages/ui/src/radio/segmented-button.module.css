@@ -19,8 +19,8 @@
       background-color: theme('colors.surface-container');
     }
     &:where(:has(:focus-visible):focus-within) {
-      outline: 2px auto theme('colors.primary');
-      outline-offset: 2px;
+      outline: 4px auto theme('colors.primary/0.2');
+      outline-offset: 0px;
     }
     &:where(:first-of-type:not(:last-of-type)) {
       border-start-end-radius: 0;

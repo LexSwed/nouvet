@@ -1,6 +1,7 @@
 import { A, createAsync } from '@solidjs/router';
+import { clientOnly } from '@solidjs/start';
 import { For, lazy, Match, Show, Switch } from 'solid-js';
-import { Button, Icon } from '@nou/ui';
+import { Button, Card, Icon } from '@nou/ui';
 
 import { createTranslator } from '~/server/i18n';
 import { getUserPets } from '~/api/pet';
@@ -8,6 +9,9 @@ import { getUserPets } from '~/api/pet';
 import { PetHomeCard } from './_pet-home-card';
 
 const CreateNewPetForm = lazy(() => import('~/lib/create-new-pet-form'));
+const Drawer = clientOnly(() =>
+  import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
+);
 
 export const UserPets = (props: { familyId: number | undefined }) => {
   const t = createTranslator('app');
@@ -24,14 +28,25 @@ export const UserPets = (props: { familyId: number | undefined }) => {
             )}
           </For>
           <li>
-            <Button size="cta" icon variant="ghost">
-              <Icon use="plus-circle" size="md" />
+            <Button
+              label={t('add-another')}
+              size="base"
+              class="bg-on-surface/5 ms-4"
+              icon
+              variant="ghost"
+              popoverTarget="create-new-pet-drawer"
+            >
+              <Icon use="plus" size="sm" />
             </Button>
+            <Drawer id="create-new-pet-drawer">
+              <CreateNewPetForm />
+            </Drawer>
           </li>
         </ul>
       </Match>
       <Match when={pets()?.length === 0}>
-        <CreateNewPetForm minimal>
+        <Card class="flex flex-col gap-6 p-4">
+          <CreateNewPetForm />
           <Show when={!props.familyId}>
             <A
               href="/app/join"
@@ -45,7 +60,7 @@ export const UserPets = (props: { familyId: number | undefined }) => {
               />
             </A>
           </Show>
-        </CreateNewPetForm>
+        </Card>
       </Match>
     </Switch>
   );

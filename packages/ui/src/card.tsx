@@ -15,7 +15,7 @@ const cardVariants = cva(
       },
       variant: {
         elevated: 'bg-surface text-on-surface shadow-sm',
-        flat: 'bg-surface text-on-surface',
+        flat: 'bg-surface shadow-flat text-on-surface',
         filled: 'bg-secondary-container text-on-secondary-container',
         outlined: 'border-outline/20 bg-surface text-on-surface border',
       },

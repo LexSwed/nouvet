@@ -25,7 +25,7 @@
     "eslint-plugin-solid": "^0.13.1",
     "eslint-plugin-storybook": "^0.6.15",
     "eslint-plugin-tailwindcss": "^3.14.2",
-    "postcss": "^8.4.34",
+    "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
     "typescript-plugin-css-modules": "^5.0.2",

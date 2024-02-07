@@ -1,4 +1,4 @@
-import { action, cache, revalidate } from '@solidjs/router';
+import { action, cache, json, revalidate } from '@solidjs/router';
 import {
   coerce,
   maxValue,
@@ -38,7 +38,10 @@ export const createPetAction = action(async (formData: FormData) => {
     );
   } catch (error) {
     console.error(error);
-    return { failed: true, errors: null };
+    return json(
+      { failed: true, errors: null },
+      { status: 500, revalidate: [] },
+    );
   }
 }, 'create-pet');
 
@@ -106,8 +109,10 @@ export const updatePetBirthDate = action(async (formData: FormData) => {
       };
     }
     console.error(error);
-    // return json({ failed: true, errors: null }, { status: 500 });
-    return { failed: true, errors: null };
+    return json(
+      { failed: true, errors: null },
+      { status: 500, revalidate: [] },
+    );
   }
 }, 'update-pet-birth-date');
 
@@ -143,7 +148,10 @@ export const updatePetWeight = action(async (formData: FormData) => {
       };
     }
     console.error(error);
-    return { failed: true, errors: null };
+    return json(
+      { failed: true, errors: null },
+      { status: 500, revalidate: [] },
+    );
   }
 }, 'update-pet-weight');
 
@@ -180,6 +188,9 @@ export const updatePetBreed = action(async (formData: FormData) => {
       };
     }
     console.error(error);
-    return { failed: true, errors: null };
+    return json(
+      { failed: true, errors: null },
+      { status: 500, revalidate: [] },
+    );
   }
 }, 'update-pet-breed');

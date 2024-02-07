@@ -73,7 +73,7 @@ const GenderSwitch = (props: { name: string }) => {
   const id = createUniqueId();
   return (
     <fieldset
-      class={tw(cssStyles.genderSwitch, 'flex flex-col gap-2 max-w-xs')}
+      class={tw(cssStyles.genderSwitch, 'flex flex-col gap-2')}
       aria-labelledby={id}
     >
       <Text with="label-sm" as="label" id={id} class="ms-2">

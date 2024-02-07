@@ -107,6 +107,9 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
         'spinner-circle': 'spinner-circle 1.8s linear infinite',
       },
+      boxShadow: {
+        flat: '0 0 1px 2px var(--nou-on-surface)/0.2',
+      },
     },
     keyframes: {
       'spinner-circle': {
