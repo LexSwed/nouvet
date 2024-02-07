@@ -3,10 +3,10 @@ import { clientOnly } from '@solidjs/start';
 import { createEffect, createMemo, Show } from 'solid-js';
 import { Button, Form, Icon, Text, TextField } from '@nou/ui';
 
-import { updatePetWeight } from '~/api/pet';
-import { getUserMeasurementSystem } from '~/api/user';
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator, getLocale } from '~/server/i18n';
+import { updatePetWeight } from '~/api/pet';
+import { getUserMeasurementSystem } from '~/api/user';
 
 import { FormErrorMessage } from './form-error-message';
 
@@ -86,7 +86,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
         <FormErrorMessage class="mb-3" />
       </Show>
       <Form
-        class="flex w-[360px] max-w-full flex-col gap-6"
+        class="flex flex-col gap-6 sm:max-w-[360px]"
         action={updatePetWeight}
         method="post"
         validationErrors={weightSubmission.result?.errors}

@@ -3,7 +3,6 @@
     position: relative;
     flex-shrink: 0;
     border-radius: theme('borderRadius.lg');
-    padding: theme('spacing.3');
     transition: all 0.24s ease-out;
     background-color: theme('colors.surface');
     border: theme('borderWidth.2') solid theme('colors.on-surface/0.05');
@@ -35,6 +34,7 @@
     display: flex;
     gap: theme('spacing.3');
     align-items: center;
+    padding: theme('spacing.3');
   }
   .icon,
   .label {

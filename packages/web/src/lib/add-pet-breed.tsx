@@ -3,9 +3,9 @@ import { clientOnly } from '@solidjs/start';
 import { createEffect, Show } from 'solid-js';
 import { Button, Form, Icon, Text, TextField } from '@nou/ui';
 
-import { updatePetBreed } from '~/api/pet';
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
+import { updatePetBreed } from '~/api/pet';
 
 import { FormErrorMessage } from './form-error-message';
 
@@ -49,7 +49,7 @@ const AddBreedForm = (props: AddBreedFormProps) => {
         <FormErrorMessage class="mb-3" />
       </Show>
       <Form
-        class="flex w-[360px] max-w-full flex-col gap-6"
+        class="flex flex-col gap-6 sm:max-w-[360px]"
         action={updatePetBreed}
         method="post"
         validationErrors={breedSubmission.result?.errors}

@@ -12,7 +12,11 @@ interface AnimalTypeSelectProps {
 
 const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
   const t = createTranslator('pet-forms');
-  const animalTypes: Array<{ value: string; label: string; icon: SvgIcons }> = [
+  const animalTypes = (): Array<{
+    value: string;
+    label: string;
+    icon: SvgIcons;
+  }> => [
     {
       value: 'dog',
       label: t('animal-type.dog')!,
@@ -51,7 +55,7 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
         'scrollbar-none -mx-4 flex w-[fit-content()] snap-x snap-mandatory scroll-px-4 gap-2 overflow-auto px-4'
       }
     >
-      <For each={animalTypes}>
+      <For each={animalTypes()}>
         {(item) => {
           return (
             <RadioCard

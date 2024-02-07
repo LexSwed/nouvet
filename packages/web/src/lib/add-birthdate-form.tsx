@@ -12,8 +12,8 @@ import {
   TextField,
 } from '@nou/ui';
 
-import { updatePetBirthDate } from '~/api/pet';
 import { createTranslator, getLocale } from '~/server/i18n';
+import { updatePetBirthDate } from '~/api/pet';
 
 import { FormErrorMessage } from './form-error-message';
 
@@ -69,7 +69,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
         <FormErrorMessage class="mb-3" />
       </Show>
       <Form
-        class="flex w-[360px] max-w-full flex-col gap-6"
+        class="flex flex-col gap-6 sm:max-w-[360px]"
         action={updatePetBirthDate}
         method="post"
         validationErrors={birthDateSubmission.result?.errors}

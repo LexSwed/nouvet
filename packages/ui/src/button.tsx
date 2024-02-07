@@ -13,7 +13,7 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'intent:filter-darker bg-primary-container text-on-primary-container outline-primary',
+          'intent:filter-darker bg-primary text-on-primary outline-primary',
         destructive:
           'bg-destructive text-on-destructive intent:bg-destructive/90 outline-destructive',
         outline:
