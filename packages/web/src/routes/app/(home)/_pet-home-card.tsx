@@ -1,13 +1,11 @@
 import { A } from '@solidjs/router';
+import { clientOnly } from '@solidjs/start';
 import { Match, Show, Switch } from 'solid-js';
 import { Button, Card, Icon, SplitButton, Text, type SvgIcons } from '@nou/ui';
 
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
 
-import AddBirthDateForm from '~/lib/add-birthdate-form';
-import AddBreedForm from '~/lib/add-pet-breed';
-import AddWeightForm from '~/lib/add-weight-form';
 import { makePersistedSetting } from '~/lib/make-persisted-signal';
 
 interface PetHomeCardProps {
@@ -65,6 +63,10 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
   );
 };
 
+const AddBirthDateForm = clientOnly(() => import('~/lib/add-birthdate-form'));
+const AddBreedForm = clientOnly(() => import('~/lib/add-pet-breed'));
+const AddWeightForm = clientOnly(() => import('~/lib/add-weight-form'));
+
 function QuickSetters(props: PetHomeCardProps) {
   const t = createTranslator('pet-forms');
 
@@ -75,91 +77,85 @@ function QuickSetters(props: PetHomeCardProps) {
   });
 
   return (
-    <ul class="overflow-snap -mx-4 grid scroll-p-4 grid-flow-col justify-start gap-2 px-4 [grid-auto-columns:min-content] empty:hidden">
+    <div class="empty:hidden">
       <Switch>
         <Match when={qs()?.showBirthDate}>
-          <li class="contents">
-            <SplitButton variant="outline" size="sm">
-              <SplitButton.Inner
-                popoverTarget={`${props.pet.id}-birth-date`}
-                class="gap-2 text-nowrap"
-              >
-                <Icon use="calendar-plus" size="sm" />
-                <Text with="label-sm">{t('animal-shortcut.birth-date')}</Text>
-              </SplitButton.Inner>
-              <SplitButton.Inner
-                icon
-                label={t('animal.drawer.cancel')}
-                class="gap-2 text-nowrap"
-                onClick={() =>
-                  toggle((old) => ({ ...old, showBirthDate: false }))
-                }
-              >
-                <Icon use="x" size="xs" />
-              </SplitButton.Inner>
-            </SplitButton>
-            <AddBirthDateForm
-              id={`${props.pet.id}-birth-date`}
-              pet={props.pet}
-              onDismiss={() =>
+          <SplitButton variant="outline" size="sm">
+            <SplitButton.Inner
+              popoverTarget={`${props.pet.id}-birth-date`}
+              class="gap-2 text-nowrap"
+            >
+              <Icon use="calendar-plus" size="sm" />
+              <Text with="label-sm">{t('animal-shortcut.birth-date')}</Text>
+            </SplitButton.Inner>
+            <SplitButton.Inner
+              icon
+              label={t('animal.drawer.cancel')}
+              class="gap-2 text-nowrap"
+              onClick={() =>
                 toggle((old) => ({ ...old, showBirthDate: false }))
               }
-            />
-          </li>
+            >
+              <Icon use="x" size="xs" />
+            </SplitButton.Inner>
+          </SplitButton>
+          <AddBirthDateForm
+            id={`${props.pet.id}-birth-date`}
+            pet={props.pet}
+            onDismiss={() =>
+              toggle((old) => ({ ...old, showBirthDate: false }))
+            }
+          />
         </Match>
         <Match when={qs()?.showWeight}>
-          <li class="contents">
-            <SplitButton variant="outline" size="sm">
-              <SplitButton.Inner
-                class="gap-2 text-nowrap"
-                popoverTarget={`${props.pet.id}-weight`}
-              >
-                <Icon use="scales" size="sm" />
-                <Text with="label-sm">{t('animal-shortcut.weight')}</Text>
-              </SplitButton.Inner>
-              <SplitButton.Inner
-                icon
-                label={t('animal.drawer.cancel')}
-                class="gap-2 text-nowrap"
-                onClick={() => toggle((old) => ({ ...old, showWeight: false }))}
-              >
-                <Icon use="x" size="xs" />
-              </SplitButton.Inner>
-            </SplitButton>
-            <AddWeightForm
-              id={`${props.pet.id}-weight`}
-              pet={props.pet}
-              onDismiss={() => toggle((old) => ({ ...old, showWeight: false }))}
-            />
-          </li>
+          <SplitButton variant="outline" size="sm">
+            <SplitButton.Inner
+              class="gap-2 text-nowrap"
+              popoverTarget={`${props.pet.id}-weight`}
+            >
+              <Icon use="scales" size="sm" />
+              <Text with="label-sm">{t('animal-shortcut.weight')}</Text>
+            </SplitButton.Inner>
+            <SplitButton.Inner
+              icon
+              label={t('animal.drawer.cancel')}
+              class="gap-2 text-nowrap"
+              onClick={() => toggle((old) => ({ ...old, showWeight: false }))}
+            >
+              <Icon use="x" size="xs" />
+            </SplitButton.Inner>
+          </SplitButton>
+          <AddWeightForm
+            id={`${props.pet.id}-weight`}
+            pet={props.pet}
+            onDismiss={() => toggle((old) => ({ ...old, showWeight: false }))}
+          />
         </Match>
         <Match when={qs()?.showBreed}>
-          <li class="contents">
-            <SplitButton variant="outline" size="sm">
-              <SplitButton.Inner
-                class="gap-2 text-nowrap"
-                popoverTarget={`${props.pet.id}-breed`}
-              >
-                <Icon use="paw-print" size="sm" />
-                <Text with="label-sm">{t('animal-shortcut.breed')}</Text>
-              </SplitButton.Inner>
-              <SplitButton.Inner
-                icon
-                label={t('animal.drawer.cancel')}
-                class="gap-2 text-nowrap"
-                onClick={() => toggle((old) => ({ ...old, showBreed: false }))}
-              >
-                <Icon use="x" size="xs" />
-              </SplitButton.Inner>
-            </SplitButton>
-            <AddBreedForm
-              id={`${props.pet.id}-breed`}
-              pet={props.pet}
-              onDismiss={() => toggle((old) => ({ ...old, showBreed: false }))}
-            />
-          </li>
+          <SplitButton variant="outline" size="sm">
+            <SplitButton.Inner
+              class="gap-2 text-nowrap"
+              popoverTarget={`${props.pet.id}-breed`}
+            >
+              <Icon use="paw-print" size="sm" />
+              <Text with="label-sm">{t('animal-shortcut.breed')}</Text>
+            </SplitButton.Inner>
+            <SplitButton.Inner
+              icon
+              label={t('animal.drawer.cancel')}
+              class="gap-2 text-nowrap"
+              onClick={() => toggle((old) => ({ ...old, showBreed: false }))}
+            >
+              <Icon use="x" size="xs" />
+            </SplitButton.Inner>
+          </SplitButton>
+          <AddBreedForm
+            id={`${props.pet.id}-breed`}
+            pet={props.pet}
+            onDismiss={() => toggle((old) => ({ ...old, showBreed: false }))}
+          />
         </Match>
       </Switch>
-    </ul>
+    </div>
   );
 }

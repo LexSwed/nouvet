@@ -1,7 +1,6 @@
 import { createAsync, useSubmission } from '@solidjs/router';
-import { clientOnly } from '@solidjs/start';
 import { createEffect, createMemo, Show } from 'solid-js';
-import { Button, Form, Icon, Text, TextField } from '@nou/ui';
+import { Button, Drawer, Form, Icon, Text, TextField } from '@nou/ui';
 
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator, getLocale } from '~/server/i18n';
@@ -9,10 +8,6 @@ import { updatePetWeight } from '~/api/pet';
 import { getUser } from '~/api/user';
 
 import { FormErrorMessage } from './form-error-message';
-
-const Drawer = clientOnly(() =>
-  import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
-);
 
 const petTypeToMetricMeasurement: {
   metrical: Record<DatabasePet['type'], 'kilogram' | 'gram'>;
