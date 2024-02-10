@@ -1,5 +1,5 @@
 import { useSubmission } from '@solidjs/router';
-import { Show } from 'solid-js';
+import { createEffect, Show } from 'solid-js';
 import { Button, Form, Text, TextField } from '@nou/ui';
 
 import { createTranslator } from '~/server/i18n';
@@ -10,7 +10,7 @@ import { GenderSwitch } from '~/lib/animal-type/animal-type';
 
 import { FormErrorMessage } from './form-error-message';
 
-function CreateNewPetForm() {
+function CreateNewPetForm(props: { onSuccess?: () => void }) {
   const t = createTranslator('pet-forms');
   const petSubmission = useSubmission(createPetAction);
 
@@ -18,6 +18,12 @@ function CreateNewPetForm() {
     petSubmission.result &&
     'failed' in petSubmission.result &&
     petSubmission.result.failed;
+
+  createEffect(() => {
+    if (petSubmission.result && 'pet' in petSubmission.result) {
+      props.onSuccess?.();
+    }
+  });
 
   return (
     <Form

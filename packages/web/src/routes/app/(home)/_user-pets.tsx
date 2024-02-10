@@ -43,7 +43,13 @@ export const UserPets = (props: { familyId: number | undefined }) => {
               placement="bottom-start"
               class="max-w-[420px]"
             >
-              <CreateNewPetForm />
+              <CreateNewPetForm
+                onSuccess={() => {
+                  document
+                    .getElementById('create-new-pet-drawer')
+                    ?.hidePopover();
+                }}
+              />
             </Drawer>
           </li>
         </ul>

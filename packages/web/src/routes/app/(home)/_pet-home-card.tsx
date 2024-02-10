@@ -1,6 +1,6 @@
 import { A } from '@solidjs/router';
 import { Match, Show, Switch } from 'solid-js';
-import { Button, Card, Icon, Text } from '@nou/ui';
+import { Button, Card, Icon, Text, type SvgIcons } from '@nou/ui';
 
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
@@ -24,6 +24,15 @@ interface PetHomeCardProps {
   };
 }
 
+const petIconMap: Record<DatabasePet['type'], SvgIcons> = {
+  dog: 'dog',
+  cat: 'cat',
+  bird: 'bird',
+  rodent: 'rodent',
+  rabbit: 'rabbit',
+  horse: 'horse',
+};
+
 export const PetHomeCard = (props: PetHomeCardProps) => {
   return (
     <Card variant="flat" class="inline-flex flex-col gap-4">
@@ -41,7 +50,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
                 alt=""
               />
             }
-            fallback={<Icon use="camera-plus" size="md" />}
+            fallback={<Icon use={petIconMap[props.pet.type]} size="md" />}
           />
         </div>
         <div class="flex flex-row items-center gap-2">
