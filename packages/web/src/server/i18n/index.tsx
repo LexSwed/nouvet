@@ -52,7 +52,7 @@ export const createTranslator = <T extends Namespace>(namespace: T) => {
   return translator(dict, resolveTemplate);
 };
 
-export const getLocale = cache(async () => {
+export const getLocale = cache(() => {
   'use server';
   const event = getRequestEvent();
   return (event!.locals.locale as Intl.Locale).baseName;
