@@ -29,12 +29,7 @@ const RadioCard = (ownProps: RadioCardProps) => {
   const child = children(() => local.children);
   return (
     <div class={tw(cssStyle.card, local.class)} style={local.style}>
-      <input
-        type="radio"
-        id={id()}
-        {...props}
-        class={tw('sr-only', cssStyle.input)}
-      />
+      <input type="radio" id={id()} {...props} class={'sr-only'} />
       <label class={cssStyle.wrapper} for={id()}>
         <Show when={icon.toArray().length > 0}>
           <div class={cssStyle.icon}>{icon()}</div>

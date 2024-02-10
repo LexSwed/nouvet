@@ -28,7 +28,7 @@ export const createPetAction = action(async (formData: FormData) => {
   'use server';
   const currentUser = await getRequestUser();
   try {
-    return petCreate(
+    const result = await petCreate(
       {
         name: formData.get('name'),
         type: formData.get('type'),
@@ -36,6 +36,10 @@ export const createPetAction = action(async (formData: FormData) => {
       },
       currentUser.userId,
     );
+    if (result.pet) {
+      revalidate(getUserPets.key);
+    }
+    return result;
   } catch (error) {
     console.error(error);
     return json(

@@ -12,41 +12,26 @@ import {
   type ValidComponent,
 } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
-import { cva, type VariantProps } from 'class-variance-authority';
 
-import {
-  createFloating,
-  type OffsetOptions,
-  type Placement,
-} from '../popover/floating';
 import { tw } from '../tw';
 import { composeEventHandlers, mergeDefaultProps } from '../utils';
 
-import * as cssStyles from './popover.module.css';
+import { createFloating, type OffsetOptions, type Placement } from './floating';
 
-const popupVariants = cva(cssStyles.popover, {
-  variants: {
-    variant: {
-      list: 'p-1',
-      popup: 'p-3',
-    },
-  },
-  defaultVariants: {
-    variant: 'popup',
-  },
-});
+import * as cssStyles from './popover.module.css';
 
 type PopoverProps<T extends ValidComponent> = Omit<
   ComponentProps<T>,
-  'id' | 'children'
+  'id' | 'children' | 'role'
 > & {
-  placement?: Placement;
+  placement?: Placement | 'center';
   offset?: OffsetOptions;
   id: string;
   children?: JSX.Element | ((open: Accessor<boolean>) => JSX.Element);
+  role?: 'dialog' | 'menu';
   /** @default 'div' */
   as?: T | undefined;
-} & VariantProps<typeof popupVariants>;
+};
 
 const Popover = <T extends ValidComponent = 'div'>(
   ownProps: PopoverProps<T>,
@@ -55,13 +40,12 @@ const Popover = <T extends ValidComponent = 'div'>(
   const [trigger, setTrigger] = createSignal<HTMLElement | null>(null);
   const [rendered, setRendered] = createSignal(false);
 
-  const [local, styles, floatingProps, props] = splitProps(
+  const [local, floatingProps, props] = splitProps(
     mergeDefaultProps(ownProps as PopoverProps<'div'>, {
       as: 'div',
       role: 'dialog' as const,
     }),
     ['id', 'ref', 'class', 'as', 'role', 'children'],
-    ['variant'],
     ['offset', 'placement'],
   );
 
@@ -76,11 +60,16 @@ const Popover = <T extends ValidComponent = 'div'>(
     return typeof child === 'function' ? child?.(isMounted) : child;
   });
 
-  const data = createFloating(
-    () => (rendered() ? trigger() : null),
-    popover,
-    floatingProps,
-  );
+  const data = createMemo(() => {
+    const { placement, offset } = floatingProps;
+    if (placement === 'center') {
+      return { style: undefined, placement };
+    }
+    return createFloating(() => (rendered() ? trigger() : null), popover, {
+      placement,
+      offset,
+    });
+  });
 
   let pointerDown = false;
   createEffect(() => {
@@ -118,13 +107,13 @@ const Popover = <T extends ValidComponent = 'div'>(
       popover="auto"
       component={component()}
       {...props}
-      style={data.style}
-      data-placement={data.placement}
+      style={data().style}
+      data-placement={data().placement}
       id={local.id}
       role={local.role}
       tabIndex={0}
       ref={mergeRefs(local.ref, setPopover)}
-      class={tw(popupVariants(styles), local.class)}
+      class={tw(cssStyles.popover, local.class)}
       onFocusOut={composeEventHandlers(props.onFocusOut, (event) => {
         if (
           !popover()?.contains(event.relatedTarget as Node) &&

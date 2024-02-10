@@ -14,12 +14,20 @@
     transition-behavior: allow-discrete;
     transition-duration: 0.24s;
     width: max-content;
+    max-width: calc(100svw - theme('spacing.4'));
     content-visibility: auto;
     margin: 0;
     box-shadow:
-      0 0 2px theme('colors.on-surface-variant/0.2'),
+      0 0 2px theme('colors.on-surface-variant/0.12'),
       theme('boxShadow.lg');
     @apply bg-surface overflow-y-auto rounded-2xl;
+
+    &[role='menu'] {
+      padding: theme('spacing.1');
+    }
+    &[role='dialog'] {
+      padding: theme('spacing.4');
+    }
 
     &:popover-open {
       opacity: 1;
@@ -34,6 +42,16 @@
       opacity: 0;
     }
 
+    &[data-placement='center'] {
+      transform-origin: center;
+      margin: auto;
+      &::backdrop {
+        pointer-events: none;
+        opacity: 1;
+        transition: 0.2s ease-out;
+        background-color: theme('colors.on-surface/0.5');
+      }
+    }
     &[data-placement='top'] {
       transform-origin: bottom center;
     }
@@ -69,6 +87,17 @@
     }
     &[data-placement='left-end'] {
       transform-origin: right bottom;
+    }
+  }
+
+  @starting-style {
+    [data-placement='center'] {
+      &:popover-open {
+        transform: translateY(1rem);
+        &::backdrop {
+          opacity: 0;
+        }
+      }
     }
   }
 }

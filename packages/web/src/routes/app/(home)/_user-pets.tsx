@@ -38,7 +38,11 @@ export const UserPets = (props: { familyId: number | undefined }) => {
             >
               <Icon use="plus" size="sm" />
             </Button>
-            <Drawer id="create-new-pet-drawer">
+            <Drawer
+              id="create-new-pet-drawer"
+              placement="bottom-start"
+              class="max-w-[420px]"
+            >
               <CreateNewPetForm />
             </Drawer>
           </li>

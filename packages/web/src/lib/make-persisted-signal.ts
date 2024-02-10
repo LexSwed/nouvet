@@ -74,7 +74,6 @@ export function makePersistedSetting<T, U extends Exclude<T, Function>>(
   // @ts-expect-error what do you want from me
   const updateCookie: Setter<U> = (value) => {
     if (typeof value === 'function') {
-      console.log(cookie);
       // @ts-expect-error what do you want from me
       const updated = value(cookie());
       document.cookie = `${name}=${serialize(updated)}`;

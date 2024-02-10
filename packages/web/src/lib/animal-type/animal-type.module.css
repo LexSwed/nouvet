@@ -7,9 +7,6 @@
         color: theme('colors.tertiary');
         background-color: theme('colors.tertiary/0.08');
         border-color: theme('colors.tertiary');
-        &:has(:focus-visible):focus-within {
-          outline: auto 6px theme('colors.tertiary/0.2');
-        }
       }
       & .genderIcon {
         color: theme('colors.tertiary');
@@ -28,9 +25,6 @@
         color: theme('colors.primary');
         background-color: theme('colors.primary/0.08');
         border-color: theme('colors.primary');
-        &:has(:focus-visible):focus-within {
-          outline: auto 6px theme('colors.primary/0.2');
-        }
       }
       & .genderIcon {
         color: theme('colors.primary');
@@ -48,6 +42,15 @@
   .genderSwitchLabel {
     &:where(:hover) {
       background-color: theme('colors.on-surface/0.05');
+    }
+    &:has(:focus-visible):focus-within {
+      outline: solid 4px theme('colors.outline/0.4');
+      &:has(input[value='male']) {
+        outline-color: theme('colors.tertiary/0.4');
+      }
+      &:has(input[value='female']) {
+        outline-color: theme('colors.primary/0.4');
+      }
     }
   }
 

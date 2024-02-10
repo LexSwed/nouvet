@@ -3,12 +3,24 @@
     position: relative;
     flex-shrink: 0;
     border-radius: theme('borderRadius.lg');
-    transition: all 0.24s ease-out;
+    transition: 0.24s ease-out;
+    transition-property: flex, border-color, background-color, color;
     background-color: theme('colors.surface');
     border: theme('borderWidth.2') solid theme('colors.on-surface/0.05');
+    &:where(:hover, :focus-within) {
+      border-color: theme('colors.on-surface/0.6');
+      background-color: theme('colors.on-surface/0.05');
+    }
+    &:where(:active) {
+      background-color: theme('colors.on-surface/0.08');
+    }
+    &:has(:focus-visible):focus-within {
+      outline: 4px solid theme('colors.on-surface/0.4');
+    }
     &:has(input:checked) {
       border-color: theme('colors.primary');
       background-color: theme('colors.surface-container-lowest');
+      outline-color: theme('colors.primary/0.4');
       & .label {
         color: theme('colors.primary');
       }
@@ -16,18 +28,9 @@
         color: theme('colors.primary');
         background-color: theme('colors.primary/0.12');
       }
-    }
-    &:where(:hover, :focus-within) {
-      background-color: theme('colors.on-surface/0.05');
-    }
-    &:where(:active) {
-      background-color: theme('colors.on-surface/0.08');
-    }
-  }
-  .input {
-    &:focus-visible + .wrapper .label {
-      outline: 2px auto currentColor;
-      outline-offset: 4px;
+      &:has(:focus-visible):focus-within {
+        outline-color: theme('colors.primary/0.4');
+      }
     }
   }
   .wrapper {

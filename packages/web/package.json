@@ -22,7 +22,7 @@
     "@solid-primitives/refs": "^1.0.6",
     "@solid-primitives/storage": "^2.1.2",
     "@solidjs/meta": "^0.29.3",
-    "@solidjs/router": "^0.11.5",
+    "@solidjs/router": "^0.12.0",
     "@solidjs/start": "^0.5.4",
     "arctic": "^1.1.4",
     "better-sqlite3": "^9.4.0",

@@ -52,7 +52,7 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
   return (
     <div
       class={
-        'scrollbar-none -mx-4 flex w-[fit-content()] snap-x snap-mandatory scroll-px-4 gap-2 overflow-auto px-4'
+        'scrollbar-none -m-4 flex w-[fit-content] max-w-[stretch] snap-x snap-mandatory scroll-px-4 gap-2 overflow-auto p-4'
       }
     >
       <For each={animalTypes()}>

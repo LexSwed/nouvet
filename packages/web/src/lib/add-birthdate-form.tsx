@@ -43,6 +43,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
   });
 
   const monthNames = createMemo(() => {
+    if (!locale()) return [];
     const formatter = Intl.DateTimeFormat(locale(), {
       month: 'long',
     });
@@ -77,7 +78,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
         <input type="hidden" name="petId" value={props.pet.id} />
         <Fieldset>
           <Text as="legend" with="label" class="mb-6 flex items-center gap-2">
-            <span class="bg-on-surface/5 rounded-full p-3">
+            <span class="rounded-full bg-on-surface/5 p-3">
               <Icon use="calendar-plus" size="md" />
             </span>
             {t('animal-add-birth-date.label', {

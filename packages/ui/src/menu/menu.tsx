@@ -13,7 +13,7 @@ interface MenuProps
 }
 
 const Menu = (ownProps: MenuProps) => {
-  return <Popover role="menu" variant="list" as={MenuList} {...ownProps} />;
+  return <Popover role="menu" as={MenuList} {...ownProps} />;
 };
 
 interface MenuItemProps extends ComponentProps<'div'> {}
