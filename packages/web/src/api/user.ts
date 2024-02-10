@@ -9,8 +9,8 @@ export const getUserFamily = cache(async () => {
   return userFamily(currentUser.userId);
 }, 'user-family');
 
-export const getUserMeasurementSystem = cache(async () => {
+export const getUser = cache(async () => {
   'use server';
   const user = await getRequestUser();
-  return user.measurementSystem;
-}, 'user-measurement-system');
+  return user;
+}, 'user');

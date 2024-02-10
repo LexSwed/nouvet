@@ -52,10 +52,18 @@ export const createTranslator = <T extends Namespace>(namespace: T) => {
   return translator(dict, resolveTemplate);
 };
 
-export const getLocale = cache(() => {
+export const getLocale = cache(async () => {
   'use server';
   const event = getRequestEvent();
-  return (event!.locals.locale as Intl.Locale).baseName;
+  const { locale } = event!.locals as { locale: Intl.Locale };
+  return {
+    /** A string containing the language, and the script and region if available. */
+    baseName: locale.baseName,
+    /** The primary language subtag associated with the locale. */
+    language: locale.language,
+    /** The region of the world (usually a country) associated with the locale. Possible values are region codes as defined by ISO 3166-1. */
+    region: locale.region,
+  };
 }, 'locale');
 
 /**

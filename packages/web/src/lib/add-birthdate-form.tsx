@@ -43,8 +43,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
   });
 
   const monthNames = createMemo(() => {
-    if (!locale()) return [];
-    const formatter = Intl.DateTimeFormat(locale(), {
+    const formatter = Intl.DateTimeFormat(locale()?.baseName, {
       month: 'long',
     });
     return Array.from({ length: 12 }).map((_, month) => {

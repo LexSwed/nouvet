@@ -44,12 +44,13 @@ const AddBreedForm = (props: AddBreedFormProps) => {
       id={props.id}
       aria-labelledby={`${props.id}-drawer`}
       placement="bottom-start"
+      class="sm:w-[280px]"
     >
       <Show when={submissionFailed()}>
         <FormErrorMessage class="mb-3" />
       </Show>
       <Form
-        class="flex flex-col gap-6 sm:max-w-[360px]"
+        class="flex flex-col gap-6"
         action={updatePetBreed}
         method="post"
         validationErrors={breedSubmission.result?.errors}

@@ -2,9 +2,11 @@ import { cache, createAsync, revalidate } from '@solidjs/router';
 import { type Setter } from 'solid-js';
 import { isServer } from 'solid-js/web';
 
-const parseCookies = (str: string) =>
+const parseDocumentCookie = () =>
   Object.fromEntries(
-    str.split(';').map((cookie) => (cookie ? cookie.split('=') : [])),
+    document.cookie
+      .split(';')
+      .map((cookie) => (cookie ? cookie.trim().split('=') : [])),
   );
 
 function serialize<T>(value: T): string {
@@ -18,34 +20,6 @@ function deserialize<T>(cookieString: unknown): T | null {
 
   return JSON.parse(decodeURIComponent(cookieString)) as T;
 }
-/* 
-export function makePersistedSetting<T>(
-  name: string,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  defaultValue?: Exclude<T, Function>,
-) {
-  const [cookie, setCookie] = createSignal<T | null>(
-    deserialize<T>(name) || defaultValue || null,
-  );
-
-  // @ts-expect-error what do you want from me
-  const updateCookie: Setter<T> = (value) => {
-    if (typeof value === 'function') {
-      setCookie((prev) => {
-        // @ts-expect-error what do you want from me
-        const updated = value(prev);
-        document.cookie = `${name}=${serialize(updated)}`;
-        return updated;
-      });
-    } else {
-      document.cookie = `${name}=${serialize(value)}`;
-      // @ts-expect-error what do you want from me
-      setCookie(value);
-    }
-  };
-
-  return [cookie, updateCookie] as const;
-} */
 
 const getServerSetting = async <T>(name: string) => {
   'use server';
@@ -57,7 +31,7 @@ const setting = cache(async <T>(name: string) => {
   if (isServer) {
     return getServerSetting<T>(name);
   }
-  return deserialize<T>(parseCookies(document.cookie)[name]);
+  return deserialize<T>(parseDocumentCookie()[name]);
 }, 'cookie-setting');
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -73,13 +47,10 @@ export function makePersistedSetting<T, U extends Exclude<T, Function>>(
 
   // @ts-expect-error what do you want from me
   const updateCookie: Setter<U> = (value) => {
-    if (typeof value === 'function') {
-      // @ts-expect-error what do you want from me
-      const updated = value(cookie());
-      document.cookie = `${name}=${serialize(updated)}`;
-    } else {
-      document.cookie = `${name}=${serialize(value)}`;
-    }
+    // @ts-expect-error what do you want from me
+    const newValue: U = typeof value === 'function' ? value(cookie()) : value;
+
+    document.cookie = `${name}=${serialize(newValue)};max-age=${60 * 60 * 24 * 365}`;
     if (!document.startViewTransition) {
       revalidate(setting.keyFor(name));
       return;

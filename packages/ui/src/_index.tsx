@@ -1,5 +1,5 @@
 export { Avatar } from './avatar';
-export { Button, ButtonLink } from './button';
+export { Button, ButtonLink, SplitButton } from './button';
 export { Card, NavCard } from './card';
 export { Divider } from './divider';
 export { default as Drawer } from './drawer';

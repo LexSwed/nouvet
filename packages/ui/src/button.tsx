@@ -12,16 +12,14 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          'intent:filter-darker bg-primary text-on-primary outline-primary',
-        destructive:
-          'bg-destructive text-on-destructive intent:bg-destructive/90 outline-destructive',
+        default: 'bg-primary text-on-primary outline-primary',
+        destructive: 'bg-destructive text-on-destructive outline-destructive',
         outline:
-          'border-outline text-on-surface outline-on-surface intent:bg-on-surface/8 rounded-full border bg-transparent',
+          'border-outline text-on-surface outline-on-surface rounded-full border bg-transparent',
         secondary:
-          'bg-tertiary-container text-on-tertiary-container outline-tertiary intent:bg-tertiary-container/80 rounded-full',
-        ghost: 'text-on-surface outline-on-surface intent:bg-on-surface/8',
-        link: 'text-primary intent:underline underline-offset-4',
+          'bg-tertiary-container text-on-tertiary-container outline-tertiary rounded-full',
+        ghost: 'text-on-surface outline-on-surface',
+        link: 'text-primary underline-offset-4',
       },
       size: {
         base: 'h-12 min-w-12 px-6 py-2 text-base',
@@ -36,28 +34,61 @@ export const buttonVariants = cva(
       icon: {
         true: 'rounded-full p-0',
       },
+      split: {
+        true: 'flex p-0 [&>*]:rounded-[inherit]',
+      },
     },
     defaultVariants: {
       variant: 'default',
       size: 'base',
       icon: false,
+      split: false,
     },
+    compoundVariants: [
+      {
+        split: false,
+        variant: 'default',
+        class: 'intent:filter-darker',
+      },
+      {
+        split: false,
+        variant: 'destructive',
+        class: 'intent:bg-destructive/90',
+      },
+      {
+        split: false,
+        variant: 'outline',
+        class: 'intent:bg-on-surface/8',
+      },
+      {
+        split: false,
+        variant: 'secondary',
+        class: ' intent:bg-tertiary-container/80',
+      },
+      {
+        split: false,
+        variant: 'ghost',
+        class: 'intent:bg-on-surface/8',
+      },
+      {
+        split: false,
+        variant: 'link',
+        class: 'intent:underline',
+      },
+    ],
   },
 );
 
-type ButtonVariants = Omit<VariantProps<typeof buttonVariants>, 'icon'>;
-type ButtonWithIcon =
-  | { icon: true; label: string }
-  | { icon?: boolean; label?: string };
-type BaseProps<T extends ValidComponent> = DynamicProps<T> &
-  ButtonVariants &
-  ButtonWithIcon;
+type ButtonVariants = Omit<VariantProps<typeof buttonVariants>, 'icon'> &
+  ({ icon: true; label: string } | { icon?: boolean; label?: string });
+type BaseProps<T extends ValidComponent> = DynamicProps<T> & ButtonVariants;
 
 const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
   const [local, props] = splitProps(ownProps as BaseProps<'button'>, [
     'size',
     'loading',
     'variant',
+    'split',
     'icon',
     'label',
     'title',
@@ -89,14 +120,16 @@ const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
   );
 };
 
-const Button = (ownProps: Omit<BaseProps<'button'>, 'component'>) => {
+const Button = (ownProps: Omit<BaseProps<'button'>, 'component' | 'split'>) => {
   const props = mergeDefaultProps(ownProps, {
     type: 'button',
   });
   return <BaseComponent {...props} component="button" />;
 };
 
-const ButtonLink = (ownProps: Omit<BaseProps<typeof A>, 'component'>) => {
+const ButtonLink = (
+  ownProps: Omit<BaseProps<typeof A>, 'component' | 'split'>,
+) => {
   /**
    * When link={false} should use <a> without any link attribute
    * @link https://github.com/solidjs/solid-router/discussions/321
@@ -107,4 +140,13 @@ const ButtonLink = (ownProps: Omit<BaseProps<typeof A>, 'component'>) => {
   );
 };
 
-export { Button, ButtonLink };
+const SplitButton = (
+  ownProps: Omit<BaseProps<'div'>, 'component' | 'icon' | 'split'>,
+) => {
+  return <BaseComponent {...ownProps} split component="div" />;
+};
+SplitButton.Inner = (ownProps: Omit<BaseProps<'button'>, 'component'>) => {
+  return <Button {...ownProps} size="sm" variant="ghost" />;
+};
+
+export { Button, ButtonLink, SplitButton };

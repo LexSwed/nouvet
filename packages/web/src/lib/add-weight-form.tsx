@@ -6,7 +6,7 @@ import { Button, Form, Icon, Text, TextField } from '@nou/ui';
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator, getLocale } from '~/server/i18n';
 import { updatePetWeight } from '~/api/pet';
-import { getUserMeasurementSystem } from '~/api/user';
+import { getUser } from '~/api/user';
 
 import { FormErrorMessage } from './form-error-message';
 
@@ -45,7 +45,7 @@ interface AddWeightFormProps {
 const AddWeightForm = (props: AddWeightFormProps) => {
   const t = createTranslator('pet-forms');
   const locale = createAsync(() => getLocale());
-  const measurementSystem = createAsync(() => getUserMeasurementSystem());
+  const user = createAsync(() => getUser());
   const weightSubmission = useSubmission(updatePetWeight);
 
   createEffect(() => {
@@ -60,10 +60,11 @@ const AddWeightForm = (props: AddWeightFormProps) => {
 
   const unit = createMemo(() => {
     let unit = 'kilogram';
-    if (measurementSystem() && props.pet.type) {
-      unit = petTypeToMetricMeasurement[measurementSystem()!][props.pet.type];
+    if (user()?.measurementSystem && props.pet.type) {
+      unit =
+        petTypeToMetricMeasurement[user()!.measurementSystem!][props.pet.type];
     }
-    return new Intl.NumberFormat(locale(), {
+    return new Intl.NumberFormat(locale()?.baseName, {
       style: 'unit',
       unit,
     })
@@ -81,6 +82,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
       id={props.id}
       aria-labelledby={`${props.id}-drawer`}
       placement="bottom-start"
+      class="sm:w-[240px]"
     >
       <Show when={submissionFailed()}>
         <FormErrorMessage class="mb-3" />
