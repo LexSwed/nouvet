@@ -1,4 +1,4 @@
-import { action, cache, json, revalidate } from '@solidjs/router';
+import { action, cache, json } from '@solidjs/router';
 import {
   coerce,
   maxValue,
@@ -36,10 +36,10 @@ export const createPetAction = action(async (formData: FormData) => {
       },
       currentUser.userId,
     );
-    if (result.pet) {
-      revalidate(getUserPets.key);
-    }
-    return result;
+    return json(
+      result,
+      result.pet ? { revalidate: [getUserPets.key] } : undefined,
+    );
   } catch (error) {
     console.error(error);
     return json(
@@ -102,10 +102,10 @@ export const updatePetBirthDate = action(async (formData: FormData) => {
       petId,
       currentUser.userId,
     );
-    if (result.pet) {
-      await revalidate(getUserPets.key);
-    }
-    return result;
+    return json(
+      result,
+      result.pet ? { revalidate: [getUserPets.key] } : undefined,
+    );
   } catch (error) {
     if (error instanceof ValiError) {
       return {
@@ -141,10 +141,10 @@ export const updatePetWeight = action(async (formData: FormData) => {
       petId,
       currentUser.userId,
     );
-    if (result.pet) {
-      await revalidate(getUserPets.key);
-    }
-    return result;
+    return json(
+      result,
+      result.pet ? { revalidate: [getUserPets.key] } : undefined,
+    );
   } catch (error) {
     if (error instanceof ValiError) {
       return {
@@ -180,11 +180,10 @@ export const updatePetBreed = action(async (formData: FormData) => {
       petId,
       currentUser.userId,
     );
-    if (result.pet) {
-      await revalidate(getUserPets.key);
-    }
-    console.log(result);
-    return result;
+    return json(
+      result,
+      result.pet ? { revalidate: [getUserPets.key] } : undefined,
+    );
   } catch (error) {
     if (error instanceof ValiError) {
       return {
