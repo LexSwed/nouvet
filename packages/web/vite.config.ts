@@ -1,5 +1,6 @@
 import { defineConfig } from '@solidjs/start/config';
 import { searchForWorkspaceRoot, type UserConfig } from 'vite';
+import { imagetools } from 'vite-imagetools';
 import viteSvgSpriteWrapper from 'vite-svg-sprite-wrapper';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
@@ -14,6 +15,7 @@ const config = {
   },
   plugins: [
     tsconfigPaths(),
+    imagetools(),
     viteSvgSpriteWrapper({
       icons: '../config/icons/source/*.svg',
       outputDir: '../config/icons',
