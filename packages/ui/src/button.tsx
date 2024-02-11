@@ -35,7 +35,7 @@ export const buttonVariants = cva(
         true: 'rounded-full p-0',
       },
       split: {
-        true: 'flex p-0 [&>*]:rounded-[inherit]',
+        true: 'flex w-fit p-0 [&>*]:rounded-[inherit]',
       },
     },
     defaultVariants: {
