@@ -4,7 +4,6 @@ import {
   createEffect,
   createMemo,
   createSignal,
-  onCleanup,
   splitProps,
   type Accessor,
   type ComponentProps,
@@ -71,28 +70,6 @@ const Popover = <T extends ValidComponent = 'div'>(
     });
   });
 
-  let pointerDown = false;
-  createEffect(() => {
-    function onPointerDown() {
-      pointerDown = true;
-    }
-    function onPointerUp(event: PointerEvent) {
-      pointerDown = false;
-      if (
-        !popover()?.contains(event.target as HTMLElement) &&
-        !trigger()?.contains(event.target as HTMLElement)
-      ) {
-        popover()?.hidePopover();
-      }
-    }
-    document.addEventListener('pointerdown', onPointerDown);
-    document.addEventListener('pointerup', onPointerUp);
-    onCleanup(() => {
-      document.removeEventListener('pointerdown', onPointerDown);
-      document.removeEventListener('pointerup', onPointerUp);
-    });
-  });
-
   createEffect(() => {
     // filter out potential close buttons inside the popover
     const trigger = Array.from(
@@ -114,22 +91,9 @@ const Popover = <T extends ValidComponent = 'div'>(
       tabIndex={0}
       ref={mergeRefs(local.ref, setPopover)}
       class={tw(cssStyles.popover, local.class)}
-      onFocusOut={composeEventHandlers(props.onFocusOut, (event) => {
-        if (
-          !popover()?.contains(event.relatedTarget as Node) &&
-          // do not hide popover on outside click, it will be handled separately
-          !pointerDown
-        ) {
-          popover()?.hidePopover();
-        }
-      })}
       children={children()}
       onBeforeToggle={composeEventHandlers(props.onBeforeToggle, (event) => {
-        if (!local.id) return;
         setRendered(event.newState === 'open');
-        if (event.newState === 'open') {
-          setTrigger(trigger);
-        }
       })}
       onToggle={composeEventHandlers(props.onToggle, (event) => {
         if (event.newState === 'open') {

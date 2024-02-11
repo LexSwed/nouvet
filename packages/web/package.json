@@ -25,7 +25,7 @@
     "@solidjs/router": "^0.12.0",
     "@solidjs/start": "^0.5.4",
     "arctic": "^1.1.4",
-    "better-sqlite3": "^9.4.0",
+    "better-sqlite3": "^9.4.1",
     "class-variance-authority": "^0.7.0",
     "drizzle-orm": "^0.29.3",
     "drizzle-valibot": "^0.1.1",
