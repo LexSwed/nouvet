@@ -7,11 +7,11 @@ import { tw } from './tw';
 const textVariants = cva('m-0 font-sans', {
   variants: {
     with: {
-      'body': 'text-base',
-      'body-xs': 'text-xs',
-      'body-sm': 'text-sm',
-      'body-lg': 'text-lg',
-      'body-xl': 'text-xl',
+      'body': 'text-base font-normal',
+      'body-xs': 'text-xs font-normal',
+      'body-sm': 'text-sm font-normal',
+      'body-lg': 'text-lg font-normal',
+      'body-xl': 'text-xl font-normal',
       'label': 'text-sm font-medium',
       'label-sm': 'text-xs',
       'label-lg': 'text-lg font-medium',

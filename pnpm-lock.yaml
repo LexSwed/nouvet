@@ -63,8 +63,8 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.1)
       typescript-plugin-css-modules:
-        specifier: ^5.0.2
-        version: 5.0.2(typescript@5.3.3)
+        specifier: ^5.1.0
+        version: 5.1.0(typescript@5.3.3)
       vite:
         specifier: ^5
         version: 5.0.12
@@ -76,8 +76,8 @@ importers:
   packages/ui:
     dependencies:
       '@floating-ui/dom':
-        specifier: ^1.6.1
-        version: 1.6.1
+        specifier: ^1.6.2
+        version: 1.6.2
       '@solid-primitives/media':
         specifier: ^2.2.6
         version: 2.2.6(solid-js@1.8.14)
@@ -98,7 +98,7 @@ importers:
         version: 0.4.1(solid-js@1.8.14)
       solid-floating-ui:
         specifier: ^0.3.1
-        version: 0.3.1(@floating-ui/dom@1.6.1)(solid-js@1.8.14)
+        version: 0.3.1(@floating-ui/dom@1.6.2)(solid-js@1.8.14)
       solid-js:
         specifier: '*'
         version: 1.8.14
@@ -2033,8 +2033,8 @@ packages:
     dependencies:
       '@floating-ui/utils': 0.2.1
 
-  /@floating-ui/dom@1.6.1:
-    resolution: {integrity: sha512-iA8qE43/H5iGozC3W0YSnVSW42Vh522yyM1gj+BqRwVsTNOyr231PsXDaV04yT39PsO0QL2QpbI/M0ZaLUQgRQ==}
+  /@floating-ui/dom@1.6.2:
+    resolution: {integrity: sha512-xymkSSowKdGqo0SRr2Mp4czH5A8o2Pum35PAD0ftb3gCcPacWzwhvtUeUqmVXm9EVtm2hThD/lRrFNcahMOaSQ==}
     dependencies:
       '@floating-ui/core': 1.6.0
       '@floating-ui/utils': 0.2.1
@@ -2045,7 +2045,7 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
-      '@floating-ui/dom': 1.6.1
+      '@floating-ui/dom': 1.6.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: true
@@ -6805,7 +6805,7 @@ packages:
     peerDependencies:
       solid-js: ^1.8
     dependencies:
-      '@floating-ui/dom': 1.6.1
+      '@floating-ui/dom': 1.6.2
       '@solid-primitives/memo': 1.3.6(solid-js@1.8.14)
       solid-js: 1.8.14
     dev: false
@@ -7192,6 +7192,11 @@ packages:
   /dotenv@16.4.1:
     resolution: {integrity: sha512-CjA3y+Dr3FyFDOAMnxZEGtnW9KBR2M0JvvUtXNW+dYJL5ROWxP9DUHCwgFqpMk0OXCc0ljhaNTr2w/kutYIcHQ==}
     engines: {node: '>=12'}
+
+  /dotenv@16.4.2:
+    resolution: {integrity: sha512-rZSSFxke7d9nYQ5NeMIwp5PP+f8wXgKNljpOb7KtH6SKW1cEqcXAz9VSJYVLKe7Jhup/gUYOkaeSVyK8GJ+nBg==}
+    engines: {node: '>=12'}
+    dev: false
 
   /dreamopt@0.8.0:
     resolution: {integrity: sha512-vyJTp8+mC+G+5dfgsY+r3ckxlz+QMX40VjPQsZc5gxVAxLmi64TBoVkP54A/pRAXMXsbu2GMMBrZPxNv23waMg==}
@@ -11030,15 +11035,10 @@ packages:
       source-map-js: 1.0.2
     dev: false
 
-  /sax@1.2.4:
-    resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
-    dev: false
-
   /sax@1.3.0:
     resolution: {integrity: sha512-0s+oAmw9zLl1V1cS9BtZN7JAd0cW5e0QH4W3LWEK6a4LaLEA2OTpGYWDY+6XasBLtz6wkm3u1xRw95mRuJ59WA==}
     requiresBuild: true
     dev: false
-    optional: true
 
   /scheduler@0.23.0:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
@@ -11267,14 +11267,14 @@ packages:
     resolution: {integrity: sha512-9LK+E7Hv5R9u4g4C3p+jjLstaLe11MDsL21UpYaCNmapvMkYhqCV4A/f/3gyH8QjMyh6l68q9xC85vihY9ahMQ==}
     dev: false
 
-  /solid-floating-ui@0.3.1(@floating-ui/dom@1.6.1)(solid-js@1.8.14):
+  /solid-floating-ui@0.3.1(@floating-ui/dom@1.6.2)(solid-js@1.8.14):
     resolution: {integrity: sha512-o/QmGsWPS2Z3KidAxP0nDvN7alI7Kqy0kU+wd85Fz+au5SYcnYm7I6Fk3M60Za35azsPX0U+5fEtqfOuk6Ao0Q==}
     engines: {node: '>=10'}
     peerDependencies:
       '@floating-ui/dom': ^1.5
       solid-js: ^1.8
     dependencies:
-      '@floating-ui/dom': 1.6.1
+      '@floating-ui/dom': 1.6.2
       solid-js: 1.8.14
     dev: false
 
@@ -11508,14 +11508,14 @@ packages:
       inline-style-parser: 0.1.1
     dev: false
 
-  /stylus@0.59.0:
-    resolution: {integrity: sha512-lQ9w/XIOH5ZHVNuNbWW8D822r+/wBSO/d6XvtyHLF7LW4KaCIDeVbvn5DF8fGCJAUCwVhVi/h6J0NUcnylUEjg==}
+  /stylus@0.62.0:
+    resolution: {integrity: sha512-v3YCf31atbwJQIMtPNX8hcQ+okD4NQaTuKGUWfII8eaqn+3otrbttGL1zSMZAAtiPsBztQnujVBugg/cXFUpyg==}
     hasBin: true
     dependencies:
       '@adobe/css-tools': 4.3.3
       debug: 4.3.4
       glob: 7.2.3
-      sax: 1.2.4
+      sax: 1.3.0
       source-map: 0.7.4
     transitivePeerDependencies:
       - supports-color
@@ -12029,14 +12029,14 @@ packages:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
     dev: true
 
-  /typescript-plugin-css-modules@5.0.2(typescript@5.3.3):
-    resolution: {integrity: sha512-ej/Og4Y8mF+43P14P9Ik1MGqNXcXBVgO1TltkESegdnZsaaRXnaJ5CoJmTPRkg25ysQlOV6P94wNhI4VxIzlkw==}
+  /typescript-plugin-css-modules@5.1.0(typescript@5.3.3):
+    resolution: {integrity: sha512-6h+sLBa4l+XYSTn/31vZHd/1c3SvAbLpobY6FxDiUOHJQG1eD9Gh3eCs12+Eqc+TCOAdxcO+zAPvUq0jBfdciw==}
     peerDependencies:
       typescript: '>=4.0.0'
     dependencies:
       '@types/postcss-modules-local-by-default': 4.0.2
       '@types/postcss-modules-scope': 3.0.4
-      dotenv: 16.4.1
+      dotenv: 16.4.2
       icss-utils: 5.1.0(postcss@8.4.35)
       less: 4.2.0
       lodash.camelcase: 4.3.0
@@ -12048,7 +12048,7 @@ packages:
       reserved-words: 0.1.2
       sass: 1.70.0
       source-map-js: 1.0.2
-      stylus: 0.59.0
+      stylus: 0.62.0
       tsconfig-paths: 4.2.0
       typescript: 5.3.3
     transitivePeerDependencies:

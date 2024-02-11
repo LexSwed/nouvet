@@ -20,7 +20,7 @@ const iconVariants = cva('inline shrink-0 select-none', {
     },
   },
   defaultVariants: {
-    size: 'font',
+    size: 'sm',
   },
 });
 

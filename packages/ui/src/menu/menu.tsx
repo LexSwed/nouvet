@@ -47,6 +47,7 @@ const MenuList = (ownProps: MenuListProps) => {
       tabIndex={0}
       role="menu"
       {...ownProps}
+      class={tw('rounded-2xl', ownProps.class)}
       onKeyDown={composeEventHandlers(ownProps.onKeyDown, (event) => {
         switch (event.key) {
           case 'ArrowDown':

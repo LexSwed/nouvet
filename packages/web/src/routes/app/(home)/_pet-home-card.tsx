@@ -1,7 +1,18 @@
 import { A } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
 import { Match, Show, Switch } from 'solid-js';
-import { Button, Card, Icon, SplitButton, Text, type SvgIcons } from '@nou/ui';
+import {
+  Button,
+  ButtonLink,
+  Card,
+  Icon,
+  MenuItem,
+  MenuList,
+  Popover,
+  SplitButton,
+  Text,
+  type SvgIcons,
+} from '@nou/ui';
 
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
@@ -32,33 +43,112 @@ const petIconMap: Record<DatabasePet['type'], SvgIcons> = {
 };
 
 export const PetHomeCard = (props: PetHomeCardProps) => {
+  const petPopoverId = `pet-popover-${props.pet.id}`;
+  const t = createTranslator('app');
   return (
-    <Card variant="flat" class="inline-flex flex-col gap-4">
-      <A
-        href={`/app/pet/${props.pet.id}/`}
-        class="-m-4 flex flex-row items-center gap-4 p-3"
+    <Card variant="flat" class="inline-flex min-w-52 flex-col gap-4">
+      <Button
+        variant="ghost"
+        class="intent:bg-transparent -m-4 h-auto cursor-pointer justify-start p-3"
+        popoverTarget={petPopoverId}
       >
-        <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
-          <Show
-            when={props.pet.pictureUrl}
-            children={
-              <img
-                src={props.pet.pictureUrl!}
-                class="aspect-square w-full"
-                alt=""
-              />
-            }
-            fallback={<Icon use={petIconMap[props.pet.type]} size="md" />}
-          />
-        </div>
-        <div class="flex flex-row items-center gap-2">
+        <div class="flex flex-row items-center gap-4">
+          <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
+            <Show
+              when={props.pet.pictureUrl}
+              children={
+                <img
+                  src={props.pet.pictureUrl!}
+                  class="aspect-square w-full"
+                  alt=""
+                />
+              }
+              fallback={<Icon use={petIconMap[props.pet.type]} size="md" />}
+            />
+          </div>
           <Text with="body-lg">{props.pet.name}</Text>
-          <Button icon variant="ghost" size="sm" aria-hidden tabIndex={-1}>
-            <Icon use="pencil" size="sm" />
-          </Button>
         </div>
-      </A>
-      <QuickSetters pet={props.pet} />
+      </Button>
+      <Popover
+        id={petPopoverId}
+        offset={(state) => ({
+          mainAxis: -1 * state.rects.reference.height - 4,
+          crossAxis: -4,
+        })}
+        placement="bottom-start"
+        class="flex transform-none flex-col gap-4 p-4"
+      >
+        {(open) => (
+          <Show when={open()}>
+            <A
+              href={`/app/pet/${props.pet.id}/`}
+              class="-m-4 flex flex-row items-center gap-4 p-4"
+            >
+              <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
+                <Show
+                  when={props.pet.pictureUrl}
+                  children={
+                    <img
+                      src={props.pet.pictureUrl!}
+                      class="aspect-square w-full"
+                      alt=""
+                    />
+                  }
+                  fallback={<Icon use={petIconMap[props.pet.type]} size="md" />}
+                />
+              </div>
+              <Text with="body-lg">{props.pet.name}</Text>
+              <Button
+                icon
+                label={t('go-to-pet-page')}
+                variant="ghost"
+                class="ms-auto"
+                tabIndex={-1}
+              >
+                <Icon use="pencil" size="sm" />
+              </Button>
+            </A>
+            <MenuList class="min-w-52">
+              <MenuItem>
+                <Icon use="pencil" size="sm" />
+                {/* TODO: translate */}
+                Edit info
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => e.preventDefault()}
+                role="presentation"
+                class="p-0"
+              >
+                <button
+                  type="button"
+                  popoverTarget={`${props.pet.id}-menu-weight`}
+                  class="flex w-full cursor-default flex-row items-center gap-2 p-3 outline-none"
+                >
+                  <Icon use="scales" size="sm" />
+                  {/* TODO: translate */}
+                  Add weight change
+                </button>
+              </MenuItem>
+              <MenuItem>
+                <Icon use="note" size="sm" />
+                {/* TODO: translate */}
+                Add a note
+              </MenuItem>
+              <MenuItem>
+                <Icon use="aid" size="sm" />
+                {/* TODO: translate */}
+                Schedule visit
+              </MenuItem>
+            </MenuList>
+            <AddWeightForm id={`${props.pet.id}-menu-weight`} pet={props.pet} />
+          </Show>
+        )}
+      </Popover>
+      <Show
+        when={!props.pet.dateOfBirth || !props.pet.weight || !props.pet.breed}
+      >
+        <QuickSetters pet={props.pet} />
+      </Show>
     </Card>
   );
 };

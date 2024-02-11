@@ -34,7 +34,7 @@ const petTypeToMetricMeasurement: {
 interface AddWeightFormProps {
   id: string;
   pet: { id: number; name: string; type: DatabasePet['type'] };
-  onDismiss: () => void;
+  onDismiss?: () => void;
 }
 
 const AddWeightForm = (props: AddWeightFormProps) => {
@@ -49,7 +49,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
       'pet' in weightSubmission.result &&
       weightSubmission.result.pet
     ) {
-      props.onDismiss();
+      props.onDismiss?.();
     }
   });
 
