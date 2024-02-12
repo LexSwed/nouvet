@@ -17,6 +17,11 @@ export { type Placement, type OffsetOptions } from '@floating-ui/dom';
 export interface FloatingOptions {
   placement?: ComputePositionConfig['placement'];
   offset?: OffsetOptions;
+  /** Enable flip + shift middleware to maintain popover in the viewport.
+   * @link https://floating-ui.com/docs/flip
+   * @default true
+   */
+  shift?: boolean;
 }
 
 interface FloatingState extends Omit<ComputePositionReturn, 'x' | 'y'> {
@@ -40,26 +45,17 @@ export function createFloating<
 ): FloatingResult {
   const placement = () => options?.placement ?? 'bottom';
   const offset = () => options?.offset ?? 8;
+  const toflip = options?.shift ?? true;
   const position = useFloating(reference, floating, {
     middleware: [
       inline(),
-      shift({ padding: 16 }),
-      flip({ padding: 16 }),
+      ...(toflip ? [shift({ padding: 16 }), flip({ padding: 16 })] : []),
       offsetMiddleware(offset()),
     ],
     placement: placement(),
     strategy,
     whileElementsMounted: (reference, floating, update) =>
-      autoUpdate(reference, floating, () => {
-        // do not calculate the position while popover is opening
-        if (
-          floating.getAttribute('popover')
-            ? floating.matches(':popover-open')
-            : true
-        ) {
-          requestAnimationFrame(update);
-        }
-      }),
+      autoUpdate(reference, floating, () => requestAnimationFrame(update)),
   });
 
   return {

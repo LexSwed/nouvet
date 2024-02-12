@@ -22,7 +22,7 @@ export const UserPets = (props: { familyId: number | undefined }) => {
         <ul class="overflow-snap -mx-4 -my-2 flex scroll-px-4 flex-row items-center gap-4 px-4 py-2">
           <For each={pets()}>
             {(pet) => (
-              <li>
+              <li class="block">
                 <PetHomeCard pet={pet} />
               </li>
             )}

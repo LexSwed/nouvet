@@ -3,7 +3,6 @@ import { clientOnly } from '@solidjs/start';
 import { Match, Show, Switch } from 'solid-js';
 import {
   Button,
-  ButtonLink,
   Card,
   Icon,
   MenuItem,
@@ -75,6 +74,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
           mainAxis: -1 * state.rects.reference.height - 4,
           crossAxis: -4,
         })}
+        shift={false}
         placement="bottom-start"
         class="flex transform-none flex-col gap-4 p-4"
       >

@@ -28,6 +28,11 @@ type PopoverProps<T extends ValidComponent> = Omit<
   id: string;
   children?: JSX.Element | ((open: Accessor<boolean>) => JSX.Element);
   role?: 'dialog' | 'menu';
+  /** Enable flip + shift middleware to maintain popover in the viewport.
+   * @link https://floating-ui.com/docs/flip
+   * @default true
+   */
+  shift?: boolean;
   /** @default 'div' */
   as?: T | undefined;
 };
@@ -45,7 +50,7 @@ const Popover = <T extends ValidComponent = 'div'>(
       role: 'dialog' as const,
     }),
     ['id', 'ref', 'class', 'as', 'role', 'children'],
-    ['offset', 'placement'],
+    ['offset', 'placement', 'shift'],
   );
 
   const { isMounted } = createPresence(rendered, {
@@ -60,13 +65,14 @@ const Popover = <T extends ValidComponent = 'div'>(
   });
 
   const data = createMemo(() => {
-    const { placement, offset } = floatingProps;
+    const { placement, offset, shift } = floatingProps;
     if (placement === 'center') {
       return { style: undefined, placement };
     }
     return createFloating(() => (rendered() ? trigger() : null), popover, {
       placement,
       offset,
+      shift,
     });
   });
 
@@ -98,6 +104,8 @@ const Popover = <T extends ValidComponent = 'div'>(
       onToggle={composeEventHandlers(props.onToggle, (event) => {
         if (event.newState === 'open') {
           popover()?.focus();
+          // TODO: can be vertical list? Could be aligned to the end?
+          trigger()?.scrollIntoView({ inline: 'start' });
         }
       })}
     />
