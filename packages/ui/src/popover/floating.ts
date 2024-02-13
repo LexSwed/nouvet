@@ -10,6 +10,7 @@ import {
   type ComputePositionReturn,
   type OffsetOptions,
   type ReferenceElement,
+  type Strategy,
 } from '@floating-ui/dom';
 
 export { type Placement, type OffsetOptions } from '@floating-ui/dom';
@@ -17,11 +18,10 @@ export { type Placement, type OffsetOptions } from '@floating-ui/dom';
 export interface FloatingOptions {
   placement?: ComputePositionConfig['placement'];
   offset?: OffsetOptions;
-  /** Enable flip + shift middleware to maintain popover in the viewport.
-   * @link https://floating-ui.com/docs/flip
-   * @default true
+  /**
+   * @default 'absolute'
    */
-  shift?: boolean;
+  strategy?: Strategy;
 }
 
 interface FloatingState extends Omit<ComputePositionReturn, 'x' | 'y'> {
@@ -33,8 +33,6 @@ export interface FloatingResult extends FloatingState {
   style: JSX.CSSProperties | undefined;
 }
 
-const strategy = 'absolute' as const;
-
 export function createFloating<
   R extends ReferenceElement,
   F extends HTMLElement,
@@ -45,15 +43,18 @@ export function createFloating<
 ): FloatingResult {
   const placement = () => options?.placement ?? 'bottom';
   const offset = () => options?.offset ?? 8;
-  const toflip = options?.shift ?? true;
+  const strategy = () => options?.strategy ?? 'absolute';
+
   const position = useFloating(reference, floating, {
     middleware: [
       inline(),
-      ...(toflip ? [shift({ padding: 16 }), flip({ padding: 16 })] : []),
+      ...(strategy() === 'absolute'
+        ? [shift({ padding: 16 }), flip({ padding: 16 })]
+        : []),
       offsetMiddleware(offset()),
     ],
     placement: placement(),
-    strategy,
+    strategy: strategy(),
     whileElementsMounted: (reference, floating, update) =>
       autoUpdate(reference, floating, () => requestAnimationFrame(update)),
   });
@@ -64,7 +65,7 @@ export function createFloating<
         inset: 'unset',
         top: `${position.y ?? 0}px`,
         left: `${position.x ?? 0}px`,
-        position: strategy,
+        position: strategy(),
       };
     },
     get x() {
@@ -79,6 +80,6 @@ export function createFloating<
     get middlewareData() {
       return position.middlewareData;
     },
-    strategy,
+    strategy: strategy(),
   };
 }
