@@ -1,4 +1,3 @@
-import { Show } from 'solid-js';
 import { type Meta } from 'storybook-solidjs';
 
 import { Avatar } from '../avatar';
@@ -24,25 +23,6 @@ export const SimpleMenu = () => {
         <MenuItem>Account</MenuItem>
         <MenuItem>Install for offline</MenuItem>
         <MenuItem>Log Out</MenuItem>
-      </Menu>
-    </>
-  );
-};
-
-export const LazyRender = () => {
-  const AsyncOrHeavyComponent = () => {
-    console.log('rendered');
-    return <div>This won't be rendered until the popover is open</div>;
-  };
-  return (
-    <>
-      <Button popoverTarget="menu">Open menu</Button>
-      <Menu id="menu">
-        {(open) => (
-          <Show when={open()}>
-            <AsyncOrHeavyComponent />
-          </Show>
-        )}
       </Menu>
     </>
   );

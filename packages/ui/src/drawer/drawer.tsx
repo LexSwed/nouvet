@@ -92,9 +92,7 @@ const Drawer = (
         <Content {...props} children={child()} />
       </Match>
       <Match when={!isMobile()}>
-        <Popover {...props} id={props.id}>
-          {(open) => <Show when={open()}>{child()}</Show>}
-        </Popover>
+        <Popover {...props} id={props.id} children={child()} />
       </Match>
     </Switch>
   );

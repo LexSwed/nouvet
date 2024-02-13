@@ -1,6 +1,6 @@
 import { A } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
-import { createUniqueId, Match, Show, Switch } from 'solid-js';
+import { createUniqueId, Match, Show, Suspense, Switch } from 'solid-js';
 import {
   Button,
   Card,
@@ -42,9 +42,7 @@ const petIconMap: Record<DatabasePet['type'], SvgIcons> = {
 };
 
 export const PetHomeCard = (props: PetHomeCardProps) => {
-  const id = createUniqueId();
-  const petPopoverId = `popover-${id}`;
-  const petPopoverTriggerId = `trigger-${id}`;
+  const petPopoverId = `popover-${createUniqueId()}`;
   let triggerRef: HTMLElement | null = null;
   const t = createTranslator('app');
   return (
@@ -57,7 +55,6 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
         variant="ghost"
         class="intent:bg-transparent -m-4 h-auto cursor-pointer justify-start p-3"
         popoverTarget={petPopoverId}
-        id={petPopoverTriggerId}
       >
         <div class="flex flex-row items-center gap-4">
           <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
@@ -85,7 +82,6 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
         strategy="fixed"
         placement="bottom-start"
         class="flex transform-none flex-col gap-4 p-4"
-        anchor={petPopoverTriggerId}
         onToggle={(e: ToggleEvent) => {
           if (triggerRef && e.newState === 'open') {
             triggerRef.scrollIntoView({
@@ -95,67 +91,74 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
           }
         }}
       >
-        <A
-          href={`/app/pet/${props.pet.id}/`}
-          class="-m-4 flex flex-row items-center gap-4 p-4"
-        >
-          <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
-            <Show
-              when={props.pet.pictureUrl}
-              children={
-                <img
-                  src={props.pet.pictureUrl!}
-                  class="aspect-square w-full"
-                  alt=""
-                />
-              }
-              fallback={<Icon use={petIconMap[props.pet.type]} size="md" />}
-            />
-          </div>
-          <Text with="body-lg">{props.pet.name}</Text>
-          <Button
-            icon
-            label={t('go-to-pet-page')}
-            variant="ghost"
-            class="ms-auto"
-            tabIndex={-1}
-          >
-            <Icon use="pencil" size="sm" />
-          </Button>
-        </A>
-        <MenuList class="min-w-52">
-          <MenuItem>
-            <Icon use="pencil" size="sm" />
-            {/* TODO: translate */}
-            Edit info
-          </MenuItem>
-          <MenuItem
-            onClick={(e) => e.preventDefault()}
-            role="presentation"
-            class="p-0"
-          >
-            <button
-              type="button"
-              popoverTarget={`${props.pet.id}-menu-weight`}
-              class="flex w-full cursor-default flex-row items-center gap-2 p-3 outline-none"
-            >
-              <Icon use="scales" size="sm" />
-              {/* TODO: translate */}
-              Add weight change
-            </button>
-          </MenuItem>
-          <MenuItem>
-            <Icon use="note" size="sm" />
-            {/* TODO: translate */}
-            Add a note
-          </MenuItem>
-          <MenuItem>
-            <Icon use="aid" size="sm" />
-            {/* TODO: translate */}
-            Schedule visit
-          </MenuItem>
-        </MenuList>
-        <AddWeightForm id={`${props.pet.id}-menu-weight`} pet={props.pet} />
+        {(open) => (
+          <Suspense>
+            <Show when={open()}>
+              <A
+                href={`/app/pet/${props.pet.id}/`}
+                class="-m-4 flex flex-row items-center gap-4 p-4"
+              >
+                <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
+                  <Show
+                    when={props.pet.pictureUrl}
+                    children={
+                      <img
+                        src={props.pet.pictureUrl!}
+                        class="aspect-square w-full"
+                        alt=""
+                      />
+                    }
+                    fallback={
+                      <Icon use={petIconMap[props.pet.type]} size="md" />
+                    }
+                  />
+                </div>
+                <Text with="body-lg">{props.pet.name}</Text>
+                <Button
+                  icon
+                  label={t('go-to-pet-page')}
+                  variant="ghost"
+                  class="ms-auto"
+                  tabIndex={-1}
+                >
+                  <Icon use="pencil" size="sm" />
+                </Button>
+              </A>
+              <MenuList class="min-w-52">
+                <MenuItem>
+                  <Icon use="pencil" size="sm" />
+                  {/* TODO: translate */}
+                  Edit info
+                </MenuItem>
+                <MenuItem role="presentation" class="p-0">
+                  <button
+                    type="button"
+                    popoverTarget={`${props.pet.id}-menu-weight`}
+                    class="flex w-full cursor-default flex-row items-center gap-2 p-3 outline-none"
+                  >
+                    <Icon use="scales" size="sm" />
+                    {/* TODO: translate */}
+                    Add weight change
+                  </button>
+                </MenuItem>
+                <MenuItem>
+                  <Icon use="note" size="sm" />
+                  {/* TODO: translate */}
+                  Add a note
+                </MenuItem>
+                <MenuItem>
+                  <Icon use="aid" size="sm" />
+                  {/* TODO: translate */}
+                  Schedule visit
+                </MenuItem>
+              </MenuList>
+              <AddWeightForm
+                id={`${props.pet.id}-menu-weight`}
+                pet={props.pet}
+              />
+            </Show>
+          </Suspense>
+        )}
       </Popover>
       <Show
         when={!props.pet.dateOfBirth || !props.pet.weight || !props.pet.breed}

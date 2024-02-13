@@ -1,9 +1,12 @@
+import { createAsync } from '@solidjs/router';
+import { Show, Suspense } from 'solid-js';
 import { type Meta } from 'storybook-solidjs';
 
 import { Avatar } from '../avatar';
 import { Button } from '../button';
 import { Icon } from '../icon/icon';
 import { MenuItem, MenuList } from '../menu';
+import { Text } from '../text';
 
 import { Popover } from './popover';
 
@@ -33,7 +36,7 @@ export const AccountMenu = () => {
         <a
           href="#"
           link={false}
-          class="flex w-full items-center justify-start gap-4 ps-3 text-primary"
+          class="text-primary flex w-full items-center justify-start gap-4 ps-3"
         >
           John Doe
           <Avatar name="John Doe" class="ms-auto" avatarUrl={null} />
@@ -70,5 +73,38 @@ export const ContextualHelp = () => {
         </p>
       </Popover>
     </div>
+  );
+};
+
+const AsyncOrHeavyComponent = () => {
+  const joke = createAsync(async () => {
+    const response = await fetch(
+      'https://v2.jokeapi.dev/joke/Programming?type=single',
+    ).then((res) => res.json());
+    console.log(response.joke);
+    return response.joke as string;
+  });
+
+  return (
+    <Show when={joke()}>
+      <Text class="max-w-56 text-balance">{joke()}</Text>
+    </Show>
+  );
+};
+
+export const LazyRender = () => {
+  return (
+    <>
+      <Button popoverTarget="lazy">Show a joke</Button>
+      <Popover id="lazy">
+        {(open) => (
+          <Show when={open()}>
+            <Suspense>
+              <AsyncOrHeavyComponent />
+            </Suspense>
+          </Show>
+        )}
+      </Popover>
+    </>
   );
 };

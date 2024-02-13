@@ -22,6 +22,11 @@
       theme('boxShadow.lg');
     @apply bg-surface overflow-y-auto rounded-2xl;
 
+    &:empty {
+      visibility: hidden;
+      animation-play-state: paused;
+    }
+
     &[role='menu'] {
       padding: theme('spacing.1');
     }

@@ -21,14 +21,14 @@ import * as cssStyles from './popover.module.css';
 
 type PopoverProps<T extends ValidComponent> = Omit<
   ComponentProps<T>,
-  'id' | 'children' | 'role'
+  'id' | 'role' | 'children'
 > & {
   placement?: FloatingOptions['placement'] | 'center';
   offset?: FloatingOptions['offset'];
   strategy?: FloatingOptions['strategy'];
   id: string;
-  children?: JSX.Element | ((open: Accessor<boolean>) => JSX.Element);
   role?: 'dialog' | 'menu';
+  children: JSX.Element | ((open: Accessor<boolean>) => JSX.Element);
   /** @default 'div' */
   as?: T | undefined;
 };
@@ -51,14 +51,10 @@ const Popover = <T extends ValidComponent = 'div'>(
 
   const { isMounted } = createPresence(rendered, {
     enterDuration: 0,
-    exitDuration: 100,
+    exitDuration: 200,
   });
 
   const component = () => local.as ?? 'div';
-  const children = createMemo(() => {
-    const child = local.children;
-    return typeof child === 'function' ? child?.(isMounted) : child;
-  });
 
   const data = createMemo(() => {
     const { placement, offset, strategy } = floatingProps;
@@ -80,6 +76,10 @@ const Popover = <T extends ValidComponent = 'div'>(
     if (!(trigger instanceof HTMLElement)) return;
     setTrigger(trigger);
   });
+  const resolved = createMemo(() => {
+    const child = local.children;
+    return typeof child === 'function' ? child(isMounted) : child;
+  });
 
   return (
     <Dynamic
@@ -93,7 +93,6 @@ const Popover = <T extends ValidComponent = 'div'>(
       tabIndex={0}
       ref={mergeRefs(local.ref, setPopover)}
       class={tw(cssStyles.popover, local.class)}
-      children={children()}
       onBeforeToggle={composeEventHandlers(props.onBeforeToggle, (event) => {
         setRendered(event.newState === 'open');
       })}
@@ -102,6 +101,7 @@ const Popover = <T extends ValidComponent = 'div'>(
           popover()?.focus();
         }
       })}
+      children={resolved()}
     />
   );
 };
