@@ -116,7 +116,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
                 <Text with="body-lg">{props.pet.name}</Text>
                 <Button
                   icon
-                  label={t('go-to-pet-page')}
+                  label={t('go-to-pet-page', { petName: props.pet.name })}
                   variant="ghost"
                   class="ms-auto"
                   tabIndex={-1}
@@ -127,8 +127,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
               <MenuList class="min-w-52">
                 <MenuItem>
                   <Icon use="pencil" size="sm" />
-                  {/* TODO: translate */}
-                  Edit info
+                  {t('pet-menu.edit-info')}
                 </MenuItem>
                 <MenuItem role="presentation" class="p-0">
                   <button
@@ -137,19 +136,16 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
                     class="flex w-full cursor-default flex-row items-center gap-2 p-3 outline-none"
                   >
                     <Icon use="scales" size="sm" />
-                    {/* TODO: translate */}
-                    Add weight change
+                    {t('pet-menu.update-weight')}
                   </button>
                 </MenuItem>
                 <MenuItem>
                   <Icon use="note" size="sm" />
-                  {/* TODO: translate */}
-                  Add a note
+                  {t('pet-menu.add-note')}
                 </MenuItem>
                 <MenuItem>
                   <Icon use="aid" size="sm" />
-                  {/* TODO: translate */}
-                  Schedule visit
+                  {t('pet-menu.book')}
                 </MenuItem>
               </MenuList>
               <AddWeightForm
