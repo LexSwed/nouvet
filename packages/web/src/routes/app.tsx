@@ -1,10 +1,10 @@
 import { type RouteDefinition, type RouteSectionProps } from '@solidjs/router';
 
-import { getDictionaryCached } from '~/server/i18n';
+import { cacheTranslations } from '~/server/i18n';
 
 export const route = {
   async load() {
-    getDictionaryCached('app');
+    cacheTranslations('app');
   },
 } satisfies RouteDefinition;
 

@@ -2,12 +2,13 @@ import { type RouteDefinition } from '@solidjs/router';
 import { For, Show, type ParentProps } from 'solid-js';
 import { Icon, NavCard, type SvgIcons } from '@nou/ui';
 
+import { cacheTranslations, createTranslator } from '~/server/i18n';
+
 import { LogoLink } from '~/lib/logo-link';
-import { createTranslator, getDictionaryCached } from '~/server/i18n';
 
 export const route = {
   load() {
-    getDictionaryCached('www');
+    cacheTranslations('www');
   },
 } satisfies RouteDefinition;
 

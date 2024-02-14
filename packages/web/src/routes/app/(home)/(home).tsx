@@ -3,8 +3,7 @@ import { createAsync, type RouteDefinition } from '@solidjs/router';
 import { Show, Suspense } from 'solid-js';
 import { ButtonLink } from '@nou/ui';
 
-import { createTranslator, getDictionaryCached } from '~/server/i18n';
-
+import { cacheTranslations, createTranslator } from '~/server/i18n';
 import { getUserFamily } from '~/api/user';
 
 import { AccountMenu } from '~/lib/account-menu';
@@ -13,7 +12,7 @@ import { UserPets } from './_user-pets';
 
 export const route = {
   load() {
-    getDictionaryCached('app');
+    cacheTranslations('app');
     getUserFamily();
   },
 } satisfies RouteDefinition;
