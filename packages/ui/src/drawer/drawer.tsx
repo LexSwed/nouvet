@@ -1,5 +1,3 @@
-'use client';
-
 import { createMediaQuery } from '@solid-primitives/media';
 import { mergeRefs } from '@solid-primitives/refs';
 import {
