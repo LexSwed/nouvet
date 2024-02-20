@@ -45,6 +45,10 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
   const petPopoverId = `popover-${createUniqueId()}`;
   let triggerRef: HTMLElement | null = null;
   const t = createTranslator('app');
+
+  const hasMissingInfo = () =>
+    !props.pet.dateOfBirth || !props.pet.weight || !props.pet.breed;
+
   return (
     <Card
       variant="flat"
@@ -156,10 +160,10 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
           </Suspense>
         )}
       </Popover>
-      <Show
-        when={!props.pet.dateOfBirth || !props.pet.weight || !props.pet.breed}
-      >
-        <QuickSetters pet={props.pet} />
+      <Show when={hasMissingInfo()}>
+        <Suspense fallback={null}>
+          <QuickSetters pet={props.pet} />
+        </Suspense>
       </Show>
     </Card>
   );

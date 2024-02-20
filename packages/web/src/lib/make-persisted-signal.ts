@@ -1,5 +1,5 @@
 import { cache, createAsync, revalidate } from '@solidjs/router';
-import { type Setter } from 'solid-js';
+import { type Accessor, type Setter } from 'solid-js';
 import { isServer } from 'solid-js/web';
 
 const parseDocumentCookie = () =>
@@ -34,21 +34,22 @@ const setting = cache(async <T>(name: string) => {
   return deserialize<T>(parseDocumentCookie()[name]);
 }, 'cookie-setting');
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export function makePersistedSetting<T, U extends Exclude<T, Function>>(
-  name: string,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  defaultValue?: U,
-) {
-  const cookie = createAsync(async (): Promise<U | null> => {
-    const stored = await setting<U>(name);
+export function makePersistedSetting<
+  T extends
+    | Record<string, string | number | undefined | null | boolean>
+    | string
+    | number
+    | boolean,
+>(name: string, defaultValue: T): [Accessor<T | null | undefined>, Setter<T>] {
+  const cookie = createAsync(async (): Promise<T | null> => {
+    const stored = await setting<T>(name);
     return stored || defaultValue || null;
   });
 
   // @ts-expect-error what do you want from me
-  const updateCookie: Setter<U> = (value) => {
+  const updateCookie: Setter<T> = (value) => {
     // @ts-expect-error what do you want from me
-    const newValue: U = typeof value === 'function' ? value(cookie()) : value;
+    const newValue: T = typeof value === 'function' ? value(cookie()) : value;
 
     document.cookie = `${name}=${serialize(newValue)};max-age=${60 * 60 * 24 * 365}`;
     if (!document.startViewTransition) {

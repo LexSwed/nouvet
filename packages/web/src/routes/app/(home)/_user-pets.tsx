@@ -19,7 +19,6 @@ export const UserPets = () => {
   const pets = createAsync(() => getUserPets());
   const user = createAsync(() => getUserFamily());
   const hasPets = () => (pets()?.length ?? 0) > 0;
-
   return (
     <Switch>
       <Match when={hasPets()}>
