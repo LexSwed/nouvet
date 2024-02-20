@@ -4,6 +4,7 @@ import { Show, Suspense } from 'solid-js';
 import { ButtonLink } from '@nou/ui';
 
 import { cacheTranslations, createTranslator } from '~/server/i18n';
+import { getUserPets } from '~/api/pet';
 import { getUserFamily } from '~/api/user';
 
 import { AccountMenu } from '~/lib/account-menu';
@@ -12,8 +13,11 @@ import { UserPets } from './_user-pets';
 
 export const route = {
   load() {
-    cacheTranslations('app');
-    getUserFamily();
+    return Promise.all([
+      cacheTranslations('app'),
+      getUserFamily(),
+      getUserPets(),
+    ]);
   },
 } satisfies RouteDefinition;
 
@@ -57,7 +61,7 @@ function AppMainPage() {
             <div class="flex flex-col gap-6">
               <section class="container">
                 <Suspense>
-                  <UserPets familyId={user().family?.id} />
+                  <UserPets />
                 </Suspense>
               </section>
             </div>

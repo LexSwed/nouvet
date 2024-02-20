@@ -5,6 +5,7 @@ import { Button, Card, Icon } from '@nou/ui';
 
 import { createTranslator } from '~/server/i18n';
 import { getUserPets } from '~/api/pet';
+import { getUserFamily } from '~/api/user';
 
 import { PetHomeCard } from './_pet-home-card';
 
@@ -13,12 +14,15 @@ const Drawer = clientOnly(() =>
   import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
 );
 
-export const UserPets = (props: { familyId: number | undefined }) => {
+export const UserPets = () => {
   const t = createTranslator('app');
   const pets = createAsync(() => getUserPets());
+  const user = createAsync(() => getUserFamily());
+  const hasPets = () => (pets()?.length ?? 0) > 0;
+
   return (
     <Switch>
-      <Match when={pets()?.length ?? 0 > 0}>
+      <Match when={hasPets()}>
         <ul class="overflow-snap -mx-4 -my-2 flex scroll-px-4 flex-row items-center gap-4 px-4 py-2">
           <For each={pets()}>
             {(pet) => (
@@ -55,10 +59,10 @@ export const UserPets = (props: { familyId: number | undefined }) => {
           </li>
         </ul>
       </Match>
-      <Match when={pets()?.length === 0}>
+      <Match when={!hasPets()}>
         <Card class="flex flex-col gap-6 p-4">
           <CreateNewPetForm />
-          <Show when={!props.familyId}>
+          <Show when={!user()?.family?.id}>
             <A
               href="/app/join"
               class="bg-surface-container-high flex flex-row items-center justify-between gap-2 text-balance rounded-[inherit] p-4"
