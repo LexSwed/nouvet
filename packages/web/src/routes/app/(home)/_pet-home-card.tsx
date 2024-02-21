@@ -16,7 +16,7 @@ import {
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
 
-import { makePersistedSetting } from '~/lib/make-persisted-signal';
+import { createPersistedSetting } from '~/lib/make-persisted-signal';
 
 interface PetHomeCardProps {
   pet: {
@@ -52,7 +52,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
   return (
     <Card
       variant="flat"
-      class="inline-flex min-w-52 flex-col gap-4"
+      class="flex min-w-52 flex-col gap-4"
       ref={(el) => (triggerRef = el)}
     >
       <Button
@@ -176,7 +176,7 @@ const AddWeightForm = clientOnly(() => import('~/lib/add-weight-form'));
 function QuickSetters(props: PetHomeCardProps) {
   const t = createTranslator('pet-forms');
 
-  const [qs, toggle] = makePersistedSetting(`qs-toggles-${props.pet.id}`, {
+  const [qs, toggle] = createPersistedSetting(`qs-toggles-${props.pet.id}`, {
     showBirthDate: !props.pet.dateOfBirth,
     showWeight: !props.pet.weight,
     showBreed: !props.pet.breed,

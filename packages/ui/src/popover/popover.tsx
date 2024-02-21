@@ -19,7 +19,7 @@ import { createFloating, type FloatingOptions } from './floating';
 
 import * as cssStyles from './popover.module.css';
 
-type PopoverProps<T extends ValidComponent> = Omit<
+export type PopoverProps<T extends ValidComponent> = Omit<
   ComponentProps<T>,
   'id' | 'role' | 'children'
 > & {

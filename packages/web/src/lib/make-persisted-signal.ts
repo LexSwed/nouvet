@@ -34,7 +34,7 @@ const setting = cache(async <T>(name: string) => {
   return deserialize<T>(parseDocumentCookie()[name]);
 }, 'cookie-setting');
 
-export function makePersistedSetting<
+export function createPersistedSetting<
   T extends
     | Record<string, string | number | undefined | null | boolean>
     | string

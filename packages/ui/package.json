@@ -26,7 +26,7 @@
     "corvu": "^0.4.4",
     "solid-floating-ui": "^0.3.1",
     "tailwind-merge": "^2.2.1",
-    "@solidjs/router": "^0.12.3",
+    "@solidjs/router": "^0.12.4",
     "solid-js": "^1.8.15"
   },
   "devDependencies": {

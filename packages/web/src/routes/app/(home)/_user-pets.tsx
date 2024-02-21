@@ -1,6 +1,6 @@
 import { A, createAsync } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
-import { For, lazy, Match, Show, Switch } from 'solid-js';
+import { For, lazy, Match, Show, Suspense, Switch } from 'solid-js';
 import { Button, Card, Icon } from '@nou/ui';
 
 import { createTranslator } from '~/server/i18n';
@@ -22,15 +22,15 @@ export const UserPets = () => {
   return (
     <Switch>
       <Match when={hasPets()}>
-        <ul class="overflow-snap -mx-4 -my-2 flex scroll-px-4 flex-row items-center gap-4 px-4 py-2">
+        <ul class="overflow-snap -mx-4 -my-2 flex scroll-px-4 flex-row items-stretch gap-4 px-4 py-2">
           <For each={pets()}>
             {(pet) => (
-              <li class="block">
+              <li>
                 <PetHomeCard pet={pet} />
               </li>
             )}
           </For>
-          <li>
+          <li class="self-center">
             <Button
               label={t('add-another')}
               size="base"
@@ -47,13 +47,19 @@ export const UserPets = () => {
               role="dialog"
               class="max-w-[420px]"
             >
-              <CreateNewPetForm
-                onSuccess={() => {
-                  document
-                    .getElementById('create-new-pet-drawer')
-                    ?.hidePopover();
-                }}
-              />
+              {(open) => (
+                <Show when={open()}>
+                  <Suspense>
+                    <CreateNewPetForm
+                      onSuccess={() => {
+                        document
+                          .getElementById('create-new-pet-drawer')
+                          ?.hidePopover();
+                      }}
+                    />
+                  </Suspense>
+                </Show>
+              )}
             </Drawer>
           </li>
         </ul>
