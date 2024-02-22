@@ -188,17 +188,17 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       better-sqlite3:
-        specifier: ^9.4.1
-        version: 9.4.1
+        specifier: ^9.4.3
+        version: 9.4.3
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
       drizzle-orm:
-        specifier: ^0.29.3
-        version: 0.29.3(@types/better-sqlite3@7.6.9)(better-sqlite3@9.4.1)
+        specifier: ^0.29.4
+        version: 0.29.4(@types/better-sqlite3@7.6.9)(better-sqlite3@9.4.3)
       drizzle-valibot:
         specifier: ^0.1.1
-        version: 0.1.1(drizzle-orm@0.29.3)
+        version: 0.1.1(drizzle-orm@0.29.4)
       lucia:
         specifier: ^3.0.1
         version: 3.0.1
@@ -6295,8 +6295,8 @@ packages:
       open: 8.4.2
     dev: true
 
-  /better-sqlite3@9.4.1:
-    resolution: {integrity: sha512-QpqiQeMI4WkE+dQ68zTMX5OzlPGc7lXIDP1iKUt4Omt9PdaVgzKYxHIJRIzt1E+RUBQoFmkip/IbvzyrxehAIg==}
+  /better-sqlite3@9.4.3:
+    resolution: {integrity: sha512-ud0bTmD9O3uWJGuXDltyj3R47Nz0OHX8iqPOT5PMspGqlu/qQFn+5S2eFBUCrySpavTjFXbi4EgrfVvPAHlImw==}
     requiresBuild: true
     dependencies:
       bindings: 1.5.0
@@ -7270,8 +7270,8 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.29.3(@types/better-sqlite3@7.6.9)(better-sqlite3@9.4.1):
-    resolution: {integrity: sha512-uSE027csliGSGYD0pqtM+SAQATMREb3eSM/U8s6r+Y0RFwTKwftnwwSkqx3oS65UBgqDOM0gMTl5UGNpt6lW0A==}
+  /drizzle-orm@0.29.4(@types/better-sqlite3@7.6.9)(better-sqlite3@9.4.3):
+    resolution: {integrity: sha512-ZnSM8TAxFhzH7p1s3+w3pRE/eKaOeNkH9SKitm717pubDVVcV2I0BCDBPGKV+pe02+wMfw37ntlTcCyo2rA3IA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
@@ -7342,15 +7342,15 @@ packages:
         optional: true
     dependencies:
       '@types/better-sqlite3': 7.6.9
-      better-sqlite3: 9.4.1
+      better-sqlite3: 9.4.3
     dev: false
 
-  /drizzle-valibot@0.1.1(drizzle-orm@0.29.3):
+  /drizzle-valibot@0.1.1(drizzle-orm@0.29.4):
     resolution: {integrity: sha512-xVEGIbZ+Ti5IkGJP1jaUV8kQ7b5RITaH5XYYPSDVOq0blxI3y65efZ0ZAUKSo6BhZ+VqfZfZn1ouPb3pR1hA6g==}
     peerDependencies:
       drizzle-orm: '>=0.23.13'
     dependencies:
-      drizzle-orm: 0.29.3(@types/better-sqlite3@7.6.9)(better-sqlite3@9.4.1)
+      drizzle-orm: 0.29.4(@types/better-sqlite3@7.6.9)(better-sqlite3@9.4.3)
     dev: false
 
   /dts-buddy@0.2.5:
