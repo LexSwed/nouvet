@@ -28,7 +28,7 @@ const MenuItem = (ownProps: MenuItemProps) => {
       tabIndex={-1}
       {...ownProps}
       onClick={composeEventHandlers(ownProps.onClick, (event) => {
-        if (event.defaultPrevented) return;
+        if (event.defaultPrevented || ownProps.role !== 'menuitem') return;
         const popover = event.currentTarget.closest('[popover]');
         if (popover) {
           (popover as HTMLDivElement).hidePopover();
