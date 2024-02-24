@@ -35,6 +35,11 @@ interface AddWeightFormProps {
   id: string;
   pet: { id: number; name: string; type: DatabasePet['type'] };
   onDismiss?: () => void;
+  /**
+   * ID of the anchor element when nested.
+   * See https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using#nested_popovers
+   */
+  anchor?: string;
 }
 
 const AddWeightForm = (props: AddWeightFormProps) => {
@@ -78,6 +83,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
       aria-labelledby={`${props.id}-drawer`}
       placement="bottom-start"
       class="sm:w-[240px]"
+      anchor={props.anchor}
     >
       <Show when={submissionFailed()}>
         <FormErrorMessage class="mb-3" />

@@ -155,6 +155,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
               <AddWeightForm
                 id={`${props.pet.id}-menu-weight`}
                 pet={props.pet}
+                anchor={petPopoverId}
               />
             </Show>
           </Suspense>
