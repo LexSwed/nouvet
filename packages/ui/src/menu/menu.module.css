@@ -32,15 +32,15 @@
       cursor: not-allowed;
       pointer-events: none;
     }
-    &:where(:first-of-type) {
+    &:where(:first-child) {
       border-end-start-radius: 0;
       border-end-end-radius: 0;
     }
-    &:where(:last-of-type) {
+    &:where(:last-child) {
       border-start-start-radius: 0;
       border-start-end-radius: 0;
     }
-    &:where(:not(:first-of-type, :last-of-type)) {
+    &:where(:not(:first-child, :last-child)) {
       border-radius: 0;
     }
   }

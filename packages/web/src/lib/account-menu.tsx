@@ -38,40 +38,22 @@ const AccountMenu = (props: AccountMenu) => {
           <Text with="label">{props.name}</Text>
         </div>
         <MenuList class="bg-surface flex flex-col rounded-2xl">
-          <MenuItem role="presentation" class="p-0">
-            <A
-              href="/profile"
-              role="menuitem"
-              class="flex w-full flex-row items-center gap-2 p-3 outline-none"
-            >
-              <Icon use="user-circle" size="sm" />
-              {t('account-menu.account')}
-            </A>
+          <MenuItem as={A} href="/profile">
+            <Icon use="user-circle" size="sm" />
+            {t('account-menu.account')}
           </MenuItem>
           <MenuItem class="gap-2">
             <Icon use="install" size="sm" />
             Install for offline
           </MenuItem>
-          <MenuItem role="presentation" class="p-0">
-            <A
-              href="/help"
-              role="menuitem"
-              class="flex w-full flex-row items-center gap-2 p-3 outline-none"
-            >
-              <Icon use="support" size="sm" />
-              Support
-            </A>
+          <MenuItem as={A} href="/help">
+            <Icon use="support" size="sm" />
+            Support
           </MenuItem>
           <Divider role="separator" class="my-2" />
-          <MenuItem role="presentation" class="p-0">
-            <A
-              href="/logout"
-              role="menuitem"
-              class="flex w-full flex-row items-center gap-2 p-3 outline-none"
-            >
-              <Icon use="sign-out" size="sm" />
-              Log Out
-            </A>
+          <MenuItem as={A} href="/logout">
+            <Icon use="sign-out" size="sm" />
+            Log Out
           </MenuItem>
         </MenuList>
       </Popover>
