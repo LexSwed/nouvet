@@ -10,7 +10,7 @@
   "add-another": "Add another pet",
   "go-to-pet-page": "Update {{petName}} details",
   "pet-menu.edit-info": "Edit info",
-  "pet-menu.update-weight": "Update weight",
+  "pet-menu.add-weight": "Add weight",
   "pet-menu.add-note": "Add a note",
   "pet-menu.book": "Schedule visit"
 }

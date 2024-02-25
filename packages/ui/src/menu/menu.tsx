@@ -1,4 +1,5 @@
-import { type ComponentProps } from 'solid-js';
+import { splitProps, type ComponentProps, type ValidComponent } from 'solid-js';
+import { Dynamic } from 'solid-js/web';
 
 import { Popover } from '../popover';
 import { tw } from '../tw';
@@ -19,25 +20,33 @@ const Menu = (ownProps: MenuProps) => {
   return <Popover role="menu" as={MenuList} {...ownProps} />;
 };
 
-interface MenuItemProps extends ComponentProps<'div'> {}
+type MenuItemProps<T extends ValidComponent> = ComponentProps<T> & { as?: T };
 
-const MenuItem = (ownProps: MenuItemProps) => {
+const MenuItem = <T extends ValidComponent>(ownProps: MenuItemProps<T>) => {
+  const [local, props] = splitProps(ownProps as MenuItemProps<'div'>, [
+    'as',
+    'class',
+  ]);
   return (
-    <div
+    <Dynamic
+      component={local.as || 'div'}
       role="menuitem"
       tabIndex={-1}
-      {...ownProps}
-      onClick={composeEventHandlers(ownProps.onClick, (event) => {
-        if (event.defaultPrevented || ownProps.role !== 'menuitem') return;
-        const popover = event.currentTarget.closest('[popover]');
+      {...props}
+      onClick={composeEventHandlers(props.onClick, (event) => {
+        if (event.defaultPrevented || props.role !== 'menuitem') return;
+        const popover = (event.currentTarget as HTMLElement).closest(
+          '[popover]',
+        );
         if (popover) {
           (popover as HTMLDivElement).hidePopover();
         }
       })}
-      onMouseEnter={composeEventHandlers(ownProps.onMouseEnter, (event) => {
-        event.currentTarget.focus();
+      onMouseEnter={composeEventHandlers(props.onMouseEnter, (event) => {
+        if (event.defaultPrevented || props.role !== 'menuitem') return;
+        (event.currentTarget as HTMLElement).focus();
       })}
-      class={tw(cssStyle.listItem, ownProps.class)}
+      class={tw(cssStyle.listItem, local.class)}
     />
   );
 };

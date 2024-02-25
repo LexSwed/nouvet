@@ -100,7 +100,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
             <Show when={open()}>
               <A
                 href={`/app/pet/${props.pet.id}/`}
-                class="-m-4 flex flex-row items-center gap-4 p-4"
+                class="group/link -m-4 flex flex-row items-center gap-4 p-4"
               >
                 <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
                   <Show
@@ -122,7 +122,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
                   icon
                   label={t('go-to-pet-page', { petName: props.pet.name })}
                   variant="ghost"
-                  class="ms-auto"
+                  class="group-hover/link:bg-on-background/5 ms-auto"
                   tabIndex={-1}
                 >
                   <Icon use="pencil" size="sm" />
@@ -133,15 +133,13 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
                   <Icon use="pencil" size="sm" />
                   {t('pet-menu.edit-info')}
                 </MenuItem>
-                <MenuItem role="presentation" class="p-0">
-                  <button
-                    type="button"
-                    popoverTarget={`${props.pet.id}-menu-weight`}
-                    class="flex w-full cursor-default flex-row items-center gap-2 p-3 outline-none"
-                  >
-                    <Icon use="scales" size="sm" />
-                    {t('pet-menu.update-weight')}
-                  </button>
+                <MenuItem
+                  as="button"
+                  type="button"
+                  popoverTarget={`${props.pet.id}-menu-weight`}
+                >
+                  <Icon use="scales" size="sm" />
+                  {t('pet-menu.add-weight')}
                 </MenuItem>
                 <MenuItem>
                   <Icon use="note" size="sm" />

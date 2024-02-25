@@ -73,7 +73,9 @@ const Popover = <T extends ValidComponent = 'div'>(
     const trigger = Array.from(
       document.querySelectorAll(`[popovertarget="${local.id}"]`),
     ).find((button) => !popover()?.contains(button));
-    if (!(trigger instanceof HTMLElement)) return;
+    if (!(trigger instanceof HTMLElement)) {
+      throw new Error(`Popover ${local.id} trigger is not found`);
+    }
     setTrigger(trigger);
   });
   const resolved = createMemo(() => {
