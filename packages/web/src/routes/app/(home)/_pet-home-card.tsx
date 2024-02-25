@@ -57,7 +57,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
     >
       <Button
         variant="ghost"
-        class="intent:bg-transparent -m-4 h-auto cursor-pointer justify-start p-3"
+        class="-m-4 h-auto cursor-pointer justify-start rounded-2xl p-3"
         popoverTarget={petPopoverId}
       >
         <div class="flex flex-row items-center gap-4">
