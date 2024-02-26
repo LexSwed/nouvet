@@ -68,7 +68,7 @@ export const buttonVariants = cva(
       {
         split: false,
         variant: 'ghost',
-        class: 'intent:bg-on-surface/8',
+        class: 'intent:bg-on-surface/5',
       },
       {
         split: false,

@@ -37,5 +37,6 @@ export async function userPets(userId: DatabaseUser['id']) {
     })
     .from(petTable)
     .where(inArray(petTable.ownerId, familyUsers))
+    .orderBy(petTable.createdAt)
     .all();
 }
