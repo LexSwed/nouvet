@@ -10,17 +10,19 @@ export const FamilyInviteDialog = (props: { id: string }) => {
       id={props.id}
       placement="center"
       role="dialog"
-      class="w-[94svw] max-w-[420px]"
+      class="flex w-[94svw] max-w-[420px] flex-col gap-6 p-6"
     >
-      <header>{t('Sharing is carying')}</header>
-      <Text as="p">{t('Share the care for your pets with a partner.')}</Text>
+      <Text with="headline-2" as="header">
+        {t('family-invite.headline')}
+      </Text>
+      <Text as="p">{t('family-invite.subheadline')}</Text>
       <ul>
         <li>Bullet point 1 with an icon</li>
         <li>Bullet point 2 with an icon</li>
         <li>Bullet point 3 with an icon</li>
         <li>Bullet point 4 with an icon</li>
       </ul>
-      <Button>{t('invite')}</Button>
+      <Button>{t('family-invite.cta')}</Button>
     </Popover>
   );
 };

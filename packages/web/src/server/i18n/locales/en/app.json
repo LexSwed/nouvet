@@ -12,5 +12,8 @@
   "pet-menu.edit-info": "Edit info",
   "pet-menu.add-weight": "Add weight",
   "pet-menu.add-note": "Add a note",
-  "pet-menu.book": "Schedule visit"
+  "pet-menu.book": "Schedule visit",
+  "family-invite.headline": "Sharing is caring",
+  "family-invite.subheadline": "Your pets are happier with more humans around! Share the care for your pets with the loved ones.",
+  "family-invite.cta": "Invite"
 }
