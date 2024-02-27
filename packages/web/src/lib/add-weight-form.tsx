@@ -40,6 +40,7 @@ interface AddWeightFormProps {
    * See https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using#nested_popovers
    */
   anchor?: string;
+  strategy?: 'absolute' | 'fixed';
 }
 
 const AddWeightForm = (props: AddWeightFormProps) => {
@@ -117,16 +118,18 @@ const AddWeightForm = (props: AddWeightFormProps) => {
           class="flex-[2]"
           suffix={unit()}
         />
-        <div class="grid grid-cols-2 gap-2 sm:flex sm:self-end">
-          <Button
-            variant="ghost"
-            popoverTargetAction="hide"
-            popoverTarget={props.id}
-            class="px-6"
-            onClick={props.onDismiss}
-          >
-            {t('animal.drawer.cancel')}
-          </Button>
+        <div class="grid gap-2 sm:flex sm:self-end">
+          <Show when={props.onDismiss}>
+            <Button
+              variant="ghost"
+              popoverTargetAction="hide"
+              popoverTarget={props.id}
+              class="px-6"
+              onClick={props.onDismiss}
+            >
+              {t('animal.drawer.cancel')}
+            </Button>
+          </Show>
           <Button
             type="submit"
             class="px-6"

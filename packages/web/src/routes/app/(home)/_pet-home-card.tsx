@@ -154,6 +154,8 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
                 id={`${props.pet.id}-menu-weight`}
                 pet={props.pet}
                 anchor={petPopoverId}
+                // NB: otherwise nested inside top-level popover won't calculate available space correctly
+                strategy="fixed"
               />
             </Show>
           </Suspense>
@@ -185,7 +187,11 @@ function QuickSetters(props: PetHomeCardProps) {
     <div class="empty:hidden">
       <Switch>
         <Match when={qs()?.showBirthDate}>
-          <SplitButton variant="outline" size="sm">
+          <SplitButton
+            variant="outline"
+            class="outline-surface bg-surface outline outline-8"
+            size="sm"
+          >
             <SplitButton.Inner
               popoverTarget={`${props.pet.id}-birth-date`}
               class="gap-2 text-nowrap"
@@ -213,7 +219,11 @@ function QuickSetters(props: PetHomeCardProps) {
           />
         </Match>
         <Match when={qs()?.showWeight}>
-          <SplitButton variant="outline" size="sm">
+          <SplitButton
+            variant="outline"
+            class="outline-surface bg-surface outline outline-8"
+            size="sm"
+          >
             <SplitButton.Inner
               class="gap-2 text-nowrap"
               popoverTarget={`${props.pet.id}-weight`}
@@ -237,7 +247,11 @@ function QuickSetters(props: PetHomeCardProps) {
           />
         </Match>
         <Match when={qs()?.showBreed}>
-          <SplitButton variant="outline" size="sm">
+          <SplitButton
+            variant="outline"
+            class="outline-surface bg-surface outline outline-8"
+            size="sm"
+          >
             <SplitButton.Inner
               class="gap-2 text-nowrap"
               popoverTarget={`${props.pet.id}-breed`}
