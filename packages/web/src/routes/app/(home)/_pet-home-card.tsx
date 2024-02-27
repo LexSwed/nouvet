@@ -100,7 +100,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
             <Show when={open()}>
               <A
                 href={`/app/pet/${props.pet.id}/`}
-                class="group/link -m-4 flex flex-row items-center gap-4 p-4"
+                class="group/link outline-on-surface -m-4 flex flex-row items-center gap-4 rounded-[inherit] p-4 -outline-offset-4 focus:outline-4"
               >
                 <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
                   <Show
@@ -129,7 +129,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
                 </Button>
               </A>
               <MenuList class="min-w-52">
-                <MenuItem>
+                <MenuItem as={A} href={`/app/pet/${props.pet.id}/`}>
                   <Icon use="pencil" size="sm" />
                   {t('pet-menu.edit-info')}
                 </MenuItem>

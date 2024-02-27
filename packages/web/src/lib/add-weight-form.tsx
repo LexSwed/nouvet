@@ -59,18 +59,21 @@ const AddWeightForm = (props: AddWeightFormProps) => {
     }
   });
 
-  const unit = createMemo(() => {
+  const localisedUnit = createMemo(() => {
     let unit = 'kilogram';
     if (user()?.measurementSystem && props.pet.type) {
       unit =
         petTypeToMetricMeasurement[user()!.measurementSystem!][props.pet.type];
     }
-    return new Intl.NumberFormat(locale()?.baseName, {
-      style: 'unit',
-      unit,
-    })
-      .format(0)
-      .split(' ')[1];
+    return (
+      new Intl.NumberFormat(locale()?.baseName, {
+        style: 'unit',
+        unit,
+      })
+        .format(0)
+        // 0 kgs -> kgs
+        .split(' ')[1]
+    );
   });
 
   const submissionFailed = () =>
@@ -116,7 +119,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
           max="9999"
           label={t('animal-shortcut.weight')}
           class="flex-[2]"
-          suffix={unit()}
+          suffix={localisedUnit()}
         />
         <div class="grid gap-2 sm:flex sm:self-end">
           <Show when={props.onDismiss}>
