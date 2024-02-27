@@ -1,7 +1,7 @@
 import { Title } from '@solidjs/meta';
 import { createAsync, type RouteDefinition } from '@solidjs/router';
 import { Show, Suspense } from 'solid-js';
-import { ButtonLink } from '@nou/ui';
+import { Button, ButtonLink } from '@nou/ui';
 
 import { cacheTranslations, createTranslator } from '~/server/i18n';
 import { getUserPets } from '~/api/pet';
@@ -9,6 +9,7 @@ import { getUserFamily } from '~/api/user';
 
 import { AccountMenu } from '~/lib/account-menu';
 
+import { FamilyInviteDialog } from './_family-invite-dialog';
 import { UserPets } from './_user-pets';
 
 export const route = {
@@ -48,9 +49,14 @@ function AppMainPage() {
                   </ButtonLink>
                 }
                 fallback={
-                  <ButtonLink href={`/app/family`} variant="link">
-                    {t('my-family-cta')}
-                  </ButtonLink>
+                  <>
+                    <Button popoverTarget="family-invite" variant="link">
+                      {t('my-family-cta')}
+                    </Button>
+                    <Suspense>
+                      <FamilyInviteDialog id="family-invite" />
+                    </Suspense>
+                  </>
                 }
               />
               <AccountMenu

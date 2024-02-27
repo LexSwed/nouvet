@@ -9,7 +9,7 @@ import {
 
 export const familyTable = sqliteTable('family', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
-  name: text('name', { length: 100 }).notNull().default(''),
+  name: text('name', { length: 100 }),
   createdAt: utcDatetime('created_at'),
 });
 
