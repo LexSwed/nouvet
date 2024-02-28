@@ -11,6 +11,12 @@ export const buttonVariants = cva(
   'relative inline-flex cursor-default items-center justify-center rounded-lg text-sm font-medium transition-[filter,colors] focus-visible:outline-4 focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
+      size: {
+        base: 'h-12 min-w-12 px-6 py-2 text-base',
+        sm: 'h-10 min-w-10 px-3 text-sm',
+        lg: 'h-14 min-w-14 px-8 text-lg',
+        cta: 'h-16 min-w-16 rounded-full px-8 text-lg',
+      },
       variant: {
         default: 'bg-primary text-on-primary outline-primary',
         destructive: 'bg-destructive text-on-destructive outline-destructive',
@@ -20,12 +26,6 @@ export const buttonVariants = cva(
           'bg-tertiary-container text-on-tertiary-container outline-tertiary rounded-full',
         ghost: 'text-on-surface outline-on-surface',
         link: 'text-primary underline-offset-4',
-      },
-      size: {
-        base: 'h-12 min-w-12 px-6 py-2 text-base',
-        sm: 'h-10 min-w-10 px-3 text-sm',
-        lg: 'h-14 min-w-14 px-8 text-lg',
-        cta: 'h-16 min-w-16 rounded-full px-8 text-lg',
       },
       loading: {
         true: '',

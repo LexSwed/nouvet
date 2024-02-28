@@ -10,19 +10,27 @@ export const FamilyInviteDialog = (props: { id: string }) => {
       id={props.id}
       placement="center"
       role="dialog"
-      class="flex w-[94svw] max-w-[420px] flex-col gap-6 p-6"
+      class="to-primary/12 from-surface  flex w-[94svw] max-w-[420px] flex-col gap-6 bg-gradient-to-b p-6"
     >
       <Text with="headline-2" as="header">
         {t('family-invite.headline')}
       </Text>
       <Text as="p">{t('family-invite.subheadline')}</Text>
-      <ul>
-        <li>Bullet point 1 with an icon</li>
-        <li>Bullet point 2 with an icon</li>
-        <li>Bullet point 3 with an icon</li>
-        <li>Bullet point 4 with an icon</li>
+      {/* TODO: insert screenshots of future features:
+      - shared reminders and actions
+      - shared notes
+      - access to doctor visits and prescriptions */}
+      <ul class="overflow-snap -mx-6 flex scroll-px-6 flex-row gap-4 px-6 py-2">
+        <li class="bg-tertiary/15 h-24 w-[95%] rounded-2xl" />
+        <li class="bg-tertiary/15 h-24 w-[95%] rounded-2xl" />
+        <li class="bg-tertiary/15 h-24 w-[95%] rounded-2xl" />
       </ul>
-      <Button>{t('family-invite.cta')}</Button>
+      <div class="flex flex-col gap-2">
+        <Button>{t('family-invite.cta')}</Button>
+        <Button variant="link" class="self-center">
+          {t('family-invite.join')}
+        </Button>
+      </div>
     </Popover>
   );
 };
