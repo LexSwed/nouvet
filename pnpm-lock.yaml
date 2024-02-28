@@ -91,8 +91,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0
       corvu:
-        specifier: ^0.4.6
-        version: 0.4.6(solid-js@1.8.15)
+        specifier: ^0.4.7
+        version: 0.4.7(solid-js@1.8.15)
       solid-floating-ui:
         specifier: ^0.3.1
         version: 0.3.1(@floating-ui/dom@1.6.3)(solid-js@1.8.15)
@@ -104,7 +104,7 @@ importers:
         version: 2.2.1
       valibot:
         specifier: '*'
-        version: 0.28.1
+        version: 0.29.0
     devDependencies:
       '@nou/config':
         specifier: ^1.0.0
@@ -182,8 +182,8 @@ importers:
         specifier: ^0.12.4
         version: 0.12.4(solid-js@1.8.15)
       '@solidjs/start':
-        specifier: ^0.5.10
-        version: 0.5.10(solid-js@1.8.15)(vinxi@0.2.1)(vite@5.1.4)
+        specifier: ^0.6.0
+        version: 0.6.0(solid-js@1.8.15)(vinxi@0.3.4)(vite@5.1.4)
       arctic:
         specifier: ^1.2.1
         version: 1.2.1
@@ -212,8 +212,8 @@ importers:
         specifier: ^0.29.0
         version: 0.29.0
       vinxi:
-        specifier: 0.2.1
-        version: 0.2.1(preact@10.19.3)
+        specifier: 0.3.4
+        version: 0.3.4(preact@10.19.3)
     devDependencies:
       '@nou/config':
         specifier: ^1.0.0
@@ -1571,6 +1571,17 @@ packages:
       enabled: 2.0.0
       kuler: 2.0.0
     dev: true
+
+  /@deno/shim-deno-test@0.5.0:
+    resolution: {integrity: sha512-4nMhecpGlPi0cSzT67L+Tm+GOJqvuk8gqHBziqcUQOarnuIax1z96/gJHCSIz2Z0zhxE6Rzwb3IZXPtFh51j+w==}
+    dev: false
+
+  /@deno/shim-deno@0.19.1:
+    resolution: {integrity: sha512-8hYIpmDqpG76sn+UY1853RCi+CI7ZWz9tt37nfyDL8rwr6xbW0+GHUwCLcsGbh1uMIKURuJy6xtrIcnW+a0duA==}
+    dependencies:
+      '@deno/shim-deno-test': 0.5.0
+      which: 4.0.0
+    dev: false
 
   /@discoveryjs/json-ext@0.5.7:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
@@ -3255,7 +3266,7 @@ packages:
     resolution: {integrity: sha512-2LuNTFBIO0m7kKIQvvPHN6UE63VjpmL9rnEEaOOaiSPbZK+zUOYIzBAWcED+3XYzhYsd/0mD57VdxAEqqV52CQ==}
     dev: false
 
-  /@preact/preset-vite@2.8.1(@babel/core@7.23.9)(preact@10.19.3)(vite@4.5.0):
+  /@preact/preset-vite@2.8.1(@babel/core@7.23.9)(preact@10.19.3)(vite@5.1.1):
     resolution: {integrity: sha512-a9KV4opdj17X2gOFuGup0aE+sXYABX/tJi/QDptOrleX4FlnoZgDWvz45tHOdVfrZX+3uvVsIYPHxRsTerkDNA==}
     peerDependencies:
       '@babel/core': 7.x
@@ -3264,7 +3275,7 @@ packages:
       '@babel/core': 7.23.9
       '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.23.9)
       '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.23.9)
-      '@prefresh/vite': 2.4.5(preact@10.19.3)(vite@4.5.0)
+      '@prefresh/vite': 2.4.5(preact@10.19.3)(vite@5.1.1)
       '@rollup/pluginutils': 4.2.1
       babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.23.9)
       debug: 4.3.4
@@ -3272,7 +3283,7 @@ packages:
       magic-string: 0.30.5
       node-html-parser: 6.1.12
       resolve: 1.22.8
-      vite: 4.5.0
+      vite: 5.1.1
     transitivePeerDependencies:
       - preact
       - supports-color
@@ -3294,7 +3305,7 @@ packages:
     resolution: {integrity: sha512-KtC/fZw+oqtwOLUFM9UtiitB0JsVX0zLKNyRTA332sqREqSALIIQQxdUCS1P3xR/jT1e2e8/5rwH6gdcMLEmsQ==}
     dev: false
 
-  /@prefresh/vite@2.4.5(preact@10.19.3)(vite@4.5.0):
+  /@prefresh/vite@2.4.5(preact@10.19.3)(vite@5.1.1):
     resolution: {integrity: sha512-iForDVJ2M8gQYnm5pHumvTEJjGGc7YNYC0GVKnHFL+GvFfKHfH9Rpq67nUAzNbjuLEpqEOUuQVQajMazWu2ZNQ==}
     peerDependencies:
       preact: ^10.4.0
@@ -3306,7 +3317,7 @@ packages:
       '@prefresh/utils': 1.2.0
       '@rollup/pluginutils': 4.2.1
       preact: 10.19.3
-      vite: 4.5.0
+      vite: 5.1.1
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -4325,12 +4336,12 @@ packages:
       solid-js: 1.8.15
     dev: false
 
-  /@solidjs/start@0.5.10(solid-js@1.8.15)(vinxi@0.2.1)(vite@5.1.4):
-    resolution: {integrity: sha512-hAZ5V9gwo6YBrfk6dzOTKTFyx3KebK2a5nZNcQ3HAUSeRs89cEPxvATnMe0Qh2Vea/PCssqodb0jWbPAnlUp3Q==}
+  /@solidjs/start@0.6.0(solid-js@1.8.15)(vinxi@0.3.4)(vite@5.1.4):
+    resolution: {integrity: sha512-djHVrUCv7AH8q5HOXX+EZ3zdXOibMCQmCG8xNRkOgEbyhB/vp+MtbhCpvoLROgnHm/5pHDLwVKVkYiTsDBUsOA==}
     dependencies:
-      '@vinxi/plugin-directives': 0.2.0(vinxi@0.2.1)
-      '@vinxi/server-components': 0.2.0(vinxi@0.2.1)
-      '@vinxi/server-functions': 0.2.1(vinxi@0.2.1)
+      '@vinxi/plugin-directives': 0.3.0(vinxi@0.3.4)
+      '@vinxi/server-components': 0.3.0(vinxi@0.3.4)
+      '@vinxi/server-functions': 0.3.0(vinxi@0.3.4)
       defu: 6.1.4
       error-stack-parser: 2.1.4
       html-to-image: 1.11.11
@@ -5788,15 +5799,15 @@ packages:
       - supports-color
     dev: false
 
-  /@vinxi/devtools@0.2.0(@babel/core@7.23.9)(preact@10.19.3)(vite@4.5.0):
+  /@vinxi/devtools@0.2.0(@babel/core@7.23.9)(preact@10.19.3)(vite@5.1.1):
     resolution: {integrity: sha512-LpQp5zbiBhV4eo2w6AiJFtpZZj4LaRBOnzggIPTeSJYvgrxRMAqe/34Har3vVo+b7sPOjxFbE1zHZhLzaAcidw==}
     dependencies:
-      '@preact/preset-vite': 2.8.1(@babel/core@7.23.9)(preact@10.19.3)(vite@4.5.0)
+      '@preact/preset-vite': 2.8.1(@babel/core@7.23.9)(preact@10.19.3)(vite@5.1.1)
       '@solidjs/router': 0.8.4(solid-js@1.8.15)
       birpc: 0.2.15
       solid-js: 1.8.15
-      vite-plugin-inspect: 0.7.42(vite@4.5.0)
-      vite-plugin-solid: 2.10.1(solid-js@1.8.15)(vite@4.5.0)
+      vite-plugin-inspect: 0.7.42(vite@5.1.1)
+      vite-plugin-solid: 2.10.1(solid-js@1.8.15)(vite@5.1.1)
       ws: 8.16.0
     transitivePeerDependencies:
       - '@babel/core'
@@ -5833,10 +5844,10 @@ packages:
       uqr: 0.1.2
     dev: false
 
-  /@vinxi/plugin-directives@0.2.0(vinxi@0.2.1):
-    resolution: {integrity: sha512-DoYuIuvdylU+0XNOipvcbw08XDBBbEksc3euCsbApNVpmQ/mC+2CjoErHtjb4zX1RqNwe1sJ8awMK6fKUMLGRA==}
+  /@vinxi/plugin-directives@0.3.0(vinxi@0.3.4):
+    resolution: {integrity: sha512-diwK2D6mZGffF5z+CgG7DcRnpKrOgqyv8SfxdbOTLGQcxtrQ9IpuHfX+mbOttaIJFvoZ3pHGUKe7Gfgd0BuQ1A==}
     peerDependencies:
-      vinxi: ^0.2.0
+      vinxi: ^0.3.0
     dependencies:
       '@babel/parser': 7.23.9
       acorn: 8.11.3
@@ -5847,37 +5858,37 @@ packages:
       magicast: 0.2.11
       recast: 0.23.4
       tslib: 2.6.2
-      vinxi: 0.2.1(preact@10.19.3)
+      vinxi: 0.3.4(preact@10.19.3)
     dev: false
 
-  /@vinxi/server-components@0.2.0(vinxi@0.2.1):
-    resolution: {integrity: sha512-U3z6pxK5CWBxaUmyg7zdDMTl1AMa47MpYCUcs0QVOz/C8kKlT6C9Ozh5pZWuzAO0cTeueNpQumDWhQ4YTXTsZw==}
+  /@vinxi/server-components@0.3.0(vinxi@0.3.4):
+    resolution: {integrity: sha512-S10O0ZKu8skBfL6BmUzIgiwD1HclKtUfXc7G0jmJAJ4qsvfBbUBwfT9Su7ppsuAjl96i7V1ipt5En4CidSpPlQ==}
     peerDependencies:
-      vinxi: ^0.2.0
+      vinxi: ^0.3.0
     dependencies:
-      '@vinxi/plugin-directives': 0.2.0(vinxi@0.2.1)
+      '@vinxi/plugin-directives': 0.3.0(vinxi@0.3.4)
       acorn: 8.11.3
       acorn-loose: 8.4.0
       acorn-typescript: 1.4.13(acorn@8.11.3)
       astring: 1.8.6
       magicast: 0.2.11
       recast: 0.23.4
-      vinxi: 0.2.1(preact@10.19.3)
+      vinxi: 0.3.4(preact@10.19.3)
     dev: false
 
-  /@vinxi/server-functions@0.2.1(vinxi@0.2.1):
-    resolution: {integrity: sha512-ir06Q6nEpJFU1uXqHdKE2OXqZFjChAIgAHpCJzMunHiutRNyYTJ7ZhbFCUk5xOx+StMpWKtqOv72TDeP/xTLtA==}
+  /@vinxi/server-functions@0.3.0(vinxi@0.3.4):
+    resolution: {integrity: sha512-WuYiXUyaxEzsXE2A5lrABHWap68jIynR/5tQTTdxcAPEkxUTchSBrakiXusUy1yU4BchqCwMGwwuoGb9qL54CQ==}
     peerDependencies:
-      vinxi: ^0.2.1
+      vinxi: ^0.3.0
     dependencies:
-      '@vinxi/plugin-directives': 0.2.0(vinxi@0.2.1)
+      '@vinxi/plugin-directives': 0.3.0(vinxi@0.3.4)
       acorn: 8.11.3
       acorn-loose: 8.4.0
       acorn-typescript: 1.4.13(acorn@8.11.3)
       astring: 1.8.6
       magicast: 0.2.11
       recast: 0.23.4
-      vinxi: 0.2.1(preact@10.19.3)
+      vinxi: 0.3.4(preact@10.19.3)
     dev: false
 
   /@xmldom/xmldom@0.8.10:
@@ -6436,7 +6447,7 @@ packages:
     dependencies:
       chokidar: 3.5.3
       defu: 6.1.4
-      dotenv: 16.4.1
+      dotenv: 16.4.2
       giget: 1.2.1
       jiti: 1.21.0
       mlly: 1.5.0
@@ -6826,8 +6837,8 @@ packages:
   /core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
 
-  /corvu@0.4.6(solid-js@1.8.15):
-    resolution: {integrity: sha512-yckRWhqbJABkzU0pl8z++DRR97lrXxcOoKOyoP2DvWWTNoJRKwasa0XnglxvcP3m/VhwrdYGD2oXB9klITEJqg==}
+  /corvu@0.4.7(solid-js@1.8.15):
+    resolution: {integrity: sha512-IfVfaPkxT5vZfHTaWx8EiIjAuSE72k9eIWYzBOT3q8TKAVGQJmlnRFYPwNi8XJbzBuksETnk+U0mX1gk1TcAFA==}
     peerDependencies:
       solid-js: ^1.8
     dependencies:
@@ -6932,6 +6943,13 @@ packages:
       es5-ext: 0.10.62
       type: 1.2.0
     dev: true
+
+  /dax-sh@0.39.2:
+    resolution: {integrity: sha512-gpuGEkBQM+5y6p4cWaw9+ePy5TNon+fdwFVtTI8leU3UhwhsBfPewRxMXGuQNC+M2b/MDGMlfgpqynkcd0C3FQ==}
+    dependencies:
+      '@deno/shim-deno': 0.19.1
+      undici-types: 5.26.5
+    dev: false
 
   /debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -7218,11 +7236,6 @@ packages:
     resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
     engines: {node: '>=12'}
     dev: true
-
-  /dotenv@16.4.1:
-    resolution: {integrity: sha512-CjA3y+Dr3FyFDOAMnxZEGtnW9KBR2M0JvvUtXNW+dYJL5ROWxP9DUHCwgFqpMk0OXCc0ljhaNTr2w/kutYIcHQ==}
-    engines: {node: '>=12'}
-    dev: false
 
   /dotenv@16.4.2:
     resolution: {integrity: sha512-rZSSFxke7d9nYQ5NeMIwp5PP+f8wXgKNljpOb7KtH6SKW1cEqcXAz9VSJYVLKe7Jhup/gUYOkaeSVyK8GJ+nBg==}
@@ -8953,6 +8966,11 @@ packages:
 
   /isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
+
+  /isexe@3.1.1:
+    resolution: {integrity: sha512-LpB/54B+/2J5hqQ7imZHfdU31OlgQqx7ZicVlkm9kzg9/w8GKLEcFfJl/t7DCEDueOyBAD6zCCwTO6Fzs0NoEQ==}
+    engines: {node: '>=16'}
+    dev: false
 
   /isobject@3.0.1:
     resolution: {integrity: sha512-WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==}
@@ -10986,6 +11004,7 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.3
+    dev: true
 
   /rollup@4.9.6:
     resolution: {integrity: sha512-05lzkCS2uASX0CiLFybYfVkwNbKZG5NFQ6Go0VWyogFTXXbR039UVsegViTntkk4OglHBdF54ccApXRRuXRbsg==}
@@ -12395,10 +12414,6 @@ packages:
     hasBin: true
     dev: true
 
-  /valibot@0.28.1:
-    resolution: {integrity: sha512-zQnjwNJuXk6362Leu0+4eFa/SMwRom3/hEvH6s1EGf3oXIPbo2WFKDra9ymnbVh3clLRvd8hw4sKF5ruI2Lyvw==}
-    dev: false
-
   /valibot@0.29.0:
     resolution: {integrity: sha512-JhZn08lwZPhAamOCfBwBkv/btQt4KeQhekULPH8crH053zUCLSOGEF2zKExu3bFf245tsj6J1dY0ysd/jUiMIQ==}
     dev: false
@@ -12418,8 +12433,8 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /vinxi@0.2.1(preact@10.19.3):
-    resolution: {integrity: sha512-zrgFO2XuKpdoW5VwlbieeQ0YhzMuuYCJyFWFyj41h9BnymHZ5dnKElALvFQn5JVzHhyrsdmlm8GU7tIuH786hw==}
+  /vinxi@0.3.4(preact@10.19.3):
+    resolution: {integrity: sha512-WAQbutVIX9zE2U5jraq+uvW2ytzb59HtX+/KVKqZSgjfQQpCHyi3XNxRkf46WTM5gASDEDFaG0l5ZHunmf7/cw==}
     hasBin: true
     dependencies:
       '@babel/core': 7.23.9
@@ -12428,7 +12443,7 @@ packages:
       '@types/micromatch': 4.0.6
       '@types/serve-static': 1.15.5
       '@types/ws': 8.5.10
-      '@vinxi/devtools': 0.2.0(@babel/core@7.23.9)(preact@10.19.3)(vite@4.5.0)
+      '@vinxi/devtools': 0.2.0(@babel/core@7.23.9)(preact@10.19.3)(vite@5.1.1)
       '@vinxi/listhen': 1.5.6
       boxen: 7.1.1
       c12: 1.6.1
@@ -12436,6 +12451,7 @@ packages:
       citty: 0.1.5
       consola: 3.2.3
       cookie-es: 1.0.0
+      dax-sh: 0.39.2
       defu: 6.1.4
       dts-buddy: 0.2.5
       es-module-lexer: 1.4.1
@@ -12464,7 +12480,7 @@ packages:
       unenv: 1.9.0
       unimport: 3.7.1(rollup@4.9.6)
       unstorage: 1.10.1
-      vite: 4.5.0
+      vite: 5.1.1
       ws: 8.16.0
       zod: 3.22.4
     transitivePeerDependencies:
@@ -12521,7 +12537,7 @@ packages:
       - rollup
     dev: true
 
-  /vite-plugin-inspect@0.7.42(vite@4.5.0):
+  /vite-plugin-inspect@0.7.42(vite@5.1.1):
     resolution: {integrity: sha512-JCyX86wr3siQc+p9Kd0t8VkFHAJag0RaQVIpdFGSv5FEaePEVB6+V/RGtz2dQkkGSXQzRWrPs4cU3dRKg32bXw==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -12539,7 +12555,7 @@ packages:
       open: 9.1.0
       picocolors: 1.0.0
       sirv: 2.0.4
-      vite: 4.5.0
+      vite: 5.1.1
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -12569,7 +12585,7 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-solid@2.10.1(solid-js@1.8.15)(vite@4.5.0):
+  /vite-plugin-solid@2.10.1(solid-js@1.8.15)(vite@5.1.1):
     resolution: {integrity: sha512-kfVdNLWaJqaJVL52U6iCCKNW/nXE7bS1VVGOWPGllOkJfcNILymVSY0LCBLSnyy0iYnRtrXpiHm14rMuzeC7CA==}
     peerDependencies:
       '@testing-library/jest-dom': ^5.16.6 || ^5.17.0 || ^6.*
@@ -12585,8 +12601,8 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.8.15
       solid-refresh: 0.6.3(solid-js@1.8.15)
-      vite: 4.5.0
-      vitefu: 0.2.5(vite@4.5.0)
+      vite: 5.1.1
+      vitefu: 0.2.5(vite@5.1.1)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -12664,12 +12680,12 @@ packages:
       - typescript
     dev: true
 
-  /vite@4.5.0:
-    resolution: {integrity: sha512-ulr8rNLA6rkyFAlVWw2q5YJ91v098AFQ2R0PRFwPzREXOUJQPtFUG0t+/ZikhaOCDqFoDhN6/v8Sq0o4araFAw==}
-    engines: {node: ^14.18.0 || >=16.0.0}
+  /vite@5.1.1:
+    resolution: {integrity: sha512-wclpAgY3F1tR7t9LL5CcHC41YPkQIpKUGeIuT8MdNwNZr6OqOTLs7JX5vIHAtzqLWXts0T+GDrh9pN2arneKqg==}
+    engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
-      '@types/node': '>= 14'
+      '@types/node': ^18.0.0 || >=20.0.0
       less: '*'
       lightningcss: ^1.21.0
       sass: '*'
@@ -12692,9 +12708,9 @@ packages:
       terser:
         optional: true
     dependencies:
-      esbuild: 0.18.20
+      esbuild: 0.19.12
       postcss: 8.4.35
-      rollup: 3.29.4
+      rollup: 4.9.6
     optionalDependencies:
       fsevents: 2.3.3
     dev: false
@@ -12733,7 +12749,7 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
 
-  /vitefu@0.2.5(vite@4.5.0):
+  /vitefu@0.2.5(vite@5.1.1):
     resolution: {integrity: sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==}
     peerDependencies:
       vite: ^3.0.0 || ^4.0.0 || ^5.0.0
@@ -12741,7 +12757,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.5.0
+      vite: 5.1.1
     dev: false
 
   /vitefu@0.2.5(vite@5.1.4):
@@ -12825,6 +12841,14 @@ packages:
     hasBin: true
     dependencies:
       isexe: 2.0.0
+
+  /which@4.0.0:
+    resolution: {integrity: sha512-GlaYyEb07DPxYCKhKzplCWBJtvxZcZMrL+4UkrTSJHHPyZU4mYYTv3qaOe77H7EODLSSopAUFAc6W8U4yqvscg==}
+    engines: {node: ^16.13.0 || >=18.0.0}
+    hasBin: true
+    dependencies:
+      isexe: 3.1.1
+    dev: false
 
   /wide-align@1.1.5:
     resolution: {integrity: sha512-eDMORYaPNZ4sQIuuYPDHdQvf4gyCF9rEEV/yPxGfwPkRodwEgiMUUXTx/dex+Me0wxx53S+NgUHaP7y3MGlDmg==}
