@@ -1,5 +1,7 @@
 {
   "link-home": "Go to home page",
   "sign-in": "Sign In",
-  "app-name": "NouVet"
+  "app-name": "NouVet",
+  "back": "Back",
+  "close-dialog": "Close dialog"
 }
