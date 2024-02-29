@@ -98,3 +98,64 @@
     @apply scrollbar-none -my-2 snap-x snap-mandatory overflow-auto py-2 [&>*]:shrink-0 [&>*]:snap-start;
   }
 }
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-from-right {
+  from {
+    transform: translateX(20px);
+  }
+}
+
+@keyframes slide-from-left {
+  from {
+    transform: translateX(-20px);
+  }
+}
+
+@keyframes slide-to-left {
+  to {
+    transform: translateX(-20px);
+  }
+}
+@keyframes slide-to-right {
+  to {
+    transform: translateX(20px);
+  }
+}
+
+:root::view-transition-old(family-invite-step-0) {
+  animation:
+    120ms ease-in both fade-out,
+    160ms ease-in both slide-to-left;
+}
+
+:root::view-transition-new(family-invite-step-0) {
+  animation:
+    120ms ease-out both fade-in,
+    200ms ease-out both slide-from-left;
+  animation-delay: 60ms;
+}
+
+:root::view-transition-old(family-invite-step-1) {
+  animation:
+    120ms ease-in both fade-out,
+    160ms ease-in both slide-to-right;
+}
+
+:root::view-transition-new(family-invite-step-1) {
+  animation:
+    120ms ease-out both fade-in,
+    200ms ease-out both slide-from-right;
+  animation-delay: 60ms;
+}
