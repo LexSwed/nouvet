@@ -1,5 +1,4 @@
 import { defineConfig } from '@solidjs/start/config';
-import { searchForWorkspaceRoot } from 'vite';
 import { imagetools } from 'vite-imagetools';
 import viteSvgSpriteWrapper from 'vite-svg-sprite-wrapper';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -18,17 +17,9 @@ export default defineConfig({
     css: {
       postcss: '../config/postcss.config.cjs',
     },
-    server: {
-      fs: {
-        allow: [searchForWorkspaceRoot(process.cwd()), '../config/global.css'],
-      },
-    },
     plugins: [
-      // @ts-expect-error vite types mismatch?
       tsconfigPaths(),
-      // @ts-expect-error vite types mismatch?
       imagetools(),
-      // @ts-expect-error vite types mismatch?
       viteSvgSpriteWrapper({
         icons: '../config/icons/source/*.svg',
         outputDir: '../config/icons',
