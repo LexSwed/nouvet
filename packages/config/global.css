@@ -97,4 +97,8 @@
   .overflow-snap {
     @apply scrollbar-none -my-2 snap-x snap-mandatory overflow-auto py-2 [&>*]:shrink-0 [&>*]:snap-start;
   }
+
+  .stack {
+    @apply grid place-items-center *:[grid-area:1/1];
+  }
 }

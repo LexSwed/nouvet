@@ -9,6 +9,8 @@
 
 @layer nou-ui {
   .popover {
+    background-color: theme('colors.surface');
+    color: theme('colors.on-surface');
     isolation: isolate;
     transition-property: opacity, transform, display;
     transition-behavior: allow-discrete;
@@ -51,7 +53,6 @@
       transform-origin: center;
       margin: auto;
       &::backdrop {
-        pointer-events: none;
         opacity: 1;
         transition: 0.2s ease-out;
         background-color: theme('colors.on-surface/0.5');
