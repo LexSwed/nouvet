@@ -1,6 +1,7 @@
 import { Title } from '@solidjs/meta';
 import { createAsync, type RouteDefinition } from '@solidjs/router';
-import { lazy, Show, Suspense } from 'solid-js';
+import { clientOnly } from '@solidjs/start';
+import { Show, Suspense } from 'solid-js';
 import { Button, ButtonLink } from '@nou/ui';
 
 import { cacheTranslations, createTranslator } from '~/server/i18n';
@@ -11,7 +12,7 @@ import { AccountMenu } from '~/lib/account-menu';
 
 import { UserPets } from './_user-pets';
 
-const FamilyInviteDialog = lazy(() => import('./_family-invite-dialog'));
+const FamilyInviteDialog = clientOnly(() => import('./_family-invite-dialog'));
 
 export const route = {
   load() {

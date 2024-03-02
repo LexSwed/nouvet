@@ -7,7 +7,8 @@
     "./tailwind": "./tailwind.ts",
     "./tsconfig": "./tsconfig.json",
     "./global.css": "./global.css",
-    "./icons/sprite.svg": "./icons/sprite.svg"
+    "./icons/sprite.svg": "./icons/sprite.svg",
+    "./theme/theme.json": "./theme/theme.json"
   },
   "engines": {
     "node": ">=20"

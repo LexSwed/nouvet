@@ -31,3 +31,6 @@ sqlite.db
 
 # turbo cache
 .turbo
+
+# vinxi config
+app.config.ts.timestamp*

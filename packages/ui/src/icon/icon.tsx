@@ -1,5 +1,5 @@
 import { splitProps, type JSX } from 'solid-js';
-import spriteHref from '@nou/config/icons/sprite.svg';
+import spriteHref from '@nou/config/icons/sprite.svg?url';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { tw } from '../tw';

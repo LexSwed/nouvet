@@ -1,26 +1,39 @@
-import { createSignal, Match, Show, Switch } from 'solid-js';
+import { createSignal, Match, Show, Suspense, Switch } from 'solid-js';
 import { Button, Icon, Popover, Text } from '@nou/ui';
 
 import { createTranslator } from '~/server/i18n';
 
+import { FamilyInviteQRCode } from '~/lib/family-invite-qrcode';
 import { startViewTransition } from '~/lib/start-view-transition';
 
 const FamilyInviteDialog = (props: { id: string }) => {
+  return (
+    <Popover
+      id={props.id}
+      placement="center"
+      aria-labelledby={`${props.id}-headline`}
+      role="dialog"
+      class="to-primary/10 via-surface from-surface flex w-[94svw] max-w-[420px] flex-col gap-6 bg-gradient-to-b via-65% p-6"
+    >
+      {(open) => (
+        <Show when={open()}>
+          <Suspense>
+            <InviteDialogContent id={props.id} />
+          </Suspense>
+        </Show>
+      )}
+    </Popover>
+  );
+};
+
+const InviteDialogContent = (props: { id: string }) => {
   const t = createTranslator('app');
   const tCommon = createTranslator('common');
   // TODO: scroll to a screen with generated QR code, or scan it
 
   const [step, setStep] = createSignal(0);
-  const headlineId = () => `${props.id}-headline`;
-
   return (
-    <Popover
-      id={props.id}
-      placement="center"
-      aria-describedby={headlineId()}
-      role="dialog"
-      class="to-primary/12 from-surface flex w-[94svw] max-w-[420px] flex-col gap-6 bg-gradient-to-b p-6"
-    >
+    <>
       <header class="-m-4 flex flex-row items-center justify-between gap-2">
         <Show when={step() !== 0} fallback={<div />}>
           <Button
@@ -49,7 +62,7 @@ const FamilyInviteDialog = (props: { id: string }) => {
       <Switch>
         <Match when={step() === 0}>
           <div class="flex flex-col gap-6">
-            <Text with="headline-2" as="h2" id={headlineId()}>
+            <Text with="headline-2" as="h2" id={`${props.id}-headline`}>
               {t('family-invite.headline')}
             </Text>
             <Text as="p">{t('family-invite.subheadline')}</Text>
@@ -83,8 +96,9 @@ const FamilyInviteDialog = (props: { id: string }) => {
             <Text as="p" class="text-center">
               {t('family-invite.qr-description')}
             </Text>
-            <div class="bg-tertiary/5 aspect-square w-full rounded-2xl" />
-            <Button variant="ghost">{t('family-invite.cta-share')}</Button>
+            <Suspense>
+              <FamilyInviteQRCode />
+            </Suspense>
             <Button
               onClick={() =>
                 startViewTransition(() => {
@@ -110,7 +124,7 @@ const FamilyInviteDialog = (props: { id: string }) => {
           </div>
         </Match>
       </Switch>
-    </Popover>
+    </>
   );
 };
 

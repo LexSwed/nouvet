@@ -1,11 +1,7 @@
-import {
-  deleteCookie,
-  getCookie,
-  sendRedirect,
-  type PageEvent,
-} from '@solidjs/start/server';
+import type { PageEvent } from '@solidjs/start/server';
 import { OAuth2RequestError } from 'arctic';
 import { object, parse, string } from 'valibot';
+import { deleteCookie, getCookie, sendRedirect } from 'vinxi/http';
 
 import { createUserSession } from '~/server/auth/user-session';
 import { RETURN_URL_COOKIE } from '~/server/const';
@@ -40,10 +36,10 @@ export const GET = async (event: PageEvent) => {
       'facebook',
       facebookUser.id,
     );
-    const returnUrl = getCookie(event, RETURN_URL_COOKIE);
+    const returnUrl = getCookie(RETURN_URL_COOKIE);
 
     if (returnUrl) {
-      deleteCookie(event, RETURN_URL_COOKIE);
+      deleteCookie(RETURN_URL_COOKIE);
     }
 
     if (existingUser) {
@@ -53,9 +49,9 @@ export const GET = async (event: PageEvent) => {
         measurementSystem: existingUser.measurementSystem ?? 'metrical',
       });
 
-      return sendRedirect(event, returnUrl || '/app');
+      return sendRedirect(returnUrl || '/app');
     }
-    const locale = await getLocale(event);
+    const locale = await getLocale();
 
     const measurementSystem =
       locale.region && ['US', 'LR', 'MM'].includes(locale.region)
@@ -76,7 +72,7 @@ export const GET = async (event: PageEvent) => {
       measurementSystem,
     });
 
-    return sendRedirect(event, returnUrl || '/app');
+    return sendRedirect(returnUrl || '/app');
   } catch (error) {
     console.log(error);
     if (error instanceof OAuth2RequestError) {
