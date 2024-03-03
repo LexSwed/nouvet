@@ -99,27 +99,8 @@ const InviteDialogContent = (props: { id: string }) => {
             <Suspense>
               <FamilyInviteQRCode />
             </Suspense>
-            <Button
-              onClick={() =>
-                startViewTransition(() => {
-                  setStep(2);
-                })
-              }
-            >
-              {t('family-invite.cta-next')}
-            </Button>
-          </div>
-        </Match>
-        <Match when={step() === 2}>
-          <div class="flex flex-col gap-6">
-            <Button
-              onClick={() =>
-                startViewTransition(() => {
-                  setStep(2);
-                })
-              }
-            >
-              done
+            <Button popoverTarget={props.id} popoverTargetAction="hide">
+              {t('family-invite.cta-done')}
             </Button>
           </div>
         </Match>
