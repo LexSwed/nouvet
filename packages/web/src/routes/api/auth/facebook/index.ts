@@ -1,14 +1,14 @@
-import { sendRedirect, type PageEvent } from '@solidjs/start/server';
 import { generateState } from 'arctic';
+import { sendRedirect } from 'vinxi/http';
 
 import { setFacebookOAuthStateCookie, useFacebookAuth } from './_shared';
 
-export const GET = async (event: PageEvent) => {
+export const GET = async () => {
   const state = generateState();
   const facebook = useFacebookAuth();
   const url = await facebook.createAuthorizationURL(state);
 
-  setFacebookOAuthStateCookie(event, state);
+  setFacebookOAuthStateCookie(state);
 
-  return sendRedirect(event, url.toString());
+  return sendRedirect(url.toString());
 };

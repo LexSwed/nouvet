@@ -6,11 +6,8 @@ import { env } from '~/server/env';
 
 const FACEBOOK_OAUTH_STATE_COOKIE = 'oauth_state';
 
-export function setFacebookOAuthStateCookie(
-  event: RequestEvent,
-  state: string,
-) {
-  setCookie(event, FACEBOOK_OAUTH_STATE_COOKIE, state, {
+export function setFacebookOAuthStateCookie(state: string) {
+  setCookie(FACEBOOK_OAUTH_STATE_COOKIE, state, {
     httpOnly: true,
     secure: env.PROD,
     maxAge: 60 * 10, // 10 minutes
