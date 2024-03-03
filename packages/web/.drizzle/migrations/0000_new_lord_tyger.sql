@@ -21,7 +21,7 @@ CREATE TABLE `event` (
 CREATE TABLE `family-invite` (
 	`id` text PRIMARY KEY NOT NULL,
 	`inviter_id` text NOT NULL,
-	`created_at` integer DEFAULT (unixepoch() + 60 * 60) NOT NULL,
+	`expires_at` integer DEFAULT (unixepoch() + 60 * 60) NOT NULL,
 	FOREIGN KEY (`inviter_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
