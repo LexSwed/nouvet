@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "58357301-64b8-46b4-badb-64373320aef0",
+  "id": "72c3a925-67d3-4a0f-89d7-182f8c89167d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "oauth_account": {
@@ -105,9 +105,9 @@
           "name": "date",
           "type": "text(50)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "(datetime('now'))"
+          "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
         }
       },
       "indexes": {},
@@ -147,10 +147,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
         "inviter_id": {
           "name": "inviter_id",
@@ -161,11 +161,11 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "text(50)",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "(datetime('now', '+60 minutes'))"
+          "default": "(unixepoch() + 60 * 60)"
         }
       },
       "indexes": {},
@@ -215,9 +215,9 @@
           "name": "created_at",
           "type": "text(50)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "(datetime('now'))"
+          "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
         }
       },
       "indexes": {},
@@ -316,9 +316,9 @@
           "name": "created_at",
           "type": "text(50)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "(datetime('now'))"
+          "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
         }
       },
       "indexes": {},
@@ -368,9 +368,9 @@
           "name": "created_at",
           "type": "text(50)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "(datetime('now'))"
+          "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
         }
       },
       "indexes": {},
@@ -528,9 +528,9 @@
           "name": "created_at",
           "type": "text(50)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "(datetime('now'))"
+          "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
         }
       },
       "indexes": {

@@ -13,15 +13,15 @@ CREATE TABLE `event` (
 	`pet_id` integer,
 	`creator_id` text,
 	`data_json` text,
-	`date` text(50) DEFAULT (datetime('now')),
+	`date` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
 	FOREIGN KEY (`pet_id`) REFERENCES `pet`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`creator_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `family-invite` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`inviter_id` text NOT NULL,
-	`created_at` text(50) DEFAULT (datetime('now', '+60 minutes')),
+	`created_at` integer DEFAULT (unixepoch() + 60 * 60) NOT NULL,
 	FOREIGN KEY (`inviter_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -29,7 +29,7 @@ CREATE TABLE `family` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text(100),
 	`creator_id` text NOT NULL,
-	`created_at` text(50) DEFAULT (datetime('now')),
+	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
 	FOREIGN KEY (`creator_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -44,7 +44,7 @@ CREATE TABLE `pet` (
 	`date_of_birth` text(50),
 	`weight` integer,
 	`picture_url` text(120),
-	`created_at` text(50) DEFAULT (datetime('now')),
+	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
 	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -52,7 +52,7 @@ CREATE TABLE `reminder` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`creator_id` text NOT NULL,
 	`pet_id` integer NOT NULL,
-	`created_at` text(50) DEFAULT (datetime('now')),
+	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
 	FOREIGN KEY (`creator_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`pet_id`) REFERENCES `pet`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -76,7 +76,7 @@ CREATE TABLE `user_profile` (
 CREATE TABLE `user` (
 	`id` text PRIMARY KEY NOT NULL,
 	`family_id` integer,
-	`created_at` text(50) DEFAULT (datetime('now')),
+	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
 	FOREIGN KEY (`family_id`) REFERENCES `family`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
