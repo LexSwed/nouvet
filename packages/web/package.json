@@ -10,7 +10,7 @@
     "lint": "eslint src",
     "format": "prettier . --write",
     "db:generate": "drizzle-kit generate:sqlite",
-    "db:migrate": "tsx .drizzle/migrate.ts --env-file=.env",
+    "db:migrate": "pnpm dlx tsx .drizzle/migrate.ts --env-file=.env",
     "db:push": "drizzle-kit push:sqlite",
     "db:studio": "drizzle-kit studio --port=3001"
   },
@@ -40,6 +40,7 @@
   "devDependencies": {
     "@nou/config": "^1.0.0",
     "@types/better-sqlite3": "^7.6.9",
+    "dotenv": "^16.4.5",
     "drizzle-kit": "^0.20.14",
     "eslint-plugin-drizzle": "^0.2.3",
     "tailwindcss": "^3.4.1",
