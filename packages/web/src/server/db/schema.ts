@@ -31,7 +31,7 @@ export const familyInviteTable = sqliteTable('family-invite', {
    * Expiration is set to 1 hour since the creation of the entry.
    * Business logic in the database, or no!
    */
-  expiresAt: integer('created_at')
+  expiresAt: integer('expires_at')
     .notNull()
     .default(sql`(unixepoch() + 60 * 60)`),
 });
