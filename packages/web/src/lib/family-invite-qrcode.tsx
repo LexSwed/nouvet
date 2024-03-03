@@ -4,34 +4,18 @@ import { Button } from '@nou/ui';
 import QRCodeStyling from 'styled-qr-code';
 
 import { createTranslator } from '~/server/i18n';
-import { createFamilyInvite } from '~/api/family-invite';
+import { getFamilyInvite } from '~/api/family-invite';
 import { getUserFamily } from '~/api/user';
 
 export const FamilyInviteQRCode = () => {
   const t = createTranslator('app');
   const user = createAsync(() => getUserFamily());
-  const inviteData = createAsync(() => createFamilyInvite());
+  const inviteData = createAsync(() => getFamilyInvite());
   let containerRef: HTMLDivElement | null = null;
 
-  // const qrCode =
-  createQRCode({
-    get data() {
-      return inviteData()?.url;
-    },
-    get containerRef() {
-      return containerRef;
-    },
-  });
+  createQRCode(() => inviteData()?.url, containerRef);
 
   async function share() {
-    // const blob = await qrCode.qrImage?.getRawData();
-    // const files = blob
-    //   ? [
-    //       new File([blob], 'qr-code.png', {
-    //         type: blob.type,
-    //       }),
-    //     ]
-    //   : undefined;
     const shareData = {
       url: inviteData()?.url,
       title: user()?.name
@@ -41,12 +25,7 @@ export const FamilyInviteQRCode = () => {
         : t('family-invite.invite-share-title-no-name'),
       text: t('family-invite.invite-share-text'),
     } satisfies ShareData;
-    // if (navigator.canShare({ files })) {
-    //   console.log('share');
-    //   await navigator.share({ ...shareData });
-    // } else {
     await navigator.share(shareData);
-    // }
   }
 
   return (
@@ -62,18 +41,18 @@ export const FamilyInviteQRCode = () => {
   );
 };
 
-function createQRCode(props: {
-  data: string | undefined;
-  containerRef: HTMLDivElement | null;
-}) {
+function createQRCode(
+  data: () => string | undefined,
+  containerRef: HTMLDivElement | null,
+) {
   let qrImage: QRCodeStyling | null;
   createEffect(() => {
-    if (props.containerRef && props.data) {
+    if (data() && containerRef) {
       qrImage = new QRCodeStyling({
         width: 300,
         height: 300,
         type: 'svg',
-        data: props.data,
+        data: data(),
         image: `/icons/icon.svg`,
         dotsOptions: {
           color: 'var(--nou-on-surface)',
@@ -91,7 +70,7 @@ function createQRCode(props: {
           margin: 0,
         },
       });
-      qrImage.append(props.containerRef);
+      qrImage.append(containerRef);
     }
   });
 
