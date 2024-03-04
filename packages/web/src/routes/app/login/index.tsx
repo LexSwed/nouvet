@@ -20,6 +20,7 @@ function AppLoginPage() {
       clearTimeout(timeout);
     });
   };
+  const isDev = import.meta.env.DEV;
 
   return (
     <>
@@ -46,6 +47,18 @@ function AppLoginPage() {
               <img src="/assets/facebook.svg" class="size-8" alt="" />
               {t('with-facebook')}
             </ButtonLink>
+            {isDev && (
+              <ButtonLink
+                href="/api/auth/dev"
+                size="lg"
+                variant="secondary"
+                link={false}
+                loading={loading()}
+                onClick={onClick}
+              >
+                Dev Login
+              </ButtonLink>
+            )}
           </div>
           <ButtonLink
             href="/"

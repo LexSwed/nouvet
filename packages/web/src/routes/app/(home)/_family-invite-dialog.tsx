@@ -29,9 +29,8 @@ const FamilyInviteDialog = (props: { id: string }) => {
 const InviteDialogContent = (props: { id: string }) => {
   const t = createTranslator('app');
   const tCommon = createTranslator('common');
-  // TODO: scroll to a screen with generated QR code, or scan it
-
   const [step, setStep] = createSignal(0);
+
   return (
     <>
       <header class="-m-4 flex flex-row items-center justify-between gap-2">

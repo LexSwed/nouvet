@@ -13,7 +13,7 @@ import { getFacebookOAuthStateCookie, useFacebookAuth } from './_shared';
 
 export const GET = async (event: PageEvent) => {
   const { request } = event;
-  const stateCookie = getFacebookOAuthStateCookie(event);
+  const stateCookie = getFacebookOAuthStateCookie();
   const facebookAuth = useFacebookAuth();
 
   const url = new URL(request.url);

@@ -1,4 +1,4 @@
-import { getRequestEvent, type RequestEvent } from 'solid-js/web';
+import { getRequestEvent } from 'solid-js/web';
 import { Facebook } from 'arctic';
 import { deleteCookie, getCookie, setCookie } from 'vinxi/server';
 
@@ -15,10 +15,10 @@ export function setFacebookOAuthStateCookie(state: string) {
   });
 }
 
-export function getFacebookOAuthStateCookie(event: RequestEvent) {
-  const cookieString = getCookie(event, FACEBOOK_OAUTH_STATE_COOKIE) ?? null;
+export function getFacebookOAuthStateCookie() {
+  const cookieString = getCookie(FACEBOOK_OAUTH_STATE_COOKIE) ?? null;
   if (cookieString) {
-    deleteCookie(event, FACEBOOK_OAUTH_STATE_COOKIE);
+    deleteCookie(FACEBOOK_OAUTH_STATE_COOKIE);
   }
   return cookieString;
 }
