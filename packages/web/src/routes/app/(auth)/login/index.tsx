@@ -4,6 +4,7 @@ import { ButtonLink, Icon } from '@nou/ui';
 
 import { createTranslator } from '~/server/i18n';
 
+import DevLogin from '~/lib/dev-login-form';
 import { HeroImage } from '~/lib/hero-image';
 import { LogoLink } from '~/lib/logo-link';
 
@@ -26,8 +27,9 @@ function AppLoginPage() {
     <>
       <Title>{t('meta.title')}</Title>
       <div class="bg-main flex min-h-full flex-col gap-12 pb-8 pt-4">
-        <header class="container">
+        <header class="container flex flex-row justify-between">
           <LogoLink />
+          {isDev && <DevLogin />}
         </header>
         <section class="container flex h-full flex-[2] flex-col items-center gap-12">
           <div class="flex max-w-2xl flex-col gap-8">
@@ -47,18 +49,6 @@ function AppLoginPage() {
               <img src="/assets/facebook.svg" class="size-8" alt="" />
               {t('with-facebook')}
             </ButtonLink>
-            {isDev && (
-              <ButtonLink
-                href="/api/auth/dev"
-                size="lg"
-                variant="secondary"
-                link={false}
-                loading={loading()}
-                onClick={onClick}
-              >
-                Dev Login
-              </ButtonLink>
-            )}
           </div>
           <ButtonLink
             href="/"
