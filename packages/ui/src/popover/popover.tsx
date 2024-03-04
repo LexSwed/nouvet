@@ -93,6 +93,7 @@ const Popover = <T extends ValidComponent = 'div'>(
       id={local.id}
       role={local.role}
       tabIndex={0}
+      autoFocus={true}
       ref={mergeRefs(local.ref, setPopover)}
       class={tw(cssStyles.popover, local.class)}
       onBeforeToggle={composeEventHandlers(props.onBeforeToggle, (event) => {
