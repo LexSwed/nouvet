@@ -11,6 +11,7 @@ import { sendRedirect, updateSession, useSession } from 'vinxi/server';
 import { useLucia } from '~/server/auth/lucia';
 import { SESSION_COOKIE } from '~/server/const';
 import type { DatabaseUserProfile } from '~/server/db/schema';
+
 import { env } from '../env';
 
 /**
@@ -27,6 +28,7 @@ export async function createUserSession({
   locale: UserSession['locale'];
   measurementSystem: UserSession['measurementSystem'];
 }) {
+  'use server';
   const event = getRequestEvent();
   const lucia = useLucia();
   const authSession = await lucia.createSession(userId, {});
@@ -46,6 +48,7 @@ export async function createUserSession({
 export async function validateAuthSession(
   event: RequestEvent,
 ): Promise<User | null> {
+  'use server';
   if (env.PROD) {
     const originHeader = event.request.headers.get('Origin');
     const hostHeader = event.request.headers.get('Host');
@@ -91,12 +94,15 @@ export async function validateAuthSession(
  * Logs user out, invalidating DB session and all associated cookies.
  */
 export async function deleteUserSession() {
+  'use server';
   const session = await useUserSession();
+  await useLucia().invalidateSession(session.data.sessionId);
   await session.clear();
 }
 export type UserSession = Output<typeof userCookieSchema>;
 
 export async function useUserSession() {
+  'use server';
   const session = await useSession<UserSession>({
     name: SESSION_COOKIE,
     password: env.SESSION_SECRET,
@@ -126,6 +132,7 @@ export async function updateRequestUser(
   user: UserSession,
   config?: CookieAttributes,
 ) {
+  'use server';
   const { sessionId } = user;
   await updateSession(
     event,

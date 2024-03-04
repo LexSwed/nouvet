@@ -51,7 +51,7 @@ const AccountMenu = (props: AccountMenu) => {
             Support
           </MenuItem>
           <Divider role="separator" class="my-2" />
-          <MenuItem as={A} href="/logout">
+          <MenuItem as="a" href="/app/logout">
             <Icon use="sign-out" size="sm" />
             Log Out
           </MenuItem>
