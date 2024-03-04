@@ -4,7 +4,7 @@ import { Button, Icon, Popover, Text } from '@nou/ui';
 import { createTranslator } from '~/server/i18n';
 
 import { FamilyInviteQRCode } from '~/lib/family-invite-qrcode';
-import { startViewTransition } from '~/lib/start-view-transition';
+import { startViewTransition } from '~/lib/utils/start-view-transition';
 
 const FamilyInviteDialog = (props: { id: string }) => {
   return (

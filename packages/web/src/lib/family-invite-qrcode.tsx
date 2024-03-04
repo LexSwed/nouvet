@@ -7,7 +7,7 @@ import { createTranslator } from '~/server/i18n';
 import { getFamilyInvite } from '~/api/family-invite';
 import { getUserFamily } from '~/api/user';
 
-import { createFormattedDate } from './format-date';
+import { createFormattedDate } from './utils/format-date';
 
 export const FamilyInviteQRCode = () => {
   const t = createTranslator('app');

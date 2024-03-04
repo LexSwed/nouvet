@@ -16,7 +16,7 @@ import {
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
 
-import { createPersistedSetting } from '~/lib/make-persisted-signal';
+import { createPersistedSetting } from '~/lib/utils/make-persisted-signal';
 
 interface PetHomeCardProps {
   pet: {
