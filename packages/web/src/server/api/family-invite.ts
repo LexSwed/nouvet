@@ -16,7 +16,7 @@ export async function getFamilyInvite() {
     const code = createHmac('sha256', env.INVITES_SECRET)
       .update(data)
       .digest('hex');
-    const url = `${new URL(event!.request.url).origin}/family/invite/${code}`;
+    const url = `${new URL(event!.request.url).origin}/app/family/invite/${code}`;
 
     return {
       url,
