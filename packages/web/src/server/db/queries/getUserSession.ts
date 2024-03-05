@@ -1,6 +1,6 @@
 'use server';
 
-import { useUserSession, type UserSession } from '../auth/user-session';
+import { useUserSession, type UserSession } from '../../auth/user-session';
 
 /**
  * Returns current user from request cookies.

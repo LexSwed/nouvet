@@ -1,7 +1,7 @@
 import { createAsync } from '@solidjs/router';
 import { createMemo, type Accessor } from 'solid-js';
 
-import { getUser } from '~/api/user';
+import { getUser } from '~/server/api/user';
 
 /**
  * Formats date using user's locale.

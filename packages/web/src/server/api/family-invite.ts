@@ -3,9 +3,9 @@
 import { createHmac } from 'node:crypto';
 import { getRequestEvent } from 'solid-js/web';
 
+import { createFamilyInvite } from '~/server/db/queries/createFamilyInvite';
+import { getRequestUser } from '~/server/db/queries/getUserSession';
 import { env } from '~/server/env';
-import { createFamilyInvite } from '~/server/queries/createFamilyInvite';
-import { getRequestUser } from '~/server/queries/getUserSession';
 
 export async function getFamilyInvite() {
   const user = await getRequestUser();

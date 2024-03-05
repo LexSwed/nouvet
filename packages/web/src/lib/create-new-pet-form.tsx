@@ -2,8 +2,8 @@ import { useSubmission } from '@solidjs/router';
 import { createEffect, Show } from 'solid-js';
 import { Button, Form, Text, TextField } from '@nou/ui';
 
+import { createPetAction } from '~/server/api/pet';
 import { createTranslator } from '~/server/i18n';
-import { createPetAction } from '~/api/pet';
 
 import { AnimalTypeSelect } from '~/lib/animal-type';
 import { GenderSwitch } from '~/lib/animal-type/animal-type';

@@ -3,9 +3,9 @@ import { createEffect, createSignal, type Accessor } from 'solid-js';
 import { Button, Text } from '@nou/ui';
 import QRCodeStyling from 'styled-qr-code';
 
+import { getFamilyInvite } from '~/server/api/family-invite';
+import { getUserFamily } from '~/server/api/user';
 import { createTranslator } from '~/server/i18n';
-import { getFamilyInvite } from '~/api/family-invite';
-import { getUserFamily } from '~/api/user';
 
 import { createFormattedDate } from './utils/format-date';
 

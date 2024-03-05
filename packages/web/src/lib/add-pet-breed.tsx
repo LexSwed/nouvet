@@ -2,9 +2,9 @@ import { useSubmission } from '@solidjs/router';
 import { createEffect, Show } from 'solid-js';
 import { Button, Drawer, Form, Icon, Text, TextField } from '@nou/ui';
 
+import { updatePetBreed } from '~/server/api/pet';
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
-import { updatePetBreed } from '~/api/pet';
 
 import { FormErrorMessage } from './form-error-message';
 

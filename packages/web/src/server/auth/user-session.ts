@@ -1,4 +1,6 @@
-import { getRequestEvent, type RequestEvent } from 'solid-js/web';
+'use server';
+
+import type { RequestEvent } from 'solid-js/web';
 import {
   TimeSpan,
   verifyRequestOrigin,
@@ -19,17 +21,18 @@ import { env } from '../env';
  * @throws {ValiError} if user info provided is not correct.
  * @throws {Error} if auth/database issues.
  */
-export async function createUserSession({
-  id: userId,
-  locale,
-  measurementSystem,
-}: {
-  id: UserSession['userId'];
-  locale: UserSession['locale'];
-  measurementSystem: UserSession['measurementSystem'];
-}) {
-  'use server';
-  const event = getRequestEvent();
+export async function createUserSession(
+  event: RequestEvent,
+  {
+    id: userId,
+    locale,
+    measurementSystem,
+  }: {
+    id: UserSession['userId'];
+    locale: UserSession['locale'];
+    measurementSystem: UserSession['measurementSystem'];
+  },
+) {
   const lucia = useLucia();
   const authSession = await lucia.createSession(userId, {});
 
@@ -48,7 +51,6 @@ export async function createUserSession({
 export async function validateAuthSession(
   event: RequestEvent,
 ): Promise<User | null> {
-  'use server';
   if (env.PROD) {
     const originHeader = event.request.headers.get('Origin');
     const hostHeader = event.request.headers.get('Host');
@@ -94,7 +96,6 @@ export async function validateAuthSession(
  * Logs user out, invalidating DB session and all associated cookies.
  */
 export async function deleteUserSession() {
-  'use server';
   const session = await useUserSession();
   await useLucia().invalidateSession(session.data.sessionId);
   await session.clear();
@@ -102,7 +103,6 @@ export async function deleteUserSession() {
 export type UserSession = Output<typeof userCookieSchema>;
 
 export async function useUserSession() {
-  'use server';
   const session = await useSession<UserSession>({
     name: SESSION_COOKIE,
     password: env.SESSION_SECRET,
@@ -113,7 +113,7 @@ export async function useUserSession() {
   return session;
 }
 
-export const userCookieSchema = object({
+const userCookieSchema = object({
   userId: string(),
   sessionId: string(),
   locale: string('locale cannot be empty'),
@@ -132,7 +132,6 @@ export async function updateRequestUser(
   user: UserSession,
   config?: CookieAttributes,
 ) {
-  'use server';
   const { sessionId } = user;
   await updateSession(
     event,

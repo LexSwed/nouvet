@@ -2,10 +2,10 @@ import { createAsync, useSubmission } from '@solidjs/router';
 import { createEffect, createMemo, Show } from 'solid-js';
 import { Button, Drawer, Form, Icon, Text, TextField } from '@nou/ui';
 
+import { updatePetWeight } from '~/server/api/pet';
+import { getUser } from '~/server/api/user';
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator, getLocale } from '~/server/i18n';
-import { updatePetWeight } from '~/api/pet';
-import { getUser } from '~/api/user';
 
 import { FormErrorMessage } from './form-error-message';
 

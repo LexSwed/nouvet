@@ -1,12 +1,13 @@
 'use server';
 
 import { json } from '@solidjs/router';
+import { getRequestEvent } from 'solid-js/web';
 import { deleteCookie, getCookie, sendRedirect } from 'vinxi/http';
 
 import { createUserSession } from '~/server/auth/user-session';
 import { RETURN_URL_COOKIE } from '~/server/const';
 
-export const loginDev = async (formData: FormData) => {
+export async function loginDevServer(formData: FormData) {
   const returnUrl = getCookie(RETURN_URL_COOKIE);
 
   if (returnUrl) {
@@ -17,7 +18,8 @@ export const loginDev = async (formData: FormData) => {
     return json({ failed: true }, { status: 500, revalidate: [] });
   }
   try {
-    await createUserSession({
+    const event = getRequestEvent();
+    await createUserSession(event!, {
       id: name.toString(),
       locale: 'en-GB',
       measurementSystem: 'metrical',
@@ -27,4 +29,4 @@ export const loginDev = async (formData: FormData) => {
   } catch (error) {
     console.error(error);
   }
-};
+}

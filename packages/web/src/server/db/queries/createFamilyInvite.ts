@@ -1,3 +1,5 @@
+'use server';
+
 import { createId } from '@paralleldrive/cuid2';
 import { and, eq, sql } from 'drizzle-orm';
 

@@ -5,9 +5,9 @@ import { deleteCookie, getCookie, sendRedirect } from 'vinxi/http';
 
 import { createUserSession } from '~/server/auth/user-session';
 import { RETURN_URL_COOKIE } from '~/server/const';
+import { getUserByAuthProviderId } from '~/server/db/queries/getUserByAuthProviderId';
+import { userCreate } from '~/server/db/queries/userCreate';
 import { getLocale } from '~/server/i18n/locale';
-import { getUserByAuthProviderId } from '~/server/queries/getUserByAuthProviderId';
-import { userCreate } from '~/server/queries/userCreate';
 
 import { getFacebookOAuthStateCookie, useFacebookAuth } from './_shared';
 
@@ -43,7 +43,7 @@ export const GET = async (event: PageEvent) => {
     }
 
     if (existingUser) {
-      await createUserSession({
+      await createUserSession(event, {
         id: existingUser.id,
         locale: existingUser.locale ?? 'en-GB',
         measurementSystem: existingUser.measurementSystem ?? 'metrical',
@@ -66,7 +66,7 @@ export const GET = async (event: PageEvent) => {
       measurementSystem: measurementSystem,
     });
 
-    await createUserSession({
+    await createUserSession(event, {
       id: user.id,
       locale: locale.baseName,
       measurementSystem,

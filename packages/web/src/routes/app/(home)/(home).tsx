@@ -4,9 +4,9 @@ import { clientOnly } from '@solidjs/start';
 import { Show, Suspense } from 'solid-js';
 import { Button, ButtonLink } from '@nou/ui';
 
+import { getUserPets } from '~/server/api/pet';
+import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
-import { getUserPets } from '~/api/pet';
-import { getUserFamily } from '~/api/user';
 
 import { AccountMenu } from '~/lib/account-menu';
 

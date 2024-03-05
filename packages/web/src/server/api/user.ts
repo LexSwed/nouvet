@@ -1,7 +1,7 @@
 import { cache } from '@solidjs/router';
 
-import { getRequestUser } from '~/server/queries/getUserSession';
-import { userFamily } from '~/server/queries/userFamily';
+import { getRequestUser } from '~/server/db/queries/getUserSession';
+import { userFamily } from '~/server/db/queries/userFamily';
 
 export const getUserFamily = cache(async () => {
   'use server';

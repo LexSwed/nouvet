@@ -1,12 +1,10 @@
-import { action, useSubmission } from '@solidjs/router';
+import { useSubmission } from '@solidjs/router';
 import { Button, Icon, Popover, Text, TextField } from '@nou/ui';
 
-import { loginDev } from '~/api/dev-login';
-
-const loginDevAction = action(loginDev, 'login-dev');
+import { loginDev } from '~/server/api/dev-login';
 
 const DevLogin = () => {
-  const login = useSubmission(loginDevAction);
+  const login = useSubmission(loginDev);
   return (
     <>
       <Button
@@ -18,7 +16,7 @@ const DevLogin = () => {
         <Icon use="carrot" />
       </Button>
       <Popover id="dev-login" class="w-[320px] p-8">
-        <form method="post" action={loginDevAction} class="flex flex-col gap-4">
+        <form method="post" action={loginDev} class="flex flex-col gap-4">
           <Text with="body-xl" class="text-center">
             Dev login
           </Text>
