@@ -43,7 +43,7 @@ export const GET = async (event: PageEvent) => {
     }
 
     if (existingUser) {
-      await createUserSession(event, {
+      await createUserSession(event.nativeEvent, {
         id: existingUser.id,
         locale: existingUser.locale ?? 'en-GB',
         measurementSystem: existingUser.measurementSystem ?? 'metrical',
@@ -66,7 +66,7 @@ export const GET = async (event: PageEvent) => {
       measurementSystem: measurementSystem,
     });
 
-    await createUserSession(event, {
+    await createUserSession(event.nativeEvent, {
       id: user.id,
       locale: locale.baseName,
       measurementSystem,

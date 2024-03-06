@@ -14,7 +14,7 @@ export async function loginDevServer(name: string) {
   }
   try {
     const event = getRequestEvent();
-    await createUserSession(event!, {
+    await createUserSession(event!.nativeEvent, {
       id: name,
       locale: 'en-GB',
       measurementSystem: 'metrical',

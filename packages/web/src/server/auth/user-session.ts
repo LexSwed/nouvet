@@ -1,6 +1,3 @@
-'use server';
-
-import type { RequestEvent } from 'solid-js/web';
 import {
   TimeSpan,
   verifyRequestOrigin,
@@ -8,7 +5,12 @@ import {
   type User,
 } from 'lucia';
 import { object, parse, picklist, string, type Output } from 'valibot';
-import { sendRedirect, updateSession, useSession } from 'vinxi/server';
+import {
+  sendRedirect,
+  updateSession,
+  useSession,
+  type HTTPEvent,
+} from 'vinxi/server';
 
 import { useLucia } from '~/server/auth/lucia';
 import { SESSION_COOKIE } from '~/server/const';
@@ -22,7 +24,7 @@ import { env } from '../env';
  * @throws {Error} if auth/database issues.
  */
 export async function createUserSession(
-  event: RequestEvent,
+  event: HTTPEvent,
   {
     id: userId,
     locale,
@@ -49,11 +51,11 @@ export async function createUserSession(
  * @throws {Error} if auth/database issues.
  */
 export async function validateAuthSession(
-  event: RequestEvent,
+  event: HTTPEvent,
 ): Promise<User | null> {
   if (env.PROD) {
-    const originHeader = event.request.headers.get('Origin');
-    const hostHeader = event.request.headers.get('Host');
+    const originHeader = event.headers.get('Origin');
+    const hostHeader = event.headers.get('Host');
     if (
       !originHeader ||
       !hostHeader ||
@@ -128,7 +130,7 @@ const userCookieSchema = object({
  * @throws {ValiError} when provided user data is invalid.
  */
 export async function updateRequestUser(
-  event: RequestEvent,
+  event: HTTPEvent,
   user: UserSession,
   config?: CookieAttributes,
 ) {
