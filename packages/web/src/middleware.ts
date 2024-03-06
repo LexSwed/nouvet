@@ -18,14 +18,14 @@ async function checkUserAuth(event: FetchEvent) {
   const { pathname } = new URL(event.request.url);
   try {
     if (pathname === '/app/login') {
-      const user = await validateAuthSession(event);
+      const user = await validateAuthSession(event.nativeEvent);
       if (user) {
         return sendRedirect(`/app`);
       }
       return;
     }
     if (pathname.startsWith('/app')) {
-      const user = await validateAuthSession(event);
+      const user = await validateAuthSession(event.nativeEvent);
       if (user) {
         return;
       }
