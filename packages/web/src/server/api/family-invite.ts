@@ -6,7 +6,7 @@ import { alphabet, generateRandomString } from 'oslo/crypto';
 
 import {
   createFamilyInviteAndRemoveOldOnes,
-  joinFamilyByInviteCode,
+  getFamilyInvitationInfo,
 } from '~/server/db/queries/getFamilyInvite';
 import { getRequestUser } from '~/server/db/queries/getUserSession';
 
@@ -34,18 +34,16 @@ export async function getFamilyInvite() {
     };
   } catch (error) {
     console.error(error);
-    return { url: null, expirationUnix: null, failed: true };
+    return { failed: true };
   }
 }
 
-export async function parseFamilyInvite(inviteCode: string) {
-  const user = await getRequestUser();
+export async function checkFamilyInvite(inviteCode: string) {
   const hashedCode = hash(inviteCode);
-  const invite = await joinFamilyByInviteCode(user.userId, hashedCode);
-  console.log({ hashedCode, invite: invite });
+  const invite = await getFamilyInvitationInfo(hashedCode);
   // TODO: set approval process. By default family is visible, but no animals are.
   // TODO: allow family owners to approve access
-  return invite?.id;
+  return invite;
 }
 
 function hash(inviteCode: string) {

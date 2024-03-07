@@ -1,14 +1,14 @@
 import { createAsync, type RouteSectionProps } from '@solidjs/router';
 
-import { parseFamilyInvite } from '~/server/api/family-invite';
+import { checkFamilyInvite } from '~/server/api/family-invite';
 
 const InviteAcceptPage = (props: RouteSectionProps) => {
   const code = props.params['invite-code'];
-  const parsedCode = createAsync(() => parseFamilyInvite(code), {
+  const invite = createAsync(() => checkFamilyInvite(code), {
     deferStream: false,
   });
 
-  return <div>{parsedCode()}</div>;
+  return <div>{invite()?.inviterName}</div>;
 };
 
 export default InviteAcceptPage;

@@ -4,7 +4,14 @@ import { and, eq, sql } from 'drizzle-orm';
 import { TimeSpan } from 'lucia';
 
 import { useDb } from '~/server/db';
-import { familyInviteTable, type DatabaseUser } from '~/server/db/schema';
+import {
+  familyInviteTable,
+  familyTable,
+  familyUserTable,
+  userProfileTable,
+  type DatabaseUser,
+} from '~/server/db/schema';
+import { IncorrectFamilyInvite } from '~/server/errors';
 
 export async function createFamilyInviteAndRemoveOldOnes(
   userId: DatabaseUser['id'],
@@ -35,6 +42,25 @@ export async function createFamilyInviteAndRemoveOldOnes(
   return invite;
 }
 
+export async function getFamilyInvitationInfo(inviteCode: string) {
+  const db = useDb();
+  const invite = await db
+    .select({ inviterName: userProfileTable.name })
+    .from(userProfileTable)
+    .where(
+      eq(
+        userProfileTable.userId,
+        db
+          .select({ userId: familyInviteTable.inviterId })
+          .from(familyInviteTable)
+          .where(eq(familyInviteTable.inviteCode, inviteCode)),
+      ),
+    )
+    .get();
+
+  return invite;
+}
+
 export async function joinFamilyByInviteCode(
   userId: DatabaseUser['id'],
   inviteCode: string,
@@ -55,11 +81,28 @@ export async function joinFamilyByInviteCode(
         ),
       )
       .get();
-    if (invite) {
-      tx.delete(familyInviteTable).where(eq(familyInviteTable.id, invite.id));
+    if (!invite) throw new IncorrectFamilyInvite('Incorrect invite');
+
+    tx.delete(familyInviteTable).where(eq(familyInviteTable.id, invite.id));
+
+    let family = tx
+      .select({ familyId: familyTable.id })
+      .from(familyTable)
+      .where(eq(familyTable.creatorId, invite.inviterId))
+      .get();
+    if (!family) {
+      family = tx
+        .insert(familyTable)
+        .values({ creatorId: invite.inviterId })
+        .returning({ familyId: familyTable.id })
+        .get();
     }
-    // new table for people who are waiting to be approved to join the family?
-    return invite;
+    tx.insert(familyUserTable).values({
+      familyId: family.familyId,
+      userId: userId,
+    });
+
+    return family;
   });
   return invite;
 }

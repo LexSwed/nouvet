@@ -1,4 +1,4 @@
-import { createAsync, json } from '@solidjs/router';
+import { createAsync } from '@solidjs/router';
 import { createEffect, createSignal, type Accessor } from 'solid-js';
 import { Button, Text } from '@nou/ui';
 import QRCodeStyling from 'styled-qr-code';
@@ -13,17 +13,18 @@ export const FamilyInviteQRCode = () => {
   const t = createTranslator('app');
   const user = createAsync(() => getUserFamily());
   // TODO: error handling
-  const inviteData = createAsync(() => getFamilyInvite());
+  const inviteData = createAsync(() => {
+    return getFamilyInvite();
+  });
   const [containerRef, setContainerRef] = createSignal<HTMLDivElement | null>(
     null,
   );
 
   createQRCode(() => inviteData()?.url, containerRef);
-  const expiresAt = createFormattedDate(() =>
-    inviteData()?.expirationUnix
-      ? new Date(inviteData()!.expirationUnix)
-      : undefined,
-  );
+  const expiresAt = createFormattedDate(() => {
+    const expirationUnix = inviteData()?.expirationUnix;
+    return expirationUnix ? new Date(expirationUnix) : undefined;
+  });
 
   async function share() {
     const shareData = {
@@ -57,17 +58,18 @@ export const FamilyInviteQRCode = () => {
 };
 
 function createQRCode(
-  data: Accessor<string | undefined>,
+  data: Accessor<string | undefined | null>,
   containerRef: Accessor<HTMLDivElement | null>,
 ) {
   let qrImage: QRCodeStyling | null;
   createEffect(() => {
-    if (data() && containerRef()) {
+    const string = data();
+    if (string && containerRef()) {
       qrImage = new QRCodeStyling({
         width: 300,
         height: 300,
         type: 'svg',
-        data: data(),
+        data: string,
         image: `/icons/icon.svg`,
         dotsOptions: {
           color: 'var(--nou-on-surface)',
