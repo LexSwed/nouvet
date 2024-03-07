@@ -21,20 +21,28 @@ export const familyTable = sqliteTable('family', {
  * Temporary invitations to a family. Only the creator of the family can send the invites.
  * Hence, a family might not be created yet when the invite is sent – it's created when invited user joins the family
  */
-export const familyInviteTable = sqliteTable('family-invite', {
-  id: text('id').notNull().primaryKey(),
-  inviterId: text('inviter_id')
-    .notNull()
-    .references(() => userTable.id),
-  /**
-   * UNIX timestamp in seconds.
-   * Expiration is set to 1 hour since the creation of the entry.
-   * Business logic in the database, or no!
-   */
-  expiresAt: integer('expires_at')
-    .notNull()
-    .default(sql`(unixepoch() + 60 * 60)`),
-});
+export const familyInviteTable = sqliteTable(
+  'family_invite',
+  {
+    id: integer('id').notNull().primaryKey({ autoIncrement: true }),
+    inviterId: text('inviter_id')
+      .notNull()
+      .references(() => userTable.id),
+    /**
+     * UNIX timestamp in seconds.
+     */
+    expiresAt: integer('expires_at').notNull(),
+    /**
+     * Hashed invitation code
+     */
+    inviteCode: text('invite_code', { length: 64 }).notNull(),
+  },
+  (table) => {
+    return {
+      inviteCodeIdx: index('family_idx').on(table.inviteCode),
+    };
+  },
+);
 
 export const petTable = sqliteTable('pet', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),

@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "9686db32-bf34-4681-86c0-cf63c842b900",
+  "id": "b4c14e65-e6ca-49af-8765-95ad42ebe4d5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "oauth_account": {
@@ -142,15 +142,15 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "family-invite": {
-      "name": "family-invite",
+    "family_invite": {
+      "name": "family_invite",
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": true
         },
         "inviter_id": {
           "name": "inviter_id",
@@ -164,15 +164,29 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(unixepoch() + 60 * 60)"
+          "autoincrement": false
+        },
+        "invite_code": {
+          "name": "invite_code",
+          "type": "text(64)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "family_idx": {
+          "name": "family_idx",
+          "columns": [
+            "invite_code"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "family-invite_inviter_id_user_id_fk": {
-          "name": "family-invite_inviter_id_user_id_fk",
-          "tableFrom": "family-invite",
+        "family_invite_inviter_id_user_id_fk": {
+          "name": "family_invite_inviter_id_user_id_fk",
+          "tableFrom": "family_invite",
           "tableTo": "user",
           "columnsFrom": [
             "inviter_id"

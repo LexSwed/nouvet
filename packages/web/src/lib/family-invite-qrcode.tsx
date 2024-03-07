@@ -1,4 +1,4 @@
-import { createAsync } from '@solidjs/router';
+import { createAsync, json } from '@solidjs/router';
 import { createEffect, createSignal, type Accessor } from 'solid-js';
 import { Button, Text } from '@nou/ui';
 import QRCodeStyling from 'styled-qr-code';
@@ -12,6 +12,7 @@ import { createFormattedDate } from './utils/format-date';
 export const FamilyInviteQRCode = () => {
   const t = createTranslator('app');
   const user = createAsync(() => getUserFamily());
+  // TODO: error handling
   const inviteData = createAsync(() => getFamilyInvite());
   const [containerRef, setContainerRef] = createSignal<HTMLDivElement | null>(
     null,

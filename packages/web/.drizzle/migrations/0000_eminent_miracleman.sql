@@ -18,10 +18,11 @@ CREATE TABLE `event` (
 	FOREIGN KEY (`creator_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `family-invite` (
-	`id` text PRIMARY KEY NOT NULL,
+CREATE TABLE `family_invite` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`inviter_id` text NOT NULL,
-	`expires_at` integer DEFAULT (unixepoch() + 60 * 60) NOT NULL,
+	`expires_at` integer NOT NULL,
+	`invite_code` text(64) NOT NULL,
 	FOREIGN KEY (`inviter_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -80,4 +81,5 @@ CREATE TABLE `user` (
 	FOREIGN KEY (`family_id`) REFERENCES `family`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
+CREATE INDEX `family_idx` ON `family_invite` (`invite_code`);--> statement-breakpoint
 CREATE INDEX `family_idx` ON `user` (`family_id`);
