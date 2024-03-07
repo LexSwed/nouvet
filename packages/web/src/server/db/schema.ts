@@ -44,6 +44,30 @@ export const familyInviteTable = sqliteTable(
   },
 );
 
+export const familyUserTable = sqliteTable(
+  'family_user',
+  {
+    familyId: integer('family_id')
+      .notNull()
+      .references(() => familyTable.id),
+    userId: text('user_id')
+      .notNull()
+      .references(() => userTable.id),
+    /**
+     * The owner of the family approves people who got the invitation.
+     */
+    approved: integer('approved', { mode: 'boolean' }).notNull().default(false),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({
+        columns: [table.familyId, table.userId, table.approved],
+      }),
+      approvedIdx: index('approved_idx').on(table.approved),
+    };
+  },
+);
+
 export const petTable = sqliteTable('pet', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
   /** Pets have an official owner that has access to all the data. Other people have access to pets only through families. */
@@ -70,22 +94,13 @@ export const petTable = sqliteTable('pet', {
 });
 export type DatabasePet = typeof petTable.$inferSelect;
 
-export const userTable = sqliteTable(
-  'user',
-  {
-    id: text('id').notNull().primaryKey(),
-    familyId: integer('family_id').references(() => familyTable.id),
-    /**
-     * UTC with appended Z for Date constructor.
-     */
-    createdAt: utcDatetime('created_at'),
-  },
-  (table) => {
-    return {
-      familyIdx: index('family_idx').on(table.familyId),
-    };
-  },
-);
+export const userTable = sqliteTable('user', {
+  id: text('id').notNull().primaryKey(),
+  /**
+   * UTC with appended Z for Date constructor.
+   */
+  createdAt: utcDatetime('created_at'),
+});
 
 // export const mediaTable = sqliteTable('user-media', {
 //   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
