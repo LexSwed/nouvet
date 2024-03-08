@@ -1,20 +1,36 @@
-import { A, createAsync } from '@solidjs/router';
+import { A, createAsync, type RouteDefinition } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
 import { For, lazy, Match, Show, Suspense, Switch } from 'solid-js';
 import { Button, Card, Icon } from '@nou/ui';
 
 import { getUserPets } from '~/server/api/pet';
 import { getUserFamily } from '~/server/api/user';
-import { createTranslator } from '~/server/i18n';
+import { cacheTranslations, createTranslator } from '~/server/i18n';
 
-import { PetHomeCard } from './_pet-home-card';
+import { PetHomeCard } from '~/lib/pet-home-card';
 
 const CreateNewPetForm = lazy(() => import('~/lib/create-new-pet-form'));
 const Drawer = clientOnly(() =>
   import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
 );
 
-export const UserPets = () => {
+export const route = {
+  load() {
+    return Promise.all([
+      cacheTranslations('app'),
+      getUserPets(),
+      getUserPets(),
+    ]);
+  },
+} satisfies RouteDefinition;
+
+const AppHomePage = () => {
+  return <UserPets />;
+};
+
+export default AppHomePage;
+
+const UserPets = () => {
   const t = createTranslator('app');
   const pets = createAsync(() => getUserPets());
   const user = createAsync(() => getUserFamily());

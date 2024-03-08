@@ -1,33 +1,31 @@
 import { Title } from '@solidjs/meta';
-import { createAsync, type RouteDefinition } from '@solidjs/router';
+import {
+  createAsync,
+  type RouteDefinition,
+  type RouteSectionProps,
+} from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
 import { Show, Suspense } from 'solid-js';
 import { Button, ButtonLink } from '@nou/ui';
 
-import { getUserPets } from '~/server/api/pet';
 import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
 
 import { AccountMenu } from '~/lib/account-menu';
 
-import { UserPets } from './_user-pets';
-
-const FamilyInviteDialog = clientOnly(() => import('./_family-invite-dialog'));
+const FamilyInviteDialog = clientOnly(
+  () => import('~/lib/family-invite-dialog'),
+);
 
 export const route = {
   load() {
-    return Promise.all([
-      cacheTranslations('app'),
-      getUserFamily(),
-      getUserPets(),
-    ]);
+    return Promise.all([cacheTranslations('app'), getUserFamily()]);
   },
 } satisfies RouteDefinition;
 
-function AppMainPage() {
+function AppMainPage(props: RouteSectionProps) {
   const t = createTranslator('app');
   const user = createAsync(() => getUserFamily());
-
   return (
     <Show when={user()}>
       {(user) => (
@@ -68,9 +66,7 @@ function AppMainPage() {
             </header>
             <div class="flex flex-col gap-6">
               <section class="container">
-                <Suspense>
-                  <UserPets />
-                </Suspense>
+                <Suspense>{props.children}</Suspense>
               </section>
             </div>
           </div>

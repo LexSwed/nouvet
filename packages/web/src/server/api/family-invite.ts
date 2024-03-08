@@ -12,7 +12,7 @@ import { getRequestUser } from '~/server/db/queries/getUserSession';
 
 import { env } from '../env';
 
-// TODO: Rate limit this
+// TODO: Heavily rate limit this
 export async function getFamilyInvite() {
   try {
     const user = await getRequestUser();
