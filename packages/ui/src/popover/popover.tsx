@@ -44,6 +44,7 @@ const Popover = <T extends ValidComponent = 'div'>(
     mergeDefaultProps(ownProps as PopoverProps<'div'>, {
       as: 'div',
       role: 'dialog' as const,
+      popover: 'auto',
     }),
     ['id', 'ref', 'class', 'as', 'role', 'children'],
     ['offset', 'placement', 'strategy'],
@@ -74,7 +75,7 @@ const Popover = <T extends ValidComponent = 'div'>(
       document.querySelectorAll(`[popovertarget="${local.id}"]`),
     ).find((button) => !popover()?.contains(button));
     if (!(trigger instanceof HTMLElement)) {
-      throw new Error(`Popover ${local.id} trigger is not found`);
+      return null;
     }
     setTrigger(trigger);
   });
@@ -85,7 +86,6 @@ const Popover = <T extends ValidComponent = 'div'>(
 
   return (
     <Dynamic
-      popover="auto"
       component={component()}
       {...props}
       style={data().style}

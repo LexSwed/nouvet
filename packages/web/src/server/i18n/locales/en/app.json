@@ -25,5 +25,9 @@
   "family-invite.invite-share-title-user": "Join {{userName}} in NouVet",
   "family-invite.invite-share-title-no-name": "Join me in NouVet?",
   "family-invite.invite-share-text": "I invite you to a group to share the care of our pets! Join using this link.",
-  "family-invite.expires-in": "The invitation expires {{expiresAt}}"
+  "family-invite.expires-in": "The invitation expires {{expiresAt}}",
+  "accept-invite.heading": "Join {{inviterName}}",
+  "accept-invite.description": "TODO blah blah something",
+  "accept-invite.cta-cancel": "Cancel",
+  "accept-invite.cta-join": "Join"
 }

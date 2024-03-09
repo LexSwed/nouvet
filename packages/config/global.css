@@ -29,7 +29,6 @@
 
 @layer base {
   :root,
-  ::backdrop,
   ::selection {
     --nou-white: 0 0% 100%;
     --nou-black: 0 0% 0%;

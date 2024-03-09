@@ -19,7 +19,7 @@ export const route = {
     return Promise.all([
       cacheTranslations('app'),
       getUserPets(),
-      getUserPets(),
+      getUserFamily(),
     ]);
   },
 } satisfies RouteDefinition;
