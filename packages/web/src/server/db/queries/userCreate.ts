@@ -1,6 +1,5 @@
 'use server';
 
-import { createId } from '@paralleldrive/cuid2';
 import {
   maxLength,
   minLength,
@@ -32,13 +31,12 @@ export const userCreate = async (newUser: {
   [K in keyof CreateUserInput]?: unknown;
 }) => {
   try {
-    const userId = createId();
     const userInfo = parse(CreateUserSchema, newUser);
     const db = useDb();
     const user = await db.transaction(async (tx) => {
       const user = await tx
         .insert(userTable)
-        .values({ id: userId })
+        .values({})
         .returning({ id: userTable.id })
         .get();
       await tx.insert(authAccount).values({

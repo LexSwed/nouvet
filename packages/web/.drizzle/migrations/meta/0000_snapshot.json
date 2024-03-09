@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "b4c14e65-e6ca-49af-8765-95ad42ebe4d5",
+  "id": "df3f75ea-4f65-4c59-af0e-8261114fb32d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "oauth_account": {
@@ -16,7 +16,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -89,7 +89,7 @@
         },
         "creator_id": {
           "name": "creator_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -154,7 +154,7 @@
         },
         "inviter_id": {
           "name": "inviter_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -220,7 +220,7 @@
         },
         "creator_id": {
           "name": "creator_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -253,6 +253,81 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "family_user": {
+      "name": "family_user",
+      "columns": {
+        "family_id": {
+          "name": "family_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "approved": {
+          "name": "approved",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        }
+      },
+      "indexes": {
+        "approved_idx": {
+          "name": "approved_idx",
+          "columns": [
+            "approved"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "family_user_family_id_family_id_fk": {
+          "name": "family_user_family_id_family_id_fk",
+          "tableFrom": "family_user",
+          "tableTo": "family",
+          "columnsFrom": [
+            "family_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "family_user_user_id_user_id_fk": {
+          "name": "family_user_user_id_user_id_fk",
+          "tableFrom": "family_user",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "family_user_family_id_user_id_approved_pk": {
+          "columns": [
+            "approved",
+            "family_id",
+            "user_id"
+          ],
+          "name": "family_user_family_id_user_id_approved_pk"
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "pet": {
       "name": "pet",
       "columns": {
@@ -265,7 +340,7 @@
         },
         "owner_id": {
           "name": "owner_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -366,7 +441,7 @@
         },
         "creator_id": {
           "name": "creator_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -431,7 +506,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -468,7 +543,7 @@
       "columns": {
         "user_id": {
           "name": "user_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
@@ -526,17 +601,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": false
-        },
-        "family_id": {
-          "name": "family_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "autoincrement": true
         },
         "created_at": {
           "name": "created_at",
@@ -547,30 +615,8 @@
           "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
         }
       },
-      "indexes": {
-        "family_idx": {
-          "name": "family_idx",
-          "columns": [
-            "family_id"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {
-        "user_family_id_family_id_fk": {
-          "name": "user_family_id_family_id_fk",
-          "tableFrom": "user",
-          "tableTo": "family",
-          "columnsFrom": [
-            "family_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }

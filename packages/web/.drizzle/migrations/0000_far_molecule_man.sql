@@ -1,6 +1,6 @@
 CREATE TABLE `oauth_account` (
 	`provider_id` text NOT NULL,
-	`user_id` text NOT NULL,
+	`user_id` integer NOT NULL,
 	`provider_user_id` text NOT NULL,
 	PRIMARY KEY(`provider_id`, `provider_user_id`),
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
@@ -11,7 +11,7 @@ CREATE TABLE `event` (
 	`type` text NOT NULL,
 	`name` text NOT NULL,
 	`pet_id` integer,
-	`creator_id` text,
+	`creator_id` integer,
 	`data_json` text,
 	`date` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
 	FOREIGN KEY (`pet_id`) REFERENCES `pet`(`id`) ON UPDATE no action ON DELETE no action,
@@ -20,7 +20,7 @@ CREATE TABLE `event` (
 --> statement-breakpoint
 CREATE TABLE `family_invite` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`inviter_id` text NOT NULL,
+	`inviter_id` integer NOT NULL,
 	`expires_at` integer NOT NULL,
 	`invite_code` text(64) NOT NULL,
 	FOREIGN KEY (`inviter_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
@@ -29,14 +29,23 @@ CREATE TABLE `family_invite` (
 CREATE TABLE `family` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text(100),
-	`creator_id` text NOT NULL,
+	`creator_id` integer NOT NULL,
 	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
 	FOREIGN KEY (`creator_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
+CREATE TABLE `family_user` (
+	`family_id` integer NOT NULL,
+	`user_id` integer NOT NULL,
+	`approved` integer DEFAULT false NOT NULL,
+	PRIMARY KEY(`approved`, `family_id`, `user_id`),
+	FOREIGN KEY (`family_id`) REFERENCES `family`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
 CREATE TABLE `pet` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`owner_id` text NOT NULL,
+	`owner_id` integer NOT NULL,
 	`name` text(200) NOT NULL,
 	`gender` text,
 	`animal_type` text NOT NULL,
@@ -51,7 +60,7 @@ CREATE TABLE `pet` (
 --> statement-breakpoint
 CREATE TABLE `reminder` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`creator_id` text NOT NULL,
+	`creator_id` integer NOT NULL,
 	`pet_id` integer NOT NULL,
 	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
 	FOREIGN KEY (`creator_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,
@@ -60,13 +69,13 @@ CREATE TABLE `reminder` (
 --> statement-breakpoint
 CREATE TABLE `user_session` (
 	`id` text PRIMARY KEY NOT NULL,
-	`user_id` text NOT NULL,
+	`user_id` integer NOT NULL,
 	`expires_at` integer NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `user_profile` (
-	`user_id` text PRIMARY KEY NOT NULL,
+	`user_id` integer PRIMARY KEY NOT NULL,
 	`name` text(200),
 	`avatar_url` text(200),
 	`locale` text NOT NULL,
@@ -75,11 +84,9 @@ CREATE TABLE `user_profile` (
 );
 --> statement-breakpoint
 CREATE TABLE `user` (
-	`id` text PRIMARY KEY NOT NULL,
-	`family_id` integer,
-	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
-	FOREIGN KEY (`family_id`) REFERENCES `family`(`id`) ON UPDATE no action ON DELETE no action
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL
 );
 --> statement-breakpoint
 CREATE INDEX `family_idx` ON `family_invite` (`invite_code`);--> statement-breakpoint
-CREATE INDEX `family_idx` ON `user` (`family_id`);
+CREATE INDEX `approved_idx` ON `family_user` (`approved`);

@@ -11,7 +11,7 @@ import {
 export const familyTable = sqliteTable('family', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
   name: text('name', { length: 100 }),
-  creatorId: text('creator_id')
+  creatorId: integer('creator_id')
     .notNull()
     .references((): AnySQLiteColumn => userTable.id),
   createdAt: utcDatetime('created_at'),
@@ -25,7 +25,7 @@ export const familyInviteTable = sqliteTable(
   'family_invite',
   {
     id: integer('id').notNull().primaryKey({ autoIncrement: true }),
-    inviterId: text('inviter_id')
+    inviterId: integer('inviter_id')
       .notNull()
       .references(() => userTable.id),
     /**
@@ -50,7 +50,7 @@ export const familyUserTable = sqliteTable(
     familyId: integer('family_id')
       .notNull()
       .references(() => familyTable.id),
-    userId: text('user_id')
+    userId: integer('user_id')
       .notNull()
       .references(() => userTable.id),
     /**
@@ -71,9 +71,9 @@ export const familyUserTable = sqliteTable(
 export const petTable = sqliteTable('pet', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
   /** Pets have an official owner that has access to all the data. Other people have access to pets only through families. */
-  ownerId: text('owner_id')
+  ownerId: integer('owner_id')
     .notNull()
-    // TODO: add constraint for Max amount of pets, when available
+    // TODO: add constraint for Max amount of pets, when the constraints are available
     .references(() => userTable.id),
   /** Name of a pet */
   name: text('name', { length: 200 }).notNull(),
@@ -94,8 +94,12 @@ export const petTable = sqliteTable('pet', {
 });
 export type DatabasePet = typeof petTable.$inferSelect;
 
+/**
+ * TODO: Is it needed, it forces unnecessary joins.
+ * Could I store something here in the future?
+ */
 export const userTable = sqliteTable('user', {
-  id: text('id').notNull().primaryKey(),
+  id: integer('id').notNull().primaryKey({ autoIncrement: true }),
   /**
    * UTC with appended Z for Date constructor.
    */
@@ -115,7 +119,7 @@ export const userTable = sqliteTable('user', {
  * User profile details and preferences.
  */
 export const userProfileTable = sqliteTable('user_profile', {
-  userId: text('user_id')
+  userId: integer('user_id')
     .notNull()
     .primaryKey()
     .references(() => userTable.id, { onDelete: 'cascade' }),
@@ -140,7 +144,7 @@ export const authAccount = sqliteTable(
   'oauth_account',
   {
     provider: text('provider_id', { enum: ['facebook'] }).notNull(),
-    userId: text('user_id')
+    userId: integer('user_id')
       .notNull()
       .references(() => userTable.id),
     /** ID of the user on the auth provider side */
@@ -163,9 +167,12 @@ export type DatabaseUser = typeof userTable.$inferSelect;
 export const sessionTable = sqliteTable('user_session', {
   /** User can have multiple sessions across devices */
   id: text('id').notNull().primaryKey(),
-  userId: text('user_id')
+  userId: integer('user_id')
     .notNull()
     .references(() => userTable.id),
+  /**
+   * unix seconds
+   */
   expiresAt: integer('expires_at').notNull(),
 });
 
@@ -179,7 +186,7 @@ export const eventsTable = sqliteTable('event', {
    */
   type: text('type', {
     mode: 'text',
-    // TODO: extract into const? Own
+    // TODO: extract into own const?
     enum: [
       'weight-in',
       'new-pill',
@@ -192,7 +199,7 @@ export const eventsTable = sqliteTable('event', {
    * Stored separately for quick access without loading all the details from the `data` JSON field; */
   name: text('name').notNull(),
   petId: integer('pet_id').references(() => petTable.id),
-  creatorId: text('creator_id').references(() => userTable.id),
+  creatorId: integer('creator_id').references(() => userTable.id),
   // TODO: events can be referenced to each other? Many to Many? Or more linear?
   /** Inner structure is typed in code, based on the EventType.
    */
@@ -215,7 +222,7 @@ export const eventsTable = sqliteTable('event', {
  */
 export const remindersTable = sqliteTable('reminder', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
-  creatorId: text('creator_id')
+  creatorId: integer('creator_id')
     .notNull()
     .references(() => userTable.id),
   petId: integer('pet_id')

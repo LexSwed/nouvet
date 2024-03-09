@@ -4,7 +4,7 @@ import {
   type CookieAttributes,
   type User,
 } from 'lucia';
-import { object, parse, picklist, string, type Output } from 'valibot';
+import { number, object, parse, picklist, string, type Output } from 'valibot';
 import {
   sendRedirect,
   updateSession,
@@ -116,7 +116,7 @@ export async function useUserSession() {
 }
 
 const userCookieSchema = object({
-  userId: string(),
+  userId: number(),
   sessionId: string(),
   locale: string('locale cannot be empty'),
   // timeZone: date(),
