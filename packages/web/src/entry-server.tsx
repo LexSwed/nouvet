@@ -2,7 +2,7 @@
 import { createHandler, StartServer } from '@solidjs/start/server';
 
 export default createHandler((ctx) => {
-  let { locale } = ctx.locals as { locale: Intl.Locale };
+  let { locale } = ctx.locals;
   if (!locale) {
     console.error('Probably HMR, defaulting to en');
     locale = new Intl.Locale('en');

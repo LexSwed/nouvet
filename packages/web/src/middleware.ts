@@ -42,3 +42,10 @@ async function checkUserAuth(event: FetchEvent) {
   }
   return;
 }
+
+
+declare module '@solidjs/start/server' {
+  interface RequestEventLocals {
+    locale: Intl.Locale;
+  }
+}
