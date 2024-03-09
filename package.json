@@ -16,8 +16,7 @@
     "dev:ui": "npm run dev -w @nou/ui",
     "format": "turbo run format",
     "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck",
-    "postinstall": "patch-package"
+    "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
