@@ -2,8 +2,9 @@
 
 import { flatten as valiFlatten, type ValiError } from 'valibot';
 
-import { getDictionary } from '~/server/i18n';
 import type ErrorsDict from '~/server/i18n/locales/en/errors.json';
+
+import { getDictionary } from './i18n/dict';
 
 export async function translateErrorTokens<T extends Record<string, unknown>>(
   error: ValiError,

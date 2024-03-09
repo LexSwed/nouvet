@@ -1,49 +1,10 @@
 import { resolveTemplate, translator } from '@solid-primitives/i18n';
 import { cache, createAsync } from '@solidjs/router';
-import { type JSX, type ParentProps } from 'solid-js';
+import type { JSX, ParentProps } from 'solid-js';
 import { getRequestEvent } from 'solid-js/web';
 
-import type AppDict from './locales/en/app.json';
-import type CommonDict from './locales/en/common.json';
-import type ErrorsDict from './locales/en/errors.json';
-import type LoginDict from './locales/en/login.json';
-import type PetFormsDict from './locales/en/pet-forms.json';
-import type WWWDict from './locales/en/www.json';
-import type { SupportedLocale } from './shared';
-
-type NamespaceMap = {
-  'common': typeof CommonDict;
-  'www': typeof WWWDict;
-  'app': typeof AppDict;
-  'login': typeof LoginDict;
-  'errors': typeof ErrorsDict;
-  'pet-forms': typeof PetFormsDict;
-};
-export type Namespace = keyof NamespaceMap;
-
-async function fetchDictionary<T extends Namespace>(
-  locale: SupportedLocale = 'en',
-  namespace: T,
-) {
-  'use server';
-  const localeFiles = import.meta.glob('./locales/*/*.json', {
-    import: 'default',
-  });
-  const routeModuleDict = (await localeFiles[
-    `./locales/${locale}/${namespace}.json`
-  ]()) as NamespaceMap[T];
-  return routeModuleDict;
-}
-
-export const getDictionary = async <T extends Namespace>(namespace: T) => {
-  'use server';
-  const event = getRequestEvent();
-  const { locale } = event!.locals;
-  return fetchDictionary(
-    (locale as Intl.Locale).language as SupportedLocale,
-    namespace,
-  );
-};
+import { getDictionary } from './dict';
+import type { Namespace } from './dict';
 
 export const cacheTranslations = cache(getDictionary, 'translations');
 
@@ -55,7 +16,7 @@ export const createTranslator = <T extends Namespace>(namespace: T) => {
 export const getLocale = cache(async () => {
   'use server';
   const event = getRequestEvent();
-  const { locale } = event!.locals as { locale: Intl.Locale };
+  const { locale } = event!.locals;
   return {
     /** A string containing the language, and the script and region if available. */
     baseName: locale.baseName,
