@@ -1,6 +1,6 @@
 import { createAsync, type RouteSectionProps } from '@solidjs/router';
 
-import { checkFamilyInvite } from '~/server/api/family-invite';
+import { checkFamilyInvite } from '~/server/api/family-invite.server';
 
 const InviteAcceptPage = (props: RouteSectionProps) => {
   const code = props.params['invite-code'];

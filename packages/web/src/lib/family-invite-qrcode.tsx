@@ -1,30 +1,24 @@
 import { createAsync } from '@solidjs/router';
-import { createEffect, createSignal, type Accessor } from 'solid-js';
+import { createEffect, createSignal, Suspense, type Accessor } from 'solid-js';
 import { Button, Text } from '@nou/ui';
 import QRCodeStyling from 'styled-qr-code';
 
-import { getFamilyInvite } from '~/server/api/family-invite';
+import { getFamilyInvite } from '~/server/api/family-invite.server';
 import { getUserFamily } from '~/server/api/user';
 import { createTranslator } from '~/server/i18n';
 
-import { createFormattedDate } from './utils/format-date';
+import { createRelativeTimeFormat } from './utils/format-date';
 
 export const FamilyInviteQRCode = () => {
   const t = createTranslator('app');
   const user = createAsync(() => getUserFamily());
   // TODO: error handling
-  const inviteData = createAsync(() => {
-    return getFamilyInvite();
-  });
+  const inviteData = createAsync(() => getFamilyInvite());
   const [containerRef, setContainerRef] = createSignal<HTMLDivElement | null>(
     null,
   );
 
   createQRCode(() => inviteData()?.url, containerRef);
-  const expiresAt = createFormattedDate(() => {
-    const expirationUnix = inviteData()?.expirationUnix;
-    return expirationUnix ? new Date(expirationUnix) : undefined;
-  });
 
   async function share() {
     const shareData = {
@@ -46,14 +40,32 @@ export const FamilyInviteQRCode = () => {
           <div ref={setContainerRef} class="peer" />
           <div class="bg-tertiary/12 hidden size-full animate-pulse rounded-2xl peer-empty:block" />
         </div>
-        <Text with="body-sm" tone="light">
-          {t('family-invite.expires-in', { expiresAt: expiresAt() || '' })}
-        </Text>
+        <Suspense fallback={<div class="h-5" />}>
+          <ExpirationDate expirationUnix={inviteData()?.expirationUnix} />
+        </Suspense>
       </div>
       <Button variant="ghost" onClick={share}>
         {t('family-invite.cta-share')}
       </Button>
     </div>
+  );
+};
+
+const ExpirationDate = (props: { expirationUnix?: number }) => {
+  const t = createTranslator('app');
+  const expiresAt = createRelativeTimeFormat([
+    () => {
+      const expirationUnix = props.expirationUnix;
+      if (expirationUnix === undefined) return undefined;
+      return Math.floor((expirationUnix - Date.now()) / 1000 / 60);
+    },
+    'minutes',
+  ]);
+
+  return (
+    <Text with="body-sm" tone="light">
+      {t('family-invite.expires-in', { expiresAt: expiresAt()! })}
+    </Text>
   );
 };
 

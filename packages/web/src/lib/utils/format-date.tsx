@@ -19,8 +19,35 @@ export function createFormattedDate(
   const user = createAsync(() => getUser());
   const formatted = createMemo(() => {
     if (user() && date()) {
-      const formatter = Intl.DateTimeFormat(user()!.locale, options);
+      const formatter = new Intl.DateTimeFormat(user()!.locale, options);
       return formatter.format(date());
+    }
+    return undefined;
+  });
+
+  return formatted;
+}
+
+/**
+ * Formats date using user's locale.
+ * Make sure the date string is in Unix or ISO format.
+ */
+export function createRelativeTimeFormat(
+  [date, unit]: [
+    date: Accessor<number | undefined>,
+    unit: Intl.RelativeTimeFormatUnit,
+  ],
+  options: Intl.RelativeTimeFormatOptions = {
+    style: 'long',
+    numeric: 'auto',
+  },
+) {
+  const user = createAsync(() => getUser());
+  const formatted = createMemo(() => {
+    const value = date();
+    if (user() && value !== undefined) {
+      const formatter = new Intl.RelativeTimeFormat(user()!.locale, options);
+      return formatter.format(value, unit);
     }
     return undefined;
   });
