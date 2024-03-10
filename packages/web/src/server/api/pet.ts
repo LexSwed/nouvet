@@ -15,7 +15,7 @@ import { getRequestUser } from '~/server/db/queries/getUserSession';
 import { petCreate } from '~/server/db/queries/petCreate';
 import { petUpdate } from '~/server/db/queries/petUpdate';
 import { userPets } from '~/server/db/queries/userPets';
-import { getDictionary } from '~/server/i18n';
+import { getDictionary } from '~/server/i18n/dict';
 import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
 
 export const getUserPets = cache(async () => {

@@ -53,7 +53,12 @@ export async function getFamilyInvitationInfo(inviteCode: string) {
         db
           .select({ userId: familyInviteTable.inviterId })
           .from(familyInviteTable)
-          .where(eq(familyInviteTable.inviteCode, inviteCode)),
+          .where(
+            and(
+              eq(familyInviteTable.inviteCode, inviteCode),
+              sql`((${familyInviteTable.expiresAt} - unixepoch())) > 0`,
+            ),
+          ),
       ),
     )
     .get();
