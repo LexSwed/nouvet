@@ -3,11 +3,9 @@ import { createEffect, createSignal, Suspense, type Accessor } from 'solid-js';
 import { Button, Text } from '@nou/ui';
 import QRCodeStyling from 'styled-qr-code';
 
-import { getFamilyInvite } from '~/server/api/family-invite.server';
+import { getFamilyInvite } from '~/server/api/family-invite';
 import { getUserFamily } from '~/server/api/user';
 import { createTranslator } from '~/server/i18n';
-
-import { createRelativeTimeFormat } from './utils/format-date';
 
 export const FamilyInviteQRCode = () => {
   const t = createTranslator('app');
@@ -41,31 +39,17 @@ export const FamilyInviteQRCode = () => {
           <div class="bg-tertiary/12 hidden size-full animate-pulse rounded-2xl peer-empty:block" />
         </div>
         <Suspense fallback={<div class="h-5" />}>
-          <ExpirationDate expirationUnix={inviteData()?.expirationUnix} />
+          <Text with="body-sm" tone="light">
+            {t('family-invite.expires-in', {
+              expiresIn: inviteData()?.expiresIn || '',
+            })}
+          </Text>
         </Suspense>
       </div>
       <Button variant="ghost" onClick={share}>
         {t('family-invite.cta-share')}
       </Button>
     </div>
-  );
-};
-
-const ExpirationDate = (props: { expirationUnix?: number }) => {
-  const t = createTranslator('app');
-  const expiresAt = createRelativeTimeFormat([
-    () => {
-      const expirationUnix = props.expirationUnix;
-      if (expirationUnix === undefined) return undefined;
-      return Math.floor((expirationUnix - Date.now()) / 1000 / 60);
-    },
-    'minutes',
-  ]);
-
-  return (
-    <Text with="body-sm" tone="light">
-      {t('family-invite.expires-in', { expiresAt: expiresAt()! })}
-    </Text>
   );
 };
 

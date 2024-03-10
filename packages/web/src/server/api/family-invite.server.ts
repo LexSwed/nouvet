@@ -28,9 +28,14 @@ export async function getFamilyInvite() {
       `${new URL(event!.request.url).origin}/app/family/invite/${inviteCode}`,
     );
 
+    const expiredAt = (invite.expiresAt - Date.now() / 1000) / 60;
+
     return {
       url: url.toString(),
-      expirationUnix: invite.expiresAt * 1000,
+      expiresIn: new Intl.RelativeTimeFormat(user.locale, {
+        style: 'long',
+        numeric: 'auto',
+      }).format(expiredAt, 'minutes'),
     };
   } catch (error) {
     console.error(error);
