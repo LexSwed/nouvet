@@ -63,7 +63,6 @@ export const familyUserTable = sqliteTable(
       pk: primaryKey({
         columns: [table.familyId, table.userId, table.approved],
       }),
-      approvedIdx: index('approved_idx').on(table.approved),
     };
   },
 );

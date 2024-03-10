@@ -21,7 +21,8 @@ import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
 export const getUserPets = cache(async () => {
   'use server';
   const currentUser = await getRequestUser();
-  return userPets(currentUser.userId);
+  const pets = await userPets(currentUser.userId);
+  return pets;
 }, 'user-pets');
 
 export const createPetAction = action(async (formData: FormData) => {

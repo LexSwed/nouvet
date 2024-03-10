@@ -71,7 +71,7 @@ export async function joinFamilyByInviteCode(
   inviteCode: string,
 ) {
   const db = useDb();
-  const invite = await db.transaction((tx) => {
+  const invite = await db.transaction(async (tx) => {
     const invite = tx
       .select({
         id: familyInviteTable.id,
@@ -88,7 +88,9 @@ export async function joinFamilyByInviteCode(
       .get();
     if (!invite) throw new IncorrectFamilyInvite('Incorrect invite');
 
-    tx.delete(familyInviteTable).where(eq(familyInviteTable.id, invite.id));
+    await tx
+      .delete(familyInviteTable)
+      .where(eq(familyInviteTable.id, invite.id));
 
     let family = tx
       .select({ familyId: familyTable.id })
@@ -102,9 +104,10 @@ export async function joinFamilyByInviteCode(
         .returning({ familyId: familyTable.id })
         .get();
     }
-    tx.insert(familyUserTable).values({
+    await tx.insert(familyUserTable).values({
       familyId: family.familyId,
       userId: userId,
+      approved: false,
     });
 
     return family;

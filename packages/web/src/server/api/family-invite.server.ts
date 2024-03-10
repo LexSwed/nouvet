@@ -7,6 +7,7 @@ import { alphabet, generateRandomString } from 'oslo/crypto';
 import {
   createFamilyInviteAndRemoveOldOnes,
   getFamilyInvitationInfo,
+  joinFamilyByInviteCode,
 } from '~/server/db/queries/getFamilyInvite';
 import { getRequestUser } from '~/server/db/queries/getUserSession';
 
@@ -46,9 +47,14 @@ export async function getFamilyInvite() {
 export async function checkFamilyInvite(inviteCode: string) {
   const hashedCode = hash(inviteCode);
   const invite = await getFamilyInvitationInfo(hashedCode);
-  // TODO: set approval process. By default family is visible, but no animals are.
-  // TODO: allow family owners to approve access
   return invite;
+}
+
+export async function joinFamily(formData: FormData) {
+  const currentUser = await getRequestUser();
+  const inviteCode = formData.get('invite-code')!.toString().trim();
+  if (!inviteCode) throw new Error('Missing invite-code');
+  await joinFamilyByInviteCode(currentUser.userId, hash(inviteCode));
 }
 
 function hash(inviteCode: string) {
