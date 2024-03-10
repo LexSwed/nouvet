@@ -4,7 +4,7 @@ import { cacheTranslations } from '~/server/i18n';
 
 export const route = {
   async load() {
-    cacheTranslations('app');
+    return Promise.all([cacheTranslations('app')]);
   },
 } satisfies RouteDefinition;
 

@@ -1,6 +1,9 @@
 {
   "meta.title": "NouVet | Invitation",
-  "logo-label": "Back to NouVet",
+  "logo-label": "Invitation",
+  "expired.heading": "Was the invite bitten?",
+  "expired.description": "Check that the invite link is correct, or that it was not expired. In any case - you can always request a new one!",
+  "expired.cta": "Return to the app",
   "accept-invite.heading": "Join {{inviterName}}",
   "accept-invite.description": "TODO blah blah something",
   "accept-invite.cta-cancel": "Cancel",

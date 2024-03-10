@@ -6,7 +6,7 @@ import {
   type RouteSectionProps,
 } from '@solidjs/router';
 import { Match, Switch } from 'solid-js';
-import { Icon, Text } from '@nou/ui';
+import { ButtonLink, Icon, Text } from '@nou/ui';
 
 import { checkFamilyInvite } from '~/server/api/family-invite';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
@@ -41,18 +41,26 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
             </A>
           </div>
         </header>
-        <main class="col-[1] row-[1/-1] grid grid-cols-12 grid-rows-subgrid items-center">
+        <main class="col-[1] flex flex-col items-center md:row-[1/-1] md:grid md:grid-cols-12 md:grid-rows-subgrid">
           <Switch>
             <Match when={!invite()}>
-              <div class="bg-background bg-main z-10 col-span-3 col-start-2 row-[2] rounded-3xl p-4 [background-attachment:fixed]">
-                <Text with="headline-1">Expired</Text>
+              <div class="bg-background bg-main z-10 col-start-2 row-[2] flex flex-col gap-6 rounded-3xl p-4 [background-attachment:fixed] md:w-[380px]">
+                <Text with="headline-1">{t('expired.heading')}</Text>
+                <Text as="p">{t('expired.description')}</Text>
+                <ButtonLink
+                  href="/app"
+                  class="gap-2 self-end"
+                  variant="outline"
+                >
+                  <Icon use="chevron-left" class="-ms-2" /> {t('expired.cta')}
+                </ButtonLink>
               </div>
 
-              <div class="col-span-7 col-end-[-1] row-[1/-1] rounded-3xl">
+              <div class="col-span-7 col-end-[-1] row-[1/-1] self-start rounded-3xl md:mt-24">
                 <img
                   src="/assets/images/andriyko-podilnyk-dWSl8REfpoQ-unsplash.jpg?w=600&format=webp&imagetools"
                   alt=""
-                  class="bg-primary/5 w-full rounded-xl object-cover"
+                  class="bg-primary/5 w-full rounded-3xl object-cover"
                 />
               </div>
             </Match>
