@@ -6,6 +6,8 @@ import { createTranslator } from '~/server/i18n';
 import { FamilyInviteQRCode } from '~/lib/family-invite-qrcode';
 import { startViewTransition } from '~/lib/utils/start-view-transition';
 
+import { FamilyInviteBenefits } from './family-invite-benefits';
+
 const FamilyInviteDialog = (props: { id: string }) => {
   return (
     <Popover
@@ -65,15 +67,7 @@ const InviteDialogContent = (props: { id: string }) => {
               {t('family-invite.headline')}
             </Text>
             <Text as="p">{t('family-invite.subheadline')}</Text>
-            {/* TODO: insert screenshots of future features:
-      - shared reminders and actions
-      - shared notes
-      - access to doctor visits and prescriptions */}
-            <ul class="overflow-snap -mx-6 flex scroll-px-6 flex-row gap-4 px-6 [&>*]:snap-center">
-              <li class="bg-tertiary/15 h-28 w-[95%] rounded-2xl" />
-              <li class="bg-tertiary/15 h-28 w-[95%] rounded-2xl" />
-              <li class="bg-tertiary/15 h-28 w-[95%] rounded-2xl" />
-            </ul>
+            <FamilyInviteBenefits class="-mx-6 scroll-px-6 px-6" />
           </div>
           <div class="flex flex-col gap-2">
             <Button

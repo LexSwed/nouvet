@@ -11,6 +11,22 @@ import {
   type DatabaseUser,
 } from '~/server/db/schema';
 
+export async function userProfile(userId: DatabaseUser['id']) {
+  const db = useDb();
+  const userProfile = await db
+    .select({
+      id: userProfileTable.userId,
+      name: userProfileTable.name,
+      avatarUrl: userProfileTable.avatarUrl,
+    })
+    .from(userTable)
+    .where(eq(userTable.id, userId))
+    .innerJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))
+    .get();
+
+  return userProfile;
+}
+
 export async function userFamily(userId: DatabaseUser['id']) {
   const db = useDb();
   const family = db
@@ -46,7 +62,7 @@ export async function userFamily(userId: DatabaseUser['id']) {
     })
     .from(userTable)
     .where(eq(userTable.id, userId))
-    .leftJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))
+    .innerJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))
     .leftJoin(familyTable, inArray(familyTable.id, family))
     .get();
 }

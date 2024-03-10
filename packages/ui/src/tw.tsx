@@ -5,6 +5,9 @@ const customTwMerge = extendTailwindMerge({
     theme: {
       spacing: ['font'],
     },
+    classGroups: {
+      overflow: ['overflow-snap'],
+    },
   },
 });
 

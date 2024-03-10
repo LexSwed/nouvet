@@ -6,7 +6,10 @@ import { getRequestEvent } from 'solid-js/web';
 import { getDictionary } from './dict';
 import type { Namespace } from './dict';
 
-export const cacheTranslations = cache(getDictionary, 'translations');
+export const cacheTranslations = cache(
+  <T extends Namespace>(namespace: T) => getDictionary(namespace),
+  'translations',
+);
 
 export const createTranslator = <T extends Namespace>(namespace: T) => {
   const dict = createAsync(() => cacheTranslations(namespace));

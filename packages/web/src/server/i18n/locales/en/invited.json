@@ -5,7 +5,8 @@
   "expired.description": "Seems like the invite is a little brokey. But that's alright! Just ask your partner to share with you a new invite!",
   "expired.cta": "Return to the app",
   "accept-invite.heading": "Join {{inviterName}}",
-  "accept-invite.description": "TODO blah blah something",
+  "accept-invite.heading.no-name": "Join family",
+  "accept-invite.description": "By joining the family, you will be able to see all the pets of the inviter. Your pets will only be visible to you, unless set otherwise.",
   "accept-invite.cta-cancel": "Cancel",
   "accept-invite.cta-join": "Join"
 }
