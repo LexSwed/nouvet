@@ -1,47 +1,64 @@
 import { Title } from '@solidjs/meta';
-import { createAsync, type RouteSectionProps } from '@solidjs/router';
-import { Button, Text } from '@nou/ui';
+import {
+  A,
+  createAsync,
+  type RouteDefinition,
+  type RouteSectionProps,
+} from '@solidjs/router';
+import { Match, Switch } from 'solid-js';
+import { Icon, Text } from '@nou/ui';
 
-import { checkFamilyInvite } from '~/server/api/family-invite.server';
-import { createTranslator } from '~/server/i18n';
+import { checkFamilyInvite } from '~/server/api/family-invite';
+import { cacheTranslations, createTranslator } from '~/server/i18n';
+
+export const route = {
+  load(route) {
+    const code = route.params['invite-code'];
+    return Promise.all([cacheTranslations('invited'), checkFamilyInvite(code)]);
+  },
+} satisfies RouteDefinition;
 
 const InviteAcceptPage = (props: RouteSectionProps) => {
   const code = props.params['invite-code'];
-  const t = createTranslator('app');
+  const t = createTranslator('invited');
   const invite = createAsync(() => checkFamilyInvite(code), {
     deferStream: false,
   });
-  const headlineId = `invite-${code}`;
-
   return (
     <>
-      <Title>TODO: Add title</Title>
-      <section class="bg-on-surface/5 fixed inset-0 grid place-content-center backdrop-blur-md">
-        <div
-          class="bg-surface text-on-surface flex w-[94svw] max-w-[420px] flex-col gap-6 rounded-3xl p-6"
-          role="dialog"
-          aria-describedby={headlineId}
-        >
-          <Text with="headline-2" as="h2" id={headlineId}>
-            {t('accept-invite.heading', {
-              inviterName: invite()?.inviterName || '',
-            })}
-          </Text>
-          <Text as="p">
-            {t('accept-invite.description', {
-              inviterName: invite()?.inviterName || '',
-            })}
-          </Text>
-          <div class="flex w-full flex-row justify-stretch gap-4">
-            <Button variant="ghost" name="cancel" class="flex-[2]">
-              {t('accept-invite.cta-cancel')}
-            </Button>
-            <Button name="join" class="flex-[3]">
-              {t('accept-invite.cta-join')}
-            </Button>
+      <Title>{t('meta.title')}</Title>
+      <div class="bg-main grid min-h-full grid-cols-[1fr] grid-rows-[auto,1fr] gap-4 p-4">
+        <header class="container z-10 col-[1] row-[1] flex flex-col gap-4">
+          <div class="flex flex-row items-center">
+            <A href="/app" class="group -m-4 flex items-center gap-4 p-4">
+              <Icon
+                use="nouvet"
+                class="size-14 duration-200 group-hover:-rotate-6"
+              />
+              <Text with="body-sm" class="hidden sm:inline-block">
+                {t('logo-label')}
+              </Text>
+            </A>
           </div>
-        </div>
-      </section>
+        </header>
+        <main class="col-[1] row-[1/-1] grid grid-cols-12 grid-rows-subgrid items-center">
+          <Switch>
+            <Match when={!invite()}>
+              <div class="bg-background bg-main z-10 col-span-3 col-start-2 row-[2] rounded-3xl p-4 [background-attachment:fixed]">
+                <Text with="headline-1">Expired</Text>
+              </div>
+
+              <div class="col-span-7 col-end-[-1] row-[1/-1] rounded-3xl">
+                <img
+                  src="/assets/images/andriyko-podilnyk-dWSl8REfpoQ-unsplash.jpg?w=600&format=webp&imagetools"
+                  alt=""
+                  class="bg-primary/5 w-full rounded-xl object-cover"
+                />
+              </div>
+            </Match>
+          </Switch>
+        </main>
+      </div>
     </>
   );
 };

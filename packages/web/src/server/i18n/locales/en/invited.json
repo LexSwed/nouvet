@@ -1,0 +1,8 @@
+{
+  "meta.title": "NouVet | Invitation",
+  "logo-label": "Back to NouVet",
+  "accept-invite.heading": "Join {{inviterName}}",
+  "accept-invite.description": "TODO blah blah something",
+  "accept-invite.cta-cancel": "Cancel",
+  "accept-invite.cta-join": "Join"
+}

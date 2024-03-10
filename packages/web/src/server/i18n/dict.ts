@@ -5,6 +5,7 @@ import { getRequestEvent } from 'solid-js/web';
 import type AppDict from './locales/en/app.json';
 import type CommonDict from './locales/en/common.json';
 import type ErrorsDict from './locales/en/errors.json';
+import type InvitedDict from './locales/en/invited.json';
 import type LoginDict from './locales/en/login.json';
 import type PetFormsDict from './locales/en/pet-forms.json';
 import type WWWDict from './locales/en/www.json';
@@ -15,6 +16,7 @@ type NamespaceMap = {
   'www': typeof WWWDict;
   'app': typeof AppDict;
   'login': typeof LoginDict;
+  'invited': typeof InvitedDict;
   'errors': typeof ErrorsDict;
   'pet-forms': typeof PetFormsDict;
 };
