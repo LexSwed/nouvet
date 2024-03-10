@@ -35,16 +35,14 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
                 use="nouvet"
                 class="size-14 duration-200 group-hover:-rotate-6"
               />
-              <Text with="body-sm" class="hidden sm:inline-block">
-                {t('logo-label')}
-              </Text>
+              <Text with="body-lg">{t('logo-label')}</Text>
             </A>
           </div>
         </header>
-        <main class="col-[1] flex flex-col items-center md:row-[1/-1] md:grid md:grid-cols-12 md:grid-rows-subgrid">
+        <main class="col-[1] flex flex-col md:row-[1/-1] md:grid md:grid-cols-12 md:grid-rows-subgrid md:items-center">
           <Switch>
             <Match when={!invite()}>
-              <div class="bg-background bg-main z-10 col-start-2 row-[2] flex flex-col gap-6 rounded-3xl p-4 [background-attachment:fixed] md:w-[380px]">
+              <div class="bg-background bg-main z-10 col-start-2 row-[2] flex w-[clamp(320px,100%,380px)] flex-col gap-6 rounded-3xl p-4 [background-attachment:fixed]">
                 <Text with="headline-1">{t('expired.heading')}</Text>
                 <Text as="p">{t('expired.description')}</Text>
                 <ButtonLink
@@ -56,7 +54,7 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
                 </ButtonLink>
               </div>
 
-              <div class="col-span-7 col-end-[-1] row-[1/-1] self-start rounded-3xl md:mt-24">
+              <div class="col-span-7 col-end-[-1] row-[1/-1] ms-auto w-[clamp(320px,100%,90svw)] self-start rounded-3xl md:mt-24">
                 <img
                   src="/assets/images/andriyko-podilnyk-dWSl8REfpoQ-unsplash.jpg?w=600&format=webp&imagetools"
                   alt=""

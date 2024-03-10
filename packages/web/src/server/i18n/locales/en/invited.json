@@ -1,8 +1,8 @@
 {
   "meta.title": "NouVet | Invitation",
-  "logo-label": "Invitation",
+  "logo-label": "Family Invitation",
   "expired.heading": "Was the invite bitten?",
-  "expired.description": "Check that the invite link is correct, or that it was not expired. In any case - you can always request a new one!",
+  "expired.description": "Seems like the invite is a little brokey. But that's alright! Just ask your partner to share with you a new invite!",
   "expired.cta": "Return to the app",
   "accept-invite.heading": "Join {{inviterName}}",
   "accept-invite.description": "TODO blah blah something",
