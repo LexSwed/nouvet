@@ -33,6 +33,7 @@ export default AppHomePage;
 const UserPets = () => {
   const t = createTranslator('app');
   const pets = createAsync(() => getUserPets());
+  console.log(pets());
   const user = createAsync(() => getUserFamily());
   const hasPets = () => (pets()?.length ?? 0) > 0;
   return (

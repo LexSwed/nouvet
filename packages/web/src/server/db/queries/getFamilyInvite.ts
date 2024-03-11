@@ -92,23 +92,37 @@ export async function joinFamilyByInviteCode(
       .delete(familyInviteTable)
       .where(eq(familyInviteTable.id, invite.id));
 
+    let newFamily = false;
     let family = tx
       .select({ familyId: familyTable.id })
       .from(familyTable)
       .where(eq(familyTable.creatorId, invite.inviterId))
       .get();
     if (!family) {
+      newFamily = true;
       family = tx
         .insert(familyTable)
         .values({ creatorId: invite.inviterId })
         .returning({ familyId: familyTable.id })
         .get();
     }
-    await tx.insert(familyUserTable).values({
-      familyId: family.familyId,
-      userId: userId,
-      approved: false,
-    });
+    await tx.insert(familyUserTable).values(
+      [
+        {
+          familyId: family.familyId,
+          userId: userId,
+          approved: false,
+        },
+      ].concat(
+        newFamily
+          ? {
+              familyId: family.familyId,
+              userId: invite.inviterId,
+              approved: true,
+            }
+          : [],
+      ),
+    );
 
     return family;
   });
