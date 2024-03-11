@@ -45,7 +45,9 @@ function AppMainPage(props: RouteSectionProps) {
                 when={user().family}
                 children={
                   <ButtonLink href={`/app/${user().family?.id}`} variant="link">
-                    {user().family?.name}
+                    {user().family?.name
+                      ? user().family?.name
+                      : t('my-family-cta')}
                   </ButtonLink>
                 }
                 fallback={
