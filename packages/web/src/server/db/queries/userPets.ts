@@ -1,6 +1,6 @@
 'use server';
 
-import { eq, inArray, or } from 'drizzle-orm';
+import { and, eq, inArray, or } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
 import {
@@ -20,7 +20,12 @@ export async function userPets(userId: DatabaseUser['id']) {
         db
           .select({ familyId: familyUserTable.familyId })
           .from(familyUserTable)
-          .where(eq(familyUserTable.userId, userId)),
+          .where(
+            and(
+              eq(familyUserTable.userId, userId),
+              eq(familyUserTable.approved, true),
+            ),
+          ),
       ),
     );
 
