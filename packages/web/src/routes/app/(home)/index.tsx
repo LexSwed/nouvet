@@ -33,7 +33,6 @@ export default AppHomePage;
 const UserPets = () => {
   const t = createTranslator('app');
   const pets = createAsync(() => getUserPets());
-  console.log(pets());
   const user = createAsync(() => getUserFamily());
   const hasPets = () => (pets()?.length ?? 0) > 0;
   return (
@@ -84,7 +83,7 @@ const UserPets = () => {
       <Match when={!hasPets()}>
         <Card class="flex flex-col gap-6 p-4">
           <CreateNewPetForm />
-          <Show when={!user()?.family?.id}>
+          <Show when={!user()?.family}>
             <A
               href="/app/join"
               class="bg-surface-container-high flex flex-row items-center justify-between gap-2 text-balance rounded-[inherit] p-4"

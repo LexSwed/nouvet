@@ -1,6 +1,6 @@
 'use server';
 
-import { and, eq, inArray, or } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
 import {
@@ -34,21 +34,7 @@ export async function userFamily(userId: DatabaseUser['id']) {
       id: familyUserTable.familyId,
     })
     .from(familyUserTable)
-    .where(
-      or(
-        eq(
-          familyUserTable.familyId,
-          db
-            .select({ familyId: familyTable.id })
-            .from(familyTable)
-            .where(eq(familyTable.creatorId, userId)),
-        ),
-        and(
-          eq(familyUserTable.userId, userId),
-          eq(familyUserTable.approved, true),
-        ),
-      ),
-    );
+    .where(eq(familyUserTable.userId, userId));
 
   return db
     .select({
@@ -58,11 +44,14 @@ export async function userFamily(userId: DatabaseUser['id']) {
       family: {
         id: familyTable.id,
         name: familyTable.name,
+        ownerId: familyTable.creatorId,
+        approved: familyUserTable.approved,
       },
     })
     .from(userTable)
     .where(eq(userTable.id, userId))
     .innerJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))
-    .leftJoin(familyTable, inArray(familyTable.id, family))
+    .innerJoin(familyUserTable, eq(familyUserTable.userId, userId))
+    .leftJoin(familyTable, eq(familyTable.id, family))
     .get();
 }

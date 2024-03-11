@@ -6,7 +6,8 @@ import { userFamily, userProfile } from '~/server/db/queries/userFamily';
 export const getUserFamily = cache(async () => {
   'use server';
   const currentUser = await getRequestUser();
-  return userFamily(currentUser.userId);
+  const user = await userFamily(currentUser.userId);
+  return user;
 }, 'user-family');
 
 export const getUser = cache(async () => {
