@@ -1,12 +1,21 @@
 import { cache } from '@solidjs/router';
 
 import { getRequestUser } from '~/server/db/queries/getUserSession';
-import { userFamily, userProfile } from '~/server/db/queries/userFamily';
+import {
+  familyUsersNotApproved,
+  userFamily,
+  userProfile,
+} from '~/server/db/queries/userFamily';
 
 export const getUserFamily = cache(async () => {
   'use server';
   const currentUser = await getRequestUser();
   const user = await userFamily(currentUser.userId);
+  if (user?.family.id && user.family.isOwner) {
+    const usersAwaitingApproval = await familyUsersNotApproved(user.family.id);
+    return { ...user, pendingUsers: usersAwaitingApproval };
+  }
+
   return user;
 }, 'user-family');
 

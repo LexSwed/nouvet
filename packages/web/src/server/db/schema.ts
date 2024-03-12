@@ -43,6 +43,7 @@ export const familyInviteTable = sqliteTable(
     };
   },
 );
+export type DatabaseFamily = typeof familyTable.$inferSelect;
 
 export const familyUserTable = sqliteTable(
   'family_user',
@@ -61,7 +62,7 @@ export const familyUserTable = sqliteTable(
   (table) => {
     return {
       pk: primaryKey({
-        columns: [table.familyId, table.userId, table.approved],
+        columns: [table.familyId, table.userId],
       }),
     };
   },
@@ -89,6 +90,7 @@ export const petTable = sqliteTable('pet', {
   weight: integer('weight', { mode: 'number' }),
   /** A signed URL to animal picture */
   pictureUrl: text('picture_url', { length: 120 }),
+  identityNumber: text('identity_number', { length: 120 }),
   createdAt: utcDatetime('created_at'),
 });
 export type DatabasePet = typeof petTable.$inferSelect;
