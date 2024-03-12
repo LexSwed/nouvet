@@ -1,6 +1,6 @@
 'use server';
 
-import { and, eq, sql } from 'drizzle-orm';
+import { and, count, eq, sql } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
 import {
@@ -8,7 +8,6 @@ import {
   familyUserTable,
   userProfileTable,
   userTable,
-  type DatabaseFamily,
   type DatabaseUser,
 } from '~/server/db/schema';
 
@@ -26,32 +25,6 @@ export async function userProfile(userId: DatabaseUser['id']) {
     .get();
 
   return userProfile;
-}
-
-export async function familyUsersNotApproved(familyId: DatabaseFamily['id']) {
-  const db = useDb();
-  return db
-    .select({
-      userId: userTable.id,
-      name: userProfileTable.name,
-      avatarUrl: userProfileTable.avatarUrl,
-    })
-    .from(userTable)
-    .where(
-      eq(
-        userTable.id,
-        db
-          .select({ userId: familyUserTable.userId })
-          .from(familyUserTable)
-          .where(
-            and(
-              eq(familyUserTable.familyId, familyId),
-              eq(familyUserTable.approved, false),
-            ),
-          ),
-      ),
-    )
-    .innerJoin(userProfileTable, eq(userTable.id, userProfileTable.userId));
 }
 
 export async function userFamily(userId: DatabaseUser['id']) {
@@ -75,6 +48,17 @@ export async function userFamily(userId: DatabaseUser['id']) {
           'is_owner',
         ),
         isApproved: familyUserTable.approved,
+        waitingApproval: count(
+          db
+            .select({ id: familyUserTable.userId })
+            .from(familyUserTable)
+            .where(
+              and(
+                eq(familyUserTable.familyId, family),
+                eq(familyUserTable.approved, false),
+              ),
+            ),
+        ),
       },
     })
     .from(userTable)
@@ -84,11 +68,15 @@ export async function userFamily(userId: DatabaseUser['id']) {
     .leftJoin(familyTable, eq(familyTable.id, family))
     .get();
 
+  if (!userFamily) return null;
+
   return {
     ...userFamily,
-    family: {
-      ...userFamily?.family,
-      isOwner: userFamily?.family.isOwner === 1,
-    },
+    family: userFamily.family
+      ? {
+          ...userFamily.family,
+          isOwner: userFamily.family.isOwner === 1,
+        }
+      : userFamily.family,
   };
 }

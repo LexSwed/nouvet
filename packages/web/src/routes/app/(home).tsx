@@ -6,7 +6,7 @@ import {
 } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
 import { Match, Show, Suspense, Switch } from 'solid-js';
-import { Button, ButtonLink, Card, Icon, Popover, Text } from '@nou/ui';
+import { Button, ButtonLink, Card, Icon, Text } from '@nou/ui';
 
 import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
@@ -57,16 +57,6 @@ const AppHeader = () => {
   const t = createTranslator('app');
   const user = createAsync(() => getUserFamily());
 
-  const pendingUsers = () => {
-    const resolved = user();
-    return (
-      resolved &&
-      resolved.family.isOwner &&
-      'pendingUsers' in resolved &&
-      resolved.pendingUsers
-    );
-  };
-
   return (
     <Show when={user()}>
       {(user) => (
@@ -84,9 +74,9 @@ const AppHeader = () => {
             </Match>
             <Match
               when={
-                user().family?.id &&
+                user().family.id &&
                 !user().family.isOwner &&
-                !user().family?.isApproved
+                !user().family.isApproved
               }
             >
               <Card
@@ -109,29 +99,38 @@ const AppHeader = () => {
               </Card>
             </Match>
             <Match when={user().family?.id}>
-              <div class="flex flex-row items-center">
-                <ButtonLink href={`/app/${user().family?.id}`} variant="link">
+              <div class="flex flex-row items-center gap-1">
+                <ButtonLink
+                  href={`/app/${user().family?.id}`}
+                  variant="ghost"
+                  class="text-primary intent:bg-primary/5 gap-2 rounded-full px-2"
+                >
                   {user().family?.name
                     ? user().family?.name
                     : t('family.no-name')}
+                  <Show when={user().family.waitingApproval > 0}>
+                    {
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      (_) => {
+                        const multiple = user().family.waitingApproval > 1;
+                        const title = multiple
+                          ? t('family.has-pending-multiple', {
+                              pendingNumber: user().family.waitingApproval,
+                            })
+                          : t('family.has-pending-one');
+                        return (
+                          <Text
+                            title={title}
+                            aria-label={title}
+                            class="bg-primary-container text-on-primary-container grid aspect-square size-8 place-items-center rounded-full text-sm"
+                          >
+                            {user().family.waitingApproval}
+                          </Text>
+                        );
+                      }
+                    }
+                  </Show>
                 </ButtonLink>
-                <Show when={pendingUsers()}>
-                  {(pendingUsers) => (
-                    <>
-                      <Button
-                        popoverTarget="pending-users"
-                        variant="default"
-                        size="sm"
-                        icon
-                      >
-                        {pendingUsers().length}
-                      </Button>
-                      <Popover id="pending-users" placement="center">
-                        Hello
-                      </Popover>
-                    </>
-                  )}
-                </Show>
               </div>
             </Match>
           </Switch>
