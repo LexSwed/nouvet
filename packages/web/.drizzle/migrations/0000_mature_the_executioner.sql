@@ -38,7 +38,7 @@ CREATE TABLE `family_user` (
 	`family_id` integer NOT NULL,
 	`user_id` integer NOT NULL,
 	`approved` integer DEFAULT false NOT NULL,
-	PRIMARY KEY(`approved`, `family_id`, `user_id`),
+	PRIMARY KEY(`family_id`, `user_id`),
 	FOREIGN KEY (`family_id`) REFERENCES `family`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -54,6 +54,7 @@ CREATE TABLE `pet` (
 	`date_of_birth` text(50),
 	`weight` integer,
 	`picture_url` text(120),
+	`identity_number` text(120),
 	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
 	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -88,5 +89,4 @@ CREATE TABLE `user` (
 	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL
 );
 --> statement-breakpoint
-CREATE INDEX `family_idx` ON `family_invite` (`invite_code`);--> statement-breakpoint
-CREATE INDEX `approved_idx` ON `family_user` (`approved`);
+CREATE INDEX `family_idx` ON `family_invite` (`invite_code`);
