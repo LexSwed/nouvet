@@ -13,8 +13,6 @@ const schema = object({
   DB: string(),
   // Session encryption secret
   SESSION_SECRET: string(),
-  // Invites encryption secret
-  INVITES_SECRET: string(),
 });
 
 export const env = parse(schema, {

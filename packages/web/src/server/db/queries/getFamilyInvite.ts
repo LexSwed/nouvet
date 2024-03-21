@@ -1,6 +1,6 @@
 'use server';
 
-import { and, eq, sql } from 'drizzle-orm';
+import { and, eq, lte, sql } from 'drizzle-orm';
 import { TimeSpan } from 'lucia';
 
 import { useDb } from '~/server/db';
@@ -13,32 +13,46 @@ import {
 } from '~/server/db/schema';
 import { IncorrectFamilyInvite } from '~/server/errors';
 
-export async function createFamilyInviteAndRemoveOldOnes(
+export async function getFamilyInvite(userId: DatabaseUser['id']) {
+  const db = useDb();
+  const invite = await db
+    .select({
+      expiresAt: familyInviteTable.expiresAt,
+      inviterId: familyInviteTable.inviterId,
+      inviteCode: familyInviteTable.inviteCode,
+    })
+    .from(familyInviteTable)
+    .where(
+      and(
+        eq(familyInviteTable.inviterId, userId),
+        lte(
+          familyInviteTable.expiresAt,
+          Date.now() / 1000 + new TimeSpan(1, 'h').seconds(),
+        ),
+      ),
+    )
+    .get();
+  return invite;
+}
+
+export async function createFamilyInvite(
   userId: DatabaseUser['id'],
   inviteHash: string,
 ) {
   const db = useDb();
-  const invite = await db.transaction(async (tx) => {
-    // delete any invites created before
-    await tx
-      .delete(familyInviteTable)
-      .where(eq(familyInviteTable.inviterId, userId));
-
-    return await tx
-      .insert(familyInviteTable)
-      .values({
-        inviterId: userId,
-        expiresAt: Date.now() / 1000 + new TimeSpan(1, 'h').seconds(),
-        inviteCode: inviteHash,
-      })
-      .returning({
-        id: familyInviteTable.id,
-        expiresAt: familyInviteTable.expiresAt,
-        inviterId: familyInviteTable.inviterId,
-        code: familyInviteTable.inviteCode,
-      })
-      .get();
-  });
+  const invite = await db
+    .insert(familyInviteTable)
+    .values({
+      inviterId: userId,
+      expiresAt: Date.now() / 1000 + new TimeSpan(1, 'h').seconds(),
+      inviteCode: inviteHash,
+    })
+    .returning({
+      expiresAt: familyInviteTable.expiresAt,
+      inviterId: familyInviteTable.inviterId,
+      inviteCode: familyInviteTable.inviteCode,
+    })
+    .get();
   return invite;
 }
 
@@ -74,7 +88,7 @@ export async function joinFamilyByInviteCode(
   const invite = await db.transaction(async (tx) => {
     const invite = tx
       .select({
-        id: familyInviteTable.id,
+        inviteCode: familyInviteTable.inviteCode,
         expiresAt: familyInviteTable.expiresAt,
         inviterId: familyInviteTable.inviterId,
       })
@@ -90,7 +104,7 @@ export async function joinFamilyByInviteCode(
 
     await tx
       .delete(familyInviteTable)
-      .where(eq(familyInviteTable.id, invite.id));
+      .where(eq(familyInviteTable.inviteCode, invite.inviteCode));
 
     let newFamily = false;
     let family = tx

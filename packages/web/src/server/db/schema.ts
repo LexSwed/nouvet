@@ -1,6 +1,5 @@
 import { sql } from 'drizzle-orm';
 import {
-  index,
   integer,
   primaryKey,
   sqliteTable,
@@ -21,28 +20,19 @@ export const familyTable = sqliteTable('family', {
  * Temporary invitations to a family. Only the creator of the family can send the invites.
  * Hence, a family might not be created yet when the invite is sent – it's created when invited user joins the family
  */
-export const familyInviteTable = sqliteTable(
-  'family_invite',
-  {
-    id: integer('id').notNull().primaryKey({ autoIncrement: true }),
-    inviterId: integer('inviter_id')
-      .notNull()
-      .references(() => userTable.id),
-    /**
-     * UNIX timestamp in seconds.
-     */
-    expiresAt: integer('expires_at').notNull(),
-    /**
-     * Hashed invitation code
-     */
-    inviteCode: text('invite_code', { length: 64 }).notNull(),
-  },
-  (table) => {
-    return {
-      inviteCodeIdx: index('family_idx').on(table.inviteCode),
-    };
-  },
-);
+export const familyInviteTable = sqliteTable('family_invite', {
+  inviterId: integer('inviter_id')
+    .notNull()
+    .references(() => userTable.id),
+  /**
+   * UNIX timestamp in seconds.
+   */
+  expiresAt: integer('expires_at').notNull(),
+  /**
+   * Invitation code
+   */
+  inviteCode: text('invite_code', { length: 32 }).notNull().primaryKey(),
+});
 export type DatabaseFamily = typeof familyTable.$inferSelect;
 
 export const familyUserTable = sqliteTable(

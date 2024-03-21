@@ -1,17 +1,15 @@
 'use server';
 
-import { createHmac } from 'node:crypto';
 import { getRequestEvent } from 'solid-js/web';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 
 import {
-  createFamilyInviteAndRemoveOldOnes,
+  createFamilyInvite as dbCreateFamilyInvite,
+  getFamilyInvite as dbGetFamilyInvite,
   getFamilyInvitationInfo,
   joinFamilyByInviteCode,
 } from '~/server/db/queries/getFamilyInvite';
 import { getRequestUser } from '~/server/db/queries/getUserSession';
-
-import { env } from '../env';
 
 // TODO: Heavily rate limit this
 export async function getFamilyInvite() {
@@ -19,24 +17,28 @@ export async function getFamilyInvite() {
     const user = await getRequestUser();
     const event = getRequestEvent();
 
-    const inviteCode = generateRandomString(16, alphabet('a-z', 'A-Z', '0-9'));
-    const hash = createHmac('sha256', env.INVITES_SECRET)
-      .update(inviteCode)
-      .digest('hex');
-    const invite = await createFamilyInviteAndRemoveOldOnes(user.userId, hash);
+    let invite = await dbGetFamilyInvite(user.userId);
+
+    if (!invite) {
+      const inviteCode = generateRandomString(
+        24,
+        alphabet('a-z', 'A-Z', '0-9'),
+      );
+      invite = await dbCreateFamilyInvite(user.userId, inviteCode);
+    }
 
     const url = new URL(
-      `${new URL(event!.request.url).origin}/app/family/invite/${inviteCode}`,
+      `${new URL(event!.request.url).origin}/app/family/invite/${invite.inviteCode}`,
     );
 
-    const expiredAt = (invite.expiresAt - Date.now() / 1000) / 60;
+    const expiresIn = (invite.expiresAt - Date.now() / 1000) / 60;
 
     return {
       url: url.toString(),
       expiresIn: new Intl.RelativeTimeFormat(user.locale, {
         style: 'long',
         numeric: 'auto',
-      }).format(expiredAt, 'minutes'),
+      }).format(expiresIn, 'minutes'),
     };
   } catch (error) {
     console.error(error);
@@ -45,8 +47,7 @@ export async function getFamilyInvite() {
 }
 
 export async function checkFamilyInvite(inviteCode: string) {
-  const hashedCode = hash(inviteCode);
-  const invite = await getFamilyInvitationInfo(hashedCode);
+  const invite = await getFamilyInvitationInfo(inviteCode);
   return invite;
 }
 
@@ -54,11 +55,5 @@ export async function joinFamily(formData: FormData) {
   const currentUser = await getRequestUser();
   const inviteCode = formData.get('invite-code')!.toString().trim();
   if (!inviteCode) throw new Error('Missing invite-code');
-  await joinFamilyByInviteCode(currentUser.userId, hash(inviteCode));
-}
-
-function hash(inviteCode: string) {
-  return createHmac('sha256', env.INVITES_SECRET)
-    .update(inviteCode)
-    .digest('hex');
+  await joinFamilyByInviteCode(currentUser.userId, inviteCode);
 }
