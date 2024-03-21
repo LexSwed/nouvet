@@ -3,8 +3,12 @@
     position: relative;
     flex-shrink: 0;
     border-radius: theme('borderRadius.lg');
-    transition: 0.24s ease-out;
-    transition-property: flex, border-color, background-color, color;
+    transition:
+      border-color 0.24s ease-out,
+      background-color 0.24s ease-out,
+      color 0.24s ease-out,
+      border-radius 0.24s ease-out,
+      flex 0.3s ease-out;
     background-color: theme('colors.surface');
     border: theme('borderWidth.2') solid theme('colors.on-surface/0.05');
     &:where(:hover, :focus-within) {
@@ -18,6 +22,7 @@
       outline: 4px solid theme('colors.on-surface/0.4');
     }
     &:has(input:checked) {
+      border-radius: theme('borderRadius.2xl');
       border-color: theme('colors.primary');
       background-color: theme('colors.surface-container-lowest');
       outline-color: theme('colors.primary/0.4');

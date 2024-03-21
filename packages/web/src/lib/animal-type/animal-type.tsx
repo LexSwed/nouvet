@@ -52,14 +52,14 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
   return (
     <div
       class={
-        'scrollbar-none -m-4 flex w-[fit-content] max-w-[stretch] snap-x snap-mandatory scroll-px-4 gap-2 overflow-auto p-4'
+        'scrollbar-none -m-4 flex w-full snap-x snap-mandatory scroll-px-4 gap-2 overflow-auto p-4'
       }
     >
       <For each={animalTypes()}>
         {(item) => {
           return (
             <RadioCard
-              class="basis-[8rem] snap-start last-of-type:snap-end has-[input:checked]:basis-[9rem]"
+              class="basis-32 snap-start last-of-type:snap-end has-[input:checked]:basis-36"
               name={props.name}
               value={item.value}
               label={item.label}

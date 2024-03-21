@@ -36,7 +36,7 @@ function AppLoginPage() {
             {/* TODO: Replace with carousel of app features with screenshots */}
             <HeroImage
               alt={t('hero-image')}
-              class="aspect-square w-full rounded-2xl"
+              class="aspect-square w-full rounded-2xl object-cover"
             />
             <ButtonLink
               href="/api/auth/facebook"
