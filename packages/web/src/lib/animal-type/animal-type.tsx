@@ -52,7 +52,7 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
   return (
     <div
       class={
-        'scrollbar-none -m-4 flex w-full snap-x snap-mandatory scroll-px-4 gap-2 overflow-auto p-4'
+        'scrollbar-none -m-4 flex w-[stretch] snap-x snap-mandatory scroll-px-4 gap-2 overflow-auto p-4'
       }
     >
       <For each={animalTypes()}>
@@ -113,7 +113,7 @@ const GenderRadio = (props: { name: string; value: string; label: string }) => {
     <label
       class={tw(
         cssStyles.genderSwitchLabel,
-        'relative text-on-surface border-2 border-on-surface/5 rounded-md py-1 grid place-items-center h-12 px-2 text-center transition-colors duration-200',
+        'relative text-on-surface border-2 border-on-surface/5 rounded-md has-[input:checked]:rounded-2xl py-1 grid place-items-center h-16 px-2 text-center transition-all duration-200',
       )}
     >
       <input

@@ -25,7 +25,11 @@ export const route = {
 } satisfies RouteDefinition;
 
 const AppHomePage = () => {
-  return <UserPets />;
+  return (
+    <>
+      <UserPets />
+    </>
+  );
 };
 
 export default AppHomePage;
@@ -81,7 +85,7 @@ const UserPets = () => {
         </ul>
       </Match>
       <Match when={!hasPets()}>
-        <Card class="flex flex-col gap-6 p-4">
+        <Card class="flex max-w-[460px] flex-col gap-6 p-4">
           <CreateNewPetForm />
           <Show when={!user()?.family}>
             <A
