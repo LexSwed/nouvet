@@ -9,7 +9,7 @@ export default createHandler((ctx) => {
   }
   return (
     <StartServer
-      document={({ assets, children, scripts }) => (
+      document={(props) => (
         <html
           lang={locale.baseName}
           dir={
@@ -37,11 +37,11 @@ export default createHandler((ctx) => {
             />
             <link rel="apple-touch-icon" href="/icons/icon-apple.png" />
             <link rel="manifest" href="/manifest.webmanifest" />
-            {assets}
+            {props.assets}
           </head>
           <body>
-            <div id="app">{children}</div>
-            {scripts}
+            <div id="app">{props.children}</div>
+            {props.scripts}
           </body>
         </html>
       )}

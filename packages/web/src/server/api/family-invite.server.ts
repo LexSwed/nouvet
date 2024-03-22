@@ -21,7 +21,7 @@ export async function getFamilyInvite() {
 
     if (!invite) {
       const inviteCode = generateRandomString(
-        24,
+        32,
         alphabet('a-z', 'A-Z', '0-9'),
       );
       invite = await dbCreateFamilyInvite(user.userId, inviteCode);
@@ -31,7 +31,7 @@ export async function getFamilyInvite() {
       `${new URL(event!.request.url).origin}/app/family/invite/${invite.inviteCode}`,
     );
 
-    const expiresIn = (invite.expiresAt - Date.now() / 1000) / 60;
+    const expiresIn = Math.floor((invite.expiresAt - Date.now() / 1000) / 60);
 
     return {
       url: url.toString(),

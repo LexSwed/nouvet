@@ -1,6 +1,6 @@
 'use server';
 
-import { and, eq, lte, sql } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { TimeSpan } from 'lucia';
 
 import { useDb } from '~/server/db';
@@ -25,16 +25,19 @@ export async function getFamilyInvite(userId: DatabaseUser['id']) {
     .where(
       and(
         eq(familyInviteTable.inviterId, userId),
-        lte(
-          familyInviteTable.expiresAt,
-          Date.now() / 1000 + new TimeSpan(1, 'h').seconds(),
-        ),
+        // expires in more than 5 minutes
+        sql`((${familyInviteTable.expiresAt} - unixepoch())) > 300`,
       ),
     )
     .get();
   return invite;
 }
 
+/**
+ * Creates new invitation code.
+ * Similar to OTP, doesn't delete existing invitation codes
+ * that could still be valid for 5 minutes as per @getFamilyInvite query.
+ */
 export async function createFamilyInvite(
   userId: DatabaseUser['id'],
   inviteHash: string,
