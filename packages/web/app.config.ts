@@ -1,4 +1,5 @@
 import { defineConfig } from '@solidjs/start/config';
+import { searchForWorkspaceRoot } from 'vite';
 import { imagetools } from 'vite-imagetools';
 import viteSvgSpriteWrapper from 'vite-svg-sprite-wrapper';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -6,7 +7,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   ssr: true,
   middleware: './src/middleware.ts',
-  devOverlay: true,
+  devOverlay: false,
   server: {
     preset: 'cloudflare_pages',
     rollupConfig: {
@@ -28,6 +29,11 @@ export default defineConfig({
     },
   },
   vite: {
+    server: {
+      fs: {
+        allow: [searchForWorkspaceRoot(process.cwd())],
+      },
+    },
     css: {
       postcss: '../config/postcss.config.cjs',
     },
