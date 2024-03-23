@@ -37,13 +37,19 @@ export async function createUserSession(
 ) {
   const lucia = useLucia();
   const authSession = await lucia.createSession(userId, {});
-
-  await updateRequestUser(event!, {
-    userId,
-    locale,
-    measurementSystem,
-    sessionId: authSession.id,
-  });
+  await updateRequestUser(
+    event!,
+    {
+      userId,
+      locale,
+      measurementSystem,
+      sessionId: authSession.id,
+    },
+    {
+      // for --host debugging on real device
+      secure: env.PROD,
+    },
+  );
 }
 
 /**
@@ -142,7 +148,7 @@ export async function updateRequestUser(
       name: SESSION_COOKIE,
       password: env.SESSION_SECRET,
       maxAge: new TimeSpan(30, 'd').seconds(),
-      ...config,
+      cookie: config,
     },
     parse(userCookieSchema, user),
   );

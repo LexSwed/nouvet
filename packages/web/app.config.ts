@@ -6,7 +6,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   ssr: true,
   middleware: './src/middleware.ts',
-  devOverlay: false,
+  devOverlay: true,
   server: {
     preset: 'cloudflare_pages',
     rollupConfig: {
@@ -42,7 +42,8 @@ export default defineConfig({
         sprite: {
           shape: {
             dimension: {
-              attributes: true, // Width and height attributes on embedded shapes
+              // Width and height attributes on embedded shapes
+              attributes: true,
             },
           },
         },

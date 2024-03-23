@@ -18,7 +18,6 @@ const schema = object({
 export const env = parse(schema, {
   ...import.meta.env,
   SESSION_SECRET: process.env.SESSION_SECRET,
-  INVITES_SECRET: process.env.INVITES_SECRET,
   FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
   FACEBOOK_APP_SECRET: process.env.FACEBOOK_APP_SECRET,
   DB: process.env.DB,
