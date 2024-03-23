@@ -11,7 +11,7 @@ import type PetFormsDict from './locales/en/pet-forms.json';
 import type WWWDict from './locales/en/www.json';
 import type { SupportedLocale } from './shared';
 
-type NamespaceMap = {
+export type NamespaceMap = {
   'common': typeof CommonDict;
   'www': typeof WWWDict;
   'app': typeof AppDict;
@@ -38,5 +38,5 @@ async function fetchDictionary<T extends Namespace>(
 export const getDictionary = async <T extends Namespace>(namespace: T) => {
   const event = getRequestEvent();
   const { locale } = event!.locals;
-  return fetchDictionary(locale.language as SupportedLocale, namespace);
+  return await fetchDictionary(locale.language as SupportedLocale, namespace);
 };

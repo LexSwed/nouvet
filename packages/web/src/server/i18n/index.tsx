@@ -1,18 +1,27 @@
 import { resolveTemplate, translator } from '@solid-primitives/i18n';
 import { cache, createAsync } from '@solidjs/router';
 import type { JSX, ParentProps } from 'solid-js';
-import { getRequestEvent } from 'solid-js/web';
+import { getRequestEvent, isServer } from 'solid-js/web';
 
 import { getDictionary } from './dict';
-import type { Namespace } from './dict';
+import type { Namespace, NamespaceMap } from './dict';
 
-export const cacheTranslations = cache(
-  <T extends Namespace>(namespace: T) => getDictionary(namespace),
-  'translations',
-);
+export const cacheTranslations = cache(<T extends Namespace>(namespace: T) => {
+  return getDictionary(namespace);
+}, 'translations');
 
+const clientMap = new Map<Namespace, NamespaceMap[Namespace]>();
 export const createTranslator = <T extends Namespace>(namespace: T) => {
-  const dict = createAsync(() => cacheTranslations(namespace));
+  const dict = createAsync(async () => {
+    if (!isServer && clientMap?.has(namespace)) {
+      return clientMap.get(namespace) as NamespaceMap[T];
+    }
+    const dict = await cacheTranslations(namespace);
+    if (!isServer) {
+      clientMap.set(namespace, dict);
+    }
+    return dict;
+  });
   return translator(dict, resolveTemplate);
 };
 
