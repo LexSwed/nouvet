@@ -12,10 +12,10 @@ export const buttonVariants = cva(
   {
     variants: {
       size: {
-        base: 'h-12 min-w-12 px-6 py-2 text-base',
-        sm: 'h-10 min-w-10 px-3 text-sm',
-        lg: 'h-14 min-w-14 px-8 text-lg',
-        cta: 'h-16 min-w-16 rounded-full px-8 text-lg',
+        base: 'min-h-12 min-w-12 px-6 py-2 text-base',
+        sm: 'min-h-10 min-w-10 px-3 text-sm',
+        lg: 'min-h-14 min-w-14 px-8 text-lg',
+        cta: 'min-h-16 min-w-16 rounded-full px-8 text-lg',
       },
       variant: {
         default: 'bg-primary text-on-primary outline-primary',
