@@ -7,6 +7,7 @@ import { getDictionary } from './dict';
 import type { Namespace, NamespaceMap } from './dict';
 
 export const cacheTranslations = cache(<T extends Namespace>(namespace: T) => {
+  'use server';
   return getDictionary(namespace);
 }, 'translations');
 

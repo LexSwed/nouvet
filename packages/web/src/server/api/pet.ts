@@ -11,7 +11,7 @@ import {
   ValiError,
 } from 'valibot';
 
-import { getRequestUser } from '~/server/db/queries/getUserSession';
+import { getRequestUser } from '~/server/auth/request-user';
 import { petCreate } from '~/server/db/queries/petCreate';
 import { petUpdate } from '~/server/db/queries/petUpdate';
 import { userPets } from '~/server/db/queries/userPets';

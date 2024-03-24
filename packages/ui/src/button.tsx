@@ -12,9 +12,10 @@ export const buttonVariants = cva(
   {
     variants: {
       size: {
-        base: 'min-h-14 min-w-14 px-6 py-2 text-base',
-        sm: 'min-h-10 min-w-10 px-3 text-sm',
-        lg: 'min-h-16 min-w-16 px-8 text-lg',
+        base: 'min-h-14 min-w-14 px-6 py-2 text-base sm:min-h-12 sm:min-w-12',
+        sm: 'min-h-12 min-w-12 px-3 text-sm sm:min-h-10 sm:min-w-10',
+        lg: 'min-h-16 min-w-16 px-8 text-lg sm:min-h-14 sm:min-w-14',
+        cta: 'min-h-16 min-w-16 rounded-full px-8 text-lg',
       },
       variant: {
         default: 'bg-primary text-on-primary outline-primary',
@@ -145,7 +146,7 @@ const SplitButton = (
   return <BaseComponent {...ownProps} split component="div" />;
 };
 SplitButton.Inner = (ownProps: Omit<BaseProps<'button'>, 'component'>) => {
-  return <Button {...ownProps} size="sm" variant="ghost" />;
+  return <Button {...ownProps} size="sm" class="gap-3 px-4" variant="ghost" />;
 };
 
 export { Button, ButtonLink, SplitButton };

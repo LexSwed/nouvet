@@ -1,15 +1,15 @@
 'use server';
 
+import { randomBytes } from 'node:crypto';
 import { getRequestEvent } from 'solid-js/web';
-import { alphabet, generateRandomString } from 'oslo/crypto';
 
+import { getRequestUser } from '~/server/auth/request-user';
 import {
   createFamilyInvite as dbCreateFamilyInvite,
   getFamilyInvite as dbGetFamilyInvite,
   getFamilyInvitationInfo,
   joinFamilyByInviteCode,
-} from '~/server/db/queries/getFamilyInvite';
-import { getRequestUser } from '~/server/db/queries/getUserSession';
+} from '~/server/db/queries/familyInvite';
 
 // TODO: Heavily rate limit this
 export async function getFamilyInvite() {
@@ -20,10 +20,7 @@ export async function getFamilyInvite() {
     let invite = await dbGetFamilyInvite(user.userId);
 
     if (!invite) {
-      const inviteCode = generateRandomString(
-        32,
-        alphabet('a-z', 'A-Z', '0-9'),
-      );
+      const inviteCode = randomBytes(10).toString('hex');
       invite = await dbCreateFamilyInvite(user.userId, inviteCode);
     }
 

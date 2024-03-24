@@ -9,6 +9,9 @@ export default defineConfig({
   middleware: './src/middleware.ts',
   devOverlay: false,
   server: {
+    prerender: {
+      routes: ['/', '/about', '/privacy'],
+    },
     preset: 'cloudflare_pages',
     rollupConfig: {
       external: ['node:async_hooks'],

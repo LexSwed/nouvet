@@ -31,7 +31,7 @@ export const familyInviteTable = sqliteTable('family_invite', {
   /**
    * Invitation code
    */
-  inviteCode: text('invite_code', { length: 32 }).notNull().primaryKey(),
+  inviteCode: text('invite_code', { length: 20 }).notNull().primaryKey(),
 });
 export type DatabaseFamily = typeof familyTable.$inferSelect;
 

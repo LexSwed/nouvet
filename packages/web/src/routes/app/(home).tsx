@@ -13,10 +13,6 @@ import { cacheTranslations, createTranslator } from '~/server/i18n';
 
 import { AccountMenu } from '~/lib/account-menu';
 
-const FamilyInviteDialog = clientOnly(
-  () => import('~/lib/family-invite-dialog'),
-);
-
 export const route = {
   load() {
     return Promise.all([cacheTranslations('app'), getUserFamily()]);
@@ -52,6 +48,10 @@ function AppMainPage(props: RouteSectionProps) {
 }
 
 export default AppMainPage;
+
+const FamilyInviteDialog = clientOnly(
+  () => import('~/lib/family-invite-dialog'),
+);
 
 const AppHeader = () => {
   const t = createTranslator('app');
