@@ -85,7 +85,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
         })}
         strategy="fixed"
         placement="bottom-start"
-        class="flex transform-none flex-col gap-4 p-4"
+        class="flex transform-none flex-col gap-4 p-2"
         onToggle={(e: ToggleEvent) => {
           if (triggerRef && e.newState === 'open') {
             triggerRef.scrollIntoView({
@@ -100,7 +100,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
             <Show when={open()}>
               <A
                 href={`/app/pet/${props.pet.id}/`}
-                class="group/link outline-on-surface -m-4 flex flex-row items-center gap-4 rounded-[inherit] p-4 -outline-offset-4 focus:outline-4"
+                class="group/link outline-on-surface -m-2 flex flex-row items-center gap-4 rounded-[inherit] p-4 -outline-offset-4 focus:outline-4"
               >
                 <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
                   <Show

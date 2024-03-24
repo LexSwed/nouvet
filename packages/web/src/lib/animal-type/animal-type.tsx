@@ -59,7 +59,7 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
         {(item) => {
           return (
             <RadioCard
-              class="basis-32 snap-start last-of-type:snap-end has-[input:checked]:basis-36"
+              class="basis-32 snap-start will-change-[flex-basis] last-of-type:snap-end has-[input:checked]:basis-36"
               name={props.name}
               value={item.value}
               label={item.label}
