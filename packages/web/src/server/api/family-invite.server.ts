@@ -11,6 +11,8 @@ import {
   joinFamilyByInviteCode,
 } from '~/server/db/queries/familyInvite';
 
+import type { DatabaseUser } from '../db/schema';
+
 // TODO: Heavily rate limit this
 export async function getFamilyInvite() {
   try {
@@ -20,7 +22,7 @@ export async function getFamilyInvite() {
     let invite = await dbGetFamilyInvite(user.userId);
 
     if (!invite) {
-      const inviteCode = randomBytes(10).toString('hex');
+      const inviteCode = randomBytes(8).toString('hex');
       invite = await dbCreateFamilyInvite(user.userId, inviteCode);
     }
 
@@ -28,6 +30,7 @@ export async function getFamilyInvite() {
       `${new URL(event!.request.url).origin}/app/family/invite/${invite.inviteCode}`,
     );
 
+    // 1 hour
     const expiresIn = Math.floor((invite.expiresAt - Date.now() / 1000) / 60);
 
     return {
@@ -48,9 +51,9 @@ export async function checkFamilyInvite(inviteCode: string) {
   return invite;
 }
 
-export async function joinFamily(formData: FormData) {
-  const currentUser = await getRequestUser();
-  const inviteCode = formData.get('invite-code')!.toString().trim();
-  if (!inviteCode) throw new Error('Missing invite-code');
-  await joinFamilyByInviteCode(currentUser.userId, inviteCode);
+export async function joinFamily(
+  inviteCode: string,
+  userId: DatabaseUser['id'],
+) {
+  await joinFamilyByInviteCode(inviteCode, userId);
 }

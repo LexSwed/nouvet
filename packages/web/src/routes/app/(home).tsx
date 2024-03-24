@@ -60,7 +60,7 @@ const AppHeader = () => {
   return (
     <Show when={user()}>
       {(user) => (
-        <header class="align-center flex justify-between gap-8 p-4">
+        <header class="flex items-start justify-between gap-8 p-4">
           <Switch>
             <Match when={!user().family?.id}>
               <>

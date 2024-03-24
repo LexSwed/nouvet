@@ -84,8 +84,8 @@ export async function getFamilyInvitationInfo(inviteCode: string) {
 }
 
 export async function joinFamilyByInviteCode(
-  userId: DatabaseUser['id'],
   inviteCode: string,
+  userId: DatabaseUser['id'],
 ) {
   const db = useDb();
   const invite = await db.transaction(async (tx) => {

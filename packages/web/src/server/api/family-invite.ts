@@ -1,5 +1,7 @@
 import { action, cache, redirect } from '@solidjs/router';
 
+import { getRequestUser } from '~/server/auth/request-user';
+
 import {
   checkFamilyInvite as checkFamilyInviteServer,
   getFamilyInvite as getFamilyInviteServer,
@@ -18,6 +20,12 @@ export const checkFamilyInvite = cache(
 
 export const joinFamily = action(async (formData: FormData) => {
   'use server';
-  await joinFamilyServer(formData);
+  const currentUser = await getRequestUser();
+  const inviteCode = formData.get('invite-code')!.toString().trim();
+  if (!inviteCode || !currentUser.userId)
+    throw new Error('Missing invite-code');
+  // TODO: error handling
+  await joinFamilyServer(inviteCode, currentUser.userId);
+
   return redirect('/app');
-});
+}, 'join-family');
