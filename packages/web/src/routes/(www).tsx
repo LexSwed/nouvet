@@ -1,6 +1,6 @@
 import { type RouteDefinition } from '@solidjs/router';
-import { For, Show, type ParentProps } from 'solid-js';
-import { Icon, NavCard, type SvgIcons } from '@nou/ui';
+import { For, type Accessor, type ParentProps } from 'solid-js';
+import { Icon, NavCard, Text, type SvgIcons } from '@nou/ui';
 
 import { cacheTranslations, createTranslator } from '~/server/i18n';
 
@@ -8,22 +8,26 @@ import { LogoLink } from '~/lib/logo-link';
 
 export const route = {
   load() {
-    cacheTranslations('www');
+    return Promise.all([cacheTranslations('www')]);
   },
 } satisfies RouteDefinition;
 
 export default function WWWLayout(props: ParentProps) {
   const t = createTranslator('www');
 
-  const items: Array<{ label: string; icon: SvgIcons; href: string }> = [
+  const items: Array<{
+    label: Accessor<string | undefined>;
+    icon: SvgIcons;
+    href: string;
+  }> = [
     {
       href: '/#features',
-      label: t('features')!,
+      label: () => t('features'),
       icon: 'package',
     },
     {
       href: '/about',
-      label: t('link-about-the-project')!,
+      label: () => t('link-about-the-project'),
       icon: 'nouvet',
     },
     // {
@@ -48,7 +52,7 @@ export default function WWWLayout(props: ParentProps) {
                     class="flex min-w-32 flex-col place-items-start gap-2 p-3"
                   >
                     <Icon size="sm" use={item.icon} class="text-primary" />
-                    {item.label}
+                    <Text>{item.label()}</Text>
                   </NavCard>
                 </li>
               )}

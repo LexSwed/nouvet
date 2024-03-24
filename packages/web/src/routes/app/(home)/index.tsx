@@ -65,7 +65,7 @@ const UserPets = () => {
               id="create-new-pet-drawer"
               placement="center"
               role="dialog"
-              class="max-w-[420px]"
+              class="md:max-w-[420px]"
             >
               {(open) => (
                 <Show when={open()}>

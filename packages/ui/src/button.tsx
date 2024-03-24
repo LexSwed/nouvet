@@ -101,7 +101,7 @@ const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
       title={local.title ?? local.label}
       class={tw(buttonVariants(local), props.class)}
       onClick={(event: MouseEvent) => {
-        if (local.loading) {
+        if (local.loading || props.disabled || props['aria-disabled']) {
           event.preventDefault();
           return;
         }

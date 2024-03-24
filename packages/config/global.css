@@ -20,7 +20,7 @@
   body,
   #app {
     scrollbar-gutter: stable;
-    @apply bg-background text-on-background h-full max-w-full;
+    @apply bg-background text-on-background h-full max-w-full overscroll-contain;
   }
   #app {
     @apply overflow-x-hidden;
