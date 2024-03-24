@@ -1,4 +1,4 @@
-import type { JSX } from 'solid-js';
+import { splitProps, type JSX } from 'solid-js';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { tw } from './tw';
@@ -7,11 +7,12 @@ interface Props
   extends JSX.SvgSVGAttributes<SVGSVGElement>,
     VariantProps<typeof spinnerCss> {}
 
-export const Spinner = (props: Props) => {
+export const Spinner = (ownProps: Props) => {
+  const [local, props] = splitProps(ownProps, ['size', 'variant']);
   return (
     <svg
       {...props}
-      class={tw(spinnerCss({ size: props.size }), props.class)}
+      class={tw(spinnerCss(local), props.class)}
       viewBox="0 0 50 50"
       role="progressbar"
       aria-valuemin={0}
@@ -37,8 +38,13 @@ const spinnerCss = cva('animate-spin', {
       xl: 'size-12',
       cta: 'size-16',
     },
+    variant: {
+      default: '',
+      tertiary: 'text-tertiary',
+    },
   },
   defaultVariants: {
     size: 'base',
+    variant: 'default',
   },
 });

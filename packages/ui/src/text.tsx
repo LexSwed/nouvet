@@ -4,7 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { tw } from './tw';
 
-const textVariants = cva('m-0 font-sans', {
+const textVariants = cva('m-0 whitespace-pre-line font-sans', {
   variants: {
     with: {
       'body': 'text-base font-normal',
@@ -40,7 +40,7 @@ const textVariants = cva('m-0 font-sans', {
       justify: 'text-justify',
     },
     dense: {
-      true: 'leading-[1]',
+      true: 'leading-none',
     },
   },
 });

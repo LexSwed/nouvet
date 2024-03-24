@@ -18,7 +18,7 @@ export const checkFamilyInvite = cache(
   'accept-family-invite',
 );
 
-export const joinFamily = action(async (formData: FormData) => {
+export const joinFamilyThroughLink = action(async (formData: FormData) => {
   'use server';
   const currentUser = await getRequestUser();
   const inviteCode = formData.get('invite-code')!.toString().trim();
@@ -28,4 +28,13 @@ export const joinFamily = action(async (formData: FormData) => {
   await joinFamilyServer(inviteCode, currentUser.userId);
 
   return redirect('/app');
+}, 'join-family');
+
+export const joinFamily = action(async (inviteCode: string) => {
+  'use server';
+  const currentUser = await getRequestUser();
+  if (!inviteCode || !currentUser.userId)
+    throw new Error('Missing invite-code');
+  // TODO: error handling
+  return await joinFamilyServer(inviteCode, currentUser.userId);
 }, 'join-family');

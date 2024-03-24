@@ -1,6 +1,6 @@
 @tailwind components;
 
-/* avoid consumers overriding this for all states */
+/* Avoid consumers overriding this for all states with e.g. display: flex */
 @layer components {
   .popover:not(:popover-open) {
     display: none;

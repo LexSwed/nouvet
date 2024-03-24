@@ -41,7 +41,6 @@ const FamilyInviteDialog = (props: { id: string }) => {
 type Step = 'initial' | 'qrcode' | 'waitlist' | 'join';
 const InviteDialogContent = (props: { id: string }) => {
   const t = createTranslator('app');
-  const tCommon = createTranslator('common');
   const [step, setStep] = createSignal<Step>('initial');
   const update = (newStep: Step) =>
     startViewTransition(() => {
@@ -55,7 +54,7 @@ const InviteDialogContent = (props: { id: string }) => {
           <Button
             variant="ghost"
             icon
-            label={tCommon('back')}
+            label={t('family-invite.back')}
             onClick={() => {
               switch (step()) {
                 case 'qrcode':
@@ -84,7 +83,7 @@ const InviteDialogContent = (props: { id: string }) => {
           popoverTarget={props.id}
           popoverTargetAction="hide"
           icon
-          label={tCommon('close-dialog')}
+          label={t('family-invite.close')}
         >
           <Icon use="x" />
         </Button>
@@ -115,17 +114,7 @@ const InviteDialogContent = (props: { id: string }) => {
           </div>
         </Match>
         <Match when={step() === 'qrcode'}>
-          <div class="flex flex-col gap-4">
-            <Text as="p" class="text-balance text-center">
-              {t('family-invite.qr-description')}
-            </Text>
-            <Suspense>
-              <FamilyInviteQRCode />
-            </Suspense>
-            <Button onClick={() => update('waitlist')}>
-              {t('family-invite.cta-ready')}
-            </Button>
-          </div>
+          <FamilyInviteQRCode onNext={() => update('waitlist')} />
         </Match>
         <Match when={step() === 'waitlist'}>
           <div class="flex flex-col gap-4">
