@@ -5,30 +5,29 @@ import QrScanner from 'qr-scanner';
 
 import { joinFamily } from '~/server/api/family-invite';
 
-const QRCodeScannerPage = () => {
+const QRCodeScannerPage = (props: { onSuccess: () => void }) => {
   const join = useAction(joinFamily);
   const joinSubmission = useSubmission(joinFamily);
 
   const onScanSuccess = async (url: string) => {
-    const form = new FormData();
-    form.set('invite-code', url.split('/family/invite/').at(-1) || '');
-    try {
-      const res = await join(form);
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
+    const inviteCode = url.split('/family/invite/').at(-1);
+    if (!inviteCode) return null;
+    await join(inviteCode);
+    props.onSuccess();
   };
 
   return (
     <Switch>
+      {/* TODO: Error handling */}
       <Match when={joinSubmission.pending}>
         <div class="grid size-full place-content-center">
           <Spinner size="base" />
         </div>
       </Match>
-      <Match when={!joinSubmission.pending}>
-        <QRCodeScanner onSuccess={onScanSuccess} />
+      <Match when={!joinSubmission.pending && !joinSubmission.error}>
+        <div class="bg-on-surface/5 size-[300px] rounded-2xl empty:animate-pulse">
+          <QRCodeScanner onSuccess={onScanSuccess} />
+        </div>
       </Match>
     </Switch>
   );

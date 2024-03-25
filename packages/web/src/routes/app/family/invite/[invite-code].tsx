@@ -9,7 +9,10 @@ import {
 import { Match, Show, Suspense, Switch } from 'solid-js';
 import { Button, ButtonLink, Card, Form, Icon, Text } from '@nou/ui';
 
-import { checkFamilyInvite, joinFamily } from '~/server/api/family-invite';
+import {
+  checkFamilyInvite,
+  joinFamilyThroughLink,
+} from '~/server/api/family-invite';
 import { getUserProfile } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
 
@@ -35,7 +38,7 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
   const invite = createAsync(() => checkFamilyInvite(code));
   // TODO: user is already part of a family
 
-  const joinSubmission = useSubmission(joinFamily);
+  const joinSubmission = useSubmission(joinFamilyThroughLink);
 
   return (
     <>
@@ -67,7 +70,7 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
             <Match when={invite()}>
               <Form
                 method="post"
-                action={joinFamily}
+                action={joinFamilyThroughLink}
                 class="bg-background bg-main z-10 col-span-6 col-start-1 row-[2] flex flex-col gap-6 rounded-3xl [background-attachment:fixed] sm:p-6 lg:col-span-5 lg:col-start-2"
               >
                 <Text with="headline-1">
@@ -105,7 +108,7 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
                 />
               </div>
 
-              <div class="md:bg-background md:bg-main bg-surface col-start-[8] col-end-[-1] row-[2] w-full max-w-[340px] self-end justify-self-end overflow-hidden overscroll-contain rounded-3xl p-3 [background-attachment:fixed] md:mb-3 md:me-3">
+              <div class="md:bg-background md:bg-main bg-surface col-start-8 col-end-[-1] row-[2] w-full max-w-[340px] self-end justify-self-end overflow-hidden overscroll-contain rounded-3xl p-3 [background-attachment:fixed] md:mb-3 md:me-3">
                 <FamilyInviteBenefits class="-mx-6 px-6 *:w-full" />
               </div>
 

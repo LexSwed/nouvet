@@ -42,5 +42,7 @@
   "family-invite.join-instruction": "Ask your partner to create an invite in their NouVet app and share it with you.",
   "family-invite.scan-denied": "Camera is not available. You can use the camera app of your device to scan the code, or ask the inviter to share a direct link instead.",
   "family-invite.join-scan-cta": "Scan QR-code with the camera",
-  "family-invite.join-link": "Open the invitation link in your browser"
+  "family-invite.join-link": "Open the invitation link in your browser",
+  "family-invite.join-success": "You are now part of the family!",
+  "family-invite.join-success-done": "Done"
 }

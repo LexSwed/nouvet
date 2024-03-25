@@ -55,5 +55,5 @@ export async function joinFamily(
   inviteCode: string,
   userId: DatabaseUser['id'],
 ) {
-  await joinFamilyByInviteCode(inviteCode, userId);
+  return await joinFamilyByInviteCode(inviteCode, userId);
 }
