@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm';
 import {
+  index,
   integer,
   primaryKey,
   sqliteTable,
@@ -20,19 +21,32 @@ export const familyTable = sqliteTable('family', {
  * Temporary invitations to a family. Only the creator of the family can send the invites.
  * Hence, a family might not be created yet when the invite is sent – it's created when invited user joins the family
  */
-export const familyInviteTable = sqliteTable('family_invite', {
-  inviterId: integer('inviter_id')
-    .notNull()
-    .references(() => userTable.id),
-  /**
-   * UNIX timestamp in seconds.
-   */
-  expiresAt: integer('expires_at').notNull(),
-  /**
-   * Invitation code
-   */
-  inviteCode: text('invite_code', { length: 20 }).notNull().primaryKey(),
-});
+export const familyInviteTable = sqliteTable(
+  'family_invite',
+  {
+    inviterId: integer('inviter_id')
+      .notNull()
+      .references(() => userTable.id),
+    /**
+     * UNIX timestamp in seconds.
+     */
+    expiresAt: integer('expires_at').notNull(),
+    /**
+     * Invitation code
+     */
+    inviteCode: text('invite_code', { length: 20 }).notNull().primaryKey(),
+    /**
+     * QR Code hash. Since QR codes allow to join the family directly, users with just
+     * invite code could avoid approval by hitting a different endpoint with the
+     * invitation code they get from the link. By hashing the QR code, having invitation code itself
+     * won't allow to bypass the approval process.
+     */
+    invitationHash: text('invitation_hash', { length: 64 }).notNull(),
+  },
+  (table) => ({
+    hashIdx: index('hash_idx').on(table.invitationHash),
+  }),
+);
 export type DatabaseFamily = typeof familyTable.$inferSelect;
 
 export const familyUserTable = sqliteTable(

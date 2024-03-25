@@ -20,6 +20,7 @@ export async function getFamilyInvite(userId: DatabaseUser['id']) {
       expiresAt: familyInviteTable.expiresAt,
       inviterId: familyInviteTable.inviterId,
       inviteCode: familyInviteTable.inviteCode,
+      invitationHash: familyInviteTable.invitationHash,
     })
     .from(familyInviteTable)
     .where(
@@ -39,21 +40,24 @@ export async function getFamilyInvite(userId: DatabaseUser['id']) {
  * that could still be valid for 5 minutes as per @getFamilyInvite query.
  */
 export async function createFamilyInvite(
-  userId: DatabaseUser['id'],
-  inviteHash: string,
+  inviterId: DatabaseUser['id'],
+  inviteCode: string,
+  invitationHash: string,
 ) {
   const db = useDb();
   const invite = await db
     .insert(familyInviteTable)
     .values({
-      inviterId: userId,
+      inviterId,
+      inviteCode,
+      invitationHash,
       expiresAt: Date.now() / 1000 + new TimeSpan(1, 'h').seconds(),
-      inviteCode: inviteHash,
     })
     .returning({
       expiresAt: familyInviteTable.expiresAt,
       inviterId: familyInviteTable.inviterId,
       inviteCode: familyInviteTable.inviteCode,
+      invitationHash: familyInviteTable.invitationHash,
     })
     .get();
   return invite;
@@ -83,9 +87,29 @@ export async function getFamilyInvitationInfo(inviteCode: string) {
   return invite;
 }
 
-export async function joinFamilyByInviteCode(
+export async function joinFamilyByInvitationHash(
+  invitationHash: string,
+  userId: DatabaseUser['id'],
+) {
+  return joinFamily(userId, { invitationHash });
+}
+
+export async function requestFamilyAdmissionByInviteCode(
   inviteCode: string,
   userId: DatabaseUser['id'],
+) {
+  return joinFamily(userId, { inviteCode });
+}
+
+async function joinFamily(
+  userId: DatabaseUser['id'],
+  params:
+    | {
+        inviteCode: string;
+      }
+    | {
+        invitationHash: string;
+      },
 ) {
   const db = useDb();
   const invite = await db.transaction(async (tx) => {
@@ -98,7 +122,9 @@ export async function joinFamilyByInviteCode(
       .from(familyInviteTable)
       .where(
         and(
-          eq(familyInviteTable.inviteCode, inviteCode),
+          'inviteCode' in params
+            ? eq(familyInviteTable.inviteCode, params.inviteCode)
+            : eq(familyInviteTable.invitationHash, params.invitationHash),
           sql`((${familyInviteTable.expiresAt} - unixepoch())) > 0`,
         ),
       )
@@ -123,12 +149,14 @@ export async function joinFamilyByInviteCode(
         .returning({ familyId: familyTable.id })
         .get();
     }
+    /** When joining via QR Code (with hash), the user is automatically approved. */
+    const approved = 'invitationHash' in params;
     await tx.insert(familyUserTable).values(
       [
         {
           familyId: family.familyId,
           userId: userId,
-          approved: false,
+          approved,
         },
       ].concat(
         newFamily

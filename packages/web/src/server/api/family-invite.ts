@@ -3,12 +3,14 @@ import { action, cache, json, redirect } from '@solidjs/router';
 import { getRequestUser } from '~/server/auth/request-user';
 
 import {
+  joinFamilyByInvitationHash,
+  requestFamilyAdmissionByInviteCode,
+} from '../db/queries/familyInvite';
+
+import {
   checkFamilyInvite as checkFamilyInviteServer,
   getFamilyInvite as getFamilyInviteServer,
-  joinFamily as joinFamilyServer,
 } from './family-invite.server';
-import { getUserPets } from './pet';
-import { getUserFamily } from './user';
 
 export const getFamilyInvite = cache(
   () => getFamilyInviteServer(),
@@ -20,24 +22,28 @@ export const checkFamilyInvite = cache(
   'accept-family-invite',
 );
 
-export const joinFamilyThroughLink = action(async (formData: FormData) => {
+export const joinFamilyWithLink = action(async (formData: FormData) => {
   'use server';
   const currentUser = await getRequestUser();
   const inviteCode = formData.get('invite-code')!.toString().trim();
   if (!inviteCode || !currentUser.userId)
-    throw new Error('Missing invite-code');
+    throw new Error('Missing invite-code.');
   // TODO: error handling
-  await joinFamilyServer(inviteCode, currentUser.userId);
+  await requestFamilyAdmissionByInviteCode(inviteCode, currentUser.userId);
 
   return redirect('/app');
 }, 'join-family');
 
-export const joinFamily = action(async (inviteCode: string) => {
+export const joinFamilyWithQRCode = action(async (invitationHash: string) => {
   'use server';
   const currentUser = await getRequestUser();
-  if (!inviteCode || !currentUser.userId)
-    throw new Error('Missing invite-code');
+  if (!invitationHash || !currentUser.userId)
+    throw new Error('Missing invitation hash.');
   // TODO: error handling
-  const family = await joinFamilyServer(inviteCode, currentUser.userId);
-  return json(family, { revalidate: [getUserFamily.key, getUserPets.key] });
+  const family = await joinFamilyByInvitationHash(
+    invitationHash,
+    currentUser.userId,
+  );
+  /** Revalidation happens after user sees the success dialog */
+  return json(family, { revalidate: [] });
 }, 'join-family');

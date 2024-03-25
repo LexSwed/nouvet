@@ -3,15 +3,13 @@ import { createEffect, createSignal, Match, onCleanup, Switch } from 'solid-js';
 import { Spinner } from '@nou/ui';
 import QrScanner from 'qr-scanner';
 
-import { joinFamily } from '~/server/api/family-invite';
+import { joinFamilyWithQRCode } from '~/server/api/family-invite';
 
 const QRCodeScannerPage = (props: { onSuccess: () => void }) => {
-  const join = useAction(joinFamily);
-  const joinSubmission = useSubmission(joinFamily);
+  const join = useAction(joinFamilyWithQRCode);
+  const joinSubmission = useSubmission(joinFamilyWithQRCode);
 
-  const onScanSuccess = async (url: string) => {
-    const inviteCode = url.split('/family/invite/').at(-1);
-    if (!inviteCode) return null;
+  const onScanSuccess = async (inviteCode: string) => {
     await join(inviteCode);
     props.onSuccess();
   };
@@ -52,7 +50,8 @@ const QRCodeScanner = (props: {
     const qrScanner = new QrScanner(
       ref,
       (result) => {
-        if (URL.canParse(result.data)) {
+        console.log(result.data);
+        if (result.data) {
           props.onSuccess(result.data);
         }
       },

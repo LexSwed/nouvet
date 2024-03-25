@@ -24,10 +24,10 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
   }
 
   createEffect(() => {
-    const url = inviteData()?.url;
+    const data = inviteData()?.qrString;
     const container = containerRef();
-    if (url && container && !consentShown()) {
-      createQRCode(url, container);
+    if (data && container && !consentShown()) {
+      createQRCode(data, container);
     }
   });
 

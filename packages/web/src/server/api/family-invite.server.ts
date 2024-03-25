@@ -1,6 +1,6 @@
 'use server';
 
-import { randomBytes } from 'node:crypto';
+import { createHmac, randomBytes } from 'node:crypto';
 import { getRequestEvent } from 'solid-js/web';
 
 import { getRequestUser } from '~/server/auth/request-user';
@@ -8,10 +8,9 @@ import {
   createFamilyInvite as dbCreateFamilyInvite,
   getFamilyInvite as dbGetFamilyInvite,
   getFamilyInvitationInfo,
-  joinFamilyByInviteCode,
 } from '~/server/db/queries/familyInvite';
 
-import type { DatabaseUser } from '../db/schema';
+import { env } from '../env';
 
 // TODO: Heavily rate limit this
 export async function getFamilyInvite() {
@@ -23,7 +22,8 @@ export async function getFamilyInvite() {
 
     if (!invite) {
       const inviteCode = randomBytes(8).toString('hex');
-      invite = await dbCreateFamilyInvite(user.userId, inviteCode);
+      const hash = createHash(inviteCode);
+      invite = await dbCreateFamilyInvite(user.userId, inviteCode, hash);
     }
 
     const url = new URL(
@@ -35,6 +35,7 @@ export async function getFamilyInvite() {
 
     return {
       url: url.toString(),
+      qrString: invite.invitationHash,
       expiresIn: new Intl.RelativeTimeFormat(user.locale, {
         style: 'long',
         numeric: 'auto',
@@ -51,9 +52,6 @@ export async function checkFamilyInvite(inviteCode: string) {
   return invite;
 }
 
-export async function joinFamily(
-  inviteCode: string,
-  userId: DatabaseUser['id'],
-) {
-  return await joinFamilyByInviteCode(inviteCode, userId);
+function createHash(code: string) {
+  return createHmac('sha256', env.INVITES_SECRET).update(code).digest('hex');
 }
