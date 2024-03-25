@@ -1,5 +1,5 @@
 import { createSignal, Match, Show, Suspense, Switch } from 'solid-js';
-import { Button, Icon, Popover, Text } from '@nou/ui';
+import { Button, Card, Icon, Popover, Text } from '@nou/ui';
 
 import { createTranslator } from '~/server/i18n';
 
@@ -29,7 +29,7 @@ const FamilyInviteDialog = (props: { id: string }) => {
   );
 };
 
-type Step = 'initial' | 'qrcode' | 'waitlist' | 'join';
+type Step = 'initial' | 'qrcode' | 'waitlist' | 'join' | 'join-success';
 const InviteDialogContent = (props: { id: string }) => {
   const t = createTranslator('app');
   const [step, setStep] = createSignal<Step>('initial');
@@ -41,7 +41,10 @@ const InviteDialogContent = (props: { id: string }) => {
   return (
     <>
       <header class="-m-4 flex flex-row items-center justify-between gap-2">
-        <Show when={step() !== 'initial'} fallback={<div />}>
+        <Show
+          when={!new Set<Step>(['initial', 'join-success']).has(step())}
+          fallback={<div />}
+        >
           <Button
             variant="ghost"
             icon
@@ -62,13 +65,6 @@ const InviteDialogContent = (props: { id: string }) => {
             <Icon use="chevron-left" />
           </Button>
         </Show>
-        <Text as="p" class="text-center font-medium">
-          <Switch>
-            <Match when={step() === 'waitlist'}>
-              {t('family-invite.step-3')}
-            </Match>
-          </Switch>
-        </Text>
         <Button
           variant="ghost"
           popoverTarget={props.id}
@@ -107,21 +103,31 @@ const InviteDialogContent = (props: { id: string }) => {
         <Match when={step() === 'qrcode'}>
           <FamilyInviteQRCode onNext={() => update('waitlist')} />
         </Match>
-        <Match when={step() === 'waitlist'}>
-          <div class="flex flex-col gap-4">
-            <Text as="p" class="text-balance text-center">
-              {t('family-invite.waiting-people')}
-            </Text>
-            <Button popoverTarget={props.id} popoverTargetAction="hide">
-              {t('family-invite.cta-later')}
-            </Button>
-          </div>
-        </Match>
         <Match when={step() === 'join'}>
           <JoinFamily
             onCancel={() => update('initial')}
-            popoverTarget={props.id}
+            onSuccess={() => update('join-success')}
           />
+        </Match>
+        <Match when={step() === 'join-success'}>
+          <div class="animate-in fade-in duration-500">
+            <Card variant="filled" class="absolute inset-0" />
+            <div class="text-on-secondary-container relative flex flex-col items-center gap-8">
+              <div class="flex flex-col items-center gap-6">
+                <Icon use="check-fat" size="lg" />
+                <Text class="text-balance text-center">
+                  {t('family-invite.join-success')}
+                </Text>
+              </div>
+              <Button
+                variant="outline"
+                popoverTarget={props.id}
+                popoverTargetAction="hide"
+              >
+                {t('family-invite.join-success-done')}
+              </Button>
+            </div>
+          </div>
         </Match>
       </Switch>
     </>

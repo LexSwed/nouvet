@@ -1,5 +1,4 @@
 import { defineConfig } from '@solidjs/start/config';
-import { searchForWorkspaceRoot } from 'vite';
 import { imagetools } from 'vite-imagetools';
 import viteSvgSpriteWrapper from 'vite-svg-sprite-wrapper';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -32,11 +31,6 @@ export default defineConfig({
     },
   },
   vite: {
-    server: {
-      fs: {
-        allow: [searchForWorkspaceRoot(process.cwd())],
-      },
-    },
     css: {
       postcss: '../config/postcss.config.cjs',
     },

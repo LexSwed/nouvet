@@ -1,4 +1,4 @@
-import { action, cache, redirect } from '@solidjs/router';
+import { action, cache, json, redirect } from '@solidjs/router';
 
 import { getRequestUser } from '~/server/auth/request-user';
 
@@ -7,6 +7,8 @@ import {
   getFamilyInvite as getFamilyInviteServer,
   joinFamily as joinFamilyServer,
 } from './family-invite.server';
+import { getUserPets } from './pet';
+import { getUserFamily } from './user';
 
 export const getFamilyInvite = cache(
   () => getFamilyInviteServer(),
@@ -36,5 +38,6 @@ export const joinFamily = action(async (inviteCode: string) => {
   if (!inviteCode || !currentUser.userId)
     throw new Error('Missing invite-code');
   // TODO: error handling
-  return await joinFamilyServer(inviteCode, currentUser.userId);
+  const family = await joinFamilyServer(inviteCode, currentUser.userId);
+  return json(family, { revalidate: [getUserFamily.key, getUserPets.key] });
 }, 'join-family');
