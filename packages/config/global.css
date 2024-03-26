@@ -94,7 +94,7 @@
   }
 
   .overflow-snap {
-    @apply scrollbar-none -my-2 snap-x snap-mandatory overflow-auto py-2 [&>*]:shrink-0 [&>*]:snap-start;
+    @apply scrollbar-none -my-2 snap-x snap-mandatory overflow-auto py-2 [&>*]:shrink-0 [&>*]:snap-start [&>*]:snap-always;
   }
 
   .stack {

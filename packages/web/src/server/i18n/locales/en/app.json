@@ -39,10 +39,14 @@
   "family-invite.invite-share-title-no-name": "Join me in NouVet?",
   "family-invite.invite-share-text": "I invite you to a group to share the care of our pets! Join using this link.",
   "family-invite.expires-in": "The invitation expires {{expiresIn}}",
-  "family-invite.join-instruction": "Ask your partner to create an invite in their NouVet app and share it with you.",
+  "family-invite.join-instruction": "Scan the QR-code, created by your partner in their NouVet app.",
   "family-invite.scan-denied": "Camera is not available. You can use the camera app of your device to scan the code, or ask the inviter to share a direct link instead.",
   "family-invite.join-scan-cta": "Scan QR-code with the camera",
   "family-invite.join-link": "Open the invitation link in your browser",
+  "family-invite.join-failure": "Open the invitation link in your browser",
+  "family-invite.expired-heading": "This invite didn't work",
+  "family-invite.expired-description": "Seems like the QR code is a little brokey. But that's alright! Just ask your partner to create a new one!",
+  "family-invite.expired-cta": "Retry",
   "family-invite.join-success": "You are now part of the family!",
   "family-invite.join-success-done": "Done"
 }

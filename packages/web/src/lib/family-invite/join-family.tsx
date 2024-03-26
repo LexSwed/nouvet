@@ -29,15 +29,13 @@ const JoinFamily = (props: { onCancel: () => void; onSuccess: () => void }) => {
     .at(1);
 
   return (
-    <div class="flex flex-col items-center gap-8">
-      <div class="flex flex-col items-center gap-4">
-        <div class="bg-on-surface/5 grid size-20 shrink-0 place-content-center self-center rounded-full">
-          <Icon use="qr-code" size="md" />
-        </div>
-        <Text class="text-balance text-center">
-          {t('family-invite.join-instruction')}
-        </Text>
+    <div class="-mt-8 flex flex-col items-center gap-6">
+      <div class="bg-on-surface/5 grid size-20 shrink-0 place-content-center self-center rounded-full">
+        <Icon use="qr-code" size="md" />
       </div>
+      <Text class="text-balance text-center">
+        {t('family-invite.join-instruction')}
+      </Text>
       <Switch>
         <Match when={camera() === 'denied'}>
           <div class="flex flex-col items-center gap-2">

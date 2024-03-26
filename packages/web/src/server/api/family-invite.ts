@@ -36,14 +36,18 @@ export const joinFamilyWithLink = action(async (formData: FormData) => {
 
 export const joinFamilyWithQRCode = action(async (invitationHash: string) => {
   'use server';
-  const currentUser = await getRequestUser();
-  if (!invitationHash || !currentUser.userId)
-    throw new Error('Missing invitation hash.');
-  // TODO: error handling
-  const family = await joinFamilyByInvitationHash(
-    invitationHash,
-    currentUser.userId,
-  );
-  /** Revalidation happens after user sees the success dialog */
-  return json(family, { revalidate: [] });
-}, 'join-family');
+  try {
+    const currentUser = await getRequestUser();
+    if (!invitationHash || !currentUser.userId)
+      throw new Error('Missing invitation hash.');
+    // TODO: error handling
+    const family = await joinFamilyByInvitationHash(
+      invitationHash,
+      currentUser.userId,
+    );
+    /** Revalidation happens after user sees the success dialog */
+    return json(family, { revalidate: [] });
+  } catch (error) {
+    throw new Error('Invite code is invalid');
+  }
+}, 'join-family-qr');
