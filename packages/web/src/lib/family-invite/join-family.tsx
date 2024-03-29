@@ -54,7 +54,7 @@ const JoinFamily = (props: { onCancel: () => void; onSuccess: () => void }) => {
           </div>
         </Match>
         <Match when={camera() === 'granted'}>
-          <div class="bg-on-surface/5 size-[300px] rounded-2xl empty:animate-pulse">
+          <div class="bg-on-surface/5 border-on-surface/5 size-[300px] rounded-2xl border empty:animate-pulse">
             <Suspense>
               <QRCodeScanner onSuccess={props.onSuccess} />
             </Suspense>
