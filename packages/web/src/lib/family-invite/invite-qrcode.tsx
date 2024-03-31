@@ -1,6 +1,7 @@
 import { createAsync } from '@solidjs/router';
-import { createEffect, createSignal, Match, Suspense, Switch } from 'solid-js';
-import { Button, Card, Spinner, Text } from '@nou/ui';
+import { createEffect, createSignal, Suspense } from 'solid-js';
+import { Button, Card, Spinner, Text, tw } from '@nou/ui';
+import type QRCodeStyling from 'styled-qr-code';
 
 import { getFamilyInvite } from '~/server/api/family-invite';
 import { createTranslator } from '~/server/i18n';
@@ -23,54 +24,62 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
     await navigator.share(shareData);
   }
 
+  let qrCode: QRCodeStyling;
   createEffect(() => {
     const data = inviteData()?.qrString;
     const container = containerRef();
-    if (data && container && !consentShown()) {
-      createQRCode(data, container);
+    if (data && container) {
+      // show fake QR code on the background while the consent is shown
+      const content = consentShown() ? '0' : data;
+      if (qrCode) {
+        qrCode.update({ data: content });
+      } else {
+        createQRCode(content, container).then((instance) => {
+          qrCode = instance;
+        });
+      }
     }
   });
 
   return (
     <div class="flex flex-col gap-6">
-      <div class="flex w-full flex-col items-center justify-center gap-2">
-        <Switch>
-          <Match when={consentShown()}>
-            <Card
-              class="flex w-full flex-col justify-stretch gap-4"
-              variant="outlined"
+      <div class="flex size-full flex-col items-center justify-center gap-4">
+        <Text as="p" class="text-balance text-center">
+          {t('family-invite.qr-description')}
+        </Text>
+        <div class="stack size-[300px] shrink-0">
+          <Card
+            class={tw(
+              'flex flex-col items-center justify-center bg-surface/[0.97] size-[324px] -m-3 backdrop-blur-sm gap-4',
+              !consentShown() ? 'hidden' : undefined,
+            )}
+            variant="outlined"
+          >
+            <Text with="body">{t('family-invite.info-consent')}</Text>
+            <Button
+              size="sm"
+              variant="link"
+              onClick={() => {
+                setConsentShown(false);
+              }}
             >
-              <Text with="body">{t('family-invite.info-consent')}</Text>
-              <Button
-                size="sm"
-                variant="link"
-                onClick={() => {
-                  setConsentShown(false);
-                }}
-              >
-                {t('family-invite.info-consent-accept')}
-              </Button>
-            </Card>
-          </Match>
-          <Match when={!consentShown()}>
-            <Text as="p" class="text-balance text-center">
-              {t('family-invite.qr-description')}
-            </Text>
-            <div class="stack size-[300px]">
-              <div ref={setContainerRef} class="peer" />
-              <div class="bg-tertiary/12 hidden size-full animate-pulse place-content-center rounded-2xl peer-empty:grid">
-                <Spinner size="sm" variant="tertiary" />
-              </div>
+              {t('family-invite.info-consent-accept')}
+            </Button>
+          </Card>
+          <div class="stack size-[300px]">
+            <div ref={setContainerRef} class="peer" />
+            <div class="bg-tertiary/12 hidden size-full animate-pulse place-content-center rounded-2xl peer-empty:grid">
+              <Spinner size="sm" variant="tertiary" />
             </div>
-            <Suspense fallback={<div class="h-5" />}>
-              <Text with="body-sm" tone="light">
-                {t('family-invite.expires-in', {
-                  expiresIn: inviteData()?.expiresIn || '',
-                })}
-              </Text>
-            </Suspense>
-          </Match>
-        </Switch>
+          </div>
+        </div>
+        <Suspense fallback={<div class="h-5" />}>
+          <Text with="body-sm" tone="light">
+            {t('family-invite.expires-in', {
+              expiresIn: inviteData()?.expiresIn || '',
+            })}
+          </Text>
+        </Suspense>
       </div>
       <Button variant="ghost" onClick={share}>
         {t('family-invite.cta-share')}

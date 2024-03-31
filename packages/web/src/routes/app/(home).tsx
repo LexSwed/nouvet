@@ -50,7 +50,7 @@ function AppMainPage(props: RouteSectionProps) {
 export default AppMainPage;
 
 const FamilyInviteDialog = clientOnly(
-  () => import('~/lib/family-invite/dialog'),
+  () => import('~/lib/family-invite/invite-dialog'),
 );
 
 const AppHeader = () => {
