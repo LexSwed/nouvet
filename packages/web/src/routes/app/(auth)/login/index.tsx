@@ -28,7 +28,7 @@ function AppLoginPage() {
       <Title>{t('meta.title')}</Title>
       <div class="bg-main flex min-h-full flex-col gap-12 pb-8 pt-4">
         <header class="container flex flex-row justify-between">
-          <LogoLink />
+          <LogoLink label={t('back-home')} />
           {isDev && <DevLogin />}
         </header>
         <section class="container flex h-full flex-[2] flex-col items-center gap-12">
