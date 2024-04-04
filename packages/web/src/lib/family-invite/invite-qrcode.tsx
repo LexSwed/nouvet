@@ -48,14 +48,27 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
           {t('family-invite.qr-description')}
         </Text>
         <div class="stack size-[300px] shrink-0">
+          <div
+            class={tw(
+              'stack size-[300px] transition-transform duration-300',
+              consentShown() ? 'scale-95' : 'scale-100',
+            )}
+          >
+            <div ref={setContainerRef} class="peer" />
+            <div class="bg-tertiary/12 hidden size-full animate-pulse place-content-center rounded-2xl peer-empty:grid">
+              <Spinner size="sm" variant="tertiary" />
+            </div>
+          </div>
           <Card
             class={tw(
-              'flex flex-col items-center justify-center bg-surface/[0.97] size-[324px] -m-3 backdrop-blur-sm gap-4',
+              'flex flex-col items-center justify-center bg-surface/[0.975] size-full -m-3 backdrop-blur-sm gap-4',
               !consentShown() ? 'hidden' : undefined,
             )}
             variant="outlined"
           >
-            <Text with="body">{t('family-invite.info-consent')}</Text>
+            <Text as="p" with="body">
+              {t('family-invite.info-consent')}
+            </Text>
             <Button
               size="sm"
               variant="link"
@@ -66,25 +79,30 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
               {t('family-invite.info-consent-accept')}
             </Button>
           </Card>
-          <div class="stack size-[300px]">
-            <div ref={setContainerRef} class="peer" />
-            <div class="bg-tertiary/12 hidden size-full animate-pulse place-content-center rounded-2xl peer-empty:grid">
-              <Spinner size="sm" variant="tertiary" />
-            </div>
-          </div>
         </div>
         <Suspense fallback={<div class="h-5" />}>
-          <Text with="body-sm" tone="light">
+          <Text
+            with="body-sm"
+            tone="light"
+            class={
+              consentShown()
+                ? 'opacity-0'
+                : 'transition-opacity delay-150 duration-150'
+            }
+            aria-hidden={consentShown()}
+          >
             {t('family-invite.expires-in', {
               expiresIn: inviteData()?.expiresIn || '',
             })}
           </Text>
         </Suspense>
       </div>
-      <Button variant="ghost" onClick={share}>
-        {t('family-invite.cta-share')}
-      </Button>
-      <Button onClick={props.onNext}>{t('family-invite.cta-ready')}</Button>
+      <div class="flex flex-col gap-4">
+        <Button variant="ghost" onClick={share}>
+          {t('family-invite.cta-share')}
+        </Button>
+        <Button onClick={props.onNext}>{t('family-invite.cta-ready')}</Button>
+      </div>
     </div>
   );
 };
