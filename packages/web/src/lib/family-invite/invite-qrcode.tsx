@@ -43,15 +43,24 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
 
   return (
     <div class="flex flex-col gap-6">
-      <div class="flex size-full flex-col items-center justify-center gap-4">
-        <Text as="p" class="text-balance text-center">
+      <div class="flex size-full flex-col items-center justify-center gap-3">
+        <Text
+          as="p"
+          class={tw(
+            'text-balance text-center',
+            consentShown()
+              ? 'opacity-0'
+              : 'transition-opacity delay-500 duration-500',
+          )}
+          aria-hidden={consentShown()}
+        >
           {t('family-invite.qr-description')}
         </Text>
         <div class="stack size-[300px] shrink-0">
           <div
             class={tw(
-              'stack size-[300px] transition-transform duration-300',
-              consentShown() ? 'scale-95' : 'scale-100',
+              'stack size-[300px] ease-out transition-transform duration-500',
+              consentShown() ? 'scale-[0.98]' : 'scale-100',
             )}
           >
             <div ref={setContainerRef} class="peer" />
@@ -61,7 +70,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
           </div>
           <Card
             class={tw(
-              'flex flex-col items-center justify-center bg-surface/[0.975] size-full -m-3 backdrop-blur-sm gap-4',
+              'flex flex-col items-center justify-center bg-surface/[0.975] backdrop-blur-sm gap-4',
               !consentShown() ? 'hidden' : undefined,
             )}
             variant="outlined"
@@ -87,7 +96,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
             class={
               consentShown()
                 ? 'opacity-0'
-                : 'transition-opacity delay-150 duration-150'
+                : 'transition-opacity delay-700 duration-500'
             }
             aria-hidden={consentShown()}
           >
