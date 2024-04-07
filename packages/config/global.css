@@ -100,4 +100,8 @@
   .stack {
     @apply grid place-items-center *:[grid-area:1/1];
   }
+
+  .allow-discrete {
+    transition-behavior: allow-discrete;
+  }
 }

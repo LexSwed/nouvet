@@ -50,7 +50,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
             'text-balance text-center',
             consentShown()
               ? 'opacity-0'
-              : 'transition-opacity delay-500 duration-500',
+              : 'transition-opacity delay-300 duration-300',
           )}
           aria-hidden={consentShown()}
         >
@@ -70,8 +70,8 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
           </div>
           <Card
             class={tw(
-              'flex flex-col items-center justify-center bg-surface/[0.975] backdrop-blur-sm gap-4',
-              !consentShown() ? 'hidden' : undefined,
+              'flex flex-col items-center allow-discrete transition-all duration-150 justify-center bg-surface/[0.975] backdrop-blur-sm gap-4',
+              !consentShown() ? 'hidden scale-[0.98] opacity-0' : undefined,
             )}
             variant="outlined"
           >
@@ -96,7 +96,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
             class={
               consentShown()
                 ? 'opacity-0'
-                : 'transition-opacity delay-700 duration-500'
+                : 'transition-opacity delay-500 duration-300'
             }
             aria-hidden={consentShown()}
           >
