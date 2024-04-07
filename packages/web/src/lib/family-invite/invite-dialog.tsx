@@ -7,6 +7,7 @@ import { startViewTransition } from '~/lib/utils/start-view-transition';
 import { FamilyInviteBenefits } from '../family-invite-benefits';
 
 import { FamilyInviteQRCode } from './invite-qrcode';
+import { InviteWaitlist } from './invite-waitlist';
 import JoinFamily from './join-family';
 
 const FamilyInviteDialog = (props: { id: string }) => {
@@ -37,6 +38,11 @@ const InviteDialogContent = (props: { id: string }) => {
     startViewTransition(() => {
       setStep(newStep);
     });
+
+  const closePopover = () => {
+    const popover = document.getElementById(props.id);
+    popover?.hidePopover();
+  };
 
   return (
     <>
@@ -108,6 +114,9 @@ const InviteDialogContent = (props: { id: string }) => {
             onCancel={() => update('initial')}
             onSuccess={() => update('join-success')}
           />
+        </Match>
+        <Match when={step() === 'waitlist'}>
+          <InviteWaitlist onNext={closePopover} />
         </Match>
         <Match when={step() === 'join-success'}>
           <div class="animate-in fade-in duration-500">

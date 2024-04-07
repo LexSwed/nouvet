@@ -12,8 +12,8 @@ export const cacheTranslations = cache(<T extends Namespace>(namespace: T) => {
 }, 'translations');
 
 /**
- * For client side JS, we don't want to call `cache` again as it's not configurable and might be "expired".
- * Hence, storing all translations used during initial load on the client, for lazy loaded modules to have access to them.
+ * For client side JS, we don't want to call `cache` again as it's not configurable and might be "expired" by the time it's called again.
+ * Hence, store all translations used during initial load on the client, as they don't have to be reactive.
  */
 const clientMap = new Map<Namespace, NamespaceMap[Namespace]>();
 export const createTranslator = <T extends Namespace>(namespace: T) => {

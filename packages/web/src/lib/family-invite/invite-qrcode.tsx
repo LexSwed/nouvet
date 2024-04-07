@@ -10,7 +10,7 @@ import { createPersistedSetting } from '../utils/make-persisted-signal';
 
 export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
   const t = createTranslator('app');
-  // TODO: error handling
+  // TODO: error handling when the invite could not be generated
   const inviteData = createAsync(() => getFamilyInvite());
   const [containerRef, setContainerRef] = createSignal<HTMLDivElement | null>(
     null,

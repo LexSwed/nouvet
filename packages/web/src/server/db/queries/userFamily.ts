@@ -44,7 +44,7 @@ export async function userFamily(userId: DatabaseUser['id']) {
       family: {
         id: familyTable.id,
         name: familyTable.name,
-        isOwner: sql<number>`(${familyTable.creatorId} == ${userId})`.as(
+        isOwner: sql<number>`(${familyTable.ownerId} = ${userId})`.as(
           'is_owner',
         ),
         isApproved: familyUserTable.approved,

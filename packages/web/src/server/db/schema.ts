@@ -11,7 +11,7 @@ import {
 export const familyTable = sqliteTable('family', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
   name: text('name', { length: 100 }),
-  creatorId: integer('creator_id')
+  ownerId: integer('owner_id')
     .notNull()
     .references((): AnySQLiteColumn => userTable.id),
   createdAt: utcDatetime('created_at'),

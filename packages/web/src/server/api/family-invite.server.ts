@@ -30,8 +30,8 @@ export async function getFamilyInvite() {
       `${new URL(event!.request.url).origin}/app/family/invite/${invite.inviteCode}`,
     );
 
-    // 1 hour
-    const expiresIn = Math.floor((invite.expiresAt - Date.now() / 1000) / 60);
+    // 1 hour. Math.ceil instead of floor to shot it's lasting 1 hour, and it won't be shown if it's expired in < X minutes anyway.
+    const expiresIn = Math.ceil((invite.expiresAt - Date.now() / 1000) / 60);
 
     return {
       url: url.toString(),
