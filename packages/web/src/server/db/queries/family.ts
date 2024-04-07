@@ -39,15 +39,7 @@ export async function familyMembers(userId: DatabaseUser['id']) {
     .innerJoin(userProfileTable, eq(userTable.id, userProfileTable.userId));
 
   if (family.isOwner === 1) {
-    query.leftJoin(familyUserTable, eq(familyUserTable.familyId, family.id));
-  } else {
-    query.leftJoin(
-      familyUserTable,
-      and(
-        eq(familyUserTable.familyId, family.id),
-        eq(familyUserTable.approved, true),
-      ),
-    );
+    query.innerJoin(familyUserTable, eq(familyUserTable.userId, userTable.id));
   }
 
   const users = await query.all();

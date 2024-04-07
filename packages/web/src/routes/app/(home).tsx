@@ -62,7 +62,8 @@ const AppHeader = () => {
       {(user) => (
         <header class="flex items-start justify-between gap-8 p-4">
           <Switch>
-            <Match when={!user().family?.id}>
+            <Match when={true}>
+              {/* !user().family?.id}> */}
               <>
                 <Button popoverTarget="family-invite" variant="link">
                   {t('family.no-name')}

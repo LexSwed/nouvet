@@ -21,7 +21,7 @@ export const buttonVariants = cva(
         default: 'bg-primary text-on-primary outline-primary',
         destructive: 'bg-destructive text-on-destructive outline-destructive',
         outline:
-          'border-outline text-on-surface outline-on-surface rounded-full border bg-transparent',
+          'border-outline text-on-surface outline-on-surface rounded-full border bg-transparent focus-visible:outline-offset-0',
         secondary:
           'bg-tertiary-container text-on-tertiary-container outline-tertiary rounded-full',
         ghost: 'text-on-surface outline-on-surface',

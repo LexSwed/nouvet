@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { tw } from './tw';
 
-const avatarVariants = cva('rounded-full shadow-inner', {
+const avatarVariants = cva('shrink-0 rounded-full shadow-inner', {
   variants: {
     size: {
       base: 'size-12',

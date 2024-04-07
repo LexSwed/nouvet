@@ -26,12 +26,21 @@ export const joinFamilyWithLink = action(async (formData: FormData) => {
   'use server';
   const currentUser = await getRequestUser();
   const inviteCode = formData.get('invite-code')!.toString().trim();
-  if (!inviteCode || !currentUser.userId)
-    throw new Error('Missing invite-code.');
-  // TODO: error handling
-  await requestFamilyAdmissionByInviteCode(inviteCode, currentUser.userId);
+  if (!inviteCode || !currentUser.userId) {
+    return json(new Error('Invite code is not provided'), { status: 422 });
+  }
 
-  return redirect('/app');
+  try {
+    const family = await requestFamilyAdmissionByInviteCode(
+      inviteCode,
+      currentUser.userId,
+    );
+
+    return redirect(`/app/${family.familyId}`);
+  } catch (error) {
+    console.error(error);
+    return json(error, { status: 422 });
+  }
 }, 'join-family');
 
 export const joinFamilyWithQRCode = action(async (invitationHash: string) => {

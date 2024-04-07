@@ -29,12 +29,6 @@ export async function userProfile(userId: DatabaseUser['id']) {
 
 export async function userFamily(userId: DatabaseUser['id']) {
   const db = useDb();
-  const family = db
-    .select({
-      id: familyUserTable.familyId,
-    })
-    .from(familyUserTable)
-    .where(eq(familyUserTable.userId, userId));
 
   const userFamily = await db
     .select({
@@ -54,7 +48,7 @@ export async function userFamily(userId: DatabaseUser['id']) {
             .from(familyUserTable)
             .where(
               and(
-                eq(familyUserTable.familyId, family),
+                eq(familyUserTable.familyId, familyTable.id),
                 eq(familyUserTable.approved, false),
               ),
             ),
@@ -65,7 +59,7 @@ export async function userFamily(userId: DatabaseUser['id']) {
     .where(eq(userTable.id, userId))
     .innerJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))
     .innerJoin(familyUserTable, eq(familyUserTable.userId, userId))
-    .leftJoin(familyTable, eq(familyTable.id, family))
+    .leftJoin(familyTable, eq(familyTable.id, familyUserTable.familyId))
     .get();
 
   if (!userFamily) return null;

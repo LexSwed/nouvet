@@ -35,12 +35,7 @@ const QRCodeScannerPage = (props: { onSuccess: () => void }) => {
     }
   };
 
-  onCleanup(() => {
-    // seems like when there wasn't a submission before, `clear` is not defined?
-    if (joinSubmission.clear) {
-      joinSubmission.clear();
-    }
-  });
+  onCleanup(joinSubmission.clear);
 
   return (
     <Switch>
