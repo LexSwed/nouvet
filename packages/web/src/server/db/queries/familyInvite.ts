@@ -139,13 +139,14 @@ async function joinFamily(
     let family = tx
       .select({ familyId: familyTable.id })
       .from(familyTable)
-      .where(eq(familyTable.creatorId, invite.inviterId))
+      .where(eq(familyTable.ownerId, invite.inviterId))
       .get();
+
     if (!family) {
       newFamily = true;
       family = tx
         .insert(familyTable)
-        .values({ creatorId: invite.inviterId })
+        .values({ ownerId: invite.inviterId })
         .returning({ familyId: familyTable.id })
         .get();
     }

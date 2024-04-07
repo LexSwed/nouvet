@@ -9,7 +9,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
   const t = createTranslator('app');
   const waitList = createAsync(async () => {
     const members = await allFamilyUsers();
-    return members ? members.waiting : null;
+    return members ? members.filter((user) => !user.isApproved) : null;
   });
 
   return (

@@ -9,12 +9,7 @@ export const familyMembers = async () => {
 
     const members = await dbFamilyMembers(user.userId);
 
-    // no family created yet
-    if (!members) return null;
-
-    return Object.groupBy(members, (user) =>
-      user.isApproved ? 'approved' : 'waiting',
-    );
+    return members;
   } catch (error) {
     console.error(error);
   }

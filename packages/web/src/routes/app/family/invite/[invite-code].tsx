@@ -11,7 +11,7 @@ import { Button, ButtonLink, Card, Form, Icon, Text } from '@nou/ui';
 
 import {
   checkFamilyInvite,
-  joinFamilyThroughLink,
+  joinFamilyWithLink,
 } from '~/server/api/family-invite';
 import { getUserProfile } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
@@ -38,7 +38,7 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
   const invite = createAsync(() => checkFamilyInvite(code));
   // TODO: user is already part of a family
 
-  const joinSubmission = useSubmission(joinFamilyThroughLink);
+  const joinSubmission = useSubmission(joinFamilyWithLink);
 
   return (
     <>
@@ -70,7 +70,7 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
             <Match when={invite()}>
               <Form
                 method="post"
-                action={joinFamilyThroughLink}
+                action={joinFamilyWithLink}
                 class="bg-background bg-main z-10 col-span-6 col-start-1 row-[2] flex flex-col gap-6 rounded-3xl [background-attachment:fixed] sm:p-6 lg:col-span-5 lg:col-start-2"
               >
                 <Text with="headline-1">
