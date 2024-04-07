@@ -6,6 +6,8 @@ import type QRCodeStyling from 'styled-qr-code';
 import { getFamilyInvite } from '~/server/api/family-invite';
 import { createTranslator } from '~/server/i18n';
 
+import { createPersistedSetting } from '../utils/make-persisted-signal';
+
 export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
   const t = createTranslator('app');
   // TODO: error handling
@@ -13,7 +15,11 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
   const [containerRef, setContainerRef] = createSignal<HTMLDivElement | null>(
     null,
   );
-  const [consentShown, setConsentShown] = createSignal(true);
+  const [consentShown, setConsentShown] = createPersistedSetting<boolean>(
+    'qr-code-invitation-consent',
+    true,
+    { maxAgeInDays: 1 },
+  );
 
   async function share() {
     const shareData = {
@@ -52,7 +58,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
               ? 'opacity-0'
               : 'transition-opacity delay-300 duration-300',
           )}
-          aria-hidden={consentShown()}
+          aria-hidden={!!consentShown()}
         >
           {t('family-invite.qr-description')}
         </Text>

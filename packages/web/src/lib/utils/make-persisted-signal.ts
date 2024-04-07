@@ -10,10 +10,10 @@ const parseDocumentCookie = () =>
   );
 
 function serialize<T>(value: T): string {
-  if (value && typeof value === 'object') {
+  if (typeof value === 'object') {
     return encodeURIComponent(JSON.stringify(value));
   }
-  return value ? encodeURIComponent(`${value}`) : '';
+  return value === undefined ? '' : encodeURIComponent(`${value}`);
 }
 function deserialize<T>(cookieString: unknown): T | null {
   if (typeof cookieString !== 'string' || cookieString === '') return null;
@@ -34,16 +34,24 @@ const setting = cache(async <T>(name: string) => {
   return deserialize<T>(parseDocumentCookie()[name]);
 }, 'cookie-setting');
 
+type PersistedSettingParams = {
+  maxAgeInDays?: number;
+};
+
 export function createPersistedSetting<
   T extends
     | Record<string, string | number | undefined | null | boolean>
     | string
     | number
     | boolean,
->(name: string, defaultValue: T): [Accessor<T | null | undefined>, Setter<T>] {
+>(
+  name: string,
+  defaultValue: T,
+  params?: PersistedSettingParams,
+): [Accessor<T | null | undefined>, Setter<T>] {
   const cookie = createAsync(async (): Promise<T | null> => {
     const stored = await setting<T>(name);
-    return stored || defaultValue || null;
+    return stored ?? defaultValue ?? null;
   });
 
   // @ts-expect-error what do you want from me
@@ -51,7 +59,7 @@ export function createPersistedSetting<
     // @ts-expect-error what do you want from me
     const newValue: T = typeof value === 'function' ? value(cookie()) : value;
 
-    document.cookie = `${name}=${serialize(newValue)};max-age=${60 * 60 * 24 * 365}`;
+    document.cookie = `${name}=${serialize(newValue)};max-age=${60 * 60 * 24 * (params?.maxAgeInDays ?? 180)}`;
     if (!document.startViewTransition) {
       revalidate(setting.keyFor(name));
       return;
