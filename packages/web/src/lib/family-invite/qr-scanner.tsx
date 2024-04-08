@@ -35,7 +35,9 @@ const QRCodeScannerPage = (props: { onSuccess: () => void }) => {
     }
   };
 
-  onCleanup(joinSubmission.clear);
+  onCleanup(() => {
+    joinSubmission.clear?.();
+  });
 
   return (
     <Switch>
