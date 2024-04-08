@@ -123,9 +123,7 @@ export default {
       addVariant('intent', ['&:where(:hover,:focus)']);
     }),
     plugin(function disabledVariant({ addVariant }) {
-      addVariant('disabled', [
-        '&:where(disabled,[aria-disabled],[aria-disabled="true"])',
-      ]);
+      addVariant('disabled', ['&:where(disabled,[aria-disabled="true"])']);
     }),
   ],
 } satisfies Config;

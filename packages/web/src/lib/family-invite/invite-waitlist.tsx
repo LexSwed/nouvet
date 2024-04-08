@@ -1,4 +1,4 @@
-import { createAsync } from '@solidjs/router';
+import { createAsync, useSubmission } from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
 import { Avatar, Button, Card, Form, Icon, Text } from '@nou/ui';
 
@@ -8,14 +8,13 @@ import { createTranslator } from '~/server/i18n';
 
 export const InviteWaitlist = (props: { onNext: () => void }) => {
   const t = createTranslator('app');
-  const waitList = createAsync(
-    async () => {
-      const members = await getFamilyMembers();
-      return members ? members.filter((user) => !user.isApproved) : [];
-    },
-    { initialValue: [] },
-  );
-  const shownUser = () => waitList().at(0);
+  const familyMember = createAsync(async () => {
+    const members = await getFamilyMembers();
+    if (members)
+      return members.find((user) => !user.isApproved) || members.at(-1);
+    return null;
+  });
+  const userWaitListSubmission = useSubmission(moveUserFromTheWaitList);
 
   return (
     <div class="flex flex-col gap-6">
@@ -23,7 +22,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
         fallback={<div class="bg-on-surface/12 size-[300px] animate-pulse" />}
       >
         <Switch>
-          <Match when={waitList().length === 0}>
+          <Match when={!familyMember()}>
             <div class="flex flex-col items-center justify-center gap-6">
               <Icon
                 use="video-conference"
@@ -35,13 +34,13 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
               </Text>
             </div>
           </Match>
-          <Match when={!shownUser()?.isApproved}>
-            <Show when={shownUser()}>
+          <Match when={!familyMember()?.isApproved}>
+            <Show when={familyMember()}>
               {(user) => (
                 <Card
                   role="group"
                   variant="flat"
-                  class="bg-on-surface/5 flex flex-col gap-4 rounded-3xl"
+                  class="from-on-surface/5 flex flex-col gap-4 rounded-3xl bg-transparent bg-gradient-to-br via-transparent via-60% to-transparent"
                 >
                   <Text as="header" with="overline">
                     {t('family-invite.waitlist')}
@@ -69,6 +68,12 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
                       size="sm"
                       variant="outline"
                       class="flex-1 gap-3"
+                      aria-disabled={userWaitListSubmission.pending}
+                      loading={
+                        userWaitListSubmission.pending &&
+                        userWaitListSubmission.input[0].get('action') ===
+                          'decline'
+                      }
                     >
                       <Icon use="x" class="-ml-3" />
                       {t('family-invite.waitlist-decline')}
@@ -80,6 +85,12 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
                       size="sm"
                       variant="outline"
                       class="flex-1 gap-3"
+                      aria-disabled={userWaitListSubmission.pending}
+                      loading={
+                        userWaitListSubmission.pending &&
+                        userWaitListSubmission.input[0].get('action') ===
+                          'accept'
+                      }
                     >
                       <Icon use="check" class="-ml-2" />
                       {t('family-invite.waitlist-accept')}

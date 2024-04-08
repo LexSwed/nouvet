@@ -1,5 +1,13 @@
 import { action, cache, json, redirect } from '@solidjs/router';
-import { object, parse, picklist, string, ValiError } from 'valibot';
+import {
+  coerce,
+  integer,
+  number,
+  object,
+  parse,
+  picklist,
+  ValiError,
+} from 'valibot';
 
 import { getFamilyMembers } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
@@ -69,7 +77,7 @@ export const joinFamilyWithQRCode = action(async (invitationHash: string) => {
 
 const WaitListActionSchema = object({
   action: picklist(['accept', 'decline']),
-  userId: string(),
+  userId: coerce(number([integer()]), Number),
 });
 export const moveUserFromTheWaitList = action(async (formData: FormData) => {
   'use server';
@@ -92,7 +100,6 @@ export const moveUserFromTheWaitList = action(async (formData: FormData) => {
       });
     }
 
-    console.log(data);
     return json(data, {
       revalidate: [getFamilyMembers.key, getUserFamily.key],
     });

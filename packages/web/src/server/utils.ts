@@ -25,3 +25,7 @@ export async function translateErrorTokens<T extends Record<string, unknown>>(
 }
 
 export type ErrorKeys = keyof typeof ErrorsDict;
+
+export async function timeout(ms: number) {
+  await new Promise((resolve) => setTimeout(resolve, ms));
+}

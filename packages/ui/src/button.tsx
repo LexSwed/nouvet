@@ -98,10 +98,15 @@ const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       {...(props as any)}
       aria-label={local.label}
+      aria-busy={local.loading}
       title={local.title ?? local.label}
       class={tw(buttonVariants(local), props.class)}
       onClick={(event: MouseEvent) => {
-        if (local.loading || props.disabled || props['aria-disabled']) {
+        if (
+          local.loading ||
+          props.disabled ||
+          (props['aria-disabled'] && props['aria-disabled'] !== 'false')
+        ) {
           event.preventDefault();
           return;
         }
@@ -112,7 +117,7 @@ const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
     >
       {props.children}
       <Show when={local.loading}>
-        <div class="absolute inset-0 z-20 flex cursor-default items-center justify-center rounded-[inherit] bg-[inherit]">
+        <div class="absolute inset-0 isolate flex cursor-default items-center justify-center rounded-[inherit] bg-[radial-gradient(circle_at_50%_50%,theme(colors.surface/0.9),transparent)]">
           <Spinner size={local.size} />
         </div>
       </Show>
