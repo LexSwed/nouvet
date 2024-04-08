@@ -4,13 +4,9 @@ import { createHmac, randomBytes } from 'node:crypto';
 import { getRequestEvent } from 'solid-js/web';
 
 import { getRequestUser } from '~/server/auth/request-user';
-import {
-  createFamilyInvite as dbCreateFamilyInvite,
-  getFamilyInvite as dbGetFamilyInvite,
-  getFamilyInvitationInfo,
-} from '~/server/db/queries/familyInvite';
-
-import { env } from '../env';
+import { createFamilyInvite } from '~/server/db/queries/familyCreateInvite';
+import { familyInvite } from '~/server/db/queries/familyInvite';
+import { env } from '~/server/env';
 
 // TODO: Heavily rate limit this
 export async function getFamilyInvite() {
@@ -18,12 +14,12 @@ export async function getFamilyInvite() {
     const user = await getRequestUser();
     const event = getRequestEvent();
 
-    let invite = await dbGetFamilyInvite(user.userId);
+    let invite = await familyInvite(user.userId);
 
     if (!invite) {
       const inviteCode = randomBytes(8).toString('hex');
       const hash = createHash(inviteCode);
-      invite = await dbCreateFamilyInvite(user.userId, inviteCode, hash);
+      invite = await createFamilyInvite(user.userId, inviteCode, hash);
     }
 
     const url = new URL(
@@ -45,11 +41,6 @@ export async function getFamilyInvite() {
     console.error(error);
     return { failed: true };
   }
-}
-
-export async function checkFamilyInvite(inviteCode: string) {
-  const invite = await getFamilyInvitationInfo(inviteCode);
-  return invite;
 }
 
 function createHash(code: string) {

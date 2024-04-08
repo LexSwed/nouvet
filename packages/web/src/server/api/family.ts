@@ -1,8 +1,17 @@
 import { cache } from '@solidjs/router';
 
-import { familyMembers } from './family.server';
+import { getRequestUser } from '~/server/auth/request-user';
+import { familyMembers } from '~/server/db/queries/familyMembers';
 
-export const allFamilyUsers = cache(
-  async () => familyMembers(),
-  'family-members',
-);
+export const getFamilyMembers = cache(async () => {
+  'use server';
+  try {
+    const user = await getRequestUser();
+
+    const members = await familyMembers(user.userId);
+
+    return members;
+  } catch (error) {
+    console.error(error);
+  }
+}, 'family-members');

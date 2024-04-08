@@ -1,3 +1,5 @@
+'use server';
+
 import { and, eq, sql } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
@@ -45,3 +47,12 @@ export async function familyMembers(userId: DatabaseUser['id']) {
   const users = await query.all();
   return users;
 }
+
+export function acceptUserToFamily(params: {
+  familyOwnerId: DatabaseUser['id'];
+  inviteeId: DatabaseUser['id'];
+}) {}
+export function revokeUserInvite(params: {
+  familyOwnerId: DatabaseUser['id'];
+  inviteeId: DatabaseUser['id'];
+}) {}

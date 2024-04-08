@@ -1,26 +1,32 @@
 import { action, cache, json, redirect } from '@solidjs/router';
+import { object, parse, picklist, string, ValiError } from 'valibot';
 
+import { getFamilyMembers } from '~/server/api/family';
+import { getUserFamily } from '~/server/api/user';
 import { getRequestUser } from '~/server/auth/request-user';
-
+import { familyInvitationInfo } from '~/server/db/queries/familyInvitationInfo';
 import {
   joinFamilyByInvitationHash,
   requestFamilyAdmissionByInviteCode,
-} from '../db/queries/familyInvite';
-
+} from '~/server/db/queries/familyJoin';
 import {
-  checkFamilyInvite as checkFamilyInviteServer,
-  getFamilyInvite as getFamilyInviteServer,
-} from './family-invite.server';
+  acceptUserToFamily,
+  revokeUserInvite,
+} from '~/server/db/queries/familyMembers';
 
-export const getFamilyInvite = cache(
-  () => getFamilyInviteServer(),
-  'family-invite-code',
-);
+import { getFamilyInvite as getFamilyInviteServer } from './family-invite.server';
 
-export const checkFamilyInvite = cache(
-  (inviteCode: string) => checkFamilyInviteServer(inviteCode),
-  'accept-family-invite',
-);
+export const getFamilyInvite = cache(() => {
+  'use server';
+  // TODO: if vinxi supports tree-shaking modules used within server functions, .server file logic (with crypto and env imports) can be moved here.
+  return getFamilyInviteServer();
+}, 'family-invite-code');
+
+export const checkFamilyInvite = cache(async (inviteCode: string) => {
+  'use server';
+  const invite = await familyInvitationInfo(inviteCode);
+  return invite;
+}, 'accept-family-invite');
 
 export const joinFamilyWithLink = action(async (formData: FormData) => {
   'use server';
@@ -60,3 +66,37 @@ export const joinFamilyWithQRCode = action(async (invitationHash: string) => {
     throw new Error('Invite code is invalid');
   }
 }, 'join-family-qr');
+
+const WaitListActionSchema = object({
+  action: picklist(['accept', 'decline']),
+  userId: string(),
+});
+export const moveUserFromTheWaitList = action(async (formData: FormData) => {
+  'use server';
+  try {
+    const data = parse(WaitListActionSchema, {
+      action: formData.get('action'),
+      userId: formData.get('user-id'),
+    });
+    const user = await getRequestUser();
+
+    if (data.action === 'accept') {
+      await acceptUserToFamily({
+        familyOwnerId: user.userId,
+        inviteeId: data.userId,
+      });
+    } else {
+      await revokeUserInvite({
+        familyOwnerId: user.userId,
+        inviteeId: data.userId,
+      });
+    }
+
+    console.log(data);
+    return json(data, {
+      revalidate: [getFamilyMembers.key, getUserFamily.key],
+    });
+  } catch (error) {
+    return json({ error }, { status: error instanceof ValiError ? 422 : 500 });
+  }
+}, 'move-user-from-the-wait-list');
