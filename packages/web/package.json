@@ -22,7 +22,7 @@
     "@solid-primitives/media": "^2.2.8",
     "@solid-primitives/permission": "^1.2.6",
     "@solid-primitives/refs": "^1.0.8",
-    "@solid-primitives/storage": "^3.1.0",
+    "@solid-primitives/storage": "^3.2.0",
     "@solidjs/meta": "^0.29.3",
     "@solidjs/router": "^0.13.1",
     "@solidjs/start": "^0.7.7",
