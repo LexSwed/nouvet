@@ -58,86 +58,68 @@ const AppHeader = () => {
   const user = createAsync(() => getUserFamily());
 
   return (
-    <Show when={user()}>
-      {(user) => (
-        <header class="flex items-start justify-between gap-8 p-4">
-          <Switch>
-            <Match when={true}>
-              {/* !user().family?.id}> */}
-              <>
-                <Button popoverTarget="family-invite" variant="link">
-                  {t('family.no-name')}
-                </Button>
-                <Suspense>
-                  <FamilyInviteDialog id="family-invite" />
-                </Suspense>
-              </>
-            </Match>
-            <Match
-              when={
-                user().family.id &&
-                !user().family.isOwner &&
-                !user().family.isApproved
-              }
-            >
-              <Card
-                variant="filled"
-                class="flex max-w-[380px] flex-col p-0 pt-2"
+    <Suspense>
+      <Show when={user()}>
+        {(user) => (
+          <header class="flex items-start justify-between gap-8 p-4">
+            <Switch>
+              <Match when={!user().family?.id}>
+                <>
+                  <Button popoverTarget="family-invite" variant="link">
+                    {t('family.no-name')}
+                  </Button>
+                  <Suspense>
+                    <FamilyInviteDialog id="family-invite" />
+                  </Suspense>
+                </>
+              </Match>
+              <Match
+                when={
+                  user().family.id &&
+                  !user().family.isOwner &&
+                  !user().family.isApproved
+                }
               >
-                <ButtonLink
-                  href={`/app/${user().family?.id}`}
-                  variant="link"
-                  class="flex flex-row items-center justify-between gap-4"
+                <Card
+                  variant="filled"
+                  class="flex max-w-[380px] flex-col p-0 pt-2"
                 >
-                  {t('family.no-name')}
-                  <Icon
-                    use="nouvet"
-                    size="md"
-                    class="text-on-primary-container"
-                  />
-                </ButtonLink>
-                <Text class="p-6 pt-0">{t('family.joined')}</Text>
-              </Card>
-            </Match>
-            <Match when={user().family?.id}>
-              <div class="flex flex-row items-center gap-1">
-                <ButtonLink
-                  href={`/app/${user().family?.id}`}
-                  variant="ghost"
-                  class="text-primary intent:bg-primary/5 gap-2 rounded-full px-2"
-                >
-                  {user().family?.name
-                    ? user().family?.name
-                    : t('family.no-name')}
-                  <Show when={user().family.waitingApproval > 0}>
-                    {
-                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                      (_) => {
-                        const multiple = user().family.waitingApproval > 1;
-                        const title = multiple
-                          ? t('family.has-pending-multiple', {
-                              pendingNumber: user().family.waitingApproval,
-                            })
-                          : t('family.has-pending-one');
-                        return (
-                          <Text
-                            title={title}
-                            aria-label={title}
-                            class="bg-primary-container text-on-primary-container grid aspect-square size-8 place-items-center rounded-full text-sm"
-                          >
-                            {user().family.waitingApproval}
-                          </Text>
-                        );
-                      }
-                    }
-                  </Show>
-                </ButtonLink>
-              </div>
-            </Match>
-          </Switch>
-          <AccountMenu name={user().name || ''} avatarUrl={user().avatarUrl!} />
-        </header>
-      )}
-    </Show>
+                  <ButtonLink
+                    href={`/app/${user().family?.id}`}
+                    variant="link"
+                    class="flex flex-row items-center justify-between gap-4"
+                  >
+                    {t('family.no-name')}
+                    <Icon
+                      use="nouvet"
+                      size="md"
+                      class="text-on-primary-container"
+                    />
+                  </ButtonLink>
+                  <Text class="p-6 pt-0">{t('family.joined')}</Text>
+                </Card>
+              </Match>
+              <Match when={user().family?.id}>
+                <div class="flex flex-row items-center gap-1">
+                  <ButtonLink
+                    href={`/app/${user().family?.id}`}
+                    variant="ghost"
+                    class="text-primary intent:bg-primary/5 gap-2 rounded-full px-2"
+                  >
+                    {user().family?.name
+                      ? user().family!.name
+                      : t('family.no-name')}
+                  </ButtonLink>
+                </div>
+              </Match>
+            </Switch>
+            <AccountMenu
+              name={user().name || ''}
+              avatarUrl={user().avatarUrl!}
+            />
+          </header>
+        )}
+      </Show>
+    </Suspense>
   );
 };

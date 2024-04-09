@@ -42,17 +42,6 @@ export async function userFamily(userId: DatabaseUser['id']) {
           'is_owner',
         ),
         isApproved: familyUserTable.approved,
-        waitingApproval: count(
-          db
-            .select({ id: familyUserTable.userId })
-            .from(familyUserTable)
-            .where(
-              and(
-                eq(familyUserTable.familyId, familyTable.id),
-                eq(familyUserTable.approved, false),
-              ),
-            ),
-        ),
       },
     })
     .from(userTable)
