@@ -62,6 +62,7 @@ export const familyUserTable = sqliteTable(
      * The owner of the family approves people who got the invitation.
      */
     approved: integer('approved', { mode: 'boolean' }).notNull().default(false),
+    joinedAt: utcDatetime('joined_at'),
   },
   (table) => {
     return {

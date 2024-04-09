@@ -1,0 +1,1 @@
+ALTER TABLE family_user ADD `joined_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL;
