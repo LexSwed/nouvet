@@ -1,6 +1,6 @@
 'use server';
 
-import { and, count, eq, sql } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
 import {
@@ -47,7 +47,7 @@ export async function userFamily(userId: DatabaseUser['id']) {
     .from(userTable)
     .where(eq(userTable.id, userId))
     .innerJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))
-    .innerJoin(familyUserTable, eq(familyUserTable.userId, userId))
+    .leftJoin(familyUserTable, eq(familyUserTable.userId, userId))
     .leftJoin(familyTable, eq(familyTable.id, familyUserTable.familyId))
     .get();
 
