@@ -1,9 +1,10 @@
-import { createAsync, useSubmission } from '@solidjs/router';
+import { createAsync, revalidate, useSubmission } from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
 import { Avatar, Button, Card, Form, Icon, Text } from '@nou/ui';
 
 import { getFamilyMembers } from '~/server/api/family';
 import { moveUserFromTheWaitList } from '~/server/api/family-invite';
+import { getUserFamily } from '~/server/api/user';
 import { createTranslator } from '~/server/i18n';
 
 export const InviteWaitlist = (props: { onNext: () => void }) => {
@@ -101,7 +102,14 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
             </Show>
           </Match>
         </Switch>
-        <Button onClick={props.onNext}>
+        <Button
+          onClick={async () => {
+            if (familyMember()) {
+              revalidate(getUserFamily.key);
+            }
+            props.onNext();
+          }}
+        >
           {t('family-invite.waitlist-done')}
         </Button>
       </Suspense>
