@@ -8,7 +8,6 @@ import {
   useContext,
   type Accessor,
   type ComponentProps,
-  type ParentProps,
 } from 'solid-js';
 
 interface FormContext {
@@ -20,9 +19,7 @@ const formContext = createContext<Accessor<FormContext>>(() => ({
 }));
 export const useFormContext = () => useContext(formContext);
 
-export const Form = (
-  ownProps: ParentProps<FormContext & ComponentProps<'form'>>,
-) => {
+export const Form = (ownProps: FormContext & ComponentProps<'form'>) => {
   let formRef: HTMLFormElement | undefined;
   const [local, props] = splitProps(ownProps, ['validationErrors']);
   const [nativeErrors, setNativeErrors] =
@@ -63,8 +60,11 @@ export const Form = (
             event.stopPropagation();
             return false;
           } else {
-            // @ts-expect-error Solid issues
-            props.onSubmit?.(event);
+            if (typeof props.onSubmit === 'function') {
+              props.onSubmit?.(event);
+            } else {
+              props.onSubmit?.[1]?.(props.onSubmit[0], event);
+            }
           }
         }}
       />
