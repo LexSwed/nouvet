@@ -9,7 +9,7 @@ import {
   familyUserTable,
   type DatabaseUser,
 } from '~/server/db/schema';
-import { IncorrectFamilyInvite } from '~/server/errors';
+import { IncorrectFamilyInvite, UserAlreadyInFamily } from '~/server/errors';
 
 export async function joinFamilyByInvitationHash(
   invitationHash: string,
@@ -33,6 +33,8 @@ export async function requestFamilyAdmissionByInviteCode(
  * Used invites are not removed for rare cases when a user sends the invite to multiple people.
  * There's no expectation for multiple people to read the invite QR code (invitationHash),
  * and the invites are short-lived, so no risk assumed.
+ * @throws {IncorrectFamilyInvite} - invite is not found or expired.
+ * @throws {UserAlreadyInFamily} - user was already a part of another family.
  */
 async function familyJoin(
   userId: DatabaseUser['id'],
@@ -45,65 +47,70 @@ async function familyJoin(
       },
 ) {
   const db = useDb();
-  const invite = await db.transaction(async (tx) => {
-    const invite = tx
-      .select({
-        inviteCode: familyInviteTable.inviteCode,
-        expiresAt: familyInviteTable.expiresAt,
-        inviterId: familyInviteTable.inviterId,
-      })
-      .from(familyInviteTable)
-      .where(
-        and(
-          'inviteCode' in params
-            ? eq(familyInviteTable.inviteCode, params.inviteCode)
-            : eq(familyInviteTable.invitationHash, params.invitationHash),
-          sql`((${familyInviteTable.expiresAt} - unixepoch())) > 0`,
-        ),
-      )
-      .get();
-    if (!invite) throw new IncorrectFamilyInvite('Incorrect invite');
-
-    await tx
-      .delete(familyInviteTable)
-      .where(eq(familyInviteTable.inviteCode, invite.inviteCode));
-
-    let newFamily = false;
-    let family = tx
-      .select({ familyId: familyTable.id })
-      .from(familyTable)
-      .where(eq(familyTable.ownerId, invite.inviterId))
-      .get();
-
-    if (!family) {
-      newFamily = true;
-      family = tx
-        .insert(familyTable)
-        .values({ ownerId: invite.inviterId })
-        .returning({ familyId: familyTable.id })
-        .get();
-    }
-    /** When joining via QR Code (with hash), the user is automatically approved. */
-    const approved = 'invitationHash' in params;
-    await tx.insert(familyUserTable).values(
-      [
-        {
-          familyId: family.familyId,
-          userId: userId,
-          approved,
-        },
-      ].concat(
-        newFamily
-          ? {
-              familyId: family.familyId,
-              userId: invite.inviterId,
-              approved: true,
-            }
-          : [],
+  const invite = db
+    .select({
+      inviteCode: familyInviteTable.inviteCode,
+      expiresAt: familyInviteTable.expiresAt,
+      inviterId: familyInviteTable.inviterId,
+    })
+    .from(familyInviteTable)
+    .where(
+      and(
+        'inviteCode' in params
+          ? eq(familyInviteTable.inviteCode, params.inviteCode)
+          : eq(familyInviteTable.invitationHash, params.invitationHash),
+        sql`((${familyInviteTable.expiresAt} - unixepoch())) > 0`,
       ),
-    );
+    )
+    .get();
+  if (!invite) throw new IncorrectFamilyInvite('Incorrect invite');
 
-    return family;
-  });
-  return invite;
+  await db
+    .delete(familyInviteTable)
+    .where(eq(familyInviteTable.inviteCode, invite.inviteCode));
+
+  const existingUserFamily = await db
+    .select({ id: familyUserTable.familyId })
+    .from(familyUserTable)
+    .where(eq(familyUserTable.userId, userId))
+    .get();
+
+  if (existingUserFamily?.id) throw new UserAlreadyInFamily();
+
+  let newFamily = false;
+  let family = db
+    .select({ familyId: familyTable.id })
+    .from(familyTable)
+    .where(eq(familyTable.ownerId, invite.inviterId))
+    .get();
+
+  if (!family) {
+    newFamily = true;
+    family = db
+      .insert(familyTable)
+      .values({ ownerId: invite.inviterId })
+      .returning({ familyId: familyTable.id })
+      .get();
+  }
+  /** When joining via QR Code (with hash), the user is automatically approved. */
+  const approved = 'invitationHash' in params;
+  await db.insert(familyUserTable).values(
+    [
+      {
+        familyId: family.familyId,
+        userId: userId,
+        approved,
+      },
+    ].concat(
+      newFamily
+        ? {
+            familyId: family.familyId,
+            userId: invite.inviterId,
+            approved: true,
+          }
+        : [],
+    ),
+  );
+
+  return family;
 }
