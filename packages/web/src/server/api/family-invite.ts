@@ -22,6 +22,8 @@ import {
   revokeUserInvite,
 } from '~/server/db/queries/familyMembers';
 
+import { UserAlreadyInFamily } from '../errors';
+
 import { getFamilyInvite as getFamilyInviteServer } from './family-invite.server';
 
 export const getFamilyInvite = cache(() => {
@@ -32,9 +34,22 @@ export const getFamilyInvite = cache(() => {
 
 export const checkFamilyInvite = cache(async (inviteCode: string) => {
   'use server';
-  const invite = await familyInvitationInfo(inviteCode);
-  return invite;
-}, 'accept-family-invite');
+  const user = await getRequestUser();
+  try {
+    const invite = await familyInvitationInfo(inviteCode, user.userId);
+    return { invite } as const;
+  } catch (error) {
+    if (error instanceof UserAlreadyInFamily) {
+      //
+      return {
+        failed: true,
+        reason: 100,
+      } as const;
+    }
+    console.error(error);
+    return { failed: true } as const;
+  }
+}, 'check-family-invite');
 
 export const joinFamilyWithLink = action(async (formData: FormData) => {
   'use server';

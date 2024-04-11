@@ -3,10 +3,30 @@
 import { and, eq, sql } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
-import { familyInviteTable, userProfileTable } from '~/server/db/schema';
+import {
+  familyInviteTable,
+  familyUserTable,
+  userProfileTable,
+  type DatabaseUser,
+} from '~/server/db/schema';
+import { UserAlreadyInFamily } from '~/server/errors';
 
-export async function familyInvitationInfo(inviteCode: string) {
+/**
+ * Finds the invite by the code from the invite link.
+ * @throws {UserAlreadyInFamily} when user is already part of another family.
+ */
+export async function familyInvitationInfo(
+  inviteCode: string,
+  inviteeId: DatabaseUser['id'],
+) {
   const db = useDb();
+  const existingUserFamily = await db
+    .select({ familyId: familyUserTable.familyId })
+    .from(familyUserTable)
+    .where(eq(familyUserTable.userId, inviteeId));
+
+  if (existingUserFamily) throw new UserAlreadyInFamily();
+
   const invite = await db
     .select({ inviterName: userProfileTable.name })
     .from(userProfileTable)
