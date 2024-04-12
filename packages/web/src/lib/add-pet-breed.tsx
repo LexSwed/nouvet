@@ -1,12 +1,17 @@
 import { useSubmission } from '@solidjs/router';
+import { clientOnly } from '@solidjs/start';
 import { createEffect, Show } from 'solid-js';
-import { Button, Drawer, Form, Icon, Text, TextField } from '@nou/ui';
+import { Button, Form, Icon, Text, TextField } from '@nou/ui';
 
 import { updatePetBreed } from '~/server/api/pet';
 import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
 
 import { FormErrorMessage } from './form-error-message';
+
+const Drawer = clientOnly(() =>
+  import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
+);
 
 interface AddBreedFormProps {
   id: string;

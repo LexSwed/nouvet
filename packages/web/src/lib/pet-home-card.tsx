@@ -1,5 +1,4 @@
 import { A } from '@solidjs/router';
-import { clientOnly } from '@solidjs/start';
 import { createUniqueId, Match, Show, Suspense, Switch } from 'solid-js';
 import {
   Button,
@@ -17,6 +16,10 @@ import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
 
 import { createPersistedSetting } from '~/lib/utils/make-persisted-signal';
+
+import AddBirthDateForm from './add-birthdate-form';
+import AddBreedForm from './add-pet-breed';
+import AddWeightForm from './add-weight-form';
 
 interface PetHomeCardProps {
   pet: {
@@ -169,10 +172,6 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
     </Card>
   );
 };
-
-const AddBirthDateForm = clientOnly(() => import('~/lib/add-birthdate-form'));
-const AddBreedForm = clientOnly(() => import('~/lib/add-pet-breed'));
-const AddWeightForm = clientOnly(() => import('~/lib/add-weight-form'));
 
 function QuickSetters(props: PetHomeCardProps) {
   const t = createTranslator('pet-forms');
