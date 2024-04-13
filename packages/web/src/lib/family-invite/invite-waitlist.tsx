@@ -9,7 +9,7 @@ import { createTranslator } from '~/server/i18n';
 import { WaitingFamilyConfirmation } from './waiting-family-confirmation';
 
 export const InviteWaitlist = (props: { onNext: () => void }) => {
-  const t = createTranslator('app');
+  const t = createTranslator('family');
   const familyMember = createAsync(async () => {
     const members = await getFamilyMembers();
     if (members)

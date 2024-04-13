@@ -7,7 +7,7 @@ import { createTranslator } from '~/server/i18n';
 
 const QRCodeScanner = lazy(() => import('./qr-scanner'));
 const JoinFamily = (props: { onCancel: () => void; onSuccess: () => void }) => {
-  const t = createTranslator('app');
+  const t = createTranslator('family');
 
   const supportsCamera = createAsync(async () => {
     try {

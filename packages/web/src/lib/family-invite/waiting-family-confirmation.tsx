@@ -7,7 +7,7 @@ import { createTranslator } from '~/server/i18n';
 export function WaitingFamilyConfirmation(props: {
   user: { name: string | null; id: number; avatarUrl: string | null };
 }) {
-  const t = createTranslator('app');
+  const t = createTranslator('family');
 
   const userWaitListSubmission = useSubmission(moveUserFromTheWaitList);
 

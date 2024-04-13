@@ -16,7 +16,7 @@ import { createTranslator } from '~/server/i18n';
 import { startViewTransition } from '../utils/start-view-transition';
 
 const QRCodeScannerPage = (props: { onSuccess: () => void }) => {
-  const t = createTranslator('app');
+  const t = createTranslator('family');
   const join = useAction(joinFamilyWithQRCode);
   const joinSubmission = useSubmission(joinFamilyWithQRCode);
   const [imageData, setImageData] = createSignal<string | null>(null);

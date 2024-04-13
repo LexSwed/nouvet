@@ -4,6 +4,7 @@ import { getRequestEvent } from 'solid-js/web';
 
 import type AppDict from './locales/en/app.json';
 import type ErrorsDict from './locales/en/errors.json';
+import type FamilyDict from './locales/en/family.json';
 import type InvitedDict from './locales/en/invited.json';
 import type LoginDict from './locales/en/login.json';
 import type PetFormsDict from './locales/en/pet-forms.json';
@@ -13,6 +14,7 @@ import type { SupportedLocale } from './shared';
 export type NamespaceMap = {
   'www': typeof WWWDict;
   'app': typeof AppDict;
+  'family': typeof FamilyDict;
   'login': typeof LoginDict;
   'invited': typeof InvitedDict;
   'errors': typeof ErrorsDict;

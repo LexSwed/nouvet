@@ -7,12 +7,7 @@ import { env } from '~/server/env';
 
 export const useLucia = () => {
   const db = useDb();
-  const adapter = new DrizzleSQLiteAdapter(
-    db,
-    // @ts-expect-error requires lucia adapter types update
-    sessionTable,
-    userTable,
-  );
+  const adapter = new DrizzleSQLiteAdapter(db, sessionTable, userTable);
 
   const lucia = new Lucia(adapter, {
     sessionCookie: {

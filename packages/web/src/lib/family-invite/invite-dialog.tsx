@@ -32,7 +32,7 @@ const FamilyInviteDialog = (props: { id: string }) => {
 
 type Step = 'initial' | 'qrcode' | 'waitlist' | 'join' | 'join-success';
 const InviteDialogContent = (props: { id: string }) => {
-  const t = createTranslator('app');
+  const t = createTranslator('family');
   const [step, setStep] = createSignal<Step>('initial');
   const update = (newStep: Step) =>
     startViewTransition(() => {

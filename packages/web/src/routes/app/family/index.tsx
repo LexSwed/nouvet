@@ -1,7 +1,7 @@
 import { Title } from '@solidjs/meta';
 import { createAsync, type RouteDefinition } from '@solidjs/router';
 import { Show, Suspense } from 'solid-js';
-import { Button, Icon } from '@nou/ui';
+import { ButtonLink, Icon, Text } from '@nou/ui';
 
 import { getFamilyMembers } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
@@ -21,7 +21,7 @@ export const route = {
 } satisfies RouteDefinition;
 
 function FamilyPage() {
-  const t = createTranslator('app');
+  const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
   const familyMembers = createAsync(async () => {
     const members = await getFamilyMembers();
@@ -46,9 +46,12 @@ function FamilyPage() {
       </Title>
       <div class="bg-background min-h-full">
         <AppHeader>
-          <Button icon>
+          <ButtonLink href="/app" icon variant="ghost">
             <Icon use="chevron-left" />
-          </Button>
+          </ButtonLink>
+          <Text tone="light" with="label">
+            {user()?.family.name ?? t('family.no-name')}
+          </Text>
         </AppHeader>
         <div class="flex flex-col gap-6">
           <section class="container">
