@@ -76,7 +76,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
           </div>
           <Card
             class={tw(
-              'flex flex-col items-center allow-discrete transition-all duration-150 justify-center bg-surface/[0.975] backdrop-blur-sm gap-4',
+              'flex flex-col size-full items-center allow-discrete transition-all duration-150 justify-center bg-surface/[0.975] backdrop-blur-sm gap-4',
               !consentShown() ? 'hidden scale-[0.98] opacity-0' : undefined,
             )}
             variant="outlined"

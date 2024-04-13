@@ -60,12 +60,9 @@ export const joinFamilyWithLink = action(async (formData: FormData) => {
   }
 
   try {
-    const family = await requestFamilyAdmissionByInviteCode(
-      inviteCode,
-      currentUser.userId,
-    );
+    await requestFamilyAdmissionByInviteCode(inviteCode, currentUser.userId);
 
-    return redirect(`/app/${family.familyId}`);
+    return redirect(`/app/family`);
   } catch (error) {
     console.error(error);
     return json(error, { status: 422 });

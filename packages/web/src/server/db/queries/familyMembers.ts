@@ -52,7 +52,8 @@ export async function familyMembers(userId: DatabaseUser['id']) {
       ),
     )
     .innerJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))
-    .innerJoin(familyUserTable, eq(familyUserTable.userId, userTable.id));
+    .innerJoin(familyUserTable, eq(familyUserTable.userId, userTable.id))
+    .orderBy(familyUserTable.joinedAt);
 
   const users = await query.all();
   return users;
