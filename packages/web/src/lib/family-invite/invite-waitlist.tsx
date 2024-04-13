@@ -61,7 +61,12 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
                     action={moveUserFromTheWaitList}
                     method="post"
                   >
-                    <input type="hidden" name="user-id" value={user().id} />
+                    <input
+                      type="hidden"
+                      name="user-id"
+                      value={user().id}
+                      readOnly
+                    />
                     <Button
                       type="submit"
                       value="decline"
