@@ -8,14 +8,22 @@ import {
   type AnySQLiteColumn,
 } from 'drizzle-orm/sqlite-core';
 
-export const familyTable = sqliteTable('family', {
-  id: integer('id').notNull().primaryKey({ autoIncrement: true }),
-  name: text('name', { length: 100 }),
-  ownerId: integer('owner_id')
-    .notNull()
-    .references((): AnySQLiteColumn => userTable.id),
-  createdAt: utcDatetime('created_at'),
-});
+export const familyTable = sqliteTable(
+  'family',
+  {
+    id: integer('id').notNull().primaryKey({ autoIncrement: true }),
+    name: text('name', { length: 100 }),
+    ownerId: integer('owner_id')
+      .notNull()
+      .references((): AnySQLiteColumn => userTable.id),
+    createdAt: utcDatetime('created_at'),
+  },
+  (table) => {
+    return {
+      hashIdx: index('owner_idx').on(table.ownerId),
+    };
+  },
+);
 
 /**
  * Temporary invitations to a family. Only the creator of the family can send the invites.
