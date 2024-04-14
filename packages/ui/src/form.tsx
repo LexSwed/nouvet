@@ -11,7 +11,7 @@ import {
 } from 'solid-js';
 
 interface FormContext {
-  validationErrors?: Record<string, string> | null;
+  validationErrors?: Record<string, string | undefined | null> | null;
 }
 
 const formContext = createContext<Accessor<FormContext>>(() => ({
@@ -38,8 +38,12 @@ export const Form = (ownProps: FormContext & ComponentProps<'form'>) => {
           if (!isValidatableInput(element)) return;
           // reset custom message if it was set before
           element.setCustomValidity('');
-          if (newPropErrors && element.name in newPropErrors) {
-            element.setCustomValidity(newPropErrors[element.name]);
+          const errorString =
+            newPropErrors &&
+            element.name in newPropErrors &&
+            newPropErrors[element.name];
+          if (typeof errorString === 'string') {
+            element.setCustomValidity(errorString);
           }
         });
       },
@@ -62,8 +66,8 @@ export const Form = (ownProps: FormContext & ComponentProps<'form'>) => {
           } else {
             if (typeof props.onSubmit === 'function') {
               props.onSubmit?.(event);
-            } else {
-              props.onSubmit?.[1]?.(props.onSubmit[0], event);
+            } else if (Array.isArray(props.onSubmit)) {
+              props.onSubmit[1](props.onSubmit[0], event);
             }
           }
         }}
