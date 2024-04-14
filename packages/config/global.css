@@ -25,6 +25,10 @@
   #app {
     @apply overflow-x-hidden;
   }
+  ::selection {
+    background-color: highlight;
+    color: highlighttext;
+  }
 }
 
 @layer base {

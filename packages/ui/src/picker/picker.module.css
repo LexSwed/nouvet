@@ -8,10 +8,6 @@
     cursor: default;
     caret-color: transparent;
     @apply text-base;
-    &::placeholder {
-      color: theme('colors.on-surface/0.6');
-      font-weight: 400;
-    }
     &::-webkit-calendar-picker-indicator {
       opacity: 0;
     }

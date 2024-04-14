@@ -1,0 +1,33 @@
+@property --btn-ghost-to {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 0%;
+}
+
+@layer nou-ui {
+  .button {
+    @apply transition;
+  }
+
+  .btnGhost {
+    --btn-ghost-color: transparent;
+    --btn-ghost-to: 40%;
+    transition: --btn-ghost-to 0.2s ease-out;
+
+    background-image: radial-gradient(
+      circle at center,
+      var(--btn-ghost-color) 0%,
+      var(--btn-ghost-color) var(--btn-ghost-to),
+      transparent var(--btn-ghost-to),
+      transparent 100%
+    );
+    &:where(:hover) {
+      --btn-ghost-to: 96%;
+      --btn-ghost-color: theme('colors.on-surface/0.05');
+    }
+    &:where(:focus) {
+      --btn-ghost-to: 96%;
+      --btn-ghost-color: theme('colors.on-surface/0.08');
+    }
+  }
+}

@@ -3,12 +3,14 @@ import {
   createUniqueId,
   Match,
   Show,
+  splitProps,
   Switch,
   type Accessor,
   type ComponentProps,
   type JSX,
   type JSXElement,
 } from 'solid-js';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 import { useFormContext } from '../form';
 import { Text } from '../text';
@@ -16,7 +18,19 @@ import { tw } from '../tw';
 
 import * as cssStyle from './form-field.module.css';
 
-export interface FormFieldProps {
+export const formFieldVariants = cva(cssStyle.wrapper, {
+  variants: {
+    variant: {
+      underline: cssStyle['wrapperUnderline'],
+      ghost: cssStyle['wrapperGhost'],
+    },
+  },
+  defaultVariants: {
+    variant: 'underline',
+  },
+});
+
+export interface FormFieldProps extends VariantProps<typeof formFieldVariants> {
   /** Field label. */
   label?: JSXElement;
   /** Helper text. */
@@ -36,8 +50,9 @@ interface FieldInnerProps
   /** Prefix text or an icon */
   suffix?: JSX.Element;
 }
-const FormField = (props: FieldInnerProps) => {
+const FormField = (ownProps: FieldInnerProps) => {
   const formContext = useFormContext();
+  const [local, props] = splitProps(ownProps, ['variant']);
   const localId = createUniqueId();
   const id = () => props.id || localId;
   const descriptionId = () => `${id()}-description`;
@@ -48,7 +63,7 @@ const FormField = (props: FieldInnerProps) => {
   return (
     <div class={tw(cssStyle.field, props.class)} style={props.style}>
       <div
-        class={cssStyle.wrapper}
+        class={formFieldVariants(local)}
         onClick={(e) => {
           // suffix and prefix need dynamic width, click on them needs to trigger input focus anyway
           const input = e.currentTarget.querySelector('input, select');

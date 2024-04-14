@@ -5,7 +5,6 @@
     --start-padding: theme(spacing.3);
     display: inline-flex;
     flex-flow: column nowrap;
-    gap: theme(spacing.1);
     &:where(:has(:user-invalid)) {
       --border-color: theme('colors.error');
       --border-scale: 2;
@@ -21,6 +20,8 @@
     width: 100%;
     flex-direction: column;
     transition: background-color 0.2s ease-out;
+  }
+  .wrapperUnderline {
     border-radius: theme('borderRadius.lg') theme('borderRadius.lg') 0 0;
     &:after {
       position: absolute;
@@ -49,9 +50,34 @@
       --border-scale: 1.5;
     }
   }
+  .wrapperGhost {
+    & > .inputWrapper {
+      transition: background-color 0.2s ease-out;
+      border-radius: theme('borderRadius.lg');
+    }
+    &:where(:hover) > .inputWrapper {
+      background-color: theme('colors.on-surface/0.05');
+    }
+    &:where(:focus-within) > .inputWrapper {
+      background-color: theme('colors.on-surface/0.08');
+    }
+    &:has(input:not(:placeholder-shown)) {
+      & > .label {
+        opacity: 0;
+        transform: translateY(2px);
+        transition: 0.2s ease-out;
+        transition-property: opacity, transform;
+      }
+      &:focus-within > .label {
+        transform: none;
+        opacity: 1;
+      }
+    }
+  }
+
   .inputWrapper {
     display: grid;
-    align-items: baseline;
+    align-items: center;
     grid-template-columns: 1fr auto;
     cursor: default;
     &:has(.prefix) {
@@ -70,6 +96,7 @@
   }
 
   .prefix {
+    line-height: 1;
     grid-column: 1;
     padding-inline-start: var(--start-padding);
     &:empty {
@@ -78,6 +105,7 @@
   }
 
   .suffix {
+    line-height: 1;
     grid-column: 3;
     padding-inline-end: var(--start-padding);
     &:empty {
