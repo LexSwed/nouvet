@@ -1,7 +1,7 @@
 import { Title } from '@solidjs/meta';
 import { createAsync, type RouteDefinition } from '@solidjs/router';
 import { Show, Suspense } from 'solid-js';
-import { ButtonLink, Icon, Text } from '@nou/ui';
+import { ButtonLink, Icon, Text, TextField } from '@nou/ui';
 
 import { getFamilyMembers } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
@@ -49,9 +49,11 @@ function FamilyPage() {
           <ButtonLink href="/app" icon variant="ghost">
             <Icon use="chevron-left" />
           </ButtonLink>
-          <Text tone="light" with="label">
-            {user()?.family.name ?? t('family.no-name')}
-          </Text>
+          <TextField
+            value={user()?.family.name ?? undefined}
+            placeholder={t('family.no-name')}
+            suffix={<Icon use="pencil" size="sm" />}
+          />
         </AppHeader>
         <div class="flex flex-col gap-6">
           <section class="container">

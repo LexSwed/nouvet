@@ -28,6 +28,7 @@ export default createHandler((ctx) => {
               name="viewport"
               content="width=device-width, initial-scale=1"
             />
+            <meta name="view-transition" content="same-origin" />
             <link rel="icon" href="/icons/favicon.ico" sizes="32x32" />
             <link
               rel="icon"

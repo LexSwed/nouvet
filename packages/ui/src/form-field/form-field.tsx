@@ -55,7 +55,6 @@ const FormField = (props: FieldInnerProps) => {
           if (input instanceof HTMLInputElement) {
             input.focus();
           } else if (input instanceof HTMLSelectElement) {
-            // @ts-expect-error libdom not supporting this yet
             input.showPicker();
           }
         }}
