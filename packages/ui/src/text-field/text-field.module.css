@@ -5,6 +5,7 @@
     min-height: theme(spacing.12);
     background: transparent;
     outline: none;
+    field-sizing: content;
     @apply text-base;
     &[type='number'] {
       font-variant-numeric: tabular-nums;

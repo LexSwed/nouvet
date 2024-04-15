@@ -1,18 +1,27 @@
 import { splitProps, type JSX } from 'solid-js';
+import { Dynamic } from 'solid-js/web';
 
 import { FormField, type FormFieldProps } from '../form-field';
 import { mergeDefaultProps } from '../utils';
 
 import * as cssStyle from './text-field.module.css';
 
-export interface TextFieldProps
-  extends FormFieldProps,
-    JSX.InputHTMLAttributes<HTMLInputElement> {
-  suffix?: JSX.Element;
-}
-const TextField = (ownProps: TextFieldProps) => {
+export type TextFieldProps<T extends 'input' | 'textarea'> = FormFieldProps &
+  (T extends 'input'
+    ? JSX.InputHTMLAttributes<HTMLInputElement>
+    : JSX.TextareaHTMLAttributes<HTMLTextAreaElement>) & {
+    suffix?: JSX.Element;
+    as?: T;
+  };
+
+const TextField = <T extends 'input' | 'textarea' = 'input'>(
+  ownProps: TextFieldProps<T>,
+) => {
   const [fieldProps, props] = splitProps(
-    mergeDefaultProps(ownProps, { type: 'text' }),
+    mergeDefaultProps(ownProps as TextFieldProps<'input'>, {
+      as: 'input',
+      type: 'text',
+    }),
     [
       'class',
       'style',
@@ -28,8 +37,9 @@ const TextField = (ownProps: TextFieldProps) => {
   return (
     <FormField {...fieldProps} name={props.name}>
       {(aria) => (
-        <input
+        <Dynamic
           {...props}
+          component={props.as}
           class={cssStyle.input}
           id={aria.id()}
           aria-describedby={aria.describedBy()}
