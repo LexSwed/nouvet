@@ -17,16 +17,19 @@ export const cacheTranslations = cache(<T extends Namespace>(namespace: T) => {
  */
 const clientMap = new Map<Namespace, NamespaceMap[Namespace]>();
 export const createTranslator = <T extends Namespace>(namespace: T) => {
-  const dict = createAsync(async () => {
-    if (!isServer && clientMap?.has(namespace)) {
-      return clientMap.get(namespace) as NamespaceMap[T];
-    }
-    const dict = await cacheTranslations(namespace);
-    if (!isServer) {
-      clientMap.set(namespace, dict);
-    }
-    return dict;
-  });
+  const dict = createAsync(
+    async () => {
+      if (!isServer && clientMap?.has(namespace)) {
+        return clientMap.get(namespace) as NamespaceMap[T];
+      }
+      const dict = await cacheTranslations(namespace);
+      if (!isServer) {
+        clientMap.set(namespace, dict);
+      }
+      return dict;
+    },
+    { deferStream: true },
+  );
   return translator(dict, resolveTemplate);
 };
 

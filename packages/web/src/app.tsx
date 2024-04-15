@@ -9,6 +9,7 @@ export default function App() {
       <Router
         explicitLinks={true}
         preload={false}
+        singleFlight={true}
         root={(props) => {
           return (
             <>
