@@ -2,6 +2,8 @@
   "meta.title-new-user": "NouVet | Welcome",
   "meta.title": "NouVet | {{familyName}}",
   "family.no-name": "My Family",
+  "family.update-name-label": "Update name",
+  "family.update-name-description": "New name is automatically saved",
   "family.joined": "You've joined the family! Last step is for the inviter to verify it's indeed you who requested to join.",
   "family.has-pending-multiple": "There are {{pendingNumber}} users asking to join the family.",
   "family.has-pending-one": "There is a user asking to join the family.",

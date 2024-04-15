@@ -35,9 +35,12 @@ function FamilyPage() {
   const updateFamilyAction = useAction(updateFamily);
   const updateFamilySubmission = useSubmission(updateFamily);
   const awaitingUser = () =>
+    // The API also filters non-approved users from non-owners, but just in case
     user()?.family.isOwner
       ? familyMembers()?.find((user) => !user.isApproved)
       : null;
+  const members = () =>
+    familyMembers()?.filter((user) => user.isApproved) ?? [];
   return (
     <>
       <Title>
@@ -79,11 +82,11 @@ function FamilyPage() {
                   placeholder={t('family.no-name')}
                   variant="ghost"
                   class="[&_input]:placeholder:text-on-surface w-full [&_input]:text-3xl [&_input]:font-semibold"
-                  label="Update name"
-                  aria-description="Press Enter to save"
+                  label={t('family.update-name-label')}
+                  aria-description={t('family.update-name-description')}
                   name="family-name"
                   aria-disabled={updateFamilySubmission.pending}
-                  suffix={<Icon use="pencil" size="sm" />}
+                  suffix={<Icon use="pencil" size="sm" class="sm:hidden" />}
                 />
               </Form>
             </Match>
@@ -93,11 +96,15 @@ function FamilyPage() {
               </Text>
             </Match>
           </Switch>
-          <section class="container">
+          <section class="container flex flex-col gap-8">
             <Suspense>
               <Show when={awaitingUser()}>
                 {(user) => <WaitingFamilyConfirmation user={user()} />}
               </Show>
+              <Switch>
+                <Match when={members().length > 0}>Render users!</Match>
+                <Match when={members().length === 0}>No users, invite</Match>
+              </Switch>
             </Suspense>
           </section>
         </div>

@@ -5,7 +5,7 @@ import {
   type RouteSectionProps,
 } from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
-import { Button, ButtonLink, Card, Icon, Text } from '@nou/ui';
+import { Button, ButtonLink } from '@nou/ui';
 
 import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
@@ -51,32 +51,12 @@ function AppMainPage(props: RouteSectionProps) {
                       </Suspense>
                     </>
                   </Match>
-                  <Match when={user().family.id && !user().family.isApproved}>
-                    <Card
-                      variant="filled"
-                      class="flex max-w-[380px] flex-col p-0 pt-2"
-                    >
-                      <ButtonLink
-                        href={`/app/family`}
-                        variant="link"
-                        class="flex flex-row items-center justify-between gap-4"
-                      >
-                        {t('family.no-name')}
-                        <Icon
-                          use="nouvet"
-                          size="md"
-                          class="text-on-primary-container"
-                        />
-                      </ButtonLink>
-                      <Text class="p-6 pt-0">{t('family.joined')}</Text>
-                    </Card>
-                  </Match>
                   <Match when={user().family?.id}>
                     <div class="flex flex-row items-center gap-1">
                       <ButtonLink
                         href={`/app/family`}
                         variant="ghost"
-                        class="text-primary intent:bg-primary/5 gap-2 rounded-full px-2"
+                        class="text-primary gap-2 rounded-full px-2"
                       >
                         {user().family?.name
                           ? user().family.name
