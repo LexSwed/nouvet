@@ -76,13 +76,9 @@
   }
 
   .inputWrapper {
-    display: grid;
+    display: flex;
     align-items: center;
-    grid-template-columns: 1fr auto;
     cursor: default;
-    &:has(.prefix) {
-      grid-template-columns: auto 1fr auto;
-    }
   }
   .label {
     padding-inline: var(--start-padding);
@@ -97,7 +93,6 @@
 
   .prefix {
     line-height: 1;
-    grid-column: 1;
     padding-inline-start: var(--start-padding);
     &:empty {
       display: none;
@@ -106,7 +101,6 @@
 
   .suffix {
     line-height: 1;
-    grid-column: 3;
     padding-inline-end: var(--start-padding);
     &:empty {
       display: none;

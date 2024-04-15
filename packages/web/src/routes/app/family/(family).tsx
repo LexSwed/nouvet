@@ -6,7 +6,7 @@ import {
   type RouteDefinition,
 } from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
-import { ButtonLink, Form, Icon, Text, TextField } from '@nou/ui';
+import { ButtonLink, Form, Icon, Stack, Text, TextField } from '@nou/ui';
 
 import { getFamilyMembers, updateFamily } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
@@ -32,8 +32,6 @@ function FamilyPage() {
     const members = await getFamilyMembers();
     return members;
   });
-  const updateFamilyAction = useAction(updateFamily);
-  const updateFamilySubmission = useSubmission(updateFamily);
   const awaitingUser = () =>
     // The API also filters non-approved users from non-owners, but just in case
     user()?.family.isOwner
@@ -61,43 +59,12 @@ function FamilyPage() {
           </ButtonLink>
         </AppHeader>
         <div class="flex flex-col gap-6">
-          <Switch>
-            <Match when={user()?.family.isOwner}>
-              <Form
-                class="container -mt-4"
-                onFocusOut={async (e) => {
-                  const form = new FormData(e.currentTarget);
-                  const newName = form.get('family-name')?.toString().trim();
-                  if (newName !== user()?.family.name) {
-                    await updateFamilyAction(form);
-                  }
-                }}
-                autocomplete="off"
-                validationErrors={updateFamilySubmission.result?.errors}
-                aria-disabled={updateFamilySubmission.pending}
-              >
-                <TextField
-                  value={user()?.family.name ?? ''}
-                  data-initial={user()?.family.name ?? ''}
-                  placeholder={t('family.no-name')}
-                  variant="ghost"
-                  class="[&_input]:placeholder:text-on-surface w-full [&_input]:text-3xl [&_input]:font-semibold"
-                  label={t('family.update-name-label')}
-                  aria-description={t('family.update-name-description')}
-                  name="family-name"
-                  aria-disabled={updateFamilySubmission.pending}
-                  suffix={<Icon use="pencil" size="sm" class="sm:hidden" />}
-                />
-              </Form>
-            </Match>
-            <Match when={!user()?.family.isOwner}>
-              <Text with="headline-1">
-                {user()?.family.name || t('family.no-name')}
-              </Text>
-            </Match>
-          </Switch>
           <section class="container flex flex-col gap-8">
             <Suspense>
+              <NewNameInput
+                name={user()?.family.name || ''}
+                isOwner={user()?.family.isOwner || false}
+              />
               <Show when={awaitingUser()}>
                 {(user) => <WaitingFamilyConfirmation user={user()} />}
               </Show>
@@ -112,5 +79,65 @@ function FamilyPage() {
     </>
   );
 }
+
+const NewNameInput = (props: { isOwner: boolean; name: string }) => {
+  const t = createTranslator('family');
+  const updateFamilyAction = useAction(updateFamily);
+  const updateFamilySubmission = useSubmission(updateFamily);
+
+  let inputWidthTextRef: HTMLDivElement | null = null;
+
+  return (
+    <Switch>
+      <Match when={props.isOwner}>
+        <Form
+          class="container -mt-4"
+          onFocusOut={async (e) => {
+            const form = new FormData(e.currentTarget);
+            const newName = form.get('family-name')?.toString().trim();
+            if (newName !== props.name) {
+              await updateFamilyAction(form);
+            }
+          }}
+          autocomplete="off"
+          validationErrors={updateFamilySubmission.result?.errors}
+          aria-disabled={updateFamilySubmission.pending}
+        >
+          <Stack class="inline-grid">
+            <Text
+              as="div"
+              with="headline-1"
+              aria-hidden
+              class="pe-12 opacity-0"
+              ref={(el: HTMLDivElement) => (inputWidthTextRef = el)}
+            >
+              {props.name}
+            </Text>
+            <TextField
+              value={props.name ?? ''}
+              data-initial={props.name ?? ''}
+              placeholder={t('family.no-name')}
+              variant="ghost"
+              class="[&_input]:placeholder:text-on-surface [&_input]:text-3xl [&_input]:font-semibold"
+              label={t('family.update-name-label')}
+              aria-description={t('family.update-name-description')}
+              name="family-name"
+              aria-disabled={updateFamilySubmission.pending}
+              suffix={<Icon use="pencil" size="sm" />}
+              onInput={(e) => {
+                if (inputWidthTextRef) {
+                  inputWidthTextRef.textContent = e.target.value;
+                }
+              }}
+            />
+          </Stack>
+        </Form>
+      </Match>
+      <Match when={!props.isOwner}>
+        <Text with="headline-1">{props.name || t('family.no-name')}</Text>
+      </Match>
+    </Switch>
+  );
+};
 
 export default FamilyPage;
