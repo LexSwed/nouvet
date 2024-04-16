@@ -7,10 +7,8 @@ import { Spinner } from '../spinner';
 import { tw } from '../tw';
 import { mergeDefaultProps } from '../utils';
 
-import cssStyles from './button.module.css';
-
 export const buttonVariants = cva(
-  `${cssStyles.button} relative inline-flex cursor-default items-center justify-center rounded-lg text-sm font-medium focus-visible:outline-4 focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50`,
+  `relative inline-flex cursor-default items-center justify-center rounded-lg text-sm font-medium transition focus-visible:outline-4 focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50`,
   {
     variants: {
       size: {
@@ -70,7 +68,7 @@ export const buttonVariants = cva(
       {
         split: false,
         variant: 'ghost',
-        class: cssStyles.btnGhost,
+        class: 'hover:bg-on-surface/5 focus:bg-on-surface/8',
       },
       {
         split: false,

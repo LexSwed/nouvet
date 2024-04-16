@@ -61,7 +61,7 @@
     &:where(:focus-within) > .inputWrapper {
       background-color: theme('colors.on-surface/0.08');
     }
-    &:has(input:not(:placeholder-shown)) {
+    &:has(:where(input, textarea):not(:placeholder-shown)) {
       & > .label {
         opacity: 0;
         transform: translateY(2px);
@@ -93,21 +93,20 @@
     color: theme('colors.on-surface');
     @apply text-sm;
   }
-
-  .prefix {
-    line-height: 1;
-    padding-inline-start: var(--start-padding);
+  .prefix,
+  .suffix {
+    display: inline-flex;
+    flex-shrink: 0;
     &:empty {
       display: none;
     }
   }
+  .prefix {
+    padding-inline-start: var(--start-padding);
+  }
 
   .suffix {
-    line-height: 1;
     padding-inline-end: var(--start-padding);
-    &:empty {
-      display: none;
-    }
   }
 
   .fieldset {

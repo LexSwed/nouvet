@@ -80,7 +80,7 @@ function FamilyPage() {
                   as="textarea"
                   placeholder={t('family.no-name')}
                   variant="ghost"
-                  class="[&_textarea]:placeholder:text-on-surface w-full [&_textarea]:text-3xl [&_textarea]:font-semibold"
+                  class="[&_textarea]:placeholder:text-on-surface w-full [&_textarea]:resize-none [&_textarea]:text-3xl [&_textarea]:font-semibold"
                   label={t('family.update-name-label')}
                   aria-description={t('family.update-name-description')}
                   name="family-name"

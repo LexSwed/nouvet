@@ -20,6 +20,7 @@ const TextField = <T extends 'input' | 'textarea' = 'input'>(
   const [fieldProps, props] = splitProps(
     mergeDefaultProps(ownProps as TextFieldProps<'input'>, {
       as: 'input',
+      // TODO: remove this default for textarea
       type: 'text',
     }),
     [

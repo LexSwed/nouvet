@@ -125,7 +125,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
                   icon
                   label={t('go-to-pet-page', { petName: props.pet.name })}
                   variant="ghost"
-                  class="group-hover/link:bg-on-background/5 ms-auto"
+                  class="ms-auto"
                   tabIndex={-1}
                 >
                   <Icon use="pencil" size="sm" />
