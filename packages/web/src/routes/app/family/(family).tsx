@@ -32,8 +32,6 @@ function FamilyPage() {
     const members = await getFamilyMembers();
     return members;
   });
-  const updateFamilyAction = useAction(updateFamily);
-  const updateFamilySubmission = useSubmission(updateFamily);
   const awaitingUser = () =>
     // The API also filters non-approved users from non-owners, but just in case
     user()?.family.isOwner
@@ -61,42 +59,9 @@ function FamilyPage() {
           </ButtonLink>
         </AppHeader>
         <div class="flex flex-col gap-6">
-          <Switch>
-            <Match when={user()?.family.isOwner}>
-              <Form
-                class="container -mt-4"
-                onFocusOut={async (e) => {
-                  const form = new FormData(e.currentTarget);
-                  const newName = form.get('family-name')?.toString().trim();
-                  if (newName !== user()?.family.name) {
-                    await updateFamilyAction(form);
-                  }
-                }}
-                autocomplete="off"
-                validationErrors={updateFamilySubmission.result?.errors}
-                aria-disabled={updateFamilySubmission.pending}
-              >
-                <TextField
-                  as="textarea"
-                  placeholder={t('family.no-name')}
-                  variant="ghost"
-                  class="[&_textarea]:placeholder:text-on-surface w-full [&_textarea]:resize-none [&_textarea]:text-3xl [&_textarea]:font-semibold"
-                  label={t('family.update-name-label')}
-                  aria-description={t('family.update-name-description')}
-                  name="family-name"
-                  aria-disabled={updateFamilySubmission.pending}
-                  suffix={<Icon use="pencil" size="sm" />}
-                >
-                  {user()?.family.name ?? ''}
-                </TextField>
-              </Form>
-            </Match>
-            <Match when={!user()?.family.isOwner}>
-              <Text with="headline-1">
-                {user()?.family.name || t('family.no-name')}
-              </Text>
-            </Match>
-          </Switch>
+          <section class="container">
+            <FamilyName />
+          </section>
           <section class="container flex flex-col gap-8">
             <Suspense>
               <Show when={awaitingUser()}>
@@ -113,5 +78,50 @@ function FamilyPage() {
     </>
   );
 }
+
+const FamilyName = () => {
+  const t = createTranslator('family');
+  const user = createAsync(() => getUserFamily());
+  const updateFamilyAction = useAction(updateFamily);
+  const updateFamilySubmission = useSubmission(updateFamily);
+  return (
+    <Switch>
+      <Match when={user()?.family.isOwner}>
+        <Form
+          onFocusOut={async (e) => {
+            const form = new FormData(e.currentTarget);
+            const newName = form.get('family-name')?.toString().trim();
+            if (newName !== user()?.family.name) {
+              await updateFamilyAction(form);
+            }
+          }}
+          autocomplete="off"
+          validationErrors={updateFamilySubmission.result?.errors}
+          aria-disabled={updateFamilySubmission.pending}
+          class="md:max-w-[50svw]"
+        >
+          <TextField
+            as="textarea"
+            placeholder={t('family.no-name')}
+            variant="ghost"
+            class="[&_textarea]:placeholder:text-on-surface w-full [&_textarea]:resize-none [&_textarea]:text-3xl [&_textarea]:font-semibold"
+            label={t('family.update-name-label')}
+            aria-description={t('family.update-name-description')}
+            name="family-name"
+            aria-disabled={updateFamilySubmission.pending}
+            prefix={<Icon use="pencil" size="sm" />}
+          >
+            {user()?.family.name ?? ''}
+          </TextField>
+        </Form>
+      </Match>
+      <Match when={!user()?.family.isOwner}>
+        <Text with="headline-1">
+          {user()?.family.name || t('family.no-name')}
+        </Text>
+      </Match>
+    </Switch>
+  );
+};
 
 export default FamilyPage;

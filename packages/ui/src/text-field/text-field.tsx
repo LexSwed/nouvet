@@ -10,6 +10,9 @@ export type TextFieldProps<T extends 'input' | 'textarea'> = FormFieldProps &
   (T extends 'input'
     ? JSX.InputHTMLAttributes<HTMLInputElement>
     : JSX.TextareaHTMLAttributes<HTMLTextAreaElement>) & {
+    /** Prefix symbol or an icon */
+    prefix?: JSX.Element;
+    /** Prefix symbol or an icon */
     suffix?: JSX.Element;
     as?: T;
   };
