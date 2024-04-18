@@ -6,13 +6,14 @@ import {
   type RouteDefinition,
 } from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
-import { ButtonLink, Form, Icon, Text, TextField } from '@nou/ui';
+import { Button, ButtonLink, Form, Icon, Text, TextField } from '@nou/ui';
 
 import { getFamilyMembers, updateFamily } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
 
 import { AppHeader } from '~/lib/app-header';
+import FamilyInviteDialog from '~/lib/family-invite/invite-dialog';
 import { WaitingFamilyConfirmation } from '~/lib/family-invite/waiting-family-confirmation';
 
 export const route = {
@@ -69,7 +70,14 @@ function FamilyPage() {
               </Show>
               <Switch>
                 <Match when={members().length > 0}>Render users!</Match>
-                <Match when={members().length === 0}>No users, invite</Match>
+                <Match when={members().length === 0}>
+                  <Button popoverTarget="family-invite">
+                    {t('family.invite')}
+                  </Button>
+                  <Suspense>
+                    <FamilyInviteDialog id="family-invite" />
+                  </Suspense>
+                </Match>
               </Switch>
             </Suspense>
           </section>
@@ -109,7 +117,7 @@ const FamilyName = () => {
             aria-description={t('family.update-name-description')}
             name="family-name"
             aria-disabled={updateFamilySubmission.pending}
-            prefix={<Icon use="pencil" size="sm" />}
+            suffix={<Icon use="pencil" size="sm" />}
           >
             {user()?.family.name ?? ''}
           </TextField>
