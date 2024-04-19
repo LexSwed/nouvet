@@ -34,10 +34,13 @@ type Step = 'initial' | 'qrcode' | 'waitlist' | 'join' | 'join-success';
 const InviteDialogContent = (props: { id: string }) => {
   const t = createTranslator('family');
   const [step, setStep] = createSignal<Step>('initial');
-  const update = (newStep: Step) =>
-    startViewTransition(() => {
+  const update = async (newStep: Step) => {
+    await startViewTransition(() => {
       setStep(newStep);
     });
+    const popover = document.getElementById(props.id);
+    popover?.focus();
+  };
 
   const closePopover = () => {
     const popover = document.getElementById(props.id);
@@ -71,6 +74,30 @@ const InviteDialogContent = (props: { id: string }) => {
             <Icon use="chevron-left" />
           </Button>
         </Show>
+        <Text
+          aria-hidden
+          class="sr-only"
+          id={`${props.id}-headline`}
+          aria-live="polite"
+        >
+          <Switch>
+            <Match when={step() === 'initial'}>
+              {t('family-invite.aria-initial')}
+            </Match>
+            <Match when={step() === 'qrcode'}>
+              {t('family-invite.aria-qrcode')}
+            </Match>
+            <Match when={step() === 'waitlist'}>
+              {t('family-invite.aria-waitlist')}
+            </Match>
+            <Match when={step() === 'join'}>
+              {t('family-invite.aria-join')}
+            </Match>
+            <Match when={step() === 'join-success'}>
+              {t('family-invite.aria-join-success')}
+            </Match>
+          </Switch>
+        </Text>
         <Button
           variant="ghost"
           popoverTarget={props.id}
@@ -84,7 +111,7 @@ const InviteDialogContent = (props: { id: string }) => {
       <Switch>
         <Match when={step() === 'initial'}>
           <div class="flex flex-col gap-6">
-            <Text with="headline-2" as="h2" id={`${props.id}-headline`}>
+            <Text with="headline-2" as="h2">
               {t('family-invite.headline')}
             </Text>
             <Text as="p">{t('family-invite.subheadline')}</Text>
