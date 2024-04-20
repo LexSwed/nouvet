@@ -19,7 +19,6 @@ export const buttonVariants = cva(
       },
       variant: {
         default: 'bg-primary text-on-primary outline-primary',
-        destructive: 'bg-destructive text-on-destructive outline-destructive',
         outline:
           'border-outline text-on-surface outline-on-surface rounded-full border bg-transparent focus-visible:outline-offset-0',
         secondary:
@@ -37,6 +36,11 @@ export const buttonVariants = cva(
       split: {
         true: 'flex w-fit p-0 [&>*]:rounded-[inherit]',
       },
+      tone: {
+        neutral: '',
+        success: '',
+        destructive: '',
+      },
     },
     defaultVariants: {
       variant: 'default',
@@ -52,13 +56,22 @@ export const buttonVariants = cva(
       },
       {
         split: false,
-        variant: 'destructive',
-        class: 'intent:bg-destructive/90',
+        variant: 'default',
+        tone: 'destructive',
+        class:
+          'bg-error-container text-on-error-container outline-error intent:bg-error-container/90',
       },
       {
         split: false,
         variant: 'outline',
         class: 'intent:bg-on-surface/8',
+      },
+      {
+        split: false,
+        variant: 'outline',
+        tone: 'destructive',
+        class:
+          'border-error text-error outline-error-container intent:bg-error-container/30',
       },
       {
         split: false,
@@ -89,6 +102,7 @@ const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
     'loading',
     'variant',
     'split',
+    'tone',
     'icon',
     'label',
     'title',

@@ -17,7 +17,7 @@
     max-height: 100%;
     will-change: transform;
     background-color: theme('colors.surface');
-    padding: 0 theme('spacing.4') theme('spacing.4');
+    padding: theme('spacing.2') theme('spacing.4') theme('spacing.4');
     border-radius: theme('borderRadius.xl');
     outline: none;
 

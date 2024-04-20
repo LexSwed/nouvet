@@ -6,7 +6,15 @@ import {
   type RouteDefinition,
 } from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
-import { Button, ButtonLink, Form, Icon, Text, TextField } from '@nou/ui';
+import {
+  Button,
+  ButtonLink,
+  Drawer,
+  Form,
+  Icon,
+  Text,
+  TextField,
+} from '@nou/ui';
 
 import { getFamilyMembers, updateFamily } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
@@ -94,6 +102,57 @@ function FamilyPage() {
                   <Suspense>
                     <FamilyInviteDialog id="family-invite" />
                   </Suspense>
+                  <Switch>
+                    <Match when={members().length === 0}>
+                      <Button variant="link" class="text-error">
+                        {t('family.delete-family')}
+                      </Button>
+                    </Match>
+                    <Match when={members().length > 0}>
+                      <Button
+                        variant="link"
+                        class="text-error"
+                        popoverTarget="family-delete"
+                      >
+                        {t('family.delete-family')}
+                      </Button>
+                      <Drawer
+                        id="family-delete"
+                        aria-labelledby="family-delete-headline"
+                      >
+                        {(open) => (
+                          <Show when={open()}>
+                            <div class="flex flex-col gap-8 p-1">
+                              <div class="flex flex-col gap-4">
+                                <Text
+                                  with="headline-2"
+                                  as="header"
+                                  id="family-delete-headline"
+                                >
+                                  {t('family.delete-family-headline')}
+                                </Text>
+                                <Text as="p">
+                                  {t('family.delete-family-description')}
+                                </Text>
+                              </div>
+                              <div class="grid grid-cols-2 gap-2">
+                                <Button
+                                  variant="outline"
+                                  popoverTarget="family-delete"
+                                  popoverTargetAction="hide"
+                                >
+                                  {t('family.delete-family-cancel')}
+                                </Button>
+                                <Button variant="outline" tone="destructive">
+                                  {t('family.delete-family-cta')}
+                                </Button>
+                              </div>
+                            </div>
+                          </Show>
+                        )}
+                      </Drawer>
+                    </Match>
+                  </Switch>
                 </div>
               </Show>
             </Suspense>
