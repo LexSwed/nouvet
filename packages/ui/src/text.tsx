@@ -16,7 +16,7 @@ const textVariants = cva('m-0 whitespace-pre-line font-sans', {
       'label-sm': 'text-xs',
       'label-lg': 'text-lg font-medium',
       'headline-1': 'text-3xl font-semibold',
-      'headline-2': 'text-2xl',
+      'headline-2': 'text-2xl font-semibold',
       'headline-3': 'text-xl',
       'headline-4': 'text-xl',
       'headline-5': 'text-xl',

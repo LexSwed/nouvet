@@ -33,11 +33,10 @@ function FamilyPage() {
     const members = await getFamilyMembers();
     return members;
   });
+  const isOwner = () => user()?.family.isOwner || false;
   const awaitingUser = () =>
     // The API also filters non-approved users from non-owners, but just in case
-    user()?.family.isOwner
-      ? familyMembers()?.find((user) => !user.isApproved)
-      : null;
+    isOwner() ? familyMembers()?.find((user) => !user.isApproved) : null;
   const members = () =>
     familyMembers()?.filter((user) => user.isApproved) ?? [];
   return (
@@ -70,15 +69,33 @@ function FamilyPage() {
               </Show>
               <Switch>
                 <Match when={members().length > 0}>Render users!</Match>
-                <Match when={members().length === 0}>
+                {/* technically it's not possible for non-owners to not see other members */}
+                <Match when={isOwner() && members().length === 0}>
+                  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-4">
+                    <div class="order-2 flex flex-1 flex-col gap-2 sm:order-none">
+                      <Text with="headline-2" as="h2">
+                        {t('family.no-members-header')}
+                      </Text>
+                      <Text as="p">{t('family.no-members-description')}</Text>
+                    </div>
+                    <img
+                      src="/assets/images/andriyko-podilnyk-dWSl8REfpoQ-unsplash.jpg?w=600&format=webp&imagetools"
+                      alt=""
+                      class="bg-primary/5 flex-2 mb-4 w-full rounded-3xl object-cover sm:max-w-[60vw]"
+                    />
+                  </div>
+                </Match>
+              </Switch>
+              <Show when={isOwner()}>
+                <div class="flex flex-col gap-4">
                   <Button popoverTarget="family-invite">
                     {t('family.invite')}
                   </Button>
                   <Suspense>
                     <FamilyInviteDialog id="family-invite" />
                   </Suspense>
-                </Match>
-              </Switch>
+                </div>
+              </Show>
             </Suspense>
           </section>
         </div>

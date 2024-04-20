@@ -8,7 +8,7 @@ import { tw } from '../tw';
 import { mergeDefaultProps } from '../utils';
 
 export const buttonVariants = cva(
-  `relative inline-flex cursor-default items-center justify-center rounded-lg text-sm font-medium transition focus-visible:outline-4 focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50`,
+  `relative inline-flex cursor-default items-center justify-center rounded-xl text-sm font-medium transition focus-visible:outline-4 focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50`,
   {
     variants: {
       size: {
