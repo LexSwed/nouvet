@@ -18,7 +18,7 @@
     "generate-themed-css": "node ./theme/generate.js"
   },
   "dependencies": {
-    "@fontsource-variable/rubik": "^5.0.21",
+    "@fontsource-variable/rubik": "^5.0.22",
     "@tailwindcss/container-queries": "^0.1.1",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "autoprefixer": "^10.4.19",
@@ -30,7 +30,7 @@
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
     "typescript-plugin-css-modules": "^5.1.0",
-    "vite": "^5.2.9"
+    "vite": "^5.2.10"
   },
   "devDependencies": {
     "colorjs.io": "^0.5.0"

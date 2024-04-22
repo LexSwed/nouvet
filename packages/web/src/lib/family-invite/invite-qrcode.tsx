@@ -24,8 +24,8 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
   async function share() {
     const shareData = {
       url: inviteData()?.url,
-      title: t('family-invite.invite-share-title-no-name'),
-      text: t('family-invite.invite-share-text'),
+      title: t('invite.invite-share-title-no-name'),
+      text: t('invite.invite-share-text'),
     } satisfies ShareData;
     await navigator.share(shareData);
   }
@@ -60,7 +60,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
           )}
           aria-hidden={!!consentShown()}
         >
-          {t('family-invite.qr-description')}
+          {t('invite.qr-description')}
         </Text>
         <div class="stack size-[300px] shrink-0">
           <div
@@ -82,7 +82,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
             variant="outlined"
           >
             <Text as="p" with="body">
-              {t('family-invite.info-consent')}
+              {t('invite.info-consent')}
             </Text>
             <Button
               size="sm"
@@ -91,7 +91,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
                 setConsentShown(false);
               }}
             >
-              {t('family-invite.info-consent-accept')}
+              {t('invite.info-consent-accept')}
             </Button>
           </Card>
         </div>
@@ -106,7 +106,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
             }
             aria-hidden={consentShown()}
           >
-            {t('family-invite.expires-in', {
+            {t('invite.expires-in', {
               expiresIn: inviteData()?.expiresIn || '',
             })}
           </Text>
@@ -114,9 +114,9 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
       </div>
       <div class="flex flex-col gap-4">
         <Button variant="ghost" onClick={share}>
-          {t('family-invite.cta-share')}
+          {t('invite.cta-share')}
         </Button>
-        <Button onClick={props.onNext}>{t('family-invite.cta-ready')}</Button>
+        <Button onClick={props.onNext}>{t('invite.cta-ready')}</Button>
       </div>
     </div>
   );

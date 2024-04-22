@@ -57,7 +57,7 @@ const InviteDialogContent = (props: { id: string }) => {
           <Button
             variant="ghost"
             icon
-            label={t('family-invite.back')}
+            label={t('invite.back')}
             onClick={() => {
               switch (step()) {
                 case 'qrcode':
@@ -82,19 +82,15 @@ const InviteDialogContent = (props: { id: string }) => {
         >
           <Switch>
             <Match when={step() === 'initial'}>
-              {t('family-invite.aria-initial')}
+              {t('invite.aria-initial')}
             </Match>
-            <Match when={step() === 'qrcode'}>
-              {t('family-invite.aria-qrcode')}
-            </Match>
+            <Match when={step() === 'qrcode'}>{t('invite.aria-qrcode')}</Match>
             <Match when={step() === 'waitlist'}>
-              {t('family-invite.aria-waitlist')}
+              {t('invite.aria-waitlist')}
             </Match>
-            <Match when={step() === 'join'}>
-              {t('family-invite.aria-join')}
-            </Match>
+            <Match when={step() === 'join'}>{t('invite.aria-join')}</Match>
             <Match when={step() === 'join-success'}>
-              {t('family-invite.aria-join-success')}
+              {t('invite.aria-join-success')}
             </Match>
           </Switch>
         </Text>
@@ -103,7 +99,7 @@ const InviteDialogContent = (props: { id: string }) => {
           popoverTarget={props.id}
           popoverTargetAction="hide"
           icon
-          label={t('family-invite.close')}
+          label={t('invite.close')}
         >
           <Icon use="x" />
         </Button>
@@ -112,14 +108,14 @@ const InviteDialogContent = (props: { id: string }) => {
         <Match when={step() === 'initial'}>
           <div class="flex flex-col gap-6">
             <Text with="headline-2" as="h2">
-              {t('family-invite.headline')}
+              {t('invite.headline')}
             </Text>
-            <Text as="p">{t('family-invite.subheadline')}</Text>
+            <Text as="p">{t('invite.subheadline')}</Text>
             <FamilyInviteBenefits class="-mx-6 scroll-px-6 px-6" />
           </div>
           <div class="flex flex-col gap-4">
             <Button onClick={() => update('qrcode')}>
-              {t('family-invite.cta-invite')}
+              {t('invite.cta-invite')}
             </Button>
             <div class="self-center">
               <Button
@@ -128,7 +124,7 @@ const InviteDialogContent = (props: { id: string }) => {
                   update('join');
                 }}
               >
-                {t('family-invite.join')}
+                {t('invite.join')}
               </Button>
             </div>
           </div>
@@ -152,7 +148,7 @@ const InviteDialogContent = (props: { id: string }) => {
               <div class="flex flex-col items-center gap-6">
                 <Icon use="check-fat" size="lg" />
                 <Text class="text-balance text-center">
-                  {t('family-invite.join-success')}
+                  {t('invite.join-success')}
                 </Text>
               </div>
               <Button
@@ -160,7 +156,7 @@ const InviteDialogContent = (props: { id: string }) => {
                 popoverTarget={props.id}
                 popoverTargetAction="hide"
               >
-                {t('family-invite.join-success-done')}
+                {t('invite.join-success-done')}
               </Button>
             </div>
           </div>

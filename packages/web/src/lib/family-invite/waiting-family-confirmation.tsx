@@ -19,14 +19,14 @@ export function WaitingFamilyConfirmation(props: {
       style={{ 'view-transition-name': `family-user-${props.user.id}` }}
     >
       <Text as="header" with="overline">
-        {t('family-invite.waitlist')}
+        {t('invite.waitlist')}
       </Text>
       <div class="flex flex-row items-center justify-start gap-2">
         <Avatar avatarUrl={props.user.avatarUrl} name={props.user.name || ''} />
         <Text with="label-lg">{props.user.name}</Text>
       </div>
       <Text as="p" with="body-sm">
-        {t('family-invite.info-consent')}
+        {t('invite.info-consent')}
       </Text>
       <Form
         class="flex flex-row gap-2"
@@ -48,7 +48,7 @@ export function WaitingFamilyConfirmation(props: {
           }
         >
           <Icon use="x" class="-ml-3" />
-          {t('family-invite.waitlist-decline')}
+          {t('invite.waitlist-decline')}
         </Button>
         <Button
           type="submit"
@@ -64,7 +64,7 @@ export function WaitingFamilyConfirmation(props: {
           }
         >
           <Icon use="check" class="-ml-2" />
-          {t('family-invite.waitlist-accept')}
+          {t('invite.waitlist-accept')}
         </Button>
       </Form>
     </Card>

@@ -34,13 +34,13 @@ const JoinFamily = (props: { onCancel: () => void; onSuccess: () => void }) => {
         <Icon use="qr-code" size="md" />
       </div>
       <Text class="text-balance text-center">
-        {t('family-invite.join-instruction')}
+        {t('invite.join-instruction')}
       </Text>
       <Switch>
         <Match when={camera() === 'denied'}>
           <div class="flex flex-col items-center gap-2">
             <Button aria-disabled={true} aria-describedby={disabledId}>
-              {t('family-invite.join-scan-cta')}
+              {t('invite.join-scan-cta')}
             </Button>
             <Text
               tone="light"
@@ -49,7 +49,7 @@ const JoinFamily = (props: { onCancel: () => void; onSuccess: () => void }) => {
               with="body-xs"
               class="text-balance text-center"
             >
-              {t('family-invite.scan-denied')}
+              {t('invite.scan-denied')}
             </Text>
           </div>
         </Match>
@@ -68,18 +68,18 @@ const JoinFamily = (props: { onCancel: () => void; onSuccess: () => void }) => {
                   navigator.mediaDevices.getUserMedia({ video: true })
                 }
               >
-                {t('family-invite.join-scan-cta')}
+                {t('invite.join-scan-cta')}
               </Button>
               <Text with="body-sm">{orText}</Text>
             </Show>
             <Text class="text-balance text-center">
-              {t('family-invite.join-link')}
+              {t('invite.join-link')}
             </Text>
           </div>
         </Match>
       </Switch>
       <Button variant="ghost" onClick={props.onCancel}>
-        {t('family-invite.cta-cancel')}
+        {t('invite.cta-cancel')}
       </Button>
     </div>
   );

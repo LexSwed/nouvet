@@ -31,7 +31,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
                 class="text-on-primary-container"
               />
               <Text class="text-balance text-center">
-                {t('family-invite.waitlist-empty')}
+                {t('invite.waitlist-empty')}
               </Text>
             </div>
           </Match>
@@ -49,7 +49,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
             props.onNext();
           }}
         >
-          {t('family-invite.waitlist-done')}
+          {t('invite.waitlist-done')}
         </Button>
       </Suspense>
     </div>

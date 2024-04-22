@@ -56,10 +56,10 @@ const QRCodeScannerPage = (props: { onSuccess: () => void }) => {
           </Show>
           <div class="animate-in bg-surface/90 zoom-in-95 fill-mode-both fade-in flex size-full flex-col items-center justify-center gap-8 rounded-2xl p-4 duration-300">
             <Text with="label-lg" class="text-balance text-center">
-              {t('family-invite.expired-heading')}
+              {t('invite.expired-heading')}
             </Text>
             <Text class="text-balance text-center">
-              {t('family-invite.expired-description')}
+              {t('invite.expired-description')}
             </Text>
             <Button
               variant="outline"
@@ -67,7 +67,7 @@ const QRCodeScannerPage = (props: { onSuccess: () => void }) => {
               class="gap-2"
             >
               <Icon use="arrows-clockwise" />
-              {t('family-invite.expired-cta')}
+              {t('invite.expired-cta')}
             </Button>
           </div>
         </div>
