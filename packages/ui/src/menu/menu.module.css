@@ -8,7 +8,6 @@
     cursor: default;
     user-select: none;
     border-radius: inherit;
-    color: theme('colors.on-surface');
     background: transparent;
     transition: background-color 0.2s ease-out;
     outline: none;
@@ -17,12 +16,6 @@
 
     @apply text-sm;
 
-    &:where(:hover, [aria-selected='true'], [aria-current='true']) {
-      background-color: theme('colors.on-surface/0.05');
-    }
-    &:where(:focus, :focus-within, :active) {
-      background-color: theme('colors.on-surface/0.08');
-    }
     &:where(:focus-visible:focus, :has(:focus-visible):focus-within) {
       outline: 2px auto currentColor;
     }
@@ -42,6 +35,29 @@
     }
     &:where(:not(:first-child, :last-child)) {
       border-radius: 0;
+    }
+
+    &:where(:first-child:last-child) {
+      border-radius: inherit;
+    }
+  }
+
+  .listItemNeutral {
+    color: theme('colors.on-surface');
+    &:where(:hover, [aria-selected='true'], [aria-current='true']) {
+      background-color: theme('colors.on-surface/0.05');
+    }
+    &:where(:focus, :focus-within, :active) {
+      background-color: theme('colors.on-surface/0.08');
+    }
+  }
+  .listItemDestructive {
+    color: theme('colors.error');
+    &:where(:hover, [aria-selected='true'], [aria-current='true']) {
+      background-color: theme('colors.error/0.05');
+    }
+    &:where(:focus, :focus-within, :active) {
+      background-color: theme('colors.error/0.08');
     }
   }
 }

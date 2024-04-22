@@ -19,6 +19,7 @@ export const buttonVariants = cva(
       },
       variant: {
         default: 'bg-primary text-on-primary outline-primary',
+        tonal: 'outline-on-surface',
         outline:
           'border-outline text-on-surface outline-on-surface rounded-full border bg-transparent focus-visible:outline-offset-0',
         secondary:
@@ -38,12 +39,15 @@ export const buttonVariants = cva(
       },
       tone: {
         neutral: '',
+        primary: '',
+        secondary: '',
         success: '',
         destructive: '',
       },
     },
     defaultVariants: {
       variant: 'default',
+      tone: 'neutral',
       size: 'base',
       icon: false,
       split: false,
@@ -75,12 +79,35 @@ export const buttonVariants = cva(
       },
       {
         split: false,
-        variant: 'secondary',
-        class: 'intent:bg-tertiary-container/80',
+        variant: 'tonal',
+        tone: 'neutral',
+        class: 'bg-on-surface/5 text-on-surface intent:bg-on-surface/8',
+      },
+      {
+        split: false,
+        variant: 'tonal',
+        tone: 'primary',
+        class:
+          'bg-primary-container text-on-primary-container intent:bg-primary-container/90',
+      },
+      {
+        split: false,
+        variant: 'tonal',
+        tone: 'secondary',
+        class:
+          'bg-secondary-container text-on-secondary-container intent:bg-secondary-container/90',
+      },
+      {
+        split: false,
+        variant: 'tonal',
+        tone: 'destructive',
+        class:
+          'bg-error-container text-on-error-container intent:bg-error-container/90',
       },
       {
         split: false,
         variant: 'ghost',
+        tone: 'neutral',
         class: 'hover:bg-on-surface/5 focus:bg-on-surface/8',
       },
       {

@@ -1,5 +1,6 @@
 import { splitProps, type ComponentProps, type ValidComponent } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 import { Popover } from '../popover';
 import { tw } from '../tw';
@@ -20,12 +21,25 @@ const Menu = (ownProps: MenuProps) => {
   return <Popover role="menu" as={MenuList} {...ownProps} />;
 };
 
-type MenuItemProps<T extends ValidComponent> = ComponentProps<T> & {
-  /**
-   * @default div
-   */
-  as?: T;
-};
+const menuItemVariants = cva(cssStyle.listItem, {
+  variants: {
+    tone: {
+      neutral: cssStyle.listItemNeutral,
+      destructive: cssStyle.listItemDestructive,
+    },
+  },
+  defaultVariants: {
+    tone: 'neutral',
+  },
+});
+
+type MenuItemProps<T extends ValidComponent> = ComponentProps<T> &
+  VariantProps<typeof menuItemVariants> & {
+    /**
+     * @default div
+     */
+    as?: T;
+  };
 
 const MenuItem = <T extends ValidComponent = 'div'>(
   ownProps: MenuItemProps<T>,
@@ -35,7 +49,7 @@ const MenuItem = <T extends ValidComponent = 'div'>(
       role: 'menuitem',
       as: 'div',
     }),
-    ['as', 'class'],
+    ['as', 'tone', 'class'],
   );
   return (
     <Dynamic
@@ -43,7 +57,12 @@ const MenuItem = <T extends ValidComponent = 'div'>(
       tabIndex={-1}
       {...props}
       onClick={composeEventHandlers(props.onClick, (event) => {
-        if (event.defaultPrevented || props.role !== 'menuitem') return;
+        if (
+          event.defaultPrevented ||
+          props.role !== 'menuitem' ||
+          ('popoverTarget' in props && props.popoverTarget)
+        )
+          return;
         const popover = (event.currentTarget as HTMLElement).closest(
           '[popover]',
         );
@@ -55,7 +74,7 @@ const MenuItem = <T extends ValidComponent = 'div'>(
         if (event.defaultPrevented || props.role !== 'menuitem') return;
         (event.currentTarget as HTMLElement).focus();
       })}
-      class={tw(cssStyle.listItem, local.class)}
+      class={tw(menuItemVariants({ tone: local.tone }), local.class)}
     />
   );
 };

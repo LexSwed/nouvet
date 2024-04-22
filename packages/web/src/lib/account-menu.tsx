@@ -50,7 +50,7 @@ const AccountMenu = (props: AccountMenu) => {
             <Icon use="seal-warning" size="sm" />
             {t('account-menu.support')}
           </MenuItem>
-          <Divider role="separator" class="my-2" />
+          <Divider class="my-2" />
           <MenuItem as="a" href="/app/logout">
             <Icon use="sign-out" size="sm" />
             {t('account-menu.logout')}
