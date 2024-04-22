@@ -3,7 +3,7 @@ import { Dynamic } from 'solid-js/web';
 
 import { Popover } from '../popover';
 import { tw } from '../tw';
-import { composeEventHandlers } from '../utils';
+import { composeEventHandlers, mergeDefaultProps } from '../utils';
 
 import * as cssStyle from './menu.module.css';
 
@@ -20,17 +20,26 @@ const Menu = (ownProps: MenuProps) => {
   return <Popover role="menu" as={MenuList} {...ownProps} />;
 };
 
-type MenuItemProps<T extends ValidComponent> = ComponentProps<T> & { as?: T };
+type MenuItemProps<T extends ValidComponent> = ComponentProps<T> & {
+  /**
+   * @default div
+   */
+  as?: T;
+};
 
-const MenuItem = <T extends ValidComponent>(ownProps: MenuItemProps<T>) => {
-  const [local, props] = splitProps(ownProps as MenuItemProps<'div'>, [
-    'as',
-    'class',
-  ]);
+const MenuItem = <T extends ValidComponent = 'div'>(
+  ownProps: MenuItemProps<T>,
+) => {
+  const [local, props] = splitProps(
+    mergeDefaultProps(ownProps as MenuItemProps<'div'>, {
+      role: 'menuitem',
+      as: 'div',
+    }),
+    ['as', 'class'],
+  );
   return (
     <Dynamic
-      component={local.as || 'div'}
-      role="menuitem"
+      component={local.as}
       tabIndex={-1}
       {...props}
       onClick={composeEventHandlers(props.onClick, (event) => {

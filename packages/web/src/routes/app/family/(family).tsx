@@ -12,6 +12,8 @@ import {
   Drawer,
   Form,
   Icon,
+  Menu,
+  MenuItem,
   Text,
   TextField,
 } from '@nou/ui';
@@ -67,8 +69,34 @@ function FamilyPage() {
           </ButtonLink>
         </AppHeader>
         <div class="flex flex-col gap-6">
-          <section class="container">
-            <FamilyName />
+          <section class="container flex flex-row items-center gap-4">
+            <Text with="headline-1" as="h2">
+              {user()?.family.name || t('family.no-name')}
+            </Text>
+            <Show when={isOwner()}>
+              <Button icon variant="ghost" popoverTarget="family-menu">
+                <Icon use="gear" />
+              </Button>
+              <Menu id="family-menu" placement="bottom-end">
+                <MenuItem>
+                  <Icon use="pencil" />
+                  Set a new name
+                </MenuItem>
+                <MenuItem
+                  popoverTarget="family-invite"
+                  as="button"
+                  type="button"
+                >
+                  <Icon use="user-circle-plus" />
+                  Add users
+                </MenuItem>
+                <MenuItem>
+                  <Icon use="hand-palm" />
+                  Disassemble the family
+                </MenuItem>
+              </Menu>
+              <FamilyInviteDialog id="family-invite" />
+            </Show>
           </section>
           <section class="container flex flex-col gap-8">
             <Suspense>
@@ -96,11 +124,11 @@ function FamilyPage() {
               </Switch>
               <Show when={isOwner()}>
                 <div class="flex flex-col gap-4">
-                  <Button popoverTarget="family-invite">
+                  <Button popoverTarget="family-invite-cta">
                     {t('family.invite')}
                   </Button>
                   <Suspense>
-                    <FamilyInviteDialog id="family-invite" />
+                    <FamilyInviteDialog id="family-invite-cta" />
                   </Suspense>
                   <Switch>
                     <Match when={members().length === 0}>

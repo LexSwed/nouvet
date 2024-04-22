@@ -71,7 +71,7 @@ export const buttonVariants = cva(
         variant: 'outline',
         tone: 'destructive',
         class:
-          'border-error text-error outline-error-container intent:bg-error-container/30',
+          'border-error text-error outline-error intent:bg-error-container/30',
       },
       {
         split: false,
