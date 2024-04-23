@@ -80,8 +80,8 @@ function FamilyPage() {
               <Match when={members().length > 0}>Render users!</Match>
               {/* technically it's not possible for non-owners to not see other members */}
               <Match when={isOwner() && members().length === 0}>
-                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-4">
-                  <div class="order-2 flex flex-1 flex-col gap-2 sm:order-none">
+                <div class="flex flex-col gap-6 sm:flex-row sm:items-center">
+                  <div class="order-2 flex flex-1 flex-col gap-4 sm:order-none">
                     <Text with="headline-2" as="h2">
                       {t('no-members-header')}
                     </Text>
@@ -117,12 +117,10 @@ function FamilyHeader(props: {
   const t = createTranslator('family');
   return (
     <section class="container">
-      <div class="flex flex-col gap-4 md:max-w-[50vw]">
-        <div class="flex-[2]">
-          <FamilyNameForm />
-        </div>
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-end">
+        <FamilyNameForm />
         <Show when={props.isOwner}>
-          <div class="mb-2 flex flex-row gap-2">
+          <div class="flex flex-row gap-2 sm:mb-2">
             <Button
               class="gap-2"
               variant="tonal"
@@ -137,9 +135,10 @@ function FamilyHeader(props: {
               variant="tonal"
               popoverTarget="family-menu"
               class="gap-2"
+              icon
+              label={t('action-more')}
             >
               <Icon use="dots-three-outline-vertical" />
-              {t('action-more')}
             </Button>
             <Menu id="family-menu" placement="bottom-end">
               <MenuItem
@@ -159,6 +158,49 @@ function FamilyHeader(props: {
     </section>
   );
 }
+
+const FamilyNameForm = () => {
+  const t = createTranslator('family');
+  const user = createAsync(() => getUserFamily());
+  const updateFamilyAction = useAction(updateFamily);
+  const updateFamilySubmission = useSubmission(updateFamily);
+  return (
+    <Show
+      when={user()?.family.isOwner}
+      fallback={
+        <Text with="headline-1">{user()?.family.name || t('no-name')}</Text>
+      }
+    >
+      <Form
+        onFocusOut={async (e) => {
+          const form = new FormData(e.currentTarget);
+          const newName = form.get('family-name')?.toString().trim();
+          if (newName !== user()?.family.name) {
+            await updateFamilyAction(form);
+          }
+        }}
+        autocomplete="off"
+        validationErrors={updateFamilySubmission.result?.errors}
+        aria-disabled={updateFamilySubmission.pending}
+      >
+        <TextField
+          as="textarea"
+          variant="ghost"
+          placeholder={t('no-name')}
+          label={t('update-name-label')}
+          aria-description={t('update-name-description')}
+          name="family-name"
+          aria-disabled={updateFamilySubmission.pending}
+          suffix={<Icon use="pencil" size="sm" />}
+          class="[&_textarea]:placeholder:text-on-surface w-full [&_textarea]:resize-none [&_textarea]:text-3xl [&_textarea]:font-semibold"
+          value={user()?.family.name || ''}
+        >
+          {user()?.family.name ?? ''}
+        </TextField>
+      </Form>
+    </Show>
+  );
+};
 
 const DeleteFamilyDialog = () => {
   const t = createTranslator('family');
@@ -182,14 +224,14 @@ const DeleteFamilyDialog = () => {
               {t('delete-family-headline')}
             </Text>
             <div class="grid items-center gap-8 md:grid-cols-[1fr,2fr]">
-              <div class="border-outline bg-primary-container/20 max-w-[200px] justify-self-center overflow-hidden rounded-full border-4">
+              <div class="border-outline bg-primary-container/20 max-w-[200px] justify-self-center overflow-hidden rounded-full border-2">
                 <img
                   src="/assets/images/family-breakup.png?w=300&format=webp"
                   class="max-w-full"
                   alt=""
                 />
               </div>
-              <div class="flex flex-col gap-4">
+              <div class="flex flex-col gap-8">
                 <Text as="p">{t('delete-family-description')}</Text>
                 <div class="grid grid-cols-2 gap-2">
                   <Button
@@ -209,40 +251,5 @@ const DeleteFamilyDialog = () => {
         </Show>
       )}
     </Drawer>
-  );
-};
-
-const FamilyNameForm = () => {
-  const t = createTranslator('family');
-  const user = createAsync(() => getUserFamily());
-  const updateFamilyAction = useAction(updateFamily);
-  const updateFamilySubmission = useSubmission(updateFamily);
-  return (
-    <Form
-      onFocusOut={async (e) => {
-        const form = new FormData(e.currentTarget);
-        const newName = form.get('family-name')?.toString().trim();
-        if (newName !== user()?.family.name) {
-          await updateFamilyAction(form);
-        }
-      }}
-      autocomplete="off"
-      validationErrors={updateFamilySubmission.result?.errors}
-      aria-disabled={updateFamilySubmission.pending}
-    >
-      <TextField
-        as="textarea"
-        variant="ghost"
-        placeholder={t('no-name')}
-        label={t('update-name-label')}
-        aria-description={t('update-name-description')}
-        name="family-name"
-        aria-disabled={updateFamilySubmission.pending}
-        suffix={<Icon use="pencil" size="sm" />}
-        class="[&_textarea]:placeholder:text-on-surface w-full [&_textarea]:resize-none [&_textarea]:text-3xl [&_textarea]:font-semibold"
-      >
-        {user()?.family.name ?? ''}
-      </TextField>
-    </Form>
   );
 };
