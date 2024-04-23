@@ -86,6 +86,12 @@ function FamilyPage() {
                       {t('no-members-header')}
                     </Text>
                     <Text as="p">{t('no-members-description')}</Text>
+                    <Button popoverTarget="family-invite">
+                      {t('invite-cta')}
+                    </Button>
+                    <Suspense>
+                      <FamilyInviteDialog id="family-invite" />
+                    </Suspense>
                   </div>
                   <img
                     src="/assets/images/andriyko-podilnyk-dWSl8REfpoQ-unsplash.jpg?w=600&format=webp&imagetools"
@@ -95,22 +101,6 @@ function FamilyPage() {
                 </div>
               </Match>
             </Switch>
-            <Show when={isOwner()}>
-              <div class="flex flex-col gap-4">
-                <Button popoverTarget="family-invite">{t('invite-cta')}</Button>
-                <Suspense>
-                  <FamilyInviteDialog id="family-invite" />
-                </Suspense>
-                <Switch>
-                  <Match when={members().length === 0}>
-                    <Button variant="link" class="text-error">
-                      {t('delete-family')}
-                    </Button>
-                  </Match>
-                  <Match when={members().length > 0}>People are here</Match>
-                </Switch>
-              </div>
-            </Show>
           </section>
         </div>
       </div>
@@ -126,48 +116,46 @@ function FamilyHeader(props: {
 }) {
   const t = createTranslator('family');
   return (
-    <section class="container flex flex-col gap-4">
-      <Text with="headline-1" as="h2">
-        {props.familyName || t('no-name')}
-      </Text>
-      <Show when={props.isOwner}>
-        <div class="overflow-snap -mx-4 flex scroll-px-4 flex-row gap-3 px-4">
-          <Button
-            class="gap-2"
-            variant="tonal"
-            size="sm"
-            popoverTarget="family-rename"
-          >
-            <Icon use="pencil" />
-            {t('action-update-name')}
-          </Button>
-          <Button
-            class="gap-2"
-            variant="tonal"
-            size="sm"
-            popoverTarget="family-invite"
-          >
-            <Icon use="user-circle-plus" />
-            {t('action-add-users')}
-          </Button>
-          <Button size="sm" icon variant="tonal" popoverTarget="family-menu">
-            <Icon use="dots-three-outline-vertical" />
-          </Button>
-          <Menu id="family-menu" placement="bottom-end">
-            <MenuItem
-              tone="destructive"
-              popoverTarget="family-delete"
-              as="button"
-              type="button"
-            >
-              <Icon use="trash-simple" />
-              {t('action-disassemble')}
-            </MenuItem>
-          </Menu>
-          <DeleteFamilyDialog />
-          <FamilyNameDialog />
+    <section class="container">
+      <div class="flex flex-col gap-4 md:max-w-[50vw]">
+        <div class="flex-[2]">
+          <FamilyNameForm />
         </div>
-      </Show>
+        <Show when={props.isOwner}>
+          <div class="mb-2 flex flex-row gap-2">
+            <Button
+              class="gap-2"
+              variant="tonal"
+              size="sm"
+              popoverTarget="family-invite"
+            >
+              <Icon use="user-circle-plus" />
+              {t('action-add-users')}
+            </Button>
+            <Button
+              size="sm"
+              variant="tonal"
+              popoverTarget="family-menu"
+              class="gap-2"
+            >
+              <Icon use="dots-three-outline-vertical" />
+              {t('action-more')}
+            </Button>
+            <Menu id="family-menu" placement="bottom-end">
+              <MenuItem
+                tone="destructive"
+                popoverTarget="family-delete"
+                as="button"
+                type="button"
+              >
+                <Icon use="trash-simple" />
+                {t('action-disassemble')}
+              </MenuItem>
+            </Menu>
+            <DeleteFamilyDialog />
+          </div>
+        </Show>
+      </div>
     </section>
   );
 }
@@ -176,19 +164,24 @@ const DeleteFamilyDialog = () => {
   const t = createTranslator('family');
 
   return (
-    <Drawer id="family-delete" aria-labelledby="family-delete-headline">
+    <Drawer
+      placement="center"
+      id="family-delete"
+      aria-labelledby="family-delete-headline"
+      class="md:max-w-[600px]"
+    >
       {(open) => (
         <Show when={open()}>
           <div class="flex flex-col gap-8">
-            <div class="flex flex-col gap-4">
-              <Text
-                with="headline-2"
-                as="header"
-                id="family-delete-headline"
-                class="text-center"
-              >
-                {t('delete-family-headline')}
-              </Text>
+            <Text
+              with="headline-2"
+              as="header"
+              id="family-delete-headline"
+              class="text-center md:text-start"
+            >
+              {t('delete-family-headline')}
+            </Text>
+            <div class="grid grid-cols-[1fr,2fr] items-center gap-8">
               <div class="border-outline bg-primary-container/20 overflow-hidden rounded-full border-2">
                 <img
                   src="/assets/images/family-breakup.png?w=300&format=webp"
@@ -196,19 +189,21 @@ const DeleteFamilyDialog = () => {
                   alt=""
                 />
               </div>
-              <Text as="p">{t('delete-family-description')}</Text>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <Button
-                variant="outline"
-                popoverTarget="family-delete"
-                popoverTargetAction="hide"
-              >
-                {t('delete-family-cancel')}
-              </Button>
-              <Button variant="outline" tone="destructive">
-                {t('delete-family-cta')}
-              </Button>
+              <div class="flex flex-col gap-4">
+                <Text as="p">{t('delete-family-description')}</Text>
+                <div class="grid grid-cols-2 gap-2">
+                  <Button
+                    variant="outline"
+                    popoverTarget="family-delete"
+                    popoverTargetAction="hide"
+                  >
+                    {t('delete-family-cancel')}
+                  </Button>
+                  <Button variant="outline" tone="destructive">
+                    {t('delete-family-cta')}
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </Show>
@@ -217,44 +212,37 @@ const DeleteFamilyDialog = () => {
   );
 };
 
-const FamilyNameDialog = () => {
+const FamilyNameForm = () => {
   const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
   const updateFamilyAction = useAction(updateFamily);
   const updateFamilySubmission = useSubmission(updateFamily);
   return (
-    <Drawer id="family-rename" aria-labelledby="family-rename-headline">
-      {(open) => (
-        <Show when={open()}>
-          <Text id="family-rename-headline" class="sr-only">
-            {t('action-update-name')}
-          </Text>
-          <Form
-            onFocusOut={async (e) => {
-              const form = new FormData(e.currentTarget);
-              const newName = form.get('family-name')?.toString().trim();
-              if (newName !== user()?.family.name) {
-                await updateFamilyAction(form);
-              }
-            }}
-            autocomplete="off"
-            validationErrors={updateFamilySubmission.result?.errors}
-            aria-disabled={updateFamilySubmission.pending}
-            class="md:max-w-[50svw]"
-          >
-            <TextField
-              placeholder={t('no-name')}
-              label={t('update-name-label')}
-              aria-description={t('update-name-description')}
-              name="family-name"
-              aria-disabled={updateFamilySubmission.pending}
-              suffix={<Icon use="pencil" size="sm" />}
-            >
-              {user()?.family.name ?? ''}
-            </TextField>
-          </Form>
-        </Show>
-      )}
-    </Drawer>
+    <Form
+      onFocusOut={async (e) => {
+        const form = new FormData(e.currentTarget);
+        const newName = form.get('family-name')?.toString().trim();
+        if (newName !== user()?.family.name) {
+          await updateFamilyAction(form);
+        }
+      }}
+      autocomplete="off"
+      validationErrors={updateFamilySubmission.result?.errors}
+      aria-disabled={updateFamilySubmission.pending}
+    >
+      <TextField
+        as="textarea"
+        variant="ghost"
+        placeholder={t('no-name')}
+        label={t('update-name-label')}
+        aria-description={t('update-name-description')}
+        name="family-name"
+        aria-disabled={updateFamilySubmission.pending}
+        suffix={<Icon use="pencil" size="sm" />}
+        class="[&_textarea]:placeholder:text-on-surface w-full [&_textarea]:resize-none [&_textarea]:text-3xl [&_textarea]:font-semibold"
+      >
+        {user()?.family.name ?? ''}
+      </TextField>
+    </Form>
   );
 };
