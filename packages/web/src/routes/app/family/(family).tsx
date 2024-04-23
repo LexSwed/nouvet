@@ -181,8 +181,8 @@ const DeleteFamilyDialog = () => {
             >
               {t('delete-family-headline')}
             </Text>
-            <div class="grid grid-cols-[1fr,2fr] items-center gap-8">
-              <div class="border-outline bg-primary-container/20 overflow-hidden rounded-full border-2">
+            <div class="grid items-center gap-8 md:grid-cols-[1fr,2fr]">
+              <div class="border-outline bg-primary-container/20 max-w-[200px] justify-self-center overflow-hidden rounded-full border-4">
                 <img
                   src="/assets/images/family-breakup.png?w=300&format=webp"
                   class="max-w-full"
