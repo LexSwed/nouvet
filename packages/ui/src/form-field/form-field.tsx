@@ -62,18 +62,7 @@ const FormField = (ownProps: FieldInnerProps) => {
   const suffix = children(() => props.suffix);
   return (
     <div class={tw(cssStyle.field, props.class)} style={props.style}>
-      <div
-        class={formFieldVariants(local)}
-        onClick={(e) => {
-          // suffix and prefix need dynamic width, click on them needs to trigger input focus anyway
-          const input = e.currentTarget.querySelector('input, select');
-          if (input instanceof HTMLInputElement) {
-            input.focus();
-          } else if (input instanceof HTMLSelectElement) {
-            input.showPicker();
-          }
-        }}
-      >
+      <div class={formFieldVariants(local)}>
         <Show when={props.label}>
           <Text as="label" for={id()} with="label-sm" class={cssStyle.label}>
             {props.label}
@@ -81,7 +70,9 @@ const FormField = (ownProps: FieldInnerProps) => {
         </Show>
         <div class={cssStyle.inputWrapper}>
           <Show when={prefix()}>
-            <span class={cssStyle.prefix}>{prefix()}</span>
+            <label for={id()} class={cssStyle.prefix}>
+              {prefix()}
+            </label>
           </Show>
           {props.children({
             id,
@@ -89,7 +80,9 @@ const FormField = (ownProps: FieldInnerProps) => {
               errorMessage() || props.description ? descriptionId() : undefined,
           })}
           <Show when={suffix()}>
-            <span class={cssStyle.suffix}>{suffix()}</span>
+            <label for={id()} class={cssStyle.suffix}>
+              {suffix()}
+            </label>
           </Show>
         </div>
       </div>

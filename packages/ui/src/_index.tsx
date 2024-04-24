@@ -4,6 +4,7 @@ export { Card, NavCard } from './card';
 export { Divider } from './divider';
 export { default as Drawer } from './drawer';
 export { Form } from './form';
+export { Image } from './image';
 export { Picker, Option } from './picker';
 export { Menu, MenuList, MenuItem } from './menu';
 export { Popover } from './popover';

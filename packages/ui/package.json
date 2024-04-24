@@ -27,7 +27,7 @@
     "solid-floating-ui": "^0.3.1",
     "tailwind-merge": "^2.3.0",
     "@solidjs/router": "^0.13.2",
-    "solid-js": "^1.8.16"
+    "solid-js": "^1.8.17"
   },
   "devDependencies": {
     "@nou/config": "^1.0.0",

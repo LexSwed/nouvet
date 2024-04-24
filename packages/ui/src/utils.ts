@@ -36,3 +36,5 @@ export function composeEventHandlers<T, E extends Event>(
     }
   };
 }
+
+export type Merge<P1 = object, P2 = object> = Omit<P1, keyof P2> & P2;

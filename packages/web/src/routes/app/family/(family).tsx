@@ -12,6 +12,7 @@ import {
   Drawer,
   Form,
   Icon,
+  Image,
   Menu,
   MenuItem,
   Text,
@@ -93,10 +94,12 @@ function FamilyPage() {
                       <FamilyInviteDialog id="family-invite" />
                     </Suspense>
                   </div>
-                  <img
-                    src="/assets/images/andriyko-podilnyk-dWSl8REfpoQ-unsplash.jpg?w=600&format=webp&imagetools"
+                  <Image
+                    src="/assets/images/andriyko-podilnyk-dWSl8REfpoQ-unsplash.jpg"
                     alt=""
-                    class="bg-primary/5 flex-2 mb-4 w-full rounded-3xl object-cover sm:max-w-[60vw]"
+                    aspectRatio="4/3"
+                    width={600}
+                    class="bg-primary/5 flex-2 mb-4 rounded-3xl sm:max-w-[60vw]"
                   />
                 </div>
               </Match>
@@ -225,9 +228,10 @@ const DeleteFamilyDialog = () => {
             </Text>
             <div class="grid items-center gap-8 md:grid-cols-[1fr,2fr]">
               <div class="border-outline bg-primary-container/20 max-w-[200px] justify-self-center overflow-hidden rounded-full border-2">
-                <img
-                  src="/assets/images/family-breakup.png?w=300&format=webp"
-                  class="max-w-full"
+                <Image
+                  src="/assets/images/family-breakup.png"
+                  width={300}
+                  aspectRatio={1 / 1}
                   alt=""
                 />
               </div>
