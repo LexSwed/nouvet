@@ -200,7 +200,7 @@ const SplitButton = (
   return <BaseComponent {...ownProps} split component="div" />;
 };
 SplitButton.Inner = (ownProps: Omit<BaseProps<'button'>, 'component'>) => {
-  return <Button {...ownProps} size="sm" class="gap-3 px-4" variant="ghost" />;
+  return <Button {...ownProps} size="sm" variant="ghost" />;
 };
 
 export { Button, ButtonLink, SplitButton };

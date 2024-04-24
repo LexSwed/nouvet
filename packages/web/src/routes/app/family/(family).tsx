@@ -81,8 +81,8 @@ function FamilyPage() {
               <Match when={members().length > 0}>Render users!</Match>
               {/* technically it's not possible for non-owners to not see other members */}
               <Match when={isOwner() && members().length === 0}>
-                <div class="flex flex-col gap-6 sm:flex-row sm:items-center">
-                  <div class="order-2 flex flex-1 flex-col gap-4 sm:order-none">
+                <div class="grid grid-flow-row gap-6 sm:grid-flow-col sm:grid-cols-[1fr,2fr] sm:items-center">
+                  <div class="row-[2] flex flex-col gap-4 sm:order-none sm:row-auto">
                     <Text with="headline-2" as="h2">
                       {t('no-members-header')}
                     </Text>
@@ -94,13 +94,15 @@ function FamilyPage() {
                       <FamilyInviteDialog id="family-invite" />
                     </Suspense>
                   </div>
-                  <Image
-                    src="/assets/images/andriyko-podilnyk-dWSl8REfpoQ-unsplash.jpg"
-                    alt=""
-                    aspectRatio="4/3"
-                    width={600}
-                    class="bg-primary/5 flex-2 mb-4 rounded-3xl sm:max-w-[60vw]"
-                  />
+                  <div class="row-[1] mb-4 grid place-content-center sm:row-auto">
+                    <Image
+                      src="/assets/images/andriyko-podilnyk-dWSl8REfpoQ-unsplash.jpg"
+                      alt=""
+                      aspectRatio="4/3"
+                      width={600}
+                      class="bg-primary/5 w-full max-w-[600px] rounded-3xl"
+                    />
+                  </div>
                 </div>
               </Match>
             </Switch>
@@ -135,7 +137,7 @@ function FamilyHeader(props: {
             </Button>
             <Button
               size="sm"
-              variant="tonal"
+              variant="ghost"
               popoverTarget="family-menu"
               class="gap-2"
               icon
