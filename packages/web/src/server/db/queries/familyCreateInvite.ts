@@ -21,7 +21,7 @@ export async function createFamilyInvite(
       inviterId,
       inviteCode,
       invitationHash,
-      expiresAt: Date.now() / 1000 + new TimeSpan(1, 'h').seconds(),
+      expiresAt: Math.floor(Date.now() / 1000) + new TimeSpan(1, 'h').seconds(),
     })
     .returning({
       expiresAt: familyInviteTable.expiresAt,

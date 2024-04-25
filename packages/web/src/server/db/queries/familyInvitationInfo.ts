@@ -23,7 +23,8 @@ export async function familyInvitationInfo(
   const existingUserFamily = await db
     .select({ familyId: familyUserTable.familyId })
     .from(familyUserTable)
-    .where(eq(familyUserTable.userId, inviteeId));
+    .where(eq(familyUserTable.userId, inviteeId))
+    .get();
 
   if (existingUserFamily) throw new UserAlreadyInFamily();
 

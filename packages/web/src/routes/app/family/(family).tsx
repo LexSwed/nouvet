@@ -40,10 +40,7 @@ export const route = {
 function FamilyPage() {
   const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
-  const familyMembers = createAsync(async () => {
-    const members = await getFamilyMembers();
-    return members;
-  });
+  const familyMembers = createAsync(async () => getFamilyMembers());
   const isOwner = () => user()?.family.isOwner || false;
   const awaitingUser = () =>
     // The API also filters non-approved users from non-owners, but just in case

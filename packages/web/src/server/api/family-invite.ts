@@ -37,17 +37,25 @@ export const checkFamilyInvite = cache(async (inviteCode: string) => {
   const user = await getRequestUser();
   try {
     const invite = await familyInvitationInfo(inviteCode, user.userId);
-    return { invite } as const;
+    return { invite };
   } catch (error) {
     if (error instanceof UserAlreadyInFamily) {
-      //
-      return {
-        failed: true,
-        reason: 100,
-      } as const;
+      return json(
+        {
+          failed: true,
+          reason: 100,
+        },
+        { status: 400 },
+      );
+    } else {
+      console.error(error);
     }
-    console.error(error);
-    return { failed: true } as const;
+    return json(
+      {
+        failed: true,
+      },
+      { status: 400 },
+    );
   }
 }, 'check-family-invite');
 
