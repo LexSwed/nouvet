@@ -126,8 +126,9 @@ export const updatePetBirthDate = action(async (formData: FormData) => {
       return {
         errors: await translateErrorTokens(error),
       };
+    } else {
+      console.error(error);
     }
-    console.error(error);
     return json(
       { failed: true, errors: null },
       { status: 500, revalidate: [] },
@@ -162,8 +163,9 @@ export const updatePetWeight = action(async (formData: FormData) => {
       return {
         errors: await translateErrorTokens(error),
       };
+    } else {
+      console.error(error);
     }
-    console.error(error);
     return json(
       { failed: true, errors: null },
       { status: 500, revalidate: [] },
@@ -195,8 +197,9 @@ export const updatePetBreed = action(async (formData: FormData) => {
       return {
         errors: await translateErrorTokens(error),
       };
+    } else {
+      console.error(error);
     }
-    console.error(error);
     return json(
       { failed: true, errors: null },
       { status: 500, revalidate: [] },
