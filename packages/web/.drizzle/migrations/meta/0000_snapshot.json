@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "2ae67bcb-b1d0-4b00-a55a-835832194bf9",
+  "id": "fb2b974b-ef70-49e6-bc8c-47c114473443",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "oauth_account": {
@@ -161,13 +161,28 @@
         },
         "invite_code": {
           "name": "invite_code",
-          "type": "text(32)",
+          "type": "text(20)",
           "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "invitation_hash": {
+          "name": "invitation_hash",
+          "type": "text(64)",
+          "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "hash_idx": {
+          "name": "hash_idx",
+          "columns": [
+            "invitation_hash"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "family_invite_inviter_id_user_id_fk": {
           "name": "family_invite_inviter_id_user_id_fk",
@@ -203,8 +218,8 @@
           "notNull": false,
           "autoincrement": false
         },
-        "creator_id": {
-          "name": "creator_id",
+        "owner_id": {
+          "name": "owner_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -219,14 +234,22 @@
           "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "owner_idx": {
+          "name": "owner_idx",
+          "columns": [
+            "owner_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "family_creator_id_user_id_fk": {
-          "name": "family_creator_id_user_id_fk",
+        "family_owner_id_user_id_fk": {
+          "name": "family_owner_id_user_id_fk",
           "tableFrom": "family",
           "tableTo": "user",
           "columnsFrom": [
-            "creator_id"
+            "owner_id"
           ],
           "columnsTo": [
             "id"
@@ -262,6 +285,14 @@
           "notNull": true,
           "autoincrement": false,
           "default": false
+        },
+        "joined_at": {
+          "name": "joined_at",
+          "type": "text(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
         }
       },
       "indexes": {},
@@ -276,7 +307,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "family_user_user_id_user_id_fk": {
@@ -289,7 +320,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },

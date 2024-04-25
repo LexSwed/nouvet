@@ -21,25 +21,27 @@ CREATE TABLE `event` (
 CREATE TABLE `family_invite` (
 	`inviter_id` integer NOT NULL,
 	`expires_at` integer NOT NULL,
-	`invite_code` text(32) PRIMARY KEY NOT NULL,
+	`invite_code` text(20) PRIMARY KEY NOT NULL,
+	`invitation_hash` text(64) NOT NULL,
 	FOREIGN KEY (`inviter_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `family` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text(100),
-	`creator_id` integer NOT NULL,
+	`owner_id` integer NOT NULL,
 	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
-	FOREIGN KEY (`creator_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `family_user` (
 	`family_id` integer NOT NULL,
 	`user_id` integer NOT NULL,
 	`approved` integer DEFAULT false NOT NULL,
+	`joined_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
 	PRIMARY KEY(`family_id`, `user_id`),
-	FOREIGN KEY (`family_id`) REFERENCES `family`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`family_id`) REFERENCES `family`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `pet` (
@@ -87,3 +89,6 @@ CREATE TABLE `user` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL
 );
+--> statement-breakpoint
+CREATE INDEX `hash_idx` ON `family_invite` (`invitation_hash`);--> statement-breakpoint
+CREATE INDEX `owner_idx` ON `family` (`owner_id`);

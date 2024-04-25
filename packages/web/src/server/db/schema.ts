@@ -62,10 +62,10 @@ export const familyUserTable = sqliteTable(
   {
     familyId: integer('family_id')
       .notNull()
-      .references(() => familyTable.id),
+      .references(() => familyTable.id, { onDelete: 'cascade' }),
     userId: integer('user_id')
       .notNull()
-      .references(() => userTable.id),
+      .references(() => userTable.id, { onDelete: 'cascade' }),
     /**
      * The owner of the family approves people who got the invitation.
      */
