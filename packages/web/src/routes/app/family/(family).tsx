@@ -82,7 +82,7 @@ function FamilyPage() {
               {/* technically it's not possible for non-owners to not see other members */}
               <Match when={isOwner() && members().length === 0}>
                 <div class="grid grid-flow-row gap-6 sm:grid-flow-col sm:grid-cols-[1fr,2fr] sm:items-center">
-                  <div class="row-[2] flex flex-col gap-4 sm:order-none sm:row-auto">
+                  <div class="row-[2] flex flex-col gap-4 sm:row-auto">
                     <Text with="headline-2" as="h2">
                       {t('no-members-header')}
                     </Text>
@@ -94,7 +94,7 @@ function FamilyPage() {
                       <FamilyInviteDialog id="family-invite" />
                     </Suspense>
                   </div>
-                  <div class="row-[1] mb-4 grid place-content-center sm:row-auto">
+                  <div class="row-[1] grid place-content-center">
                     <Image
                       src="/assets/images/andriyko-podilnyk-dWSl8REfpoQ-unsplash.jpg"
                       alt=""
