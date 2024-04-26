@@ -230,7 +230,7 @@ const DeleteFamilyDialog = () => {
                 <Image
                   src="/assets/images/family-breakup.png"
                   width={300}
-                  aspectRatio={1 / 1}
+                  aspectRatio="1/1"
                   alt=""
                 />
               </div>
