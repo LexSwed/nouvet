@@ -1,15 +1,39 @@
 'use server';
 
 import { createHmac, randomBytes } from 'node:crypto';
+import { json, redirect } from '@solidjs/router';
 import { getRequestEvent } from 'solid-js/web';
+import {
+  coerce,
+  integer,
+  number,
+  object,
+  parse,
+  picklist,
+  ValiError,
+} from 'valibot';
 
 import { getRequestUser } from '~/server/auth/request-user';
 import { createFamilyInvite } from '~/server/db/queries/familyCreateInvite';
+import { familyInvitationInfo } from '~/server/db/queries/familyInvitationInfo';
 import { familyInvite } from '~/server/db/queries/familyInvite';
+import {
+  joinFamilyByInvitationHash,
+  requestFamilyAdmissionByInviteCode,
+} from '~/server/db/queries/familyJoin';
 import { env } from '~/server/env';
+import { UserAlreadyInFamily } from '~/server/errors';
+
+import {
+  acceptUserToFamily,
+  revokeUserInvite,
+} from '../db/queries/familyMembers';
+
+import { getFamilyMembers } from './family';
+import { getUserFamily } from './user';
 
 // TODO: Heavily rate limit this
-export async function getFamilyInvite() {
+export async function getFamilyInviteServer() {
   try {
     const user = await getRequestUser();
     const event = getRequestEvent();
@@ -46,3 +70,95 @@ export async function getFamilyInvite() {
 function createHash(code: string) {
   return createHmac('sha256', env.INVITES_SECRET).update(code).digest('hex');
 }
+
+export const checkFamilyInviteServer = async (inviteCode: string) => {
+  const user = await getRequestUser();
+  try {
+    const invite = await familyInvitationInfo(inviteCode, user.userId);
+    return { invite };
+  } catch (error) {
+    if (error instanceof UserAlreadyInFamily) {
+      return json(
+        {
+          failed: true,
+          reason: 100,
+        },
+        { status: 400 },
+      );
+    } else {
+      console.error(error);
+    }
+    return json(
+      {
+        failed: true,
+      },
+      { status: 400 },
+    );
+  }
+};
+
+export const joinFamilyWithLinkServer = async (formData: FormData) => {
+  const currentUser = await getRequestUser();
+  const inviteCode = formData.get('invite-code')!.toString().trim();
+  if (!inviteCode || !currentUser.userId) {
+    return json(new Error('Invite code is not provided'), { status: 422 });
+  }
+
+  try {
+    await requestFamilyAdmissionByInviteCode(inviteCode, currentUser.userId);
+
+    return redirect(`/app/family`);
+  } catch (error) {
+    console.error(error);
+    return json(error, { status: 422 });
+  }
+};
+
+export const joinFamilyWithQRCodeServer = async (invitationHash: string) => {
+  try {
+    const currentUser = await getRequestUser();
+    if (!invitationHash || !currentUser.userId)
+      throw new Error('Missing invitation hash.');
+    // TODO: error handling
+    const family = await joinFamilyByInvitationHash(
+      invitationHash,
+      currentUser.userId,
+    );
+    /** Revalidation happens after user sees the success dialog */
+    return json(family, { revalidate: [] });
+  } catch (error) {
+    throw new Error('Invite code is invalid');
+  }
+};
+
+const WaitListActionSchema = object({
+  action: picklist(['accept', 'decline']),
+  userId: coerce(number([integer()]), Number),
+});
+export const moveUserFromTheWaitListServer = async (formData: FormData) => {
+  try {
+    const data = parse(WaitListActionSchema, {
+      action: formData.get('action'),
+      userId: formData.get('user-id'),
+    });
+    const user = await getRequestUser();
+
+    if (data.action === 'accept') {
+      await acceptUserToFamily({
+        familyOwnerId: user.userId,
+        inviteeId: data.userId,
+      });
+    } else {
+      await revokeUserInvite({
+        familyOwnerId: user.userId,
+        inviteeId: data.userId,
+      });
+    }
+
+    return json(data, {
+      revalidate: [getFamilyMembers.key, getUserFamily.key],
+    });
+  } catch (error) {
+    return json({ error }, { status: error instanceof ValiError ? 422 : 500 });
+  }
+};

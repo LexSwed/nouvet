@@ -1,23 +1,7 @@
 'use server';
 
 import { and, eq } from 'drizzle-orm';
-import {
-  date,
-  maxLength,
-  maxValue,
-  minLength,
-  minValue,
-  number,
-  object,
-  optional,
-  parse,
-  picklist,
-  string,
-  toTrimmed,
-  ValiError,
-  type Input,
-  type Output,
-} from 'valibot';
+import * as v from 'valibot';
 
 import { useDb } from '~/server/db';
 import {
@@ -27,48 +11,48 @@ import {
 } from '~/server/db/schema';
 import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
 
-const UpdatePetSchema = object({
-  name: optional(
-    string('createPet.name.required' satisfies ErrorKeys, [
-      toTrimmed(),
-      minLength(1, 'createPet.name.required' satisfies ErrorKeys),
-      maxLength(200, 'createPet.name.length' satisfies ErrorKeys),
+const UpdatePetSchema = v.object({
+  name: v.optional(
+    v.string('createPet.name.required' satisfies ErrorKeys, [
+      v.toTrimmed(),
+      v.minLength(1, 'createPet.name.required' satisfies ErrorKeys),
+      v.maxLength(200, 'createPet.name.length' satisfies ErrorKeys),
     ]),
   ),
-  type: optional(
-    picklist(
+  type: v.optional(
+    v.picklist(
       ['dog', 'cat', 'bird', 'rabbit', 'rodent', 'horse'],
       'createPet.type' satisfies ErrorKeys,
     ),
   ),
-  gender: optional(
-    picklist(['male', 'female'], 'createPet.gender' satisfies ErrorKeys),
+  gender: v.optional(
+    v.picklist(['male', 'female'], 'createPet.gender' satisfies ErrorKeys),
   ),
-  breed: optional(
-    string([
-      toTrimmed(),
-      minLength(2, 'createPet.breed' satisfies ErrorKeys),
-      maxLength(200, 'createPet.breed' satisfies ErrorKeys),
+  breed: v.optional(
+    v.string([
+      v.toTrimmed(),
+      v.minLength(2, 'createPet.breed' satisfies ErrorKeys),
+      v.maxLength(200, 'createPet.breed' satisfies ErrorKeys),
     ]),
   ),
-  color: optional(
-    string([
-      toTrimmed(),
-      minLength(2, 'createPet.color' satisfies ErrorKeys),
-      maxLength(200, 'createPet.color' satisfies ErrorKeys),
+  color: v.optional(
+    v.string([
+      v.toTrimmed(),
+      v.minLength(2, 'createPet.color' satisfies ErrorKeys),
+      v.maxLength(200, 'createPet.color' satisfies ErrorKeys),
     ]),
   ),
-  dateOfBirth: optional(
-    date([
-      minValue(new Date(2000, 0, 1), 'birthdate.range' satisfies ErrorKeys),
-      maxValue(new Date(), 'birthdate.range' satisfies ErrorKeys),
+  dateOfBirth: v.optional(
+    v.date([
+      v.minValue(new Date(2000, 0, 1), 'birthdate.range' satisfies ErrorKeys),
+      v.maxValue(new Date(), 'birthdate.range' satisfies ErrorKeys),
     ]),
   ),
-  weight: optional(number([minValue(0.1), maxValue(999)])),
+  weight: v.optional(v.number([v.minValue(0.1), v.maxValue(999)])),
 });
 
-type UpdatePetInput = Input<typeof UpdatePetSchema>;
-type UpdatePetOutput = Output<typeof UpdatePetSchema>;
+type UpdatePetInput = v.Input<typeof UpdatePetSchema>;
+type UpdatePetOutput = v.Output<typeof UpdatePetSchema>;
 
 export async function petUpdate(
   petData: {
@@ -78,7 +62,7 @@ export async function petUpdate(
   userId: DatabaseUser['id'],
 ) {
   try {
-    const { name, type, gender, breed, color, dateOfBirth, weight } = parse(
+    const { name, type, gender, breed, color, dateOfBirth, weight } = v.parse(
       UpdatePetSchema,
       petData,
     );
@@ -109,7 +93,7 @@ export async function petUpdate(
 
     return { errors: null, pet };
   } catch (error) {
-    if (error instanceof ValiError) {
+    if (error instanceof v.ValiError) {
       const errors = await translateErrorTokens<UpdatePetOutput>(error);
       return {
         errors,

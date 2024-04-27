@@ -7,9 +7,22 @@ import { getRequestUser } from '~/server/auth/request-user';
 import { familyUpdate } from '~/server/db/queries/familyUpdate';
 
 import { familyDelete } from '../db/queries/familyDelete';
+import { familyMembers } from '../db/queries/familyMembers';
 import { translateErrorTokens, type ErrorKeys } from '../utils';
 
 import { getUserFamily } from './user';
+
+export async function getFamilyMembersServer() {
+  try {
+    const user = await getRequestUser();
+
+    const members = await familyMembers(user.userId);
+
+    return members;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 const FamilyUpdateSchema = object({
   name: string('family.name' satisfies ErrorKeys, [toTrimmed()]),
