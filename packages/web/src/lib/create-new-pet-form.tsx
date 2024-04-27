@@ -14,10 +14,11 @@ function CreateNewPetForm(props: { onSuccess?: () => void }) {
   const t = createTranslator('pet-forms');
   const petSubmission = useSubmission(createPet);
 
-  const hasFailed = () =>
+  const hasUnknownError = () =>
     petSubmission.result &&
     'failed' in petSubmission.result &&
-    petSubmission.result.failed;
+    petSubmission.result.failed &&
+    !petSubmission.result.errors;
 
   createEffect(() => {
     if (petSubmission.result && 'pet' in petSubmission.result) {
@@ -30,7 +31,11 @@ function CreateNewPetForm(props: { onSuccess?: () => void }) {
       aria-labelledby="new-pet"
       class="flex flex-col gap-6"
       action={createPet}
-      validationErrors={petSubmission.result?.errors || undefined}
+      validationErrors={
+        petSubmission.result && 'errors' in petSubmission.result
+          ? petSubmission.result.errors
+          : undefined
+      }
       method="post"
       aria-errormessage="error-message"
     >
@@ -46,7 +51,7 @@ function CreateNewPetForm(props: { onSuccess?: () => void }) {
       <AnimalTypeSelect name="type" />
       <GenderSwitch name="gender" />
 
-      <Show when={hasFailed()}>
+      <Show when={hasUnknownError()}>
         <FormErrorMessage />
       </Show>
 

@@ -9,7 +9,7 @@ import {
   type DatabasePet,
   type DatabaseUser,
 } from '~/server/db/schema';
-import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
+import { type ErrorKeys } from '~/server/utils';
 
 const UpdatePetSchema = v.object({
   name: v.optional(
@@ -52,7 +52,6 @@ const UpdatePetSchema = v.object({
 });
 
 type UpdatePetInput = v.Input<typeof UpdatePetSchema>;
-type UpdatePetOutput = v.Output<typeof UpdatePetSchema>;
 
 export async function petUpdate(
   petData: {
@@ -61,44 +60,34 @@ export async function petUpdate(
   petId: DatabasePet['id'],
   userId: DatabaseUser['id'],
 ) {
-  try {
-    const { name, type, gender, breed, color, dateOfBirth, weight } = v.parse(
-      UpdatePetSchema,
-      petData,
-    );
-    const db = useDb();
-    const pet = await db
-      .update(petTable)
-      .set({
-        weight,
-        name,
-        type,
-        gender,
-        breed,
-        color,
-        dateOfBirth: dateOfBirth?.toUTCString(),
-      })
-      .where(and(eq(petTable.id, petId), eq(petTable.ownerId, userId)))
-      .returning({
-        id: petTable.id,
-        name: petTable.name,
-        type: petTable.type,
-        gender: petTable.gender,
-        breed: petTable.breed,
-        color: petTable.color,
-        dateOfBirth: petTable.dateOfBirth,
-        weight: petTable.weight,
-      })
-      .get();
+  const { name, type, gender, breed, color, dateOfBirth, weight } = v.parse(
+    UpdatePetSchema,
+    petData,
+  );
+  const db = useDb();
+  const pet = await db
+    .update(petTable)
+    .set({
+      weight,
+      name,
+      type,
+      gender,
+      breed,
+      color,
+      dateOfBirth: dateOfBirth?.toUTCString(),
+    })
+    .where(and(eq(petTable.id, petId), eq(petTable.ownerId, userId)))
+    .returning({
+      id: petTable.id,
+      name: petTable.name,
+      type: petTable.type,
+      gender: petTable.gender,
+      breed: petTable.breed,
+      color: petTable.color,
+      dateOfBirth: petTable.dateOfBirth,
+      weight: petTable.weight,
+    })
+    .get();
 
-    return { errors: null, pet };
-  } catch (error) {
-    if (error instanceof v.ValiError) {
-      const errors = await translateErrorTokens<UpdatePetOutput>(error);
-      return {
-        errors,
-      };
-    }
-    throw error;
-  }
+  return pet;
 }

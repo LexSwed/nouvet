@@ -1,3 +1,5 @@
+'use server';
+
 import { json } from '@solidjs/router';
 import * as v from 'valibot';
 
@@ -11,14 +13,12 @@ import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
 import { getUserPets } from './pet';
 
 export const getUserPetsServer = async () => {
-  'use server';
   const currentUser = await getRequestUser();
   const pets = await userPets(currentUser.userId);
   return pets;
 };
 
 export const createPetServer = async (formData: FormData) => {
-  'use server';
   const currentUser = await getRequestUser();
   try {
     const pet = await petCreate(
@@ -29,7 +29,7 @@ export const createPetServer = async (formData: FormData) => {
       },
       currentUser.userId,
     );
-    return json(pet, { revalidate: [getUserPets.key] });
+    return json({ pet }, { revalidate: [getUserPets.key] });
   } catch (error) {
     if (error instanceof v.ValiError) {
       return json(
@@ -81,7 +81,6 @@ const PetUpdateSchema = v.object({
 });
 
 export const updatePetBirthDateServer = async (formData: FormData) => {
-  'use server';
   try {
     const { petId, birthDate } = v.parse(PetUpdateSchema, {
       petId: formData.get('petId'),
@@ -99,29 +98,26 @@ export const updatePetBirthDateServer = async (formData: FormData) => {
       dateOfBirth.getMonth() !== birthDate!.bmonth
     ) {
       const dict = await getDictionary('errors');
-      return {
-        errors: {
-          bday: dict['bday'],
-        },
-      };
+      return json(
+        { failed: true, errors: { bday: dict['bday'] } },
+        { status: 422, revalidate: [] },
+      );
     }
     const currentUser = await getRequestUser();
-    const result = await petUpdate(
+    const pet = await petUpdate(
       {
         dateOfBirth,
       },
       petId,
       currentUser.userId,
     );
-    return json(
-      result,
-      result.pet ? { revalidate: [getUserPets.key] } : undefined,
-    );
+    return json({ pet }, { revalidate: [getUserPets.key] });
   } catch (error) {
     if (error instanceof v.ValiError) {
-      return {
-        errors: await translateErrorTokens(error),
-      };
+      return json(
+        { failed: true, errors: await translateErrorTokens(error) },
+        { status: 422, revalidate: [] },
+      );
     } else {
       console.error(error);
     }
@@ -133,7 +129,6 @@ export const updatePetBirthDateServer = async (formData: FormData) => {
 };
 
 export const updatePetWeightServer = async (formData: FormData) => {
-  'use server';
   try {
     const { weight } = v.parse(PetUpdateSchema, {
       weight: formData.get('weight'),
@@ -143,22 +138,20 @@ export const updatePetWeightServer = async (formData: FormData) => {
       throw new Error('petId is not provided');
     }
     const currentUser = await getRequestUser();
-    const result = await petUpdate(
+    const pet = await petUpdate(
       {
         weight,
       },
       petId,
       currentUser.userId,
     );
-    return json(
-      result,
-      result.pet ? { revalidate: [getUserPets.key] } : undefined,
-    );
+    return json({ pet }, { revalidate: [getUserPets.key] });
   } catch (error) {
     if (error instanceof v.ValiError) {
-      return {
-        errors: await translateErrorTokens(error),
-      };
+      return json(
+        { failed: true, errors: await translateErrorTokens(error) },
+        { status: 422, revalidate: [] },
+      );
     } else {
       console.error(error);
     }
@@ -170,35 +163,31 @@ export const updatePetWeightServer = async (formData: FormData) => {
 };
 
 export const updatePetBreedServer = async (formData: FormData) => {
-  'use server';
   try {
     const { petId, breed } = v.parse(PetUpdateSchema, {
       petId: formData.get('petId'),
       breed: formData.get('breed'),
     });
     const currentUser = await getRequestUser();
-    const result = await petUpdate(
+    const pet = await petUpdate(
       {
         breed,
       },
       petId,
       currentUser.userId,
     );
-    return json(
-      result,
-      result.pet ? { revalidate: [getUserPets.key] } : undefined,
-    );
+    return json({ pet }, { revalidate: [getUserPets.key] });
   } catch (error) {
     if (error instanceof v.ValiError) {
-      return {
-        errors: await translateErrorTokens(error),
-      };
+      return json(
+        { failed: true, errors: await translateErrorTokens(error) },
+        { status: 422, revalidate: [] },
+      );
     } else {
-      console.error(error);
+      return json(
+        { failed: true, errors: null },
+        { status: 500, revalidate: [] },
+      );
     }
-    return json(
-      { failed: true, errors: null },
-      { status: 500, revalidate: [] },
-    );
   }
 };

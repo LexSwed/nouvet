@@ -81,10 +81,11 @@ const AddWeightForm = (props: AddWeightFormProps) => {
     );
   });
 
-  const submissionFailed = () =>
+  const hasUnknownError = () =>
     weightSubmission.result &&
     'failed' in weightSubmission.result &&
-    weightSubmission.result.failed;
+    weightSubmission.result.failed &&
+    !weightSubmission.result.errors;
 
   return (
     <Drawer
@@ -94,14 +95,18 @@ const AddWeightForm = (props: AddWeightFormProps) => {
       class="sm:w-[240px]"
       anchor={props.anchor}
     >
-      <Show when={submissionFailed()}>
+      <Show when={hasUnknownError()}>
         <FormErrorMessage class="mb-3" />
       </Show>
       <Form
         class="flex flex-col gap-6 sm:max-w-[360px]"
         action={updatePetWeight}
         method="post"
-        validationErrors={weightSubmission.result?.errors}
+        validationErrors={
+          weightSubmission.result && 'errors' in weightSubmission.result
+            ? weightSubmission.result.errors
+            : undefined
+        }
       >
         <input type="hidden" name="petId" value={props.pet.id} />
         <div class="flex flex-row gap-4">
