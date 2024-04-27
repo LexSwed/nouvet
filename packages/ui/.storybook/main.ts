@@ -1,44 +1,23 @@
-import path from 'path';
+import { dirname, join } from 'path';
 import type { StorybookConfig } from 'storybook-solidjs-vite';
-import { mergeConfig } from 'vite';
-import viteSvgSpriteWrapper from 'vite-svg-sprite-wrapper';
+
+/**
+ * This function is used to resolve the absolute path of a package.
+ * It is needed in projects that use Yarn PnP or are set up within a monorepo.
+ */
+function getAbsolutePath(value: string) {
+  return dirname(require.resolve(join(value, 'package.json')));
+}
 
 const config = {
-  core: {
-    builder: '@storybook/builder-vite', // 👈 The builder enabled here.
-  },
-  async viteFinal(config) {
-    // Merge custom configuration into the default config
-    return mergeConfig(config, {
-      assetsInclude: ['/sb-preview/**'],
-      css: {
-        postcss: '../config/postcss.config.cjs',
-      },
-      plugins: [
-        viteSvgSpriteWrapper({
-          icons: '../config/icons/source/*.svg',
-          outputDir: '../config/icons',
-          generateType: true,
-          typeOutputDir: './src/icon',
-          sprite: {
-            shape: {
-              dimension: {
-                attributes: true, // Width and height attributes on embedded shapes
-              },
-            },
-          },
-        }),
-      ],
-    });
-  },
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@storybook/addon-interactions',
+    getAbsolutePath('@storybook/addon-links'),
+    getAbsolutePath('@storybook/addon-essentials'),
+    getAbsolutePath('@storybook/addon-interactions'),
   ],
   framework: {
-    name: 'storybook-solidjs-vite',
+    name: getAbsolutePath('storybook-solidjs-vite') as 'storybook-solidjs-vite',
     options: {},
   },
   docs: {
