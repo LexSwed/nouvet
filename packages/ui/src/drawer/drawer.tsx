@@ -8,7 +8,7 @@ import {
   type ComponentProps,
   type ValidComponent,
 } from 'solid-js';
-import Corvu from 'corvu/drawer';
+import { Content as DrawerContent, Root as DrawerRoot } from 'corvu/drawer';
 
 import { Popover, type PopoverProps } from '../popover';
 import { tw } from '../tw';
@@ -16,7 +16,7 @@ import { composeEventHandlers } from '../utils';
 
 import cssStyles from './drawer.module.css';
 
-const DrawerContent = <T extends ValidComponent = 'div'>(
+const MobileDrawer = <T extends ValidComponent = 'div'>(
   ownProps: PopoverProps<T>,
 ) => {
   const [open, setOpen] = createSignal(false);
@@ -32,7 +32,7 @@ const DrawerContent = <T extends ValidComponent = 'div'>(
   });
 
   return (
-    <Corvu.Root
+    <DrawerRoot
       open={open()}
       closeOnEscapeKeyDown={false}
       closeOnOutsidePointer={false}
@@ -46,7 +46,7 @@ const DrawerContent = <T extends ValidComponent = 'div'>(
         if (!popoverEl?.matches(':popover-open')) popoverEl?.hidePopover();
       }}
     >
-      <Corvu.Content
+      <DrawerContent
         as="div"
         forceMount
         popover="auto"
@@ -68,7 +68,7 @@ const DrawerContent = <T extends ValidComponent = 'div'>(
             (event.currentTarget as HTMLElement).hidePopover();
           }
         })}
-        {...(props as ComponentProps<typeof Corvu.Content>)}
+        {...(props as ComponentProps<typeof DrawerContent>)}
         ref={mergeRefs(ownProps.ref, (el: HTMLElement) => (popoverEl = el))}
       >
         <Show when={open()}>
@@ -77,8 +77,8 @@ const DrawerContent = <T extends ValidComponent = 'div'>(
           </div>
           {resolved()}
         </Show>
-      </Corvu.Content>
-    </Corvu.Root>
+      </DrawerContent>
+    </DrawerRoot>
   );
 };
 
@@ -93,8 +93,8 @@ const Drawer = <T extends ValidComponent = 'div'>(
   return (
     <Show
       when={isMobile()}
-      children={<DrawerContent {...ownProps} />}
-      fallback={<Popover {...ownProps} id={ownProps.id} />}
+      children={<MobileDrawer {...ownProps} />}
+      fallback={<Popover {...ownProps} />}
     />
   );
 };
