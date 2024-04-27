@@ -8,7 +8,7 @@ interface Props
     VariantProps<typeof spinnerCss> {}
 
 export const Spinner = (ownProps: Props) => {
-  const [local, props] = splitProps(ownProps, ['size', 'variant']);
+  const [local, props] = splitProps(ownProps, ['size']);
   return (
     <svg
       {...props}
@@ -38,13 +38,8 @@ const spinnerCss = cva('animate-spin', {
       xl: 'size-12',
       cta: 'size-16',
     },
-    variant: {
-      default: '',
-      tertiary: 'text-tertiary',
-    },
   },
   defaultVariants: {
     size: 'base',
-    variant: 'default',
   },
 });

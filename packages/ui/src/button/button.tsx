@@ -5,7 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { Spinner } from '../spinner';
 import { tw } from '../tw';
-import { mergeDefaultProps } from '../utils';
+import { mergeDefaultProps, type Merge } from '../utils';
 
 export const buttonVariants = cva(
   `relative inline-flex cursor-default items-center justify-center rounded-xl text-sm font-medium transition focus-visible:outline-4 focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50`,
@@ -22,17 +22,16 @@ export const buttonVariants = cva(
         tonal: 'outline-on-surface',
         outline:
           'border-outline text-on-surface outline-on-surface rounded-full border bg-transparent focus-visible:outline-offset-0',
-        secondary:
-          'bg-tertiary-container text-on-tertiary-container outline-tertiary rounded-full',
         ghost: 'text-on-surface outline-on-surface',
         link: 'text-primary underline-offset-4',
       },
       loading: {
-        true: '',
+        true: 'disabled:opacity-90',
         false: '',
       },
       icon: {
         true: 'rounded-full p-0',
+        false: '',
       },
       split: {
         true: 'flex w-fit p-0 [&>*]:rounded-[inherit]',
@@ -56,14 +55,21 @@ export const buttonVariants = cva(
       {
         split: false,
         variant: 'default',
-        class: 'intent:filter-darker',
+        class: 'intent:filter-darker [--btn-bg:theme(colors.primary)]',
+      },
+      {
+        split: false,
+        variant: 'default',
+        tone: 'secondary',
+        class:
+          'bg-tertiary text-on-tertiary intent:filter-darker [--btn-bg:theme(colors.tertiary)]',
       },
       {
         split: false,
         variant: 'default',
         tone: 'destructive',
         class:
-          'bg-error-container text-on-error-container outline-error intent:bg-error-container/90',
+          'bg-error text-on-error outline-error intent:bg-error/90 [--btn-bg:theme(colors.error)]',
       },
       {
         split: false,
@@ -75,40 +81,49 @@ export const buttonVariants = cva(
         variant: 'outline',
         tone: 'destructive',
         class:
-          'border-error text-error outline-error intent:bg-error-container/30',
+          'border-error text-error outline-error intent:bg-error-container/30 [--btn-bg:theme(colors.surface)]',
       },
       {
         split: false,
         variant: 'tonal',
         tone: 'neutral',
-        class: 'bg-on-surface/5 text-on-surface intent:bg-on-surface/8',
+        class:
+          'bg-on-surface/5 text-on-surface intent:bg-on-surface/8 [--btn-bg:theme(colors.surface)]',
       },
       {
         split: false,
         variant: 'tonal',
         tone: 'primary',
         class:
-          'bg-primary-container text-on-primary-container intent:bg-primary-container/90',
+          'bg-primary-container text-on-primary-container intent:bg-primary-container/90 [--btn-bg:theme(colors.primary-container)]',
       },
       {
         split: false,
         variant: 'tonal',
         tone: 'secondary',
         class:
-          'bg-secondary-container text-on-secondary-container intent:bg-secondary-container/90',
+          'bg-tertiary-container text-on-tertiary-container intent:bg-secondary-container/90 [--btn-bg:theme(colors.tertiary-container)]',
       },
       {
         split: false,
         variant: 'tonal',
         tone: 'destructive',
         class:
-          'bg-error-container text-on-error-container intent:bg-error-container/90',
+          'bg-error-container text-on-error-container intent:bg-error-container/90 [--btn-bg:theme(colors.error-container)]',
+      },
+      {
+        split: false,
+        variant: 'tonal',
+        tone: 'success',
+        // TODO
+        class: '',
       },
       {
         split: false,
         variant: 'ghost',
         tone: 'neutral',
-        class: 'hover:bg-on-surface/5 focus:bg-on-surface/8',
+        class:
+          'hover:bg-on-surface/5 focus:bg-on-surface/8 [--btn-bg:theme(colors.surface)]',
       },
       {
         split: false,
@@ -119,9 +134,12 @@ export const buttonVariants = cva(
   },
 );
 
-type ButtonVariants = Omit<VariantProps<typeof buttonVariants>, 'icon'> &
-  ({ icon: true; label: string } | { icon?: boolean; label?: string });
-type BaseProps<T extends ValidComponent> = DynamicProps<T> & ButtonVariants;
+type ButtonVariants = VariantProps<typeof buttonVariants> & { label?: string };
+
+type BaseProps<T extends ValidComponent> = Merge<
+  DynamicProps<T>,
+  ButtonVariants
+>;
 
 const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
   const [local, props] = splitProps(ownProps as BaseProps<'button'>, [
@@ -166,7 +184,7 @@ const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
     >
       {props.children}
       <Show when={local.loading}>
-        <div class="absolute inset-0 isolate flex cursor-default items-center justify-center rounded-[inherit] bg-[radial-gradient(circle_at_50%_50%,theme(colors.surface/0.9),transparent)]">
+        <div class="absolute inset-0 isolate flex cursor-default items-center justify-center rounded-[inherit] bg-[radial-gradient(circle_at_50%_50%,color-mix(in_lch,var(--btn-bg)_92%,transparent)_30%,transparent)]">
           <Spinner size={local.size} />
         </div>
       </Show>
@@ -180,6 +198,8 @@ const Button = (ownProps: Omit<BaseProps<'button'>, 'component' | 'split'>) => {
   });
   return <BaseComponent {...props} component="button" />;
 };
+
+<Button icon>Something</Button>;
 
 const ButtonLink = (
   ownProps: Omit<BaseProps<typeof A>, 'component' | 'split'>,
@@ -197,7 +217,7 @@ const ButtonLink = (
 const SplitButton = (
   ownProps: Omit<BaseProps<'div'>, 'component' | 'icon' | 'split'>,
 ) => {
-  return <BaseComponent {...ownProps} split component="div" />;
+  return <BaseComponent {...ownProps} icon={false} split component="div" />;
 };
 SplitButton.Inner = (ownProps: Omit<BaseProps<'button'>, 'component'>) => {
   return <Button {...ownProps} size="sm" variant="ghost" />;
