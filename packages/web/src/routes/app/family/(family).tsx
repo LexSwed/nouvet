@@ -9,6 +9,7 @@ import { Match, Show, Suspense, Switch } from 'solid-js';
 import {
   Button,
   ButtonLink,
+  Card,
   Drawer,
   Form,
   Icon,
@@ -40,8 +41,8 @@ export const route = {
 function FamilyPage() {
   const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
-  const familyMembers = createAsync(async () => getFamilyMembers());
   const isOwner = () => user()?.family.isOwner || false;
+  const familyMembers = createAsync(async () => getFamilyMembers());
   const awaitingUser = () =>
     // The API also filters non-approved users from non-owners, but just in case
     isOwner() ? familyMembers()?.find((user) => !user.isApproved) : null;
@@ -67,7 +68,7 @@ function FamilyPage() {
           </ButtonLink>
         </AppHeader>
         <div class="flex flex-col gap-6">
-          <FamilyHeader familyName={user()?.family.name} isOwner={isOwner()} />
+          <FamilyHeader />
           <section class="container flex flex-col gap-8">
             <Suspense>
               <Show when={awaitingUser()}>
@@ -75,9 +76,14 @@ function FamilyPage() {
               </Show>
             </Suspense>
             <Switch>
+              <Match when={!user()?.family.isApproved}>
+                <WaitingApproval />
+              </Match>
               <Match when={members().length > 0}>Render users!</Match>
               {/* technically it's not possible for non-owners to not see other members */}
-              <Match when={isOwner() && members().length === 0}>
+              <Match
+                when={isOwner() && members().length === 0 && !awaitingUser()}
+              >
                 <div class="grid grid-flow-row gap-6 sm:grid-flow-col sm:grid-cols-[1fr,2fr] sm:items-center">
                   <div class="row-[2] flex flex-col gap-4 sm:row-auto">
                     <Text with="headline-2" as="h2">
@@ -87,9 +93,6 @@ function FamilyPage() {
                     <Button popoverTarget="family-invite">
                       {t('invite-cta')}
                     </Button>
-                    <Suspense>
-                      <FamilyInviteDialog id="family-invite" />
-                    </Suspense>
                   </div>
                   <div class="row-[1] grid place-content-center">
                     <Image
@@ -104,6 +107,9 @@ function FamilyPage() {
               </Match>
             </Switch>
           </section>
+          <Suspense>
+            <FamilyInviteDialog id="family-invite" />
+          </Suspense>
         </div>
       </div>
     </>
@@ -112,95 +118,126 @@ function FamilyPage() {
 
 export default FamilyPage;
 
-function FamilyHeader(props: {
-  familyName: string | null | undefined;
-  isOwner: boolean;
-}) {
+function FamilyHeader() {
   const t = createTranslator('family');
+  const user = createAsync(() => getUserFamily());
+  const isOwner = () => user()?.family.isOwner || false;
   return (
     <section class="container">
       <div class="flex flex-col gap-4 sm:flex-row sm:items-end">
-        <FamilyNameForm />
-        <Show when={props.isOwner}>
-          <div class="flex flex-row gap-2 sm:mb-2">
-            <Button
-              class="gap-2"
-              variant="tonal"
-              size="sm"
-              popoverTarget="family-invite"
-            >
-              <Icon use="user-circle-plus" />
-              {t('action-add-users')}
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              popoverTarget="family-menu"
-              class="gap-2"
-              icon
-              label={t('action-more')}
-            >
-              <Icon use="dots-three-outline-vertical" />
-            </Button>
-            <Menu id="family-menu" placement="bottom-end">
-              <MenuItem
-                tone="destructive"
-                popoverTarget="family-delete"
-                as="button"
-                type="button"
-              >
-                <Icon use="trash-simple" />
-                {t('action-disassemble')}
-              </MenuItem>
-            </Menu>
-            <DeleteFamilyDialog />
-          </div>
-        </Show>
+        <Switch>
+          <Match when={isOwner()}>
+            <>
+              <FamilyNameForm familyName={user()?.family.name} />
+              <div class="flex flex-row gap-2 sm:mb-2">
+                <Button
+                  class="gap-2"
+                  variant="tonal"
+                  size="sm"
+                  popoverTarget="family-invite"
+                >
+                  <Icon use="user-circle-plus" />
+                  {t('action-add-users')}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  popoverTarget="family-owner-menu"
+                  class="gap-2"
+                  icon
+                  label={t('action-more')}
+                >
+                  <Icon use="dots-three-outline-vertical" />
+                </Button>
+                <Menu id="family-owner-menu" placement="bottom-end">
+                  <MenuItem
+                    tone="destructive"
+                    popoverTarget="family-delete"
+                    as="button"
+                    type="button"
+                  >
+                    <Icon use="trash-simple" />
+                    {t('action-disassemble')}
+                  </MenuItem>
+                </Menu>
+                <DeleteFamilyDialog />
+              </div>
+            </>
+          </Match>
+          <Match when={!isOwner()}>
+            <>
+              <Text with="headline-1">
+                {user()?.family.name || t('no-name')}
+              </Text>
+              <Show when={user()?.family.isApproved}>
+                <ul>
+                  <li>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      popoverTarget="family-menu"
+                      class="gap-2"
+                      icon
+                      label="Actions on family"
+                    >
+                      <Icon use="dots-three-outline-vertical" />
+                    </Button>
+                  </li>
+                </ul>
+                <Menu id="family-menu" placement="bottom-end">
+                  <MenuItem
+                    tone="destructive"
+                    popoverTarget="family-leave"
+                    as="button"
+                    type="button"
+                  >
+                    <Icon use="sign-out" />
+                    Leave family
+                  </MenuItem>
+                </Menu>
+                <Drawer id="family-leave" placement="center">
+                  {(open) => <Show when={open()}>Are you sure?</Show>}
+                </Drawer>
+              </Show>
+            </>
+          </Match>
+        </Switch>
       </div>
     </section>
   );
 }
 
-const FamilyNameForm = () => {
+const FamilyNameForm = (props: { familyName: string | undefined | null }) => {
   const t = createTranslator('family');
-  const user = createAsync(() => getUserFamily());
   const updateFamilyAction = useAction(updateFamily);
   const updateFamilySubmission = useSubmission(updateFamily);
   return (
-    <Show
-      when={user()?.family.isOwner}
-      fallback={
-        <Text with="headline-1">{user()?.family.name || t('no-name')}</Text>
-      }
+    <Form
+      onFocusOut={async (e) => {
+        const form = new FormData(e.currentTarget);
+        const newName = form.get('family-name')?.toString().trim();
+        if (newName !== props.familyName) {
+          await updateFamilyAction(form);
+        }
+      }}
+      autocomplete="off"
+      validationErrors={updateFamilySubmission.result?.errors}
+      aria-disabled={updateFamilySubmission.pending}
     >
-      <Form
-        onFocusOut={async (e) => {
-          const form = new FormData(e.currentTarget);
-          const newName = form.get('family-name')?.toString().trim();
-          if (newName !== user()?.family.name) {
-            await updateFamilyAction(form);
-          }
-        }}
-        autocomplete="off"
-        validationErrors={updateFamilySubmission.result?.errors}
+      <TextField
+        as="textarea"
+        variant="ghost"
+        placeholder={t('no-name')}
+        label={t('update-name-label')}
+        aria-description={t('update-name-description')}
+        name="family-name"
         aria-disabled={updateFamilySubmission.pending}
+        suffix={<Icon use="pencil" size="sm" />}
+        class="[&_textarea]:placeholder:text-on-surface w-full [&_textarea]:resize-none [&_textarea]:text-3xl [&_textarea]:font-semibold"
       >
-        <TextField
-          as="textarea"
-          variant="ghost"
-          placeholder={t('no-name')}
-          label={t('update-name-label')}
-          aria-description={t('update-name-description')}
-          name="family-name"
-          aria-disabled={updateFamilySubmission.pending}
-          suffix={<Icon use="pencil" size="sm" />}
-          class="[&_textarea]:placeholder:text-on-surface w-full [&_textarea]:resize-none [&_textarea]:text-3xl [&_textarea]:font-semibold"
-          value={user()?.family.name || ''}
-        >
-          {user()?.family.name ?? ''}
-        </TextField>
-      </Form>
-    </Show>
+        {props.familyName ?? ''}
+      </TextField>
+    </Form>
   );
 };
 
@@ -256,3 +293,65 @@ const DeleteFamilyDialog = () => {
     </Drawer>
   );
 };
+
+function WaitingApproval() {
+  const t = createTranslator('family');
+  return (
+    <div class="flex flex-col items-start gap-4 md:flex-row">
+      <Card variant="outlined" class="max-w-[400px]">
+        <Text as="p" with="headline-3">
+          {t('waiting.headline')}
+        </Text>
+        <Text as="p">{t('waiting.description')}</Text>
+        <div class="mt-4 flex flex-row items-center gap-2 self-end">
+          <Text with="label">{t('waiting.cancel-join-label')}</Text>
+          <Button
+            variant="outline"
+            tone="primary"
+            size="sm"
+            popoverTarget="cancel-join-drawer"
+          >
+            {t('waiting.cancel-join-cta')}
+          </Button>
+        </div>
+      </Card>
+      <Image
+        src="/assets/images/barthelemy-de-mazenod-iw0SowaRxeY-unsplash.jpg"
+        width={300}
+        aspectRatio="4/3"
+        alt={t('waiting.image')!}
+        class="w-[600px] rounded-3xl"
+      />
+      <Drawer
+        id="cancel-join-drawer"
+        placement="center"
+        aria-labelledby="cancel-join-headline"
+        class="max-w-[500px]"
+      >
+        {(open) => (
+          <Show when={open()}>
+            <div class="flex flex-col gap-4">
+              <Text with="headline-3" as="header" id="cancel-join-headline">
+                {t('waiting.cancel-join-popup-headline')}
+              </Text>
+              <Text as="p">{t('waiting.cancel-join-popup-description')}</Text>
+              <div class="mt-4 grid grid-cols-2 gap-4 md:self-end">
+                <Button
+                  variant="ghost"
+                  popoverTargetAction="hide"
+                  popoverTarget="cancel-join-drawer"
+                  class="rounded-full"
+                >
+                  {t('waiting.cancel-join-popup-close')}
+                </Button>
+                <Button variant="outline" tone="destructive">
+                  {t('waiting.cancel-join-popup-confirm')}
+                </Button>
+              </div>
+            </div>
+          </Show>
+        )}
+      </Drawer>
+    </div>
+  );
+}

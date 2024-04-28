@@ -31,6 +31,7 @@ export async function familyMembers(userId: DatabaseUser['id']) {
       ),
     )
     .leftJoin(familyTable, eq(familyTable.id, familyUserTable.familyId))
+    .orderBy(familyUserTable.joinedAt)
     .get();
 
   if (!family) return null;

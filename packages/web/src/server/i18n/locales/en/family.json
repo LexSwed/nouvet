@@ -55,5 +55,14 @@
   "invite.expired-description": "Seems like the QR code is a little brokey. But that's alright! Just ask your partner to create a new one!",
   "invite.expired-cta": "Retry",
   "invite.join-success": "You are now part of the family!",
-  "invite.join-success-done": "Done"
+  "invite.join-success-done": "Done",
+  "waiting.image": "A french bulldog patiently waiting for the owner",
+  "waiting.headline": "You are almost there!",
+  "waiting.description": "You will start enjoying the benefits of the group as soon as the person who invited you verifies it's indeed you who used their invite.",
+  "waiting.cancel-join-label": "Changed your mind?",
+  "waiting.cancel-join-cta": "Cancel join",
+  "waiting.cancel-join-popup-headline": "Cancel joining this family?",
+  "waiting.cancel-join-popup-description": "Withdrawing your request will remove you from the current joining process for this family. To join it in the future, you'll need a new invitation.",
+  "waiting.cancel-join-popup-close": "Close popup, keep join request",
+  "waiting.cancel-join-popup-confirm": "Cancel join"
 }

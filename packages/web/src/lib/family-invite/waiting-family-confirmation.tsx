@@ -16,7 +16,6 @@ export function WaitingFamilyConfirmation(props: {
       role="group"
       variant="flat"
       class="from-on-surface/5 flex flex-col gap-4 rounded-3xl bg-transparent bg-gradient-to-br via-transparent via-60% to-transparent"
-      style={{ 'view-transition-name': `family-user-${props.user.id}` }}
     >
       <Text as="header" with="overline">
         {t('invite.waitlist')}

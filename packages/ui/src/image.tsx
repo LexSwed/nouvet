@@ -20,33 +20,26 @@ type ImageProps = Merge<
      */
     format?: string;
     style?: JSX.CSSProperties;
-  } & (
-    | {
-        width: number;
-      }
-    | { height: number }
-  )
+  } & {
+    width: number;
+  }
 >;
 
+const steps = [640, 800, 1080, 1280, 1600];
 /**
  * Constructs image URL
  */
 function Image(ownProps: ImageProps) {
   const [local, props] = splitProps(
     mergeDefaultProps(ownProps, {
-      get sizes() {
-        return ownProps.width
-          ? `(min-width: ${ownProps.width}px) ${ownProps.width}px, 100vw`
-          : 'auto';
-      },
       format: 'webp',
       alt: '',
     }),
     ['aspectRatio', 'src', 'format', 'class', 'style'],
   );
-  const dynamicSrc = createMemo(() => {
-    // TODO: Add Cloudflare Image Resizing
-    if (local.src.startsWith('https://')) return local.src;
+  const imageProps = createMemo((): ComponentProps<'img'> => {
+    // TODO: Absolute path, add Cloudflare Image Resizing
+    if (local.src.startsWith('https://')) return { src: local.src };
     // local image (from file, use vite-imagetools)
     const url = new URL(
       local.src,
@@ -56,18 +49,23 @@ function Image(ownProps: ImageProps) {
           : 'http://localhost:3000'
         : location.origin,
     );
+    const props: ComponentProps<'img'> = {};
+
+    props.srcSet = steps.reduce((srcSet, w) => {
+      const wurl = new URL(url);
+      wurl.searchParams.set('w', `${w}`);
+      srcSet += `, ${wurl.toString()} ${w}w`;
+      return srcSet;
+    }, '');
     if (props.width) {
-      url.searchParams.set('w', `${props.width}`);
-    }
-    if (props.height) {
-      url.searchParams.set('h', `${props.height}`);
+      props.sizes = `(min-width: ${props.width}px) ${props.width}px, 100vw`;
     }
     if (local.format) {
       url.searchParams.set('format', `${local.format}`);
     }
     url.searchParams.set('imagetools', '');
 
-    return url.toString();
+    return props;
   });
   const style = (): JSX.CSSProperties => ({
     ...local.style,
@@ -76,7 +74,7 @@ function Image(ownProps: ImageProps) {
   return (
     <img
       {...props}
-      src={dynamicSrc()}
+      {...imageProps}
       class={tw(`max-w-full object-cover`, local.class)}
       style={style()}
     />
