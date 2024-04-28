@@ -11,7 +11,7 @@ export const AppHeader = (props: ParentProps) => {
   return (
     <Show when={user()}>
       {(user) => (
-        <header class="container flex items-center justify-between gap-8 p-4">
+        <header class="container flex items-center justify-between gap-8 py-4">
           {props.children}
           <AccountMenu name={user().name || ''} avatarUrl={user().avatarUrl!} />
         </header>

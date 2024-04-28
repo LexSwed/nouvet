@@ -8,7 +8,7 @@ import { tw } from '../tw';
 import { mergeDefaultProps, type Merge } from '../utils';
 
 export const buttonVariants = cva(
-  `relative inline-flex cursor-default items-center justify-center rounded-xl text-sm font-medium transition focus-visible:outline-4 focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50`,
+  `relative inline-flex cursor-default select-none items-center justify-center rounded-full text-sm font-medium transition focus-visible:outline-4 focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50`,
   {
     variants: {
       size: {
@@ -21,7 +21,7 @@ export const buttonVariants = cva(
         default: 'bg-primary text-on-primary outline-primary',
         tonal: 'outline-on-surface',
         outline:
-          'border-outline text-on-surface outline-on-surface rounded-full border bg-transparent focus-visible:outline-offset-0',
+          'border-outline text-on-surface outline-on-surface border bg-transparent focus-visible:outline-offset-0',
         ghost: 'text-on-surface outline-on-surface',
         link: 'text-primary underline-offset-4',
       },
