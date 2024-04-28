@@ -52,7 +52,7 @@ const MobileDrawer = <T extends ValidComponent = 'div'>(
         popover="auto"
         role="dialog"
         tabIndex={0}
-        class={tw(cssStyles.drawer, local.class)}
+        class={tw(cssStyles.drawer, local.class, 'max-w-[640px]')}
         onToggle={composeEventHandlers(props.onToggle, (event) => {
           setOpen(event.newState === 'open');
           if (event.newState === 'open') {

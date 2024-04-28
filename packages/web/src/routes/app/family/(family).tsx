@@ -303,11 +303,10 @@ function WaitingApproval() {
           {t('waiting.headline')}
         </Text>
         <Text as="p">{t('waiting.description')}</Text>
-        <div class="mt-4 flex flex-row items-center gap-2 self-end">
-          <Text with="label">{t('waiting.cancel-join-label')}</Text>
+        <div class="self-end">
           <Button
-            variant="outline"
-            tone="primary"
+            variant="ghost"
+            tone="destructive"
             size="sm"
             popoverTarget="cancel-join-drawer"
           >
@@ -320,7 +319,7 @@ function WaitingApproval() {
         width={300}
         aspectRatio="4/3"
         alt={t('waiting.image')!}
-        class="w-[600px] rounded-3xl"
+        class="w-[400px] self-end rounded-3xl md:w-[600px]"
       />
       <Drawer
         id="cancel-join-drawer"

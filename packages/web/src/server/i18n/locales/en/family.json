@@ -59,10 +59,9 @@
   "waiting.image": "A french bulldog patiently waiting for the owner",
   "waiting.headline": "You are almost there!",
   "waiting.description": "You will start enjoying the benefits of the group as soon as the person who invited you verifies it's indeed you who used their invite.",
-  "waiting.cancel-join-label": "Changed your mind?",
   "waiting.cancel-join-cta": "Cancel join",
   "waiting.cancel-join-popup-headline": "Cancel joining this family?",
   "waiting.cancel-join-popup-description": "Withdrawing your request will remove you from the current joining process for this family. To join it in the future, you'll need a new invitation.",
-  "waiting.cancel-join-popup-close": "Close popup, keep join request",
+  "waiting.cancel-join-popup-close": "Keep",
   "waiting.cancel-join-popup-confirm": "Cancel join"
 }

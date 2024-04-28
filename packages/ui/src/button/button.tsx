@@ -127,6 +127,13 @@ export const buttonVariants = cva(
       },
       {
         split: false,
+        variant: 'ghost',
+        tone: 'destructive',
+        class:
+          'text-error hover:bg-error/5 focus:bg-error/8 [--btn-bg:theme(colors.error/0.05)]',
+      },
+      {
+        split: false,
         variant: 'link',
         class: 'intent:underline',
       },
