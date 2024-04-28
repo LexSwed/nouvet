@@ -112,7 +112,7 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
                     <Form
                       method="post"
                       action={joinFamilyWithLink}
-                      class="bg-background bg-main z-10 col-span-6 col-start-1 row-[2] flex flex-col gap-6 rounded-3xl [background-attachment:fixed] sm:p-6 lg:col-span-5 lg:col-start-2"
+                      class="bg-background bg-main z-10 col-span-6 col-start-1 row-[2] flex flex-col gap-6 rounded-3xl [background-attachment:fixed] sm:p-6 md:max-w-[600px] lg:col-span-5 lg:col-start-2"
                     >
                       <Text with="headline-1">
                         {invite()!.inviterName

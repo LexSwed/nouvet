@@ -84,26 +84,7 @@ function FamilyPage() {
               <Match
                 when={isOwner() && members().length === 0 && !awaitingUser()}
               >
-                <div class="grid grid-flow-row gap-6 sm:grid-flow-col sm:grid-cols-[1fr,2fr] sm:items-center">
-                  <div class="row-[2] flex flex-col gap-4 sm:row-auto">
-                    <Text with="headline-2" as="h2">
-                      {t('no-members-header')}
-                    </Text>
-                    <Text as="p">{t('no-members-description')}</Text>
-                    <Button popoverTarget="family-invite">
-                      {t('invite-cta')}
-                    </Button>
-                  </div>
-                  <div class="row-[1] grid place-content-center">
-                    <Image
-                      src="/assets/images/andriyko-podilnyk-dWSl8REfpoQ-unsplash.jpg"
-                      alt=""
-                      aspectRatio="4/3"
-                      width={600}
-                      class="bg-primary/5 w-full max-w-[600px] rounded-3xl"
-                    />
-                  </div>
-                </div>
+                <EmptyFamily />
               </Match>
             </Switch>
           </section>
@@ -351,6 +332,30 @@ function WaitingApproval() {
           </Show>
         )}
       </Drawer>
+    </div>
+  );
+}
+
+function EmptyFamily() {
+  const t = createTranslator('family');
+  return (
+    <div class="grid grid-flow-row gap-6 sm:grid-flow-col sm:grid-cols-[1fr,2fr] sm:items-center">
+      <div class="row-[2] flex flex-col gap-4 sm:row-auto">
+        <Text with="headline-2" as="h2">
+          {t('no-members-header')}
+        </Text>
+        <Text as="p">{t('no-members-description')}</Text>
+        <Button popoverTarget="family-invite">{t('invite-cta')}</Button>
+      </div>
+      <div class="row-[1] grid place-content-center">
+        <Image
+          src="/assets/images/andriyko-podilnyk-dWSl8REfpoQ-unsplash.jpg"
+          alt=""
+          aspectRatio="4/3"
+          width={600}
+          class="bg-primary/5 w-full max-w-[600px] rounded-3xl"
+        />
+      </div>
     </div>
   );
 }

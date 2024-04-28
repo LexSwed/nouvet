@@ -30,7 +30,7 @@ export const buttonVariants = cva(
         false: '',
       },
       icon: {
-        true: 'rounded-full p-0',
+        true: 'p-0',
         false: '',
       },
       split: {

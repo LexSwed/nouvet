@@ -14,10 +14,10 @@ function AppLoginPage() {
 
   const onClick = () => {
     setLoading(true);
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
     onCleanup(() => {
-      const timeout = setTimeout(() => {
-        setLoading(false);
-      }, 1000);
       clearTimeout(timeout);
     });
   };
@@ -40,11 +40,13 @@ function AppLoginPage() {
             />
             <ButtonLink
               href="/api/auth/facebook"
-              class="flex items-center gap-3 !bg-[#1877F2] text-white"
+              class="intent:bg-[#1877F2] flex items-center gap-3 rounded-2xl bg-[#1877F2] text-white outline-[#1877F2]"
               size="lg"
               link={false}
+              variant="tonal"
               loading={loading()}
               onClick={onClick}
+              style={{ '--btn-bg': '#1877F2' }}
             >
               <img src="/assets/facebook.svg" class="size-8" alt="" />
               {t('with-facebook')}
