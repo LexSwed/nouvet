@@ -18,7 +18,7 @@
     "build": "storybook build"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.6.3",
+    "@floating-ui/dom": "^1.6.4",
     "@solid-primitives/media": "^2.2.9",
     "@solid-primitives/presence": "^0.0.6",
     "@solid-primitives/refs": "^1.0.8",

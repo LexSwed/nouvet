@@ -20,7 +20,7 @@ export function WaitingFamilyConfirmation(props: {
       <Text as="header" with="overline">
         {t('invite.waitlist')}
       </Text>
-      <div class="flex flex-row items-center justify-start gap-2">
+      <div class="flex flex-row items-center justify-start gap-3">
         <Avatar avatarUrl={props.user.avatarUrl} name={props.user.name || ''} />
         <Text with="label-lg">{props.user.name}</Text>
       </div>

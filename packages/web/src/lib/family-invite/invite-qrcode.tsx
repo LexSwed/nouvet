@@ -71,7 +71,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
           >
             <div ref={setContainerRef} class="peer" />
             <div class="bg-tertiary/12 hidden size-full animate-pulse place-content-center rounded-2xl peer-empty:grid">
-              <Spinner size="sm" variant="tertiary" />
+              <Spinner size="sm" />
             </div>
           </div>
           <Card
@@ -112,7 +112,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
           </Text>
         </Suspense>
       </div>
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
         <Button variant="ghost" onClick={share}>
           {t('invite.cta-share')}
         </Button>

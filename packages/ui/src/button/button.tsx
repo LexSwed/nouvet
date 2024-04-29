@@ -206,8 +206,6 @@ const Button = (ownProps: Omit<BaseProps<'button'>, 'component' | 'split'>) => {
   return <BaseComponent {...props} component="button" />;
 };
 
-<Button icon>Something</Button>;
-
 const ButtonLink = (
   ownProps: Omit<BaseProps<typeof A>, 'component' | 'split'>,
 ) => {

@@ -42,11 +42,13 @@ export async function familyMembers(userId: DatabaseUser['id']) {
       name: userProfileTable.name,
       avatarUrl: userProfileTable.avatarUrl,
       isApproved: familyUserTable.approved,
+      joinedAt: familyUserTable.joinedAt,
     })
     .from(userTable)
     .where(
       and(
         eq(familyUserTable.familyId, family.id),
+        // not current user
         not(eq(familyUserTable.userId, userId)),
         // if not the owner, only return approved users
         family.isOwner === 0 ? eq(familyUserTable.approved, true) : undefined,
