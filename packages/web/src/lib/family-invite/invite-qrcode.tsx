@@ -112,11 +112,11 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
           </Text>
         </Suspense>
       </div>
-      <div class="flex flex-col gap-2">
-        <Button variant="ghost" onClick={share}>
+      <div class="flex flex-col gap-4">
+        <Button onClick={props.onNext}>{t('invite.cta-ready')}</Button>
+        <Button variant="link" onClick={share}>
           {t('invite.cta-share')}
         </Button>
-        <Button onClick={props.onNext}>{t('invite.cta-ready')}</Button>
       </div>
     </div>
   );

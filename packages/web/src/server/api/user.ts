@@ -7,6 +7,10 @@ export const getUserFamily = cache(async () => {
   'use server';
   const currentUser = await getRequestUser();
   const user = await userFamily(currentUser.userId);
+  if (!user) {
+    console.error(`${currentUser.userId} was not resolved from the database`);
+    throw Error('Something went wrong');
+  }
   return user;
 }, 'user-family');
 

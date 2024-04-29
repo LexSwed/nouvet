@@ -1,30 +1,24 @@
 import { Title } from '@solidjs/meta';
-import {
-  createAsync,
-  useAction,
-  useSubmission,
-  type RouteDefinition,
-} from '@solidjs/router';
+import { createAsync, type RouteDefinition } from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
 import {
   Button,
   ButtonLink,
   Card,
   Drawer,
-  Form,
   Icon,
   Image,
   Menu,
   MenuItem,
   Text,
-  TextField,
 } from '@nou/ui';
 
-import { getFamilyMembers, updateFamily } from '~/server/api/family';
+import { getFamilyMembers } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
 
 import { AppHeader } from '~/lib/app-header';
+import { FamilyNameForm } from '~/lib/family-invite/family-name-form';
 import FamilyInviteDialog from '~/lib/family-invite/invite-dialog';
 import { WaitingFamilyConfirmation } from '~/lib/family-invite/waiting-family-confirmation';
 
@@ -187,40 +181,6 @@ function FamilyHeader() {
     </section>
   );
 }
-
-const FamilyNameForm = (props: { familyName: string | undefined | null }) => {
-  const t = createTranslator('family');
-  const updateFamilyAction = useAction(updateFamily);
-  const updateFamilySubmission = useSubmission(updateFamily);
-  return (
-    <Form
-      onFocusOut={async (e) => {
-        const form = new FormData(e.currentTarget);
-        const newName = form.get('family-name')?.toString().trim();
-        if (newName !== props.familyName) {
-          await updateFamilyAction(form);
-        }
-      }}
-      autocomplete="off"
-      validationErrors={updateFamilySubmission.result?.errors}
-      aria-disabled={updateFamilySubmission.pending}
-    >
-      <TextField
-        as="textarea"
-        variant="ghost"
-        placeholder={t('no-name')}
-        label={t('update-name-label')}
-        aria-description={t('update-name-description')}
-        name="family-name"
-        aria-disabled={updateFamilySubmission.pending}
-        suffix={<Icon use="pencil" size="sm" />}
-        class="[&_textarea]:placeholder:text-on-surface w-full [&_textarea]:resize-none [&_textarea]:text-3xl [&_textarea]:font-semibold"
-      >
-        {props.familyName ?? ''}
-      </TextField>
-    </Form>
-  );
-};
 
 const DeleteFamilyDialog = () => {
   const t = createTranslator('family');
