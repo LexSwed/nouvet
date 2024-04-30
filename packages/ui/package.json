@@ -24,7 +24,7 @@
     "@solid-primitives/refs": "^1.0.8",
     "@solidjs/router": "^0.13.2",
     "class-variance-authority": "^0.7.0",
-    "corvu": "^0.5.0",
+    "corvu": "^0.5.1",
     "solid-floating-ui": "^0.3.1",
     "solid-js": "^1.8.17",
     "tailwind-merge": "^2.3.0"

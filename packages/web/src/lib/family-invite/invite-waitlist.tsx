@@ -60,7 +60,9 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
           </Match>
           <Match when={family()?.familyMember?.isApproved}>
             <div class="flex flex-col gap-6">
-              <FamilyNameForm familyName={family()?.name} />
+              <Show when={family()?.name}>
+                {(name) => <FamilyNameForm familyName={name()} />}
+              </Show>
               <Card
                 variant="tonal"
                 tone="primary-light"

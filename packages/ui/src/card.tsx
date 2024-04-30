@@ -5,63 +5,82 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { tw } from './tw';
 import { mergeDefaultProps } from './utils';
 
-const cardVariants = cva(
-  'flex flex-col gap-2 rounded-2xl p-4 transition-shadow duration-200',
-  {
-    variants: {
-      _link: {
-        true: 'intent:outline-2 outline-offset-4',
-        false: '',
-      },
-      variant: {
-        elevated: 'bg-surface text-on-surface shadow-sm',
-        flat: 'bg-surface shadow-flat text-on-surface',
-        tonal: '',
-        outlined: 'border-outline/20 bg-surface text-on-surface border',
-      },
-      tone: {
-        'neutral': '',
-        'primary': '',
-        'primary-light': '',
-        'secondary': '',
-        'failure': '',
-      },
+const cardVariants = cva('flex flex-col gap-2 rounded-2xl p-4', {
+  variants: {
+    _link: {
+      true: 'intent:outline-2 outline-offset-4 transition duration-200',
+      false: '',
     },
-    compoundVariants: [
-      {
-        variant: 'tonal',
-        tone: 'primary',
-        class:
-          'bg-primary-container text-on-primary-container outline-primary intent:bg-primary-container/90',
-      },
-      {
-        variant: 'tonal',
-        tone: 'primary-light',
-        class:
-          'bg-primary-container/30 text-on-primary-container outline-primary-container [&a]:intent:bg-primary-container/20',
-      },
-      {
-        variant: 'tonal',
-        tone: 'secondary',
-        class: 'bg-tertiary-container text-on-tertiary-container',
-      },
-      {
-        variant: 'tonal',
-        tone: 'neutral',
-        class: 'bg-on-surface/5 text-on-surface outline-on-surface',
-      },
-      {
-        variant: 'tonal',
-        tone: 'failure',
-        class: 'bg-error-container text-on-error-container',
-      },
-    ],
-    defaultVariants: {
-      tone: 'neutral',
-      variant: 'elevated',
+    variant: {
+      elevated: 'bg-surface text-on-surface shadow-sm',
+      flat: 'bg-surface shadow-flat text-on-surface',
+      tonal: '',
+      outlined: 'border-outline/20 bg-surface text-on-surface border',
+    },
+    tone: {
+      'neutral': '',
+      'primary': '',
+      'primary-light': '',
+      'secondary': '',
+      'failure': '',
     },
   },
-);
+  compoundVariants: [
+    {
+      variant: 'tonal',
+      tone: 'primary',
+      class: 'bg-primary-container text-on-primary-container',
+    },
+    {
+      _link: true,
+      variant: 'tonal',
+      tone: 'primary',
+      class: 'outline-primary intent:filter-darker',
+    },
+    {
+      variant: 'tonal',
+      tone: 'primary-light',
+      class: 'bg-primary-container/30 text-on-primary-container',
+    },
+    {
+      variant: 'tonal',
+      tone: 'primary-light',
+      _link: true,
+      class: 'outline-primary-container intent:bg-primary-container/20',
+    },
+    {
+      variant: 'tonal',
+      tone: 'secondary',
+      class: 'bg-tertiary-container text-on-tertiary-container',
+    },
+    {
+      variant: 'tonal',
+      tone: 'primary-light',
+      _link: true,
+      class: 'outline-tertiary intent:bg-tertiary-container/90',
+    },
+    {
+      variant: 'tonal',
+      tone: 'neutral',
+      class: 'bg-on-surface/5 text-on-surface',
+    },
+    {
+      variant: 'tonal',
+      tone: 'neutral',
+      _link: true,
+      class: 'outline-on-surface intent:bg-on-surface/8',
+    },
+    {
+      variant: 'tonal',
+      tone: 'failure',
+      class: 'bg-error-container text-on-error-container',
+    },
+  ],
+  defaultVariants: {
+    tone: 'neutral',
+    variant: 'elevated',
+  },
+});
 
 type CardVariants = Omit<VariantProps<typeof cardVariants>, '_link'>;
 
