@@ -32,7 +32,8 @@ export const FamilyNameForm = (props: {
         name="family-name"
         aria-disabled={updateFamilySubmission.pending}
         suffix={<Icon use="pencil" size="sm" />}
-        class="[&_textarea]:placeholder:text-on-surface w-full [&_textarea]:resize-none [&_textarea]:text-3xl [&_textarea]:font-semibold"
+        class="[&_textarea]:placeholder:text-on-surface w-full"
+        textSize="lg"
       >
         {props.familyName ?? ''}
       </TextField>

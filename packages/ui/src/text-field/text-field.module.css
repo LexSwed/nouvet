@@ -1,12 +1,10 @@
 @layer nou-ui {
   .input {
     flex-basis: 100%;
-    padding: theme(spacing.2) var(--start-padding);
-    min-height: theme(spacing.12);
     background: transparent;
     outline: none;
     field-sizing: content;
-    @apply text-base;
+    resize: none;
     &[type='number'] {
       font-variant-numeric: tabular-nums;
       @media screen(md) {

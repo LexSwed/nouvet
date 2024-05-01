@@ -74,14 +74,33 @@
       }
     }
   }
+  .sizeBase {
+    @apply text-base;
+    & :where(input, textarea) {
+      padding: theme(spacing.3) var(--start-padding);
+      min-height: theme(spacing.12);
+    }
+
+    & :where(.prefix, .suffix) {
+      padding-block-start: theme(spacing.2);
+    }
+  }
+
+  .sizeLg {
+    @apply text-3xl font-medium;
+    & :where(input, textarea) {
+      padding: theme(spacing[1.5]) var(--start-padding);
+      min-height: theme(spacing.12);
+    }
+    & :where(.prefix, .suffix) {
+      padding-block-start: theme(spacing.1);
+    }
+  }
 
   .inputWrapper {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     cursor: default;
-    &:has(textarea) {
-      align-items: baseline;
-    }
   }
   .label {
     padding-inline: var(--start-padding);
@@ -95,7 +114,6 @@
   }
   .prefix,
   .suffix {
-    display: inline-flex;
     flex-shrink: 0;
     &:empty {
       display: none;
@@ -103,9 +121,11 @@
   }
   .prefix {
     padding-inline-start: var(--start-padding);
+    padding-inline-start: theme(spacing.2);
   }
 
   .suffix {
+    padding-inline-start: theme(spacing.2);
     padding-inline-end: var(--start-padding);
   }
 

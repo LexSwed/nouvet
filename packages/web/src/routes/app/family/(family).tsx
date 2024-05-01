@@ -104,18 +104,16 @@ function FamilyHeader() {
           <Match when={isOwner()}>
             <>
               <FamilyNameForm familyName={user()?.family.name} />
-              <div class="flex flex-row gap-2 sm:mb-2">
+              <div class="flex flex-row gap-2">
                 <Button
                   class="gap-2"
                   variant="tonal"
-                  size="sm"
                   popoverTarget="family-invite"
                 >
                   <Icon use="user-circle-plus" />
                   {t('action-add-users')}
                 </Button>
                 <Button
-                  size="sm"
                   variant="ghost"
                   popoverTarget="family-owner-menu"
                   class="gap-2"

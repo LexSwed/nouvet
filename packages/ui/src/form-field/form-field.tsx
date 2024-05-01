@@ -24,9 +24,14 @@ export const formFieldVariants = cva(cssStyle.wrapper, {
       underline: cssStyle['wrapperUnderline'],
       ghost: cssStyle['wrapperGhost'],
     },
+    textSize: {
+      base: cssStyle['sizeBase'],
+      lg: cssStyle['sizeLg'],
+    },
   },
   defaultVariants: {
     variant: 'underline',
+    textSize: 'base',
   },
 });
 
@@ -52,7 +57,7 @@ interface FieldInnerProps
 }
 const FormField = (ownProps: FieldInnerProps) => {
   const formContext = useFormContext();
-  const [local, props] = splitProps(ownProps, ['variant']);
+  const [local, props] = splitProps(ownProps, ['variant', 'textSize']);
   const localId = createUniqueId();
   const id = () => props.id || localId;
   const descriptionId = () => `${id()}-description`;

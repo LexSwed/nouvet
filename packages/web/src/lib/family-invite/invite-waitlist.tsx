@@ -1,12 +1,11 @@
 import { createAsync, revalidate } from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
-import { Avatar, Button, Card, Icon, Text } from '@nou/ui';
+import { Avatar, Button, ButtonLink, Card, Icon, Text } from '@nou/ui';
 import { differenceInMinutes } from 'date-fns';
 
 import { getFamilyMembers } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
 import { createTranslator } from '~/server/i18n';
-import { timeout } from '~/server/utils';
 
 import { FamilyNameForm } from './family-name-form';
 import { WaitingFamilyConfirmation } from './waiting-family-confirmation';
@@ -20,7 +19,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
       getFamilyMembers(),
       getUserFamily(),
     ]);
-    await timeout(1000);
+    // await timeout(1000);
     if (!members) return { ...user.family, familyMember: null };
     return {
       ...user.family,
@@ -59,15 +58,20 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
             </Show>
           </Match>
           <Match when={family()?.familyMember?.isApproved}>
-            <div class="flex flex-col gap-6">
-              <Show when={family()?.name}>
-                {(name) => <FamilyNameForm familyName={name()} />}
-              </Show>
-              <Card
-                variant="tonal"
-                tone="primary-light"
-                class="flex flex-col gap-2"
-              >
+            <Card
+              variant="outlined"
+              tone="primary-light"
+              class="flex flex-col gap-6 pt-0"
+            >
+              <div class="flex flex-row items-end gap-4">
+                <div class="flex-[2]">
+                  <FamilyNameForm familyName={family()?.name} />
+                </div>
+                <ButtonLink href="/app/family" icon variant="ghost">
+                  <Icon use="arrow-up-right" size="md" />
+                </ButtonLink>
+              </div>
+              <div class="flex flex-col gap-2">
                 <div class="flex flex-row items-center justify-start gap-3">
                   <Avatar
                     avatarUrl={family()?.familyMember!.avatarUrl || ''}
@@ -83,8 +87,8 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
                 >
                   Remove
                 </Button>
-              </Card>
-            </div>
+              </div>
+            </Card>
           </Match>
         </Switch>
         <Button

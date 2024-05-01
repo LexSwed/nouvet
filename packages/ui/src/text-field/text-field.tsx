@@ -33,6 +33,7 @@ const TextField = <T extends 'input' | 'textarea' = 'input'>(
       'label',
       'description',
       'variant',
+      'textSize',
       'prefix',
       'suffix',
     ],
