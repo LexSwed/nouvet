@@ -12,8 +12,8 @@ export const buttonVariants = cva(
   {
     variants: {
       size: {
-        base: 'min-h-14 min-w-14 px-6 py-2 text-base sm:min-h-12 sm:min-w-12',
-        sm: 'min-h-12 min-w-12 px-3 text-sm sm:min-h-10 sm:min-w-10',
+        base: 'min-h-12 min-w-12 px-6 py-2 text-base',
+        sm: 'min-h-10 min-w-10 px-2 text-sm',
         lg: 'min-h-16 min-w-16 px-8 text-lg sm:min-h-14 sm:min-w-14',
         cta: 'min-h-16 min-w-16 rounded-full px-8 text-lg',
       },
@@ -124,6 +124,13 @@ export const buttonVariants = cva(
         tone: 'neutral',
         class:
           'hover:bg-on-surface/5 focus:bg-on-surface/8 [--btn-bg:theme(colors.surface)]',
+      },
+      {
+        split: false,
+        variant: 'ghost',
+        tone: 'primary',
+        class:
+          'text-primary outline-primary hover:bg-primary/5 focus:bg-primary/8 [--btn-bg:theme(colors.surface)]',
       },
       {
         split: false,

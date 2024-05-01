@@ -52,17 +52,15 @@ function AppMainPage(props: RouteSectionProps) {
                     </>
                   </Match>
                   <Match when={user().family?.id}>
-                    <div class="flex flex-row items-center gap-1">
-                      <ButtonLink
-                        href={`/app/family`}
-                        variant="ghost"
-                        class="text-primary gap-2 rounded-full px-2"
-                      >
-                        {user().family?.name
-                          ? user().family.name
-                          : t('family.no-name')}
-                      </ButtonLink>
-                    </div>
+                    <ButtonLink
+                      href={`/app/family`}
+                      variant="ghost"
+                      tone="primary"
+                    >
+                      {user().family?.name
+                        ? user().family.name
+                        : t('family.no-name')}
+                    </ButtonLink>
                   </Match>
                 </Switch>
               )}
