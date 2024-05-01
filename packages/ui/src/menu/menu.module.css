@@ -7,11 +7,11 @@
     flex-shrink: 0;
     cursor: default;
     user-select: none;
-    border-radius: inherit;
     background: transparent;
     transition: background-color 0.2s ease-out;
     outline: none;
-    min-height: theme('spacing.14');
+    border-radius: theme(borderRadius.xl);
+    min-height: theme('spacing.12');
     padding: theme('spacing.3');
 
     @apply text-sm;
@@ -38,7 +38,7 @@
     }
 
     &:where(:first-child:last-child) {
-      border-radius: inherit;
+      border-radius: theme(borderRadius.xl);
     }
   }
 
