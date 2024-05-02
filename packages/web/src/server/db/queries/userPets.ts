@@ -50,6 +50,6 @@ export async function userPets(userId: DatabaseUser['id']) {
         inArray(petTable.ownerId, familyUsers),
       ),
     )
-    .orderBy(petTable.createdAt)
+    .orderBy(petTable.ownerId, petTable.createdAt)
     .all();
 }
