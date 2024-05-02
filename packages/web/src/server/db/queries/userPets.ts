@@ -44,7 +44,11 @@ export async function userPets(userId: DatabaseUser['id']) {
     })
     .from(petTable)
     .where(
-      or(eq(petTable.ownerId, userId), inArray(petTable.ownerId, familyUsers)),
+      or(
+        // when there's no family
+        eq(petTable.ownerId, userId),
+        inArray(petTable.ownerId, familyUsers),
+      ),
     )
     .orderBy(petTable.createdAt)
     .all();

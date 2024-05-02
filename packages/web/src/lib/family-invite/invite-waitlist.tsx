@@ -1,4 +1,4 @@
-import { createAsync, revalidate } from '@solidjs/router';
+import { createAsync, revalidate, useMatch } from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
 import { Avatar, Button, ButtonLink, Card, Icon, Text } from '@nou/ui';
 import { differenceInMinutes } from 'date-fns';
@@ -30,6 +30,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
         ),
     };
   });
+  const isFamilyUrl = useMatch(() => '/app/family');
 
   return (
     <div class="flex flex-col gap-6">
@@ -58,37 +59,37 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
             </Show>
           </Match>
           <Match when={family()?.familyMember?.isApproved}>
-            <Card
-              variant="outlined"
-              tone="primary-light"
-              class="flex flex-col gap-6 pt-0"
-            >
+            <div class="flex flex-col gap-6">
               <div class="flex flex-row items-end gap-4">
                 <div class="flex-[2]">
                   <FamilyNameForm familyName={family()?.name} />
                 </div>
-                <ButtonLink href="/app/family" icon variant="ghost">
-                  <Icon use="arrow-up-right" size="md" />
-                </ButtonLink>
+                <Show when={!isFamilyUrl()}>
+                  <ButtonLink href="/app/family" icon variant="ghost">
+                    <Icon use="arrow-up-right" size="md" />
+                  </ButtonLink>
+                </Show>
               </div>
-              <div class="flex flex-col gap-2">
-                <div class="flex flex-row items-center justify-start gap-3">
-                  <Avatar
-                    avatarUrl={family()?.familyMember!.avatarUrl || ''}
-                    name={family()?.familyMember!.name || ''}
-                  />
-                  <Text with="label-lg">{family()?.familyMember!.name}</Text>
+              <Card variant="outlined" tone="primary-light">
+                <div class="flex flex-col gap-2">
+                  <div class="flex flex-row items-center justify-start gap-3">
+                    <Avatar
+                      avatarUrl={family()?.familyMember!.avatarUrl || ''}
+                      name={family()?.familyMember!.name || ''}
+                    />
+                    <Text with="label-lg">{family()?.familyMember!.name}</Text>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    tone="destructive"
+                    size="sm"
+                    class="self-end"
+                  >
+                    Remove
+                  </Button>
                 </div>
-                <Button
-                  variant="ghost"
-                  tone="destructive"
-                  size="sm"
-                  class="self-end"
-                >
-                  Remove
-                </Button>
-              </div>
-            </Card>
+              </Card>
+            </div>
           </Match>
         </Switch>
         <Button
