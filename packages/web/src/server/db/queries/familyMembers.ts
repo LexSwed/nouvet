@@ -6,7 +6,6 @@ import { useDb } from '~/server/db';
 import {
   familyTable,
   familyUserTable,
-  userProfileTable,
   userTable,
   type DatabaseUser,
 } from '~/server/db/schema';
@@ -39,8 +38,8 @@ export async function familyMembers(userId: DatabaseUser['id']) {
   const query = db
     .select({
       id: userTable.id,
-      name: userProfileTable.name,
-      avatarUrl: userProfileTable.avatarUrl,
+      name: userTable.name,
+      avatarUrl: userTable.avatarUrl,
       isApproved: familyUserTable.approved,
       joinedAt: familyUserTable.joinedAt,
     })
@@ -54,7 +53,7 @@ export async function familyMembers(userId: DatabaseUser['id']) {
         family.isOwner === 0 ? eq(familyUserTable.approved, true) : undefined,
       ),
     )
-    .innerJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))
+    .innerJoin(userTable, eq(userTable.id, userTable.id))
     .innerJoin(familyUserTable, eq(familyUserTable.userId, userTable.id))
     .orderBy(familyUserTable.joinedAt);
 

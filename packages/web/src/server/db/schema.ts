@@ -108,18 +108,6 @@ export const petTable = sqliteTable('pet', {
 });
 export type DatabasePet = typeof petTable.$inferSelect;
 
-/**
- * TODO: Is it needed, it forces unnecessary joins.
- * Could I store something here in the future?
- */
-export const userTable = sqliteTable('user', {
-  id: integer('id').notNull().primaryKey({ autoIncrement: true }),
-  /**
-   * UTC with appended Z for Date constructor.
-   */
-  createdAt: utcDatetime('created_at'),
-});
-
 // export const mediaTable = sqliteTable('user-media', {
 //   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
 //   sourceUrl: text('source_url').notNull(),
@@ -132,11 +120,8 @@ export const userTable = sqliteTable('user', {
 /**
  * User profile details and preferences.
  */
-export const userProfileTable = sqliteTable('user_profile', {
-  userId: integer('user_id')
-    .notNull()
-    .primaryKey()
-    .references(() => userTable.id, { onDelete: 'cascade' }),
+export const userTable = sqliteTable('user_profile', {
+  id: integer('id').notNull().primaryKey({ autoIncrement: true }),
   /** User's name, set by auth provider, or updated manually afterwards. */
   name: text('name', { length: 200 }),
   /** User's picture, only for personalization purposes. */
@@ -148,8 +133,11 @@ export const userProfileTable = sqliteTable('user_profile', {
     mode: 'text',
     enum: ['imperial', 'metrical'] as const,
   }).notNull(),
+  /**
+   * UTC with appended Z for Date constructor.
+   */
+  createdAt: utcDatetime('created_at'),
 });
-export type DatabaseUserProfile = typeof userProfileTable.$inferSelect;
 
 /**
  * Maps different OAuth accounts to the same user.

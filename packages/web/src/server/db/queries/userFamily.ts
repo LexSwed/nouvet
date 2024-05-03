@@ -6,7 +6,6 @@ import { useDb } from '~/server/db';
 import {
   familyTable,
   familyUserTable,
-  userProfileTable,
   userTable,
   type DatabaseUser,
 } from '~/server/db/schema';
@@ -15,13 +14,13 @@ export async function userProfile(userId: DatabaseUser['id']) {
   const db = useDb();
   const userProfile = await db
     .select({
-      id: userProfileTable.userId,
-      name: userProfileTable.name,
-      avatarUrl: userProfileTable.avatarUrl,
+      id: userTable.id,
+      name: userTable.name,
+      avatarUrl: userTable.avatarUrl,
     })
     .from(userTable)
     .where(eq(userTable.id, userId))
-    .innerJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))
+    .innerJoin(userTable, eq(userTable.id, userTable.id))
     .get();
 
   return userProfile;
@@ -33,8 +32,8 @@ export async function userFamily(userId: DatabaseUser['id']) {
   const userFamily = await db
     .select({
       id: userTable.id,
-      name: userProfileTable.name,
-      avatarUrl: userProfileTable.avatarUrl,
+      name: userTable.name,
+      avatarUrl: userTable.avatarUrl,
       family: {
         id: familyTable.id,
         name: familyTable.name,
@@ -46,7 +45,7 @@ export async function userFamily(userId: DatabaseUser['id']) {
     })
     .from(userTable)
     .where(eq(userTable.id, userId))
-    .innerJoin(userProfileTable, eq(userTable.id, userProfileTable.userId))
+    .innerJoin(userTable, eq(userTable.id, userTable.id))
     .leftJoin(familyUserTable, eq(familyUserTable.userId, userId))
     .leftJoin(familyTable, eq(familyTable.id, familyUserTable.familyId))
     .get();

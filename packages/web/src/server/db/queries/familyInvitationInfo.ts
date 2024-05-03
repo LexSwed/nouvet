@@ -6,7 +6,7 @@ import { useDb } from '~/server/db';
 import {
   familyInviteTable,
   familyUserTable,
-  userProfileTable,
+  userTable,
   type DatabaseUser,
 } from '~/server/db/schema';
 import { UserAlreadyInFamily } from '~/server/errors';
@@ -29,11 +29,11 @@ export async function familyInvitationInfo(
   if (existingUserFamily) throw new UserAlreadyInFamily();
 
   const invite = await db
-    .select({ inviterName: userProfileTable.name })
-    .from(userProfileTable)
+    .select({ inviterName: userTable.name })
+    .from(userTable)
     .where(
       eq(
-        userProfileTable.userId,
+        userTable.id,
         db
           .select({ userId: familyInviteTable.inviterId })
           .from(familyInviteTable)

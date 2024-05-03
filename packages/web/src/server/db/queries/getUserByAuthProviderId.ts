@@ -5,7 +5,7 @@ import { and, eq } from 'drizzle-orm';
 import { useDb } from '~/server/db';
 import {
   authAccount,
-  userProfileTable,
+  userTable,
   type SupportedAuthProvider,
 } from '~/server/db/schema';
 
@@ -16,11 +16,11 @@ export const getUserByAuthProviderId = async (
   const user = await useDb()
     .select({
       id: authAccount.userId,
-      locale: userProfileTable.locale,
-      measurementSystem: userProfileTable.measurementSystem,
+      locale: userTable.locale,
+      measurementSystem: userTable.measurementSystem,
     })
     .from(authAccount)
-    .leftJoin(userProfileTable, eq(authAccount.userId, userProfileTable.userId))
+    .leftJoin(userTable, eq(authAccount.userId, userTable.id))
     .where(
       and(
         eq(authAccount.provider, provider),

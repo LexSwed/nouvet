@@ -12,7 +12,7 @@ import {
 } from 'valibot';
 
 import { useDb } from '~/server/db';
-import { authAccount, userProfileTable, userTable } from '~/server/db/schema';
+import { authAccount, userTable } from '~/server/db/schema';
 
 const CreateUserSchema = object({
   provider: picklist(['facebook']),
@@ -33,25 +33,22 @@ export const userCreate = async (newUser: {
   try {
     const userInfo = parse(CreateUserSchema, newUser);
     const db = useDb();
-    const user = await db.transaction(async (tx) => {
-      const user = await tx
-        .insert(userTable)
-        .values({})
-        .returning({ id: userTable.id })
-        .get();
-      await tx.insert(authAccount).values({
-        userId: user.id,
-        provider: userInfo.provider,
-        providerUserId: userInfo.accountProviderId,
-      });
-      await tx.insert(userProfileTable).values({
-        userId: user.id,
+    const user = db
+      .insert(userTable)
+      .values({
         name: userInfo.name,
         measurementSystem: userInfo.measurementSystem,
         locale: userInfo.locale,
-      });
-      return user;
+      })
+      .returning({ id: userTable.id })
+      .get();
+
+    await db.insert(authAccount).values({
+      userId: user.id,
+      provider: userInfo.provider,
+      providerUserId: userInfo.accountProviderId,
     });
+
     return user;
   } catch (error) {
     console.error(error);
