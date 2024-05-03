@@ -120,7 +120,7 @@ export type DatabasePet = typeof petTable.$inferSelect;
 /**
  * User profile details and preferences.
  */
-export const userTable = sqliteTable('user_profile', {
+export const userTable = sqliteTable('user', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
   /** User's name, set by auth provider, or updated manually afterwards. */
   name: text('name', { length: 200 }),

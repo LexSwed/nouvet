@@ -76,17 +76,12 @@ CREATE TABLE `user_session` (
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `user_profile` (
-	`user_id` integer PRIMARY KEY NOT NULL,
+CREATE TABLE `user` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text(200),
 	`avatar_url` text(200),
 	`locale` text NOT NULL,
 	`measurement_system` text NOT NULL,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
-);
---> statement-breakpoint
-CREATE TABLE `user` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL
 );
 --> statement-breakpoint
