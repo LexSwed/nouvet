@@ -36,7 +36,7 @@ export const familyInviteTable = sqliteTable(
       .notNull()
       .references(() => userTable.id),
     /**
-     * UNIX timestamp in seconds.
+     * UNIX timestamp in **seconds**.
      */
     expiresAt: integer('expires_at').notNull(),
     /**
@@ -66,10 +66,6 @@ export const familyUserTable = sqliteTable(
     userId: integer('user_id')
       .notNull()
       .references(() => userTable.id, { onDelete: 'cascade' }),
-    /**
-     * The owner of the family approves people who got the invitation.
-     */
-    approved: integer('approved', { mode: 'boolean' }).notNull().default(false),
     joinedAt: utcDatetime('joined_at'),
   },
   (table) => {
@@ -80,6 +76,15 @@ export const familyUserTable = sqliteTable(
     };
   },
 );
+
+export const familyWaitListTable = sqliteTable('family_wait_list', {
+  familyId: integer('family_id')
+    .notNull()
+    .references(() => familyTable.id, { onDelete: 'cascade' }),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => userTable.id, { onDelete: 'cascade' }),
+});
 
 export const petTable = sqliteTable('pet', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),

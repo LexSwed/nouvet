@@ -37,15 +37,11 @@ export async function userFamily(userId: DatabaseUser['id']) {
       family: {
         id: familyTable.id,
         name: familyTable.name,
-        isOwner: sql<number>`(${familyTable.ownerId} = ${userId})`.as(
-          'is_owner',
-        ),
-        isApproved: familyUserTable.approved,
+        isOwner: sql<number>`(${familyTable.ownerId} = ${userId})`,
       },
     })
     .from(userTable)
     .where(eq(userTable.id, userId))
-    .innerJoin(userTable, eq(userTable.id, userTable.id))
     .leftJoin(familyUserTable, eq(familyUserTable.userId, userId))
     .leftJoin(familyTable, eq(familyTable.id, familyUserTable.familyId))
     .get();

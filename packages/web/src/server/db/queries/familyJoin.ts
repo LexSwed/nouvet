@@ -7,6 +7,7 @@ import {
   familyInviteTable,
   familyTable,
   familyUserTable,
+  familyWaitListTable,
   type DatabaseUser,
 } from '~/server/db/schema';
 import { IncorrectFamilyInvite, UserAlreadyInFamily } from '~/server/errors';
@@ -29,8 +30,8 @@ export async function requestFamilyAdmissionByInviteCode(
  * Adds @userId into the family behind invite code.
  * invitationHash makes invited user being pre-approved,
  * while inviteCode assumes the user followed the invite link,
- * and hence needs a confirmation.
- * Used invites are not removed for rare cases when a user sends the invite to multiple people.
+ * and hence needs a confirmation first.
+ * Invite can only be accepted once, so it's removed as soon as its accepted.
  * There's no expectation for multiple people to read the invite QR code (invitationHash),
  * and the invites are short-lived, so no risk assumed.
  * @throws {IncorrectFamilyInvite} - invite is not found or expired.
@@ -69,48 +70,47 @@ async function familyJoin(
     .delete(familyInviteTable)
     .where(eq(familyInviteTable.inviteCode, invite.inviteCode));
 
-  const existingUserFamily = await db
+  const existingInvitedUserFamily = await db
     .select({ id: familyUserTable.familyId })
     .from(familyUserTable)
     .where(eq(familyUserTable.userId, userId))
     .get();
 
-  if (existingUserFamily?.id) throw new UserAlreadyInFamily();
+  if (existingInvitedUserFamily?.id) {
+    throw new UserAlreadyInFamily();
+  }
 
-  let newFamily = false;
-  let family = db
+  let family = await db
     .select({ familyId: familyTable.id })
     .from(familyTable)
     .where(eq(familyTable.ownerId, invite.inviterId))
     .get();
 
-  if (!family) {
-    newFamily = true;
+  // first time the inviter accepted somebody into the family – create a new family
+  if (!family?.familyId) {
     family = db
       .insert(familyTable)
       .values({ ownerId: invite.inviterId })
       .returning({ familyId: familyTable.id })
       .get();
+
+    // add the inviter as a first member of the new family
+    await db
+      .insert(familyUserTable)
+      .values({ userId: invite.inviterId, familyId: family.familyId });
   }
-  /** When joining via QR Code (with hash), the user is automatically approved. */
-  const approved = 'invitationHash' in params;
-  await db.insert(familyUserTable).values(
-    [
-      {
-        familyId: family.familyId,
-        userId: userId,
-        approved,
-      },
-    ].concat(
-      newFamily
-        ? {
-            familyId: family.familyId,
-            userId: invite.inviterId,
-            approved: true,
-          }
-        : [],
-    ),
-  );
+
+  // When joining via QR Code (with hash), the user is added to the family directly.
+  if ('invitationHash' in params) {
+    await db
+      .insert(familyUserTable)
+      .values({ familyId: family.familyId, userId: userId });
+  } else {
+    // Otherwise they go through the wait list
+    await db
+      .insert(familyWaitListTable)
+      .values({ familyId: family.familyId, userId: userId });
+  }
 
   return family;
 }
