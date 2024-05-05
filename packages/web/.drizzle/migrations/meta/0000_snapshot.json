@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "6b94aa0a-354d-4751-971a-7ea49deddb5a",
+  "id": "379daafa-ba9b-4d1e-a17b-777e566fdd7b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "oauth_account": {
@@ -107,7 +107,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
+          "default": "(concat(datetime('now', 'utc'), 'Z'))"
         }
       },
       "indexes": {},
@@ -231,7 +231,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
+          "default": "(concat(datetime('now', 'utc'), 'Z'))"
         }
       },
       "indexes": {
@@ -278,21 +278,13 @@
           "notNull": true,
           "autoincrement": false
         },
-        "approved": {
-          "name": "approved",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": false
-        },
         "joined_at": {
           "name": "joined_at",
           "type": "text(50)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
+          "default": "(concat(datetime('now', 'utc'), 'Z'))"
         }
       },
       "indexes": {},
@@ -333,6 +325,56 @@
           "name": "family_user_family_id_user_id_pk"
         }
       },
+      "uniqueConstraints": {}
+    },
+    "family_wait_list": {
+      "name": "family_wait_list",
+      "columns": {
+        "family_id": {
+          "name": "family_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "family_wait_list_family_id_family_id_fk": {
+          "name": "family_wait_list_family_id_family_id_fk",
+          "tableFrom": "family_wait_list",
+          "tableTo": "family",
+          "columnsFrom": [
+            "family_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "family_wait_list_user_id_user_id_fk": {
+          "name": "family_wait_list_user_id_user_id_fk",
+          "tableFrom": "family_wait_list",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "pet": {
@@ -421,7 +463,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
+          "default": "(concat(datetime('now', 'utc'), 'Z'))"
         }
       },
       "indexes": {},
@@ -473,7 +515,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
+          "default": "(concat(datetime('now', 'utc'), 'Z'))"
         }
       },
       "indexes": {},
@@ -596,7 +638,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(CONCAT(datetime('now', 'utc'), 'Z'))"
+          "default": "(concat(datetime('now', 'utc'), 'Z'))"
         }
       },
       "indexes": {},

@@ -1,11 +1,12 @@
 'use server';
 
-import { and, eq, inArray, or } from 'drizzle-orm';
+import { eq, inArray, or } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
 import {
   familyUserTable,
   petTable,
+  userTable,
   type DatabaseUser,
 } from '~/server/db/schema';
 
@@ -20,12 +21,7 @@ export async function userPets(userId: DatabaseUser['id']) {
         db
           .select({ familyId: familyUserTable.familyId })
           .from(familyUserTable)
-          .where(
-            and(
-              eq(familyUserTable.userId, userId),
-              eq(familyUserTable.approved, true),
-            ),
-          ),
+          .where(eq(familyUserTable.userId, userId)),
       ),
     );
 
@@ -41,6 +37,11 @@ export async function userPets(userId: DatabaseUser['id']) {
       color: petTable.color,
       weight: petTable.weight,
       ownerId: petTable.ownerId,
+      user: {
+        id: userTable.id,
+        name: userTable.name,
+        avatarUrl: userTable.avatarUrl,
+      },
     })
     .from(petTable)
     .where(
@@ -50,6 +51,7 @@ export async function userPets(userId: DatabaseUser['id']) {
         inArray(petTable.ownerId, familyUsers),
       ),
     )
+    .leftJoin(userTable, eq(userTable.id, petTable.ownerId))
     .orderBy(petTable.ownerId, petTable.createdAt)
     .all();
 }

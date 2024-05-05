@@ -13,7 +13,7 @@ CREATE TABLE `event` (
 	`pet_id` integer,
 	`creator_id` integer,
 	`data_json` text,
-	`date` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
+	`date` text(50) DEFAULT (concat(datetime('now', 'utc'), 'Z')) NOT NULL,
 	FOREIGN KEY (`pet_id`) REFERENCES `pet`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`creator_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -30,16 +30,22 @@ CREATE TABLE `family` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text(100),
 	`owner_id` integer NOT NULL,
-	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
+	`created_at` text(50) DEFAULT (concat(datetime('now', 'utc'), 'Z')) NOT NULL,
 	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `family_user` (
 	`family_id` integer NOT NULL,
 	`user_id` integer NOT NULL,
-	`approved` integer DEFAULT false NOT NULL,
-	`joined_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
+	`joined_at` text(50) DEFAULT (concat(datetime('now', 'utc'), 'Z')) NOT NULL,
 	PRIMARY KEY(`family_id`, `user_id`),
+	FOREIGN KEY (`family_id`) REFERENCES `family`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `family_wait_list` (
+	`family_id` integer NOT NULL,
+	`user_id` integer NOT NULL,
 	FOREIGN KEY (`family_id`) REFERENCES `family`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -56,7 +62,7 @@ CREATE TABLE `pet` (
 	`weight` integer,
 	`picture_url` text(120),
 	`identity_number` text(120),
-	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
+	`created_at` text(50) DEFAULT (concat(datetime('now', 'utc'), 'Z')) NOT NULL,
 	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -64,7 +70,7 @@ CREATE TABLE `reminder` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`creator_id` integer NOT NULL,
 	`pet_id` integer NOT NULL,
-	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL,
+	`created_at` text(50) DEFAULT (concat(datetime('now', 'utc'), 'Z')) NOT NULL,
 	FOREIGN KEY (`creator_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`pet_id`) REFERENCES `pet`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -82,7 +88,7 @@ CREATE TABLE `user` (
 	`avatar_url` text(200),
 	`locale` text NOT NULL,
 	`measurement_system` text NOT NULL,
-	`created_at` text(50) DEFAULT (CONCAT(datetime('now', 'utc'), 'Z')) NOT NULL
+	`created_at` text(50) DEFAULT (concat(datetime('now', 'utc'), 'Z')) NOT NULL
 );
 --> statement-breakpoint
 CREATE INDEX `hash_idx` ON `family_invite` (`invitation_hash`);--> statement-breakpoint

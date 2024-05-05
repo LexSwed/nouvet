@@ -42,8 +42,16 @@ export async function userFamily(userId: DatabaseUser['id']) {
     })
     .from(userTable)
     .where(eq(userTable.id, userId))
-    .leftJoin(familyUserTable, eq(familyUserTable.userId, userId))
-    .leftJoin(familyTable, eq(familyTable.id, familyUserTable.familyId))
+    .leftJoin(
+      familyTable,
+      eq(
+        familyTable.id,
+        db
+          .select({ familyId: familyUserTable.familyId })
+          .from(familyUserTable)
+          .where(eq(familyUserTable.userId, userId)),
+      ),
+    )
     .get();
 
   if (!userFamily) return null;

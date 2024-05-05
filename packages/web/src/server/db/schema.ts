@@ -248,7 +248,7 @@ export const remindersTable = sqliteTable('reminder', {
 function utcDatetime(columnName: Parameters<typeof text>[0]) {
   return dateTime(columnName)
     .notNull()
-    .default(sql`(CONCAT(datetime('now', 'utc'), 'Z'))`);
+    .default(sql`(concat(datetime('now', 'utc'), 'Z'))`);
 }
 
 function dateTime(columnName: Parameters<typeof text>[0]) {
