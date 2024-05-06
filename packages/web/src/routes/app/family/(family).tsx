@@ -35,7 +35,7 @@ export const route = {
 function FamilyPage() {
   const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
-  const isOwner = () => user()?.family.isOwner || false;
+  const isOwner = () => user()?.family?.isOwner || false;
   const familyMembers = createAsync(async () => getFamilyMembers());
   const awaitingUser = () =>
     // The API also filters non-approved users from non-owners, but just in case
@@ -62,26 +62,30 @@ function FamilyPage() {
           </ButtonLink>
         </AppHeader>
         <div class="flex flex-col gap-6">
-          <FamilyHeader />
-          <section class="container flex flex-col gap-8">
-            <Suspense>
+          <Suspense>
+            <FamilyHeader />
+            <section class="container flex flex-col gap-8">
               <Show when={awaitingUser()}>
-                {(user) => <WaitingFamilyConfirmation user={user()} />}
+                {(user) => (
+                  <div class="sm:max-w-[400px]">
+                    <WaitingFamilyConfirmation user={user()} />
+                  </div>
+                )}
               </Show>
-            </Suspense>
-            <Switch>
-              <Match when={!user()?.family.isApproved}>
-                <WaitingApproval />
-              </Match>
-              <Match when={members().length > 0}>Render users!</Match>
-              {/* technically it's not possible for non-owners to not see other members */}
-              <Match
-                when={isOwner() && members().length === 0 && !awaitingUser()}
-              >
-                <EmptyFamily />
-              </Match>
-            </Switch>
-          </section>
+              <Switch>
+                <Match when={!user()?.family?.isApproved}>
+                  <WaitingApproval />
+                </Match>
+                <Match when={members().length > 0}>Render users!</Match>
+                {/* technically it's not possible for non-owners to not see other members */}
+                <Match
+                  when={isOwner() && members().length === 0 && !awaitingUser()}
+                >
+                  <EmptyFamily />
+                </Match>
+              </Switch>
+            </section>
+          </Suspense>
           <Suspense>
             <FamilyInviteDialog id="family-invite" />
           </Suspense>
@@ -96,14 +100,14 @@ export default FamilyPage;
 function FamilyHeader() {
   const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
-  const isOwner = () => user()?.family.isOwner || false;
+  const isOwner = () => user()?.family?.isOwner || false;
   return (
     <section class="container">
       <div class="flex flex-col gap-4 sm:flex-row sm:items-end">
         <Switch>
           <Match when={isOwner()}>
             <>
-              <FamilyNameForm familyName={user()?.family.name} />
+              <FamilyNameForm familyName={user()?.family?.name} />
               <div class="mb-1 flex flex-row gap-2">
                 <Button
                   variant="tonal"
@@ -142,9 +146,9 @@ function FamilyHeader() {
           <Match when={!isOwner()}>
             <>
               <Text with="headline-1">
-                {user()?.family.name || t('no-name')}
+                {user()?.family?.name || t('no-name')}
               </Text>
-              <Show when={user()?.family.isApproved}>
+              <Show when={user()?.family?.isApproved}>
                 <ul>
                   <li>
                     <Button

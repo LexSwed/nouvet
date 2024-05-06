@@ -22,10 +22,11 @@ import {
   requestFamilyAdmissionByInviteCode,
 } from '~/server/db/queries/familyJoin';
 import { env } from '~/server/env';
-import { IncorrectFamilyInvite, UserAlreadyInFamily } from '~/server/errors';
+import { UserAlreadyInFamily } from '~/server/errors';
 
 import { acceptUserToFamily } from '../db/queries/familyAcceptUser';
 import { revokeUserMembership } from '../db/queries/familyRevoke';
+import { translateErrorTokens } from '../utils';
 
 import { getFamilyMembers } from './family';
 import { getUserFamily } from './user';
@@ -99,7 +100,11 @@ export const joinFamilyWithLinkServer = async (formData: FormData) => {
   const currentUser = await getRequestUser();
   const inviteCode = formData.get('invite-code')!.toString().trim();
   if (!inviteCode || !currentUser.userId) {
-    return json(new Error('Invite code is not provided'), { status: 422 });
+    // TODO: error translation
+    return json(
+      { errors: { inviteCode: 'Missing invite code' } },
+      { status: 422 },
+    );
   }
 
   try {
@@ -108,7 +113,7 @@ export const joinFamilyWithLinkServer = async (formData: FormData) => {
     return redirect(`/app/family`);
   } catch (error) {
     console.error(error);
-    return json(error, { status: 422 });
+    return json({ error: 'Something went wrong' }, { status: 500 });
   }
 };
 
@@ -116,7 +121,11 @@ export const joinFamilyWithQRCodeServer = async (invitationHash: string) => {
   try {
     const currentUser = await getRequestUser();
     if (!invitationHash || !currentUser.userId) {
-      throw new IncorrectFamilyInvite('Missing invitation hash.');
+      // TODO: error translation
+      return json(
+        { errors: { inviteCode: 'Missing invitation hash.' } },
+        { status: 422 },
+      );
     }
     // TODO: error handling
     const family = await joinFamilyByInvitationHash(
@@ -126,7 +135,7 @@ export const joinFamilyWithQRCodeServer = async (invitationHash: string) => {
     /** Revalidation happens after user sees the success dialog */
     return json(family, { revalidate: [] });
   } catch (error) {
-    throw new IncorrectFamilyInvite('Invite code is invalid');
+    return json({ error: 'Something went wrong' }, { status: 500 });
   }
 };
 
@@ -158,6 +167,9 @@ export const moveUserFromTheWaitListServer = async (formData: FormData) => {
       revalidate: [getFamilyMembers.key, getUserFamily.key],
     });
   } catch (error) {
-    return json({ error }, { status: error instanceof ValiError ? 422 : 500 });
+    if (error instanceof ValiError) {
+      return json({ errors: translateErrorTokens(error) }, { status: 422 });
+    }
+    return json({ error: 'Something went wrong' }, { status: 500 });
   }
 };

@@ -1,11 +1,12 @@
 'use server';
 
-import { eq, sql } from 'drizzle-orm';
+import { eq, or, sql } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
 import {
   familyTable,
   familyUserTable,
+  familyWaitListTable,
   userTable,
   type DatabaseUser,
 } from '~/server/db/schema';
@@ -20,7 +21,6 @@ export async function userProfile(userId: DatabaseUser['id']) {
     })
     .from(userTable)
     .where(eq(userTable.id, userId))
-    .innerJoin(userTable, eq(userTable.id, userTable.id))
     .get();
 
   return userProfile;
@@ -38,18 +38,18 @@ export async function userFamily(userId: DatabaseUser['id']) {
         id: familyTable.id,
         name: familyTable.name,
         isOwner: sql<number>`(${familyTable.ownerId} = ${userId})`,
+        isInWaitList: sql<number>`(${familyWaitListTable.userId} = ${userId})`,
       },
     })
     .from(userTable)
     .where(eq(userTable.id, userId))
+    .leftJoin(familyUserTable, eq(familyUserTable.userId, userId))
+    .leftJoin(familyWaitListTable, eq(familyWaitListTable.userId, userId))
     .leftJoin(
       familyTable,
-      eq(
-        familyTable.id,
-        db
-          .select({ familyId: familyUserTable.familyId })
-          .from(familyUserTable)
-          .where(eq(familyUserTable.userId, userId)),
+      or(
+        eq(familyTable.id, familyUserTable.familyId),
+        eq(familyTable.id, familyWaitListTable.familyId),
       ),
     )
     .get();
@@ -62,6 +62,7 @@ export async function userFamily(userId: DatabaseUser['id']) {
       ? {
           ...userFamily.family,
           isOwner: userFamily.family.isOwner === 1,
+          isApproved: !(userFamily.family.isInWaitList === 1),
         }
       : userFamily.family,
   };

@@ -91,8 +91,7 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
                     class="gap-2 self-end"
                     variant="outline"
                   >
-                    <Icon use="chevron-left" class="-ms-2" />{' '}
-                    {t('already-in-family.cta')}
+                    <Icon use="chevron-left" /> {t('already-in-family.cta')}
                   </ButtonLink>
                 </div>
 
@@ -123,12 +122,8 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
                       </Text>
                       <Text as="p">{t('accept-invite.description')}</Text>
                       <div class="flex items-stretch justify-between gap-2 sm:flex-row">
-                        <ButtonLink
-                          href="/app"
-                          class="shrink-0 gap-2"
-                          variant="outline"
-                        >
-                          <Icon use="chevron-left" class="-ms-2" />
+                        <ButtonLink href="/app" variant="outline">
+                          <Icon use="chevron-left" />
                           {t('accept-invite.cta-cancel')}
                         </ButtonLink>
                         <input type="hidden" value={code} name="invite-code" />
@@ -156,7 +151,7 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
                     <Show when={joinSubmission.error}>
                       <Card
                         aria-live="polite"
-                        variant="filled"
+                        variant="tonal"
                         tone="failure"
                         class="col-span-4 col-start-1 row-[2] flex max-w-[320px] flex-col gap-6 self-end rounded-3xl [background-attachment:fixed] md:mb-4 lg:col-span-5 lg:col-start-2"
                       >
@@ -170,12 +165,8 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
                 <div class="bg-background bg-main z-10 col-span-5 col-start-1 row-[2] flex flex-col gap-6 rounded-3xl p-4 [background-attachment:fixed] sm:w-[clamp(340px,100%,480px)] lg:col-start-2">
                   <Text with="headline-1">{t('expired.heading')}</Text>
                   <Text as="p">{t('expired.description')}</Text>
-                  <ButtonLink
-                    href="/app"
-                    class="gap-2 self-end"
-                    variant="outline"
-                  >
-                    <Icon use="chevron-left" class="-ms-2" /> {t('expired.cta')}
+                  <ButtonLink href="/app" class="self-end" variant="outline">
+                    <Icon use="chevron-left" /> {t('expired.cta')}
                   </ButtonLink>
                 </div>
 

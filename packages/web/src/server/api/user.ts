@@ -7,7 +7,6 @@ export const getUserFamily = cache(async () => {
   'use server';
   const currentUser = await getRequestUser();
 
-  // TODO: check if user is in the family wait list
   const user = await userFamily(currentUser.userId);
   if (!user) {
     console.error(`${currentUser.userId} was not resolved from the database`);
