@@ -1,6 +1,7 @@
 import { action, cache } from '@solidjs/router';
 
 import {
+  cancelFamilyJoinServer,
   deleteFamilyServer,
   getFamilyMembersServer,
   updateFamilyServer,
@@ -16,3 +17,5 @@ export const updateFamily = action((formData: FormData) =>
 );
 
 export const deleteFamily = action(() => deleteFamilyServer());
+
+export const cancelFamilyJoin = action(() => cancelFamilyJoinServer());

@@ -1,11 +1,16 @@
 import { Title } from '@solidjs/meta';
-import { createAsync, type RouteDefinition } from '@solidjs/router';
+import {
+  createAsync,
+  useSubmission,
+  type RouteDefinition,
+} from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
 import {
   Button,
   ButtonLink,
   Card,
   Drawer,
+  Form,
   Icon,
   Image,
   Menu,
@@ -13,7 +18,7 @@ import {
   Text,
 } from '@nou/ui';
 
-import { getFamilyMembers } from '~/server/api/family';
+import { cancelFamilyJoin, getFamilyMembers } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
 
@@ -241,9 +246,10 @@ const DeleteFamilyDialog = () => {
 
 function WaitingApproval() {
   const t = createTranslator('family');
+  const cancelJoinSubmission = useSubmission(cancelFamilyJoin);
   return (
     <div class="flex flex-col items-start gap-4 md:flex-row">
-      <Card variant="outlined" class="max-w-[400px]">
+      <Card class="max-w-[400px]">
         <Text as="p" with="headline-3">
           {t('waiting.headline')}
         </Text>
@@ -279,7 +285,11 @@ function WaitingApproval() {
                 {t('waiting.cancel-join-popup-headline')}
               </Text>
               <Text as="p">{t('waiting.cancel-join-popup-description')}</Text>
-              <div class="mt-4 grid grid-cols-2 gap-4 md:self-end">
+              <Form
+                action={cancelFamilyJoin}
+                method="post"
+                class="mt-4 grid grid-cols-2 gap-4 md:self-end"
+              >
                 <Button
                   variant="ghost"
                   popoverTargetAction="hide"
@@ -288,10 +298,15 @@ function WaitingApproval() {
                 >
                   {t('waiting.cancel-join-popup-close')}
                 </Button>
-                <Button variant="outline" tone="destructive">
+                <Button
+                  variant="outline"
+                  tone="destructive"
+                  type="submit"
+                  loading={cancelJoinSubmission.pending}
+                >
                   {t('waiting.cancel-join-popup-confirm')}
                 </Button>
-              </div>
+              </Form>
             </div>
           </Show>
         )}

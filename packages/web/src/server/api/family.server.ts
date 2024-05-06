@@ -1,14 +1,14 @@
 'use server';
 
-import { json } from '@solidjs/router';
+import { json, redirect } from '@solidjs/router';
 import { object, parse, string, toTrimmed, ValiError } from 'valibot';
 
 import { getRequestUser } from '~/server/auth/request-user';
+import { familyCancelJoin } from '~/server/db/queries/familyCancelJoin';
+import { familyDelete } from '~/server/db/queries/familyDelete';
+import { familyMembers } from '~/server/db/queries/familyMembers';
 import { familyUpdate } from '~/server/db/queries/familyUpdate';
-
-import { familyDelete } from '../db/queries/familyDelete';
-import { familyMembers } from '../db/queries/familyMembers';
-import { translateErrorTokens, type ErrorKeys } from '../utils';
+import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
 
 import { getUserFamily } from './user';
 
@@ -78,6 +78,20 @@ export async function deleteFamilyServer() {
     console.error(error);
     return json(
       { failed: true, errors: null },
+      { status: 500, revalidate: [] },
+    );
+  }
+}
+
+export async function cancelFamilyJoinServer() {
+  try {
+    const user = await getRequestUser();
+    await familyCancelJoin(user.userId);
+    return redirect('/app', { revalidate: [getUserFamily.key] });
+  } catch (error) {
+    console.error(error);
+    return json(
+      { error: 'Something went wrong' },
       { status: 500, revalidate: [] },
     );
   }
