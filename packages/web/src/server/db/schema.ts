@@ -77,14 +77,25 @@ export const familyUserTable = sqliteTable(
   },
 );
 
-export const familyWaitListTable = sqliteTable('family_wait_list', {
-  familyId: integer('family_id')
-    .notNull()
-    .references(() => familyTable.id, { onDelete: 'cascade' }),
-  userId: integer('user_id')
-    .notNull()
-    .references(() => userTable.id, { onDelete: 'cascade' }),
-});
+export const familyWaitListTable = sqliteTable(
+  'family_wait_list',
+  {
+    familyId: integer('family_id')
+      .notNull()
+      .references(() => familyTable.id, { onDelete: 'cascade' }),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => userTable.id, { onDelete: 'cascade' }),
+    joinedAt: utcDatetime('joined_at'),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({
+        columns: [table.familyId, table.userId],
+      }),
+    };
+  },
+);
 
 export const petTable = sqliteTable('pet', {
   id: integer('id').notNull().primaryKey({ autoIncrement: true }),
