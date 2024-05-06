@@ -1,5 +1,5 @@
 import { createSignal, Match, Show, Suspense, Switch } from 'solid-js';
-import { Button, Card, Icon, Popover, Text } from '@nou/ui';
+import { Button, Icon, mergeDefaultProps, Popover, Text } from '@nou/ui';
 
 import { createTranslator } from '~/server/i18n';
 
@@ -9,8 +9,10 @@ import { FamilyInviteBenefits } from '../family-invite-benefits';
 import { FamilyInviteQRCode } from './invite-qrcode';
 import { InviteWaitlist } from './invite-waitlist';
 import JoinFamily from './join-family';
+import { Joined } from './joined';
 
-const FamilyInviteDialog = (props: { id: string }) => {
+type Step = 'initial' | 'qrcode' | 'waitlist' | 'join' | 'join-success';
+const FamilyInviteDialog = (props: { id: string; initialScreen?: Step }) => {
   return (
     <Popover
       id={props.id}
@@ -22,7 +24,10 @@ const FamilyInviteDialog = (props: { id: string }) => {
       {(open) => (
         <Show when={open()}>
           <Suspense>
-            <InviteDialogContent id={props.id} />
+            <InviteDialogContent
+              id={props.id}
+              initialScreen={props.initialScreen}
+            />
           </Suspense>
         </Show>
       )}
@@ -30,10 +35,16 @@ const FamilyInviteDialog = (props: { id: string }) => {
   );
 };
 
-type Step = 'initial' | 'qrcode' | 'waitlist' | 'join' | 'join-success';
-const InviteDialogContent = (props: { id: string }) => {
+/**
+ * The component is separated to ensure the `step` is reset after the dialog is closed.
+ */
+const InviteDialogContent = (ownProps: {
+  id: string;
+  initialScreen?: Step;
+}) => {
   const t = createTranslator('family');
-  const [step, setStep] = createSignal<Step>('initial');
+  const props = mergeDefaultProps(ownProps, { initialScreen: 'initial' });
+  const [step, setStep] = createSignal<Step>(props.initialScreen);
   const update = async (newStep: Step) => {
     await startViewTransition(() => {
       setStep(newStep);
@@ -142,24 +153,7 @@ const InviteDialogContent = (props: { id: string }) => {
           <InviteWaitlist onNext={closePopover} />
         </Match>
         <Match when={step() === 'join-success'}>
-          <div class="animate-in fade-in duration-500">
-            <Card variant="filled" class="absolute inset-0" />
-            <div class="text-on-secondary-container relative flex flex-col items-center gap-8">
-              <div class="flex flex-col items-center gap-6">
-                <Icon use="check-fat" size="lg" />
-                <Text class="text-balance text-center">
-                  {t('invite.join-success')}
-                </Text>
-              </div>
-              <Button
-                variant="outline"
-                popoverTarget={props.id}
-                popoverTargetAction="hide"
-              >
-                {t('invite.join-success-done')}
-              </Button>
-            </div>
-          </div>
+          <Joined popoverTarget={props.id} />
         </Match>
       </Switch>
     </>

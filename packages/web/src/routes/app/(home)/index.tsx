@@ -1,4 +1,4 @@
-import { A, createAsync, type RouteDefinition } from '@solidjs/router';
+import { createAsync, type RouteDefinition } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
 import { For, lazy, Match, Show, Suspense, Switch } from 'solid-js';
 import { Button, Card, Icon } from '@nou/ui';
@@ -7,6 +7,7 @@ import { getUserPets } from '~/server/api/pet';
 import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
 
+import FamilyInviteDialog from '~/lib/family-invite/invite-dialog';
 import { PetHomeCard } from '~/lib/pet-home-card';
 
 const CreateNewPetForm = lazy(() => import('~/lib/create-new-pet-form'));
@@ -88,17 +89,23 @@ const UserPets = () => {
         <Card class="flex max-w-[460px] flex-col gap-6 p-4">
           <CreateNewPetForm />
           <Show when={!user()?.family}>
-            <A
-              href="/app/join"
-              class="bg-surface-container-high flex flex-row items-center justify-between gap-2 text-balance rounded-[inherit] p-4"
+            <Button
+              popoverTarget="newjoiner-join-family"
+              variant="tonal"
+              tone="primary"
+              class="justify-between gap-2 rounded-2xl p-4 text-start font-normal"
             >
-              <h3 class="text-primary text-sm">{t('invite-card-heading')}</h3>
+              {t('invite-card-heading')}
               <Icon
                 use="arrow-circle-up-right"
-                class="text-primary"
+                class="text-on-primary-container"
                 size="sm"
               />
-            </A>
+            </Button>
+            <FamilyInviteDialog
+              initialScreen="join"
+              id="newjoiner-join-family"
+            />
           </Show>
         </Card>
       </Match>

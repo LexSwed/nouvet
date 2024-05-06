@@ -56,7 +56,7 @@ function CreateNewPetForm(props: { onSuccess?: () => void }) {
       </Show>
 
       <Button loading={petSubmission.pending} type="submit">
-        Create
+        {t('cta.create')}
       </Button>
     </Form>
   );
