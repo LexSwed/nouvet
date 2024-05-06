@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "379daafa-ba9b-4d1e-a17b-777e566fdd7b",
+  "id": "720c49f0-2359-4b06-b279-b761d9be1529",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "oauth_account": {
@@ -343,6 +343,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "joined_at": {
+          "name": "joined_at",
+          "type": "text(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(concat(datetime('now', 'utc'), 'Z'))"
         }
       },
       "indexes": {},
@@ -374,7 +382,15 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "family_wait_list_family_id_user_id_pk": {
+          "columns": [
+            "family_id",
+            "user_id"
+          ],
+          "name": "family_wait_list_family_id_user_id_pk"
+        }
+      },
       "uniqueConstraints": {}
     },
     "pet": {

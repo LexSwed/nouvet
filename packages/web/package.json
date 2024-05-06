@@ -10,7 +10,7 @@
     "lint": "eslint src",
     "format": "prettier . --write",
     "db:generate": "drizzle-kit generate:sqlite",
-    "db:migrate": "npx dlx tsx .drizzle/migrate.ts --env-file=.env",
+    "db:migrate": "npx tsx .drizzle/migrate.ts --env-file=.env",
     "db:push": "drizzle-kit push:sqlite",
     "db:studio": "drizzle-kit studio --port=3001"
   },

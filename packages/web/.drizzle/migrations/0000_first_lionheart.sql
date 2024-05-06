@@ -46,6 +46,8 @@ CREATE TABLE `family_user` (
 CREATE TABLE `family_wait_list` (
 	`family_id` integer NOT NULL,
 	`user_id` integer NOT NULL,
+	`joined_at` text(50) DEFAULT (concat(datetime('now', 'utc'), 'Z')) NOT NULL,
+	PRIMARY KEY(`family_id`, `user_id`),
 	FOREIGN KEY (`family_id`) REFERENCES `family`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
