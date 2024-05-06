@@ -58,7 +58,7 @@ function AppMainPage(props: RouteSectionProps) {
                       tone="primary"
                     >
                       {user().family?.name
-                        ? user().family.name
+                        ? user().family!.name
                         : t('family.no-name')}
                     </ButtonLink>
                   </Match>

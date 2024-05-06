@@ -22,12 +22,10 @@ import {
   requestFamilyAdmissionByInviteCode,
 } from '~/server/db/queries/familyJoin';
 import { env } from '~/server/env';
-import { UserAlreadyInFamily } from '~/server/errors';
+import { IncorrectFamilyInvite, UserAlreadyInFamily } from '~/server/errors';
 
-import {
-  acceptUserToFamily,
-  revokeUserInvite,
-} from '../db/queries/familyMembers';
+import { acceptUserToFamily } from '../db/queries/familyAcceptUser';
+import { revokeUserMembership } from '../db/queries/familyRevoke';
 
 import { getFamilyMembers } from './family';
 import { getUserFamily } from './user';
@@ -117,8 +115,9 @@ export const joinFamilyWithLinkServer = async (formData: FormData) => {
 export const joinFamilyWithQRCodeServer = async (invitationHash: string) => {
   try {
     const currentUser = await getRequestUser();
-    if (!invitationHash || !currentUser.userId)
-      throw new Error('Missing invitation hash.');
+    if (!invitationHash || !currentUser.userId) {
+      throw new IncorrectFamilyInvite('Missing invitation hash.');
+    }
     // TODO: error handling
     const family = await joinFamilyByInvitationHash(
       invitationHash,
@@ -127,7 +126,7 @@ export const joinFamilyWithQRCodeServer = async (invitationHash: string) => {
     /** Revalidation happens after user sees the success dialog */
     return json(family, { revalidate: [] });
   } catch (error) {
-    throw new Error('Invite code is invalid');
+    throw new IncorrectFamilyInvite('Invite code is invalid');
   }
 };
 
@@ -149,9 +148,9 @@ export const moveUserFromTheWaitListServer = async (formData: FormData) => {
         inviteeId: data.userId,
       });
     } else {
-      await revokeUserInvite({
+      await revokeUserMembership({
         familyOwnerId: user.userId,
-        inviteeId: data.userId,
+        familyMemberId: data.userId,
       });
     }
 

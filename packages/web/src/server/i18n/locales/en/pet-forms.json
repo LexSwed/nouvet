@@ -25,5 +25,6 @@
   "animal.drawer.cancel": "Later",
   "animal.drawer.save": "Save",
   "failure.title": "There was an error saving the data.",
-  "failure.message": "This is not expected, but the fix is surely coming soon!"
+  "failure.message": "This is not expected, but the fix is surely coming soon!",
+  "cta.create": "Create"
 }
