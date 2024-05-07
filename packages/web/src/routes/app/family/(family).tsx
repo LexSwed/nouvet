@@ -18,7 +18,11 @@ import {
   Text,
 } from '@nou/ui';
 
-import { cancelFamilyJoin, getFamilyMembers } from '~/server/api/family';
+import {
+  cancelFamilyJoin,
+  getFamilyMembers,
+  getWaitListMembers,
+} from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
 
@@ -42,11 +46,15 @@ function FamilyPage() {
   const user = createAsync(() => getUserFamily());
   const isOwner = () => user()?.family?.isOwner || false;
   const familyMembers = createAsync(async () => getFamilyMembers());
-  const awaitingUser = () =>
-    // The API also filters non-approved users from non-owners, but just in case
-    isOwner() ? familyMembers()?.find((user) => !user.isApproved) : null;
-  const members = () =>
-    familyMembers()?.filter((user) => user.isApproved) ?? [];
+  const waitListMembers = createAsync(async () =>
+    isOwner() ? getWaitListMembers() : [],
+  );
+  const awaitingUser = () => {
+    if (!isOwner) return null;
+    const waitList = waitListMembers();
+    if (waitList && waitList.length > 0) return waitList[0];
+    return null;
+  };
   return (
     <>
       <Title>
@@ -68,31 +76,52 @@ function FamilyPage() {
         </AppHeader>
         <div class="flex flex-col gap-6">
           <Suspense>
-            <FamilyHeader />
-            <section class="container flex flex-col gap-8">
-              <Show when={awaitingUser()}>
-                {(user) => (
-                  <div class="sm:max-w-[400px]">
-                    <WaitingFamilyConfirmation user={user()} />
-                  </div>
+            <Switch>
+              <Match when={user()?.family}>
+                {(family) => (
+                  <>
+                    <FamilyHeader />
+                    <section class="container flex flex-col gap-8">
+                      <Show when={awaitingUser()}>
+                        {(user) => (
+                          <div class="sm:max-w-[400px]">
+                            <WaitingFamilyConfirmation user={user()} />
+                          </div>
+                        )}
+                      </Show>
+                      <Switch>
+                        <Match when={!family().isApproved}>
+                          <WaitingApproval />
+                        </Match>
+                        <Match
+                          when={
+                            familyMembers()
+                              ? familyMembers()!.length > 0
+                              : false
+                          }
+                        >
+                          Render users!
+                        </Match>
+                        <Match
+                          when={
+                            isOwner() &&
+                            !awaitingUser() &&
+                            familyMembers() &&
+                            familyMembers()!.length === 0
+                          }
+                        >
+                          <EmptyFamily />
+                        </Match>
+                      </Switch>
+                    </section>
+                    <Suspense>
+                      <FamilyInviteDialog id="family-invite" />
+                    </Suspense>
+                  </>
                 )}
-              </Show>
-              <Switch>
-                <Match when={!user()?.family?.isApproved}>
-                  <WaitingApproval />
-                </Match>
-                <Match when={members().length > 0}>Render users!</Match>
-                {/* technically it's not possible for non-owners to not see other members */}
-                <Match
-                  when={isOwner() && members().length === 0 && !awaitingUser()}
-                >
-                  <EmptyFamily />
-                </Match>
-              </Switch>
-            </section>
-          </Suspense>
-          <Suspense>
-            <FamilyInviteDialog id="family-invite" />
+              </Match>
+              <Match when={user() && !user()!.family}>No family UI</Match>
+            </Switch>
           </Suspense>
         </div>
       </div>

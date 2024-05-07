@@ -36,34 +36,33 @@ export async function acceptUserToFamily(params: {
   const family = await db
     .select({ id: familyTable.id })
     .from(familyTable)
-    .where(eq(familyTable.ownerId, params.familyOwnerId))
+    .where(
+      and(
+        eq(familyTable.id, invitee.familyId),
+        eq(familyTable.ownerId, params.familyOwnerId),
+      ),
+    )
     .get();
+
   if (!family?.id) {
     throw new NotAllowedToPerformFamilyAction(
       `Invalid family owner: ${params.familyOwnerId}`,
     );
   }
 
-  await db
-    .insert(familyUserTable)
-    .values({
-      familyId: family.id,
-      userId: invitee.inviteeId,
-    })
-    .returning({
-      userId: familyUserTable.userId,
-      familyId: familyUserTable.familyId,
-    });
+  await db.insert(familyUserTable).values({
+    familyId: family.id,
+    userId: invitee.inviteeId,
+  });
 
   await db
     .delete(familyWaitListTable)
     .where(
       and(
-        eq(familyUserTable.familyId, family.id),
-        eq(familyUserTable.userId, params.inviteeId),
+        eq(familyWaitListTable.familyId, family.id),
+        eq(familyWaitListTable.userId, params.inviteeId),
       ),
-    )
-    .get();
+    );
 
   return family;
 }

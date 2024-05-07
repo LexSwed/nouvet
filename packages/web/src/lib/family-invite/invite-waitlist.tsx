@@ -2,7 +2,7 @@ import { createAsync, revalidate, useMatch } from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
 import { Avatar, Button, ButtonLink, Card, Icon, Text } from '@nou/ui';
 
-import { getFamilyAndRecentMembers } from '~/server/api/family';
+import { getRecentMember } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
 import { createTranslator } from '~/server/i18n';
 
@@ -12,7 +12,11 @@ import { WaitingFamilyConfirmation } from './waiting-family-confirmation';
 export const InviteWaitlist = (props: { onNext: () => void }) => {
   const t = createTranslator('family');
 
-  const family = createAsync(() => getFamilyAndRecentMembers());
+  const user = createAsync(() => getUserFamily());
+  const isOwner = () => user()?.family?.isOwner;
+  const recentMember = createAsync(async () =>
+    isOwner() ? getRecentMember() : null,
+  );
   const isFamilyUrl = useMatch(() => '/app/family');
 
   return (
@@ -24,7 +28,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
         }
       >
         <Switch>
-          <Match when={!family()?.recentMember}>
+          <Match when={!recentMember()}>
             <div class="flex flex-col items-center justify-center gap-6">
               <Icon
                 use="video-conference"
@@ -36,16 +40,16 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
               </Text>
             </div>
           </Match>
-          <Match when={!family()?.recentMember?.isApproved}>
-            <Show when={family()?.recentMember}>
+          <Match when={!recentMember()?.isApproved}>
+            <Show when={recentMember()}>
               {(user) => <WaitingFamilyConfirmation user={user()} />}
             </Show>
           </Match>
-          <Match when={family()?.recentMember?.isApproved}>
+          <Match when={recentMember()?.isApproved}>
             <div class="flex flex-col gap-6">
               <div class="flex flex-row items-end gap-4">
                 <div class="flex-[2]">
-                  <FamilyNameForm familyName={family()?.name} />
+                  <FamilyNameForm familyName={user()?.family?.name} />
                 </div>
                 <Show when={!isFamilyUrl()}>
                   <ButtonLink href="/app/family" icon variant="ghost">
@@ -57,10 +61,10 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
                 <div class="flex flex-col gap-2">
                   <div class="flex flex-row items-center justify-start gap-3">
                     <Avatar
-                      avatarUrl={family()?.recentMember!.avatarUrl || ''}
-                      name={family()?.recentMember!.name || ''}
+                      avatarUrl={recentMember()!.avatarUrl || ''}
+                      name={recentMember()!.name || ''}
                     />
-                    <Text with="label-lg">{family()?.recentMember!.name}</Text>
+                    <Text with="label-lg">{recentMember()!.name}</Text>
                   </div>
                   <Button
                     variant="ghost"
@@ -77,7 +81,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
         </Switch>
         <Button
           onClick={() => {
-            if (family()?.recentMember) {
+            if (recentMember()) {
               revalidate(getUserFamily.key);
             }
             props.onNext();

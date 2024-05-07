@@ -3,14 +3,14 @@
 import { json, redirect } from '@solidjs/router';
 import { object, parse, string, toTrimmed, ValiError } from 'valibot';
 
+import { getUserFamily } from '~/server/api/user';
 import { getRequestUser } from '~/server/auth/request-user';
 import { familyCancelJoin } from '~/server/db/queries/familyCancelJoin';
 import { familyDelete } from '~/server/db/queries/familyDelete';
 import { familyMembers } from '~/server/db/queries/familyMembers';
 import { familyUpdate } from '~/server/db/queries/familyUpdate';
+import { familyWaitList } from '~/server/db/queries/familyWaitList';
 import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
-
-import { getUserFamily } from './user';
 
 export async function getFamilyMembersServer() {
   try {
@@ -18,9 +18,25 @@ export async function getFamilyMembersServer() {
 
     const members = await familyMembers(user.userId);
 
-    return members;
+    return members || [];
   } catch (error) {
     console.error(error);
+
+    throw error;
+  }
+}
+
+export async function getWaitListMembersServer() {
+  try {
+    const user = await getRequestUser();
+
+    const members = await familyWaitList(user.userId);
+
+    return members || [];
+  } catch (error) {
+    console.error(error);
+
+    throw error;
   }
 }
 

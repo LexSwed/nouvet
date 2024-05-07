@@ -122,13 +122,17 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
                       </Text>
                       <Text as="p">{t('accept-invite.description')}</Text>
                       <div class="flex items-stretch justify-between gap-2 sm:flex-row">
-                        <ButtonLink href="/app" variant="outline">
+                        <ButtonLink
+                          href="/app"
+                          variant="outline"
+                          class="flex-1"
+                        >
                           <Icon use="chevron-left" />
                           {t('accept-invite.cta-cancel')}
                         </ButtonLink>
                         <input type="hidden" value={code} name="invite-code" />
                         <Button
-                          class="w-full rounded-full"
+                          class="flex-[3] rounded-full"
                           type="submit"
                           loading={joinSubmission.pending}
                         >

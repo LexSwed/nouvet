@@ -25,10 +25,10 @@ import { env } from '~/server/env';
 import { UserAlreadyInFamily } from '~/server/errors';
 
 import { acceptUserToFamily } from '../db/queries/familyAcceptUser';
-import { revokeUserMembership } from '../db/queries/familyRevoke';
+import { familyRemoveFromWaitList } from '../db/queries/familyRemoveFromWaitList';
 import { translateErrorTokens } from '../utils';
 
-import { getFamilyMembers } from './family';
+import { getFamilyMembers, getRecentMember } from './family';
 import { getUserFamily } from './user';
 
 // TODO: Heavily rate limit this
@@ -157,19 +157,24 @@ export const moveUserFromTheWaitListServer = async (formData: FormData) => {
         inviteeId: data.userId,
       });
     } else {
-      await revokeUserMembership({
+      await familyRemoveFromWaitList({
         familyOwnerId: user.userId,
-        familyMemberId: data.userId,
+        waitListMemberId: data.userId,
       });
     }
 
     return json(data, {
-      revalidate: [getFamilyMembers.key, getUserFamily.key],
+      revalidate: [
+        getFamilyMembers.key,
+        getRecentMember.key,
+        getUserFamily.key,
+      ],
     });
   } catch (error) {
     if (error instanceof ValiError) {
       return json({ errors: translateErrorTokens(error) }, { status: 422 });
     }
+    console.error(error);
     return json({ error: 'Something went wrong' }, { status: 500 });
   }
 };
