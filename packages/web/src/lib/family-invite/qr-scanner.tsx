@@ -25,8 +25,7 @@ const QRCodeScannerPage = (props: { onSuccess: () => void }) => {
     try {
       setImageData(imageData);
       const res = await join(inviteCode);
-      console.trace(res);
-      if (res.familyId) {
+      if ('familyId' in res) {
         startViewTransition(() => {
           props.onSuccess();
         });

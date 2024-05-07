@@ -27,44 +27,45 @@ export function WaitingFamilyConfirmation(props: {
       <Text as="p" with="body-sm">
         {t('invite.info-consent')}
       </Text>
-      <Form
-        class="flex flex-row gap-2"
-        action={moveUserFromTheWaitList}
-        method="post"
-      >
-        <input type="hidden" name="user-id" value={props.user.id} readOnly />
-        <Button
-          type="submit"
-          value="decline"
-          name="action"
-          size="sm"
-          variant="outline"
-          class="flex-1 gap-3"
-          aria-disabled={userWaitListSubmission.pending}
-          loading={
-            userWaitListSubmission.pending &&
-            userWaitListSubmission.input[0].get('action') === 'decline'
-          }
+      <Form action={moveUserFromTheWaitList} method="post">
+        <fieldset
+          disabled={userWaitListSubmission.pending}
+          class="flex flex-row gap-2"
         >
-          <Icon use="x" class="-ml-3" />
-          {t('invite.waitlist-decline')}
-        </Button>
-        <Button
-          type="submit"
-          value="accept"
-          name="action"
-          size="sm"
-          variant="outline"
-          class="flex-1 gap-3"
-          aria-disabled={userWaitListSubmission.pending}
-          loading={
-            userWaitListSubmission.pending &&
-            userWaitListSubmission.input[0].get('action') === 'accept'
-          }
-        >
-          <Icon use="check" class="-ml-2" />
-          {t('invite.waitlist-accept')}
-        </Button>
+          <input type="hidden" name="user-id" value={props.user.id} readOnly />
+          <Button
+            type="submit"
+            value="decline"
+            name="action"
+            size="sm"
+            variant="outline"
+            class="flex-1 gap-3"
+            aria-disabled={userWaitListSubmission.pending}
+            loading={
+              userWaitListSubmission.pending &&
+              userWaitListSubmission.input[0].get('action') === 'decline'
+            }
+          >
+            <Icon use="x" class="-ml-3" />
+            {t('invite.waitlist-decline')}
+          </Button>
+          <Button
+            type="submit"
+            value="accept"
+            name="action"
+            size="sm"
+            variant="outline"
+            class="flex-1 gap-3"
+            aria-disabled={userWaitListSubmission.pending}
+            loading={
+              userWaitListSubmission.pending &&
+              userWaitListSubmission.input[0].get('action') === 'accept'
+            }
+          >
+            <Icon use="check" class="-ml-2" />
+            {t('invite.waitlist-accept')}
+          </Button>
+        </fieldset>
       </Form>
     </Card>
   );

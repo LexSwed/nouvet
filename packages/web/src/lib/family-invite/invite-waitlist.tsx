@@ -1,9 +1,8 @@
 import { createAsync, revalidate, useMatch } from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
 import { Avatar, Button, ButtonLink, Card, Icon, Text } from '@nou/ui';
-import { differenceInMinutes } from 'date-fns';
 
-import { getFamilyMembers } from '~/server/api/family';
+import { getFamilyAndRecentMembers } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
 import { createTranslator } from '~/server/i18n';
 
@@ -13,23 +12,7 @@ import { WaitingFamilyConfirmation } from './waiting-family-confirmation';
 export const InviteWaitlist = (props: { onNext: () => void }) => {
   const t = createTranslator('family');
 
-  const family = createAsync(async () => {
-    'use server';
-    const [members, user] = await Promise.all([
-      getFamilyMembers(),
-      getUserFamily(),
-    ]);
-    // await timeout(1000);
-    if (!members) return { ...user.family, familyMember: null };
-    return {
-      ...user.family,
-      familyMember:
-        members.find((user) => !user.isApproved) ||
-        members.find(
-          (user) => differenceInMinutes(new Date(), user.joinedAt) < 60,
-        ),
-    };
-  });
+  const family = createAsync(() => getFamilyAndRecentMembers());
   const isFamilyUrl = useMatch(() => '/app/family');
 
   return (
@@ -41,7 +24,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
         }
       >
         <Switch>
-          <Match when={!family()?.familyMember}>
+          <Match when={!family()?.recentMember}>
             <div class="flex flex-col items-center justify-center gap-6">
               <Icon
                 use="video-conference"
@@ -53,12 +36,12 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
               </Text>
             </div>
           </Match>
-          <Match when={!family()?.familyMember?.isApproved}>
-            <Show when={family()?.familyMember}>
+          <Match when={!family()?.recentMember?.isApproved}>
+            <Show when={family()?.recentMember}>
               {(user) => <WaitingFamilyConfirmation user={user()} />}
             </Show>
           </Match>
-          <Match when={family()?.familyMember?.isApproved}>
+          <Match when={family()?.recentMember?.isApproved}>
             <div class="flex flex-col gap-6">
               <div class="flex flex-row items-end gap-4">
                 <div class="flex-[2]">
@@ -74,10 +57,10 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
                 <div class="flex flex-col gap-2">
                   <div class="flex flex-row items-center justify-start gap-3">
                     <Avatar
-                      avatarUrl={family()?.familyMember!.avatarUrl || ''}
-                      name={family()?.familyMember!.name || ''}
+                      avatarUrl={family()?.recentMember!.avatarUrl || ''}
+                      name={family()?.recentMember!.name || ''}
                     />
-                    <Text with="label-lg">{family()?.familyMember!.name}</Text>
+                    <Text with="label-lg">{family()?.recentMember!.name}</Text>
                   </div>
                   <Button
                     variant="ghost"
@@ -85,7 +68,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
                     size="sm"
                     class="self-end"
                   >
-                    Remove
+                    {t('invite.waitlist-joined-cancel')}
                   </Button>
                 </div>
               </Card>
@@ -93,8 +76,8 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
           </Match>
         </Switch>
         <Button
-          onClick={async () => {
-            if (family()?.familyMember) {
+          onClick={() => {
+            if (family()?.recentMember) {
               revalidate(getUserFamily.key);
             }
             props.onNext();

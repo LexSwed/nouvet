@@ -4,16 +4,16 @@ import { and, eq } from 'drizzle-orm';
 
 import {
   familyTable,
-  familyUserTable,
+  familyWaitListTable,
   type DatabaseUser,
 } from '~/server/db/schema';
 import { NotAllowedToPerformFamilyAction } from '~/server/errors';
 
 import { useDb } from '..';
 
-export async function revokeUserMembership(params: {
+export async function familyRemoveFromWaitList(params: {
   familyOwnerId: DatabaseUser['id'];
-  familyMemberId: DatabaseUser['id'];
+  waitListMemberId: DatabaseUser['id'];
 }) {
   const db = useDb();
 
@@ -30,13 +30,13 @@ export async function revokeUserMembership(params: {
   }
 
   return await db
-    .delete(familyUserTable)
+    .delete(familyWaitListTable)
     .where(
       and(
-        eq(familyUserTable.familyId, family.id),
-        eq(familyUserTable.userId, params.familyMemberId),
+        eq(familyWaitListTable.familyId, family.id),
+        eq(familyWaitListTable.userId, params.waitListMemberId),
       ),
     )
-    .returning({ familyId: familyUserTable.familyId })
+    .returning({ familyId: familyWaitListTable.familyId })
     .get();
 }

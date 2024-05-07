@@ -1,21 +1,33 @@
 'use server';
 
-import { and, eq, sql } from 'drizzle-orm';
+import { and, eq, not } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
 import {
   familyTable,
   familyUserTable,
-  familyWaitListTable,
   userTable,
   type DatabaseUser,
 } from '~/server/db/schema';
 
 /**
- * Lists all family members and any new user in the wait list.
+ * Lists all family members.
+ * If request user is the owner of the family, also
+ * includes users from the wait list.
+ * Returns {null} if user is not part of a family
  */
 export async function familyMembers(userId: DatabaseUser['id']) {
   const db = useDb();
+
+  const family = db
+    .select({ familyId: familyUserTable.familyId })
+    .from(familyUserTable)
+    .where(eq(familyUserTable.userId, userId))
+    .get();
+
+  if (!family?.familyId) {
+    return null;
+  }
 
   const users = await db
     .select({
@@ -23,21 +35,17 @@ export async function familyMembers(userId: DatabaseUser['id']) {
       name: userTable.name,
       avatarUrl: userTable.avatarUrl,
       joinedAt: familyUserTable.joinedAt,
-      isApproved: sql<number>`(${familyWaitListTable.userId} = ${userId})`,
     })
-    .from(userTable)
-    .where(eq(userTable.id, userId))
-    .leftJoin(familyUserTable, eq(familyUserTable.userId, userId))
-    .leftJoin(familyTable, eq(familyTable.id, familyUserTable.familyId))
-    .leftJoin(
-      familyWaitListTable,
+    .from(familyUserTable)
+    .where(
       and(
-        eq(familyTable.ownerId, userId),
-        eq(familyWaitListTable.userId, userId),
+        not(eq(familyUserTable.userId, userId)),
+        eq(familyUserTable.familyId, family.familyId),
       ),
     )
-    .orderBy(familyUserTable.joinedAt)
+    .innerJoin(userTable, eq(familyUserTable.userId, userTable.id))
+    .leftJoin(familyTable, eq(familyTable.id, familyUserTable.familyId))
     .all();
 
-  return users.map((user) => ({ ...user, isApproved: user.isApproved === 1 }));
+  return users;
 }

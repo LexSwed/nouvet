@@ -18,7 +18,9 @@ const DevLogin = () => {
       <Popover id="dev-login" class="w-[320px] p-8">
         <Form
           validationErrors={
-            'errors' in login.result! ? login.result.errors : undefined
+            login.result && 'errors' in login.result
+              ? login.result.errors
+              : undefined
           }
           method="post"
           action={loginDev}
