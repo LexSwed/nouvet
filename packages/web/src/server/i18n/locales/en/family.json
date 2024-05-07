@@ -40,6 +40,7 @@
   "invite.waitlist-accept": "Accept",
   "invite.waitlist-decline": "Decline",
   "invite.waitlist-done": "Done",
+  "invite.waitlist-joined-cancel": "Remove",
   "invite.cta-later": "Later",
   "invite.cta-cancel": "Return",
   "invite.invite-share-title-user": "Join {{userName}} in NouVet",

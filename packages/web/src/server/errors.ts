@@ -5,3 +5,5 @@ export class UserAlreadyInFamily extends Error {}
 export class InviteeNotInWaitList extends Error {}
 
 export class NotAllowedToPerformFamilyAction extends Error {}
+
+export class IncorrectFamilyId extends Error {}
