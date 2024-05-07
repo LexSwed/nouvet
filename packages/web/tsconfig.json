@@ -2,7 +2,7 @@
   "extends": "@nou/config/tsconfig",
   "include": ["./src", "./drizzle.config.ts", ".drizzle/migrate.ts"],
   "compilerOptions": {
-    "types": ["vinxi/client"],
+    "types": ["vinxi/types/client"],
     "paths": {
       "~/*": ["./src/*"]
     }
