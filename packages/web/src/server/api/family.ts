@@ -1,6 +1,8 @@
 import { action, cache } from '@solidjs/router';
 import { differenceInMinutes } from 'date-fns/differenceInMinutes';
 
+import { timeout } from '../utils';
+
 import {
   cancelFamilyJoinServer,
   deleteFamilyServer,
@@ -14,10 +16,10 @@ export const getFamilyMembers = cache(
   'family-members',
 );
 
-export const getWaitListMembers = cache(
-  async () => getWaitListMembersServer(),
-  'wait-list-members',
-);
+export const getWaitListMembers = cache(async () => {
+  await timeout(5000);
+  return getWaitListMembersServer();
+}, 'wait-list-members');
 
 export const getRecentMember = cache(async () => {
   'use server';

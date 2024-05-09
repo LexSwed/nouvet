@@ -74,14 +74,14 @@ function FamilyPage() {
             <Icon use="chevron-left" />
           </ButtonLink>
         </AppHeader>
-        <div class="flex flex-col gap-6">
-          <Suspense>
-            <Switch>
-              <Match when={user()?.family}>
-                {(family) => (
-                  <>
-                    <FamilyHeader />
-                    <section class="container flex flex-col gap-8">
+        <Suspense>
+          <Switch>
+            <Match when={user()?.family}>
+              {(family) => (
+                <div class="flex flex-col gap-6">
+                  <FamilyHeader />
+                  <section class="container flex flex-col gap-8">
+                    <Suspense>
                       <Show when={awaitingUser()}>
                         {(user) => (
                           <div class="sm:max-w-[400px]">
@@ -89,41 +89,38 @@ function FamilyPage() {
                           </div>
                         )}
                       </Show>
-                      <Switch>
-                        <Match when={!family().isApproved}>
-                          <WaitingApproval />
-                        </Match>
-                        <Match
-                          when={
-                            familyMembers()
-                              ? familyMembers()!.length > 0
-                              : false
-                          }
-                        >
-                          Render users!
-                        </Match>
-                        <Match
-                          when={
-                            isOwner() &&
-                            !awaitingUser() &&
-                            familyMembers() &&
-                            familyMembers()!.length === 0
-                          }
-                        >
-                          <EmptyFamily />
-                        </Match>
-                      </Switch>
-                    </section>
-                    <Suspense>
-                      <FamilyInviteDialog id="family-invite" />
                     </Suspense>
-                  </>
-                )}
-              </Match>
-              <Match when={user() && !user()!.family}>No family UI</Match>
-            </Switch>
-          </Suspense>
-        </div>
+                    <Switch>
+                      <Match when={!family().isApproved}>
+                        <WaitingApproval />
+                      </Match>
+                      <Match
+                        when={
+                          familyMembers() ? familyMembers()!.length > 0 : false
+                        }
+                      >
+                        Render users!
+                      </Match>
+                      <Match
+                        when={
+                          isOwner() &&
+                          familyMembers() &&
+                          familyMembers()!.length === 0
+                        }
+                      >
+                        <EmptyFamily />
+                      </Match>
+                    </Switch>
+                  </section>
+                  <Suspense>
+                    <FamilyInviteDialog id="family-invite" />
+                  </Suspense>
+                </div>
+              )}
+            </Match>
+            <Match when={user() && !user()!.family}>No family UI</Match>
+          </Switch>
+        </Suspense>
       </div>
     </>
   );
