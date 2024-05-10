@@ -37,8 +37,9 @@ export async function userFamily(userId: DatabaseUser['id']) {
       family: {
         id: familyTable.id,
         name: familyTable.name,
-        isOwner: sql<number>`(${familyTable.ownerId} = ${userId})`,
-        isInWaitList: sql<number>`(${familyWaitListTable.userId} = ${userId})`,
+        role: sql<
+          'owner' | 'member' | 'waiting'
+        >`(iif(${familyTable.ownerId} == ${userId}, 'owner', iif(${familyWaitListTable.userId} == ${userId}, 'waiting', 'member')))`,
       },
     })
     .from(userTable)
@@ -56,14 +57,5 @@ export async function userFamily(userId: DatabaseUser['id']) {
 
   if (!userFamily) return null;
 
-  return {
-    ...userFamily,
-    family: userFamily.family
-      ? {
-          ...userFamily.family,
-          isOwner: userFamily.family.isOwner === 1,
-          isApproved: !(userFamily.family.isInWaitList === 1),
-        }
-      : userFamily.family,
-  };
+  return userFamily;
 }

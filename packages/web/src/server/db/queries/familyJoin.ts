@@ -100,6 +100,12 @@ async function familyJoin(
       .values({ userId: invite.inviterId, familyId: family.familyId });
   }
 
+  // delete the user from all possible invites to other families
+  await db
+    .delete(familyWaitListTable)
+    .where(eq(familyWaitListTable.userId, userId))
+    .run();
+
   // When joining via QR Code (with hash), the user is added to the family directly.
   if ('invitationHash' in params) {
     await db

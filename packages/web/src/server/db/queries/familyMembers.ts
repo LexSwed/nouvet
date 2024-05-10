@@ -1,11 +1,11 @@
 'use server';
 
-import { and, eq, not } from 'drizzle-orm';
+import { and, eq, lt, not, or, sql } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
 import {
-  familyTable,
   familyUserTable,
+  familyWaitListTable,
   userTable,
   type DatabaseUser,
 } from '~/server/db/schema';
@@ -22,12 +22,7 @@ export async function familyMembers(userId: DatabaseUser['id']) {
   const family = db
     .select({ familyId: familyUserTable.familyId })
     .from(familyUserTable)
-    .where(eq(familyUserTable.userId, userId))
-    .get();
-
-  if (!family?.familyId) {
-    return null;
-  }
+    .where(eq(familyUserTable.userId, userId));
 
   const users = await db
     .select({
@@ -39,13 +34,55 @@ export async function familyMembers(userId: DatabaseUser['id']) {
     .from(familyUserTable)
     .where(
       and(
+        eq(familyUserTable.familyId, family),
         not(eq(familyUserTable.userId, userId)),
-        eq(familyUserTable.familyId, family.familyId),
       ),
     )
     .innerJoin(userTable, eq(familyUserTable.userId, userTable.id))
-    .leftJoin(familyTable, eq(familyTable.id, familyUserTable.familyId))
     .all();
 
   return users;
+}
+
+export async function recentFamilyMember(userId: DatabaseUser['id']) {
+  const db = useDb();
+
+  const family = db
+    .select({ familyId: familyUserTable.familyId })
+    .from(familyUserTable)
+    .where(eq(familyUserTable.userId, userId));
+
+  const user = await db
+    .select({
+      id: userTable.id,
+      name: userTable.name,
+      avatarUrl: userTable.avatarUrl,
+      isApproved: sql<number>`(${familyUserTable.userId} == ${userTable.id})`,
+    })
+    .from(userTable)
+    .where(
+      or(
+        // recently joined user
+        and(
+          not(eq(familyUserTable.userId, userId)),
+          eq(familyUserTable.familyId, family),
+          lt(
+            sql`(unixepoch(concat(datetime('now', 'utc'), 'Z')) - unixepoch(${familyUserTable.joinedAt})) / 60`,
+            60,
+          ),
+        ),
+        eq(familyWaitListTable.familyId, family),
+      ),
+    )
+    .leftJoin(familyUserTable, eq(familyUserTable.userId, userTable.id))
+    .leftJoin(familyWaitListTable, eq(familyWaitListTable.userId, userTable.id))
+    .get();
+
+  if (!user) return null;
+
+  const { isApproved, ...u } = user;
+  return {
+    ...u,
+    isApproved: isApproved === 1,
+  };
 }

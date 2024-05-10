@@ -20,8 +20,8 @@ import {
 
 import {
   cancelFamilyJoin,
+  getFamilyAndWaitListMembers,
   getFamilyMembers,
-  getWaitListMembers,
 } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
@@ -44,16 +44,11 @@ export const route = {
 function FamilyPage() {
   const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
-  const isOwner = () => user()?.family?.isOwner || false;
-  const familyMembers = createAsync(async () => getFamilyMembers());
-  const waitListMembers = createAsync(async () =>
-    isOwner() ? getWaitListMembers() : [],
-  );
+  const isOwner = () => user()?.family?.role === 'owner' || false;
+  const familyMembers = createAsync(async () => getFamilyAndWaitListMembers());
   const awaitingUser = () => {
     if (!isOwner) return null;
-    const waitList = waitListMembers();
-    if (waitList && waitList.length > 0) return waitList[0];
-    return null;
+    return familyMembers()?.waitList[0];
   };
   return (
     <>
@@ -91,21 +86,21 @@ function FamilyPage() {
                       </Show>
                     </Suspense>
                     <Switch>
-                      <Match when={!family().isApproved}>
+                      <Match when={family()!.role === 'waiting'}>
                         <WaitingApproval />
                       </Match>
                       <Match
                         when={
-                          familyMembers() ? familyMembers()!.length > 0 : false
+                          familyMembers()
+                            ? familyMembers()!.members!.length > 0
+                            : false
                         }
                       >
                         Render users!
                       </Match>
                       <Match
                         when={
-                          isOwner() &&
-                          familyMembers() &&
-                          familyMembers()!.length === 0
+                          isOwner() && familyMembers()?.members.length === 0
                         }
                       >
                         <EmptyFamily />
@@ -131,88 +126,86 @@ export default FamilyPage;
 function FamilyHeader() {
   const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
-  const isOwner = () => user()?.family?.isOwner || false;
+  const isOwner = () => user()?.family?.role === 'owner' || false;
   return (
     <section class="container">
-      <div class="flex flex-col gap-4 sm:flex-row sm:items-end">
-        <Switch>
-          <Match when={isOwner()}>
-            <>
-              <FamilyNameForm familyName={user()?.family?.name} />
-              <div class="mb-1 flex flex-row gap-2">
-                <Button
-                  variant="tonal"
-                  size="sm"
-                  popoverTarget="family-invite"
-                  class="gap-2"
+      <Switch>
+        <Match when={isOwner()}>
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-end">
+            <FamilyNameForm familyName={user()?.family?.name} />
+            <div class="mb-1 flex flex-row gap-2">
+              <Button
+                variant="tonal"
+                size="sm"
+                popoverTarget="family-invite"
+                class="gap-2"
+              >
+                <Icon use="user-circle-plus" />
+                {t('action-add-users')}
+              </Button>
+              <Button
+                variant="ghost"
+                icon
+                size="sm"
+                label={t('action-more')}
+                popoverTarget="family-owner-menu"
+                class="gap-2"
+              >
+                <Icon use="dots-three-outline-vertical" />
+              </Button>
+              <Menu id="family-owner-menu" placement="bottom-end">
+                <MenuItem
+                  tone="destructive"
+                  popoverTarget="family-delete"
+                  as="button"
+                  type="button"
                 >
-                  <Icon use="user-circle-plus" />
-                  {t('action-add-users')}
-                </Button>
-                <Button
-                  variant="ghost"
-                  icon
-                  size="sm"
-                  label={t('action-more')}
-                  popoverTarget="family-owner-menu"
-                  class="gap-2"
+                  <Icon use="trash-simple" />
+                  {t('action-disassemble')}
+                </MenuItem>
+              </Menu>
+              <DeleteFamilyDialog />
+            </div>
+          </div>
+        </Match>
+        <Match when={!isOwner()}>
+          <div class="flex flex-col items-center gap-4 sm:flex-row">
+            <Text with="headline-1">
+              {user()?.family?.name || t('no-name')}
+            </Text>
+            <Show when={user()?.family?.role === 'member'}>
+              <ul>
+                <li>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    popoverTarget="family-menu"
+                    class="gap-2"
+                    icon
+                    label="Actions on family"
+                  >
+                    <Icon use="dots-three-outline-vertical" />
+                  </Button>
+                </li>
+              </ul>
+              <Menu id="family-menu" placement="bottom-end">
+                <MenuItem
+                  tone="destructive"
+                  popoverTarget="family-leave"
+                  as="button"
+                  type="button"
                 >
-                  <Icon use="dots-three-outline-vertical" />
-                </Button>
-                <Menu id="family-owner-menu" placement="bottom-end">
-                  <MenuItem
-                    tone="destructive"
-                    popoverTarget="family-delete"
-                    as="button"
-                    type="button"
-                  >
-                    <Icon use="trash-simple" />
-                    {t('action-disassemble')}
-                  </MenuItem>
-                </Menu>
-                <DeleteFamilyDialog />
-              </div>
-            </>
-          </Match>
-          <Match when={!isOwner()}>
-            <>
-              <Text with="headline-1">
-                {user()?.family?.name || t('no-name')}
-              </Text>
-              <Show when={user()?.family?.isApproved}>
-                <ul>
-                  <li>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      popoverTarget="family-menu"
-                      class="gap-2"
-                      icon
-                      label="Actions on family"
-                    >
-                      <Icon use="dots-three-outline-vertical" />
-                    </Button>
-                  </li>
-                </ul>
-                <Menu id="family-menu" placement="bottom-end">
-                  <MenuItem
-                    tone="destructive"
-                    popoverTarget="family-leave"
-                    as="button"
-                    type="button"
-                  >
-                    <Icon use="sign-out" />
-                    Leave family
-                  </MenuItem>
-                </Menu>
-                <Drawer id="family-leave" placement="center">
-                  {(open) => <Show when={open()}>Are you sure?</Show>}
-                </Drawer>
-              </Show>
-            </>
-          </Match>
-        </Switch>
-      </div>
+                  <Icon use="sign-out" />
+                  Leave family
+                </MenuItem>
+              </Menu>
+              <Drawer id="family-leave" placement="center">
+                {(open) => <Show when={open()}>Are you sure?</Show>}
+              </Drawer>
+            </Show>
+          </div>
+        </Match>
+      </Switch>
     </section>
   );
 }

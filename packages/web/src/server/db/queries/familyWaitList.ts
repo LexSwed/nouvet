@@ -20,12 +20,7 @@ export async function familyWaitList(userId: DatabaseUser['id']) {
     .where(
       and(eq(familyUserTable.userId, userId), eq(familyTable.ownerId, userId)),
     )
-    .innerJoin(familyTable, eq(familyTable.id, familyUserTable.familyId))
-    .get();
-
-  if (!family?.familyId) {
-    return null;
-  }
+    .innerJoin(familyTable, eq(familyTable.id, familyUserTable.familyId));
 
   const users = await db
     .select({
@@ -35,9 +30,9 @@ export async function familyWaitList(userId: DatabaseUser['id']) {
       joinedAt: familyWaitListTable.joinedAt,
     })
     .from(familyWaitListTable)
-    .where(eq(familyWaitListTable.familyId, family.familyId))
+    .where(eq(familyWaitListTable.familyId, family))
     .innerJoin(userTable, eq(familyWaitListTable.userId, userTable.id))
-    .leftJoin(familyTable, eq(familyTable.id, familyWaitListTable.familyId))
+    .orderBy(familyWaitListTable.joinedAt)
     .all();
 
   return users;

@@ -13,7 +13,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
   const t = createTranslator('family');
 
   const user = createAsync(() => getUserFamily());
-  const isOwner = () => user()?.family?.isOwner;
+  const isOwner = () => user()?.family?.role === 'owner';
   const recentMember = createAsync(async () =>
     isOwner() ? getRecentMember() : null,
   );

@@ -7,7 +7,10 @@ import { getUserFamily } from '~/server/api/user';
 import { getRequestUser } from '~/server/auth/request-user';
 import { familyCancelJoin } from '~/server/db/queries/familyCancelJoin';
 import { familyDelete } from '~/server/db/queries/familyDelete';
-import { familyMembers } from '~/server/db/queries/familyMembers';
+import {
+  familyMembers,
+  recentFamilyMember,
+} from '~/server/db/queries/familyMembers';
 import { familyUpdate } from '~/server/db/queries/familyUpdate';
 import { familyWaitList } from '~/server/db/queries/familyWaitList';
 import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
@@ -33,6 +36,20 @@ export async function getWaitListMembersServer() {
     const members = await familyWaitList(user.userId);
 
     return members || [];
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+}
+
+export async function getRecentMemberServer() {
+  try {
+    const user = await getRequestUser();
+
+    const member = await recentFamilyMember(user.userId);
+
+    return member;
   } catch (error) {
     console.error(error);
 

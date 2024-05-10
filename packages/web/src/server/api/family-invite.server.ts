@@ -22,13 +22,17 @@ import {
   requestFamilyAdmissionByInviteCode,
 } from '~/server/db/queries/familyJoin';
 import { env } from '~/server/env';
-import { UserAlreadyInFamily } from '~/server/errors';
+import { IncorrectFamilyInvite } from '~/server/errors';
 
 import { acceptUserToFamily } from '../db/queries/familyAcceptUser';
 import { familyRemoveFromWaitList } from '../db/queries/familyRemoveFromWaitList';
 import { translateErrorTokens } from '../utils';
 
-import { getFamilyMembers, getRecentMember } from './family';
+import {
+  getFamilyAndWaitListMembers,
+  getFamilyMembers,
+  getRecentMember,
+} from './family';
 import { getUserFamily } from './user';
 
 // TODO: Heavily rate limit this
@@ -74,22 +78,15 @@ export const checkFamilyInviteServer = async (inviteCode: string) => {
   const user = await getRequestUser();
   try {
     const invite = await familyInvitationInfo(inviteCode, user.userId);
+
+    if (!invite) throw new IncorrectFamilyInvite('Invite does not exist');
+
     return { invite };
   } catch (error) {
-    if (error instanceof UserAlreadyInFamily) {
-      return json(
-        {
-          failed: true,
-          reason: 100,
-        },
-        { status: 400 },
-      );
-    } else {
-      console.error(error);
-    }
+    console.error(error);
     return json(
       {
-        failed: true,
+        error,
       },
       { status: 400 },
     );
@@ -168,6 +165,7 @@ export const moveUserFromTheWaitListServer = async (formData: FormData) => {
         getFamilyMembers.key,
         getRecentMember.key,
         getUserFamily.key,
+        getFamilyAndWaitListMembers.key,
       ],
     });
   } catch (error) {

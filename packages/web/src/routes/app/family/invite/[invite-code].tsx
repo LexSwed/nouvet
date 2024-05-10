@@ -14,6 +14,11 @@ import {
   joinFamilyWithLink,
 } from '~/server/api/family-invite';
 import { getUserProfile } from '~/server/api/user';
+import {
+  IncorrectFamilyInvite,
+  isErrorResponse,
+  UserAlreadyInFamily,
+} from '~/server/errors';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
 
 import { AccountMenu } from '~/lib/account-menu';
@@ -36,21 +41,16 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
   const t = createTranslator('invited');
   const user = createAsync(() => getUserProfile());
   const userInvite = createAsync(() => checkFamilyInvite(code));
-  // TODO: user is already part of a family
 
   const joinSubmission = useSubmission(joinFamilyWithLink);
   const invite = () => {
     const invite = userInvite();
     return invite && 'invite' in invite ? invite.invite : null;
   };
-  const alreadyInFamily = () => {
-    const invite = userInvite();
-    return invite && 'reason' in invite ? invite.reason === 100 : false;
-  };
-  const failed = () => {
-    const invite = userInvite();
-    return invite && 'failed' in invite && invite.failed;
-  };
+
+  const alreadyInFamily = () =>
+    isErrorResponse(userInvite(), UserAlreadyInFamily);
+  const failed = () => isErrorResponse(userInvite(), Error);
 
   return (
     <>
@@ -121,21 +121,13 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
                           : t('accept-invite.heading.no-name')}
                       </Text>
                       <Text as="p">{t('accept-invite.description')}</Text>
-                      <div class="flex items-stretch justify-between gap-2 sm:flex-row">
-                        <ButtonLink
-                          href="/app"
-                          variant="outline"
-                          class="flex-1"
-                        >
+                      <div class="grid grid-cols-[min-content,1fr] gap-2 sm:flex-row">
+                        <ButtonLink href="/app" variant="outline">
                           <Icon use="chevron-left" />
                           {t('accept-invite.cta-cancel')}
                         </ButtonLink>
                         <input type="hidden" value={code} name="invite-code" />
-                        <Button
-                          class="flex-[3] rounded-full"
-                          type="submit"
-                          loading={joinSubmission.pending}
-                        >
+                        <Button type="submit" loading={joinSubmission.pending}>
                           {t('accept-invite.cta-join')}
                         </Button>
                       </div>
