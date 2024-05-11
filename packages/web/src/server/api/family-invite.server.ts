@@ -32,7 +32,9 @@ import {
   getFamilyAndWaitListMembers,
   getFamilyMembers,
   getRecentMember,
+  getWaitListMembers,
 } from './family';
+import { getUserPets } from './pet';
 import { getUserFamily } from './user';
 
 // TODO: Heavily rate limit this
@@ -149,25 +151,34 @@ export const moveUserFromTheWaitListServer = async (formData: FormData) => {
     const user = await getRequestUser();
 
     if (data.action === 'accept') {
-      await acceptUserToFamily({
+      const family = await acceptUserToFamily({
         familyOwnerId: user.userId,
         inviteeId: data.userId,
       });
+
+      return json(family, {
+        revalidate: [
+          getFamilyMembers.key,
+          getRecentMember.key,
+          getUserFamily.key,
+          getWaitListMembers.key,
+          getFamilyAndWaitListMembers.key,
+          getUserPets.key,
+        ],
+      });
     } else {
-      await familyRemoveFromWaitList({
+      const family = await familyRemoveFromWaitList({
         familyOwnerId: user.userId,
         waitListMemberId: data.userId,
       });
+      return json(family, {
+        revalidate: [
+          getRecentMember.key,
+          getWaitListMembers.key,
+          getFamilyAndWaitListMembers.key,
+        ],
+      });
     }
-
-    return json(data, {
-      revalidate: [
-        getFamilyMembers.key,
-        getRecentMember.key,
-        getUserFamily.key,
-        getFamilyAndWaitListMembers.key,
-      ],
-    });
   } catch (error) {
     if (error instanceof ValiError) {
       return json({ errors: translateErrorTokens(error) }, { status: 422 });

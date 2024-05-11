@@ -1,6 +1,6 @@
 'use server';
 
-import { eq, inArray, or } from 'drizzle-orm';
+import { desc, eq, inArray, or } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
 import {
@@ -51,6 +51,10 @@ export async function userPets(userId: DatabaseUser['id']) {
       ),
     )
     .leftJoin(userTable, eq(userTable.id, petTable.ownerId))
-    .orderBy(petTable.ownerId, petTable.createdAt)
+    .orderBy(
+      desc(eq(petTable.ownerId, userId)),
+      petTable.ownerId,
+      petTable.createdAt,
+    )
     .all();
 }

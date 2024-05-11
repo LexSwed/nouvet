@@ -18,12 +18,12 @@ export async function familyRemoveFromWaitList(params: {
   const db = useDb();
 
   const family = await db
-    .select({ id: familyTable.id })
+    .select({ familyId: familyTable.id })
     .from(familyTable)
     .where(eq(familyTable.ownerId, params.familyOwnerId))
     .get();
 
-  if (!family?.id) {
+  if (!family?.familyId) {
     throw new NotAllowedToPerformFamilyAction(
       `Invalid owner ${params.familyOwnerId}`,
     );
@@ -33,7 +33,7 @@ export async function familyRemoveFromWaitList(params: {
     .delete(familyWaitListTable)
     .where(
       and(
-        eq(familyWaitListTable.familyId, family.id),
+        eq(familyWaitListTable.familyId, family.familyId),
         eq(familyWaitListTable.userId, params.waitListMemberId),
       ),
     )
