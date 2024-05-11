@@ -15,6 +15,7 @@
   "account-menu.support": "Report a bug",
   "account-menu.logout": "Log Out",
   "pet-list": "Your pets",
+  "pet-owner-no-name": "Owner's profile",
   "add-another": "Add another pet",
   "go-to-pet-page": "Update {{petName}} details",
   "pet-menu.edit-info": "Edit info",

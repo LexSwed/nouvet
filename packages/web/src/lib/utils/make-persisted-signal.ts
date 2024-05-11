@@ -2,6 +2,8 @@ import { cache, createAsync, revalidate } from '@solidjs/router';
 import { type Accessor, type Setter } from 'solid-js';
 import { isServer } from 'solid-js/web';
 
+import { startViewTransition } from './start-view-transition';
+
 const parseDocumentCookie = () =>
   Object.fromEntries(
     document.cookie
@@ -60,11 +62,7 @@ export function createPersistedSetting<
     const newValue: T = typeof value === 'function' ? value(cookie()) : value;
 
     document.cookie = `${name}=${serialize(newValue)};max-age=${60 * 60 * 24 * (params?.maxAgeInDays ?? 180)}`;
-    if (!document.startViewTransition) {
-      revalidate(setting.keyFor(name));
-      return;
-    }
-    document.startViewTransition(() => {
+    startViewTransition(() => {
       revalidate(setting.keyFor(name));
     });
   };

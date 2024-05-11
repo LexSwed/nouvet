@@ -80,7 +80,10 @@ const UserPets = () => {
             <For each={pets()}>
               {(pet) => (
                 <li>
-                  <PetHomeCard pet={pet} />
+                  <PetHomeCard
+                    pet={pet}
+                    owner={user()?.id === pet.owner?.id ? undefined : pet.owner}
+                  />
                 </li>
               )}
             </For>
