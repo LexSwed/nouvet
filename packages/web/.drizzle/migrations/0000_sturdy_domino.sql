@@ -19,9 +19,9 @@ CREATE TABLE `event` (
 );
 --> statement-breakpoint
 CREATE TABLE `family_invite` (
+	`invite_code` text(20) PRIMARY KEY NOT NULL,
 	`inviter_id` integer NOT NULL,
 	`expires_at` integer NOT NULL,
-	`invite_code` text(20) PRIMARY KEY NOT NULL,
 	`invitation_hash` text(64) NOT NULL,
 	FOREIGN KEY (`inviter_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );

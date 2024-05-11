@@ -11,6 +11,7 @@
     "format": "prettier . --write",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "npx tsx .drizzle/migrate.ts --env-file=.env",
+    "db:seed": "npx tsx .drizzle/seed.ts --env-file=.env",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio --port=3001"
   },
@@ -44,6 +45,7 @@
     "vinxi": "0.3.11"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@nou/config": "^1.0.0",
     "@types/better-sqlite3": "^7.6.10",
     "dotenv": "^16.4.5",

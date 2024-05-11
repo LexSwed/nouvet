@@ -1,12 +1,12 @@
 {
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1715011661260,
-      "tag": "0000_whole_mandroid",
+      "version": "6",
+      "when": 1715424691892,
+      "tag": "0000_sturdy_domino",
       "breakpoints": true
     }
   ]

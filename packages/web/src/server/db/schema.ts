@@ -5,7 +5,6 @@ import {
   primaryKey,
   sqliteTable,
   text,
-  type AnySQLiteColumn,
 } from 'drizzle-orm/sqlite-core';
 
 export const familyTable = sqliteTable(
@@ -15,12 +14,12 @@ export const familyTable = sqliteTable(
     name: text('name', { length: 100 }),
     ownerId: integer('owner_id')
       .notNull()
-      .references((): AnySQLiteColumn => userTable.id),
+      .references(() => userTable.id),
     createdAt: utcDatetime('created_at'),
   },
   (table) => {
     return {
-      hashIdx: index('owner_idx').on(table.ownerId),
+      ownerIdx: index('owner_idx').on(table.ownerId),
     };
   },
 );
@@ -32,6 +31,14 @@ export const familyTable = sqliteTable(
 export const familyInviteTable = sqliteTable(
   'family_invite',
   {
+    /**
+     * Invitation code
+     */
+    inviteCode: text('invite_code', { length: 20 }).notNull().primaryKey(),
+    /**
+     * User who created the invite.
+     * TODO: enforce connection with family to make sure only owners can create invites.
+     */
     inviterId: integer('inviter_id')
       .notNull()
       .references(() => userTable.id),
@@ -39,10 +46,6 @@ export const familyInviteTable = sqliteTable(
      * UNIX timestamp in **seconds**.
      */
     expiresAt: integer('expires_at').notNull(),
-    /**
-     * Invitation code
-     */
-    inviteCode: text('invite_code', { length: 20 }).notNull().primaryKey(),
     /**
      * QR Code hash. Since QR codes allow to join the family directly, users with just
      * invite code could avoid approval by hitting a different endpoint with the
@@ -71,7 +74,8 @@ export const familyUserTable = sqliteTable(
   (table) => {
     return {
       pk: primaryKey({
-        columns: [table.familyId, table.userId],
+        // user id comes first as it's the most common way of requesting the family
+        columns: [table.userId, table.familyId],
       }),
     };
   },
@@ -91,7 +95,8 @@ export const familyWaitListTable = sqliteTable(
   (table) => {
     return {
       pk: primaryKey({
-        columns: [table.familyId, table.userId],
+        // user id comes first as it's the most common way of requesting the family
+        columns: [table.userId, table.familyId],
       }),
     };
   },
