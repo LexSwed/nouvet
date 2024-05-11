@@ -1,8 +1,6 @@
 {
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
-  "id": "abacba63-8048-44e4-9694-0533a827c9d9",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "oauth_account": {
       "name": "oauth_account",
@@ -34,15 +32,15 @@
         "oauth_account_user_id_user_id_fk": {
           "name": "oauth_account_user_id_user_id_fk",
           "tableFrom": "oauth_account",
-          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -115,28 +113,28 @@
         "event_pet_id_pet_id_fk": {
           "name": "event_pet_id_pet_id_fk",
           "tableFrom": "event",
-          "tableTo": "pet",
           "columnsFrom": [
             "pet_id"
           ],
+          "tableTo": "pet",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "event_creator_id_user_id_fk": {
           "name": "event_creator_id_user_id_fk",
           "tableFrom": "event",
-          "tableTo": "user",
           "columnsFrom": [
             "creator_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -187,15 +185,15 @@
         "family_invite_inviter_id_user_id_fk": {
           "name": "family_invite_inviter_id_user_id_fk",
           "tableFrom": "family_invite",
-          "tableTo": "user",
           "columnsFrom": [
             "inviter_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -247,15 +245,15 @@
         "family_owner_id_user_id_fk": {
           "name": "family_owner_id_user_id_fk",
           "tableFrom": "family",
-          "tableTo": "user",
           "columnsFrom": [
             "owner_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -292,28 +290,28 @@
         "family_user_family_id_family_id_fk": {
           "name": "family_user_family_id_family_id_fk",
           "tableFrom": "family_user",
-          "tableTo": "family",
           "columnsFrom": [
             "family_id"
           ],
+          "tableTo": "family",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "family_user_user_id_user_id_fk": {
           "name": "family_user_user_id_user_id_fk",
           "tableFrom": "family_user",
-          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -358,28 +356,28 @@
         "family_wait_list_family_id_family_id_fk": {
           "name": "family_wait_list_family_id_family_id_fk",
           "tableFrom": "family_wait_list",
-          "tableTo": "family",
           "columnsFrom": [
             "family_id"
           ],
+          "tableTo": "family",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "family_wait_list_user_id_user_id_fk": {
           "name": "family_wait_list_user_id_user_id_fk",
           "tableFrom": "family_wait_list",
-          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -487,15 +485,15 @@
         "pet_owner_id_user_id_fk": {
           "name": "pet_owner_id_user_id_fk",
           "tableFrom": "pet",
-          "tableTo": "user",
           "columnsFrom": [
             "owner_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -539,28 +537,28 @@
         "reminder_creator_id_user_id_fk": {
           "name": "reminder_creator_id_user_id_fk",
           "tableFrom": "reminder",
-          "tableTo": "user",
           "columnsFrom": [
             "creator_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "reminder_pet_id_pet_id_fk": {
           "name": "reminder_pet_id_pet_id_fk",
           "tableFrom": "reminder",
-          "tableTo": "pet",
           "columnsFrom": [
             "pet_id"
           ],
+          "tableTo": "pet",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -596,15 +594,15 @@
         "user_session_user_id_user_id_fk": {
           "name": "user_session_user_id_user_id_fk",
           "tableFrom": "user_session",
-          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -665,8 +663,9 @@
   },
   "enums": {},
   "_meta": {
-    "schemas": {},
     "tables": {},
     "columns": {}
-  }
+  },
+  "id": "abacba63-8048-44e4-9694-0533a827c9d9",
+  "prevId": "00000000-0000-0000-0000-000000000000"
 }

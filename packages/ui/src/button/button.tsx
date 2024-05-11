@@ -109,7 +109,7 @@ export const buttonVariants = cva(
         variant: 'tonal',
         tone: 'destructive',
         class:
-          'bg-error-container text-on-error-container intent:bg-error-container/90 [--btn-bg:theme(colors.error-container)]',
+          'text-error bg-error/5 hover:bg-error/8 focus:bg-error/12 [--btn-bg:theme(colors.error/0.05)]',
       },
       {
         split: false,

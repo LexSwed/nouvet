@@ -14,11 +14,7 @@ import {
   joinFamilyWithLink,
 } from '~/server/api/family-invite';
 import { getUserProfile } from '~/server/api/user';
-import {
-  IncorrectFamilyInvite,
-  isErrorResponse,
-  UserAlreadyInFamily,
-} from '~/server/errors';
+import { isErrorResponse, UserAlreadyInFamily } from '~/server/errors';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
 
 import { AccountMenu } from '~/lib/account-menu';

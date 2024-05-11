@@ -17,7 +17,6 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
   const recentMember = createAsync(async () =>
     isOwner() ? getRecentMember() : null,
   );
-  const isFamilyUrl = useMatch(() => '/app/family');
 
   return (
     <div class="flex flex-col gap-6">
@@ -46,37 +45,14 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
             </Show>
           </Match>
           <Match when={recentMember()?.isApproved}>
-            <div class="flex flex-col gap-6">
-              <div class="flex flex-row items-end gap-4">
-                <div class="flex-[2]">
-                  <FamilyNameForm familyName={user()?.family?.name} />
-                </div>
-                <Show when={!isFamilyUrl()}>
-                  <ButtonLink href="/app/family" icon variant="ghost">
-                    <Icon use="arrow-up-right" size="md" />
-                  </ButtonLink>
-                </Show>
-              </div>
-              <Card variant="outlined" tone="primary-light">
-                <div class="flex flex-col gap-2">
-                  <div class="flex flex-row items-center justify-start gap-3">
-                    <Avatar
-                      avatarUrl={recentMember()!.avatarUrl || ''}
-                      name={recentMember()!.name || ''}
-                    />
-                    <Text with="label-lg">{recentMember()!.name}</Text>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    tone="destructive"
-                    size="sm"
-                    class="self-end"
-                  >
-                    {t('invite.waitlist-joined-cancel')}
-                  </Button>
-                </div>
-              </Card>
-            </div>
+            <Show when={recentMember()}>
+              {(member) => (
+                <NewlyJoinedMember
+                  familyName={user()?.family?.name}
+                  member={member()}
+                />
+              )}
+            </Show>
           </Match>
         </Switch>
         <Button
@@ -90,6 +66,53 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
           {t('invite.waitlist-done')}
         </Button>
       </Suspense>
+    </div>
+  );
+};
+
+const NewlyJoinedMember = (props: {
+  familyName: string | null | undefined;
+  member: {
+    isApproved: boolean;
+    id: number;
+    name: string | null;
+    avatarUrl: string | null;
+  };
+}) => {
+  const t = createTranslator('family');
+  const isFamilyUrl = useMatch(() => '/app/family');
+
+  return (
+    <div class="flex flex-col gap-6">
+      <div class="flex flex-row items-end gap-4">
+        <div class="flex-[2]">
+          <FamilyNameForm familyName={props.familyName} />
+        </div>
+        <Show when={!isFamilyUrl()}>
+          <ButtonLink href="/app/family" icon variant="ghost">
+            <Icon use="arrow-up-right" size="md" />
+          </ButtonLink>
+        </Show>
+      </div>
+      <Card variant="outlined" tone="primary-light" class="bg-main">
+        <div class="flex flex-col gap-2">
+          <div class="flex flex-row items-center justify-start gap-3">
+            <Avatar
+              avatarUrl={props.member.avatarUrl || ''}
+              name={props.member.name || ''}
+            />
+            <Text with="label-lg">{props.member.name}</Text>
+          </div>
+          <Button
+            variant="ghost"
+            tone="destructive"
+            size="sm"
+            class="-mb-1 self-end"
+          >
+            {t('invite.waitlist-joined-cancel')}
+          </Button>
+        </div>
+      </Card>
     </div>
   );
 };

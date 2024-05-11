@@ -76,6 +76,7 @@ export async function recentFamilyMember(userId: DatabaseUser['id']) {
     )
     .leftJoin(familyUserTable, eq(familyUserTable.userId, userTable.id))
     .leftJoin(familyWaitListTable, eq(familyWaitListTable.userId, userTable.id))
+    .orderBy(familyWaitListTable.joinedAt, familyUserTable.joinedAt)
     .get();
 
   if (!user) return null;
