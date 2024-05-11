@@ -10,7 +10,9 @@ import { GenderSwitch } from '~/lib/animal-type/animal-type';
 
 import { FormErrorMessage } from './form-error-message';
 
-function CreateNewPetForm(props: { onSuccess?: () => void }) {
+function CreateNewPetForm(props: {
+  onSuccess?: (pet: { name: string; id: number }) => void;
+}) {
   const t = createTranslator('pet-forms');
   const petSubmission = useSubmission(createPet);
 
@@ -22,13 +24,13 @@ function CreateNewPetForm(props: { onSuccess?: () => void }) {
 
   createEffect(() => {
     if (petSubmission.result && 'pet' in petSubmission.result) {
-      props.onSuccess?.();
+      props.onSuccess?.(petSubmission.result.pet);
     }
   });
 
   return (
     <Form
-      aria-labelledby="new-pet"
+      aria-labelledby="new-pet-headline"
       class="flex flex-col gap-6"
       action={createPet}
       validationErrors={
@@ -39,7 +41,7 @@ function CreateNewPetForm(props: { onSuccess?: () => void }) {
       method="post"
       aria-errormessage="error-message"
     >
-      <Text with="headline-2" as="h3" id="new-pet">
+      <Text with="headline-2" as="h3" id="new-pet-headline" class="ps-2">
         {t('new-pet-heading')}
       </Text>
       <TextField

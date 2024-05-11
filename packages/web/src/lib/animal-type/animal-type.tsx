@@ -59,7 +59,7 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
         {(item) => {
           return (
             <RadioCard
-              class="basis-32 snap-start will-change-[flex-basis] last-of-type:snap-end has-[input:checked]:basis-36"
+              class="basis-[8.5rem] snap-start will-change-[flex-basis] last-of-type:snap-end has-[input:checked]:basis-[9.25rem]"
               name={props.name}
               value={item.value}
               label={item.label}
@@ -113,7 +113,7 @@ const GenderRadio = (props: { name: string; value: string; label: string }) => {
     <label
       class={tw(
         cssStyles.genderSwitchLabel,
-        'relative text-on-surface border-2 border-on-surface/5 rounded-md has-[input:checked]:rounded-2xl py-1 grid place-items-center h-16 px-2 text-center transition-all duration-200',
+        'relative text-on-surface border-2 border-on-surface/5 rounded-md has-[input:checked]:rounded-2xl py-1 grid place-items-center h-16 px-2 text-center transition-colors duration-200',
       )}
     >
       <input

@@ -14,6 +14,7 @@
   "account-menu.pwa-description": "Use NouVet without the internet, making the access faster and enabling more features.",
   "account-menu.support": "Report a bug",
   "account-menu.logout": "Log Out",
+  "pet-list": "Your pets",
   "add-another": "Add another pet",
   "go-to-pet-page": "Update {{petName}} details",
   "pet-menu.edit-info": "Edit info",

@@ -49,6 +49,7 @@ export async function petCreate(
   const pet = await db
     .insert(petTable)
     .values({ ...petInfo, ownerId: userId })
-    .returning({ id: petTable.id, name: petTable.name, type: petTable.type });
+    .returning({ id: petTable.id, name: petTable.name, type: petTable.type })
+    .get();
   return pet;
 }

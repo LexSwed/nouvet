@@ -62,6 +62,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
         variant="ghost"
         class="-m-4 h-auto cursor-pointer justify-start rounded-2xl p-3"
         popoverTarget={petPopoverId}
+        id={`pet-${props.pet.id}`}
       >
         <div class="flex flex-row items-center gap-4">
           <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">

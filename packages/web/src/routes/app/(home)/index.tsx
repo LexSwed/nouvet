@@ -1,9 +1,22 @@
-import { createAsync, type RouteDefinition } from '@solidjs/router';
+import {
+  createAsync,
+  useSubmission,
+  type RouteDefinition,
+} from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
-import { For, lazy, Match, Show, Suspense, Switch } from 'solid-js';
+import {
+  createEffect,
+  createUniqueId,
+  For,
+  lazy,
+  Match,
+  Show,
+  Suspense,
+  Switch,
+} from 'solid-js';
 import { Button, Card, Icon } from '@nou/ui';
 
-import { getUserPets } from '~/server/api/pet';
+import { createPet, getUserPets } from '~/server/api/pet';
 import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
 
@@ -36,54 +49,75 @@ const AppHomePage = () => {
 export default AppHomePage;
 
 const UserPets = () => {
+  const headingId = createUniqueId();
+
   const t = createTranslator('app');
   const pets = createAsync(() => getUserPets());
   const user = createAsync(() => getUserFamily());
   const hasPets = () => (pets()?.length ?? 0) > 0;
+
+  const createPetSubmission = useSubmission(createPet);
+
+  createEffect(() => {
+    if (createPetSubmission.result && 'pet' in createPetSubmission.result) {
+      document
+        .getElementById(`pet-${createPetSubmission.result.pet.id}`)
+        ?.focus();
+    }
+  });
+
   return (
     <Switch>
       <Match when={hasPets()}>
-        <ul class="overflow-snap -mx-4 -my-2 flex scroll-px-4 flex-row items-stretch gap-4 px-4 py-2">
-          <For each={pets()}>
-            {(pet) => (
-              <li>
-                <PetHomeCard pet={pet} />
-              </li>
-            )}
-          </For>
-          <li class="self-center">
-            <Button
-              label={t('add-another')}
-              size="base"
-              class="bg-on-surface/5"
-              icon
-              variant="ghost"
-              popoverTarget="create-new-pet-drawer"
-            >
-              <Icon use="plus" size="sm" />
-            </Button>
-            <Drawer
-              id="create-new-pet-drawer"
-              placement="center"
-              role="dialog"
-              class="md:max-w-[420px]"
-            >
-              {(open) => (
-                <Show when={open()}>
-                  <Suspense>
-                    <CreateNewPetForm
-                      onSuccess={() => {
-                        document
-                          .getElementById('create-new-pet-drawer')
-                          ?.hidePopover();
-                      }}
-                    />
-                  </Suspense>
-                </Show>
+        <div>
+          <h2 id={headingId} class="sr-only">
+            {t('pet-list')}
+          </h2>
+          <ul
+            class="overflow-snap -mx-4 -my-2 flex scroll-px-4 flex-row items-stretch gap-4 px-4 py-2"
+            aria-labelledby={headingId}
+          >
+            <For each={pets()}>
+              {(pet) => (
+                <li>
+                  <PetHomeCard pet={pet} />
+                </li>
               )}
-            </Drawer>
-          </li>
-        </ul>
+            </For>
+            <li class="self-center">
+              <Button
+                label={t('add-another')}
+                size="base"
+                class="bg-on-surface/5"
+                icon
+                variant="ghost"
+                popoverTarget="create-new-pet-drawer"
+              >
+                <Icon use="plus" size="sm" />
+              </Button>
+              <Drawer
+                id="create-new-pet-drawer"
+                placement="center"
+                role="dialog"
+                class="md:max-w-[420px]"
+              >
+                {(open) => (
+                  <Show when={open()}>
+                    <Suspense>
+                      <CreateNewPetForm
+                        onSuccess={() => {
+                          document
+                            .getElementById('create-new-pet-drawer')
+                            ?.hidePopover();
+                        }}
+                      />
+                    </Suspense>
+                  </Show>
+                )}
+              </Drawer>
+            </li>
+          </ul>
+        </div>
       </Match>
       <Match when={!hasPets()}>
         <Card class="flex max-w-[460px] flex-col gap-6 p-4">

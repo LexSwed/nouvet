@@ -14,7 +14,7 @@ import {
 
 import { useLucia } from '~/server/auth/lucia';
 import { SESSION_COOKIE } from '~/server/const';
-import type { DatabaseUserProfile } from '~/server/db/schema';
+import type { DatabaseUser } from '~/server/db/schema';
 
 import { env } from '../env';
 
@@ -116,6 +116,7 @@ export async function useUserSession() {
     password: env.SESSION_SECRET,
   });
   if (!session.data) {
+    await deleteUserSession();
     throw sendRedirect('/app/login');
   }
   return session;
@@ -127,7 +128,7 @@ const userCookieSchema = object({
   locale: string('locale cannot be empty'),
   // timeZone: date(),
   measurementSystem: picklist(['imperial', 'metrical'] as const satisfies Array<
-    DatabaseUserProfile['measurementSystem']
+    DatabaseUser['measurementSystem']
   >),
 });
 
