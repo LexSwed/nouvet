@@ -9,6 +9,7 @@ import {
   Button,
   ButtonLink,
   Card,
+  Divider,
   Drawer,
   Form,
   Icon,
@@ -24,7 +25,7 @@ import {
   getFamilyMembers,
 } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
-import { cacheTranslations, createTranslator } from '~/server/i18n';
+import { cacheTranslations, createTranslator, T } from '~/server/i18n';
 
 import { AppHeader } from '~/lib/app-header';
 import { FamilyNameForm } from '~/lib/family-invite/family-name-form';
@@ -113,7 +114,51 @@ function FamilyPage() {
                 </div>
               )}
             </Match>
-            <Match when={user() && !user()!.family}>No family UI</Match>
+            <Match when={user() && !user()!.family}>
+              <section aria-labelledby="no-family-headline" class="container">
+                <Card class="bg-main flex flex-col gap-12 p-8 sm:flex-row">
+                  <div class="flex h-full max-w-[700px] flex-col justify-between gap-8">
+                    <Text as="h1" with="headline-1" id="no-family-headline">
+                      {t('family-feature.headline')}
+                    </Text>
+                    <Text as="p">{t('family-feature.description')}</Text>
+                    <ul class="bg-surface flex flex-col gap-4 rounded-2xl p-4">
+                      <Text as="li">
+                        <T>{t('family-feature.1')}</T>
+                      </Text>
+                      <Divider />
+                      <Text as="li">
+                        <T>{t('family-feature.2')}</T>
+                      </Text>
+                      <Divider />
+                      <Text as="li">
+                        <T>{t('family-feature.3')}</T>
+                      </Text>
+                      <Divider />
+                      <Text as="li">
+                        <T>{t('family-feature.4')}</T>
+                      </Text>
+                    </ul>
+                    <Button
+                      class="w-[300px] self-center"
+                      popoverTarget="family-feature-invite"
+                    >
+                      {t('invite-cta')}
+                    </Button>
+                  </div>
+                  <Image
+                    src="/assets/images/alec-favale-Ivzo69e18nk-unsplash.jpg"
+                    alt=""
+                    aspectRatio="auto"
+                    width={600}
+                    class="-my-4 -me-4 hidden rounded-2xl sm:block"
+                  />
+                </Card>
+              </section>
+              <Suspense>
+                <FamilyInviteDialog id="family-feature-invite" />
+              </Suspense>
+            </Match>
           </Switch>
         </Suspense>
       </div>
@@ -196,7 +241,7 @@ function FamilyHeader() {
                   type="button"
                 >
                   <Icon use="sign-out" />
-                  Leave family
+                  {t('member.leave-family')}
                 </MenuItem>
               </Menu>
               <Drawer id="family-leave" placement="center">

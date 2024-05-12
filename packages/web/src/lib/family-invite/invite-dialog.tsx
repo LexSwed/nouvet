@@ -93,15 +93,17 @@ const InviteDialogContent = (ownProps: {
         >
           <Switch>
             <Match when={step() === 'initial'}>
-              {t('invite.aria-initial')}
+              {t('invite.step-aria-initial')}
             </Match>
-            <Match when={step() === 'qrcode'}>{t('invite.aria-qrcode')}</Match>
+            <Match when={step() === 'qrcode'}>
+              {t('invite.step-aria-qrcode')}
+            </Match>
             <Match when={step() === 'waitlist'}>
-              {t('invite.aria-waitlist')}
+              {t('invite.step-aria-waitlist')}
             </Match>
-            <Match when={step() === 'join'}>{t('invite.aria-join')}</Match>
+            <Match when={step() === 'join'}>{t('invite.step-aria-join')}</Match>
             <Match when={step() === 'join-success'}>
-              {t('invite.aria-join-success')}
+              {t('invite.step-aria-join-success')}
             </Match>
           </Switch>
         </Text>

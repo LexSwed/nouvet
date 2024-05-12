@@ -1,6 +1,9 @@
 import { tw } from '@nou/ui';
 
-export const FamilyInviteBenefits = (props: { class?: string }) => {
+export const FamilyInviteBenefits = (props: {
+  class?: string;
+  orientation?: 'horizontal' | 'vertical';
+}) => {
   /* TODO: insert screenshots of future features:
   - shared reminders and actions
   - shared notes

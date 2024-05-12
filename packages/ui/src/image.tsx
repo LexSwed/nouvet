@@ -51,12 +51,14 @@ function Image(ownProps: ImageProps) {
     );
     const props: ComponentProps<'img'> = {};
 
-    props.srcSet = steps.reduce((srcSet, w) => {
-      const wurl = new URL(url);
-      wurl.searchParams.set('w', `${w}`);
-      srcSet += `, ${wurl.toString()} ${w}w`;
-      return srcSet;
-    }, '');
+    props.srcSet = steps
+      .reduce((srcSet, w) => {
+        const wurl = new URL(url);
+        wurl.searchParams.set('w', `${w}`);
+        srcSet.push(`${wurl.toString()} ${w}w`);
+        return srcSet;
+      }, [] as Array<string>)
+      .join(', ');
     if (props.width) {
       props.sizes = `(min-width: ${props.width}px) ${props.width}px, 100vw`;
     }
