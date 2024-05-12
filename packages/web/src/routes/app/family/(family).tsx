@@ -19,11 +19,7 @@ import {
   Text,
 } from '@nou/ui';
 
-import {
-  cancelFamilyJoin,
-  getFamilyAndWaitListMembers,
-  getFamilyMembers,
-} from '~/server/api/family';
+import { cancelFamilyJoin, getFamilyMembers } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator, T } from '~/server/i18n';
 
@@ -46,10 +42,10 @@ function FamilyPage() {
   const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
   const isOwner = () => user()?.family?.role === 'owner' || false;
-  const familyMembers = createAsync(async () => getFamilyAndWaitListMembers());
+  const familyMembers = createAsync(async () => getFamilyMembers());
   const awaitingUser = () => {
     if (!isOwner) return null;
-    return familyMembers()?.waitList[0];
+    return familyMembers()?.find((m) => !m.isApproved);
   };
   return (
     <>
@@ -92,74 +88,32 @@ function FamilyPage() {
                       </Match>
                       <Match
                         when={
-                          familyMembers()
-                            ? familyMembers()!.members!.length > 0
-                            : false
+                          familyMembers() ? familyMembers()!.length > 0 : false
                         }
                       >
                         Render users!
                       </Match>
                       <Match
                         when={
-                          isOwner() && familyMembers()?.members.length === 0
+                          isOwner() &&
+                          familyMembers() &&
+                          familyMembers()!.length === 0
                         }
                       >
                         <EmptyFamily />
                       </Match>
                     </Switch>
                   </section>
-                  <Suspense>
-                    <FamilyInviteDialog id="family-invite" />
-                  </Suspense>
                 </div>
               )}
             </Match>
             <Match when={user() && !user()!.family}>
-              <section aria-labelledby="no-family-headline" class="container">
-                <Card class="bg-main flex flex-col gap-12 p-8 sm:flex-row">
-                  <div class="flex h-full max-w-[700px] flex-col justify-between gap-8">
-                    <Text as="h1" with="headline-1" id="no-family-headline">
-                      {t('family-feature.headline')}
-                    </Text>
-                    <Text as="p">{t('family-feature.description')}</Text>
-                    <ul class="bg-surface flex flex-col gap-4 rounded-2xl p-4">
-                      <Text as="li">
-                        <T>{t('family-feature.1')}</T>
-                      </Text>
-                      <Divider />
-                      <Text as="li">
-                        <T>{t('family-feature.2')}</T>
-                      </Text>
-                      <Divider />
-                      <Text as="li">
-                        <T>{t('family-feature.3')}</T>
-                      </Text>
-                      <Divider />
-                      <Text as="li">
-                        <T>{t('family-feature.4')}</T>
-                      </Text>
-                    </ul>
-                    <Button
-                      class="w-[300px] self-center"
-                      popoverTarget="family-feature-invite"
-                    >
-                      {t('invite-cta')}
-                    </Button>
-                  </div>
-                  <Image
-                    src="/assets/images/alec-favale-Ivzo69e18nk-unsplash.jpg"
-                    alt=""
-                    aspectRatio="auto"
-                    width={600}
-                    class="-my-4 -me-4 hidden rounded-2xl sm:block"
-                  />
-                </Card>
-              </section>
-              <Suspense>
-                <FamilyInviteDialog id="family-feature-invite" />
-              </Suspense>
+              <DiscoveredFamilyFeature />
             </Match>
           </Switch>
+        </Suspense>
+        <Suspense>
+          <FamilyInviteDialog id="family-invite" />
         </Suspense>
       </div>
     </>
@@ -312,30 +266,32 @@ function WaitingApproval() {
   const t = createTranslator('family');
   const cancelJoinSubmission = useSubmission(cancelFamilyJoin);
   return (
-    <div class="flex flex-col items-start gap-4 md:flex-row">
-      <Card class="max-w-[400px]">
-        <Text as="p" with="headline-3">
-          {t('waiting.headline')}
-        </Text>
-        <Text as="p">{t('waiting.description')}</Text>
-        <div class="self-end">
-          <Button
-            variant="ghost"
-            tone="destructive"
-            size="sm"
-            popoverTarget="cancel-join-drawer"
-          >
-            {t('waiting.cancel-join-cta')}
-          </Button>
+    <>
+      <Card class="bg-main flex flex-col items-center gap-4 p-8 sm:flex-row">
+        <div class="flex flex-col gap-6">
+          <Text as="h2" with="headline-2">
+            {t('waiting.headline')}
+          </Text>
+          <Text as="p">{t('waiting.description')}</Text>
+          <div class="self-end">
+            <Button
+              variant="tonal"
+              tone="destructive"
+              popoverTarget="cancel-join-drawer"
+            >
+              {t('waiting.cancel-join-cta')}
+            </Button>
+          </div>
         </div>
+
+        <Image
+          src="/assets/images/barthelemy-de-mazenod-iw0SowaRxeY-unsplash.jpg"
+          width={300}
+          aspectRatio="4/3"
+          alt={t('waiting.image')!}
+          class="-my-4 -me-4 w-[400px] rounded-3xl md:w-[600px]"
+        />
       </Card>
-      <Image
-        src="/assets/images/barthelemy-de-mazenod-iw0SowaRxeY-unsplash.jpg"
-        width={300}
-        aspectRatio="4/3"
-        alt={t('waiting.image')!}
-        class="w-[400px] self-end rounded-3xl md:w-[600px]"
-      />
       <Drawer
         id="cancel-join-drawer"
         placement="center"
@@ -375,7 +331,7 @@ function WaitingApproval() {
           </Show>
         )}
       </Drawer>
-    </div>
+    </>
   );
 }
 
@@ -400,5 +356,50 @@ function EmptyFamily() {
         />
       </div>
     </div>
+  );
+}
+
+function DiscoveredFamilyFeature() {
+  const t = createTranslator('family');
+  return (
+    <>
+      <section aria-labelledby="no-family-headline" class="container">
+        <Card class="bg-main flex flex-col gap-12 sm:p-8 md:flex-row">
+          <div class="flex h-full max-w-[700px] flex-col justify-between gap-6">
+            <Text as="h1" with="headline-1" id="no-family-headline">
+              {t('family-feature.headline')}
+            </Text>
+            <Text as="p">{t('family-feature.description')}</Text>
+            <ul class="bg-surface flex flex-col gap-3 rounded-2xl p-3">
+              <Text as="li">
+                <T>{t('family-feature.1')}</T>
+              </Text>
+              <Divider />
+              <Text as="li">
+                <T>{t('family-feature.2')}</T>
+              </Text>
+              <Divider />
+              <Text as="li">
+                <T>{t('family-feature.3')}</T>
+              </Text>
+              <Divider />
+              <Text as="li">
+                <T>{t('family-feature.4')}</T>
+              </Text>
+            </ul>
+            <Button class="w-[300px] self-center" popoverTarget="family-invite">
+              {t('invite-cta')}
+            </Button>
+          </div>
+          <Image
+            src="/assets/images/alec-favale-Ivzo69e18nk-unsplash.jpg"
+            alt=""
+            aspectRatio="auto"
+            width={600}
+            class="-my-4 -me-4 hidden rounded-2xl md:block"
+          />
+        </Card>
+      </section>
+    </>
   );
 }

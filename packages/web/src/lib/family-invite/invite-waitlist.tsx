@@ -1,8 +1,10 @@
 import { createAsync, revalidate, useMatch } from '@solidjs/router';
-import { Match, Show, Suspense, Switch } from 'solid-js';
+import { Match, onMount, Show, Suspense, Switch } from 'solid-js';
 import { Avatar, Button, ButtonLink, Card, Icon, Text } from '@nou/ui';
+import { UTCDate } from '@date-fns/utc';
+import { differenceInMinutes } from 'date-fns/differenceInMinutes';
 
-import { getRecentMember } from '~/server/api/family';
+import { getFamilyMembers } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
 import { createTranslator } from '~/server/i18n';
 
@@ -13,7 +15,23 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
   const t = createTranslator('family');
 
   const user = createAsync(() => getUserFamily());
-  const recentMember = createAsync(async () => getRecentMember());
+
+  // ensure we call update
+  onMount(() => {
+    revalidate(getFamilyMembers.key);
+  });
+
+  const recentMember = createAsync(async () => {
+    const members = await getFamilyMembers();
+    return (
+      members.find((member) => !member.isApproved) ||
+      members.find((member) => {
+        return (
+          differenceInMinutes(new UTCDate(), new UTCDate(member.joinedAt)) < 60
+        );
+      })
+    );
+  });
 
   return (
     <div class="flex flex-col gap-6">
@@ -54,9 +72,6 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
         </Switch>
         <Button
           onClick={() => {
-            if (recentMember()) {
-              revalidate(getUserFamily.key);
-            }
             props.onNext();
           }}
         >

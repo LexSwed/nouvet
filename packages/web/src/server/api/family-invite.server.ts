@@ -22,18 +22,13 @@ import {
   requestFamilyAdmissionByInviteCode,
 } from '~/server/db/queries/familyJoin';
 import { env } from '~/server/env';
-import { IncorrectFamilyInvite } from '~/server/errors';
+import { IncorrectFamilyInvite, InviteeNotInWaitList } from '~/server/errors';
 
 import { acceptUserToFamily } from '../db/queries/familyAcceptUser';
 import { familyRemoveFromWaitList } from '../db/queries/familyRemoveFromWaitList';
 import { translateErrorTokens } from '../utils';
 
-import {
-  getFamilyAndWaitListMembers,
-  getFamilyMembers,
-  getRecentMember,
-  getWaitListMembers,
-} from './family';
+import { getFamilyMembers } from './family';
 import { getUserPets } from './pet';
 import { getUserFamily } from './user';
 
@@ -68,7 +63,10 @@ export async function getFamilyInviteServer() {
     };
   } catch (error) {
     console.error(error);
-    return { failed: true };
+    return json(
+      { error: 'Something went wrong' },
+      { revalidate: [], status: 500 },
+    );
   }
 }
 
@@ -90,7 +88,7 @@ export const checkFamilyInviteServer = async (inviteCode: string) => {
       {
         error,
       },
-      { status: 400 },
+      { status: 400, revalidate: [] },
     );
   }
 };
@@ -112,7 +110,10 @@ export const joinFamilyWithLinkServer = async (formData: FormData) => {
     return redirect(`/app/family`);
   } catch (error) {
     console.error(error);
-    return json({ error: 'Something went wrong' }, { status: 500 });
+    return json(
+      { error: 'Something went wrong' },
+      { status: 500, revalidate: [] },
+    );
   }
 };
 
@@ -134,7 +135,10 @@ export const joinFamilyWithQRCodeServer = async (invitationHash: string) => {
     /** Revalidation happens after user sees the success dialog */
     return json(family, { revalidate: [] });
   } catch (error) {
-    return json({ error: 'Something went wrong' }, { status: 500 });
+    return json(
+      { error: 'Something went wrong' },
+      { status: 500, revalidate: [] },
+    );
   }
 };
 
@@ -157,14 +161,7 @@ export const moveUserFromTheWaitListServer = async (formData: FormData) => {
       });
 
       return json(family, {
-        revalidate: [
-          getFamilyMembers.key,
-          getRecentMember.key,
-          getUserFamily.key,
-          getWaitListMembers.key,
-          getFamilyAndWaitListMembers.key,
-          getUserPets.key,
-        ],
+        revalidate: [getFamilyMembers.key, getUserFamily.key, getUserPets.key],
       });
     } else {
       const family = await familyRemoveFromWaitList({
@@ -172,18 +169,29 @@ export const moveUserFromTheWaitListServer = async (formData: FormData) => {
         waitListMemberId: data.userId,
       });
       return json(family, {
-        revalidate: [
-          getRecentMember.key,
-          getWaitListMembers.key,
-          getFamilyAndWaitListMembers.key,
-        ],
+        revalidate: [getFamilyMembers.key],
       });
     }
   } catch (error) {
     if (error instanceof ValiError) {
-      return json({ errors: translateErrorTokens(error) }, { status: 422 });
+      return json(
+        { errors: translateErrorTokens(error) },
+        { status: 422, revalidate: [] },
+      );
+    }
+    if (error instanceof InviteeNotInWaitList) {
+      return json(
+        { error: 'Something went wrong' },
+        {
+          status: 500,
+          revalidate: [getFamilyMembers.key],
+        },
+      );
     }
     console.error(error);
-    return json({ error: 'Something went wrong' }, { status: 500 });
+    return json(
+      { error: 'Something went wrong' },
+      { status: 500, revalidate: [] },
+    );
   }
 };

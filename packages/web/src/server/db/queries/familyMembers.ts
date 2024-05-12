@@ -1,9 +1,10 @@
 'use server';
 
-import { and, eq, lt, not, or, sql } from 'drizzle-orm';
+import { and, eq, not, or, sql } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
 import {
+  familyTable,
   familyUserTable,
   familyWaitListTable,
   userTable,
@@ -14,7 +15,6 @@ import {
  * Lists all family members.
  * If request user is the owner of the family, also
  * includes users from the wait list.
- * Returns {null} if user is not part of a family
  */
 export async function familyMembers(userId: DatabaseUser['id']) {
   const db = useDb();
@@ -29,35 +29,8 @@ export async function familyMembers(userId: DatabaseUser['id']) {
       id: userTable.id,
       name: userTable.name,
       avatarUrl: userTable.avatarUrl,
-      joinedAt: familyUserTable.joinedAt,
-    })
-    .from(familyUserTable)
-    .where(
-      and(
-        eq(familyUserTable.familyId, family),
-        not(eq(familyUserTable.userId, userId)),
-      ),
-    )
-    .innerJoin(userTable, eq(familyUserTable.userId, userTable.id))
-    .all();
-
-  return users;
-}
-
-export async function recentFamilyMember(userId: DatabaseUser['id']) {
-  const db = useDb();
-
-  const family = db
-    .select({ familyId: familyUserTable.familyId })
-    .from(familyUserTable)
-    .where(eq(familyUserTable.userId, userId));
-
-  const user = await db
-    .select({
-      id: userTable.id,
-      name: userTable.name,
-      avatarUrl: userTable.avatarUrl,
       isApproved: sql<number>`(${familyUserTable.userId} == ${userTable.id})`,
+      joinedAt: sql<string>`iif(${familyUserTable.userId} == ${userTable.id}, ${familyUserTable.joinedAt}, ${familyWaitListTable.joinedAt})`,
     })
     .from(userTable)
     .where(
@@ -66,24 +39,24 @@ export async function recentFamilyMember(userId: DatabaseUser['id']) {
         and(
           not(eq(familyUserTable.userId, userId)),
           eq(familyUserTable.familyId, family),
-          lt(
-            sql`(unixepoch(concat(datetime('now', 'utc'), 'Z')) - unixepoch(${familyUserTable.joinedAt})) / 60`,
-            60,
-          ),
+          // lt(
+          //   sql`(unixepoch(concat(datetime('now', 'utc'), 'Z')) - unixepoch(${familyUserTable.joinedAt})) / 60`,
+          //   60,
+          // ),
         ),
-        eq(familyWaitListTable.familyId, family),
+        and(
+          eq(familyTable.ownerId, userId),
+          eq(familyWaitListTable.familyId, family),
+        ),
       ),
     )
     .leftJoin(familyUserTable, eq(familyUserTable.userId, userTable.id))
     .leftJoin(familyWaitListTable, eq(familyWaitListTable.userId, userTable.id))
+    .leftJoin(familyTable, eq(familyTable.id, family))
     .orderBy(familyWaitListTable.joinedAt, familyUserTable.joinedAt)
-    .get();
+    .all();
 
-  if (!user) return null;
+  if (!users) return [];
 
-  const { isApproved, ...u } = user;
-  return {
-    ...u,
-    isApproved: isApproved === 1,
-  };
+  return users.map((user) => ({ ...user, isApproved: user.isApproved === 1 }));
 }

@@ -252,19 +252,22 @@ export const remindersTable = sqliteTable('reminder', {
     .notNull()
     .references(() => petTable.id),
   /**
-   * UTC with appended Z for Date constructor.
+   * ISO-8601 date time string stored in UTC.
    */
   createdAt: utcDatetime('created_at'),
 });
 
 /**
- * ISO 8601 date string stored in UTC with appended Z for Date constructor.
- * Maybe appending 'Z' is bad for non-JS runtimes who could work with this DB dates, but that's not a concern right now.
+ * ISO-8601 date time string stored in UTC.
  */
 function utcDatetime(columnName: Parameters<typeof text>[0]) {
-  return dateTime(columnName)
-    .notNull()
-    .default(sql`(concat(datetime('now', 'utc'), 'Z'))`);
+  return (
+    dateTime(columnName)
+      .notNull()
+      // see https://www.sqlite.org/lang_datefunc.html
+      // TODO: verify why datetime('now', 'utc') applies timezone twice. Drizzle bug? sqlite driver?
+      .default(sql`(strftime('%FT%TZ', datetime('now')))`)
+  );
 }
 
 function dateTime(columnName: Parameters<typeof text>[0]) {

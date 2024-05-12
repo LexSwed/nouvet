@@ -4,8 +4,6 @@ import {
   cancelFamilyJoinServer,
   deleteFamilyServer,
   getFamilyMembersServer,
-  getRecentMemberServer,
-  getWaitListMembersServer,
   updateFamilyServer,
 } from './family.server';
 
@@ -14,28 +12,14 @@ export const getFamilyMembers = cache(
   'family-members',
 );
 
-export const getWaitListMembers = cache(
-  async () => getWaitListMembersServer(),
-  'wait-list-members',
+export const updateFamily = action(
+  (formData: FormData) => updateFamilyServer(formData),
+  'update-family',
 );
 
-export const getFamilyAndWaitListMembers = cache(async () => {
-  const [members, waitList] = await Promise.all([
-    getFamilyMembers(),
-    getWaitListMembers(),
-  ]);
-  return { members, waitList };
-}, 'family-and-wait-list-members');
+export const deleteFamily = action(() => deleteFamilyServer(), 'delete-family');
 
-export const getRecentMember = cache(
-  async () => getRecentMemberServer(),
-  'recent-family-member',
+export const cancelFamilyJoin = action(
+  () => cancelFamilyJoinServer(),
+  'cancel-family-join',
 );
-
-export const updateFamily = action((formData: FormData) =>
-  updateFamilyServer(formData),
-);
-
-export const deleteFamily = action(() => deleteFamilyServer());
-
-export const cancelFamilyJoin = action(() => cancelFamilyJoinServer());
