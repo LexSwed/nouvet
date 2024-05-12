@@ -1,11 +1,6 @@
-import {
-  createAsync,
-  useSubmission,
-  type RouteDefinition,
-} from '@solidjs/router';
+import { createAsync, type RouteDefinition } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
 import {
-  createEffect,
   createUniqueId,
   For,
   lazy,
@@ -16,7 +11,7 @@ import {
 } from 'solid-js';
 import { Button, Card, Icon } from '@nou/ui';
 
-import { createPet, getUserPets } from '~/server/api/pet';
+import { getUserPets } from '~/server/api/pet';
 import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator } from '~/server/i18n';
 
@@ -55,16 +50,6 @@ const UserPets = () => {
   const pets = createAsync(() => getUserPets());
   const user = createAsync(() => getUserFamily());
   const hasPets = () => (pets()?.length ?? 0) > 0;
-
-  const createPetSubmission = useSubmission(createPet);
-
-  createEffect(() => {
-    if (createPetSubmission.result && 'pet' in createPetSubmission.result) {
-      document
-        .getElementById(`pet-${createPetSubmission.result.pet.id}`)
-        ?.focus();
-    }
-  });
 
   return (
     <Switch>
@@ -124,7 +109,11 @@ const UserPets = () => {
       </Match>
       <Match when={!hasPets()}>
         <Card class="flex max-w-[460px] flex-col gap-6 p-4">
-          <CreateNewPetForm />
+          <CreateNewPetForm
+            onSuccess={(pet) => {
+              document.getElementById(`pet-${pet.id}`)?.focus();
+            }}
+          />
           <Show when={!user()?.family}>
             <Button
               popoverTarget="newjoiner-join-family"

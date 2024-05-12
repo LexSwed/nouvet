@@ -1,5 +1,5 @@
-import { useSubmission } from '@solidjs/router';
-import { createEffect, Show } from 'solid-js';
+import { useAction, useSubmission } from '@solidjs/router';
+import { Show } from 'solid-js';
 import { Button, Form, Text, TextField } from '@nou/ui';
 
 import { createPet } from '~/server/api/pet';
@@ -14,6 +14,7 @@ function CreateNewPetForm(props: {
   onSuccess?: (pet: { name: string; id: number }) => void;
 }) {
   const t = createTranslator('pet-forms');
+  const createPetAction = useAction(createPet);
   const petSubmission = useSubmission(createPet);
 
   const hasUnknownError = () =>
@@ -22,17 +23,20 @@ function CreateNewPetForm(props: {
     petSubmission.result.failed &&
     !petSubmission.result.errors;
 
-  createEffect(() => {
-    if (petSubmission.result && 'pet' in petSubmission.result) {
-      props.onSuccess?.(petSubmission.result.pet);
-    }
-  });
-
   return (
     <Form
       aria-labelledby="new-pet-headline"
       class="flex flex-col gap-6"
       action={createPet}
+      onSubmit={async (event) => {
+        // progressively enhancing, allowing onSuccess to be executed even after the submission
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const result = await createPetAction(formData);
+        if ('pet' in result) {
+          props.onSuccess?.(result.pet);
+        }
+      }}
       validationErrors={
         petSubmission.result && 'errors' in petSubmission.result
           ? petSubmission.result.errors
