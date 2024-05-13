@@ -136,6 +136,9 @@ const InviteDialogContent = (ownProps: {
                 onClick={() => {
                   update('join');
                 }}
+                style={{
+                  'view-transition-name': 'invite-dialog-cta',
+                }}
               >
                 {t('invite.join')}
               </Button>

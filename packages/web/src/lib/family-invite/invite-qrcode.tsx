@@ -20,10 +20,14 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
     true,
     { maxAgeInDays: 1 },
   );
+  const invite = () => {
+    const inviteInfo = inviteData();
+    return inviteInfo && 'error' in inviteInfo ? null : inviteInfo;
+  };
 
   async function share() {
     const shareData = {
-      url: inviteData()?.url,
+      url: invite()?.url,
       title: t('invite.invite-share-title-no-name'),
       text: t('invite.invite-share-text'),
     } satisfies ShareData;
@@ -32,7 +36,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
 
   let qrCode: QRCodeStyling;
   createEffect(() => {
-    const data = inviteData()?.qrString;
+    const data = invite()?.qrString;
     const container = containerRef();
     if (data && container) {
       // show fake QR code on the background while the consent is shown
@@ -107,13 +111,20 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
             aria-hidden={consentShown()}
           >
             {t('invite.expires-in', {
-              expiresIn: inviteData()?.expiresIn || '',
+              expiresIn: invite()?.expiresIn || '',
             })}
           </Text>
         </Suspense>
       </div>
       <div class="flex flex-col gap-4">
-        <Button onClick={props.onNext}>{t('invite.cta-ready')}</Button>
+        <Button
+          onClick={props.onNext}
+          style={{
+            'view-transition-name': 'invite-dialog-cta',
+          }}
+        >
+          {t('invite.cta-ready')}
+        </Button>
         <Button variant="link" onClick={share}>
           {t('invite.cta-share')}
         </Button>

@@ -71,6 +71,9 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
           </Match>
         </Switch>
         <Button
+          style={{
+            'view-transition-name': 'invite-dialog-cta',
+          }}
           onClick={() => {
             props.onNext();
           }}
@@ -106,24 +109,15 @@ const NewlyJoinedMember = (props: {
           </ButtonLink>
         </Show>
       </div>
-      <Card variant="outlined" tone="primary-light" class="bg-main">
-        <div class="flex flex-col gap-2">
-          <div class="flex flex-row items-center justify-start gap-3">
-            <Avatar
-              avatarUrl={props.member.avatarUrl || ''}
-              name={props.member.name || ''}
-            />
-            <Text with="label-lg">{props.member.name}</Text>
-          </div>
-          <Button
-            variant="ghost"
-            tone="destructive"
-            size="sm"
-            class="-mb-1 self-end"
-          >
-            {t('invite.waitlist-joined-cancel')}
-          </Button>
-        </div>
+      <Card
+        variant="outlined"
+        class="fade-in animate-in flex flex-col items-center gap-6 self-start p-4"
+      >
+        <Avatar
+          avatarUrl={props.member.avatarUrl || ''}
+          name={props.member.name || ''}
+        />
+        <Text with="label">{props.member.name}</Text>
       </Card>
     </div>
   );
