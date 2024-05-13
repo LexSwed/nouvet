@@ -168,7 +168,7 @@ function FamilyHeader() {
           </div>
         </Match>
         <Match when={!isOwner()}>
-          <div class="flex flex-col items-center gap-4 sm:flex-row">
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
             <Text with="headline-1">
               {user()?.family?.name || t('no-name')}
             </Text>
