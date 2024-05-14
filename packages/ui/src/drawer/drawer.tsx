@@ -8,7 +8,7 @@ import {
   type ComponentProps,
   type ValidComponent,
 } from 'solid-js';
-import { Content as DrawerContent, Root as DrawerRoot } from 'corvu/drawer';
+import { Content as DrawerContent, Root as DrawerRoot } from '@corvu/drawer';
 
 import { Popover, type PopoverProps } from '../popover';
 import { tw } from '../tw';

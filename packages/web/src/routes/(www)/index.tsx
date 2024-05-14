@@ -37,30 +37,15 @@ export default function WWW() {
         <h2 class="sr-only" id="features">
           {t('heading-features')}
         </h2>
-        <ul class="spacing-bleed scrollbar-none -mx-4 flex snap-x snap-mandatory scroll-p-2 flex-row gap-4 overflow-x-auto px-3">
-          <li class="min-w-64">
-            <Card
-              variant="flat"
-              class="border-primary-container/20 snap-start rounded-md border-2 p-8"
-            >
-              {t('feature-medical-history')}
-            </Card>
+        <ul class="spacing-bleed flex flex-row flex-wrap gap-4">
+          <li class="max-w-64">
+            <Card class="p-8">{t('feature-medical-history')}</Card>
           </li>
-          <li class="min-w-64">
-            <Card
-              variant="flat"
-              class="border-primary-container/20 snap-start rounded-md border-2 p-8"
-            >
-              {t('feature-share-reminders')}
-            </Card>
+          <li class="max-w-64">
+            <Card class="p-8">{t('feature-share-reminders')}</Card>
           </li>
-          <li class="min-w-64">
-            <Card
-              variant="flat"
-              class="border-primary-container/20 snap-start rounded-md border-2 p-8"
-            >
-              {t('feature-connect-veterinaries')}
-            </Card>
+          <li class="max-w-64">
+            <Card class="p-8">{t('feature-connect-veterinaries')}</Card>
           </li>
         </ul>
       </section>
