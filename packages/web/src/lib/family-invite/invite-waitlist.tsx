@@ -1,6 +1,6 @@
 import { createAsync, revalidate, useMatch } from '@solidjs/router';
 import { Match, onMount, Show, Suspense, Switch } from 'solid-js';
-import { Avatar, Button, ButtonLink, Card, Icon, Text } from '@nou/ui';
+import { Avatar, Button, ButtonLink, Icon, Text } from '@nou/ui';
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns/differenceInMinutes';
 
@@ -105,17 +105,23 @@ const NewlyJoinedMember = (props: {
           </ButtonLink>
         </Show>
       </div>
-      <Card
-        variant="outlined"
-        class="flex flex-row items-center gap-6 p-4"
+      <ButtonLink
+        href={`/app/family/${props.user.id}`}
+        variant="tonal"
+        class="flex flex-row items-center justify-between rounded-2xl p-5"
         style={{ 'view-transition-name': `family-invite-${props.user.id}` }}
       >
-        <Avatar
-          avatarUrl={props.user.avatarUrl || ''}
-          name={props.user.name || ''}
-        />
-        <Text with="label-lg">{props.user.name}</Text>
-      </Card>
+        <div class="flex flex-row items-center gap-6">
+          <Avatar
+            avatarUrl={props.user.avatarUrl || ''}
+            name={props.user.name || ''}
+          />
+          <Text with="label-lg">{props.user.name}</Text>
+        </div>
+        <div class="rounded-full p-4">
+          <Icon use="carret-right" />
+        </div>
+      </ButtonLink>
     </div>
   );
 };
