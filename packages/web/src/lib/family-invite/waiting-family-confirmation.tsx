@@ -22,7 +22,7 @@ export function WaitingFamilyConfirmation(props: {
       </Text>
       <div
         class="flex flex-row items-center justify-start gap-3"
-        style={{ 'view-transition-name': `${props.user.id}` }}
+        style={{ 'view-transition-name': `family-invite-${props.user.id}` }}
       >
         <Avatar avatarUrl={props.user.avatarUrl} name={props.user.name || ''} />
         <Text with="label-lg">{props.user.name}</Text>

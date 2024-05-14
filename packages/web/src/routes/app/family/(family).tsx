@@ -346,13 +346,13 @@ function EmptyFamily() {
         <Text as="p">{t('no-members-description')}</Text>
         <Button popoverTarget="family-invite">{t('invite-cta')}</Button>
       </div>
-      <div class="row-[1] grid place-content-center">
+      <div class="row-[1]">
         <Image
           src="/assets/images/andriyko-podilnyk-dWSl8REfpoQ-unsplash.jpg"
           alt=""
-          aspectRatio="4/3"
-          width={600}
-          class="bg-primary/5 w-full max-w-[600px] rounded-3xl"
+          aspectRatio="5/3"
+          width={500}
+          class="bg-primary/5 max-h-[300px] rounded-3xl"
         />
       </div>
     </div>

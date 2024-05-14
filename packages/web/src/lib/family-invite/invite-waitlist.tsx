@@ -64,16 +64,13 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
               {(member) => (
                 <NewlyJoinedMember
                   familyName={user()?.family?.name}
-                  member={member()}
+                  user={member()}
                 />
               )}
             </Show>
           </Match>
         </Switch>
         <Button
-          style={{
-            'view-transition-name': 'invite-dialog-cta',
-          }}
           onClick={() => {
             props.onNext();
           }}
@@ -87,14 +84,13 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
 
 const NewlyJoinedMember = (props: {
   familyName: string | null | undefined;
-  member: {
+  user: {
     isApproved: boolean;
     id: number;
     name: string | null;
     avatarUrl: string | null;
   };
 }) => {
-  const t = createTranslator('family');
   const isFamilyUrl = useMatch(() => '/app/family');
 
   return (
@@ -111,13 +107,14 @@ const NewlyJoinedMember = (props: {
       </div>
       <Card
         variant="outlined"
-        class="fade-in animate-in flex flex-col items-center gap-6 self-start p-4"
+        class="flex flex-row items-center gap-6 p-4"
+        style={{ 'view-transition-name': `family-invite-${props.user.id}` }}
       >
         <Avatar
-          avatarUrl={props.member.avatarUrl || ''}
-          name={props.member.name || ''}
+          avatarUrl={props.user.avatarUrl || ''}
+          name={props.user.name || ''}
         />
-        <Text with="label">{props.member.name}</Text>
+        <Text with="label-lg">{props.user.name}</Text>
       </Card>
     </div>
   );

@@ -1,3 +1,4 @@
+import { Style } from '@solidjs/meta';
 import { createSignal, Match, Show, Suspense, Switch } from 'solid-js';
 import { Button, Icon, mergeDefaultProps, Popover, Text } from '@nou/ui';
 
@@ -60,6 +61,7 @@ const InviteDialogContent = (ownProps: {
 
   return (
     <>
+      <Style>``</Style>
       <header class="-m-4 flex flex-row items-center justify-between gap-2">
         <Show
           when={!new Set<Step>(['initial', 'join-success']).has(step())}
@@ -135,9 +137,6 @@ const InviteDialogContent = (ownProps: {
                 variant="link"
                 onClick={() => {
                   update('join');
-                }}
-                style={{
-                  'view-transition-name': 'invite-dialog-cta',
                 }}
               >
                 {t('invite.join')}

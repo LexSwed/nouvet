@@ -20,9 +20,12 @@ type ImageProps = Merge<
      */
     format?: string;
     style?: JSX.CSSProperties;
-  } & {
-    width: number;
-  }
+  } & (
+    | {
+        width: number;
+      }
+    | { height: number }
+  )
 >;
 
 const steps = [640, 800, 1080, 1280, 1600];
