@@ -3,6 +3,7 @@ import {
   createAsync,
   useSubmission,
   type RouteDefinition,
+  type RouteSectionProps,
 } from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
 import {
@@ -38,7 +39,7 @@ export const route = {
   },
 } satisfies RouteDefinition;
 
-function FamilyPage() {
+function FamilyPage(props: RouteSectionProps) {
   const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
   const isOwner = () => user()?.family?.role === 'owner' || false;
@@ -92,6 +93,7 @@ function FamilyPage() {
                         }
                       >
                         Render users!
+                        {props.children}
                       </Match>
                       <Match
                         when={
@@ -283,14 +285,15 @@ function WaitingApproval() {
             </Button>
           </div>
         </div>
-
-        <Image
-          src="/assets/images/barthelemy-de-mazenod-iw0SowaRxeY-unsplash.jpg"
-          width={300}
-          aspectRatio="4/3"
-          alt={t('waiting.image')!}
-          class="-my-4 -me-4 w-[400px] rounded-3xl md:w-[600px]"
-        />
+        <div class="-mx-4 -mb-4 min-h-0 sm:-my-4 sm:mx-0 sm:-me-4 sm:mb-0 sm:max-w-[50%] sm:self-stretch">
+          <Image
+            src="/assets/images/barthelemy-de-mazenod-iw0SowaRxeY-unsplash.jpg"
+            width={300}
+            aspectRatio="4/3"
+            alt={t('waiting.image')!}
+            class="h-full max-h-[400px] w-auto rounded-3xl md:max-w-full"
+          />
+        </div>
       </Card>
       <Drawer
         id="cancel-join-drawer"
