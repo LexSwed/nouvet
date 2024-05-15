@@ -129,10 +129,10 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
                       </div>
                     </Form>
 
-                    <div class="col-span-7 col-end-[-1] row-[1/-1] ms-auto hidden h-full max-h-[500px] overflow-hidden rounded-3xl md:block md:max-h-[calc(100vh-theme(spacing.6)*2)]">
+                    <div class="col-span-7 col-start-6 row-[1/-1] ms-auto hidden size-full max-h-[500px] overflow-hidden rounded-3xl md:grid md:max-h-[calc(100vh-theme(spacing.6)*2)]">
                       <HeroImage
                         alt=""
-                        class="ms-auto size-full max-w-[400px] rounded-3xl object-cover object-center md:max-w-full"
+                        class="ms-auto size-full min-h-0 rounded-3xl object-cover object-center md:max-w-full"
                       />
                     </div>
 
