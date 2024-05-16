@@ -1,6 +1,6 @@
 import { createAsync, revalidate, useMatch } from '@solidjs/router';
 import { Match, onMount, Show, Suspense, Switch } from 'solid-js';
-import { Avatar, Button, ButtonLink, Icon, Text } from '@nou/ui';
+import { Avatar, Button, ButtonLink, Card, Icon, Text } from '@nou/ui';
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns/differenceInMinutes';
 
@@ -91,6 +91,7 @@ const NewlyJoinedMember = (props: {
     avatarUrl: string | null;
   };
 }) => {
+  const t = createTranslator('family');
   const isFamilyUrl = useMatch(() => '/app/family');
 
   return (
@@ -105,23 +106,27 @@ const NewlyJoinedMember = (props: {
           </ButtonLink>
         </Show>
       </div>
-      <ButtonLink
-        href={`/app/family/${props.user.id}`}
-        variant="tonal"
-        class="flex flex-row items-center justify-between rounded-2xl p-5"
+      <Card
+        variant="outlined"
+        class="flex flex-row items-end gap-4"
         style={{ 'view-transition-name': `family-invite-${props.user.id}` }}
       >
-        <div class="flex flex-row items-center gap-6">
-          <Avatar
-            avatarUrl={props.user.avatarUrl || ''}
-            name={props.user.name || ''}
-          />
-          <Text with="label-lg">{props.user.name}</Text>
+        <Avatar
+          avatarUrl={props.user.avatarUrl || ''}
+          name={props.user.name || ''}
+          size="xl"
+        />
+        <div class="flex w-full flex-col gap-1">
+          {/* TODO: Chip? Tag component? */}
+          <div class="bg-primary-container text-on-primary-container -me-2 -mt-2 flex cursor-default flex-row items-center gap-2 self-end rounded-full p-2">
+            <Icon use="check-fat" size="xs" />
+            <Text with="label-sm">{t('waitlist.just-joined')}</Text>
+          </div>
+          <Text with="body-xl" class="mb-1">
+            {props.user.name}
+          </Text>
         </div>
-        <div class="rounded-full p-4">
-          <Icon use="carret-right" />
-        </div>
-      </ButtonLink>
+      </Card>
     </div>
   );
 };

@@ -10,6 +10,7 @@ const avatarVariants = cva('shrink-0 rounded-full shadow-inner', {
       xs: 'size-6',
       sm: 'size-10',
       lg: 'size-14',
+      xl: 'size-16',
     },
   },
   defaultVariants: {
