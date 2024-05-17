@@ -65,6 +65,9 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
                 <NewlyJoinedMember
                   familyName={user()?.family?.name}
                   user={member()}
+                  onNavigate={() => {
+                    props.onNext();
+                  }}
                 />
               )}
             </Show>
@@ -90,6 +93,7 @@ const NewlyJoinedMember = (props: {
     name: string | null;
     avatarUrl: string | null;
   };
+  onNavigate: () => void;
 }) => {
   const t = createTranslator('family');
   const isFamilyUrl = useMatch(() => '/app/family');
@@ -101,31 +105,45 @@ const NewlyJoinedMember = (props: {
           <FamilyNameForm familyName={props.familyName} />
         </div>
         <Show when={!isFamilyUrl()}>
-          <ButtonLink href="/app/family" icon variant="ghost">
+          <ButtonLink
+            href="/app/family"
+            onClick={props.onNavigate}
+            icon
+            variant="ghost"
+          >
             <Icon use="arrow-up-right" size="md" />
           </ButtonLink>
         </Show>
       </div>
       <Card
         variant="outlined"
-        class="flex flex-row items-end gap-4"
+        class="flex flex-col gap-4"
         style={{ 'view-transition-name': `family-invite-${props.user.id}` }}
       >
-        <Avatar
-          avatarUrl={props.user.avatarUrl || ''}
-          name={props.user.name || ''}
-          size="xl"
-        />
-        <div class="flex w-full flex-col gap-1">
-          {/* TODO: Chip? Tag component? */}
-          <div class="bg-primary-container text-on-primary-container -me-2 -mt-2 flex cursor-default flex-row items-center gap-2 self-end rounded-full p-2">
-            <Icon use="check-fat" size="xs" />
-            <Text with="label-sm">{t('waitlist.just-joined')}</Text>
-          </div>
-          <Text with="body-xl" class="mb-1">
-            {props.user.name}
-          </Text>
+        {/* TODO: Chip? Tag component? */}
+        <div class="bg-primary-container text-on-primary-container -me-2 -mt-2 flex cursor-default flex-row items-center gap-2 self-end rounded-full p-2">
+          <Icon use="check-fat" size="xs" />
+          <Text with="label-sm">{t('waitlist.just-joined')}</Text>
         </div>
+
+        <ButtonLink
+          href={`/app/family/${props.user.id}`}
+          variant="ghost"
+          class="-m-3 flex flex-row items-center justify-start gap-4 rounded-xl p-3"
+          onClick={props.onNavigate}
+        >
+          <Avatar
+            avatarUrl={props.user.avatarUrl || ''}
+            name={props.user.name || ''}
+            size="xl"
+          />
+          <Text with="body-xl">{props.user.name}</Text>
+          <Icon
+            use="carret-right"
+            size="md"
+            class="text-on-surface/80 ms-auto"
+          />
+        </ButtonLink>
       </Card>
     </div>
   );
