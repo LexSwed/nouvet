@@ -15,7 +15,8 @@ import FamilyInviteDialog from '~/lib/family-invite/invite-dialog';
 
 export const route = {
   load() {
-    return Promise.all([cacheTranslations('app'), getUserFamily()]);
+    void cacheTranslations('app');
+    void getUserFamily();
   },
 } satisfies RouteDefinition;
 

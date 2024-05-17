@@ -22,17 +22,13 @@ import { FamilyInviteBenefits } from '~/lib/family-invite-benefits';
 import { HeroImage } from '~/lib/hero-image';
 
 export const route = {
-  load(route) {
-    const code = route.params['invite-code'];
-    return Promise.all([
-      cacheTranslations('invited'),
-      getUserProfile(),
-      checkFamilyInvite(code),
-    ]);
+  load() {
+    void cacheTranslations('invited');
+    void getUserProfile();
   },
 } satisfies RouteDefinition;
 
-const InviteAcceptPage = (props: RouteSectionProps) => {
+export default function InviteAcceptPage(props: RouteSectionProps) {
   const code = props.params['invite-code'];
   const t = createTranslator('invited');
   const user = createAsync(() => getUserProfile());
@@ -176,6 +172,4 @@ const InviteAcceptPage = (props: RouteSectionProps) => {
       </div>
     </>
   );
-};
-
-export default InviteAcceptPage;
+}

@@ -31,11 +31,9 @@ import { WaitingFamilyConfirmation } from '~/lib/family-invite/waiting-family-co
 
 export const route = {
   load() {
-    return Promise.all([
-      cacheTranslations('family'),
-      getUserFamily(),
-      getFamilyMembers(),
-    ]);
+    void cacheTranslations('family');
+    void getUserFamily();
+    void getFamilyMembers();
   },
 } satisfies RouteDefinition;
 
