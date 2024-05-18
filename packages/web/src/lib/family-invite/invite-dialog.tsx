@@ -1,4 +1,3 @@
-import { Style } from '@solidjs/meta';
 import { createSignal, Match, Show, Suspense, Switch } from 'solid-js';
 import { Button, Icon, mergeDefaultProps, Popover, Text } from '@nou/ui';
 
@@ -12,6 +11,8 @@ import { InviteWaitlist } from './invite-waitlist';
 import JoinFamily from './join-family';
 import { Joined } from './joined';
 
+import './family-invite.module.css';
+
 type Step = 'initial' | 'qrcode' | 'waitlist' | 'join' | 'join-success';
 const FamilyInviteDialog = (props: { id: string; initialScreen?: Step }) => {
   return (
@@ -20,7 +21,7 @@ const FamilyInviteDialog = (props: { id: string; initialScreen?: Step }) => {
       placement="center"
       aria-labelledby={`${props.id}-headline`}
       role="dialog"
-      class="to-primary/10 via-surface from-surface flex w-[94svw] max-w-[420px] flex-col gap-6 bg-gradient-to-b via-65% p-6"
+      class="to-primary/10 via-surface from-surface mt-[16vh] flex w-[94svw] max-w-[420px] flex-col gap-6 text-clip bg-gradient-to-b via-65% p-6 md:mt-[20vh]"
     >
       {(open) => (
         <Show when={open()}>
@@ -46,10 +47,17 @@ const InviteDialogContent = (ownProps: {
   const t = createTranslator('family');
   const props = mergeDefaultProps(ownProps, { initialScreen: 'initial' });
   const [step, setStep] = createSignal<Step>(props.initialScreen);
-  const update = async (newStep: Step) => {
-    await startViewTransition(() => {
-      setStep(newStep);
+  const update = async (
+    newStep: Step,
+    direction: 'forwards' | 'backwards' = 'forwards',
+  ) => {
+    const transition = startViewTransition({
+      update: () => {
+        setStep(newStep);
+      },
+      types: ['slide', direction],
     });
+    await transition.updateCallbackDone;
     const popover = document.getElementById(props.id);
     popover?.focus();
   };
@@ -61,7 +69,6 @@ const InviteDialogContent = (ownProps: {
 
   return (
     <>
-      <Style>``</Style>
       <header class="-m-4 flex flex-row items-center justify-between gap-2">
         <Show
           when={!new Set<Step>(['initial', 'join-success']).has(step())}
@@ -74,11 +81,11 @@ const InviteDialogContent = (ownProps: {
             onClick={() => {
               switch (step()) {
                 case 'qrcode':
-                  return update('initial');
+                  return update('initial', 'backwards');
                 case 'join':
-                  return update('initial');
+                  return update('initial', 'backwards');
                 case 'waitlist':
-                  return update('qrcode');
+                  return update('qrcode', 'backwards');
                 default:
                   return null;
               }
@@ -121,7 +128,7 @@ const InviteDialogContent = (ownProps: {
       </header>
       <Switch>
         <Match when={step() === 'initial'}>
-          <div class="flex flex-col gap-6">
+          <div class="view-transition-[content] flex flex-col gap-6">
             <Text with="headline-2" as="h2">
               {t('invite.headline')}
             </Text>
@@ -145,19 +152,27 @@ const InviteDialogContent = (ownProps: {
           </div>
         </Match>
         <Match when={step() === 'qrcode'}>
-          <FamilyInviteQRCode onNext={() => update('waitlist')} />
+          <div class="view-transition-[content]">
+            <FamilyInviteQRCode onNext={() => update('waitlist')} />
+          </div>
         </Match>
         <Match when={step() === 'join'}>
-          <JoinFamily
-            onCancel={() => update('initial')}
-            onSuccess={() => update('join-success')}
-          />
+          <div class="view-transition-[content]">
+            <JoinFamily
+              onCancel={() => update('initial', 'backwards')}
+              onSuccess={() => update('join-success')}
+            />
+          </div>
         </Match>
         <Match when={step() === 'waitlist'}>
-          <InviteWaitlist onNext={closePopover} />
+          <div class="view-transition-[content]">
+            <InviteWaitlist onNext={closePopover} />
+          </div>
         </Match>
         <Match when={step() === 'join-success'}>
-          <Joined popoverTarget={props.id} />
+          <div class="view-transition-[content]">
+            <Joined popoverTarget={props.id} />
+          </div>
         </Match>
       </Switch>
     </>

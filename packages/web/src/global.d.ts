@@ -13,7 +13,12 @@ interface ImportMeta {
 
 interface Document {
   startViewTransition(
-    updateCallback: () => Promise<void> | void,
+    update:
+      | (() => Promise<void> | void)
+      | {
+          update: () => Promise<void> | void;
+          types: ['slide', direction: 'forwards' | 'backwards'];
+        },
   ): ViewTransition;
 }
 

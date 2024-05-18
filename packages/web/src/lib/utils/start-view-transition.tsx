@@ -1,9 +1,20 @@
 export function startViewTransition(
-  callback: Parameters<typeof document.startViewTransition>[0],
-) {
-  if ('startViewTransition' in document) {
-    document.startViewTransition(callback);
+  handler: Parameters<Document['startViewTransition']>[0],
+): ReturnType<Document['startViewTransition']> {
+  if (typeof document.startViewTransition === 'function') {
+    console.log('start transition!');
+    return document.startViewTransition(handler);
   } else {
-    callback();
+    if (typeof handler === 'function') {
+      handler();
+    } else {
+      handler.update();
+    }
+    return {
+      finished: Promise.resolve(),
+      ready: Promise.resolve(),
+      skipTransition: () => {},
+      updateCallbackDone: Promise.resolve(),
+    };
   }
 }
