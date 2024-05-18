@@ -62,7 +62,10 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
     !props.pet.dateOfBirth || !props.pet.weight || !props.pet.breed;
 
   return (
-    <Card class="flex min-w-52 flex-col gap-4" ref={(el) => (triggerRef = el)}>
+    <Card
+      class="flex min-w-52 flex-col gap-4"
+      ref={(el: HTMLElement) => (triggerRef = el)}
+    >
       <Button
         variant="ghost"
         class="-m-4 flex h-auto cursor-pointer flex-row items-center justify-start gap-4 rounded-2xl p-3"
@@ -97,13 +100,8 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
       </Button>
       <Popover
         id={petPopoverId}
-        offset={(state) => ({
-          mainAxis: -1 * state.rects.reference.height - 4,
-          crossAxis: -4,
-        })}
-        strategy="fixed"
-        placement="bottom-start"
-        class="flex transform-none flex-col gap-4 p-2"
+        placement="top-to-top left-to-left"
+        class="-m-1 flex transform-none flex-col gap-4 p-2"
         onToggle={(e: ToggleEvent) => {
           if (triggerRef && e.newState === 'open') {
             triggerRef.scrollIntoView({
@@ -184,8 +182,6 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
                 id={`${props.pet.id}-menu-weight`}
                 pet={props.pet}
                 anchor={petPopoverId}
-                // NB: otherwise nested inside top-level popover won't calculate available space correctly
-                strategy="fixed"
               />
             </Show>
           </Suspense>

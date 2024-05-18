@@ -19,7 +19,7 @@ export const SimpleMenu = () => {
       <Button popoverTarget="menu" variant="ghost" icon>
         <Avatar name="John Doe" avatarUrl={null} />
       </Button>
-      <Menu id="menu" placement="bottom-start">
+      <Menu id="menu">
         <MenuItem>Account</MenuItem>
         <MenuItem>Install for offline</MenuItem>
         <MenuItem>Log Out</MenuItem>
@@ -35,7 +35,7 @@ export const WithoutAutoClosingOnItemClick = () => {
       <Button popoverTarget="menu" variant="ghost" icon>
         <Avatar name="John Doe" avatarUrl={null} />
       </Button>
-      <Menu id="menu" placement="bottom-end">
+      <Menu id="menu">
         <MenuItem onClick={nope}>Account</MenuItem>
         <MenuItem onClick={nope}>Install for offline</MenuItem>
         <MenuItem onClick={nope}>Log Out</MenuItem>

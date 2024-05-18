@@ -8,30 +8,58 @@ import { Icon } from '../icon/icon';
 import { MenuItem, MenuList } from '../menu';
 import { Text } from '../text';
 
-import { Popover } from './popover';
+import { Popover, type PopoverProps } from './popover';
 
 const meta = {
   title: 'Popover',
   component: Popover,
-  argTypes: {},
+  argTypes: {
+    placement: {
+      options: [
+        undefined,
+        'center',
+        'bottom-to-bottom',
+        'bottom-to-bottom left-to-left',
+        'bottom-to-bottom left-to-right',
+        'bottom-to-bottom right-to-left',
+        'bottom-to-bottom right-to-right',
+        'bottom-to-top',
+        'bottom-to-top left-to-left',
+        'bottom-to-top left-to-right',
+        'bottom-to-top right-to-left',
+        'bottom-to-top right-to-right',
+        'left-to-left',
+        'left-to-right',
+        'right-to-left',
+        'right-to-right',
+        'top-to-bottom',
+        'top-to-bottom left-to-left',
+        'top-to-bottom left-to-right',
+        'top-to-bottom right-to-left',
+        'top-to-bottom right-to-right',
+        'top-to-top',
+        'top-to-top left-to-left',
+        'top-to-top left-to-right',
+        'top-to-top right-to-left',
+        'top-to-top right-to-right',
+      ] as const satisfies Array<PopoverProps<'div'>['placement']>,
+      control: { type: 'select' },
+    },
+  },
 } satisfies Meta<typeof Popover>;
 
 export default meta;
 
-export const AccountMenu = () => {
+export const AccountMenu = (props: PopoverProps<'div'>) => {
   return (
-    <div class="flex size-full justify-end">
-      <Button popoverTarget="settings" variant="ghost" icon>
+    <div class="grid size-full place-content-center">
+      <Button popoverTarget="account-menu" variant="ghost" icon>
         <Avatar name="John Doe" avatarUrl={null} />
       </Button>
       <Popover
-        id="settings"
-        placement="bottom-end"
-        offset={(state) => ({
-          mainAxis: -(state.elements.reference as HTMLElement).offsetWidth - 12,
-          crossAxis: 12,
-        })}
+        {...props}
         class="flex w-[240px] flex-col gap-4"
+        id="account-menu"
       >
         <a
           href="#"
@@ -51,18 +79,18 @@ export const AccountMenu = () => {
   );
 };
 
-export const ContextualHelp = () => {
+export const ContextualHelp = (props: PopoverProps<'div'>) => {
   return (
     <div class="flex size-full items-center justify-center">
       <Button aria-label="Info" popoverTarget="info" variant="ghost" icon>
         <Icon use="info" size="md" />
       </Button>
       <Popover
+        {...props}
         role="dialog"
         id="info"
         aria-labelledby="info-heading"
         class="w-[300px]"
-        placement="top"
       >
         <h2 id="info-heading" class="text-lg">
           How this is used?
@@ -92,11 +120,11 @@ const AsyncOrHeavyComponent = () => {
   );
 };
 
-export const LazyRender = () => {
+export const LazyRender = (props: PopoverProps<'div'>) => {
   return (
     <>
       <Button popoverTarget="lazy">Show a joke</Button>
-      <Popover id="lazy">
+      <Popover {...props} id="lazy">
         {(open) => (
           <Show when={open()}>
             <Suspense>

@@ -29,10 +29,6 @@ interface ViewTransition {
   skipTransition(): void;
 }
 
-interface CSSStyleDeclaration {
-  viewTransitionName: string;
-}
-
 declare module '*&imagetools' {
   /**
    * actual types

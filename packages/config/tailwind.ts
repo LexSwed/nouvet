@@ -126,7 +126,7 @@ export default {
     plugin(function disabledVariant({ addVariant }) {
       addVariant('disabled', ['&:where(disabled,[aria-disabled="true"])']);
     }),
-    plugin(function viewTransitions({ matchUtilities, theme }) {
+    plugin(function viewTransitions({ matchUtilities }) {
       matchUtilities({
         'view-transition': (value) => ({
           viewTransitionName: value,

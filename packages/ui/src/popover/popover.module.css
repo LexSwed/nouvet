@@ -16,10 +16,12 @@
     transition-behavior: allow-discrete;
     transition-duration: 0.24s;
     width: max-content;
+    margin: 0;
+    inset: auto;
     max-width: calc(100svw - theme('spacing.4'));
     max-height: calc(100svh - theme('spacing.4'));
     content-visibility: auto;
-    margin: 0;
+    position-try-options: flip-block, flip-inline;
     overflow: auto;
     box-shadow:
       0 0 2px theme('colors.on-surface-variant/0.12'),

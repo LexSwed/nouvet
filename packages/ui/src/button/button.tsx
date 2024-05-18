@@ -1,5 +1,5 @@
 import { A } from '@solidjs/router';
-import { Show, splitProps, type ValidComponent } from 'solid-js';
+import { Show, splitProps, type JSX, type ValidComponent } from 'solid-js';
 import { Dynamic, type DynamicProps } from 'solid-js/web';
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -152,7 +152,9 @@ type ButtonVariants = VariantProps<typeof buttonVariants> & { label?: string };
 
 type BaseProps<T extends ValidComponent> = Merge<
   DynamicProps<T>,
-  ButtonVariants
+  ButtonVariants & {
+    style?: JSX.CSSProperties;
+  }
 >;
 
 const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
@@ -165,6 +167,7 @@ const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
     'icon',
     'label',
     'title',
+    'style',
   ]);
   return (
     <Dynamic
@@ -195,6 +198,14 @@ const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
         }
       }}
       aria-disabled={local.loading || undefined}
+      style={
+        props['popoverTarget']
+          ? ({
+              ...local.style,
+              'anchor-name': `--anchor-${props.popoverTarget}`,
+            } satisfies JSX.CSSProperties)
+          : local.style
+      }
     >
       {props.children}
       <Show when={local.loading}>

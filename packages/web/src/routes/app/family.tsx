@@ -152,7 +152,10 @@ function FamilyHeader() {
               >
                 <Icon use="dots-three-outline-vertical" />
               </Button>
-              <Menu id="family-owner-menu" placement="bottom-end">
+              <Menu
+                id="family-owner-menu"
+                placement="top-to-bottom right-to-left"
+              >
                 <MenuItem
                   tone="destructive"
                   popoverTarget="family-delete"
@@ -187,7 +190,7 @@ function FamilyHeader() {
                   </Button>
                 </li>
               </ul>
-              <Menu id="family-menu" placement="bottom-end">
+              <Menu id="family-menu" placement="top-to-bottom right-to-left">
                 <MenuItem
                   tone="destructive"
                   popoverTarget="family-leave"

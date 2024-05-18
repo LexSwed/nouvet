@@ -45,7 +45,6 @@ interface AddWeightFormProps {
    * See https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using#nested_popovers
    */
   anchor?: string;
-  strategy?: 'absolute' | 'fixed';
 }
 
 const AddWeightForm = (props: AddWeightFormProps) => {
@@ -91,7 +90,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
     <Drawer
       id={props.id}
       aria-labelledby={`${props.id}-drawer`}
-      placement="bottom-start"
+      placement="top-to-bottom left-to-left"
       class="sm:w-[240px]"
       anchor={props.anchor}
     >
