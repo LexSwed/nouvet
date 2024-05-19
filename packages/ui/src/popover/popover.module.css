@@ -16,6 +16,7 @@
     transition-behavior: allow-discrete;
     transition-duration: 0.24s;
     width: max-content;
+    will-change: transform, opacity;
     margin: 0;
     inset: auto;
     max-width: calc(100svw - theme('spacing.4'));
@@ -53,6 +54,18 @@
       opacity: 0;
     }
 
+    &:where([data-placement*='top'], [data-placement*='bottom']):not(
+        [data-placement*=' ']
+      ) {
+      inset-inline-start: anchor(center);
+      justify-self: anchor-center;
+    }
+    &:where([data-placement*='left'], [data-placement*='right']):not(
+        [data-placement*=' ']
+      ) {
+      inset-block-start: anchor(center);
+      align-self: anchor-center;
+    }
     &[data-placement='center'] {
       transform-origin: center;
       margin: auto;
@@ -63,57 +76,29 @@
         background-color: theme('colors.on-surface/0.5');
       }
     }
-    &[data-placement='top'] {
-      transform-origin: bottom center;
+    &[data-placement^='top'] {
+      transform-origin: center top;
     }
-    &[data-placement='right'] {
+    &[data-placement^='bottom'] {
+      transform-origin: center bottom;
+    }
+    &[data-placement^='left'] {
       transform-origin: left center;
     }
-    &[data-placement='bottom'] {
-      transform-origin: top center;
-    }
-    &[data-placement='left'] {
+    &[data-placement^='right'] {
       transform-origin: right center;
     }
-    &[data-placement='top-start'] {
-      transform-origin: bottom left;
-    }
-    &[data-placement='right-start'] {
+    &[data-placement^='top'][data-placement*='left-to-'] {
       transform-origin: left top;
     }
-    &[data-placement='bottom-start'] {
-      transform-origin: top left;
-    }
-    &[data-placement='left-start'] {
-      transform-origin: top right;
-    }
-    &[data-placement='top-end'] {
-      transform-origin: bottom right;
-    }
-    &[data-placement='right-end'] {
+    &[data-placement^='bottom'][data-placement*='left-to-'] {
       transform-origin: left bottom;
     }
-    &[data-placement='bottom-end'] {
-      transform-origin: top right;
+    &[data-placement^='top'][data-placement*='right-to-'] {
+      transform-origin: right top;
     }
-    &[data-placement='left-end'] {
+    &[data-placement^='bottom'][data-placement*='right-to-'] {
       transform-origin: right bottom;
-    }
-    &:where(
-        :where([data-placement*='top'], [data-placement*='bottom']):not(
-            [data-placement*=' ']
-          )
-      ) {
-      inset-inline-start: anchor(center);
-      justify-self: anchor-center;
-    }
-    &:where(
-        :where([data-placement*='left'], [data-placement*='right']):not(
-            [data-placement*=' ']
-          )
-      ) {
-      inset-block-start: anchor(center);
-      align-self: anchor-center;
     }
   }
 
