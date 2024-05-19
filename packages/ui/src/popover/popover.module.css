@@ -99,6 +99,22 @@
     &[data-placement='left-end'] {
       transform-origin: right bottom;
     }
+    &:where(
+        :where([data-placement*='top'], [data-placement*='bottom']):not(
+            [data-placement*=' ']
+          )
+      ) {
+      inset-inline-start: anchor(center);
+      justify-self: anchor-center;
+    }
+    &:where(
+        :where([data-placement*='left'], [data-placement*='right']):not(
+            [data-placement*=' ']
+          )
+      ) {
+      inset-block-start: anchor(center);
+      align-self: anchor-center;
+    }
   }
 
   @starting-style {

@@ -14,8 +14,8 @@ import { composeEventHandlers, mergeDefaultProps, type Merge } from '../utils';
 import * as cssStyle from './menu.module.css';
 
 interface MenuProps
-  extends Omit<ComponentProps<'div'>, 'children' | 'role'>,
-    Pick<ComponentProps<typeof Popover>, 'placement' | 'offset' | 'children'> {
+  extends Omit<ComponentProps<'div'>, 'children' | 'style' | 'role'>,
+    Pick<ComponentProps<typeof Popover>, 'placement' | 'style' | 'children'> {
   id: string;
 }
 

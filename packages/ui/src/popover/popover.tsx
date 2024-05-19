@@ -77,23 +77,26 @@ const Popover = <T extends ValidComponent = 'div'>(
     if (local.placement === 'center') {
       return local.style;
     }
-    const toLogical = {
+    const propertyToLogical = {
       top: 'inset-block-start',
       left: 'inset-inline-start',
       bottom: 'inset-block-end',
       right: 'inset-inline-end',
     } as const;
+    const anchorToLogical = {
+      top: 'start',
+      left: 'start',
+      bottom: 'end',
+      right: 'end',
+    } as const;
 
     const alignmentStyles = local.placement.split(' ').map((placement) => {
       const [popoverSide, anchorSide] = placement.split('-to-');
       return [
-        `${toLogical[popoverSide as BlockAlign | InlineAlign]}`,
-        `anchor(${anchorSide})`,
+        `${propertyToLogical[popoverSide as BlockAlign | InlineAlign]}`,
+        `anchor(${anchorToLogical[anchorSide as BlockAlign | InlineAlign]})`,
       ];
     });
-    if (alignmentStyles.length === 1) {
-      alignmentStyles.push(['justify-self', 'anchor-center']);
-    }
 
     const style: JSX.CSSProperties = {
       ...local.style,
