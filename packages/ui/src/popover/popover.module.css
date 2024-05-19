@@ -54,6 +54,19 @@
       opacity: 0;
     }
 
+    &:where(
+        [data-placement*='left-to-right'],
+        [data-placement*='right-to-left']
+      ) {
+      margin-inline: theme(spacing.4);
+    }
+    &:where(
+        [data-placement*='top-to-bottom'],
+        [data-placement*='bottom-to-top']
+      ) {
+      margin-block: theme(spacing.4);
+    }
+
     &:where([data-placement*='top'], [data-placement*='bottom']):not(
         [data-placement*=' ']
       ) {
