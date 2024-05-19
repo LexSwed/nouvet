@@ -31,9 +31,11 @@ export type PopoverProps<T extends ValidComponent> = Merge<
   ComponentProps<T>,
   {
     /**
-     * Specifies inset-area of the popover relative to the anchor.
      * See @link https://developer.chrome.com/blog/anchor-positioning-api
      * 'center' makes popover appear as a dialog, not attached to the anchor.
+     * Offset is controlled via margin:
+     * @example class='ms-2 mt-2'
+     *
      * @default 'block-end-bottom inline-end-left'
      */
     placement?: Placement;
