@@ -1,7 +1,7 @@
 import { createAsync, useSubmission } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
-import { createEffect, createMemo, Show } from 'solid-js';
-import { Button, Form, Icon, Text, TextField } from '@nou/ui';
+import { createEffect, createMemo, Show, type ComponentProps } from 'solid-js';
+import { Button, Form, Icon, Text, TextField, type Popover } from '@nou/ui';
 
 import { updatePetWeight } from '~/server/api/pet';
 import { getUser } from '~/server/api/user';
@@ -45,6 +45,7 @@ interface AddWeightFormProps {
    * See https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using#nested_popovers
    */
   anchor?: string;
+  placement?: ComponentProps<typeof Popover>['placement'];
 }
 
 const AddWeightForm = (props: AddWeightFormProps) => {
@@ -90,8 +91,8 @@ const AddWeightForm = (props: AddWeightFormProps) => {
     <Drawer
       id={props.id}
       aria-labelledby={`${props.id}-drawer`}
-      placement="top-to-bottom left-to-left"
-      class="sm:w-[240px]"
+      placement={props.placement || 'top-to-bottom left-to-left'}
+      class="sm:w-[320px]"
       anchor={props.anchor}
     >
       <Show when={hasUnknownError()}>

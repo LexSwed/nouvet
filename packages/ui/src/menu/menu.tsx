@@ -1,10 +1,15 @@
-import { splitProps, type ComponentProps, type ValidComponent } from 'solid-js';
+import {
+  splitProps,
+  type ComponentProps,
+  type JSX,
+  type ValidComponent,
+} from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { Popover } from '../popover';
 import { tw } from '../tw';
-import { composeEventHandlers, mergeDefaultProps } from '../utils';
+import { composeEventHandlers, mergeDefaultProps, type Merge } from '../utils';
 
 import * as cssStyle from './menu.module.css';
 
@@ -30,13 +35,16 @@ const menuItemVariants = cva(cssStyle.listItem, {
   },
 });
 
-type MenuItemProps<T extends ValidComponent> = ComponentProps<T> &
+type MenuItemProps<T extends ValidComponent> = Merge<
+  ComponentProps<T>,
   VariantProps<typeof menuItemVariants> & {
     /**
      * @default div
      */
     as?: T;
-  };
+    style?: JSX.CSSProperties;
+  }
+>;
 
 const MenuItem = <T extends ValidComponent = 'div'>(
   ownProps: MenuItemProps<T>,
@@ -46,13 +54,21 @@ const MenuItem = <T extends ValidComponent = 'div'>(
       role: 'menuitem',
       as: 'div',
     }),
-    ['as', 'tone', 'class'],
+    ['as', 'tone', 'style', 'class'],
   );
   return (
     <Dynamic
       component={local.as}
       tabIndex={-1}
       {...props}
+      style={
+        'popoverTarget' in props
+          ? ({
+              ...local.style,
+              'anchor-name': `--anchor-${props.popoverTarget}`,
+            } satisfies JSX.CSSProperties)
+          : local.style
+      }
       onClick={composeEventHandlers(props.onClick, (event) => {
         if (
           event.defaultPrevented ||

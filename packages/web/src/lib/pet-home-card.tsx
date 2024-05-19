@@ -182,6 +182,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
                 id={`${props.pet.id}-menu-weight`}
                 pet={props.pet}
                 anchor={petPopoverId}
+                placement="center"
               />
             </Show>
           </Suspense>
