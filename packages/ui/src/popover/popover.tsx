@@ -64,6 +64,8 @@ const Popover = <T extends ValidComponent = 'div'>(
     ['id', 'ref', 'class', 'style', 'as', 'role', 'placement', 'children'],
   );
 
+  /** When the content is shown conditionally, it should wait
+   * until the animation is over before being hidden */
   const { isMounted } = createPresence(rendered, {
     enterDuration: 0,
     exitDuration: 200,
@@ -75,45 +77,16 @@ const Popover = <T extends ValidComponent = 'div'>(
     const child = local.children;
     return typeof child === 'function' ? child(isMounted) : child;
   });
-  const styles = (): JSX.CSSProperties | undefined => {
-    if (local.placement === 'center') {
-      return local.style;
-    }
-    const propertyToLogical = {
-      top: 'inset-block-start',
-      left: 'inset-inline-start',
-      bottom: 'inset-block-end',
-      right: 'inset-inline-end',
-    } as const;
-    const anchorToLogical = {
-      top: 'start',
-      left: 'start',
-      bottom: 'end',
-      right: 'end',
-    } as const;
-
-    const alignmentStyles = local.placement.split(' ').map((placement) => {
-      const [popoverSide, anchorSide] = placement.split('-to-');
-      return [
-        `${propertyToLogical[popoverSide as BlockAlign | InlineAlign]}`,
-        `anchor(${anchorToLogical[anchorSide as BlockAlign | InlineAlign]})`,
-      ];
-    });
-
-    const style: JSX.CSSProperties = {
-      ...local.style,
-      'position-anchor': `--anchor-${local.id}`,
-      ...Object.fromEntries(alignmentStyles),
-    };
-    return style;
-  };
 
   return (
     <Dynamic
       component={component()}
       {...props}
       data-placement={local.placement}
-      style={styles()}
+      style={{
+        ...local.style,
+        ...inlineAnchoring(local.id, local.placement),
+      }}
       id={local.id}
       role={local.role}
       tabIndex={0}
@@ -133,6 +106,41 @@ const Popover = <T extends ValidComponent = 'div'>(
 };
 
 export { Popover };
+
+function inlineAnchoring(
+  id: string,
+  placement: Placement,
+): JSX.CSSProperties | undefined {
+  if (placement === 'center') {
+    return undefined;
+  }
+  const propertyToLogical = {
+    top: 'inset-block-start',
+    left: 'inset-inline-start',
+    bottom: 'inset-block-end',
+    right: 'inset-inline-end',
+  } as const;
+  const anchorToLogical = {
+    top: 'start',
+    left: 'start',
+    bottom: 'end',
+    right: 'end',
+  } as const;
+
+  const alignmentStyles = placement.split(' ').map((placement) => {
+    const [popoverSide, anchorSide] = placement.split('-to-');
+    return [
+      `${propertyToLogical[popoverSide as BlockAlign | InlineAlign]}`,
+      `anchor(${anchorToLogical[anchorSide as BlockAlign | InlineAlign]})`,
+    ];
+  });
+
+  const style: JSX.CSSProperties = {
+    'position-anchor': `--anchor-${id}`,
+    ...Object.fromEntries(alignmentStyles),
+  };
+  return style;
+}
 
 /* eslint-disable @typescript-eslint/no-namespace */
 declare module 'solid-js' {
