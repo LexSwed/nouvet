@@ -1,6 +1,6 @@
 'use server';
 
-import { and, eq, not, or, sql } from 'drizzle-orm';
+import { and, desc, eq, not, or, sql } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
 import {
@@ -29,20 +29,20 @@ export async function familyMembers(userId: DatabaseUser['id']) {
       id: userTable.id,
       name: userTable.name,
       avatarUrl: userTable.avatarUrl,
-      isApproved: sql<number>`(${familyUserTable.userId} == ${userTable.id})`,
-      joinedAt: sql<string>`iif(${familyUserTable.userId} == ${userTable.id}, ${familyUserTable.joinedAt}, ${familyWaitListTable.joinedAt})`,
+      role: sql<
+        'member' | 'waiting'
+      >`(iif(${familyWaitListTable.userId} == ${userTable.id}, 'waiting', 'member'))`,
+      joinedAt:
+        sql<string>`iif(${familyUserTable.userId} == ${userTable.id}, ${familyUserTable.joinedAt}, ${familyWaitListTable.joinedAt})`.as(
+          'joined_at',
+        ),
     })
     .from(userTable)
     .where(
       or(
-        // recently joined user
         and(
           not(eq(familyUserTable.userId, userId)),
           eq(familyUserTable.familyId, family),
-          // lt(
-          //   sql`(unixepoch(concat(datetime('now', 'utc'), 'Z')) - unixepoch(${familyUserTable.joinedAt})) / 60`,
-          //   60,
-          // ),
         ),
         and(
           eq(familyTable.ownerId, userId),
@@ -53,10 +53,8 @@ export async function familyMembers(userId: DatabaseUser['id']) {
     .leftJoin(familyUserTable, eq(familyUserTable.userId, userTable.id))
     .leftJoin(familyWaitListTable, eq(familyWaitListTable.userId, userTable.id))
     .leftJoin(familyTable, eq(familyTable.id, family))
-    .orderBy(familyWaitListTable.joinedAt, familyUserTable.joinedAt)
+    .orderBy(desc(familyWaitListTable.joinedAt), desc(familyUserTable.joinedAt))
     .all();
 
-  if (!users) return [];
-
-  return users.map((user) => ({ ...user, isApproved: user.isApproved === 1 }));
+  return users;
 }

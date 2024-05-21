@@ -5,8 +5,9 @@ import {
   type RouteDefinition,
   type RouteSectionProps,
 } from '@solidjs/router';
-import { Match, Show, Suspense, Switch } from 'solid-js';
+import { For, Match, Show, Suspense, Switch } from 'solid-js';
 import {
+  Avatar,
   Button,
   ButtonLink,
   Card,
@@ -41,11 +42,8 @@ function FamilyPage(props: RouteSectionProps) {
   const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
   const isOwner = () => user()?.family?.role === 'owner' || false;
-  const familyMembers = createAsync(async () => getFamilyMembers());
-  const awaitingUser = () => {
-    if (!isOwner) return null;
-    return familyMembers()?.find((m) => !m.isApproved);
-  };
+  const familyMembers = createAsync(() => getFamilyMembers());
+  console.log(familyMembers());
   return (
     <>
       <Title>
@@ -71,39 +69,61 @@ function FamilyPage(props: RouteSectionProps) {
               {(family) => (
                 <div class="flex flex-col gap-6">
                   <FamilyHeader />
-                  <section class="container flex flex-col gap-8">
-                    <Suspense>
-                      <Show when={awaitingUser()}>
-                        {(user) => (
-                          <div class="sm:max-w-[400px]">
-                            <WaitingFamilyConfirmation user={user()} />
-                          </div>
-                        )}
-                      </Show>
-                    </Suspense>
-                    <Switch>
-                      <Match when={family()!.role === 'waiting'}>
-                        <WaitingApproval />
-                      </Match>
-                      <Match
-                        when={
-                          familyMembers() ? familyMembers()!.length > 0 : false
-                        }
-                      >
-                        Render users!
-                        {props.children}
-                      </Match>
-                      <Match
-                        when={
-                          isOwner() &&
-                          familyMembers() &&
-                          familyMembers()!.length === 0
-                        }
-                      >
-                        <EmptyFamily />
-                      </Match>
-                    </Switch>
-                  </section>
+                  <Suspense>
+                    <section class="container flex flex-col gap-8">
+                      <Switch>
+                        <Match when={family()!.role === 'waiting'}>
+                          <WaitingApproval />
+                        </Match>
+                        <Match
+                          when={
+                            familyMembers()
+                              ? familyMembers()!.length > 0
+                              : false
+                          }
+                        >
+                          <For each={familyMembers()}>
+                            {(member) => (
+                              <Switch>
+                                <Match when={member.role === 'waiting'}>
+                                  <Suspense>
+                                    <div class="sm:max-w-[400px]">
+                                      <WaitingFamilyConfirmation
+                                        user={member}
+                                      />
+                                    </div>
+                                  </Suspense>
+                                </Match>
+                                <Match when={member.role === 'member'}>
+                                  <Card>
+                                    <Avatar
+                                      name={member.name || ''}
+                                      avatarUrl={member.avatarUrl}
+                                    />
+                                    {member.name}
+                                  </Card>
+                                </Match>
+                              </Switch>
+                            )}
+                          </For>
+                          <Show
+                            when={props.params.userId}
+                            children={props.children}
+                            fallback={'Render users activity timeline'}
+                          />
+                        </Match>
+                        <Match
+                          when={
+                            isOwner() &&
+                            familyMembers() &&
+                            familyMembers()!.length === 0
+                          }
+                        >
+                          <EmptyFamily />
+                        </Match>
+                      </Switch>
+                    </section>
+                  </Suspense>
                 </div>
               )}
             </Match>
