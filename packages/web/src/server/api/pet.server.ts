@@ -111,7 +111,10 @@ export const updatePetBirthDateServer = async (formData: FormData) => {
       petId,
       currentUser.userId,
     );
-    return json({ pet }, { revalidate: [getUserPets.key] });
+    return json(
+      { pet, failed: false, errors: null },
+      { revalidate: [getUserPets.key] },
+    );
   } catch (error) {
     if (error instanceof v.ValiError) {
       return json(
@@ -145,7 +148,10 @@ export const updatePetWeightServer = async (formData: FormData) => {
       petId,
       currentUser.userId,
     );
-    return json({ pet }, { revalidate: [getUserPets.key] });
+    return json(
+      { pet, failed: false, errors: null },
+      { revalidate: [getUserPets.key] },
+    );
   } catch (error) {
     if (error instanceof v.ValiError) {
       return json(
@@ -176,7 +182,10 @@ export const updatePetBreedServer = async (formData: FormData) => {
       petId,
       currentUser.userId,
     );
-    return json({ pet }, { revalidate: [getUserPets.key] });
+    return json(
+      { pet, failed: false, errors: null },
+      { revalidate: [getUserPets.key] },
+    );
   } catch (error) {
     if (error instanceof v.ValiError) {
       return json(
