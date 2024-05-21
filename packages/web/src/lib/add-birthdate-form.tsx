@@ -1,6 +1,12 @@
 import { createAsync, useSubmission } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
-import { createEffect, createMemo, For, Show } from 'solid-js';
+import {
+  createEffect,
+  createMemo,
+  For,
+  Show,
+  type ComponentProps,
+} from 'solid-js';
 import {
   Button,
   Fieldset,
@@ -25,6 +31,7 @@ interface AddBirthDateFormProps {
   id: string;
   pet: { id: number; name: string };
   onDismiss: () => void;
+  placement?: ComponentProps<typeof Drawer>['placement'];
 }
 
 const AddBirthDateForm = (props: AddBirthDateFormProps) => {
@@ -64,7 +71,10 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
     birthDateSubmission.result.failed;
 
   return (
-    <Drawer id={props.id} placement="bottom-start">
+    <Drawer
+      id={props.id}
+      placement={props.placement || 'top-to-bottom left-to-left'}
+    >
       <Show when={submissionFailed()}>
         <FormErrorMessage class="mb-3" />
       </Show>
