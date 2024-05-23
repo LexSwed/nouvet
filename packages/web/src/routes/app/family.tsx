@@ -43,7 +43,6 @@ function FamilyPage(props: RouteSectionProps) {
   const user = createAsync(() => getUserFamily());
   const isOwner = () => user()?.family?.role === 'owner' || false;
   const familyMembers = createAsync(() => getFamilyMembers());
-  console.log(familyMembers());
   return (
     <>
       <Title>
