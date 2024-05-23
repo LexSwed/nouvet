@@ -18,6 +18,7 @@ import {
   Image,
   Menu,
   MenuItem,
+  NavCard,
   Text,
 } from '@nou/ui';
 
@@ -81,35 +82,44 @@ function FamilyPage(props: RouteSectionProps) {
                               : false
                           }
                         >
-                          <For each={familyMembers()}>
-                            {(member) => (
-                              <Switch>
-                                <Match when={member.role === 'waiting'}>
-                                  <Suspense>
-                                    <div class="sm:max-w-[400px]">
-                                      <WaitingFamilyConfirmation
-                                        user={member}
-                                      />
-                                    </div>
-                                  </Suspense>
-                                </Match>
-                                <Match when={member.role === 'member'}>
-                                  <Card>
-                                    <Avatar
-                                      name={member.name || ''}
-                                      avatarUrl={member.avatarUrl}
-                                    />
-                                    {member.name}
-                                  </Card>
-                                </Match>
-                              </Switch>
-                            )}
-                          </For>
-                          <Show
-                            when={props.params.userId}
-                            children={props.children}
-                            fallback={'Render users activity timeline'}
-                          />
+                          <div class="grid grid-cols-2 gap-8">
+                            <ul class="flex flex-col gap-4">
+                              <For each={familyMembers()}>
+                                {(member) => (
+                                  <Switch>
+                                    <Match when={member.role === 'waiting'}>
+                                      <Suspense>
+                                        <li>
+                                          <WaitingFamilyConfirmation
+                                            user={member}
+                                          />
+                                        </li>
+                                      </Suspense>
+                                    </Match>
+                                    <Match when={member.role === 'member'}>
+                                      <NavCard
+                                        href={`/app/family/${member.id}`}
+                                        variant="tonal"
+                                        tone="neutral"
+                                        class="flex flex-row items-center gap-4"
+                                      >
+                                        <Avatar
+                                          name={member.name || ''}
+                                          avatarUrl={member.avatarUrl}
+                                        />
+                                        {member.name}
+                                      </NavCard>
+                                    </Match>
+                                  </Switch>
+                                )}
+                              </For>
+                            </ul>
+                            <Show
+                              when={props.params.userId}
+                              children={props.children}
+                              fallback={'Render users activity timeline'}
+                            />
+                          </div>
                         </Match>
                         <Match
                           when={

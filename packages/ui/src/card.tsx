@@ -58,7 +58,7 @@ const cardVariants = cva('flex flex-col gap-2 rounded-2xl p-4', {
       variant: 'tonal',
       tone: 'primary-light',
       _link: true,
-      class: 'outline-tertiary intent:bg-tertiary-container/90',
+      class: 'outline-primary intent:bg-primary-container/90',
     },
     {
       variant: 'tonal',
@@ -110,7 +110,7 @@ interface NavCardProps extends AnchorProps, CardVariants {
 }
 export const NavCard = (ownProps: NavCardProps) => {
   const [local, props] = splitProps(
-    mergeDefaultProps(ownProps, { variant: 'tonal', tone: 'primary' }),
+    mergeDefaultProps(ownProps, { variant: 'tonal', tone: 'primary-light' }),
     ['variant', 'tone'],
   );
 
