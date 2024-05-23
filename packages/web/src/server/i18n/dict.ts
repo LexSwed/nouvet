@@ -38,5 +38,6 @@ async function fetchDictionary<T extends Namespace>(
 export const getDictionary = async <T extends Namespace>(namespace: T) => {
   const event = getRequestEvent();
   const { locale } = event!.locals;
-  return await fetchDictionary(locale.language as SupportedLocale, namespace);
+  // TODO: check if HMR in AsyncLocalContext is fixed to remove optional chaining
+  return await fetchDictionary(locale?.language as SupportedLocale, namespace);
 };

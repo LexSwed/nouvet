@@ -7,7 +7,7 @@ const Divider = (props: ComponentProps<'div'>) => {
     <div
       role="separator"
       {...props}
-      class={tw('m-0 border-t-[1px] border-on-surface/12', props.class)}
+      class={tw('mx-4 border-t-[1px] border-on-surface/12', props.class)}
     />
   );
 };

@@ -83,7 +83,11 @@ function FamilyPage(props: RouteSectionProps) {
                           }
                         >
                           <div class="grid grid-cols-2 gap-8">
-                            <ul class="flex flex-col gap-4">
+                            <Card
+                              as="ul"
+                              class="flex flex-col gap-4"
+                              variant="flat"
+                            >
                               <For each={familyMembers()}>
                                 {(member) => (
                                   <Switch>
@@ -95,13 +99,14 @@ function FamilyPage(props: RouteSectionProps) {
                                           />
                                         </li>
                                       </Suspense>
+                                      <Divider />
                                     </Match>
                                     <Match when={member.role === 'member'}>
                                       <NavCard
                                         href={`/app/family/${member.id}`}
-                                        variant="tonal"
-                                        tone="neutral"
                                         class="flex flex-row items-center gap-4"
+                                        variant="tonal"
+                                        tone="primary-light"
                                       >
                                         <Avatar
                                           name={member.name || ''}
@@ -113,7 +118,7 @@ function FamilyPage(props: RouteSectionProps) {
                                   </Switch>
                                 )}
                               </For>
-                            </ul>
+                            </Card>
                             <Show
                               when={props.params.userId}
                               children={props.children}

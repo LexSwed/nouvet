@@ -36,7 +36,7 @@
   "invite.subheadline": "Your pets are happier with more humans around! Share the care for your pets with the loved ones.",
   "invite.cta-invite": "Invite",
   "invite.join": "Want to join another user instead?",
-  "invite.info-consent": "By accepting another user into your family, you allow them to see and modify your pets information, including medical history or medications you may have saved.\n\nYou can always revoke the access later.",
+  "invite.info-consent": "By accepting a user into your family, you give them permission to see and modify your pets information and related activities, including medical history.\n\nYou can always revoke the access later.",
   "invite.info-consent-accept": "Create QR code",
   "invite.qr-description": "Let another person you want to invite to scan this code with their phone camera",
   "invite.cta-ready": "Ready",
