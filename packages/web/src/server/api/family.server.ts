@@ -7,9 +7,11 @@ import { getUserFamily } from '~/server/api/user';
 import { getRequestUser } from '~/server/auth/request-user';
 import { familyCancelJoin } from '~/server/db/queries/familyCancelJoin';
 import { familyDelete } from '~/server/db/queries/familyDelete';
-import { familyMembers } from '~/server/db/queries/familyMembers';
+import { familyMember, familyMembers } from '~/server/db/queries/familyMembers';
 import { familyUpdate } from '~/server/db/queries/familyUpdate';
 import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
+
+import { IncorrectFamilyMemberId } from '../errors';
 
 export async function getFamilyMembersServer() {
   try {
@@ -19,7 +21,25 @@ export async function getFamilyMembersServer() {
     return members;
   } catch (error) {
     console.error(error);
+    // TODO: Error handling
+    throw error;
+  }
+}
 
+export async function getFamilyMemberServer(memberIdParam: unknown) {
+  try {
+    const user = await getRequestUser();
+    const memberId = Number(memberIdParam ?? NaN);
+    if (Number.isNaN(memberId)) throw new Error('Invalid request');
+
+    const member = await familyMember(user.userId, memberId);
+
+    if (!member) throw new IncorrectFamilyMemberId();
+
+    return member;
+  } catch (error) {
+    console.error(error);
+    // TODO: Error handling
     throw error;
   }
 }

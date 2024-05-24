@@ -3,6 +3,7 @@ import { action, cache } from '@solidjs/router';
 import {
   cancelFamilyJoinServer,
   deleteFamilyServer,
+  getFamilyMemberServer,
   getFamilyMembersServer,
   updateFamilyServer,
 } from './family.server';
@@ -10,6 +11,11 @@ import {
 export const getFamilyMembers = cache(
   async () => getFamilyMembersServer(),
   'family-members',
+);
+
+export const getFamilyMember = cache(
+  async (memberId: unknown) => getFamilyMemberServer(memberId),
+  'family-member',
 );
 
 export const updateFamily = action(

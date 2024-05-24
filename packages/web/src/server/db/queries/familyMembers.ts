@@ -7,6 +7,7 @@ import {
   familyTable,
   familyUserTable,
   familyWaitListTable,
+  petTable,
   userTable,
   type DatabaseUser,
 } from '~/server/db/schema';
@@ -57,4 +58,55 @@ export async function familyMembers(userId: DatabaseUser['id']) {
     .all();
 
   return users;
+}
+
+/**
+ * Query specific user from the family.
+ */
+export async function familyMember(
+  userId: DatabaseUser['id'],
+  memberId: DatabaseUser['id'],
+) {
+  const db = useDb();
+
+  const family = db
+    .select({ familyId: familyUserTable.familyId })
+    .from(familyUserTable)
+    .where(eq(familyUserTable.userId, userId));
+
+  const member = await db
+    .select({
+      id: userTable.id,
+      name: userTable.name,
+      avatarUrl: userTable.avatarUrl,
+      role: sql<
+        'member' | 'owner'
+      >`(iif(${familyTable.ownerId} == ${userTable.id}, 'owner', 'member'))`,
+    })
+    .from(userTable)
+    .where(
+      and(
+        eq(familyUserTable.userId, memberId),
+        eq(familyUserTable.familyId, family),
+      ),
+    )
+    .leftJoin(familyUserTable, eq(familyUserTable.userId, userTable.id))
+    .leftJoin(familyTable, eq(familyTable.id, family))
+    .leftJoin(petTable, eq(petTable.ownerId, memberId))
+    .get();
+
+  if (member) {
+    const pets = await db
+      .select({ id: petTable.id, name: petTable.name })
+      .from(petTable)
+      .where(eq(petTable.ownerId, member.id))
+      .all();
+
+    return {
+      ...member,
+      pets,
+    };
+  }
+
+  return member;
 }
