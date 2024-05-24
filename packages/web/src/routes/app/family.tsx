@@ -69,8 +69,8 @@ function FamilyPage(props: RouteSectionProps) {
               {(family) => (
                 <div class="flex flex-col gap-6">
                   <FamilyHeader />
-                  <Suspense>
-                    <section class="container flex flex-col gap-8">
+                  <section class="container flex flex-col gap-8">
+                    <Suspense>
                       <Switch>
                         <Match when={family()!.role === 'waiting'}>
                           <WaitingApproval />
@@ -83,47 +83,8 @@ function FamilyPage(props: RouteSectionProps) {
                           }
                         >
                           <div class="grid grid-cols-2 gap-8">
-                            <Card
-                              as="ul"
-                              class="flex flex-col gap-4"
-                              variant="flat"
-                            >
-                              <For each={familyMembers()}>
-                                {(member) => (
-                                  <Switch>
-                                    <Match when={member.role === 'waiting'}>
-                                      <Suspense>
-                                        <li>
-                                          <WaitingFamilyConfirmation
-                                            user={member}
-                                          />
-                                        </li>
-                                      </Suspense>
-                                      <Divider />
-                                    </Match>
-                                    <Match when={member.role === 'member'}>
-                                      <NavCard
-                                        href={`/app/family/${member.id}`}
-                                        class="flex flex-row items-center gap-4"
-                                        variant="tonal"
-                                        tone="primary-light"
-                                      >
-                                        <Avatar
-                                          name={member.name || ''}
-                                          avatarUrl={member.avatarUrl}
-                                        />
-                                        {member.name}
-                                      </NavCard>
-                                    </Match>
-                                  </Switch>
-                                )}
-                              </For>
-                            </Card>
-                            <Show
-                              when={props.params.userId}
-                              children={props.children}
-                              fallback={'Render users activity timeline'}
-                            />
+                            <FamilyMembers />
+                            {props.children}
                           </div>
                         </Match>
                         <Match
@@ -136,8 +97,8 @@ function FamilyPage(props: RouteSectionProps) {
                           <EmptyFamily />
                         </Match>
                       </Switch>
-                    </section>
-                  </Suspense>
+                    </Suspense>
+                  </section>
                 </div>
               )}
             </Match>
@@ -441,3 +402,36 @@ function DiscoveredFamilyFeature() {
     </>
   );
 }
+
+const FamilyMembers = () => {
+  const familyMembers = createAsync(() => getFamilyMembers());
+  return (
+    <Card as="ul" class="flex flex-col gap-4" variant="flat">
+      <For each={familyMembers()}>
+        {(member) => (
+          <Switch>
+            <Match when={member.role === 'waiting'}>
+              <Suspense>
+                <li>
+                  <WaitingFamilyConfirmation user={member} />
+                </li>
+              </Suspense>
+              <Divider />
+            </Match>
+            <Match when={member.role === 'member'}>
+              <NavCard
+                href={`/app/family/${member.id}`}
+                class="flex flex-row items-center gap-4"
+                variant="flat"
+                tone="neutral"
+              >
+                <Avatar name={member.name || ''} avatarUrl={member.avatarUrl} />
+                {member.name}
+              </NavCard>
+            </Match>
+          </Switch>
+        )}
+      </For>
+    </Card>
+  );
+};

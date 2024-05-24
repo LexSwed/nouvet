@@ -76,6 +76,12 @@ const cardVariants = cva('flex flex-col gap-2 rounded-2xl p-4', {
       tone: 'failure',
       class: 'bg-error-container text-on-error-container',
     },
+    {
+      variant: 'flat',
+      tone: 'neutral',
+      _link: true,
+      class: 'outline-on-surface intent:bg-on-surface/8',
+    },
   ],
   defaultVariants: {
     tone: 'neutral',
