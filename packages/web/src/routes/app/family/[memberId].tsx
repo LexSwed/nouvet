@@ -6,7 +6,7 @@ import {
 import { Show } from 'solid-js';
 import { Card } from '@nou/ui';
 
-import { getFamilyMember } from '~/server/api/family';
+import { getFamilyMember, getFamilyMembers } from '~/server/api/family';
 import { cacheTranslations } from '~/server/i18n';
 
 export const route = {
@@ -17,10 +17,17 @@ export const route = {
 } satisfies RouteDefinition;
 
 function FamilyUserPage(props: RouteSectionProps) {
+  const partialMember = createAsync(async () => {
+    const members = await getFamilyMembers();
+    return members.find((m) => m.id === Number(props.params.memberId));
+  });
   const member = createAsync(() => getFamilyMember(props.params.memberId));
+
+  const memberInfo = () => member() || partialMember();
+
   return (
     <Card variant="flat">
-      <Show when={member()}>{(member) => <>{member().name}</>}</Show>
+      <Show when={memberInfo()}>{(member) => <>{member().name}</>}</Show>
     </Card>
   );
 }
