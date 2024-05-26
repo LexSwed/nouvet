@@ -1,11 +1,16 @@
 import { MetaProvider } from '@solidjs/meta';
-import { Router } from '@solidjs/router';
+import { Navigate, Router } from '@solidjs/router';
 import { FileRoutes } from '@solidjs/start/router';
-import { Suspense } from 'solid-js';
+import { ErrorBoundary, Suspense } from 'solid-js';
 
 export default function App() {
   return (
-    <>
+    <ErrorBoundary
+      fallback={(error) => {
+        console.error(error);
+        return <Navigate href="/houston" />;
+      }}
+    >
       <Router
         explicitLinks={true}
         preload={false}
@@ -22,6 +27,6 @@ export default function App() {
       >
         <FileRoutes />
       </Router>
-    </>
+    </ErrorBoundary>
   );
 }
