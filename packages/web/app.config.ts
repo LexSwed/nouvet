@@ -7,6 +7,9 @@ export default defineConfig({
   ssr: true,
   middleware: './src/middleware.ts',
   devOverlay: true,
+  solid: {
+    hot: false,
+  },
   server: {
     prerender: {
       routes: ['/', '/about', '/privacy'],
