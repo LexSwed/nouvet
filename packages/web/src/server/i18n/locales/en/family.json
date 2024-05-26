@@ -41,7 +41,7 @@
   "invite.qr-description": "Let another person you want to invite to scan this code with their phone camera",
   "invite.cta-ready": "Ready",
   "invite.cta-share": "Share invite link",
-  "invite.waitlist": "Waiting for approval",
+  "invite.waitlist": "Waiting to join",
   "invite.waitlist-empty": "People who followed the link will appear here for your approval.",
   "invite.waitlist-accept": "Accept",
   "invite.waitlist-decline": "Decline",

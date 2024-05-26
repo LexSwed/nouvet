@@ -63,12 +63,12 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 
   return (
     <Card
-      class="flex min-w-52 flex-col gap-4"
+      class="flex min-w-52 flex-col gap-4 rounded-2xl p-0.5"
       ref={(el: HTMLElement) => (triggerRef = el)}
     >
       <Button
         variant="ghost"
-        class="-m-4 flex h-auto cursor-pointer flex-row items-center justify-start gap-4 rounded-2xl p-3"
+        class="flex h-auto cursor-pointer flex-row items-center justify-start gap-4 rounded-[0.875rem] p-3"
         popoverTarget={petPopoverId}
         id={`pet-${props.pet.id}`}
       >
@@ -144,7 +144,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
                   <Icon use="pencil" size="sm" />
                 </Button>
               </A>
-              <MenuList class="min-w-52">
+              <MenuList class="min-w-56">
                 <Show when={props.owner}>
                   {(owner) => (
                     <MenuItem as={A} href={`/app/family/${owner().id}/`}>
@@ -188,7 +188,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
           </Suspense>
         )}
       </Popover>
-      <div class="flex flex-row items-center gap-2 empty:hidden">
+      <div class="-mt-6 flex flex-row items-center gap-2 px-3 py-2 empty:hidden">
         <Show when={hasMissingInfo()}>
           <Suspense fallback={null}>
             <QuickSetters pet={props.pet} />
@@ -213,7 +213,7 @@ function QuickSetters(props: { pet: PetHomeCardProps['pet'] }) {
       <Match when={qs()?.showBirthDate}>
         <SplitButton
           variant="outline"
-          class="outline-surface bg-surface outline outline-8"
+          class="outline-surface bg-surface outline outline-4"
           size="sm"
         >
           <SplitButton.Inner
@@ -241,7 +241,7 @@ function QuickSetters(props: { pet: PetHomeCardProps['pet'] }) {
       <Match when={qs()?.showWeight}>
         <SplitButton
           variant="outline"
-          class="outline-surface bg-surface outline outline-8"
+          class="outline-surface bg-surface outline outline-4"
           size="sm"
         >
           <SplitButton.Inner
@@ -269,7 +269,7 @@ function QuickSetters(props: { pet: PetHomeCardProps['pet'] }) {
       <Match when={qs()?.showBreed}>
         <SplitButton
           variant="outline"
-          class="outline-surface bg-surface outline outline-8"
+          class="outline-surface bg-surface outline outline-4"
           size="sm"
         >
           <SplitButton.Inner

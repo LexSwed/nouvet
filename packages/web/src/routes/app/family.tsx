@@ -18,7 +18,7 @@ import {
   Image,
   Menu,
   MenuItem,
-  NavCard,
+  Popover,
   Text,
 } from '@nou/ui';
 
@@ -42,7 +42,7 @@ export const route = {
 function FamilyPage(props: RouteSectionProps) {
   const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
-  const isOwner = () => user()?.family?.role === 'owner' || false;
+  const isOwner = () => user()?.family?.role === 'owner' ?? false;
   const familyMembers = createAsync(() => getFamilyMembers());
   return (
     <>
@@ -82,7 +82,7 @@ function FamilyPage(props: RouteSectionProps) {
                               : false
                           }
                         >
-                          <div class="grid grid-cols-2 gap-8">
+                          <div class="flex flex-col gap-6">
                             <FamilyMembers />
                             {props.children}
                           </div>
@@ -134,7 +134,7 @@ function FamilyHeader() {
                 popoverTarget="family-invite"
                 class="gap-2"
               >
-                <Icon use="user-circle-plus" />
+                <Icon use="user-circle-plus" class="-ms-1" />
                 {t('action-add-users')}
               </Button>
               <Button
@@ -404,34 +404,68 @@ function DiscoveredFamilyFeature() {
 }
 
 const FamilyMembers = () => {
+  const t = createTranslator('family');
   const familyMembers = createAsync(() => getFamilyMembers());
   return (
-    <Card as="ul" class="flex flex-col gap-4" variant="flat">
+    <ul class="flex flex-row flex-wrap items-end gap-2">
       <For each={familyMembers()}>
         {(member) => (
           <Switch>
             <Match when={member.role === 'waiting'}>
-              <Suspense>
-                <li>
-                  <WaitingFamilyConfirmation user={member} />
-                </li>
-              </Suspense>
-              <Divider />
+              <li class="peer/waiting me-4 flex flex-col items-start peer-[]/waiting:hidden">
+                <Text
+                  id="waiting-to-join-label"
+                  with="overline"
+                  class="text-primary ps-4"
+                >
+                  {t('invite.waitlist')}
+                </Text>
+                <Button
+                  class="border-primary flex flex-col items-start gap-2 rounded-[0.875rem] border p-4 outline-offset-0"
+                  popoverTarget="family-wait-list"
+                  variant="ghost"
+                  tone="primary"
+                  style={{
+                    'view-transition-name': `family-member-${member.id}`,
+                  }}
+                >
+                  <div class="flex flex-row items-center justify-start gap-4">
+                    <Avatar
+                      name={member.name || ''}
+                      avatarUrl={member.avatarUrl}
+                    />
+                    <Text with="label">{member.name}</Text>
+                  </div>
+                </Button>
+                <Popover
+                  id="family-wait-list"
+                  placement="top-to-top left-to-left"
+                  class="-mt-8 max-w-80 transform-none rounded-3xl p-0"
+                >
+                  <Suspense>
+                    <WaitingFamilyConfirmation user={member} />
+                  </Suspense>
+                </Popover>
+              </li>
             </Match>
             <Match when={member.role === 'member'}>
-              <NavCard
-                href={`/app/family/${member.id}`}
-                class="flex flex-row items-center gap-4"
-                variant="flat"
-                tone="neutral"
-              >
-                <Avatar name={member.name || ''} avatarUrl={member.avatarUrl} />
-                {member.name}
-              </NavCard>
+              <Card as="li" class="p-0.5">
+                <ButtonLink
+                  href={`/app/family/${member.id}`}
+                  class="bg-surface flex flex-row items-center justify-start gap-4 rounded-[0.875rem] p-4"
+                  variant="ghost"
+                >
+                  <Avatar
+                    name={member.name || ''}
+                    avatarUrl={member.avatarUrl}
+                  />
+                  <Text with="label">{member.name}</Text>
+                </ButtonLink>
+              </Card>
             </Match>
           </Switch>
         )}
       </For>
-    </Card>
+    </ul>
   );
 };

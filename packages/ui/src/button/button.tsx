@@ -8,7 +8,7 @@ import { tw } from '../tw';
 import { mergeDefaultProps, type Merge } from '../utils';
 
 export const buttonVariants = cva(
-  `relative inline-flex cursor-default select-none items-center justify-center gap-2 rounded-full text-sm font-medium transition focus-visible:outline-4 focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50`,
+  `relative inline-flex cursor-default select-none items-center justify-center gap-2 rounded-full text-sm font-medium outline-offset-4 transition focus-visible:outline-4 disabled:pointer-events-none disabled:opacity-50`,
   {
     variants: {
       size: {
@@ -21,7 +21,7 @@ export const buttonVariants = cva(
         default: 'bg-primary text-on-primary outline-primary',
         tonal: 'outline-on-surface',
         outline:
-          'border-outline text-on-surface outline-on-surface border bg-transparent focus-visible:outline-offset-0',
+          'border-outline text-on-surface outline-on-surface border bg-transparent outline-offset-0',
         ghost: 'text-on-surface outline-on-surface',
         link: 'text-primary underline-offset-4',
       },
@@ -95,14 +95,14 @@ export const buttonVariants = cva(
         variant: 'tonal',
         tone: 'primary',
         class:
-          'bg-primary-container text-on-primary-container intent:bg-primary-container/90 [--btn-bg:theme(colors.primary-container)]',
+          'bg-primary-container text-on-primary-container intent:filter-darker [--btn-bg:theme(colors.primary-container)]',
       },
       {
         split: false,
         variant: 'tonal',
         tone: 'secondary',
         class:
-          'bg-tertiary-container text-on-tertiary-container intent:bg-secondary-container/90 [--btn-bg:theme(colors.tertiary-container)]',
+          'bg-tertiary-container text-on-tertiary-container intent:filter-darker [--btn-bg:theme(colors.tertiary-container)]',
       },
       {
         split: false,

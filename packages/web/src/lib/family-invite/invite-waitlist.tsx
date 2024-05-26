@@ -1,5 +1,5 @@
-import { createAsync, revalidate, useMatch } from '@solidjs/router';
-import { Match, onMount, Show, Suspense, Switch } from 'solid-js';
+import { createAsync, useMatch } from '@solidjs/router';
+import { Match, Show, Suspense, Switch } from 'solid-js';
 import { Avatar, Button, ButtonLink, Card, Icon, Text } from '@nou/ui';
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns/differenceInMinutes';
@@ -15,11 +15,6 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
   const t = createTranslator('family');
 
   const user = createAsync(() => getUserFamily());
-
-  // ensure we call update
-  onMount(() => {
-    revalidate(getFamilyMembers.key);
-  });
 
   const recentMember = createAsync(async () => {
     const members = await getFamilyMembers();

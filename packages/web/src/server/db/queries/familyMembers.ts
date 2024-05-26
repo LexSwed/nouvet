@@ -64,7 +64,7 @@ export async function familyMembers(userId: DatabaseUser['id']) {
  * Query specific user from the family.
  */
 export async function familyMember(
-  userId: DatabaseUser['id'],
+  requesterId: DatabaseUser['id'],
   memberId: DatabaseUser['id'],
 ) {
   const db = useDb();
@@ -72,7 +72,7 @@ export async function familyMember(
   const family = db
     .select({ familyId: familyUserTable.familyId })
     .from(familyUserTable)
-    .where(eq(familyUserTable.userId, userId));
+    .where(eq(familyUserTable.userId, requesterId));
 
   const member = await db
     .select({

@@ -12,9 +12,11 @@
     background-color: theme('colors.surface');
     color: theme('colors.on-surface');
     isolation: isolate;
-    transition-property: opacity, transform, display;
+    transition:
+      opacity 0.16s ease-out,
+      transform 0.24s ease-out,
+      display 0.24s ease-out;
     transition-behavior: allow-discrete;
-    transition-duration: 0.24s;
     width: max-content;
     will-change: transform, opacity;
     margin: 0;
@@ -51,6 +53,7 @@
     }
     &:not(:popover-open) {
       transition-duration: 0.1s;
+      transition-timing-function: ease-in;
       opacity: 0;
     }
 
@@ -58,13 +61,13 @@
         [data-placement*='left-to-right'],
         [data-placement*='right-to-left']
       ) {
-      margin-inline: theme(spacing.4);
+      margin-inline: theme(spacing.2);
     }
     &:where(
         [data-placement*='top-to-bottom'],
         [data-placement*='bottom-to-top']
       ) {
-      margin-block: theme(spacing.4);
+      margin-block: theme(spacing.2);
     }
 
     &:where([data-placement*='top'], [data-placement*='bottom']):not(

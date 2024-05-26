@@ -21,13 +21,13 @@ export function WaitingFamilyConfirmation(props: {
         {t('invite.waitlist')}
       </Text>
       <div
-        class="flex flex-row items-center justify-start gap-3"
+        class="flex flex-row items-center justify-start gap-4"
         style={{ 'view-transition-name': `family-member-${props.user.id}` }}
       >
         <Avatar avatarUrl={props.user.avatarUrl} name={props.user.name || ''} />
-        <Text with="label-lg">{props.user.name}</Text>
+        <Text with="label">{props.user.name}</Text>
       </div>
-      <Text as="p" with="body-sm">
+      <Text as="p" with="body-sm" class="p-2">
         {t('invite.info-consent')}
       </Text>
       <Form action={moveUserFromTheWaitList} method="post">
