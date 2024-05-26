@@ -64,7 +64,7 @@ const Popover = <T extends ValidComponent = 'div'>(
     ['id', 'ref', 'class', 'style', 'as', 'role', 'placement', 'children'],
   );
 
-  /** When the content is shown conditionally, it should wait
+  /** When children is shown conditionally, it should wait
    * until the animation is over before being hidden */
   const { isMounted } = createPresence(rendered, {
     enterDuration: 0,
