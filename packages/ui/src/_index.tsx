@@ -15,6 +15,5 @@ export { RadioCard, SegmentedButton } from './radio';
 export { Spinner } from './spinner';
 export { Stack } from './stack';
 export { Text } from './text';
-export { Presence } from './presence';
 export { tw } from './tw';
 export { mergeDefaultProps } from './utils';
