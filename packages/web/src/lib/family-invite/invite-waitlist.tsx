@@ -24,7 +24,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
   const recentMember = createAsync(async () => {
     const members = await getFamilyMembers();
     return (
-      members.find((member) => !member.isApproved) ||
+      members.find((member) => member.role === 'waiting') ||
       members.find((member) => {
         return (
           differenceInMinutes(new UTCDate(), new UTCDate(member.joinedAt)) < 60
@@ -54,23 +54,19 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
               </Text>
             </div>
           </Match>
-          <Match when={!recentMember()?.isApproved}>
-            <Show when={recentMember()}>
-              {(user) => <WaitingFamilyConfirmation user={user()} />}
-            </Show>
+          <Match when={recentMember()!.role === 'waiting' && recentMember()}>
+            {(user) => <WaitingFamilyConfirmation user={user()} />}
           </Match>
-          <Match when={recentMember()?.isApproved}>
-            <Show when={recentMember()}>
-              {(member) => (
-                <NewlyJoinedMember
-                  familyName={user()?.family?.name}
-                  user={member()}
-                  onNavigate={() => {
-                    props.onNext();
-                  }}
-                />
-              )}
-            </Show>
+          <Match when={recentMember()!.role === 'member' && recentMember()}>
+            {(member) => (
+              <NewlyJoinedMember
+                familyName={user()?.family?.name}
+                user={member()}
+                onNavigate={() => {
+                  props.onNext();
+                }}
+              />
+            )}
           </Match>
         </Switch>
         <Button
@@ -88,7 +84,6 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
 const NewlyJoinedMember = (props: {
   familyName: string | null | undefined;
   user: {
-    isApproved: boolean;
     id: number;
     name: string | null;
     avatarUrl: string | null;
@@ -118,7 +113,7 @@ const NewlyJoinedMember = (props: {
       <Card
         variant="outlined"
         class="flex flex-col gap-4"
-        style={{ 'view-transition-name': `family-invite-${props.user.id}` }}
+        style={{ 'view-transition-name': `family-member-${props.user.id}` }}
       >
         {/* TODO: Chip? Tag component? */}
         <div class="bg-primary-container text-on-primary-container -me-2 -mt-2 flex cursor-default flex-row items-center gap-2 self-end rounded-full p-2">
