@@ -26,15 +26,15 @@
       pointer-events: none;
     }
     &:where(:first-child) {
-      border-end-start-radius: 0;
-      border-end-end-radius: 0;
+      border-end-start-radius: 2px;
+      border-end-end-radius: 2px;
     }
     &:where(:last-child) {
-      border-start-start-radius: 0;
-      border-start-end-radius: 0;
+      border-start-start-radius: 2px;
+      border-start-end-radius: 2px;
     }
     &:where(:not(:first-child, :last-child)) {
-      border-radius: 0;
+      border-radius: 2px;
     }
 
     &:where(:first-child:last-child) {
