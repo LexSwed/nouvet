@@ -54,7 +54,7 @@ export async function familyMembers(userId: DatabaseUser['id']) {
     .leftJoin(familyUserTable, eq(familyUserTable.userId, userTable.id))
     .leftJoin(familyWaitListTable, eq(familyWaitListTable.userId, userTable.id))
     .leftJoin(familyTable, eq(familyTable.id, family))
-    .orderBy(desc(familyWaitListTable.joinedAt), desc(familyUserTable.joinedAt))
+    .orderBy(desc(familyUserTable.joinedAt), desc(familyWaitListTable.joinedAt))
     .all();
 
   return users;

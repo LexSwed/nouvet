@@ -42,7 +42,7 @@ export const route = {
 function FamilyPage(props: RouteSectionProps) {
   const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
-  const isOwner = () => user()?.family?.role === 'owner' ?? false;
+  const isOwner = () => user()?.family?.role === 'owner';
   const familyMembers = createAsync(() => getFamilyMembers());
   return (
     <>
@@ -412,7 +412,7 @@ const FamilyMembers = () => {
         {(member) => (
           <Switch>
             <Match when={member.role === 'waiting'}>
-              <li class="peer/waiting me-4 flex flex-col items-start peer-[]/waiting:hidden">
+              <li class="peer/waiting ms-4 flex flex-col items-start first:ms-0 peer-[]/waiting:hidden">
                 <Text
                   id="waiting-to-join-label"
                   with="overline"
@@ -421,7 +421,7 @@ const FamilyMembers = () => {
                   {t('invite.waitlist')}
                 </Text>
                 <Button
-                  class="border-primary flex flex-col items-start gap-2 rounded-[0.875rem] border p-4 outline-offset-0"
+                  class="border-primary bg-surface flex flex-col items-start gap-2 rounded-[0.875rem] border p-4 outline-offset-0"
                   popoverTarget="family-wait-list"
                   variant="ghost"
                   tone="primary"
