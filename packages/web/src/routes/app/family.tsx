@@ -407,12 +407,12 @@ const FamilyMembers = () => {
   const t = createTranslator('family');
   const familyMembers = createAsync(() => getFamilyMembers());
   return (
-    <ul class="flex flex-row flex-wrap items-end gap-2">
+    <ul class="flex flex-row flex-wrap items-end justify-stretch gap-2">
       <For each={familyMembers()}>
         {(member) => (
           <Switch>
             <Match when={member.role === 'waiting'}>
-              <li class="peer/waiting ms-4 flex flex-col items-start first:ms-0 peer-[]/waiting:hidden">
+              <li class="peer/waiting flex basis-full flex-col items-start first:ms-0 peer-[]/waiting:hidden sm:basis-auto md:ms-4">
                 <Text
                   id="waiting-to-join-label"
                   with="overline"
@@ -421,7 +421,7 @@ const FamilyMembers = () => {
                   {t('invite.waitlist')}
                 </Text>
                 <Button
-                  class="border-primary bg-surface flex flex-col items-start gap-2 rounded-[0.875rem] border p-4 outline-offset-0"
+                  class="border-primary bg-surface flex w-full flex-col items-start gap-2 rounded-[0.875rem] border p-4 outline-offset-0"
                   popoverTarget="family-wait-list"
                   variant="ghost"
                   tone="primary"
@@ -449,7 +449,7 @@ const FamilyMembers = () => {
               </li>
             </Match>
             <Match when={member.role === 'member'}>
-              <Card as="li" class="p-0.5">
+              <Card as="li" class="basis-full p-0.5 sm:basis-auto">
                 <ButtonLink
                   href={`/app/family/${member.id}`}
                   class="bg-surface flex flex-row items-center justify-start gap-4 rounded-[0.875rem] p-4"
