@@ -2,7 +2,7 @@
 
 import { flatten as valiFlatten, type ValiError } from 'valibot';
 
-import type ErrorsDict from '~/server/i18n/locales/en/errors.json';
+import type ErrorsDict from '~/server/i18n/locales/en/errors';
 
 import { getDictionary } from './i18n/dict';
 

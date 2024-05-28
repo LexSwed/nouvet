@@ -21,10 +21,10 @@ import {
 
 import { cancelFamilyJoin, getFamilyMembers } from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
-import { cacheTranslations, createTranslator } from '~/server/i18n';
+import { cacheTranslations, createTranslator, T } from '~/server/i18n';
 
 import { FamilyNameForm } from '~/lib/family-invite/family-name-form';
-import FamilyInviteDialog from '~/lib/family-invite/invite-dialog';
+import { FamilyInviteDialog } from '~/lib/family-invite/invite-dialog';
 import { WaitingFamilyConfirmation } from '~/lib/family-invite/waiting-family-confirmation';
 
 export const route = {
@@ -37,8 +37,9 @@ export const route = {
 
 export default function FamilyRootPage() {
   const user = createAsync(() => getUserFamily());
-  const isOwner = () => user()?.family?.role === 'owner';
   const familyMembers = createAsync(() => getFamilyMembers());
+
+  const isOwner = () => user()?.family?.role === 'owner';
   return (
     <>
       <section class="container flex flex-col gap-8">
@@ -292,7 +293,9 @@ const DeleteFamilyDialog = () => {
                 />
               </div>
               <div class="flex flex-col gap-8">
-                <Text as="p">{t('delete-family-description')}</Text>
+                <Text as="p">
+                  <T>{t('delete-family-description')}</T>
+                </Text>
                 <div class="grid grid-cols-2 gap-2">
                   <Button
                     variant="outline"

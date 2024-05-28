@@ -14,7 +14,10 @@ import { Joined } from './joined';
 import './family-invite.module.css';
 
 type Step = 'initial' | 'qrcode' | 'waitlist' | 'join' | 'join-success';
-const FamilyInviteDialog = (props: { id: string; initialScreen?: Step }) => {
+export const FamilyInviteDialog = (props: {
+  id: string;
+  initialScreen?: Step;
+}) => {
   return (
     <Popover
       id={props.id}

@@ -2,13 +2,13 @@
 
 import { getRequestEvent } from 'solid-js/web';
 
-import type AppDict from './locales/en/app.json';
-import type ErrorsDict from './locales/en/errors.json';
-import type FamilyDict from './locales/en/family.json';
-import type InvitedDict from './locales/en/invited.json';
-import type LoginDict from './locales/en/login.json';
-import type PetFormsDict from './locales/en/pet-forms.json';
-import type WWWDict from './locales/en/www.json';
+import type AppDict from './locales/en/app';
+import type ErrorsDict from './locales/en/errors';
+import type FamilyDict from './locales/en/family';
+import type InvitedDict from './locales/en/invited';
+import type LoginDict from './locales/en/login';
+import type PetFormsDict from './locales/en/pet-forms';
+import type WWWDict from './locales/en/www';
 import type { SupportedLocale } from './shared';
 
 export type NamespaceMap = {
@@ -26,11 +26,11 @@ async function fetchDictionary<T extends Namespace>(
   locale: SupportedLocale = 'en',
   namespace: T,
 ) {
-  const localeFiles = import.meta.glob('./locales/*/*.json', {
+  const localeFiles = import.meta.glob('./locales/*/*.ts', {
     import: 'default',
   });
   const routeModuleDict = (await localeFiles[
-    `./locales/${locale}/${namespace}.json`
+    `./locales/${locale}/${namespace}.ts`
   ]()) as NamespaceMap[T];
   return routeModuleDict;
 }
