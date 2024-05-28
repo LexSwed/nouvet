@@ -19,7 +19,11 @@ import {
   Text,
 } from '@nou/ui';
 
-import { cancelFamilyJoin, getFamilyMembers } from '~/server/api/family';
+import {
+  cancelFamilyJoin,
+  getFamilyMembers,
+  leaveFamily,
+} from '~/server/api/family';
 import { getUserFamily } from '~/server/api/user';
 import { cacheTranslations, createTranslator, T } from '~/server/i18n';
 
@@ -81,86 +85,181 @@ export default function FamilyRootPage() {
 function FamilyHeader() {
   const t = createTranslator('family');
   const user = createAsync(() => getUserFamily());
-  const isOwner = () => user()?.family?.role === 'owner' || false;
+  const isOwner = () => user()?.family?.role === 'owner';
   return (
-    <Switch>
-      <Match when={isOwner()}>
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-end">
-          <FamilyNameForm familyName={user()?.family?.name} />
-          <div class="mb-1 flex flex-row gap-2">
+    <>
+      <Switch>
+        <Match when={isOwner()}>
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-end">
+            <FamilyNameForm familyName={user()?.family?.name} />
+            <div class="mb-1 flex flex-row gap-2">
+              <Button
+                variant="tonal"
+                size="sm"
+                popoverTarget="family-invite"
+                class="gap-2"
+              >
+                <Icon use="user-circle-plus" class="-ms-1" />
+                {t('action.add-users')}
+              </Button>
+              <Button
+                variant="ghost"
+                icon
+                size="sm"
+                label={t('action.more')}
+                popoverTarget="family-owner-menu"
+                class="gap-2"
+              >
+                <Icon use="dots-three-outline-vertical" />
+              </Button>
+              <Menu
+                id="family-owner-menu"
+                placement="top-to-bottom right-to-right"
+              >
+                <MenuItem
+                  tone="destructive"
+                  popoverTarget="family-delete"
+                  as="button"
+                  type="button"
+                >
+                  <Icon use="trash-simple" />
+                  {t('action.disassemble')}
+                </MenuItem>
+              </Menu>
+
+              <Drawer
+                placement="center"
+                id="family-delete"
+                aria-labelledby="family-delete-headline"
+                class="md:max-w-[600px]"
+              >
+                {(open) => (
+                  <Show when={open()}>
+                    <div class="flex flex-col gap-8">
+                      <Text
+                        with="headline-2"
+                        as="header"
+                        id="family-delete-headline"
+                        class="text-center md:text-start"
+                      >
+                        {t('delete-family.headline')}
+                      </Text>
+                      <div class="grid items-center gap-8 md:grid-cols-[1fr,2fr]">
+                        <div class="border-outline bg-primary-container/20 max-w-[200px] justify-self-center overflow-hidden rounded-full border-2">
+                          <Image
+                            src="/assets/images/family-breakup.png"
+                            width={300}
+                            aspectRatio="1/1"
+                            alt=""
+                          />
+                        </div>
+                        <div class="flex flex-col gap-8">
+                          <Text as="p">
+                            <T>{t('delete-family.description')}</T>
+                          </Text>
+                          <div class="grid grid-cols-2 gap-2">
+                            <Button
+                              variant="outline"
+                              popoverTarget="family-delete"
+                              popoverTargetAction="hide"
+                            >
+                              {t('delete-family.cancel')}
+                            </Button>
+                            <Button variant="outline" tone="destructive">
+                              {t('delete-family.cta')}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Show>
+                )}
+              </Drawer>
+            </div>
+          </div>
+        </Match>
+        <Match when={!isOwner()}>
+          <FamilyHeaderMember />
+        </Match>
+      </Switch>
+    </>
+  );
+}
+
+function FamilyHeaderMember() {
+  const t = createTranslator('family');
+  const user = createAsync(() => getUserFamily());
+  const leaveFamilySubmission = useSubmission(leaveFamily);
+  return (
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+      <Text with="headline-1">{user()?.family?.name || t('no-name')}</Text>
+      <Show when={user()?.family?.role === 'member'}>
+        <ul>
+          <li>
             <Button
-              variant="tonal"
               size="sm"
-              popoverTarget="family-invite"
-              class="gap-2"
-            >
-              <Icon use="user-circle-plus" class="-ms-1" />
-              {t('action-add-users')}
-            </Button>
-            <Button
               variant="ghost"
-              icon
-              size="sm"
-              label={t('action-more')}
-              popoverTarget="family-owner-menu"
+              popoverTarget="family-menu"
               class="gap-2"
+              icon
+              label="Actions on family"
             >
               <Icon use="dots-three-outline-vertical" />
             </Button>
-            <Menu
-              id="family-owner-menu"
-              placement="top-to-bottom right-to-right"
-            >
-              <MenuItem
-                tone="destructive"
-                popoverTarget="family-delete"
-                as="button"
-                type="button"
-              >
-                <Icon use="trash-simple" />
-                {t('action-disassemble')}
-              </MenuItem>
-            </Menu>
-            <DeleteFamilyDialog />
-          </div>
-        </div>
-      </Match>
-      <Match when={!isOwner()}>
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
-          <Text with="headline-1">{user()?.family?.name || t('no-name')}</Text>
-          <Show when={user()?.family?.role === 'member'}>
-            <ul>
-              <li>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  popoverTarget="family-menu"
-                  class="gap-2"
-                  icon
-                  label="Actions on family"
+          </li>
+        </ul>
+        <Menu id="family-menu" placement="top-to-bottom right-to-right">
+          <MenuItem
+            tone="destructive"
+            popoverTarget="family-leave"
+            as="button"
+            type="button"
+          >
+            <Icon use="sign-out" />
+            {t('action.leave-family')}
+          </MenuItem>
+        </Menu>
+        <Drawer
+          id="family-leave"
+          aria-labelledby="family-leave-headline"
+          placement="center"
+          class="sm:max-w-md"
+        >
+          {(open) => (
+            <Show when={open()}>
+              <div class="flex flex-col gap-4">
+                <Text with="headline-3" as="header" id="family-leave-headline">
+                  {t('leave-family.headline')}
+                </Text>
+                <Text as="p">{t('leave-family.description')}</Text>
+                <Form
+                  action={leaveFamily}
+                  method="post"
+                  class="mt-4 grid grid-cols-2 gap-4 md:self-end"
                 >
-                  <Icon use="dots-three-outline-vertical" />
-                </Button>
-              </li>
-            </ul>
-            <Menu id="family-menu" placement="top-to-bottom right-to-right">
-              <MenuItem
-                tone="destructive"
-                popoverTarget="family-leave"
-                as="button"
-                type="button"
-              >
-                <Icon use="sign-out" />
-                {t('member.leave-family')}
-              </MenuItem>
-            </Menu>
-            <Drawer id="family-leave" placement="center">
-              {(open) => <Show when={open()}>Are you sure?</Show>}
-            </Drawer>
-          </Show>
-        </div>
-      </Match>
-    </Switch>
+                  <Button
+                    variant="ghost"
+                    popoverTargetAction="hide"
+                    popoverTarget="family-leave"
+                    class="rounded-full"
+                  >
+                    {t('leave-family.cancel')}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    tone="destructive"
+                    type="submit"
+                    loading={leaveFamilySubmission.pending}
+                  >
+                    {t('leave-family.confirm')}
+                  </Button>
+                </Form>
+              </div>
+            </Show>
+          )}
+        </Drawer>
+      </Show>
+    </div>
   );
 }
 
@@ -199,7 +298,7 @@ function WaitingApproval() {
         id="cancel-join-drawer"
         placement="center"
         aria-labelledby="cancel-join-headline"
-        class="max-w-[500px]"
+        class="max-w-md"
       >
         {(open) => (
           <Show when={open()}>
@@ -261,61 +360,6 @@ function EmptyFamily() {
     </div>
   );
 }
-
-const DeleteFamilyDialog = () => {
-  const t = createTranslator('family');
-
-  return (
-    <Drawer
-      placement="center"
-      id="family-delete"
-      aria-labelledby="family-delete-headline"
-      class="md:max-w-[600px]"
-    >
-      {(open) => (
-        <Show when={open()}>
-          <div class="flex flex-col gap-8">
-            <Text
-              with="headline-2"
-              as="header"
-              id="family-delete-headline"
-              class="text-center md:text-start"
-            >
-              {t('delete-family-headline')}
-            </Text>
-            <div class="grid items-center gap-8 md:grid-cols-[1fr,2fr]">
-              <div class="border-outline bg-primary-container/20 max-w-[200px] justify-self-center overflow-hidden rounded-full border-2">
-                <Image
-                  src="/assets/images/family-breakup.png"
-                  width={300}
-                  aspectRatio="1/1"
-                  alt=""
-                />
-              </div>
-              <div class="flex flex-col gap-8">
-                <Text as="p">
-                  <T>{t('delete-family-description')}</T>
-                </Text>
-                <div class="grid grid-cols-2 gap-2">
-                  <Button
-                    variant="outline"
-                    popoverTarget="family-delete"
-                    popoverTargetAction="hide"
-                  >
-                    {t('delete-family-cancel')}
-                  </Button>
-                  <Button variant="outline" tone="destructive">
-                    {t('delete-family-cta')}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Show>
-      )}
-    </Drawer>
-  );
-};
 
 const FamilyMembers = () => {
   const t = createTranslator('family');

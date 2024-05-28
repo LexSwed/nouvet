@@ -11,6 +11,7 @@ import { familyMember, familyMembers } from '~/server/db/queries/familyMembers';
 import { familyUpdate } from '~/server/db/queries/familyUpdate';
 import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
 
+import { familyLeave } from '../db/queries/familyLeave';
 import { IncorrectFamilyMemberId } from '../errors';
 
 export async function getFamilyMembersServer() {
@@ -107,6 +108,20 @@ export async function cancelFamilyJoinServer() {
   try {
     const user = await getRequestUser();
     await familyCancelJoin(user.userId);
+    return redirect('/app', { revalidate: [getUserFamily.key] });
+  } catch (error) {
+    console.error(error);
+    return json(
+      { error: 'Something went wrong' },
+      { status: 500, revalidate: [] },
+    );
+  }
+}
+
+export async function leaveFamilyServer() {
+  try {
+    const user = await getRequestUser();
+    await familyLeave(user.userId);
     return redirect('/app', { revalidate: [getUserFamily.key] });
   } catch (error) {
     console.error(error);

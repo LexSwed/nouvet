@@ -5,6 +5,7 @@ import {
   deleteFamilyServer,
   getFamilyMemberServer,
   getFamilyMembersServer,
+  leaveFamilyServer,
   updateFamilyServer,
 } from './family.server';
 
@@ -29,3 +30,5 @@ export const cancelFamilyJoin = action(
   () => cancelFamilyJoinServer(),
   'cancel-family-join',
 );
+
+export const leaveFamily = action(() => leaveFamilyServer(), 'leave-family');
