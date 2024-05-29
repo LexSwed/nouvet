@@ -12,8 +12,10 @@ export const cacheTranslations = cache(<T extends Namespace>(namespace: T) => {
 }, 'translations');
 
 /**
- * For client side JS, we don't want to call `cache` again as it's not configurable and might be "expired" by the time it's called again.
+ * For client side JS, we don't want to call `cache` again as it's not configurable and might be "expired" by the time it's called agai
+ * when rendering the dynamic parts of the app.
  * Hence, store all translations used during initial load on the client, as they don't have to be reactive.
+ * TODO: look at public HTTP caching, revalidating the translations when the content (bundle) changes.
  */
 const clientMap = new Map<Namespace, NamespaceMap[Namespace]>();
 export const createTranslator = <T extends Namespace>(namespace: T) => {

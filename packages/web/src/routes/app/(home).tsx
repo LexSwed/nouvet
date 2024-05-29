@@ -54,7 +54,7 @@ function AppMainPage(props: RouteSectionProps) {
                   </Match>
                   <Match when={user().family?.id}>
                     <ButtonLink
-                      href={`/app/family`}
+                      href="/app/family"
                       variant="ghost"
                       tone="primary"
                     >
