@@ -66,16 +66,16 @@ const Popover = <T extends ValidComponent = 'div'>(
 
   /** When children is shown conditionally, it should wait
    * until the animation is over before being hidden */
-  // const { isMounted } = createPresence(rendered, {
-  //   enterDuration: 0,
-  //   exitDuration: 200,
-  // });
+  const { isMounted } = createPresence(rendered, {
+    enterDuration: 0,
+    exitDuration: 200,
+  });
 
   const component = () => local.as ?? 'div';
 
   const resolved = createMemo(() => {
     const child = local.children;
-    return typeof child === 'function' ? child(rendered) : child;
+    return typeof child === 'function' ? child(isMounted) : child;
   });
 
   return (

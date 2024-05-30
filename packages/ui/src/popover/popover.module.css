@@ -1,11 +1,11 @@
 @tailwind components;
 
 /* Avoid consumers overriding this for all states with e.g. display: flex */
-/* @layer components {
+@layer components {
   .popover:not(:popover-open) {
     display: none;
   }
-} */
+}
 
 @layer nou-ui {
   .popover {
