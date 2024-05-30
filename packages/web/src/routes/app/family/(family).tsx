@@ -41,34 +41,31 @@ export const route = {
 
 export default function FamilyRootPage() {
   const user = createAsync(() => getUserFamily());
-  const familyMembers = createAsync(() => getFamilyMembers(), {
-    name: 'getFamilyMembers',
-    initialValue: [],
-  });
+  const familyMembers = createAsync(() => getFamilyMembers());
 
   const isOwner = () => user()?.family?.role === 'owner';
   return (
     <>
       <section class="container flex flex-col gap-8">
+        <FamilyHeader />
         <Suspense>
           <Switch>
             <Match when={user()?.family?.role === 'waiting'}>
               <WaitingApproval />
             </Match>
-            <Match when={familyMembers().length > 0}>
+            <Match when={familyMembers() && familyMembers()!.length > 0}>
               <div class="flex flex-col gap-6">
-                <FamilyHeader />
-                <section class="flex flex-col gap-8">
-                  <Suspense>
-                    <div class="flex flex-col gap-6">
-                      <FamilyMembers />
-                      <Card variant="flat">Render all users timeline</Card>
-                    </div>
-                  </Suspense>
-                </section>
+                <Suspense>
+                  <FamilyMembers />
+                  <Card variant="flat">Render all users timeline</Card>
+                </Suspense>
               </div>
             </Match>
-            <Match when={isOwner() && familyMembers().length === 0}>
+            <Match
+              when={
+                isOwner() && familyMembers() && familyMembers()!.length === 0
+              }
+            >
               <EmptyFamily />
             </Match>
           </Switch>
