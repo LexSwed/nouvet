@@ -66,16 +66,16 @@ const Popover = <T extends ValidComponent = 'div'>(
 
   /** When children is shown conditionally, it should wait
    * until the animation is over before being hidden */
-  const { isMounted } = createPresence(rendered, {
-    enterDuration: 0,
-    exitDuration: 200,
-  });
+  // const { isMounted } = createPresence(rendered, {
+  //   enterDuration: 0,
+  //   exitDuration: 200,
+  // });
 
   const component = () => local.as ?? 'div';
 
   const resolved = createMemo(() => {
     const child = local.children;
-    return typeof child === 'function' ? child(isMounted) : child;
+    return typeof child === 'function' ? child(rendered) : child;
   });
 
   return (
@@ -112,7 +112,10 @@ function inlineAnchoring(
   placement: Placement,
 ): JSX.CSSProperties | undefined {
   if (placement === 'center') {
-    return undefined;
+    /** TODO: remove whn Chromium bug is fixed with centered popover failing the page */
+    return {
+      'position-anchor': `--anchor-${id}`,
+    };
   }
   const propertyToLogical = {
     top: 'inset-block-start',
