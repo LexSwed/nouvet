@@ -23,7 +23,7 @@
     "@solid-primitives/media": "^2.2.9",
     "@solid-primitives/presence": "^0.0.6",
     "@solid-primitives/refs": "^1.0.8",
-    "@solidjs/router": "^0.13.4",
+    "@solidjs/router": "^0.13.5",
     "class-variance-authority": "^0.7.0",
     "solid-js": "^1.8.17",
     "tailwind-merge": "^2.3.0"
