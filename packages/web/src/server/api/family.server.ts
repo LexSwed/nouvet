@@ -9,14 +9,13 @@ import { familyCancelJoin } from '~/server/db/queries/familyCancelJoin';
 import { familyDelete } from '~/server/db/queries/familyDelete';
 import { familyMember, familyMembers } from '~/server/db/queries/familyMembers';
 import { familyUpdate } from '~/server/db/queries/familyUpdate';
-import { timeout, translateErrorTokens, type ErrorKeys } from '~/server/utils';
+import { translateErrorTokens, type ErrorKeys } from '~/server/utils';
 
 import { familyLeave } from '../db/queries/familyLeave';
 import { IncorrectFamilyMemberId } from '../errors';
 
 export async function getFamilyMembersServer() {
   try {
-    await timeout(2000);
     const user = await getRequestUser();
     const members = await familyMembers(user.userId);
 
