@@ -1,8 +1,9 @@
-import { createPresence } from '@solid-primitives/presence';
 import { mergeRefs } from '@solid-primitives/refs';
 import {
+  children,
   createMemo,
   createSignal,
+  Show,
   splitProps,
   type Accessor,
   type ComponentProps,
@@ -11,6 +12,7 @@ import {
 } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
+import { Text } from '../text';
 import { tw } from '../tw';
 import { composeEventHandlers, mergeDefaultProps, type Merge } from '../utils';
 
@@ -30,6 +32,10 @@ type Placement =
 export type PopoverProps<T extends ValidComponent> = Merge<
   ComponentProps<T>,
   {
+    /**
+     * Popover heading/title/header/headline.
+     */
+    heading?: JSX.Element;
     /**
      * See @link https://developer.chrome.com/blog/anchor-positioning-api
      * 'center' makes popover appear as a dialog, not attached to the anchor.
@@ -52,7 +58,9 @@ const Popover = <T extends ValidComponent = 'div'>(
   ownProps: PopoverProps<T>,
 ) => {
   const [popover, setPopover] = createSignal<HTMLElement | null>(null);
-  const [rendered, setRendered] = createSignal(false);
+  const [shownState, setShownState] = createSignal<
+    'closed' | 'open' | 'hiding'
+  >('closed');
 
   const [local, props] = splitProps(
     mergeDefaultProps(ownProps as PopoverProps<'div'>, {
@@ -61,22 +69,28 @@ const Popover = <T extends ValidComponent = 'div'>(
       popover: 'auto',
       placement: 'top-to-bottom left-to-left',
     }),
-    ['id', 'ref', 'class', 'style', 'as', 'role', 'placement', 'children'],
+    [
+      'id',
+      'ref',
+      'heading',
+      'class',
+      'style',
+      'as',
+      'role',
+      'placement',
+      'children',
+    ],
   );
-
-  /** When children is shown conditionally, it should wait
-   * until the animation is over before being hidden */
-  const { isMounted } = createPresence(rendered, {
-    enterDuration: 0,
-    exitDuration: 200,
-  });
 
   const component = () => local.as ?? 'div';
 
   const resolved = createMemo(() => {
     const child = local.children;
-    return typeof child === 'function' ? child(isMounted) : child;
+    return typeof child === 'function'
+      ? child(() => shownState() !== 'closed')
+      : child;
   });
+  const heading = children(() => local.heading);
 
   return (
     <Dynamic
@@ -93,15 +107,36 @@ const Popover = <T extends ValidComponent = 'div'>(
       ref={mergeRefs(local.ref, setPopover)}
       class={tw(cssStyles.popover, local.class)}
       onBeforeToggle={composeEventHandlers(props.onBeforeToggle, (event) => {
-        setRendered(event.newState === 'open');
+        if (event.newState === 'open') {
+          setShownState('open');
+        } else {
+          setShownState('hiding');
+        }
       })}
       onToggle={composeEventHandlers(props.onToggle, (event) => {
         if (event.newState === 'open') {
           popover()?.focus();
+        } else {
+          Promise.allSettled(
+            popover()
+              ?.getAnimations()
+              .map((a) => a.finished) || [],
+          ).finally(() => {
+            if (shownState() === 'hiding') {
+              setShownState('closed');
+            }
+          });
         }
       })}
-      children={resolved()}
-    />
+      aria-labelledby={heading() ? `${local.id}-heading` : undefined}
+    >
+      <Show when={heading()}>
+        <Text with="headline-3" id={`${local.id}-heading`}>
+          {heading()}
+        </Text>
+      </Show>
+      {resolved()}
+    </Dynamic>
   );
 };
 
