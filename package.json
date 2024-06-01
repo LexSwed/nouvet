@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "type": "module",
   "workspaces": [
+    "packages/acceptance-tests",
+    "packages/config",
     "packages/ui",
-    "packages/web",
-    "packages/config"
+    "packages/web"
   ],
   "engines": {
     "node": ">=20"
