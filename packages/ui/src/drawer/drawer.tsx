@@ -1,6 +1,7 @@
 import { createMediaQuery } from '@solid-primitives/media';
 import { mergeRefs } from '@solid-primitives/refs';
 import {
+  children,
   createMemo,
   createSignal,
   Show,
@@ -11,6 +12,7 @@ import {
 import { Content as DrawerContent, Root as DrawerRoot } from '@corvu/drawer';
 
 import { Popover, type PopoverProps } from '../popover';
+import { Text } from '../text';
 import { tw } from '../tw';
 import { composeEventHandlers } from '../utils';
 
@@ -23,6 +25,7 @@ const MobileDrawer = <T extends ValidComponent = 'div'>(
   const [local, props] = splitProps(ownProps as PopoverProps<'div'>, [
     'children',
     'class',
+    'heading',
   ]);
   let popoverEl: HTMLElement | null;
 
@@ -30,6 +33,8 @@ const MobileDrawer = <T extends ValidComponent = 'div'>(
     const child = local.children;
     return typeof child === 'function' ? child(open) : child;
   });
+
+  const heading = children(() => local.heading);
 
   return (
     <DrawerRoot
@@ -70,11 +75,23 @@ const MobileDrawer = <T extends ValidComponent = 'div'>(
         })}
         {...(props as ComponentProps<typeof DrawerContent>)}
         ref={mergeRefs(ownProps.ref, (el: HTMLElement) => (popoverEl = el))}
+        aria-labelledby={heading() ? `${props.id}-heading` : undefined}
       >
         <Show when={open()}>
           <div class="grid w-full place-content-center pb-3 pt-2">
             <div class="bg-on-surface/30 h-1 w-8 rounded-full" />
           </div>
+
+          <Show when={heading()}>
+            <Text
+              with="headline-3"
+              as="header"
+              id={`${props.id}-heading`}
+              class="mb-4"
+            >
+              {heading()}
+            </Text>
+          </Show>
           {resolved()}
         </Show>
       </DrawerContent>

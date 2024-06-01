@@ -126,45 +126,35 @@ function FamilyHeader() {
               <Drawer
                 placement="center"
                 id="family-delete"
-                aria-labelledby="family-delete-headline"
                 class="md:max-w-[600px]"
+                heading={t('delete-family.headline')}
               >
                 {(open) => (
                   <Show when={open()}>
-                    <div class="flex flex-col gap-8">
-                      <Text
-                        with="headline-2"
-                        as="header"
-                        id="family-delete-headline"
-                        class="text-center md:text-start"
-                      >
-                        {t('delete-family.headline')}
-                      </Text>
-                      <div class="grid items-center gap-8 md:grid-cols-[1fr,2fr]">
-                        <div class="border-outline bg-primary-container/20 max-w-[200px] justify-self-center overflow-hidden rounded-full border-2">
-                          <Image
-                            src="/assets/images/family-breakup.png"
-                            width={300}
-                            aspectRatio="1/1"
-                            alt=""
-                          />
-                        </div>
-                        <div class="flex flex-col gap-8">
-                          <Text as="p">
-                            <T>{t('delete-family.description')}</T>
-                          </Text>
-                          <div class="grid grid-cols-2 gap-2">
-                            <Button
-                              variant="outline"
-                              popoverTarget="family-delete"
-                              popoverTargetAction="hide"
-                            >
-                              {t('delete-family.cancel')}
-                            </Button>
-                            <Button variant="outline" tone="destructive">
-                              {t('delete-family.cta')}
-                            </Button>
-                          </div>
+                    <div class="grid items-center gap-8 sm:grid-cols-[1fr,2fr]">
+                      <div class="border-outline bg-primary-container/20 max-w-[200px] justify-self-center overflow-hidden rounded-full border-2">
+                        <Image
+                          src="/assets/images/family-breakup.png"
+                          width={300}
+                          aspectRatio="1/1"
+                          alt=""
+                        />
+                      </div>
+                      <div class="flex flex-col gap-8">
+                        <Text as="p">
+                          <T>{t('delete-family.description')}</T>
+                        </Text>
+                        <div class="grid grid-cols-2 gap-2">
+                          <Button
+                            variant="outline"
+                            popoverTarget="family-delete"
+                            popoverTargetAction="hide"
+                          >
+                            {t('delete-family.cancel')}
+                          </Button>
+                          <Button variant="outline" tone="destructive">
+                            {t('delete-family.cta')}
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -217,16 +207,13 @@ function FamilyHeaderMember() {
         </Menu>
         <Drawer
           id="family-leave"
-          aria-labelledby="family-leave-headline"
           placement="center"
           class="sm:max-w-md"
+          heading={t('leave-family.headline')}
         >
           {(open) => (
             <Show when={open()}>
               <div class="flex flex-col gap-4">
-                <Text with="headline-3" as="header" id="family-leave-headline">
-                  {t('leave-family.headline')}
-                </Text>
                 <Text as="p">{t('leave-family.description')}</Text>
                 <Form
                   action={leaveFamily}
@@ -293,15 +280,12 @@ function WaitingApproval() {
       <Drawer
         id="cancel-join-drawer"
         placement="center"
-        aria-labelledby="cancel-join-headline"
         class="max-w-md"
+        heading={t('waiting.cancel-join-popup-headline')}
       >
         {(open) => (
           <Show when={open()}>
             <div class="flex flex-col gap-4">
-              <Text with="headline-3" as="header" id="cancel-join-headline">
-                {t('waiting.cancel-join-popup-headline')}
-              </Text>
               <Text as="p">{t('waiting.cancel-join-popup-description')}</Text>
               <Form
                 action={cancelFamilyJoin}

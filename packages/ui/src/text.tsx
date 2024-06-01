@@ -52,7 +52,7 @@ type TextProps<T extends ValidComponent> = Omit<DynamicProps<T>, 'component'> &
   };
 
 const Text = <T extends ValidComponent>(ownProps: TextProps<T>) => {
-  const [style, component, props] = splitProps(
+  const [variants, component, props] = splitProps(
     ownProps as TextProps<'span'>,
     ['with', 'tone', 'align', 'dense'],
     ['as', 'class'],
@@ -62,7 +62,7 @@ const Text = <T extends ValidComponent>(ownProps: TextProps<T>) => {
     <Dynamic
       {...props}
       component={component.as || 'span'}
-      class={tw(textVariants(style), component.class)}
+      class={tw(textVariants(variants), component.class)}
     />
   );
 };

@@ -71,6 +71,7 @@ export default {
     // },
     screens: {
       ...defaultConfig.theme?.screens,
+      'sm': '560px',
       '2xl': '1400px',
     },
     extend: {

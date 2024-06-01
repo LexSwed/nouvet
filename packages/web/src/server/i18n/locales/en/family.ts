@@ -28,7 +28,7 @@ const familyDict = {
   'action.leave-family': 'Leave family',
   'delete-family.headline': 'Time to break up?',
   'delete-family.description':
-    'You will keep all the pets created by you, and all the information associated with them.<br/>The pets of other users will only be visible to them.',
+    'You will keep all the pets created by you, and all the information associated with them.<br/>Other members of the family will keep all the information that belongs to their pets.',
   'delete-family.cta': 'Disband Family',
   'delete-family.cancel': 'Cancel',
   'leave-family.headline': 'Is it farewell, then?',
