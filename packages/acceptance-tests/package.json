@@ -1,5 +1,5 @@
 {
-  "name": "acceptance-tests",
+  "name": "@nou/acceptance-tests",
   "version": "1.0.0",
   "description": "",
   "license": "GNU General Public License v3.0",
