@@ -33,5 +33,15 @@ jobs:
         if: always()
         with:
           name: playwright-report
-          path: playwright-report/
+          path: ./packages/acceptance-tests/playwright-report/
           retention-days: 30
+      - name: Publish to GH Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./packages/acceptance-tests/playwright-report/
+          keep_files: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
