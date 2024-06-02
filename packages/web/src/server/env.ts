@@ -5,27 +5,23 @@ const schema = object({
   BASE_URL: string(),
   MODE: picklist(['production', 'development', 'test']),
   DEV: boolean(),
+  TEST: boolean(),
   PROD: boolean(),
   SSR: boolean(),
   // Facebook App
   FACEBOOK_APP_ID: string(),
   FACEBOOK_APP_SECRET: string(),
-  DB_CONNECTION: string(),
   // Session encryption secret
   SESSION_SECRET: string(),
   // Invites encryption secret
   INVITES_SECRET: string(),
+  // DB connection string
+  DB: string(),
 });
-console.log({
-  ...import.meta.env,
-  SESSION_SECRET: process.env.SESSION_SECRET,
-  INVITES_SECRET: process.env.INVITES_SECRET,
-  FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
-  FACEBOOK_APP_SECRET: process.env.FACEBOOK_APP_SECRET,
-  DB: process.env.DB_CONNECTION,
-});
+
 export const env = parse(schema, {
   ...import.meta.env,
+  TEST: import.meta.env.NODE_ENV === 'test',
   SESSION_SECRET: process.env.SESSION_SECRET,
   INVITES_SECRET: process.env.INVITES_SECRET,
   FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
