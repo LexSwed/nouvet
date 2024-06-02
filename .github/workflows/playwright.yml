@@ -29,18 +29,12 @@ jobs:
         run: npm run prepare:ci -w @nou/acceptance-tests
       - name: Run Playwright tests
         run: npm run test -w @nou/acceptance-tests
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: ./packages/acceptance-tests/playwright-report/
-          retention-days: 30
       - name: Publish to GH Pages
         if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
+          publish_branch: e2e-report
           publish_dir: ./packages/acceptance-tests/playwright-report/
           keep_files: true
           user_name: 'github-actions[bot]'
