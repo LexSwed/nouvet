@@ -8,6 +8,14 @@ jobs:
   test:
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    environment: acceptance-tests
+    env:
+      NODE_ENV: test
+      SESSION_SECRET: ${{secrets.SESSION_SECRET}}
+      INVITES_SECRET: ${{secrets.INVITES_SECRET}}
+      FACEBOOK_APP_ID: ${{secrets.FACEBOOK_APP_ID}}
+      FACEBOOK_APP_SECRET: ${{secrets.FACEBOOK_APP_SECRET}}
+      DB: ${{secrets.DB_CONNECTION}}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -17,6 +25,8 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+      - name: Build webapp
+        run: npm run build -w @nou/web
       - name: Run Playwright tests
         run: npm run test -w @nou/acceptance-tests
       - uses: actions/upload-artifact@v4
