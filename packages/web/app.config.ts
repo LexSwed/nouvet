@@ -6,32 +6,33 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   ssr: true,
   middleware: './src/middleware.ts',
-  devOverlay: true,
+  devOverlay: false,
   solid: {
     hot: false,
   },
   server: {
     prerender: {
-      routes: ['/', '/about', '/privacy'],
+      // TODO: needs per-language generation
+      // routes: ['/', '/about', '/privacy'],
     },
-    preset: 'cloudflare_pages',
-    rollupConfig: {
-      external: ['node:async_hooks'],
-    },
-    database: {
-      // D1
-      // default: {
-      //   connector: 'cloudflare-d1',
-      //   options: { bindingName: 'db' }
-      // },
-      default: {
-        connector: 'sqlite',
-        options: { name: 'db' },
-      },
-    },
-    experimental: {
-      database: true,
-    },
+    // preset: 'cloudflare_pages',
+    // rollupConfig: {
+    //   external: ['node:async_hooks'],
+    // },
+    // database: {
+    // D1
+    // default: {
+    //   connector: 'cloudflare-d1',
+    //   options: { bindingName: 'db' }
+    // },
+    // default: {
+    //   connector: 'sqlite',
+    //   options: { name: 'db' },
+    // },
+    // },
+    // experimental: {
+    //   database: true,
+    // },
   },
   vite: {
     css: {

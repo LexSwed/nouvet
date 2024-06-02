@@ -6,8 +6,9 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "build:web": "npx @dotenvx/dotenvx run --env-file=.env.test -- npm run build -w @nou/web",
-    "start:web": "npx @dotenvx/dotenvx run --env-file=.env.test -- npm run start -w @nou/web"
+    "build:web": "dotenvx run --env-file=.env.test -- npm run build -w @nou/web",
+    "db:seed": "dotenvx run --env-file=.env.test -- npm run db:push -w @nou/web && npm run db:seed -w @nou/web",
+    "start:web": "dotenvx run --env-file=.env.test -- npm run dev -w @nou/web"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
     "@types/node": "^20.13.0"
   },
   "dependencies": {
+    "@dotenvx/dotenvx": "^0.44.1",
     "@playwright/test": "^1.44.1"
   }
 }

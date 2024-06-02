@@ -3,9 +3,8 @@ import { boolean, object, parse, picklist, string } from 'valibot';
 const schema = object({
   // Vite defaults
   BASE_URL: string(),
-  MODE: picklist(['production', 'development', 'test']),
+  MODE: picklist(['production', 'development']),
   DEV: boolean(),
-  TEST: boolean(),
   PROD: boolean(),
   SSR: boolean(),
   // Facebook App
@@ -21,7 +20,6 @@ const schema = object({
 
 export const env = parse(schema, {
   ...import.meta.env,
-  TEST: import.meta.env.NODE_ENV === 'test',
   SESSION_SECRET: process.env.SESSION_SECRET,
   INVITES_SECRET: process.env.INVITES_SECRET,
   FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,

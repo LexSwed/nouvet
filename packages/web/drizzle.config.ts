@@ -7,6 +7,6 @@ export default {
   out: './.drizzle/migrations',
   dialect: 'sqlite',
   dbCredentials: {
-    url: String(process.env.DB),
+    url: String(process.env.DB_CONNECTION),
   },
 } satisfies Config;
