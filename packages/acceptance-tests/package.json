@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
+    "prepare:ci": "npm run build -w @nou/web && npm run db:push -w @nou/web && npm run db:seed -w @nou/web",
     "build:web": "dotenvx run --env-file=.env.test -- npm run build -w @nou/web",
     "db:seed": "dotenvx run --env-file=.env.test -- npm run db:push -w @nou/web && npm run db:seed -w @nou/web",
     "start:web": "dotenvx run --env-file=.env.test -- npm run dev -w @nou/web"

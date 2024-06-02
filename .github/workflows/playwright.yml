@@ -26,7 +26,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Build webapp
-        run: npm run build -w @nou/web
+        run: npm run prepare:ci -w @nou/acceptance-tests
       - name: Run Playwright tests
         run: npm run test -w @nou/acceptance-tests
       - uses: actions/upload-artifact@v4
