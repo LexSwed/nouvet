@@ -39,6 +39,10 @@ jobs:
           path: ./packages/acceptance-tests/playwright-report/
           retention-days: 30
   deploy:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     needs: test
     environment:
       name: github-pages
