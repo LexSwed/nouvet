@@ -15,7 +15,7 @@ jobs:
       INVITES_SECRET: ${{secrets.INVITES_SECRET}}
       FACEBOOK_APP_ID: ${{secrets.FACEBOOK_APP_ID}}
       FACEBOOK_APP_SECRET: ${{secrets.FACEBOOK_APP_SECRET}}
-      DB: ${{secrets.DB_CONNECTION}}
+      DB_CONNECTION: ${{secrets.DB_CONNECTION}}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
