@@ -31,7 +31,7 @@ jobs:
         run: npm run test -w @nou/acceptance-tests
       - name: Publish to GH Pages
         if: github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: e2e-report
