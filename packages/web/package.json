@@ -5,7 +5,7 @@
   "license": "GNU General Public License v3.0",
   "scripts": {
     "dev": "vinxi dev --host",
-    "build": "echo \"$PWD\" & vinxi build",
+    "build": "vinxi build",
     "start": "vinxi start",
     "typecheck": "tsc",
     "lint": "eslint src",

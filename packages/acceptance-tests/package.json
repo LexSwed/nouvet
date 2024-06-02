@@ -2,13 +2,15 @@
   "name": "acceptance-tests",
   "version": "1.0.0",
   "description": "",
+  "license": "GNU General Public License v3.0",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test"
+    "test": "npx playwright test",
+    "build:web": "npx @dotenvx/dotenvx run --env-file=.env.test -- npm run build -w @nou/web",
+    "start:web": "npx @dotenvx/dotenvx run --env-file=.env.test -- npm run start -w @nou/web"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.13.0"
   },
