@@ -2,6 +2,7 @@
   "name": "@nou/ui",
   "version": "0.0.1",
   "type": "module",
+  "license": "GNU General Public License v3.0",
   "engines": {
     "node": ">=20"
   },

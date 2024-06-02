@@ -2,6 +2,7 @@
   "name": "nouvet",
   "version": "0.0.1",
   "type": "module",
+  "license": "GNU General Public License v3.0",
   "workspaces": [
     "packages/acceptance-tests",
     "packages/config",

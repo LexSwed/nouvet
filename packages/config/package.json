@@ -2,6 +2,7 @@
   "name": "@nou/config",
   "version": "1.0.0",
   "type": "module",
+  "license": "GNU General Public License v3.0",
   "exports": {
     "./eslint": "./eslint.cjs",
     "./tailwind": "./tailwind.ts",

@@ -2,9 +2,10 @@
   "name": "@nou/web",
   "version": "0.0.1",
   "type": "module",
+  "license": "GNU General Public License v3.0",
   "scripts": {
     "dev": "vinxi dev --host",
-    "build": "NITRO_PRESET=cloudflare_pages vinxi build",
+    "build": "echo \"$PWD\" & vinxi build",
     "start": "vinxi start",
     "typecheck": "tsc",
     "lint": "eslint src",
