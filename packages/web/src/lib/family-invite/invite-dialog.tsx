@@ -24,7 +24,7 @@ export const FamilyInviteDialog = (props: {
       placement="center"
       aria-labelledby={`${props.id}-headline`}
       role="dialog"
-      class="to-primary/10 via-surface from-surface mt-[16vh] flex w-[94svw] max-w-[420px] flex-col gap-6 text-clip bg-gradient-to-b via-65% p-6 md:mt-[20vh]"
+      class="to-primary/10 via-surface from-surface mt-[16vh] flex w-[94svw] max-w-[420px] flex-col gap-6 bg-gradient-to-b via-65% p-6 md:mt-[20vh]"
     >
       {(open) => (
         <Show when={open()}>
@@ -72,7 +72,7 @@ const InviteDialogContent = (ownProps: {
 
   return (
     <>
-      <header class="-m-4 flex flex-row items-center justify-between gap-2">
+      <header class="z-10 -m-4 flex flex-row items-center justify-between gap-2">
         <Show
           when={!new Set<Step>(['initial', 'join-success']).has(step())}
           fallback={<div />}
@@ -129,55 +129,49 @@ const InviteDialogContent = (ownProps: {
           <Icon use="x" />
         </Button>
       </header>
-      <Switch>
-        <Match when={step() === 'initial'}>
-          <div class="view-transition-[content] flex flex-col gap-6">
-            <Text with="headline-2" as="h2">
-              {t('invite.headline')}
-            </Text>
-            <Text as="p">{t('invite.subheadline')}</Text>
-            <FamilyInviteBenefits class="-mx-6 scroll-px-6 px-6" />
-          </div>
-          <div class="flex flex-col gap-4">
-            <Button onClick={() => update('qrcode')}>
-              {t('invite.cta-invite')}
-            </Button>
-            <div class="self-center">
-              <Button
-                variant="link"
-                onClick={() => {
-                  update('join');
-                }}
-              >
-                {t('invite.join')}
-              </Button>
+      <div class="view-transition-[invite-dialog-content] flex flex-col gap-6">
+        <Switch>
+          <Match when={step() === 'initial'}>
+            <div class="flex flex-col gap-6">
+              <Text with="headline-2" as="h2">
+                {t('invite.headline')}
+              </Text>
+              <Text as="p">{t('invite.subheadline')}</Text>
+              <FamilyInviteBenefits class="-mx-6 scroll-px-6 px-6" />
             </div>
-          </div>
-        </Match>
-        <Match when={step() === 'qrcode'}>
-          <div class="view-transition-[content]">
+            <div class="flex flex-col gap-4">
+              <Button onClick={() => update('qrcode')}>
+                {t('invite.cta-invite')}
+              </Button>
+              <div class="self-center">
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    update('join');
+                  }}
+                >
+                  {t('invite.join')}
+                </Button>
+              </div>
+            </div>
+          </Match>
+          <Match when={step() === 'qrcode'}>
             <FamilyInviteQRCode onNext={() => update('waitlist')} />
-          </div>
-        </Match>
-        <Match when={step() === 'join'}>
-          <div class="view-transition-[content]">
+          </Match>
+          <Match when={step() === 'join'}>
             <JoinFamily
               onCancel={() => update('initial', 'backwards')}
               onSuccess={() => update('join-success')}
             />
-          </div>
-        </Match>
-        <Match when={step() === 'waitlist'}>
-          <div class="view-transition-[content]">
+          </Match>
+          <Match when={step() === 'waitlist'}>
             <InviteWaitlist onNext={closePopover} />
-          </div>
-        </Match>
-        <Match when={step() === 'join-success'}>
-          <div class="view-transition-[content]">
+          </Match>
+          <Match when={step() === 'join-success'}>
             <Joined popoverTarget={props.id} />
-          </div>
-        </Match>
-      </Switch>
+          </Match>
+        </Switch>
+      </div>
     </>
   );
 };
