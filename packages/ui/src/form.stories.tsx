@@ -1,16 +1,6 @@
 import { createSignal, For } from 'solid-js';
 import { type Meta } from 'storybook-solidjs';
-import {
-  coerce,
-  maxValue,
-  minValue,
-  notValue,
-  nullable,
-  number,
-  object,
-  safeParse,
-  string,
-} from 'valibot';
+import * as v from 'valibot';
 
 import { Button } from './button';
 import { Card } from './card';
@@ -33,41 +23,62 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const CreatePet = () => {
   const [loading, setLoading] = createSignal(false);
-  const [errors, setErrors] = createSignal<Record<string, string> | null>(null);
+  const [errors, setErrors] = createSignal<Record<
+    string,
+    string | null
+  > | null>(null);
 
   async function server(data: unknown) {
-    const PetSchema = object({
-      name: string('Name cannot be empty', [
-        notValue('admin', 'This name is already taken ;)'),
+    const PetSchema = v.object({
+      name: v.pipe(
+        v.string('Name cannot be empty'),
+        v.notValue('admin', 'This name is already taken ;)'),
+      ),
+      bday: v.union([
+        v.null_(),
+        v.pipe(v.string(), v.literal('')),
+        v.pipe(
+          v.union([v.pipe(v.string(), v.nonEmpty()), v.number()]),
+          v.transform((input) =>
+            typeof input === 'string' ? Number(input) : input,
+          ),
+          v.minValue(1),
+          v.maxValue(31),
+        ),
       ]),
-      bday: nullable(
-        coerce(
-          number('Date format is incorrect', [minValue(1), maxValue(31)]),
-          Number,
+      bmonth: v.union([
+        v.null_(),
+        v.pipe(v.string(), v.literal('')),
+        v.pipe(
+          v.union([v.pipe(v.string(), v.nonEmpty()), v.number()]),
+          v.transform((input) =>
+            typeof input === 'string' ? Number(input) : input,
+          ),
+          v.minValue(1),
+          v.maxValue(12),
         ),
-      ),
-      bmonth: nullable(
-        coerce(
-          number('Date format is incorrect', [minValue(1), maxValue(12)]),
-          Number,
+      ]),
+      byear: v.union([
+        v.null_(),
+        v.pipe(v.string(), v.literal('')),
+        v.pipe(
+          v.union([v.pipe(v.string(), v.nonEmpty()), v.number()]),
+          v.transform((input) =>
+            typeof input === 'string' ? Number(input) : input,
+          ),
+          v.minValue(1990),
+          v.maxValue(new Date().getFullYear()),
         ),
-      ),
-      byear: nullable(
-        coerce(
-          number('Date format is incorrect', [
-            minValue(1990),
-            maxValue(new Date().getFullYear()),
-          ]),
-          Number,
-        ),
-      ),
+      ]),
     });
     await sleep(400);
-    const result = safeParse(PetSchema, data);
+    const result = v.safeParse(PetSchema, data);
     if (!result.success) {
       return {
         errors: Object.fromEntries(
-          result.issues.map((issue) => [issue.path?.[0].key, issue.message]),
+          Object.entries(v.flatten(result.issues).nested ?? {}).map(
+            ([key, v]) => [key, v ? v[0] : null],
+          ),
         ),
       };
     }
@@ -157,7 +168,7 @@ export const CreatePet = () => {
         </div>
         <div class="scrollbar-none -mx-2 flex snap-mandatory snap-start scroll-px-2 flex-row gap-2 overflow-auto px-2 pb-2 pt-0">
           <RadioCard
-            class="w-[8rem] snap-x"
+            class="w-32 snap-x"
             name="animal-type"
             value="dog"
             label="Dog"
@@ -165,49 +176,49 @@ export const CreatePet = () => {
             checked
           />
           <RadioCard
-            class="w-[8rem] snap-x"
+            class="w-32 snap-x"
             name="animal-type"
             value="cat"
             label="Cat"
             icon={<Icon size="sm" use="cat" />}
           />
           <RadioCard
-            class="w-[8rem] snap-x"
+            class="w-32 snap-x"
             name="animal-type"
             value="parrot"
             label="Parrot"
             icon={<Icon size="sm" use="bird" />}
           />
           <RadioCard
-            class="w-[8rem] snap-x"
+            class="w-32 snap-x"
             name="animal-type"
             value="rabbit"
             label="Rabbit"
             icon={<Icon size="sm" use="rabbit" />}
           />
           <RadioCard
-            class="w-[8rem] snap-x"
+            class="w-32 snap-x"
             name="animal-type"
             value="horse"
             label="Horse"
             icon={<Icon size="sm" use="horse" />}
           />
           <RadioCard
-            class="w-[8rem] snap-x"
+            class="w-32 snap-x"
             name="animal-type"
             value="fish"
             label="Fish"
             icon={<Icon size="sm" use="fish" />}
           />
           <RadioCard
-            class="w-[8rem] snap-x"
+            class="w-32 snap-x"
             name="animal-type"
             value="other"
             label="Other"
             icon={<Icon size="sm" use="alien" />}
           />
         </div>
-        <Button type="submit" loading={loading()} class="ms-auto w-[7rem]">
+        <Button type="submit" loading={loading()} class="ms-auto w-28">
           Submit
         </Button>
       </Form>

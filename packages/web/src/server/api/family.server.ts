@@ -1,7 +1,7 @@
 'use server';
 
 import { json, redirect } from '@solidjs/router';
-import { object, parse, string, toTrimmed, ValiError } from 'valibot';
+import * as v from 'valibot';
 
 import { getUserFamily } from '~/server/api/user';
 import { getRequestUser } from '~/server/auth/request-user';
@@ -45,13 +45,17 @@ export async function getFamilyMemberServer(memberIdParam: unknown) {
   }
 }
 
-const FamilyUpdateSchema = object({
-  name: string('family.name' satisfies ErrorKeys, [toTrimmed()]),
+const FamilyUpdateSchema = v.object({
+  name: v.pipe(
+    v.string('family.name' satisfies ErrorKeys),
+    v.trim(),
+    v.nonEmpty('family.name' satisfies ErrorKeys),
+  ),
 });
 export async function updateFamilyServer(formData: FormData) {
   try {
     const user = await getRequestUser();
-    const { name } = parse(FamilyUpdateSchema, {
+    const { name } = v.parse(FamilyUpdateSchema, {
       name: formData.get('family-name'),
     });
     const family = await familyUpdate({ familyOwnerId: user.userId, name });
@@ -66,7 +70,7 @@ export async function updateFamilyServer(formData: FormData) {
       },
     );
   } catch (error) {
-    if (error instanceof ValiError) {
+    if (error instanceof v.ValiError) {
       return json(
         { failed: true, errors: await translateErrorTokens(error) },
         { status: 500, revalidate: [] },

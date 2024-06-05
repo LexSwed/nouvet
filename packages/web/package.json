@@ -33,7 +33,7 @@
     "better-sqlite3": "^11.0.0",
     "class-variance-authority": "^0.7.0",
     "date-fns": "^3.6.0",
-    "drizzle-orm": "^0.31.0",
+    "drizzle-orm": "^0.31.1",
     "drizzle-valibot": "^0.2.0",
     "lucia": "^3.2.0",
     "oslo": "^1.2.0",
@@ -42,7 +42,7 @@
     "solid-motionone": "^1.0.0",
     "styled-qr-code": "^1.0.0",
     "temporal-polyfill": "^0.2.5",
-    "valibot": "^0.30.0",
+    "valibot": "^0.31.0-rc.12",
     "vinxi": "0.3.11"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "@nou/config": "^1.0.0",
     "@types/better-sqlite3": "^7.6.10",
     "dotenv": "^16.4.5",
-    "drizzle-kit": "^0.22.1",
+    "drizzle-kit": "^0.22.2",
     "eslint-plugin-drizzle": "^0.2.3",
     "tailwindcss": "^3.4.3",
     "tsx": "^4.11.2",

@@ -3,15 +3,7 @@
 import { createHmac, randomBytes } from 'node:crypto';
 import { json, redirect } from '@solidjs/router';
 import { getRequestEvent } from 'solid-js/web';
-import {
-  coerce,
-  integer,
-  number,
-  object,
-  parse,
-  picklist,
-  ValiError,
-} from 'valibot';
+import * as v from 'valibot';
 
 import { getRequestUser } from '~/server/auth/request-user';
 import { createFamilyInvite } from '~/server/db/queries/familyCreateInvite';
@@ -142,13 +134,17 @@ export const joinFamilyWithQRCodeServer = async (invitationHash: string) => {
   }
 };
 
-const WaitListActionSchema = object({
-  action: picklist(['accept', 'decline']),
-  userId: coerce(number([integer()]), Number),
+const WaitListActionSchema = v.object({
+  action: v.picklist(['accept', 'decline']),
+  userId: v.pipe(
+    v.union([v.pipe(v.string(), v.trim(), v.nonEmpty()), v.number()]),
+    v.transform(Number),
+    v.number(),
+  ),
 });
 export const moveUserFromTheWaitListServer = async (formData: FormData) => {
   try {
-    const data = parse(WaitListActionSchema, {
+    const data = v.parse(WaitListActionSchema, {
       action: formData.get('action'),
       userId: formData.get('user-id'),
     });
@@ -173,7 +169,7 @@ export const moveUserFromTheWaitListServer = async (formData: FormData) => {
       });
     }
   } catch (error) {
-    if (error instanceof ValiError) {
+    if (error instanceof v.ValiError) {
       return json(
         { errors: translateErrorTokens(error) },
         { status: 422, revalidate: [] },
