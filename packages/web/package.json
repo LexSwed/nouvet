@@ -52,7 +52,7 @@
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.22.2",
     "eslint-plugin-drizzle": "^0.2.3",
-    "tailwindcss": "^3.4.3",
+    "tailwindcss": "^3.4.4",
     "tsx": "^4.11.2",
     "vite": "^5.2.12",
     "vite-imagetools": "^7.0.2",

@@ -14,7 +14,7 @@
   "keywords": [],
   "author": "",
   "devDependencies": {
-    "@types/node": "^20.14.1"
+    "@types/node": "^20.14.2"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^0.44.1",

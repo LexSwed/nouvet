@@ -4,7 +4,7 @@ import {
   type CookieAttributes,
   type User,
 } from 'lucia';
-import { number, object, parse, picklist, string, type Output } from 'valibot';
+import * as v from 'valibot';
 import {
   sendRedirect,
   updateSession,
@@ -20,7 +20,7 @@ import { env } from '../env';
 
 /**
  * Creates new auth session and stores it in cookie with other user basic user info.
- * @throws {ValiError} if user info provided is not correct.
+ * @throws {v.ValiError} if user info provided is not correct.
  * @throws {Error} if auth/database issues.
  */
 export async function createUserSession(
@@ -108,7 +108,7 @@ export async function deleteUserSession() {
   await useLucia().invalidateSession(session.data.sessionId);
   await session.clear();
 }
-export type UserSession = Output<typeof userCookieSchema>;
+export type UserSession = v.InferOutput<typeof userCookieSchema>;
 
 export async function useUserSession() {
   const session = await useSession<UserSession>({
@@ -122,19 +122,20 @@ export async function useUserSession() {
   return session;
 }
 
-const userCookieSchema = object({
-  userId: number(),
-  sessionId: string(),
-  locale: string('locale cannot be empty'),
+const userCookieSchema = v.object({
+  userId: v.pipe(v.number(), v.integer()),
+  sessionId: v.string(),
+  locale: v.string(),
   // timeZone: date(),
-  measurementSystem: picklist(['imperial', 'metrical'] as const satisfies Array<
-    DatabaseUser['measurementSystem']
-  >),
+  measurementSystem: v.picklist([
+    'imperial',
+    'metrical',
+  ] as const satisfies Array<DatabaseUser['measurementSystem']>),
 });
 
 /**
  * Sets current user to the cookies.
- * @throws {ValiError} when provided user data is invalid.
+ * @throws {v.ValiError} when provided user data is invalid.
  */
 export async function updateRequestUser(
   event: HTTPEvent,
@@ -151,6 +152,6 @@ export async function updateRequestUser(
       maxAge: new TimeSpan(30, 'd').seconds(),
       cookie: config,
     },
-    parse(userCookieSchema, user),
+    v.parse(userCookieSchema, user),
   );
 }
