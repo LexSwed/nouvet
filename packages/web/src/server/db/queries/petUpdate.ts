@@ -13,11 +13,12 @@ import { type ErrorKeys } from '~/server/utils';
 
 const UpdatePetSchema = v.object({
   name: v.optional(
-    v.string('createPet.name.required' satisfies ErrorKeys, [
-      v.toTrimmed(),
+    v.pipe(
+      v.string('createPet.name.required' satisfies ErrorKeys),
+      v.trim(),
       v.minLength(1, 'createPet.name.required' satisfies ErrorKeys),
       v.maxLength(200, 'createPet.name.length' satisfies ErrorKeys),
-    ]),
+    ),
   ),
   type: v.optional(
     v.picklist(
@@ -29,29 +30,32 @@ const UpdatePetSchema = v.object({
     v.picklist(['male', 'female'], 'createPet.gender' satisfies ErrorKeys),
   ),
   breed: v.optional(
-    v.string([
-      v.toTrimmed(),
+    v.pipe(
+      v.string(),
+      v.trim(),
       v.minLength(2, 'createPet.breed' satisfies ErrorKeys),
       v.maxLength(200, 'createPet.breed' satisfies ErrorKeys),
-    ]),
+    ),
   ),
   color: v.optional(
-    v.string([
-      v.toTrimmed(),
+    v.pipe(
+      v.string(),
+      v.trim(),
       v.minLength(2, 'createPet.color' satisfies ErrorKeys),
       v.maxLength(200, 'createPet.color' satisfies ErrorKeys),
-    ]),
+    ),
   ),
   dateOfBirth: v.optional(
-    v.date([
+    v.pipe(
+      v.date(),
       v.minValue(new Date(2000, 0, 1), 'birthdate.range' satisfies ErrorKeys),
       v.maxValue(new Date(), 'birthdate.range' satisfies ErrorKeys),
-    ]),
+    ),
   ),
-  weight: v.optional(v.number([v.minValue(0.1), v.maxValue(999)])),
+  weight: v.optional(v.pipe(v.number(), v.minValue(0.1), v.maxValue(999))),
 });
 
-type UpdatePetInput = v.Input<typeof UpdatePetSchema>;
+type UpdatePetInput = v.InferInput<typeof UpdatePetSchema>;
 
 export async function petUpdate(
   petData: {
