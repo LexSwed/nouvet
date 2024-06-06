@@ -1,37 +1,33 @@
 'use server';
 
-import {
-  maxLength,
-  minLength,
-  object,
-  parse,
-  picklist,
-  string,
-  ValiError,
-  type Input,
-} from 'valibot';
+import * as v from 'valibot';
 
 import { useDb } from '~/server/db';
 import { authAccount, userTable } from '~/server/db/schema';
 
-const CreateUserSchema = object({
-  provider: picklist(['facebook']),
-  name: string('Name cannot be empty', [minLength(2), maxLength(200)]),
-  accountProviderId: string('Auth Provider ID cannot be empty', [
-    minLength(1),
-    maxLength(200),
-  ]),
-  locale: string(),
-  measurementSystem: picklist(['imperial', 'metrical']),
+const CreateUserSchema = v.object({
+  provider: v.picklist(['facebook']),
+  name: v.pipe(
+    v.string('Name cannot be empty'),
+    v.minLength(2),
+    v.maxLength(200),
+  ),
+  accountProviderId: v.pipe(
+    v.string('Auth Provider ID cannot be empty'),
+    v.minLength(1),
+    v.maxLength(200),
+  ),
+  locale: v.string(),
+  measurementSystem: v.picklist(['imperial', 'metrical']),
 });
 
-type CreateUserInput = Input<typeof CreateUserSchema>;
+type CreateUserInput = v.InferInput<typeof CreateUserSchema>;
 
 export const userCreate = async (newUser: {
   [K in keyof CreateUserInput]?: unknown;
 }) => {
   try {
-    const userInfo = parse(CreateUserSchema, newUser);
+    const userInfo = v.parse(CreateUserSchema, newUser);
     const db = useDb();
     const user = db
       .insert(userTable)
@@ -52,7 +48,7 @@ export const userCreate = async (newUser: {
     return user;
   } catch (error) {
     console.error(error);
-    if (error instanceof ValiError) {
+    if (v.isValiError(error)) {
       throw error;
     }
     throw error;
