@@ -139,7 +139,7 @@ const WaitListActionSchema = v.object({
   userId: v.pipe(
     v.union([v.pipe(v.string(), v.trim(), v.nonEmpty()), v.number()]),
     v.transform(Number),
-    v.number(),
+    v.integer(),
   ),
 });
 export const moveUserFromTheWaitListServer = async (formData: FormData) => {
