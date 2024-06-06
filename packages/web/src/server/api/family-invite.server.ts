@@ -169,7 +169,7 @@ export const moveUserFromTheWaitListServer = async (formData: FormData) => {
       });
     }
   } catch (error) {
-    if (error instanceof v.ValiError) {
+    if (v.isValiError(error)) {
       return json(
         { errors: translateErrorTokens(error) },
         { status: 422, revalidate: [] },

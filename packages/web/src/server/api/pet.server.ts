@@ -31,7 +31,7 @@ export const createPetServer = async (formData: FormData) => {
     );
     return json({ pet }, { revalidate: [getUserPets.key] });
   } catch (error) {
-    if (error instanceof v.ValiError) {
+    if (v.isValiError(error)) {
       return json(
         { failed: true, errors: await translateErrorTokens(error) },
         { status: 500, revalidate: [] },
@@ -47,34 +47,49 @@ export const createPetServer = async (formData: FormData) => {
 };
 
 const PetUpdateSchema = v.object({
-  petId: v.coerce(v.number([v.integer()]), Number),
-  breed: v.optional(v.string([v.toTrimmed()])),
-  weight: v.optional(v.coerce(v.number(), Number)),
+  petId: v.pipe(v.string(), v.transform(Number), v.integer()),
+  breed: v.optional(
+    v.pipe(
+      v.string(),
+      v.trim(),
+      v.minLength(2, 'createPet.breed' satisfies ErrorKeys),
+    ),
+  ),
+  weight: v.optional(
+    v.pipe(
+      v.string(),
+      v.transform(Number),
+      v.number('weight.range' satisfies ErrorKeys),
+    ),
+  ),
   birthDate: v.optional(
     v.object({
       bday: v.nullish(
-        v.coerce(
-          v.number('bday' satisfies ErrorKeys, [v.minValue(1), v.maxValue(31)]),
-          Number,
+        v.pipe(
+          v.unknown(),
+          v.transform(Number),
+          v.number('bday' satisfies ErrorKeys),
+          v.minValue(1, 'bday' satisfies ErrorKeys),
+          v.maxValue(31, 'bday' satisfies ErrorKeys),
         ),
         1,
       ),
       bmonth: v.nullish(
-        v.coerce(
-          v.number('bmonth' satisfies ErrorKeys, [
-            v.minValue(0),
-            v.maxValue(11),
-          ]),
-          Number,
+        v.pipe(
+          v.unknown(),
+          v.transform(Number),
+          v.number('bmonth' satisfies ErrorKeys),
+          v.minValue(0, 'bmonth' satisfies ErrorKeys),
+          v.maxValue(new Date().getFullYear(), 'bmonth' satisfies ErrorKeys),
         ),
         0,
       ),
-      byear: v.coerce(
-        v.number('byear' satisfies ErrorKeys, [
-          v.minValue(1980),
-          v.maxValue(new Date().getFullYear()),
-        ]),
-        Number,
+      byear: v.pipe(
+        v.unknown(),
+        v.transform(Number),
+        v.number('byear' satisfies ErrorKeys),
+        v.minValue(1980, 'byear' satisfies ErrorKeys),
+        v.maxValue(new Date().getFullYear(), 'byear' satisfies ErrorKeys),
       ),
     }),
   ),
@@ -116,7 +131,7 @@ export const updatePetBirthDateServer = async (formData: FormData) => {
       { revalidate: [getUserPets.key] },
     );
   } catch (error) {
-    if (error instanceof v.ValiError) {
+    if (v.isValiError(error)) {
       return json(
         { failed: true, errors: await translateErrorTokens(error) },
         { status: 422, revalidate: [] },
@@ -153,7 +168,7 @@ export const updatePetWeightServer = async (formData: FormData) => {
       { revalidate: [getUserPets.key] },
     );
   } catch (error) {
-    if (error instanceof v.ValiError) {
+    if (v.isValiError(error)) {
       return json(
         { failed: true, errors: await translateErrorTokens(error) },
         { status: 422, revalidate: [] },
@@ -187,7 +202,7 @@ export const updatePetBreedServer = async (formData: FormData) => {
       { revalidate: [getUserPets.key] },
     );
   } catch (error) {
-    if (error instanceof v.ValiError) {
+    if (v.isValiError(error)) {
       return json(
         { failed: true, errors: await translateErrorTokens(error) },
         { status: 422, revalidate: [] },

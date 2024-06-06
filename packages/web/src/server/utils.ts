@@ -1,17 +1,23 @@
 'use server';
 
-import { flatten as valiFlatten, type ValiError } from 'valibot';
+import * as v from 'valibot';
 
 import type ErrorsDict from '~/server/i18n/locales/en/errors';
 
 import { getDictionary } from './i18n/dict';
 
-export async function translateErrorTokens<T extends Record<string, unknown>>(
-  error: ValiError,
-): Promise<Partial<Record<keyof T, string>>> {
+export async function translateErrorTokens<
+  TSchema extends
+    | v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>
+    | v.BaseSchemaAsync<unknown, unknown, v.BaseIssue<unknown>>,
+>(
+  error: v.ValiError<TSchema>,
+): Promise<Partial<Record<keyof TSchema, string>>> {
   const t = await getDictionary('errors');
-  const flat: Partial<Record<keyof T, string>> = {};
-  for (const [key, issue] of Object.entries(valiFlatten(error).nested)) {
+  const flat: Partial<Record<keyof TSchema, string>> = {};
+  for (const [key, issue] of Object.entries(
+    v.flatten(error.issues).nested ?? {},
+  )) {
     if (issue) {
       // @ts-expect-error I know what I'm doing
       flat[key] =

@@ -70,7 +70,7 @@ export async function updateFamilyServer(formData: FormData) {
       },
     );
   } catch (error) {
-    if (error instanceof v.ValiError) {
+    if (v.isValiError(error)) {
       return json(
         { failed: true, errors: await translateErrorTokens(error) },
         { status: 500, revalidate: [] },
