@@ -48,20 +48,8 @@ export const createPetServer = async (formData: FormData) => {
 
 const PetUpdateSchema = v.object({
   petId: v.pipe(v.string(), v.transform(Number), v.integer()),
-  breed: v.optional(
-    v.pipe(
-      v.string(),
-      v.trim(),
-      v.minLength(2, 'createPet.breed' satisfies ErrorKeys),
-    ),
-  ),
-  weight: v.optional(
-    v.pipe(
-      v.string(),
-      v.transform(Number),
-      v.number('weight.range' satisfies ErrorKeys),
-    ),
-  ),
+  breed: v.optional(v.pipe(v.string(), v.trim())),
+  weight: v.optional(v.pipe(v.string(), v.transform(Number), v.number())),
   birthDate: v.optional(
     v.object({
       bday: v.nullish(

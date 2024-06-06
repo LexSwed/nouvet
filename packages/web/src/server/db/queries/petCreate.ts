@@ -7,11 +7,12 @@ import { petTable, type DatabaseUser } from '~/server/db/schema';
 import { type ErrorKeys } from '~/server/utils';
 
 const CreatePetSchema = v.object({
-  name: v.string('createPet.name.required' satisfies ErrorKeys, [
-    v.toTrimmed(),
+  name: v.pipe(
+    v.string('createPet.name.required' satisfies ErrorKeys),
+    v.trim(),
     v.minLength(1, 'createPet.name.required' satisfies ErrorKeys),
     v.maxLength(200, 'createPet.name.length' satisfies ErrorKeys),
-  ]),
+  ),
   type: v.picklist(
     ['dog', 'cat', 'bird', 'rabbit', 'rodent', 'horse'],
     'createPet.type' satisfies ErrorKeys,
@@ -20,23 +21,25 @@ const CreatePetSchema = v.object({
     v.picklist(['male', 'female'], 'createPet.gender' satisfies ErrorKeys),
   ),
   breed: v.nullish(
-    v.string([
-      v.toTrimmed(),
+    v.pipe(
+      v.string(),
+      v.trim(),
       v.minLength(2, 'createPet.breed' satisfies ErrorKeys),
       v.maxLength(200, 'createPet.breed' satisfies ErrorKeys),
-    ]),
+    ),
   ),
   color: v.nullish(
-    v.string([
-      v.toTrimmed(),
+    v.pipe(
+      v.string(),
+      v.trim(),
       v.minLength(2, 'createPet.color' satisfies ErrorKeys),
       v.maxLength(200, 'createPet.color' satisfies ErrorKeys),
-    ]),
+    ),
   ),
-  dateOfBirth: v.nullish(v.string([v.isoDate()])),
+  dateOfBirth: v.nullish(v.pipe(v.string(), v.isoDate())),
 });
 
-type CreatePetInput = v.Input<typeof CreatePetSchema>;
+type CreatePetInput = v.InferInput<typeof CreatePetSchema>;
 
 export async function petCreate(
   input: {
