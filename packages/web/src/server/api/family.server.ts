@@ -46,11 +46,9 @@ export async function getFamilyMemberServer(memberIdParam: unknown) {
 }
 
 const FamilyUpdateSchema = v.object({
-  name: v.pipe(
-    v.string('family.name' satisfies ErrorKeys),
-    v.trim(),
-    v.nonEmpty('family.name' satisfies ErrorKeys),
-  ),
+  name: v.config(v.pipe(v.string(), v.trim(), v.nonEmpty()), {
+    message: 'family.name' satisfies ErrorKeys,
+  }),
 });
 export async function updateFamilyServer(formData: FormData) {
   try {

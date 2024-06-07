@@ -7,11 +7,14 @@ import { petTable, type DatabaseUser } from '~/server/db/schema';
 import { type ErrorKeys } from '~/server/utils';
 
 const CreatePetSchema = v.object({
-  name: v.pipe(
-    v.string('createPet.name.required' satisfies ErrorKeys),
-    v.trim(),
-    v.minLength(1, 'createPet.name.required' satisfies ErrorKeys),
-    v.maxLength(200, 'createPet.name.length' satisfies ErrorKeys),
+  name: v.config(
+    v.pipe(
+      v.string('createPet.name.required'),
+      v.trim(),
+      v.minLength(1, 'createPet.name.required'),
+      v.maxLength(200, 'createPet.name.length'),
+    ),
+    { message: 'createPet.name.required' satisfies ErrorKeys },
   ),
   type: v.picklist(
     ['dog', 'cat', 'bird', 'rabbit', 'rodent', 'horse'],
@@ -21,20 +24,14 @@ const CreatePetSchema = v.object({
     v.picklist(['male', 'female'], 'createPet.gender' satisfies ErrorKeys),
   ),
   breed: v.nullish(
-    v.pipe(
-      v.string(),
-      v.trim(),
-      v.minLength(2, 'createPet.breed' satisfies ErrorKeys),
-      v.maxLength(200, 'createPet.breed' satisfies ErrorKeys),
-    ),
+    v.config(v.pipe(v.string(), v.trim(), v.minLength(2), v.maxLength(200)), {
+      message: 'createPet.breed' satisfies ErrorKeys,
+    }),
   ),
   color: v.nullish(
-    v.pipe(
-      v.string(),
-      v.trim(),
-      v.minLength(2, 'createPet.color' satisfies ErrorKeys),
-      v.maxLength(200, 'createPet.color' satisfies ErrorKeys),
-    ),
+    v.config(v.pipe(v.string(), v.trim(), v.minLength(2), v.maxLength(200)), {
+      message: 'createPet.color' satisfies ErrorKeys,
+    }),
   ),
   dateOfBirth: v.nullish(v.pipe(v.string(), v.isoDate())),
 });

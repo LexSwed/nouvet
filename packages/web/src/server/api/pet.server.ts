@@ -53,31 +53,40 @@ const PetUpdateSchema = v.object({
   birthDate: v.optional(
     v.object({
       bday: v.nullish(
-        v.pipe(
-          v.unknown(),
-          v.transform(Number),
-          v.number('bday' satisfies ErrorKeys),
-          v.minValue(1, 'bday' satisfies ErrorKeys),
-          v.maxValue(31, 'bday' satisfies ErrorKeys),
+        v.config(
+          v.pipe(
+            v.unknown(),
+            v.transform(Number),
+            v.number(),
+            v.minValue(1),
+            v.maxValue(31),
+          ),
+          { message: 'bday' satisfies ErrorKeys },
         ),
         1,
       ),
       bmonth: v.nullish(
-        v.pipe(
-          v.unknown(),
-          v.transform(Number),
-          v.number('bmonth' satisfies ErrorKeys),
-          v.minValue(0, 'bmonth' satisfies ErrorKeys),
-          v.maxValue(new Date().getFullYear(), 'bmonth' satisfies ErrorKeys),
+        v.config(
+          v.pipe(
+            v.unknown(),
+            v.transform(Number),
+            v.number(),
+            v.minValue(0),
+            v.maxValue(new Date().getFullYear()),
+          ),
+          { message: 'bmonth' satisfies ErrorKeys },
         ),
         0,
       ),
-      byear: v.pipe(
-        v.unknown(),
-        v.transform(Number),
-        v.number('byear' satisfies ErrorKeys),
-        v.minValue(1980, 'byear' satisfies ErrorKeys),
-        v.maxValue(new Date().getFullYear(), 'byear' satisfies ErrorKeys),
+      byear: v.config(
+        v.pipe(
+          v.unknown(),
+          v.transform(Number),
+          v.number(),
+          v.minValue(1980),
+          v.maxValue(new Date().getFullYear()),
+        ),
+        { message: 'byear' satisfies ErrorKeys },
       ),
     }),
   ),

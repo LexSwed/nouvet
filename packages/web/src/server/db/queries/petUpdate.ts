@@ -16,7 +16,7 @@ const UpdatePetSchema = v.object({
     v.pipe(
       v.string('createPet.name.required' satisfies ErrorKeys),
       v.trim(),
-      v.minLength(1, 'createPet.name.required' satisfies ErrorKeys),
+      v.minLength(1, 'createPet.name.length' satisfies ErrorKeys),
       v.maxLength(200, 'createPet.name.length' satisfies ErrorKeys),
     ),
   ),
@@ -30,29 +30,30 @@ const UpdatePetSchema = v.object({
     v.picklist(['male', 'female'], 'createPet.gender' satisfies ErrorKeys),
   ),
   breed: v.optional(
-    v.pipe(
-      v.string(),
-      v.trim(),
-      v.minLength(2, 'createPet.breed' satisfies ErrorKeys),
-      v.maxLength(200, 'createPet.breed' satisfies ErrorKeys),
-    ),
+    v.config(v.pipe(v.string(), v.trim(), v.minLength(2), v.maxLength(200)), {
+      message: 'createPet.breed' satisfies ErrorKeys,
+    }),
   ),
   color: v.optional(
-    v.pipe(
-      v.string(),
-      v.trim(),
-      v.minLength(2, 'createPet.color' satisfies ErrorKeys),
-      v.maxLength(200, 'createPet.color' satisfies ErrorKeys),
-    ),
+    v.config(v.pipe(v.string(), v.trim(), v.minLength(2), v.maxLength(200)), {
+      message: 'createPet.color' satisfies ErrorKeys,
+    }),
   ),
   dateOfBirth: v.optional(
-    v.pipe(
-      v.date(),
-      v.minValue(new Date(2000, 0, 1), 'birthdate.range' satisfies ErrorKeys),
-      v.maxValue(new Date(), 'birthdate.range' satisfies ErrorKeys),
+    v.config(
+      v.pipe(
+        v.date(),
+        v.minValue(new Date(2000, 0, 1)),
+        v.maxValue(new Date()),
+      ),
+      { message: 'birthdate.range' satisfies ErrorKeys },
     ),
   ),
-  weight: v.optional(v.pipe(v.number(), v.minValue(0.1), v.maxValue(999))),
+  weight: v.optional(
+    v.config(v.pipe(v.number(), v.minValue(0.1), v.maxValue(999)), {
+      message: 'weight.range' satisfies ErrorKeys,
+    }),
+  ),
 });
 
 type UpdatePetInput = v.InferInput<typeof UpdatePetSchema>;
