@@ -13,6 +13,11 @@
   }
 }
 
+:global(::view-transition-old(family-invite-dialog)),
+:global(::view-transition-new(family-invite-dialog)) {
+  height: 100%;
+}
+
 :global(::view-transition-group(invite-dialog-content)) {
   /* Clip the views as they overflow the group */
   overflow: clip;

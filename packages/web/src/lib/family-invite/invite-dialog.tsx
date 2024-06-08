@@ -24,7 +24,7 @@ export const FamilyInviteDialog = (props: {
       placement="center"
       aria-labelledby={`${props.id}-headline`}
       role="dialog"
-      class="to-primary/10 via-surface from-surface mt-[16vh] flex w-[94svw] max-w-[420px] flex-col gap-6 bg-gradient-to-b via-65% p-6 md:mt-[20vh]"
+      class="to-primary/10 via-surface from-surface view-transition-[family-invite-dialog] mt-[16vh] flex w-[94svw] max-w-[420px] flex-col gap-6 bg-gradient-to-b via-65% p-6 md:mt-[20vh]"
     >
       {(open) => (
         <Show when={open()}>
@@ -72,7 +72,7 @@ const InviteDialogContent = (ownProps: {
 
   return (
     <>
-      <header class="z-10 -m-4 flex flex-row items-center justify-between gap-2">
+      <header class="view-transition-[family-invite-dialog-header] z-10 -m-4 flex flex-row items-center justify-between gap-2">
         <Show
           when={!new Set<Step>(['initial', 'join-success']).has(step())}
           fallback={<div />}
