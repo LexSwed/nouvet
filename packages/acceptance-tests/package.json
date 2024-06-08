@@ -8,7 +8,9 @@
     "test": "npx playwright test",
     "prepare:ci": "npm run build -w @nou/web && npm run db:push -w @nou/web && npm run db:seed -w @nou/web",
     "build:web": "dotenvx run --env-file=.env.test -- npm run build -w @nou/web",
-    "db:seed": "dotenvx run --env-file=.env.test -- npm run db:push -w @nou/web && npm run db:seed -w @nou/web",
+    "db:push": "dotenvx run --env-file=.env.test -- npm run db:push -w @nou/web",
+    "db:seed": "dotenvx run --env-file=.env.test -- npm run db:seed -w @nou/web -- --seed-file=$INIT_CWD/.drizzle/seed.ts",
+    "db:setup": "npm run db:push && npm run db:seed",
     "start:web": "dotenvx run --env-file=.env.test -- npm run dev -w @nou/web",
     "typecheck": "tsc",
     "lint": "eslint src",
@@ -17,6 +19,7 @@
   "keywords": [],
   "author": "",
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@types/node": "^20.14.2"
   },
   "dependencies": {

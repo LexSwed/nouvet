@@ -1,5 +1,6 @@
 import 'dotenv/config';
 
+import { resolve } from 'node:path';
 import { faker } from '@faker-js/faker';
 import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
@@ -20,4 +21,19 @@ async function seed() {
   await db.insert(schema.userTable).values(users);
 }
 
-seed();
+const seedFile = process.argv
+  .slice(2)
+  .find((arg) => arg.startsWith('--seed-file'))
+  ?.split('=')
+  .at(1);
+
+if (seedFile) {
+  try {
+    const file = await import(resolve(seedFile));
+    file.seed(db);
+  } catch (error) {
+    console.error(error);
+  }
+} else {
+  seed();
+}

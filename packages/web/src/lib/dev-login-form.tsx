@@ -1,5 +1,5 @@
 import { useSubmission } from '@solidjs/router';
-import { Button, Form, Icon, Popover, Text, TextField } from '@nou/ui';
+import { Button, Form, Icon, Popover, TextField } from '@nou/ui';
 
 import { loginDev } from '~/server/api/dev-login';
 
@@ -15,7 +15,7 @@ const DevLogin = () => {
       >
         <Icon use="carrot" />
       </Button>
-      <Popover id="dev-login" class="w-[320px] p-8">
+      <Popover id="dev-login" class="w-[320px] p-8" heading={'Dev login'}>
         <Form
           validationErrors={
             login.result && 'errors' in login.result
@@ -26,9 +26,6 @@ const DevLogin = () => {
           action={loginDev}
           class="flex flex-col gap-4"
         >
-          <Text with="body-xl" class="text-center">
-            Dev login
-          </Text>
           <TextField name="name" label="Name" />
           <Button type="submit" loading={login.pending}>
             Login

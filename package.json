@@ -10,7 +10,8 @@
     "packages/web"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+    "npm": ">=10"
   },
   "scripts": {
     "dev": "npm run dev -w @nou/web",
