@@ -15,8 +15,10 @@
     "node": ">=20"
   },
   "scripts": {
-    "format": "prettier . --write",
-    "generate-themed-css": "node ./theme/generate.js"
+    "generate-themed-css": "node ./theme/generate.js",
+    "typecheck": "tsc",
+    "lint": "eslint src",
+    "format": "prettier . --write"
   },
   "dependencies": {
     "@fontsource-variable/rubik": "^5.0.22",
