@@ -1,8 +1,6 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../fixtures/hook';
 
 test.describe('pet-create', () => {
-  test.use({ ignoreHTTPSErrors: true });
-
   test('tests pet-create', async ({ page }) => {
     await page.goto('/app/login');
 

@@ -34,26 +34,12 @@ export default defineConfig({
 
   projects: [
     {
-      name: 'database setup',
-      testDir: 'playwright',
-      testMatch: 'database.setup.ts',
-    },
-    {
-      name: 'database teardown',
-      testDir: 'playwright',
-      testMatch: 'database.teardown.ts',
-    },
-    {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'], locale: 'en-GB' },
-      dependencies: ['database setup'],
-      teardown: 'database teardown',
     },
     {
       name: 'Mobile Chrome',
       use: { ...devices['Pixel 5'], locale: 'en-GB' },
-      dependencies: ['database setup'],
-      teardown: 'database teardown',
     },
   ],
 });
