@@ -1,4 +1,6 @@
-import { execSync } from 'child_process';
+import { execSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { rm } from 'node:fs/promises';
 import { test as setup } from '@playwright/test';
 
 /**
@@ -9,6 +11,10 @@ setup('Set up new database', async () => {
   console.log(
     `Running migrations and seeding the database ${process.env.DB_CONNECTION}`,
   );
+
+  if (existsSync(process.env.DB_CONNECTION!)) {
+    await rm(process.env.DB_CONNECTION!);
+  }
 
   execSync('npm run db:setup -w @nou/acceptance-tests');
 
