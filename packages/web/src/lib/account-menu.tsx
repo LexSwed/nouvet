@@ -21,7 +21,12 @@ const AccountMenu = (props: AccountMenu) => {
   const t = createTranslator('app');
   return (
     <>
-      <Button popoverTarget="account-menu" variant="ghost" icon>
+      <Button
+        popoverTarget="account-menu"
+        variant="ghost"
+        icon
+        label={t('account-menu.label')}
+      >
         <Avatar name={props.name} avatarUrl={props.avatarUrl} />
       </Button>
       <Popover

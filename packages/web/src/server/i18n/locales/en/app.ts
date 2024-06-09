@@ -7,6 +7,7 @@ const appDict = {
   'invite-card-description':
     'Your pets are happier with more humans around! Share the care for your pets with the loved ones.',
   'cta-invite-join': 'Join',
+  'account-menu.label': 'User menu',
   'account-menu.account': 'Account preferences',
   'account-menu.pwa-title': 'Install for offline',
   'account-menu.pwa-description':
