@@ -7,10 +7,18 @@ import { createUserSession } from '~/server/auth/user-session';
 import { RETURN_URL_COOKIE } from '~/server/const';
 
 export async function loginDevServer(name: string) {
-  const returnUrl = getCookie(RETURN_URL_COOKIE);
+  let returnUrl = getCookie(RETURN_URL_COOKIE);
 
   if (returnUrl) {
     deleteCookie(RETURN_URL_COOKIE);
+  }
+
+  switch (returnUrl) {
+    case '/':
+    case '/app/login':
+    case '/app/logout':
+      returnUrl = '/app';
+      break;
   }
   try {
     const event = getRequestEvent();

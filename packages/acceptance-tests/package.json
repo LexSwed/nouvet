@@ -11,8 +11,6 @@
     "db:seed": "dotenvx run -f .env.test -- npm run db:seed -w @nou/web -- --seed-file=$INIT_CWD/.drizzle/seed.ts",
     "build:web": "dotenvx run -f=.env.test -- npm run build -w @nou/web",
     "start:web": "npm run dev -w @nou/web",
-    "ci:build": "npm run build -w @nou/web",
-    "ci:test": "npx playwright test",
     "typecheck": "tsc",
     "lint": "eslint src",
     "format": "prettier . --write"

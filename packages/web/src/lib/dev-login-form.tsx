@@ -15,7 +15,12 @@ const DevLogin = () => {
       >
         <Icon use="carrot" />
       </Button>
-      <Popover id="dev-login" class="w-[320px] p-8" heading={'Dev login'}>
+      <Popover
+        id="dev-login"
+        class="w-[320px] p-8"
+        heading={'Dev login'}
+        placement="top-to-bottom right-to-right"
+      >
         <Form
           validationErrors={
             login.result && 'errors' in login.result

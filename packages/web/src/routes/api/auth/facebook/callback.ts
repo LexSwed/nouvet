@@ -37,12 +37,17 @@ export const GET = async (event: PageEvent) => {
       facebookUser.id,
     );
     let returnUrl = getCookie(RETURN_URL_COOKIE);
-    if (returnUrl === '/') {
-      returnUrl = '/app';
-    }
 
     if (returnUrl) {
       deleteCookie(RETURN_URL_COOKIE);
+    }
+
+    switch (returnUrl) {
+      case '/':
+      case '/app/login':
+      case '/app/logout':
+        returnUrl = '/app';
+        break;
     }
 
     if (existingUser) {
