@@ -27,20 +27,33 @@ export default defineConfig({
 
   /* Run local dev server before starting the tests. */
   webServer: {
-    command: 'npm run dev -w @nou/web',
+    command: 'npm run start:web',
     url: 'http://127.0.0.1:3000',
     reuseExistingServer: !process.env.CI,
   },
 
-  /* Configure projects for major browsers */
   projects: [
+    {
+      name: 'database setup',
+      testDir: 'playwright',
+      testMatch: 'database.setup.ts',
+    },
+    {
+      name: 'database teardown',
+      testDir: 'playwright',
+      testMatch: 'database.teardown.ts',
+    },
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'], locale: 'en-GB' },
+      dependencies: ['database setup'],
+      teardown: 'database teardown',
     },
     {
       name: 'Mobile Chrome',
       use: { ...devices['Pixel 5'], locale: 'en-GB' },
+      dependencies: ['database setup'],
+      teardown: 'database teardown',
     },
   ],
 });
