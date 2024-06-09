@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "dotenvx run -f .env.test -- npx playwright test",
-    "db:setup": "npm run db:push && npm run db:seed",
+    "db:setup": "rm ./test-sqlite.db && npm run db:push && npm run db:seed",
     "db:push": "dotenvx run -f .env.test -- npm run db:push -w @nou/web",
     "db:seed": "dotenvx run -f .env.test -- npm run db:seed -w @nou/web -- --seed-file=$INIT_CWD/.drizzle/seed.ts",
     "build:web": "dotenvx run -f=.env.test -- npm run build -w @nou/web",

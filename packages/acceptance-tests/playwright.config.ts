@@ -34,12 +34,19 @@ export default defineConfig({
 
   projects: [
     {
+      name: 'database setup',
+      testDir: 'setup',
+      testMatch: 'database.setup.ts',
+    },
+    {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'], locale: 'en-GB' },
+      dependencies: ['database setup'],
     },
     {
       name: 'Mobile Chrome',
       use: { ...devices['Pixel 5'], locale: 'en-GB' },
+      dependencies: ['database setup'],
     },
   ],
 });
