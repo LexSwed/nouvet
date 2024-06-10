@@ -1,13 +1,13 @@
-import { expect, testUserOne as test } from '../fixtures/user-1';
+import { expect, test } from '../fixtures/users';
 
 test.describe('User 1 is a new user', () => {
-  test('can create pets', async ({ page }) => {
+  test('can create pets', async ({ userOnePage: page }) => {
     page.goto('/app');
     console.log('Has initial pet creation form expanded');
     await expect(page.getByLabel('Add your pet')).toBeVisible();
   });
 
-  test('can create family invites', async ({ page, context }) => {
+  test('can create family invites', async ({ userOnePage: page, context }) => {
     page.goto('/app');
     console.log('Has family invitation message');
     await expect(

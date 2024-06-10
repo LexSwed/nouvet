@@ -27,12 +27,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright Browsers
+        working-directory: packages/acceptance-tests
         run: npx playwright install --with-deps
       - name: Build webapp
+        working-directory: packages/acceptance-tests
         run: npm run build -w @nou/acceptance-tests
       - name: Prepare the database
+        working-directory: packages/acceptance-tests
         run: npm run db:push -w @nou/acceptance-tests
       - name: Run Playwright tests
+        working-directory: packages/acceptance-tests
         run: npm run test -w @nou/acceptance-tests
       - uses: actions/upload-artifact@v4
         if: always()

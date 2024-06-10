@@ -1,9 +1,10 @@
-import { verifyRequestOrigin, type CookieAttributes, type User } from 'lucia';
+import { verifyRequestOrigin, type User } from 'lucia';
 import * as v from 'valibot';
 import {
   sendRedirect,
   updateSession,
   useSession,
+  type CookieSerializeOptions,
   type HTTPEvent,
 } from 'vinxi/server';
 
@@ -138,7 +139,7 @@ const userCookieSchema = v.object({
 export async function updateRequestUser(
   event: HTTPEvent,
   user: UserSession,
-  config?: CookieAttributes,
+  config?: CookieSerializeOptions,
 ) {
   const { sessionId } = user;
   await updateSession(

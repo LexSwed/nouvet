@@ -9,6 +9,7 @@ import { env } from '../env';
 const sqlite = new Database(env.DB);
 let _db: BetterSQLite3Database | null = null;
 
+console.log(process.env.DB_CONNECTION);
 export const useDb = () => {
   if (!_db) {
     _db = drizzle(sqlite, { logger: env.DEV });
@@ -16,4 +17,3 @@ export const useDb = () => {
 
   return _db;
 };
-
