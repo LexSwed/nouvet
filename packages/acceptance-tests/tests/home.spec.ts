@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('Home Page', () => {
-  test('Has a link to navigate to /app', async ({ page }) => {
+  test.use({ ignoreHTTPSErrors: true });
+
+  test('Unauthorized user', async ({ page }) => {
     await page.goto('/');
 
     await expect(page).toHaveTitle('NouVet for pets wellbeing');
@@ -10,5 +12,11 @@ test.describe('Home Page', () => {
 
     await expect(page).toHaveURL('/app/login');
     await expect(page).toHaveTitle('NouVet | Sign In');
+
+    console.log('Redirects to login page when unauthorized');
+    await page.goto('/app');
+    await page.waitForURL('/app/login');
+
+    expect(page.url()).toMatch('/app/login');
   });
 });

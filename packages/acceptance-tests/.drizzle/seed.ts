@@ -1,22 +1,41 @@
-import { faker } from '@faker-js/faker';
-
 import type { useDb } from '../../web/src/server/db';
 import * as schema from '../../web/src/server/db/schema';
 
 export async function seed(db: ReturnType<typeof useDb>) {
   const users = await db
     .insert(schema.userTable)
-    .values(
-      Array.from({ length: 5 }).map((_, i) => ({
-        id: i + 1,
-        name: faker.person.fullName(),
-        measurementSystem: faker.helpers.arrayElement([
-          'imperial',
-          'metrical',
-        ]) as 'imperial' | 'metrical',
-        locale: 'en-GB' as const,
-      })),
-    )
+    .values([
+      {
+        id: 1,
+        name: 'User One',
+        locale: 'en-GB',
+        measurementSystem: 'metrical',
+      },
+      {
+        id: 2,
+        name: 'User Two',
+        locale: 'en-GB',
+        measurementSystem: 'metrical',
+      },
+      {
+        id: 3,
+        name: 'User Three',
+        locale: 'en-GB',
+        measurementSystem: 'metrical',
+      },
+      {
+        id: 4,
+        name: 'User Four',
+        locale: 'en-GB',
+        measurementSystem: 'metrical',
+      },
+      {
+        id: 5,
+        name: 'User Five',
+        locale: 'en-GB',
+        measurementSystem: 'metrical',
+      },
+    ])
     .returning({ id: schema.userTable.id });
 
   // User 1 gets no family nor the animals

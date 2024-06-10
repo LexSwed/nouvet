@@ -18,7 +18,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://127.0.0.1:3000',
+    baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -28,7 +28,10 @@ export default defineConfig({
   /* Run local dev server before starting the tests. */
   webServer: {
     command: 'npm run start:web',
-    url: 'http://127.0.0.1:3000',
+    url: 'http://localhost:3000',
+    ignoreHTTPSErrors: true,
+    stdout: process.env.CI ? 'ignore' : 'pipe',
+    stderr: 'pipe',
     reuseExistingServer: !process.env.CI,
   },
 
@@ -40,12 +43,18 @@ export default defineConfig({
     },
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'], locale: 'en-GB' },
+      use: {
+        ...devices['Desktop Chrome'],
+        locale: 'en-GB',
+      },
       dependencies: ['database setup'],
     },
     {
       name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'], locale: 'en-GB' },
+      use: {
+        ...devices['Pixel 5'],
+        locale: 'en-GB',
+      },
       dependencies: ['database setup'],
     },
   ],
