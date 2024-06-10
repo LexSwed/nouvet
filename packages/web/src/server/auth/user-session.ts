@@ -1,9 +1,4 @@
-import {
-  TimeSpan,
-  verifyRequestOrigin,
-  type CookieAttributes,
-  type User,
-} from 'lucia';
+import { verifyRequestOrigin, type CookieAttributes, type User } from 'lucia';
 import * as v from 'valibot';
 import {
   sendRedirect,
@@ -46,8 +41,9 @@ export async function createUserSession(
       sessionId: authSession.id,
     },
     {
-      // for --host debugging on real device
+      // keep enabled in DEV for --host debugging on real device
       secure: env.PROD,
+      expires: authSession.expiresAt,
     },
   );
 }
@@ -105,7 +101,9 @@ export async function validateAuthSession(
  */
 export async function deleteUserSession() {
   const session = await useUserSession();
-  await useLucia().invalidateSession(session.data.sessionId);
+  if (session.data.sessionId) {
+    await useLucia().invalidateSession(session.data.sessionId);
+  }
   await session.clear();
 }
 export type UserSession = v.InferOutput<typeof userCookieSchema>;
@@ -149,7 +147,6 @@ export async function updateRequestUser(
       generateId: () => sessionId,
       name: SESSION_COOKIE,
       password: env.SESSION_SECRET,
-      maxAge: new TimeSpan(30, 'd').seconds(),
       cookie: config,
     },
     v.parse(userCookieSchema, user),
