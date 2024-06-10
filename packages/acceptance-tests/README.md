@@ -4,7 +4,13 @@
 
 ## Running
 
-You can run [Playwright in UI mode](https://playwright.dev/docs/test-ui-mode):
+Prepare the database which will be seeded for each test:
+
+```
+npm run db:push -w @nou/acceptance-tests
+```
+
+Now you can run [Playwright in UI mode](https://playwright.dev/docs/test-ui-mode):
 
 ```
 npm run test -w @nou/acceptance-tests --  --ui
