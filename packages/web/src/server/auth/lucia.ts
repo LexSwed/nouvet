@@ -18,7 +18,6 @@ export const useLucia = () => {
     sessionExpiresIn: new TimeSpan(30, 'd'),
     sessionCookie: {
       attributes: {
-        sameSite: env.PROD ? 'lax' : undefined,
         secure: env.PROD,
       },
     },
