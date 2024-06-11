@@ -1,7 +1,7 @@
-import { useSubmission } from '@solidjs/router';
+import { action, json, redirect, useSubmission } from '@solidjs/router';
 import { Button, Form, Icon, Popover, TextField } from '@nou/ui';
 
-import { loginDev } from '~/server/api/dev-login';
+import { loginDevServer } from '~/server/api/dev-login.server';
 
 const DevLogin = () => {
   const login = useSubmission(loginDev);
@@ -42,3 +42,20 @@ const DevLogin = () => {
 };
 
 export default DevLogin;
+
+const loginDev = action(async (formData: FormData) => {
+  'use server';
+  const name = formData.get('name')?.toString().trim();
+  if (!name) {
+    return json(
+      { errors: { name: 'Cannot be empty ' } },
+      { status: 500, revalidate: [] },
+    );
+  }
+  try {
+    const { redirectUrl } = await loginDevServer(name);
+    return redirect(redirectUrl);
+  } catch (error) {
+    return json({ failed: true }, { status: 500, revalidate: [] });
+  }
+}, 'dev-login');
