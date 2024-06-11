@@ -17,11 +17,11 @@ test.describe('User 1 is a new user', () => {
     ).toBeVisible();
 
     console.log('Opens family invite dialog on QR scan page');
-    page
+    await page
       .getByRole('button')
       .getByText('Have your partner already registered? Join them!')
       .click();
-    await expect(page.getByRole('dialog')).toBeVisible();
+    await expect(page.getByRole('dialog')).toBeVisible({ timeout: 1000 });
     await expect(
       page
         .getByRole('dialog')
@@ -32,11 +32,11 @@ test.describe('User 1 is a new user', () => {
     page.getByRole('dialog').getByLabel('Close dialog').click();
 
     console.log('Has default family invite window.');
-    page.getByRole('button').getByLabel('My Family').click();
+    await page.getByRole('button').getByLabel('My Family').click();
     await expect(
       page.getByRole('dialog').getByText('Sharing is caring'),
     ).toBeVisible();
-    page.getByRole('dialog').getByText('Invite').click();
+    await page.getByRole('dialog').getByText('Invite').click();
     await expect(page.getByRole('dialog')).toBeFocused();
     await expect(
       page.getByRole('dialog').getByRole('button').getByText('Create QR code'),

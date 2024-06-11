@@ -1,7 +1,10 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('Home Page', () => {
-  test.use({ ignoreHTTPSErrors: true });
+  test.use({
+    ignoreHTTPSErrors: true,
+    storageState: { cookies: [], origins: [] },
+  });
 
   test('Unauthorized user', async ({ page }) => {
     await page.goto('/');
