@@ -58,7 +58,6 @@ export async function createUserSession(
 export async function validateAuthSession(
   event: HTTPEvent,
 ): Promise<User | null> {
-  console.log('validate', env);
   if (env.PROD) {
     const originHeader = event.headers.get('Origin');
     const hostHeader = event.headers.get('Host');
@@ -72,7 +71,6 @@ export async function validateAuthSession(
   }
   const lucia = useLucia();
   const userSession = await useUserSession();
-  console.log(userSession.id, userSession.data);
   if (!userSession.id) {
     // Cleanup just in case
     await deleteUserSession();

@@ -19,20 +19,20 @@ export default defineConfig({
     // rollupConfig: {
     //   external: ['node:async_hooks'],
     // },
-    // database: {
-    // D1
-    // default: {
-    //   connector: 'cloudflare-d1',
-    //   options: { bindingName: 'db' }
-    // },
-    // default: {
-    //   connector: 'sqlite',
-    //   options: { name: 'db' },
-    // },
-    // },
-    // experimental: {
-    //   database: true,
-    // },
+    database: {
+      // D1
+      // default: {
+      //   connector: 'cloudflare-d1',
+      //   options: { bindingName: 'db' }
+      // },
+      default: {
+        connector: 'sqlite',
+        options: { name: 'db' },
+      },
+    },
+    experimental: {
+      database: true,
+    },
   },
   vite: {
     css: {

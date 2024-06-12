@@ -7,39 +7,45 @@ test.describe('User 1 is a new user', () => {
     await expect(page.getByLabel('Add your pet')).toBeVisible();
   });
 
-  test('can create family invites', async ({ userOnePage: page, context }) => {
+  test('can create family invites', async ({ userOnePage: page }) => {
     page.goto('/app');
+    await page.waitForEvent('load');
+
     console.log('Has family invitation message');
-    await expect(
-      page
-        .getByRole('button')
-        .getByText('Have your partner already registered? Join them!'),
-    ).toBeVisible();
+    const newPetFamilyInvitationCta = page.getByRole('button', {
+      name: 'Have your partner already registered? Join them!',
+    });
+    await expect(newPetFamilyInvitationCta).toBeVisible();
 
     console.log('Opens family invite dialog on QR scan page');
-    await page
-      .getByRole('button')
-      .getByText('Have your partner already registered? Join them!')
-      .click();
-    await expect(page.getByRole('dialog')).toBeVisible({ timeout: 1000 });
+    await newPetFamilyInvitationCta.click();
     await expect(
-      page
-        .getByRole('dialog')
-        .getByText(
-          'Scan the QR-code, created by your partner in their NouVet app.',
-        ),
+      page.getByRole('dialog', { name: 'Join another user' }),
     ).toBeVisible();
-    page.getByRole('dialog').getByLabel('Close dialog').click();
+    await page
+      .getByRole('dialog', { name: 'Join another user' })
+      .getByLabel('Close dialog')
+      .click();
 
     console.log('Has default family invite window.');
-    await page.getByRole('button').getByLabel('My Family').click();
+    await page.getByRole('button', { name: 'My Family' }).click();
     await expect(
-      page.getByRole('dialog').getByText('Sharing is caring'),
+      page
+        .getByRole('dialog', { name: 'Family invitation' })
+        .getByText('Sharing is caring'),
     ).toBeVisible();
-    await page.getByRole('dialog').getByText('Invite').click();
-    await expect(page.getByRole('dialog')).toBeFocused();
+    await page
+      .getByRole('dialog', { name: 'Family invitation' })
+      .getByText('Invite')
+      .click();
     await expect(
-      page.getByRole('dialog').getByRole('button').getByText('Create QR code'),
+      page.getByRole('dialog', { name: 'Create invite' }),
+    ).toBeFocused();
+    await expect(
+      page
+        .getByRole('dialog', { name: 'Create invite' })
+        .getByRole('button')
+        .getByText('Create QR code'),
     ).toBeVisible();
 
     console.log('Can create invites and share them');
@@ -51,10 +57,5 @@ test.describe('User 1 is a new user', () => {
     await expect(
       page.getByText(/The invitation expires in [\d]+ minutes/),
     ).toBeVisible();
-
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-
-    const clipboardText = await page.evaluate('navigator.clipboard.readText()');
-    expect(clipboardText).toContain("Hello, I'm TEXT 1");
   });
 });

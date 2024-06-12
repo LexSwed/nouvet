@@ -1,7 +1,4 @@
-import { execSync } from 'node:child_process';
-import { randomUUID } from 'node:crypto';
 import { existsSync } from 'node:fs';
-import { rm } from 'node:fs/promises';
 import { expect, test as setup } from '@playwright/test';
 
 import { getAuthFilePath } from './utils';
@@ -10,28 +7,27 @@ import { getAuthFilePath } from './utils';
  * Sets up new database before all tests are run.
  * The steps are run in sequence to ensure that user auth sessions are stored
  * in the same DB that was seeded.
+ *
+ * UPD: seeding was removed as this step is run every time an update to test is made.
+ * To reduce friction, DB is now initialized once. If the developer sees failing tests
+ * due to them being not isolated, they can re-initialize the database manually.
  */
 setup('Set up tests', async ({ page }) => {
-  await setup.step('Set up the database', async () => {
-    console.time('database');
+  // await setup.step('Set up the database', async () => {
+  //   console.time('database');
 
-    console.log(process.env.DB_CONNECTION);
-    if (existsSync(process.env.DB_CONNECTION!)) {
-      console.log('Clean up possibly modified database');
-      await rm(process.env.DB_CONNECTION!);
-    }
-    console.log(`Running migrations and seeding the database`);
-    try {
-      execSync('npm run db:setup -w @nou/acceptance-tests', { stdio: 'pipe' });
-      process.env.TEST_RUN_ID = randomUUID();
-    } catch (error) {
-      console.error(error);
-      process.exit(1);
-    }
+  //   console.log(`Re-seeding the database`);
+  //   try {
+  //     execSync('npm run db:seed -w @nou/acceptance-tests', { stdio: 'pipe' });
+  //     process.env.TEST_RUN_ID = randomUUID();
+  //   } catch (error) {
+  //     console.error(error);
+  //     process.exit(1);
+  //   }
 
-    console.log(`The database is set up!`);
-    console.timeEnd('database');
-  });
+  //   console.log(`The database is set up!`);
+  //   console.timeEnd('database');
+  // });
 
   await setup.step('authenticate user-1', async () => {
     console.log('authenticate user-1');

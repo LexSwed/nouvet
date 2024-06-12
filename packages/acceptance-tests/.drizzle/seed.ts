@@ -2,6 +2,16 @@ import type { useDb } from '../../web/src/server/db';
 import * as schema from '../../web/src/server/db/schema';
 
 export async function seed(db: ReturnType<typeof useDb>) {
+  await Promise.all([
+    db.delete(schema.authAccount),
+    db.delete(schema.sessionTable),
+    db.delete(schema.familyInviteTable),
+    db.delete(schema.familyUserTable),
+    db.delete(schema.familyTable),
+    db.delete(schema.petTable),
+  ]);
+  await db.delete(schema.userTable);
+
   const users = await db
     .insert(schema.userTable)
     .values([
