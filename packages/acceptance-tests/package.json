@@ -23,7 +23,7 @@
     "eslint-plugin-playwright": "^1.6.2"
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^0.44.1",
+    "@dotenvx/dotenvx": "^0.44.2",
     "@playwright/test": "^1.44.1"
   }
 }
