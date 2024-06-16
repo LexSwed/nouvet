@@ -134,15 +134,12 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
                   />
                 </div>
                 <Text with="body-lg">{props.pet.name}</Text>
-                <Button
-                  icon
-                  label={t('go-to-pet-page', { petName: props.pet.name })}
-                  variant="ghost"
-                  class="ms-auto"
-                  tabIndex={-1}
-                >
+                <Text class="sr-only">
+                  {t('go-to-pet-page', { petName: props.pet.name })}
+                </Text>
+                <div class="bg-on-surface/5 group-hover/link:bg-on-surface/8 ms-auto grid cursor-pointer place-content-center rounded-full p-3 transition-colors duration-200">
                   <Icon use="pencil" size="sm" />
-                </Button>
+                </div>
               </A>
               <MenuList class="min-w-56">
                 <Show when={props.owner}>

@@ -1,5 +1,3 @@
-'use server';
-
 import { type User } from 'lucia';
 import * as v from 'valibot';
 import {

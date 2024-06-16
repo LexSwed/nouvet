@@ -76,9 +76,8 @@ const UserPets = () => {
               <Button
                 label={t('add-another')}
                 size="base"
-                class="bg-on-surface/5"
                 icon
-                variant="ghost"
+                variant="tonal"
                 popoverTarget="create-new-pet-drawer"
               >
                 <Icon use="plus" size="sm" />
