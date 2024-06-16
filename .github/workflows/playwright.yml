@@ -31,7 +31,7 @@ jobs:
         run: npx playwright install --with-deps
       - name: Build webapp
         working-directory: packages/acceptance-tests
-        run: npm run build -w @nou/acceptance-tests
+        run: npm run build:web -w @nou/acceptance-tests
       - name: Prepare the database
         working-directory: packages/acceptance-tests
         run: npm run db:setup -w @nou/acceptance-tests
