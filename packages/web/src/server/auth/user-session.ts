@@ -1,6 +1,6 @@
 'use server';
 
-import { verifyRequestOrigin, type User } from 'lucia';
+import { type User } from 'lucia';
 import * as v from 'valibot';
 import {
   sendRedirect,
@@ -58,17 +58,19 @@ export async function createUserSession(
 export async function validateAuthSession(
   event: HTTPEvent,
 ): Promise<User | null> {
-  if (env.PROD) {
-    const originHeader = event.headers.get('Origin');
-    const hostHeader = event.headers.get('Host');
-    if (
-      !originHeader ||
-      !hostHeader ||
-      !verifyRequestOrigin(originHeader, [hostHeader])
-    ) {
-      throw new Error('Request Origin is not matching');
-    }
-  }
+  // TODO: validate request origin, disabled while
+  // https://github.com/nksaraf/vinxi/issues/304
+  // if (env.PROD) {
+  //   const originHeader = event.headers.get('Origin');
+  //   const hostHeader = event.headers.get('Host');
+  //   if (
+  //     !originHeader ||
+  //     !hostHeader ||
+  //     !verifyRequestOrigin(originHeader, [hostHeader])
+  //   ) {
+  //     throw new Error('Request Origin is not matching');
+  //   }
+  // }
   const lucia = useLucia();
   const userSession = await useUserSession();
   if (!userSession.id) {
