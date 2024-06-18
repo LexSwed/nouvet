@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "06273574-1bcf-464f-978c-f5eb00afa9a2",
+  "id": "78b2e07c-a95f-422b-b548-5a08146a9ccf",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "oauth_account": {
@@ -107,7 +107,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(concat(datetime('now', 'utc'), 'Z'))"
+          "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
       "indexes": {},
@@ -231,7 +231,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(concat(datetime('now', 'utc'), 'Z'))"
+          "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
       "indexes": {
@@ -284,7 +284,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(concat(datetime('now', 'utc'), 'Z'))"
+          "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
       "indexes": {},
@@ -350,7 +350,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(concat(datetime('now', 'utc'), 'Z'))"
+          "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
       "indexes": {},
@@ -424,8 +424,8 @@
           "notNull": false,
           "autoincrement": false
         },
-        "animal_type": {
-          "name": "animal_type",
+        "species": {
+          "name": "species",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -479,7 +479,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(concat(datetime('now', 'utc'), 'Z'))"
+          "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
       "indexes": {},
@@ -531,7 +531,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(concat(datetime('now', 'utc'), 'Z'))"
+          "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
       "indexes": {},
@@ -654,7 +654,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(concat(datetime('now', 'utc'), 'Z'))"
+          "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
       "indexes": {},
@@ -668,5 +668,8 @@
     "schemas": {},
     "tables": {},
     "columns": {}
+  },
+  "internal": {
+    "indexes": {}
   }
 }

@@ -1,12 +1,12 @@
 {
-  "version": "6",
+  "version": "7",
   "dialect": "sqlite",
   "entries": [
     {
       "idx": 0,
       "version": "6",
-      "when": 1715424691892,
-      "tag": "0000_sturdy_domino",
+      "when": 1718714688395,
+      "tag": "0000_broad_otto_octavius",
       "breakpoints": true
     }
   ]

@@ -112,7 +112,7 @@ export const petTable = sqliteTable('pet', {
   /** Name of a pet */
   name: text('name', { length: 200 }).notNull(),
   gender: text('gender', { mode: 'text', enum: ['male', 'female'] as const }),
-  type: text('animal_type', {
+  species: text('species', {
     mode: 'text',
     enum: ['dog', 'cat', 'bird', 'rabbit', 'rodent', 'horse'] as const,
   }).notNull(),
