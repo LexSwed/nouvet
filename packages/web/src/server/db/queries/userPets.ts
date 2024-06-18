@@ -30,7 +30,7 @@ export async function userPets(userId: DatabaseUser['id']) {
       id: petTable.id,
       name: petTable.name,
       pictureUrl: petTable.pictureUrl,
-      type: petTable.type,
+      species: petTable.species,
       breed: petTable.breed,
       gender: petTable.gender,
       dateOfBirth: petTable.dateOfBirth,

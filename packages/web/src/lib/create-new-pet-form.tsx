@@ -5,10 +5,8 @@ import { Button, Form, Text, TextField } from '@nou/ui';
 import { createPet } from '~/server/api/pet';
 import { createTranslator } from '~/server/i18n';
 
-import { AnimalTypeSelect } from '~/lib/animal-type';
-import { GenderSwitch } from '~/lib/animal-type/animal-type';
-
 import { FormErrorMessage } from './form-error-message';
+import { GenderSwitch, SpeciesSelector } from './species-selector';
 
 function CreateNewPetForm(props: {
   onSuccess?: (pet: { name: string; id: number }) => void;
@@ -54,7 +52,7 @@ function CreateNewPetForm(props: {
         name="name"
         required
       />
-      <AnimalTypeSelect name="type" />
+      <SpeciesSelector name="type" />
       <GenderSwitch name="gender" />
 
       <Show when={hasUnknownError()}>

@@ -3,16 +3,16 @@ import { Icon, RadioCard, Text, tw, type SvgIcons } from '@nou/ui';
 
 import { createTranslator } from '~/server/i18n';
 
-import * as cssStyles from './animal-type.module.css';
+import * as cssStyles from './species-selector.module.css';
 
-interface AnimalTypeSelectProps {
-  /** input radio element name attribute for animal type */
+interface SpeciesSelectorProps {
+  /** input radio element name attribute for species */
   name: string;
 }
 
-const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
+const SpeciesSelector = (props: SpeciesSelectorProps) => {
   const t = createTranslator('pet-forms');
-  const animalTypes = (): Array<{
+  const species = (): Array<{
     value: string;
     label: string;
     icon: SvgIcons;
@@ -55,7 +55,7 @@ const AnimalTypeSelect = (props: AnimalTypeSelectProps) => {
         'scrollbar-none -m-4 flex w-[stretch] snap-x snap-mandatory scroll-px-4 gap-2 overflow-auto p-4'
       }
     >
-      <For each={animalTypes()}>
+      <For each={species()}>
         {(item) => {
           return (
             <RadioCard
@@ -197,4 +197,4 @@ const SvgGender = (props: ComponentProps<'svg'>) => {
   );
 };
 
-export { AnimalTypeSelect, GenderSwitch };
+export { SpeciesSelector, GenderSwitch };
