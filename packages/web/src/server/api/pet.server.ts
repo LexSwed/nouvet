@@ -24,7 +24,7 @@ export const createPetServer = async (formData: FormData) => {
     const pet = await petCreate(
       {
         name: formData.get('name'),
-        type: formData.get('type'),
+        species: formData.get('species'),
         gender: formData.get('gender'),
       },
       currentUser.userId,

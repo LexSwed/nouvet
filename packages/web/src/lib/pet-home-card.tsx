@@ -27,7 +27,7 @@ interface PetHomeCardProps {
     id: number;
     pictureUrl: string | null;
     name: string;
-    type: DatabasePet['type'];
+    species: DatabasePet['species'];
     gender: DatabasePet['gender'];
     breed: string | null;
     dateOfBirth: string | null;
@@ -44,7 +44,7 @@ interface PetHomeCardProps {
     | null;
 }
 
-const petIconMap: Record<DatabasePet['type'], SvgIcons> = {
+const petIconMap: Record<DatabasePet['species'], SvgIcons> = {
   dog: 'dog',
   cat: 'cat',
   bird: 'bird',
@@ -82,7 +82,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
                 alt=""
               />
             }
-            fallback={<Icon use={petIconMap[props.pet.type]} size="md" />}
+            fallback={<Icon use={petIconMap[props.pet.species]} size="md" />}
           />
         </div>
         <Text with="body-lg">{props.pet.name}</Text>
@@ -111,79 +111,71 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
           }
         }}
       >
-        {(open) => (
-          <Suspense>
-            <Show when={open()}>
-              <A
-                href={`/app/pets/${props.pet.id}/`}
-                class="group/link outline-on-surface -m-2 flex flex-row items-center gap-4 rounded-[inherit] p-4 -outline-offset-4 focus:outline-4"
-              >
-                <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
-                  <Show
-                    when={props.pet.pictureUrl}
-                    children={
-                      <img
-                        src={props.pet.pictureUrl!}
-                        class="aspect-square w-full"
-                        alt=""
-                      />
-                    }
-                    fallback={
-                      <Icon use={petIconMap[props.pet.type]} size="md" />
-                    }
-                  />
-                </div>
-                <Text with="body-lg">{props.pet.name}</Text>
-                <Text class="sr-only">
-                  {t('go-to-pet-page', { petName: props.pet.name })}
-                </Text>
-                <div class="bg-on-surface/5 group-hover/link:bg-on-surface/8 ms-auto grid cursor-pointer place-content-center rounded-full p-3 transition-colors duration-200">
-                  <Icon use="pencil" size="sm" />
-                </div>
-              </A>
-              <MenuList class="min-w-56">
-                <Show when={props.owner}>
-                  {(owner) => (
-                    <MenuItem as={A} href={`/app/family/${owner().id}/`}>
-                      <Avatar
-                        avatarUrl={owner().avatarUrl || ''}
-                        name={owner().name || ''}
-                        size="xs"
-                      />
-                      <Text>{owner().name || t('pet-owner-no-name')}</Text>
-                    </MenuItem>
-                  )}
-                </Show>
-                <MenuItem as={A} href={`/app/pets/${props.pet.id}/`}>
-                  <Icon use="pencil" size="sm" />
-                  {t('pet-menu.edit-info')}
-                </MenuItem>
-                <MenuItem
-                  as="button"
-                  type="button"
-                  popoverTarget={`${props.pet.id}-menu-weight`}
-                >
-                  <Icon use="scales" size="sm" />
-                  {t('pet-menu.add-weight')}
-                </MenuItem>
-                <MenuItem>
-                  <Icon use="note" size="sm" />
-                  {t('pet-menu.add-note')}
-                </MenuItem>
-                <MenuItem>
-                  <Icon use="aid" size="sm" />
-                  {t('pet-menu.book')}
-                </MenuItem>
-              </MenuList>
-              <AddWeightForm
-                id={`${props.pet.id}-menu-weight`}
-                pet={props.pet}
-                anchor={petPopoverId}
-                placement="center"
-              />
-            </Show>
-          </Suspense>
-        )}
+        <A
+          href={`/app/pets/${props.pet.id}/`}
+          class="group/link outline-on-surface -m-2 flex flex-row items-center gap-4 rounded-[inherit] p-4 -outline-offset-4 focus:outline-4"
+        >
+          <div class="bg-tertiary/10 text-tertiary grid size-16 shrink-0 place-content-center rounded-full">
+            <Show
+              when={props.pet.pictureUrl}
+              children={
+                <img
+                  src={props.pet.pictureUrl!}
+                  class="aspect-square w-full"
+                  alt=""
+                />
+              }
+              fallback={<Icon use={petIconMap[props.pet.species]} size="md" />}
+            />
+          </div>
+          <Text with="body-lg">{props.pet.name}</Text>
+          <Text class="sr-only">
+            {t('go-to-pet-page', { petName: props.pet.name })}
+          </Text>
+          <div class="bg-on-surface/5 group-hover/link:bg-on-surface/8 ms-auto grid cursor-pointer place-content-center rounded-full p-3 transition-colors duration-200">
+            <Icon use="pencil" size="sm" />
+          </div>
+        </A>
+        <MenuList class="min-w-56">
+          <Show when={props.owner}>
+            {(owner) => (
+              <MenuItem as={A} href={`/app/family/${owner().id}/`}>
+                <Avatar
+                  avatarUrl={owner().avatarUrl || ''}
+                  name={owner().name || ''}
+                  size="xs"
+                />
+                <Text>{owner().name || t('pet-owner-no-name')}</Text>
+              </MenuItem>
+            )}
+          </Show>
+          <MenuItem as={A} href={`/app/pets/${props.pet.id}/`}>
+            <Icon use="pencil" size="sm" />
+            {t('pet-menu.edit-info')}
+          </MenuItem>
+          <MenuItem
+            as="button"
+            type="button"
+            popoverTarget={`${props.pet.id}-menu-weight`}
+          >
+            <Icon use="scales" size="sm" />
+            {t('pet-menu.add-weight')}
+          </MenuItem>
+          <MenuItem>
+            <Icon use="note" size="sm" />
+            {t('pet-menu.add-note')}
+          </MenuItem>
+          <MenuItem>
+            <Icon use="aid" size="sm" />
+            {t('pet-menu.book')}
+          </MenuItem>
+        </MenuList>
+        <AddWeightForm
+          id={`${props.pet.id}-menu-weight`}
+          pet={props.pet}
+          anchor={petPopoverId}
+          placement="center"
+        />
       </Popover>
       <div class="-mt-6 flex flex-row items-center gap-2 px-3 py-2 empty:hidden">
         <Show when={hasMissingInfo()}>

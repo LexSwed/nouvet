@@ -52,7 +52,7 @@ function CreateNewPetForm(props: {
         name="name"
         required
       />
-      <SpeciesSelector name="type" />
+      <SpeciesSelector name="species" />
       <GenderSwitch name="gender" />
 
       <Show when={hasUnknownError()}>

@@ -1,7 +1,7 @@
 const errorsDict = {
   'createPet.name.required': 'Name is required',
   'createPet.name.length': 'Name should not be too short or too long',
-  'createPet.type': 'Only valid pet types are allowed',
+  'createPet.species': 'Only acceptable species are allowed',
   'createPet.gender': 'Incorrect gender is provided',
   'createPet.breed': 'This breed name looks suspicious',
   'createPet.color': 'Only valid colors are allowed',

@@ -1,5 +1,6 @@
 // @refresh reload
 import { createHandler, StartServer } from '@solidjs/start/server';
+import css from '@nou/config/global.css?url';
 
 export default createHandler((ctx) => {
   let { locale } = ctx.locals;
@@ -37,6 +38,7 @@ export default createHandler((ctx) => {
             />
             <link rel="apple-touch-icon" href="/icons/icon-apple.png" />
             <link rel="manifest" href="/manifest.webmanifest" />
+            <link rel="stylesheet" href={css} />
             {props.assets}
           </head>
           <body>

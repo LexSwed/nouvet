@@ -3,14 +3,13 @@ import { createEffect, Show, type ComponentProps } from 'solid-js';
 import { Button, Drawer, Form, Icon, Text, TextField } from '@nou/ui';
 
 import { updatePetBreed } from '~/server/api/pet';
-import type { DatabasePet } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
 
 import { FormErrorMessage } from './form-error-message';
 
 interface AddBreedFormProps {
   id: string;
-  pet: { id: number; name: string; type: DatabasePet['type'] };
+  pet: { id: number; name: string };
   onDismiss: () => void;
   placement?: ComponentProps<typeof Drawer>['placement'];
 }

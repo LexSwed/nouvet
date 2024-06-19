@@ -9,9 +9,9 @@ import { createTranslator, getLocale } from '~/server/i18n';
 
 import { FormErrorMessage } from './form-error-message';
 
-const petTypeToMetricMeasurement: {
-  metrical: Record<DatabasePet['type'], 'kilogram' | 'gram'>;
-  imperial: Record<DatabasePet['type'], 'pound' | 'ounce'>;
+const petSpeciesToMetricMeasurement: {
+  metrical: Record<DatabasePet['species'], 'kilogram' | 'gram'>;
+  imperial: Record<DatabasePet['species'], 'pound' | 'ounce'>;
 } = {
   metrical: {
     dog: 'kilogram',
@@ -33,7 +33,7 @@ const petTypeToMetricMeasurement: {
 
 interface AddWeightFormProps {
   id: string;
-  pet: { id: number; name: string; type: DatabasePet['type'] };
+  pet: { id: number; name: string; species: DatabasePet['species'] };
   onDismiss?: () => void;
   /**
    * ID of the anchor element when nested.
@@ -61,9 +61,11 @@ const AddWeightForm = (props: AddWeightFormProps) => {
 
   const localisedUnit = createMemo(() => {
     let unit = 'kilogram';
-    if (user()?.measurementSystem && props.pet.type) {
+    if (user()?.measurementSystem && props.pet.species) {
       unit =
-        petTypeToMetricMeasurement[user()!.measurementSystem!][props.pet.type];
+        petSpeciesToMetricMeasurement[user()!.measurementSystem!][
+          props.pet.species
+        ];
     }
     return (
       new Intl.NumberFormat(locale()?.baseName, {

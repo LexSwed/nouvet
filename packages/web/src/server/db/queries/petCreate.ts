@@ -16,9 +16,9 @@ const CreatePetSchema = v.object({
     ),
     { message: 'createPet.name.required' satisfies ErrorKeys },
   ),
-  type: v.picklist(
+  species: v.picklist(
     ['dog', 'cat', 'bird', 'rabbit', 'rodent', 'horse'],
-    'createPet.type' satisfies ErrorKeys,
+    'createPet.species' satisfies ErrorKeys,
   ),
   gender: v.nullish(
     v.picklist(['male', 'female'], 'createPet.gender' satisfies ErrorKeys),
@@ -49,7 +49,11 @@ export async function petCreate(
   const pet = await db
     .insert(petTable)
     .values({ ...petInfo, ownerId: userId })
-    .returning({ id: petTable.id, name: petTable.name, type: petTable.type })
+    .returning({
+      id: petTable.id,
+      name: petTable.name,
+      species: petTable.species,
+    })
     .get();
   return pet;
 }
