@@ -90,14 +90,14 @@ export async function seed(db: ReturnType<typeof useDb>) {
   // User 3 gets a cat
   await db.insert(schema.petTable).values({
     name: 'Juno',
-    type: 'cat',
+    species: 'cat',
     gender: 'female',
     ownerId: users[2].id,
   });
   // User 5 gets a dog
   await db.insert(schema.petTable).values({
     name: 'Luna',
-    type: 'dog',
+    species: 'dog',
     gender: 'female',
     ownerId: users[4].id,
   });

@@ -27,8 +27,8 @@
     "@solid-primitives/refs": "^1.0.8",
     "@solid-primitives/storage": "^3.7.1",
     "@solidjs/meta": "^0.29.4",
-    "@solidjs/router": "^0.13.5",
-    "@solidjs/start": "^1.0.1",
+    "@solidjs/router": "^0.13.6",
+    "@solidjs/start": "^1.0.2",
     "arctic": "^1.9.1",
     "better-sqlite3": "^11.0.0",
     "class-variance-authority": "^0.7.0",
@@ -42,7 +42,7 @@
     "solid-motionone": "^1.0.0",
     "styled-qr-code": "^1.0.0",
     "temporal-polyfill": "^0.2.5",
-    "valibot": "^0.33.0",
+    "valibot": "^0.33.1",
     "vinxi": "0.3.12"
   },
   "devDependencies": {
