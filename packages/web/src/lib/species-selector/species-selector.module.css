@@ -40,10 +40,13 @@
   }
 
   .genderSwitchLabel {
-    &:where(:hover) {
+    border: theme('borderWidth.2') solid theme('colors.on-surface/0.12');
+    &:where(:hover, :focus-within) {
+      border-color: theme('colors.on-surface/0.6');
       background-color: theme('colors.on-surface/0.05');
     }
     &:has(:focus-visible):focus-within {
+      border-color: theme('colors.on-surface/0.6');
       outline: solid 4px theme('colors.outline/0.4');
       &:has(input[value='male']) {
         outline-color: theme('colors.tertiary/0.4');

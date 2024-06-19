@@ -7,7 +7,7 @@
     flex-flow: column nowrap;
     &:where(:has(:user-invalid)) {
       --border-color: theme('colors.error');
-      --border-scale: 2;
+      --border-scale-y: 2;
       & .description,
       & .label {
         color: theme('colors.error');
@@ -29,9 +29,10 @@
       inset-inline: 0;
       content: '';
       height: 2px;
+      border-radius: 0 0 theme('borderRadius.sm') theme('borderRadius.sm');
       transition: all 0.2s ease-out;
       transform-origin: center bottom;
-      transform: scaleY(var(--border-scale));
+      transform: scaleY(var(--border-scale-y));
       isolation: isolate;
       background: linear-gradient(
         to top,
@@ -47,7 +48,7 @@
     }
     &:where(:focus-within) {
       --border-color: theme('colors.primary');
-      --border-scale: 1.5;
+      --border-scale-y: 1.5;
     }
   }
   .wrapperGhost {

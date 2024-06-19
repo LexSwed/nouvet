@@ -113,7 +113,7 @@ const GenderRadio = (props: { name: string; value: string; label: string }) => {
     <label
       class={tw(
         cssStyles.genderSwitchLabel,
-        'relative text-on-surface border-2 border-on-surface/5 rounded-md has-[input:checked]:rounded-2xl py-1 grid place-items-center h-16 px-2 text-center transition-colors duration-200',
+        'relative text-on-surface border-2 border-on-surface/5 rounded-lg has-[input:checked]:rounded-2xl py-1 grid place-items-center h-16 px-2 text-center transition-all duration-200',
       )}
     >
       <input
