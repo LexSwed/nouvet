@@ -18,6 +18,8 @@ export async function userProfile(userId: DatabaseUser['id']) {
       id: userTable.id,
       name: userTable.name,
       avatarUrl: userTable.avatarUrl,
+      measurementSystem: userTable.measurementSystem,
+      locale: userTable.locale,
     })
     .from(userTable)
     .where(eq(userTable.id, userId))

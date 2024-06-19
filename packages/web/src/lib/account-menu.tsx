@@ -43,7 +43,7 @@ const AccountMenu = (props: AccountMenu) => {
           <Text with="label">{props.name}</Text>
         </div>
         <MenuList class="bg-surface flex flex-col rounded-2xl">
-          <MenuItem as={A} href="/profile">
+          <MenuItem as={A} href="/app/profile">
             <Icon use="user-circle" size="sm" />
             {t('account-menu.account')}
           </MenuItem>
