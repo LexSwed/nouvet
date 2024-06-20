@@ -1,6 +1,6 @@
 import { createAsync, useMatch } from '@solidjs/router';
 import { Match, Show, Suspense, Switch } from 'solid-js';
-import { Avatar, Button, ButtonLink, Card, Icon, Text } from '@nou/ui';
+import { Avatar, Button, ButtonLink, Card, Chip, Icon, Text } from '@nou/ui';
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns/differenceInMinutes';
 
@@ -110,11 +110,10 @@ const NewlyJoinedMember = (props: {
         class="flex flex-col gap-4"
         style={{ 'view-transition-name': `family-member-${props.user.id}` }}
       >
-        {/* TODO: Chip? Tag component? */}
-        <div class="bg-primary-container text-on-primary-container -me-2 -mt-2 flex cursor-default flex-row items-center gap-2 self-end rounded-full p-2">
+        <Chip tone="primary" class="-me-2 -mt-2">
           <Icon use="check-fat" size="xs" />
-          <Text with="label-sm">{t('waitlist.just-joined')}</Text>
-        </div>
+          {t('waitlist.just-joined')}
+        </Chip>
 
         <ButtonLink
           href={`/app/family/${props.user.id}`}

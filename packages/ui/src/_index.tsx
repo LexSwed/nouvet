@@ -1,6 +1,7 @@
 export { Avatar } from './avatar';
 export { Button, ButtonLink, SplitButton } from './button';
 export { Card, NavCard } from './card';
+export { Chip } from './chip';
 export { Divider } from './divider';
 export { default as Drawer } from './drawer';
 export { Form } from './form';
