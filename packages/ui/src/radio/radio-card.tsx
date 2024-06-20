@@ -3,7 +3,7 @@ import { children, createUniqueId, Show, splitProps, type JSX } from 'solid-js';
 import { Text } from '../text';
 import { tw } from '../tw';
 
-import * as cssStyle from './card.module.css';
+import * as cssStyle from './radio-card.module.css';
 
 interface RadioCardProps
   extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type' | 'children'> {

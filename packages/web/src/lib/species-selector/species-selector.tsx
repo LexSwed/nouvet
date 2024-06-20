@@ -50,11 +50,7 @@ const SpeciesSelector = (props: SpeciesSelectorProps) => {
   ];
 
   return (
-    <div
-      class={
-        'scrollbar-none -m-4 flex w-[stretch] snap-x snap-mandatory scroll-px-4 gap-2 overflow-auto p-4'
-      }
-    >
+    <div class={'overflow-snap -m-4 flex w-[stretch] scroll-px-4 gap-2 p-4'}>
       <For each={species()}>
         {(item) => {
           return (
@@ -89,47 +85,24 @@ const GenderSwitch = (props: { name: string }) => {
           'grid grid-cols-[1fr,auto,1fr] items-center gap-2',
         )}
       >
-        <GenderRadio
+        <RadioCard
           name={props.name}
           value="male"
           label={t('animal-gender.male')!}
+          class={tw(cssStyles.genderSwitchCard, 'h-16')}
         />
         <SvgGender
           class={tw(cssStyles.genderIcon, 'relative mt-1 size-10')}
           aria-hidden
         />
-        <GenderRadio
+        <RadioCard
           name={props.name}
           value="female"
           label={t('animal-gender.female')!}
+          class={tw(cssStyles.genderSwitchCard, 'h-16')}
         />
       </div>
     </fieldset>
-  );
-};
-
-const GenderRadio = (props: { name: string; value: string; label: string }) => {
-  return (
-    <label
-      class={tw(
-        cssStyles.genderSwitchLabel,
-        'relative text-on-surface border-2 border-on-surface/5 rounded-lg has-[input:checked]:rounded-2xl py-1 grid place-items-center h-16 px-2 text-center transition-all duration-200',
-      )}
-    >
-      <input
-        type="radio"
-        name={props.name}
-        class="sr-only"
-        value={props.value}
-      />
-      <Text
-        with="label"
-        class="inline-block text-ellipsis text-nowrap"
-        title={props.label}
-      >
-        {props.label}
-      </Text>
-    </label>
   );
 };
 

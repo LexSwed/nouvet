@@ -1,9 +1,9 @@
-@tailwind components;
+@import 'tailwindcss/components' layer(tw-components);
 
-@layer components {
+@layer tw-components {
   .genderSwitch {
     &:has(input[value='male']:checked) {
-      & .genderSwitchLabel:has(input[value='male']) {
+      & .genderSwitchCard:has(input[value='male']) {
         color: theme('colors.tertiary');
         background-color: theme('colors.tertiary/0.08');
         border-color: theme('colors.tertiary');
@@ -21,7 +21,7 @@
     }
 
     &:has(input[value='female']:checked) {
-      & .genderSwitchLabel:has(input[value='female']) {
+      & .genderSwitchCard:has(input[value='female']) {
         color: theme('colors.primary');
         background-color: theme('colors.primary/0.08');
         border-color: theme('colors.primary');
@@ -39,8 +39,12 @@
     }
   }
 
-  .genderSwitchLabel {
-    border: theme('borderWidth.2') solid theme('colors.on-surface/0.12');
+  .genderSwitchCard {
+    border: theme('borderWidth.DEFAULT') solid theme('colors.on-surface/0.08');
+    & label {
+      height: 100%;
+      justify-content: center;
+    }
     &:where(:hover, :focus-within) {
       border-color: theme('colors.on-surface/0.6');
       background-color: theme('colors.on-surface/0.05');

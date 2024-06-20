@@ -1,7 +1,9 @@
+@import 'tailwindcss/base' layer(tw-base);
+
 @layer nou-ui {
   .field {
     --border-color: theme('colors.outline');
-    --border-scale-y: 1;
+    --border-scale-y: 0.75;
     --start-padding: theme(spacing.3);
     display: inline-flex;
     flex-flow: column nowrap;

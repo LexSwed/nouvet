@@ -1,4 +1,4 @@
-@tailwind components;
+@import 'tailwindcss/base' layer(tw-base);
 
 @layer nou-ui {
   .drawer {

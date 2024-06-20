@@ -1,3 +1,5 @@
+@import 'tailwindcss/base' layer(tw-base);
+
 @layer nou-ui {
   .card {
     position: relative;
@@ -10,7 +12,7 @@
       border-radius 0.24s ease-out,
       flex 0.3s ease-out;
     background-color: theme('colors.surface');
-    border: theme('borderWidth.2') solid theme('colors.on-surface/0.12');
+    border: theme('borderWidth.DEFAULT') solid theme('colors.on-surface/0.08');
     &:where(:hover, :focus-within) {
       border-color: theme('colors.on-surface/0.6');
       background-color: theme('colors.on-surface/0.05');
@@ -26,11 +28,8 @@
       border-color: theme('colors.primary');
       background-color: theme('colors.surface-container-lowest');
       outline-color: theme('colors.primary/0.4');
-      & .label {
-        color: theme('colors.primary');
-      }
+      color: theme('colors.primary');
       & .icon {
-        color: theme('colors.primary');
         background-color: theme('colors.primary/0.12');
       }
       &:has(:focus-visible):focus-within {

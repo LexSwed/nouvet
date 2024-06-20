@@ -6,11 +6,12 @@ import { tw } from './tw';
 const avatarVariants = cva('shrink-0 rounded-full shadow-inner', {
   variants: {
     size: {
-      base: 'size-12',
-      xs: 'size-6',
-      sm: 'size-10',
-      lg: 'size-14',
-      xl: 'size-16',
+      'base': 'size-12',
+      'xs': 'size-6',
+      'sm': 'size-10',
+      'lg': 'size-14',
+      'xl': 'size-16',
+      '2xl': 'size-20',
     },
   },
   defaultVariants: {

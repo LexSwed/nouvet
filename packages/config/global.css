@@ -1,13 +1,10 @@
-@layer tailwind-base, nou-ui;
+@layer tw-base, nou-ui, tw-components, tw-utilities;
 
-@layer tailwind-base {
-  @tailwind base;
-}
+@import 'tailwindcss/base' layer(tw-base);
+@import 'tailwindcss/components' layer(tw-components);
+@import 'tailwindcss/utilities' layer(tw-utilities);
 
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
+@layer tw-base {
   :root {
     --nou-font-sans: 'Rubik Variable';
 
