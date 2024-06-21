@@ -41,7 +41,7 @@
 
   .genderSwitchCard {
     border: theme('borderWidth.DEFAULT') solid theme('colors.on-surface/0.08');
-    & label {
+    & [data-part='label'] {
       height: 100%;
       justify-content: center;
     }
