@@ -14,12 +14,19 @@
     "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
     "lib": ["ESNext", "DOM", "ESNext.Intl"],
+    "skipLibCheck": true,
+    "noUncheckedIndexedAccess": true,
     "plugins": [
       {
         "name": "typescript-plugin-css-modules",
         "options": {
           "goToDefinition": true,
-          "classnameTransform": "camelCase"
+          "classnameTransform": "camelCase",
+          "noUncheckedIndexedAccess": true,
+          "namedExports": false,
+          "postcssOptions": {
+            "useConfig": true
+          }
         }
       }
     ]
