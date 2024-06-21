@@ -1,7 +1,7 @@
 @import 'tailwindcss/components' layer(tw-components);
 
 /* Avoid consumers overriding this for all states with e.g. display: flex */
-@layer tw-components {
+@layer tw-utilities {
   .popover:not(:popover-open) {
     display: none;
   }
