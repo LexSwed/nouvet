@@ -7,37 +7,39 @@
     & selectedoption:has([data-empty-option]) {
       @apply text-transparent;
     }
+
+    & selectedoption [data-part='content'] {
+      display: none;
+    }
   }
 
   .popover {
     min-width: anchor-size(width);
-    @apply bg-surface shadow-popover text-on-surface isolate overflow-auto overflow-y-auto rounded-2xl p-1;
-
-    /* &:not(:popover-open) {
-      transition-duration: 0.1s;
-      transition-timing-function: ease-in;
-      opacity: 0;
-    } */
+    @apply bg-surface shadow-popover text-on-surface isolate mt-2 overflow-auto overflow-y-auto rounded-2xl p-1;
   }
 
   .option {
-    &::after {
-      content: '';
-      mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><polyline points="40 144 96 200 224 72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"/></svg>');
-      @apply ms-auto size-4;
+    @apply flex flex-col items-stretch justify-center gap-1;
+
+    & > [data-part='content']:empty {
+      display: none;
     }
-    &:where(:checked) {
+
+    &:where(:checked) > [data-part='label'] {
       color: theme('colors.primary');
     }
-    &:where(:checked):after {
+    &:where(:checked) > [data-part='label']:after {
+      content: '';
+      mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><polyline points="40 144 96 200 224 72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"/></svg>');
+      @apply pointer-events-none ms-auto size-4;
       @apply bg-primary;
     }
-    &:where([value='']:checked):after {
+    &:where([value='']:checked) > [data-part='label']:after {
       content: '';
       mask: none;
       @apply text-on-surface/65 bg-transparent;
     }
-    &:where([value='']) {
+    &:where([value='']) > [data-part='label'] {
       @apply text-on-surface/65;
     }
   }

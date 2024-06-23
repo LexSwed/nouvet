@@ -71,7 +71,7 @@ export const CreatePet = () => {
         ),
       ]),
     });
-    await sleep(400);
+    await sleep(1000);
     const result = v.safeParse(PetSchema, data);
     if (!result.success) {
       return {
@@ -149,9 +149,11 @@ export const CreatePet = () => {
                 autocomplete="off"
                 class="flex-[2]"
               >
-                <Option value="">None</Option>
+                <Option value="" label="None" />
                 <For each={monthNames}>
-                  {(month, index) => <Option value={index()}>{month}</Option>}
+                  {(month, index) => (
+                    <Option value={index() + 1} label={month} />
+                  )}
                 </For>
               </Picker>
               <TextField
@@ -166,7 +168,7 @@ export const CreatePet = () => {
             </div>
           </fieldset>
         </div>
-        <div class="scrollbar-none -mx-2 flex snap-mandatory snap-start scroll-px-2 flex-row gap-2 overflow-auto px-2 pb-2 pt-0">
+        <div class="overflow-snap -m-3 flex scroll-px-3 flex-row gap-2 p-3">
           <RadioCard
             class="w-32 snap-x"
             name="animal-type"

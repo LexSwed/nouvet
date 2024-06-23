@@ -14,7 +14,7 @@ interface PickerProps
 const Picker = (ownProps: PickerProps) => {
   const [fieldProps, local, props] = splitProps(
     ownProps,
-    ['class', 'style', 'id', 'label'],
+    ['class', 'style', 'id', 'variant', 'label'],
     ['children'],
   );
   return (
@@ -57,17 +57,25 @@ const Picker = (ownProps: PickerProps) => {
   );
 };
 
-const Option = (props: JSX.OptionHTMLAttributes<HTMLOptionElement>) => {
+const Option = (
+  ownProps: JSX.OptionHTMLAttributes<HTMLOptionElement> & {
+    label?: JSX.Element;
+  },
+) => {
+  const [local, props] = splitProps(ownProps, ['label', 'children', 'class']);
   return (
     <ListItem
       as="option"
       {...props}
-      class={tw('select-none', cssStyle.option, props.class)}
+      class={tw('select-none', cssStyle.option, local.class)}
     >
-      {props.children}
-      <Show when={props.value === ''}>
-        <span class="sr-only" data-empty-option />
-      </Show>
+      <div class="flex flex-row items-center gap-2" data-part="label">
+        {local.label}
+        <Show when={props.value === ''}>
+          <span class="sr-only" data-empty-option />
+        </Show>
+      </div>
+      <div data-part="content">{local.children}</div>
     </ListItem>
   );
 };
