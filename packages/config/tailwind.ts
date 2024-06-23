@@ -96,6 +96,7 @@ export default {
       colors,
       boxShadow: {
         flat: '0 0 1px 2px var(--nou-on-surface)/0.2',
+        popover: `0 0 2px theme('colors.on-surface-variant/0.12'), theme('boxShadow.lg')`,
       },
       animation: {
         'spinner-circle': 'spinner-circle 1.8s linear infinite',

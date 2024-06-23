@@ -1,19 +1,44 @@
 @layer nou-ui {
   .input {
-    appearance: none;
+    appearance: base-select;
+    width: 100%;
     outline: none;
-    padding: theme(spacing.3) var(--start-padding);
-    background: transparent;
-    outline: none;
-    cursor: default;
-    caret-color: transparent;
-    @apply text-base;
-    &::-webkit-calendar-picker-indicator {
-      opacity: 0;
+
+    & selectedoption:has([data-empty-option]) {
+      @apply text-transparent;
     }
   }
+
+  .popover {
+    min-width: anchor-size(width);
+    @apply bg-surface shadow-popover text-on-surface isolate overflow-auto overflow-y-auto rounded-2xl p-1;
+
+    /* &:not(:popover-open) {
+      transition-duration: 0.1s;
+      transition-timing-function: ease-in;
+      opacity: 0;
+    } */
+  }
+
   .option {
-    cursor: default;
-    user-select: none;
+    &::after {
+      content: '';
+      mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><polyline points="40 144 96 200 224 72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"/></svg>');
+      @apply ms-auto size-4;
+    }
+    &:where(:checked) {
+      color: theme('colors.primary');
+    }
+    &:where(:checked):after {
+      @apply bg-primary;
+    }
+    &:where([value='']:checked):after {
+      content: '';
+      mask: none;
+      @apply text-on-surface/65 bg-transparent;
+    }
+    &:where([value='']) {
+      @apply text-on-surface/65;
+    }
   }
 }

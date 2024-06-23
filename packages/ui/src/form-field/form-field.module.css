@@ -79,7 +79,8 @@
   }
   .sizeBase {
     @apply text-base;
-    & :where(input, textarea) {
+    & :where(input, textarea),
+    & select > button {
       padding: theme(spacing.3) var(--start-padding);
       min-height: theme(spacing.12);
     }

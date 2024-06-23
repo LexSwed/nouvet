@@ -4,12 +4,13 @@ import {
   type JSX,
   type ValidComponent,
 } from 'solid-js';
-import { Dynamic } from 'solid-js/web';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { Popover } from '../popover';
 import { tw } from '../tw';
 import { composeEventHandlers, mergeDefaultProps, type Merge } from '../utils';
+
+import { ListItem } from './list-item';
 
 import * as cssStyle from './menu.module.css';
 
@@ -54,11 +55,10 @@ const MenuItem = <T extends ValidComponent = 'div'>(
       role: 'menuitem',
       as: 'div',
     }),
-    ['as', 'tone', 'style', 'class'],
+    ['style'],
   );
   return (
-    <Dynamic
-      component={local.as}
+    <ListItem
       tabIndex={-1}
       {...props}
       style={
@@ -87,7 +87,6 @@ const MenuItem = <T extends ValidComponent = 'div'>(
         if (event.defaultPrevented || props.role !== 'menuitem') return;
         (event.currentTarget as HTMLElement).focus();
       })}
-      class={tw(menuItemVariants({ tone: local.tone }), local.class)}
     />
   );
 };

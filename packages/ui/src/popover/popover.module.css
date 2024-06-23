@@ -27,10 +27,7 @@
     content-visibility: auto;
     position-try-options: flip-block, flip-inline;
     overflow: auto;
-    box-shadow:
-      0 0 2px theme('colors.on-surface-variant/0.12'),
-      theme('boxShadow.lg');
-    @apply bg-surface overflow-y-auto rounded-2xl;
+    @apply bg-surface shadow-popover overflow-y-auto rounded-2xl;
 
     &:empty {
       visibility: hidden;

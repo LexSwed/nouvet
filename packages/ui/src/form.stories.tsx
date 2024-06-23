@@ -149,7 +149,7 @@ export const CreatePet = () => {
                 autocomplete="off"
                 class="flex-[2]"
               >
-                <Option value="" />
+                <Option value="">None</Option>
                 <For each={monthNames}>
                   {(month, index) => <Option value={index()}>{month}</Option>}
                 </For>

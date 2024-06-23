@@ -1,7 +1,8 @@
-import { splitProps, type JSX } from 'solid-js';
+import { Show, splitProps, type JSX } from 'solid-js';
 
 import { FormField, type FormFieldProps } from '../form-field';
 import { Icon } from '../icon/icon';
+import { ListItem } from '../menu/list-item';
 import { tw } from '../tw';
 
 import * as cssStyle from './picker.module.css';
@@ -11,12 +12,11 @@ interface PickerProps
     JSX.SelectHTMLAttributes<HTMLSelectElement> {}
 
 const Picker = (ownProps: PickerProps) => {
-  const [fieldProps, props] = splitProps(ownProps, [
-    'class',
-    'style',
-    'id',
-    'label',
-  ]);
+  const [fieldProps, local, props] = splitProps(
+    ownProps,
+    ['class', 'style', 'id', 'label'],
+    ['children'],
+  );
   return (
     <FormField
       {...fieldProps}
@@ -39,7 +39,18 @@ const Picker = (ownProps: PickerProps) => {
             class={cssStyle.input}
             id={aria.id()}
             aria-describedby={aria.describedBy()}
-          />
+          >
+            <button
+              // @ts-expect-error select menu not supported
+              type="popover"
+              class="flex w-full cursor-default items-center outline-none"
+              data-part="trigger"
+              style={{ 'anchor-name': `--anchor-${aria.id()}` }}
+            >
+              <selectedoption />
+            </button>
+            <datalist class={cssStyle.popover}>{local.children}</datalist>
+          </select>
         );
       }}
     </FormField>
@@ -47,7 +58,27 @@ const Picker = (ownProps: PickerProps) => {
 };
 
 const Option = (props: JSX.OptionHTMLAttributes<HTMLOptionElement>) => {
-  return <option {...props} class={tw(cssStyle.option, props.class)} />;
+  return (
+    <ListItem
+      as="option"
+      {...props}
+      class={tw('select-none', cssStyle.option, props.class)}
+    >
+      {props.children}
+      <Show when={props.value === ''}>
+        <span class="sr-only" data-empty-option />
+      </Show>
+    </ListItem>
+  );
 };
 
 export { Picker, Option };
+
+/* eslint-disable @typescript-eslint/no-namespace */
+declare module 'solid-js' {
+  namespace JSX {
+    interface IntrinsicElements {
+      selectedoption: HTMLAttributes<HTMLElement>;
+    }
+  }
+}
