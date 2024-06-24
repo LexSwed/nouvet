@@ -6,7 +6,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   ssr: true,
   middleware: './src/middleware.ts',
-  devOverlay: false,
+  // devOverlay: false,
   solid: {
     hot: false,
   },
