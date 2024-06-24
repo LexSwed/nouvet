@@ -9,13 +9,18 @@ import * as cssStyle from './picker.module.css';
 
 interface PickerProps
   extends FormFieldProps,
-    JSX.SelectHTMLAttributes<HTMLSelectElement> {}
+    Omit<JSX.SelectHTMLAttributes<HTMLSelectElement>, 'prefix'> {
+  /** Prefix text or an icon */
+  prefix?: JSX.Element;
+  /** Prefix text or an icon */
+  suffix?: JSX.Element;
+}
 
 const Picker = (ownProps: PickerProps) => {
   const [fieldProps, local, props] = splitProps(
     ownProps,
     ['class', 'style', 'id', 'variant'],
-    ['children', 'label'],
+    ['children', 'label', 'prefix', 'suffix'],
   );
   const label = children(() => local.label);
   const child = children(() => local.children);
@@ -27,9 +32,7 @@ const Picker = (ownProps: PickerProps) => {
         <Show when={label()}>
           <span class="flex flex-row items-center gap-2">
             {label()}
-            <div class="flex h-[1em] items-center">
-              <Icon use="carret-up-down" class="size-3" />
-            </div>
+            <Icon use="carret-up-down" size="font" />
           </span>
         </Show>
       }
@@ -49,7 +52,9 @@ const Picker = (ownProps: PickerProps) => {
               data-part="trigger"
               style={{ 'anchor-name': `--anchor-${aria.id}` }}
             >
-              <selectedoption />
+              {local.prefix}
+              <selectedoption class="w-full" />
+              {local.suffix}
             </button>
             <datalist class={cssStyle.popover}>{child()}</datalist>
           </select>
@@ -60,24 +65,36 @@ const Picker = (ownProps: PickerProps) => {
 };
 
 const Option = (
-  ownProps: JSX.OptionHTMLAttributes<HTMLOptionElement> & {
+  ownProps: Omit<JSX.OptionHTMLAttributes<HTMLOptionElement>, 'label'> & {
     label?: JSX.Element;
   },
 ) => {
   const [local, props] = splitProps(ownProps, ['label', 'children', 'class']);
+  const child = children(() => local.children);
   return (
     <ListItem
       as="option"
       {...props}
-      class={tw('select-none', cssStyle.option, local.class)}
+      class={tw(
+        'select-none flex flex-col items-stretch justify-center gap-1',
+        cssStyle.option,
+        local.class,
+      )}
     >
-      <div class="flex flex-row items-center gap-2" data-part="label">
+      <div
+        class="flex flex-row items-center justify-stretch gap-2"
+        data-part="label"
+      >
         {local.label}
         <Show when={props.value === ''}>
           <span class="sr-only" data-empty-option />
         </Show>
       </div>
-      <div data-part="content">{local.children}</div>
+      <Show when={child()}>
+        <div data-part="content" class="empty:hidden">
+          {child()}
+        </div>
+      </Show>
     </ListItem>
   );
 };

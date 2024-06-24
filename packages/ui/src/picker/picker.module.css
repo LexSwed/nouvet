@@ -19,19 +19,15 @@
   }
 
   .option {
-    @apply flex flex-col items-stretch justify-center gap-1;
-
-    & > [data-part='content']:empty {
-      display: none;
-    }
-
     &:where(:checked) > [data-part='label'] {
       color: theme('colors.primary');
     }
-    &:where(:checked) > [data-part='label']:after {
+    & > [data-part='label']:after {
       content: '';
       mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><polyline points="40 144 96 200 224 72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"/></svg>');
-      @apply pointer-events-none ms-auto size-4;
+      @apply pointer-events-none size-4;
+    }
+    &:where(:checked) > [data-part='label']:after {
       @apply bg-primary;
     }
     &:where([value='']:checked) > [data-part='label']:after {
