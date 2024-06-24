@@ -47,8 +47,8 @@ const TextField = <T extends 'input' | 'textarea' = 'input'>(
           {...props}
           component={props.as}
           class={cssStyle.input}
-          id={aria.id()}
-          aria-describedby={aria.describedBy()}
+          id={aria.id}
+          aria-describedby={aria.describedBy}
         />
       )}
     </FormField>

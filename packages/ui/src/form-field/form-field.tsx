@@ -1,11 +1,11 @@
 import {
   children,
+  createMemo,
   createUniqueId,
   Match,
   Show,
   splitProps,
   Switch,
-  type Accessor,
   type ComponentProps,
   type JSX,
   type JSXElement,
@@ -47,8 +47,8 @@ interface FieldInnerProps
   /* Name of the input field to assign validation description */
   name?: string;
   children: (ariaProps: {
-    id: Accessor<string>;
-    describedBy: Accessor<string | undefined>;
+    id: string;
+    describedBy: string | undefined;
   }) => JSX.Element;
   /** Prefix text or an icon */
   prefix?: JSX.Element;
@@ -59,33 +59,40 @@ const FormField = (ownProps: FieldInnerProps) => {
   const formContext = useFormContext();
   const [local, props] = splitProps(ownProps, ['variant', 'textSize']);
   const localId = createUniqueId();
-  const id = () => props.id || localId;
-  const descriptionId = () => `${id()}-description`;
+
+  const aria = {
+    get id() {
+      return props.id || localId;
+    },
+    get describedBy() {
+      return `${aria.id}-description`;
+    },
+  };
+
   const errorMessage = () =>
     props.name ? formContext().validationErrors?.[props.name] : null;
   const prefix = children(() => props.prefix);
   const suffix = children(() => props.suffix);
+  const label = children(() => props.label);
+  const description = children(() => props.description);
+  const child = createMemo(() => props.children(aria));
   return (
     <div class={tw(cssStyle.field, props.class)} style={props.style}>
       <div class={formFieldVariants(local)}>
-        <Show when={props.label}>
-          <Text as="label" for={id()} with="label-sm" class={cssStyle.label}>
-            {props.label}
+        <Show when={label()}>
+          <Text as="label" for={aria.id} with="label-sm" class={cssStyle.label}>
+            {label()}
           </Text>
         </Show>
         <div class={cssStyle.inputWrapper}>
           <Show when={prefix()}>
-            <label for={id()} class={cssStyle.prefix}>
+            <label for={aria.id} class={cssStyle.prefix}>
               {prefix()}
             </label>
           </Show>
-          {props.children({
-            id,
-            describedBy: () =>
-              errorMessage() || props.description ? descriptionId() : undefined,
-          })}
+          {child()}
           <Show when={suffix()}>
-            <label for={id()} class={cssStyle.suffix}>
+            <label for={aria.id} class={cssStyle.suffix}>
               {suffix()}
             </label>
           </Show>
@@ -94,16 +101,16 @@ const FormField = (ownProps: FieldInnerProps) => {
       <Switch>
         <Match when={errorMessage()}>
           <span
-            id={descriptionId()}
+            id={aria.describedBy}
             aria-live="polite"
             class={cssStyle.description}
           >
             {errorMessage()}
           </span>
         </Match>
-        <Match when={props.description}>
-          <span id={descriptionId()} class={cssStyle.description}>
-            {props.description}
+        <Match when={description()}>
+          <span id={aria.describedBy} class={cssStyle.description}>
+            {description()}
           </span>
         </Match>
       </Switch>

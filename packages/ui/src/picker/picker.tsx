@@ -1,4 +1,4 @@
-import { Show, splitProps, type JSX } from 'solid-js';
+import { children, Show, splitProps, type JSX } from 'solid-js';
 
 import { FormField, type FormFieldProps } from '../form-field';
 import { Icon } from '../icon/icon';
@@ -14,42 +14,44 @@ interface PickerProps
 const Picker = (ownProps: PickerProps) => {
   const [fieldProps, local, props] = splitProps(
     ownProps,
-    ['class', 'style', 'id', 'variant', 'label'],
-    ['children'],
+    ['class', 'style', 'id', 'variant'],
+    ['children', 'label'],
   );
+  const label = children(() => local.label);
+  const child = children(() => local.children);
   return (
     <FormField
       {...fieldProps}
+      name={props.name}
       label={
-        fieldProps.label ? (
+        <Show when={label()}>
           <span class="flex flex-row items-center gap-2">
-            {fieldProps.label}
+            {label()}
             <div class="flex h-[1em] items-center">
               <Icon use="carret-up-down" class="size-3" />
             </div>
           </span>
-        ) : null
+        </Show>
       }
-      name={props.name}
     >
       {(aria) => {
         return (
           <select
             {...props}
             class={cssStyle.input}
-            id={aria.id()}
-            aria-describedby={aria.describedBy()}
+            id={aria.id}
+            aria-describedby={aria.describedBy}
           >
             <button
               // @ts-expect-error select menu not supported
               type="popover"
               class="flex w-full cursor-default items-center outline-none"
               data-part="trigger"
-              style={{ 'anchor-name': `--anchor-${aria.id()}` }}
+              style={{ 'anchor-name': `--anchor-${aria.id}` }}
             >
               <selectedoption />
             </button>
-            <datalist class={cssStyle.popover}>{local.children}</datalist>
+            <datalist class={cssStyle.popover}>{child()}</datalist>
           </select>
         );
       }}

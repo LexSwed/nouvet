@@ -19,7 +19,7 @@
   "author": "",
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
-    "@types/node": "^20.14.7",
+    "@types/node": "^20.14.8",
     "eslint-plugin-playwright": "^1.6.2"
   },
   "dependencies": {
