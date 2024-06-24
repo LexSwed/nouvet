@@ -2,8 +2,7 @@ import { MetaProvider } from '@solidjs/meta';
 import { Router, useNavigate } from '@solidjs/router';
 import { FileRoutes } from '@solidjs/start/router';
 import { ErrorBoundary, Suspense } from 'solid-js';
-
-import { env } from './server/env';
+import { isDev } from 'solid-js/web';
 
 export default function App() {
   return (
@@ -15,7 +14,9 @@ export default function App() {
         return (
           <ErrorBoundary
             fallback={(error) => {
-              if (env.DEV) {
+              if (isDev) {
+                throw error;
+              } else {
                 console.error(error);
                 if (error instanceof Error) {
                   console.log(error.cause);
@@ -25,8 +26,6 @@ export default function App() {
                 const navigate = useNavigate();
                 navigate('/houston', { replace: false });
                 return null;
-              } else {
-                throw error;
               }
             }}
           >

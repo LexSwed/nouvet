@@ -8,6 +8,7 @@ import type FamilyDict from './locales/en/family';
 import type InvitedDict from './locales/en/invited';
 import type LoginDict from './locales/en/login';
 import type PetFormsDict from './locales/en/pet-forms';
+import type ProfileDict from './locales/en/profile';
 import type WWWDict from './locales/en/www';
 import type { SupportedLocale } from './shared';
 
@@ -19,6 +20,7 @@ export type NamespaceMap = {
   'invited': typeof InvitedDict;
   'errors': typeof ErrorsDict;
   'pet-forms': typeof PetFormsDict;
+  'profile': typeof ProfileDict;
 };
 export type Namespace = keyof NamespaceMap;
 

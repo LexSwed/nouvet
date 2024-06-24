@@ -9,7 +9,7 @@ const appDict = {
   'cta-invite-join': 'Join',
   'go-to-home-page': 'Home page',
   'account-menu.label': 'User menu',
-  'account-menu.account': 'Account preferences',
+  'account-menu.account': 'Profile',
   'account-menu.pwa-title': 'Install for offline',
   'account-menu.pwa-description':
     'Use NouVet without the internet, making the access faster and enabling more features.',
