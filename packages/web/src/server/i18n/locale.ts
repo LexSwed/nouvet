@@ -6,7 +6,7 @@ import { acceptedLocaleLanguageTag } from './shared';
 
 export async function getLocale(): Promise<Intl.Locale> {
   try {
-    for (const fn of [header, cookie]) {
+    for (const fn of [cookie, header]) {
       const locale = await fn();
       if (locale) {
         return locale;

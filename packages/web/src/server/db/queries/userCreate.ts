@@ -9,7 +9,7 @@ const CreateUserSchema = v.object({
   provider: v.picklist(['facebook']),
   name: v.pipe(
     v.string('Name cannot be empty'),
-    v.minLength(2),
+    v.minLength(1),
     v.maxLength(200),
   ),
   accountProviderId: v.pipe(
