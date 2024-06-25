@@ -56,7 +56,7 @@ function header(): Intl.Locale | null {
            * Verify it's a correct language and matches supported one. See
            * @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/language
            */
-          const locale = new Intl.Locale(code);
+          const locale = new Intl.Locale(code!);
           res.push([locale, Number(priority)] as const);
         } catch {
           // Skip

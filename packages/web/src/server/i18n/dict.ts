@@ -33,7 +33,7 @@ async function fetchDictionary<T extends Namespace>(
   });
   const routeModuleDict = (await localeFiles[
     `./locales/${locale}/${namespace}.ts`
-  ]()) as NamespaceMap[T];
+  ]!()) as NamespaceMap[T];
   return routeModuleDict;
 }
 

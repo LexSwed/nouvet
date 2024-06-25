@@ -1,8 +1,8 @@
 const loginDict = {
-  'meta.title': 'NouVet | Sign In',
-  'hero-image': 'A cat and a dog sleeping together',
-  'with-facebook': 'Continue with Facebook',
-  'back-home': 'Go to the home page',
+  'meta.title': 'NouVet | Iniciar sesión',
+  'hero-image': 'Un gato y un perro durmiendo juntos',
+  'with-facebook': 'Continuar con Facebook',
+  'back-home': 'Ir a la página de inicio',
 } as const;
 
 export default loginDict;

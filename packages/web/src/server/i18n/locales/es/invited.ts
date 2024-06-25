@@ -1,22 +1,22 @@
 const invitedDict = {
-  'meta.title': 'NouVet | Invitation',
-  'logo-label': 'Family Invitation',
-  'expired.heading': 'Was the invite bitten?',
+  'meta.title': 'NouVet | Invitación',
+  'logo-label': 'Invitación Familiar',
+  'expired.heading': '¿La invitación se dañó?',
   'expired.description':
-    "Seems like the invite is a little brokey. But that's alright! Just ask your partner to share with you a new invite!",
-  'expired.cta': 'Return to the app',
-  'already-in-family.heading': 'Want to switch families?',
+    'Parece que la invitación está un poco dañada. ¡Pero no pasa nada! Pídele a tu compañero que te comparta una nueva invitación.',
+  'expired.cta': 'Volver a la aplicación',
+  'already-in-family.heading': '¿Quieres cambiar de familia?',
   'already-in-family.description':
-    'You are already part of another family. To join the family in this invite, you need to leave your current family first.',
-  'already-in-family.cta': 'To the family',
-  'accept-invite.heading': 'Join {{inviterName}}',
-  'accept-invite.heading.no-name': 'Join family',
+    'Ya eres parte de otra familia. Para unirte a la familia en esta invitación, primero debes dejar tu familia actual.',
+  'already-in-family.cta': 'A la familia',
+  'accept-invite.heading': 'Unirse a {{inviterName}}',
+  'accept-invite.heading.no-name': 'Unirse a la familia',
   'accept-invite.description':
-    'By joining the family, your pets data will be shared with all users of the family.',
-  'accept-invite.cta-cancel': 'Cancel',
-  'accept-invite.cta-join': 'Join',
+    'Al unirte a la familia, los datos de tus mascotas se compartirán con todos los usuarios de la familia.',
+  'accept-invite.cta-cancel': 'Cancelar',
+  'accept-invite.cta-join': 'Unirse',
   'acceptInvite.failed':
-    "Something, somewhere, didn't work as expected. Maybe the invite has expired? We will look into it, but please, try again later.",
+    'Algo, en algún lugar, no funcionó como se esperaba. ¿Quizás la invitación ha expirado? Lo investigaremos, pero por favor, vuelve a intentarlo más tarde.',
 } as const;
 
 export default invitedDict;
