@@ -7,7 +7,9 @@ const appDict = {
   'invite-card-description':
     'Your pets are happier with more humans around! Share the care for your pets with the loved ones.',
   'cta-invite-join': 'Join',
-  'account-menu.account': 'Account preferences',
+  'go-to-home-page': 'Home page',
+  'account-menu.label': 'User menu',
+  'account-menu.account': 'Profile',
   'account-menu.pwa-title': 'Install for offline',
   'account-menu.pwa-description':
     'Use NouVet without the internet, making the access faster and enabling more features.',

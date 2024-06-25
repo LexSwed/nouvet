@@ -11,6 +11,10 @@ const errorsDict = {
   'birthdate.range': 'The date cannot be before 1980 or after today',
   'weight.range': 'The wight cannot be negative or too big',
   'family.name': 'Name cannot be empty',
+  'user.name-min': 'Name cannot be empty',
+  'user.name-max': 'Name cannot exceed 200 characters',
+  'user.locale': 'Locale is not supported',
+  'user.measurementsSystem': 'This measurements system is not supported',
 } as const;
 
 export default errorsDict;
