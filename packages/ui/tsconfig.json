@@ -1,7 +1,4 @@
 {
   "extends": "@nou/config/tsconfig",
-  "include": ["./src", "./.storybook", "global.d.ts"],
-  "compilerOptions": {
-    "verbatimModuleSyntax": false
-  }
+  "include": ["./src", "./.storybook", "global.d.ts"]
 }

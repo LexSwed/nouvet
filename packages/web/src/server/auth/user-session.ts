@@ -22,19 +22,20 @@ import { env } from '../env';
 export async function createUserSession(
   event: HTTPEvent,
   {
-    id: userId,
+    userId,
     locale,
     measurementSystem,
   }: {
-    id: UserSession['userId'];
+    userId: UserSession['userId'];
     locale: UserSession['locale'];
     measurementSystem: UserSession['measurementSystem'];
   },
 ) {
   const lucia = useLucia();
   const authSession = await lucia.createSession(userId, {});
+
   await updateRequestUser(
-    event!,
+    event,
     {
       userId,
       locale,
@@ -70,14 +71,16 @@ export async function validateAuthSession(
   //   }
   // }
   const lucia = useLucia();
-  const userSession = await useUserSession();
+  const userSession = await tryUseUserSession();
   if (!userSession.id) {
     // Cleanup just in case
     await deleteUserSession();
     return null;
   }
 
-  const { session, user } = await lucia.validateSession(userSession.id);
+  const { session, user } = await lucia.validateSession(
+    userSession.data.sessionId,
+  );
 
   if (!session) {
     // Cleanup just in case
@@ -102,7 +105,7 @@ export async function validateAuthSession(
  * Logs user out, invalidating DB session and all associated cookies.
  */
 export async function deleteUserSession() {
-  const session = await useUserSession();
+  const session = await tryUseUserSession();
   if (session.data.sessionId) {
     await useLucia().invalidateSession(session.data.sessionId);
   }
@@ -110,12 +113,21 @@ export async function deleteUserSession() {
 }
 export type UserSession = v.InferOutput<typeof userCookieSchema>;
 
-export async function useUserSession() {
+/**
+ * DO NOT USE OR YOU WILL BE FIRED.
+ * Should only be used when cookie is expected to possibly not be available (f.e. yet).
+ */
+export async function tryUseUserSession() {
   const session = await useSession<UserSession>({
     name: SESSION_COOKIE,
     password: env.SESSION_SECRET,
   });
-  if (!session.data) {
+  return session;
+}
+
+export async function useUserSession() {
+  const session = await tryUseUserSession();
+  if (!session.data.userId) {
     await deleteUserSession();
     throw sendRedirect('/app/login');
   }
@@ -123,7 +135,7 @@ export async function useUserSession() {
 }
 
 const userCookieSchema = v.object({
-  userId: v.string(),
+  userId: v.pipe(v.string(), v.trim(), v.nonEmpty()),
   sessionId: v.string(),
   locale: v.string(),
   // timeZone: date(),
@@ -137,16 +149,14 @@ const userCookieSchema = v.object({
  * Sets current user to the cookies.
  * @throws {v.ValiError} when provided user data is invalid.
  */
-export async function updateRequestUser(
+async function updateRequestUser(
   event: HTTPEvent,
   user: UserSession,
   config?: CookieSerializeOptions,
 ) {
-  const { sessionId } = user;
   await updateSession(
     event,
     {
-      generateId: () => sessionId,
       name: SESSION_COOKIE,
       password: env.SESSION_SECRET,
       cookie: config,

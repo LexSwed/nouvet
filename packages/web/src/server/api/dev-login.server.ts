@@ -1,7 +1,6 @@
 'use server';
 
-import { getRequestEvent } from 'solid-js/web';
-import { deleteCookie, getCookie } from 'vinxi/http';
+import { deleteCookie, getCookie, getEvent } from 'vinxi/http';
 
 import { createUserSession } from '~/server/auth/user-session';
 import { RETURN_URL_COOKIE } from '~/server/const';
@@ -21,9 +20,9 @@ export async function loginDevServer(name: string) {
       break;
   }
   try {
-    const event = getRequestEvent();
-    await createUserSession(event!.nativeEvent, {
-      id: name,
+    const event = getEvent();
+    await createUserSession(event, {
+      userId: name,
       locale: 'en-GB',
       measurementSystem: 'metrical',
     });

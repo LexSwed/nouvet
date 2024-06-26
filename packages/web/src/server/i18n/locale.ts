@@ -1,6 +1,6 @@
 import { getHeader } from 'vinxi/http';
 
-import { getRequestUser } from '~/server/auth/request-user';
+import { tryUseUserSession } from '../auth/user-session';
 
 import { acceptedLocaleLanguageTag } from './shared';
 
@@ -26,10 +26,9 @@ export async function getLocale(): Promise<Intl.Locale> {
  */
 async function cookie(): Promise<Intl.Locale | null> {
   try {
-    const user = await getRequestUser();
-    return new Intl.Locale(user?.locale);
+    const locale = (await tryUseUserSession()).data.locale;
+    return new Intl.Locale(locale);
   } catch (error) {
-    // TODO: if the app is migrated to new values, where does invalidation of cookies happen?
     return null;
   }
 }

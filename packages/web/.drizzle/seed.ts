@@ -11,7 +11,8 @@ const sqlite = new Database(process.env.DB_CONNECTION!);
 const db = drizzle(sqlite, { schema, logger: true });
 
 async function seed() {
-  const users = Array.from({ length: 5 }).map(() => ({
+  const users = Array.from({ length: 5 }).map((_, i) => ({
+    id: `${i}`,
     name: faker.person.fullName(),
     measurementSystem: faker.helpers.arrayElement(['imperial', 'metrical']) as
       | 'imperial'
