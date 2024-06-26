@@ -6,13 +6,14 @@ import {
   sqliteTable,
   text,
 } from 'drizzle-orm/sqlite-core';
+import { v7 as uuidv7 } from 'uuid';
 
 export const familyTable = sqliteTable(
   'family',
   {
-    id: integer('id').notNull().primaryKey({ autoIncrement: true }),
+    id: primaryId('id'),
     name: text('name', { length: 100 }),
-    ownerId: integer('owner_id')
+    ownerId: text('owner_id')
       .notNull()
       .references(() => userTable.id),
     createdAt: utcDatetime('created_at'),
@@ -39,7 +40,7 @@ export const familyInviteTable = sqliteTable(
      * User who created the invite.
      * TODO: enforce connection with family to make sure only owners can create invites.
      */
-    inviterId: integer('inviter_id')
+    inviterId: text('inviter_id')
       .notNull()
       .references(() => userTable.id),
     /**
@@ -63,10 +64,10 @@ export type DatabaseFamily = typeof familyTable.$inferSelect;
 export const familyUserTable = sqliteTable(
   'family_user',
   {
-    familyId: integer('family_id')
+    familyId: text('family_id')
       .notNull()
       .references(() => familyTable.id, { onDelete: 'cascade' }),
-    userId: integer('user_id')
+    userId: text('user_id')
       .notNull()
       .references(() => userTable.id, { onDelete: 'cascade' }),
     joinedAt: utcDatetime('joined_at'),
@@ -84,10 +85,10 @@ export const familyUserTable = sqliteTable(
 export const familyWaitListTable = sqliteTable(
   'family_wait_list',
   {
-    familyId: integer('family_id')
+    familyId: text('family_id')
       .notNull()
       .references(() => familyTable.id, { onDelete: 'cascade' }),
-    userId: integer('user_id')
+    userId: text('user_id')
       .notNull()
       .references(() => userTable.id, { onDelete: 'cascade' }),
     joinedAt: utcDatetime('joined_at'),
@@ -103,9 +104,9 @@ export const familyWaitListTable = sqliteTable(
 );
 
 export const petTable = sqliteTable('pet', {
-  id: integer('id').notNull().primaryKey({ autoIncrement: true }),
+  id: primaryId('id'),
   /** Pets have an official owner that has access to all the data. Other people have access to pets only through families. */
-  ownerId: integer('owner_id')
+  ownerId: text('owner_id')
     .notNull()
     // TODO: add constraint for Max amount of pets, when the constraints are available
     .references(() => userTable.id),
@@ -142,7 +143,7 @@ export type DatabasePet = typeof petTable.$inferSelect;
  * User profile details and preferences.
  */
 export const userTable = sqliteTable('user', {
-  id: integer('id').notNull().primaryKey({ autoIncrement: true }),
+  id: primaryId('id'),
   /** User's name, set by auth provider, or updated manually afterwards. */
   name: text('name', { length: 200 }),
   /** User's picture, only for personalization purposes. */
@@ -159,6 +160,8 @@ export const userTable = sqliteTable('user', {
    */
   createdAt: utcDatetime('created_at'),
 });
+export type DatabaseUser = typeof userTable.$inferSelect;
+export type UserID = DatabaseUser['id'];
 
 /**
  * Maps different OAuth accounts to the same user.
@@ -167,7 +170,7 @@ export const authAccount = sqliteTable(
   'oauth_account',
   {
     provider: text('provider_id', { enum: ['facebook'] }).notNull(),
-    userId: integer('user_id')
+    userId: text('user_id')
       .notNull()
       .references(() => userTable.id),
     /** ID of the user on the auth provider side */
@@ -182,15 +185,13 @@ export const authAccount = sqliteTable(
 export type SupportedAuthProvider =
   (typeof authAccount.$inferInsert)['provider'];
 
-export type DatabaseUser = typeof userTable.$inferSelect;
-
 /**
  * Stores all user sessions to verify validity of requests.
  */
 export const sessionTable = sqliteTable('user_session', {
   /** User can have multiple sessions across devices */
   id: text('id').notNull().primaryKey(),
-  userId: integer('user_id')
+  userId: text('user_id')
     .notNull()
     .references(() => userTable.id),
   /**
@@ -203,7 +204,7 @@ export const sessionTable = sqliteTable('user_session', {
  * These are calendar events. They can be attached to the request for doctor’s visit.
  */
 export const eventsTable = sqliteTable('event', {
-  id: integer('id').notNull().primaryKey({ autoIncrement: true }),
+  id: primaryId('id'),
   /** Type of the event selected by the client.
    * TODO: create index for faster look-ups
    */
@@ -244,7 +245,7 @@ export const eventsTable = sqliteTable('event', {
  * Reminders can create events.
  */
 export const remindersTable = sqliteTable('reminder', {
-  id: integer('id').notNull().primaryKey({ autoIncrement: true }),
+  id: primaryId('id'),
   creatorId: integer('creator_id')
     .notNull()
     .references(() => userTable.id),
@@ -272,4 +273,11 @@ function utcDatetime(columnName: Parameters<typeof text>[0]) {
 
 function dateTime(columnName: Parameters<typeof text>[0]) {
   return text(columnName, { mode: 'text', length: 50 });
+}
+
+function primaryId(columnName: Parameters<typeof text>[0]) {
+  return text(columnName)
+    .notNull()
+    .primaryKey()
+    .$default(() => uuidv7());
 }

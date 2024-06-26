@@ -79,7 +79,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
 const NewlyJoinedMember = (props: {
   familyName: string | null | undefined;
   user: {
-    id: number;
+    id: string;
     name: string | null;
     avatarUrl: string | null;
   };

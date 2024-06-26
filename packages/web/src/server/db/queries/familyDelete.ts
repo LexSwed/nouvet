@@ -6,10 +6,10 @@ import { useDb } from '~/server/db';
 import {
   familyInviteTable,
   familyTable,
-  type DatabaseUser,
+  type UserID,
 } from '~/server/db/schema';
 
-export async function familyDelete(userId: DatabaseUser['id']) {
+export async function familyDelete(userId: UserID) {
   const db = useDb();
   const family = await db
     .delete(familyTable)

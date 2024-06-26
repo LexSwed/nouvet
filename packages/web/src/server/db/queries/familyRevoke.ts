@@ -2,18 +2,14 @@
 
 import { and, eq } from 'drizzle-orm';
 
-import {
-  familyTable,
-  familyUserTable,
-  type DatabaseUser,
-} from '~/server/db/schema';
+import { familyTable, familyUserTable, type UserID } from '~/server/db/schema';
 import { NotAllowedToPerformFamilyAction } from '~/server/errors';
 
 import { useDb } from '..';
 
 export async function revokeUserMembership(params: {
-  familyOwnerId: DatabaseUser['id'];
-  familyMemberId: DatabaseUser['id'];
+  familyOwnerId: UserID;
+  familyMemberId: UserID;
 }) {
   const db = useDb();
 

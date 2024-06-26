@@ -9,7 +9,7 @@ import { FormErrorMessage } from './form-error-message';
 
 interface AddBreedFormProps {
   id: string;
-  pet: { id: number; name: string };
+  pet: { id: string; name: string };
   onDismiss: () => void;
   placement?: ComponentProps<typeof Drawer>['placement'];
 }

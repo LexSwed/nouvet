@@ -9,7 +9,7 @@ import { FormErrorMessage } from './form-error-message';
 import { GenderSwitch, SpeciesSelector } from './species-selector';
 
 function CreateNewPetForm(props: {
-  onSuccess?: (pet: { name: string; id: number }) => void;
+  onSuccess?: (pet: { name: string; id: string }) => void;
 }) {
   const t = createTranslator('pet-forms');
   const createPetAction = useAction(createPet);

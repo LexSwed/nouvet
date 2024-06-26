@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import * as v from 'valibot';
 
 import { useDb } from '~/server/db';
-import { userTable, type DatabaseUser } from '~/server/db/schema';
+import { userTable, type UserID } from '~/server/db/schema';
 import { acceptedLocaleLanguageTag } from '~/server/i18n/shared';
 import type { ErrorKeys } from '~/server/utils';
 
@@ -29,7 +29,7 @@ export type UpdateUserSchema = typeof UpdateUserSchema;
 type UpdateUserInput = v.InferInput<UpdateUserSchema>;
 
 export const userUpdate = async (
-  userId: DatabaseUser['id'],
+  userId: UserID,
   userUpdate: {
     [K in keyof UpdateUserInput]?: unknown;
   },

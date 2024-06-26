@@ -7,7 +7,7 @@ import {
   familyInviteTable,
   familyUserTable,
   userTable,
-  type DatabaseUser,
+  type UserID,
 } from '~/server/db/schema';
 import { UserAlreadyInFamily } from '~/server/errors';
 
@@ -17,7 +17,7 @@ import { UserAlreadyInFamily } from '~/server/errors';
  */
 export async function familyInvitationInfo(
   inviteCode: string,
-  inviteeId: DatabaseUser['id'],
+  inviteeId: UserID,
 ) {
   const db = useDb();
   const existingUserFamily = await db

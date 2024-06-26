@@ -7,7 +7,8 @@ const FormErrorMessage = (props: { class?: string }) => {
 
   return (
     <Card
-      variant="filled"
+      variant="tonal"
+      tone="primary-light"
       id="error-message"
       aria-live="polite"
       class={tw(

@@ -32,7 +32,7 @@ export default function InviteAcceptPage(props: RouteSectionProps) {
   const code = props.params['invite-code'];
   const t = createTranslator('invited');
   const user = createAsync(() => getUserProfile());
-  const userInvite = createAsync(() => checkFamilyInvite(code));
+  const userInvite = createAsync(() => checkFamilyInvite(code!));
 
   const joinSubmission = useSubmission(joinFamilyWithLink);
   const invite = () => {

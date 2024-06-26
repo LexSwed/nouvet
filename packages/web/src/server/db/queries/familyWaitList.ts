@@ -8,10 +8,10 @@ import {
   familyUserTable,
   familyWaitListTable,
   userTable,
-  type DatabaseUser,
+  type UserID,
 } from '~/server/db/schema';
 
-export async function familyWaitList(userId: DatabaseUser['id']) {
+export async function familyWaitList(userId: UserID) {
   const db = useDb();
 
   const family = db

@@ -3,14 +3,14 @@
 import { TimeSpan } from 'lucia';
 
 import { useDb } from '~/server/db';
-import { familyInviteTable, type DatabaseUser } from '~/server/db/schema';
+import { familyInviteTable, type UserID } from '~/server/db/schema';
 
 /**
  * Creates new invitation code.
  * Similar to OTP, doesn't delete existing invitation codes for some time.
  */
 export async function createFamilyInvite(
-  inviterId: DatabaseUser['id'],
+  inviterId: UserID,
   inviteCode: string,
   invitationHash: string,
 ) {

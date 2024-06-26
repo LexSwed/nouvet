@@ -8,10 +8,10 @@ import {
   familyUserTable,
   familyWaitListTable,
   userTable,
-  type DatabaseUser,
+  type UserID,
 } from '~/server/db/schema';
 
-export async function userProfile(userId: DatabaseUser['id']) {
+export async function userProfile(userId: UserID) {
   const db = useDb();
   const userProfile = await db
     .select({
@@ -28,7 +28,7 @@ export async function userProfile(userId: DatabaseUser['id']) {
   return userProfile;
 }
 
-export async function userFamily(userId: DatabaseUser['id']) {
+export async function userFamily(userId: UserID) {
   const db = useDb();
 
   const userFamily = await db

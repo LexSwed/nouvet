@@ -13,7 +13,7 @@ import {
   type SvgIcons,
 } from '@nou/ui';
 
-import type { DatabasePet, DatabaseUser } from '~/server/db/schema';
+import type { DatabasePet, UserID } from '~/server/db/schema';
 import { createTranslator } from '~/server/i18n';
 
 import { createPersistedSetting } from '~/lib/utils/make-persisted-signal';
@@ -24,7 +24,7 @@ import AddWeightForm from './add-weight-form';
 
 interface PetHomeCardProps {
   pet: {
-    id: number;
+    id: string;
     pictureUrl: string | null;
     name: string;
     species: DatabasePet['species'];
@@ -36,7 +36,7 @@ interface PetHomeCardProps {
   };
   owner:
     | {
-        id: DatabaseUser['id'];
+        id: UserID;
         name: string | null | undefined;
         avatarUrl: string | null | undefined;
       }

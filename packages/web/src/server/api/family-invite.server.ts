@@ -136,11 +136,7 @@ export const joinFamilyWithQRCodeServer = async (invitationHash: string) => {
 
 const WaitListActionSchema = v.object({
   action: v.picklist(['accept', 'decline']),
-  userId: v.pipe(
-    v.union([v.pipe(v.string(), v.trim(), v.nonEmpty()), v.number()]),
-    v.transform(Number),
-    v.integer(),
-  ),
+  userId: v.pipe(v.string(), v.trim(), v.nonEmpty()),
 });
 export const moveUserFromTheWaitListServer = async (formData: FormData) => {
   try {

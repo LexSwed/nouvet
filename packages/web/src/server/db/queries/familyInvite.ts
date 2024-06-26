@@ -3,9 +3,9 @@
 import { and, eq, sql } from 'drizzle-orm';
 
 import { useDb } from '~/server/db';
-import { familyInviteTable, type DatabaseUser } from '~/server/db/schema';
+import { familyInviteTable, type UserID } from '~/server/db/schema';
 
-export async function familyInvite(userId: DatabaseUser['id']) {
+export async function familyInvite(userId: UserID) {
   const db = useDb();
   const invite = await db
     .select({

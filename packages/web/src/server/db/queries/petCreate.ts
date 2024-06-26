@@ -3,7 +3,7 @@
 import * as v from 'valibot';
 
 import { useDb } from '~/server/db';
-import { petTable, type DatabaseUser } from '~/server/db/schema';
+import { petTable, type UserID } from '~/server/db/schema';
 import { type ErrorKeys } from '~/server/utils';
 
 const CreatePetSchema = v.object({
@@ -42,7 +42,7 @@ export async function petCreate(
   input: {
     [K in keyof CreatePetInput]?: unknown;
   },
-  userId: DatabaseUser['id'],
+  userId: UserID,
 ) {
   const petInfo = v.parse(CreatePetSchema, input);
   const db = useDb();

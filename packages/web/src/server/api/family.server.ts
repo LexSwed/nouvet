@@ -27,11 +27,10 @@ export async function getFamilyMembersServer() {
   }
 }
 
-export async function getFamilyMemberServer(memberIdParam: unknown) {
+export async function getFamilyMemberServer(memberId: unknown) {
   try {
     const user = await getRequestUser();
-    const memberId = Number(memberIdParam ?? NaN);
-    if (Number.isNaN(memberId)) throw new Error('Invalid request');
+    if (typeof memberId !== 'string') throw new Error('Invalid request');
 
     const member = await familyMember(user.userId, memberId);
 

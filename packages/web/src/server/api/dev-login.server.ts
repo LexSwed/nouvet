@@ -23,7 +23,7 @@ export async function loginDevServer(name: string) {
   try {
     const event = getRequestEvent();
     await createUserSession(event!.nativeEvent, {
-      id: +name,
+      id: name,
       locale: 'en-GB',
       measurementSystem: 'metrical',
     });

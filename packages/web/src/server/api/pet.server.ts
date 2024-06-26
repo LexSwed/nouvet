@@ -47,7 +47,7 @@ export const createPetServer = async (formData: FormData) => {
 };
 
 const PetUpdateSchema = v.object({
-  petId: v.pipe(v.string(), v.transform(Number), v.integer()),
+  petId: v.pipe(v.string(), v.trim(), v.nonEmpty()),
   breed: v.optional(v.pipe(v.string(), v.trim())),
   weight: v.optional(v.pipe(v.string(), v.transform(Number), v.number())),
   birthDate: v.optional(
@@ -148,8 +148,8 @@ export const updatePetWeightServer = async (formData: FormData) => {
     const { weight } = v.parse(PetUpdateSchema, {
       weight: formData.get('weight'),
     });
-    const petId = Number(formData.get('petId'));
-    if (Number.isNaN(petId)) {
+    const petId = formData.get('petId')?.toString();
+    if (!petId) {
       throw new Error('petId is not provided');
     }
     const currentUser = await getRequestUser();

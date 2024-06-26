@@ -33,7 +33,7 @@ const petSpeciesToMetricMeasurement: {
 
 interface AddWeightFormProps {
   id: string;
-  pet: { id: number; name: string; species: DatabasePet['species'] };
+  pet: { id: string; name: string; species: DatabasePet['species'] };
   onDismiss?: () => void;
   /**
    * ID of the anchor element when nested.

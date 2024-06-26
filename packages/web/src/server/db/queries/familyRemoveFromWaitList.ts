@@ -5,15 +5,15 @@ import { and, eq } from 'drizzle-orm';
 import {
   familyTable,
   familyWaitListTable,
-  type DatabaseUser,
+  type UserID,
 } from '~/server/db/schema';
 import { NotAllowedToPerformFamilyAction } from '~/server/errors';
 
 import { useDb } from '..';
 
 export async function familyRemoveFromWaitList(params: {
-  familyOwnerId: DatabaseUser['id'];
-  waitListMemberId: DatabaseUser['id'];
+  familyOwnerId: UserID;
+  waitListMemberId: UserID;
 }) {
   const db = useDb();
 

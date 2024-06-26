@@ -5,11 +5,11 @@ import {
   familyTable,
   familyUserTable,
   familyWaitListTable,
-  type DatabaseUser,
+  type UserID,
 } from '~/server/db/schema';
 import { NotAllowedToPerformFamilyAction } from '~/server/errors';
 
-export async function familyLeave(userId: DatabaseUser['id']) {
+export async function familyLeave(userId: UserID) {
   const db = useDb();
 
   const family = await db

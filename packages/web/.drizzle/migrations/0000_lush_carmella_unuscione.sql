@@ -1,13 +1,13 @@
 CREATE TABLE `oauth_account` (
 	`provider_id` text NOT NULL,
-	`user_id` integer NOT NULL,
+	`user_id` text NOT NULL,
 	`provider_user_id` text NOT NULL,
 	PRIMARY KEY(`provider_id`, `provider_user_id`),
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `event` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`type` text NOT NULL,
 	`name` text NOT NULL,
 	`pet_id` integer,
@@ -20,23 +20,23 @@ CREATE TABLE `event` (
 --> statement-breakpoint
 CREATE TABLE `family_invite` (
 	`invite_code` text(20) PRIMARY KEY NOT NULL,
-	`inviter_id` integer NOT NULL,
+	`inviter_id` text NOT NULL,
 	`expires_at` integer NOT NULL,
 	`invitation_hash` text(64) NOT NULL,
 	FOREIGN KEY (`inviter_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `family` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`name` text(100),
-	`owner_id` integer NOT NULL,
+	`owner_id` text NOT NULL,
 	`created_at` text(50) DEFAULT (strftime('%FT%TZ', datetime('now'))) NOT NULL,
 	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `family_user` (
-	`family_id` integer NOT NULL,
-	`user_id` integer NOT NULL,
+	`family_id` text NOT NULL,
+	`user_id` text NOT NULL,
 	`joined_at` text(50) DEFAULT (strftime('%FT%TZ', datetime('now'))) NOT NULL,
 	PRIMARY KEY(`family_id`, `user_id`),
 	FOREIGN KEY (`family_id`) REFERENCES `family`(`id`) ON UPDATE no action ON DELETE cascade,
@@ -44,8 +44,8 @@ CREATE TABLE `family_user` (
 );
 --> statement-breakpoint
 CREATE TABLE `family_wait_list` (
-	`family_id` integer NOT NULL,
-	`user_id` integer NOT NULL,
+	`family_id` text NOT NULL,
+	`user_id` text NOT NULL,
 	`joined_at` text(50) DEFAULT (strftime('%FT%TZ', datetime('now'))) NOT NULL,
 	PRIMARY KEY(`family_id`, `user_id`),
 	FOREIGN KEY (`family_id`) REFERENCES `family`(`id`) ON UPDATE no action ON DELETE cascade,
@@ -53,8 +53,8 @@ CREATE TABLE `family_wait_list` (
 );
 --> statement-breakpoint
 CREATE TABLE `pet` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`owner_id` integer NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
+	`owner_id` text NOT NULL,
 	`name` text(200) NOT NULL,
 	`gender` text,
 	`species` text NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE `pet` (
 );
 --> statement-breakpoint
 CREATE TABLE `reminder` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`creator_id` integer NOT NULL,
 	`pet_id` integer NOT NULL,
 	`created_at` text(50) DEFAULT (strftime('%FT%TZ', datetime('now'))) NOT NULL,
@@ -79,13 +79,13 @@ CREATE TABLE `reminder` (
 --> statement-breakpoint
 CREATE TABLE `user_session` (
 	`id` text PRIMARY KEY NOT NULL,
-	`user_id` integer NOT NULL,
+	`user_id` text NOT NULL,
 	`expires_at` integer NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `user` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`name` text(200),
 	`avatar_url` text(200),
 	`locale` text NOT NULL,

@@ -50,7 +50,7 @@ export default function ProfilePage() {
               {(user) => (
                 <Card
                   variant="outlined"
-                  class="w-full max-w-96"
+                  class="animate-in fade-in slide-in-from-bottom-1 w-full max-w-96"
                   aria-labelledby="heading-profile"
                 >
                   <Form
@@ -63,6 +63,7 @@ export default function ProfilePage() {
                         ? profileSubmission.result.errors
                         : null
                     }
+                    // eslint-disable-next-line solid/reactivity
                     onSubmit={async (e) => {
                       e.preventDefault();
                       const initialLocale = user().locale;

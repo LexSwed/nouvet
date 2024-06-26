@@ -4,11 +4,7 @@ import { and, eq } from 'drizzle-orm';
 import * as v from 'valibot';
 
 import { useDb } from '~/server/db';
-import {
-  petTable,
-  type DatabasePet,
-  type DatabaseUser,
-} from '~/server/db/schema';
+import { petTable, type DatabasePet, type UserID } from '~/server/db/schema';
 import { type ErrorKeys } from '~/server/utils';
 
 const UpdatePetSchema = v.object({
@@ -20,10 +16,10 @@ const UpdatePetSchema = v.object({
       v.maxLength(200, 'createPet.name.length' satisfies ErrorKeys),
     ),
   ),
-  type: v.optional(
+  species: v.optional(
     v.picklist(
       ['dog', 'cat', 'bird', 'rabbit', 'rodent', 'horse'],
-      'createPet.type' satisfies ErrorKeys,
+      'createPet.species' satisfies ErrorKeys,
     ),
   ),
   gender: v.optional(
@@ -63,9 +59,9 @@ export async function petUpdate(
     [K in keyof UpdatePetInput]?: NonNullable<unknown>;
   },
   petId: DatabasePet['id'],
-  userId: DatabaseUser['id'],
+  userId: UserID,
 ) {
-  const { name, type, gender, breed, color, dateOfBirth, weight } = v.parse(
+  const { name, species, gender, breed, color, dateOfBirth, weight } = v.parse(
     UpdatePetSchema,
     petData,
   );
@@ -75,7 +71,7 @@ export async function petUpdate(
     .set({
       weight,
       name,
-      type,
+      species,
       gender,
       breed,
       color,
@@ -85,7 +81,7 @@ export async function petUpdate(
     .returning({
       id: petTable.id,
       name: petTable.name,
-      type: petTable.type,
+      species: petTable.species,
       gender: petTable.gender,
       breed: petTable.breed,
       color: petTable.color,

@@ -7,10 +7,10 @@ import {
   familyUserTable,
   petTable,
   userTable,
-  type DatabaseUser,
+  type UserID,
 } from '~/server/db/schema';
 
-export async function userPets(userId: DatabaseUser['id']) {
+export async function userPets(userId: UserID) {
   const db = useDb();
   const familyUsers = db
     .select({ userId: familyUserTable.userId })

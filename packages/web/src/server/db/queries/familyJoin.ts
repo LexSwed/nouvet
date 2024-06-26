@@ -8,20 +8,20 @@ import {
   familyTable,
   familyUserTable,
   familyWaitListTable,
-  type DatabaseUser,
+  type UserID,
 } from '~/server/db/schema';
 import { IncorrectFamilyInvite, UserAlreadyInFamily } from '~/server/errors';
 
 export async function joinFamilyByInvitationHash(
   invitationHash: string,
-  userId: DatabaseUser['id'],
+  userId: UserID,
 ) {
   return familyJoin(userId, { invitationHash });
 }
 
 export async function requestFamilyAdmissionByInviteCode(
   inviteCode: string,
-  userId: DatabaseUser['id'],
+  userId: UserID,
 ) {
   return familyJoin(userId, { inviteCode });
 }
@@ -38,7 +38,7 @@ export async function requestFamilyAdmissionByInviteCode(
  * @throws {UserAlreadyInFamily} - user was already a part of another family.
  */
 async function familyJoin(
-  userId: DatabaseUser['id'],
+  userId: UserID,
   params:
     | {
         inviteCode: string;

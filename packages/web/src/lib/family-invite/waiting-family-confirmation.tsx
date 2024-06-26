@@ -5,7 +5,7 @@ import { moveUserFromTheWaitList } from '~/server/api/family-invite';
 import { createTranslator } from '~/server/i18n';
 
 export function WaitingFamilyConfirmation(props: {
-  user: { name: string | null; id: number; avatarUrl: string | null };
+  user: { name: string | null; id: string; avatarUrl: string | null };
 }) {
   const t = createTranslator('family');
 

@@ -123,7 +123,7 @@ export async function useUserSession() {
 }
 
 const userCookieSchema = v.object({
-  userId: v.pipe(v.number(), v.integer()),
+  userId: v.string(),
   sessionId: v.string(),
   locale: v.string(),
   // timeZone: date(),

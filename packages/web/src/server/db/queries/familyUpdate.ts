@@ -2,14 +2,11 @@
 
 import { and, eq } from 'drizzle-orm';
 
-import { familyTable, type DatabaseUser } from '../schema';
+import { familyTable, type UserID } from '../schema';
 
 import { useDb } from '..';
 
-export function familyUpdate(params: {
-  name: string;
-  familyOwnerId: DatabaseUser['id'];
-}) {
+export function familyUpdate(params: { name: string; familyOwnerId: UserID }) {
   const db = useDb();
   return db
     .update(familyTable)

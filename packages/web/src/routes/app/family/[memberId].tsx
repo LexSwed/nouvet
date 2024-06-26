@@ -19,7 +19,7 @@ export const route = {
 function FamilyUserPage(props: RouteSectionProps) {
   const partialMember = createAsync(async () => {
     const members = await getFamilyMembers();
-    return members.find((m) => m.id === Number(props.params.memberId));
+    return members.find((m) => m.id === props.params.memberId);
   });
   const member = createAsync(() => getFamilyMember(props.params.memberId));
 

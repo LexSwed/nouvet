@@ -9,7 +9,7 @@ import {
   familyWaitListTable,
   petTable,
   userTable,
-  type DatabaseUser,
+  type UserID,
 } from '~/server/db/schema';
 
 /**
@@ -17,7 +17,7 @@ import {
  * If request user is the owner of the family, also
  * includes users from the wait list.
  */
-export async function familyMembers(userId: DatabaseUser['id']) {
+export async function familyMembers(userId: UserID) {
   const db = useDb();
 
   const family = db
@@ -63,10 +63,7 @@ export async function familyMembers(userId: DatabaseUser['id']) {
 /**
  * Query specific user from the family.
  */
-export async function familyMember(
-  requesterId: DatabaseUser['id'],
-  memberId: DatabaseUser['id'],
-) {
+export async function familyMember(requesterId: UserID, memberId: UserID) {
   const db = useDb();
 
   const family = db

@@ -1,13 +1,13 @@
 'use server';
 
 import { and, eq } from 'drizzle-orm';
-import type { DatabaseUser } from 'lucia';
 
 import { useDb } from '~/server/db';
 import {
   familyTable,
   familyUserTable,
   familyWaitListTable,
+  type UserID,
 } from '~/server/db/schema';
 import {
   InviteeNotInWaitList,
@@ -15,8 +15,8 @@ import {
 } from '~/server/errors';
 
 export async function acceptUserToFamily(params: {
-  familyOwnerId: DatabaseUser['id'];
-  inviteeId: DatabaseUser['id'];
+  familyOwnerId: UserID;
+  inviteeId: UserID;
 }) {
   const db = useDb();
 
