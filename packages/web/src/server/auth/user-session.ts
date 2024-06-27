@@ -79,6 +79,10 @@ export async function validateAuthSession(
   }
 
   const { session, user } = await lucia.validateSession(
+    /**
+     * NB: userSession.id is a unique identifier assigned to a user when visiting the website,
+     * even before authentication. data.sessionId refers to the actual auth session ID stored in the database.
+     */
     userSession.data.sessionId,
   );
 
