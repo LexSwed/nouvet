@@ -16,31 +16,31 @@ export async function seed(db: ReturnType<typeof useDb>) {
     .insert(schema.userTable)
     .values([
       {
-        id: 1,
+        id: '1',
         name: 'User One',
         locale: 'en-GB',
         measurementSystem: 'metrical',
       },
       {
-        id: 2,
+        id: '2',
         name: 'User Two',
         locale: 'en-GB',
         measurementSystem: 'metrical',
       },
       {
-        id: 3,
+        id: '3',
         name: 'User Three',
         locale: 'en-GB',
         measurementSystem: 'metrical',
       },
       {
-        id: 4,
+        id: '4',
         name: 'User Four',
         locale: 'en-GB',
         measurementSystem: 'metrical',
       },
       {
-        id: 5,
+        id: '5',
         name: 'User Five',
         locale: 'en-GB',
         measurementSystem: 'metrical',
