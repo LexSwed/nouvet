@@ -12,7 +12,7 @@ import { composeEventHandlers, mergeDefaultProps, type Merge } from '../utils';
 
 import { ListItem } from './list-item';
 
-import * as cssStyle from './menu.module.css';
+import css from './menu.module.css';
 
 interface MenuProps
   extends Omit<ComponentProps<'div'>, 'children' | 'style' | 'role'>,
@@ -24,11 +24,11 @@ const Menu = (ownProps: MenuProps) => {
   return <Popover role="menu" as={MenuList} {...ownProps} />;
 };
 
-const menuItemVariants = cva(cssStyle.listItem, {
+const menuItemVariants = cva(css.listItem, {
   variants: {
     tone: {
-      neutral: cssStyle.listItemNeutral,
-      destructive: cssStyle.listItemDestructive,
+      neutral: css.listItemNeutral,
+      destructive: css.listItemDestructive,
     },
   },
   defaultVariants: {

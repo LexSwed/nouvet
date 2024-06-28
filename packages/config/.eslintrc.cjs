@@ -25,10 +25,12 @@ module.exports = {
         node: true,
       },
       files: [
+        'eslint.cjs',
         '.eslintrc.cjs',
         'postcss.config.cjs',
         'prettier.config.cjs',
         'tailwind.config.ts',
+        './theme/generate.js',
       ],
       parserOptions: {
         sourceType: 'script',

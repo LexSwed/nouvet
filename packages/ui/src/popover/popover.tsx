@@ -16,7 +16,7 @@ import { Text } from '../text';
 import { tw } from '../tw';
 import { composeEventHandlers, mergeDefaultProps, type Merge } from '../utils';
 
-import * as cssStyles from './popover.module.css';
+import css from './popover.module.css';
 
 type BlockAlign = 'top' | 'bottom';
 type InlineAlign = 'left' | 'right';
@@ -105,7 +105,7 @@ const Popover = <T extends ValidComponent = 'div'>(
       role={local.role}
       tabIndex={0}
       ref={mergeRefs(local.ref, setPopover)}
-      class={tw(cssStyles.popover, local.class)}
+      class={tw(css.popover, local.class)}
       onBeforeToggle={composeEventHandlers(props.onBeforeToggle, (event) => {
         if (event.newState === 'open') {
           setShownState('open');

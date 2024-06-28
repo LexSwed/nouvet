@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createAsync, type RouteDefinition } from '@solidjs/router';
 import { clientOnly } from '@solidjs/start';
 import {

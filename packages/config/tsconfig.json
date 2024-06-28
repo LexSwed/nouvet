@@ -1,21 +1,24 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "allowJs": true,
     "noEmit": true,
     "strict": true,
+    "declaration": true,
+    "incremental": true,
+    "tsBuildInfoFile": "../../tsconfig.tsbuildinfo",
+    "rootDir": "../../",
     "isolatedModules": true,
     "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
     "lib": ["ESNext", "DOM", "ESNext.Intl"],
-    "skipLibCheck": true,
     "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
     "plugins": [
       {
         "name": "typescript-plugin-css-modules",
@@ -23,7 +26,7 @@
           "goToDefinition": true,
           "classnameTransform": "camelCase",
           "noUncheckedIndexedAccess": true,
-          "namedExports": false,
+          "namedExports": true,
           "postcssOptions": {
             "useConfig": true
           }

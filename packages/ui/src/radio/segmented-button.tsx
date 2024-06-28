@@ -4,7 +4,7 @@ import { Icon } from '../_index';
 import { tw } from '../tw';
 import { mergeDefaultProps } from '../utils';
 
-import cssStyles from './segmented-button.module.css';
+import css from './segmented-button.module.css';
 
 type RadioButtonProps = Omit<
   JSX.InputHTMLAttributes<HTMLInputElement>,
@@ -25,15 +25,15 @@ const SegmentedButton = (ownProps: RadioButtonProps) => {
   const icon = children(() => local.icon);
   const label = children(() => local.label);
   return (
-    <label class={tw(cssStyles.button, local.class)} style={local.style}>
+    <label class={tw(css.button, local.class)} style={local.style}>
       <input type="radio" id={id()} {...props} class={tw('sr-only')} />
-      <div class={tw(cssStyles.iconWrapper)}>
-        <Icon use="check" class={tw(cssStyles.icon)} />
+      <div class={tw(css.iconWrapper)}>
+        <Icon use="check" class={tw(css.icon)} />
         <Show when={icon()}>
-          <span class={tw(cssStyles.customIcon)}>{icon()}</span>
+          <span class={tw(css.customIcon)}>{icon()}</span>
         </Show>
       </div>
-      <span class={cssStyles.label}>{label()}</span>
+      <span class={css.label}>{label()}</span>
     </label>
   );
 };

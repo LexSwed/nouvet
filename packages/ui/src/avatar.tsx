@@ -197,7 +197,7 @@ const getUnit = (number: number, range: number, index?: number) => {
 };
 
 const getRandomColor = (number: number, colors: string[], range: number) => {
-  return colors[number % range];
+  return colors[number % range] as string;
 };
 
 const getContrast = (hexcolor: string) => {

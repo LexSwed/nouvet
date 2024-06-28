@@ -5,13 +5,13 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { tw } from '../tw';
 import { mergeDefaultProps, type Merge } from '../utils';
 
-import * as cssStyle from './menu.module.css';
+import css from './menu.module.css';
 
-const listItemVariants = cva(cssStyle.listItem, {
+const listItemVariants = cva(css.listItem, {
   variants: {
     tone: {
-      neutral: cssStyle.listItemNeutral,
-      destructive: cssStyle.listItemDestructive,
+      neutral: css.listItemNeutral,
+      destructive: css.listItemDestructive,
     },
   },
   defaultVariants: {

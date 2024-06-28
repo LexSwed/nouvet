@@ -16,17 +16,17 @@ import { useFormContext } from '../form';
 import { Text } from '../text';
 import { tw } from '../tw';
 
-import * as cssStyle from './form-field.module.css';
+import css from './form-field.module.css';
 
-export const formFieldVariants = cva(cssStyle.wrapper, {
+export const formFieldVariants = cva(css.wrapper, {
   variants: {
     variant: {
-      underline: cssStyle['wrapperUnderline'],
-      ghost: cssStyle['wrapperGhost'],
+      underline: css['wrapperUnderline'],
+      ghost: css['wrapperGhost'],
     },
     textSize: {
-      base: cssStyle['sizeBase'],
-      lg: cssStyle['sizeLg'],
+      base: css['sizeBase'],
+      lg: css['sizeLg'],
     },
   },
   defaultVariants: {
@@ -77,22 +77,22 @@ const FormField = (ownProps: FieldInnerProps) => {
   const description = children(() => props.description);
   const child = createMemo(() => props.children(aria));
   return (
-    <div class={tw(cssStyle.field, props.class)} style={props.style}>
+    <div class={tw(css.field, props.class)} style={props.style}>
       <div class={formFieldVariants(local)}>
         <Show when={label()}>
-          <Text as="label" for={aria.id} with="label-sm" class={cssStyle.label}>
+          <Text as="label" for={aria.id} with="label-sm" class={css.label}>
             {label()}
           </Text>
         </Show>
-        <div class={cssStyle.inputWrapper}>
+        <div class={css.inputWrapper}>
           <Show when={prefix()}>
-            <label for={aria.id} class={cssStyle.prefix}>
+            <label for={aria.id} class={css.prefix}>
               {prefix()}
             </label>
           </Show>
           {child()}
           <Show when={suffix()}>
-            <label for={aria.id} class={cssStyle.suffix}>
+            <label for={aria.id} class={css.suffix}>
               {suffix()}
             </label>
           </Show>
@@ -103,13 +103,13 @@ const FormField = (ownProps: FieldInnerProps) => {
           <span
             id={aria.describedBy}
             aria-live="polite"
-            class={cssStyle.description}
+            class={css.description}
           >
             {errorMessage()}
           </span>
         </Match>
         <Match when={description()}>
-          <span id={aria.describedBy} class={cssStyle.description}>
+          <span id={aria.describedBy} class={css.description}>
             {description()}
           </span>
         </Match>
@@ -119,7 +119,7 @@ const FormField = (ownProps: FieldInnerProps) => {
 };
 
 const Fieldset = (props: ComponentProps<'fieldset'>) => {
-  return <fieldset {...props} class={tw(cssStyle.fieldset, props.class)} />;
+  return <fieldset {...props} class={tw(css.fieldset, props.class)} />;
 };
 
 export { FormField, Fieldset };

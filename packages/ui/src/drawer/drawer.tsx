@@ -16,7 +16,7 @@ import { Text } from '../text';
 import { tw } from '../tw';
 import { composeEventHandlers } from '../utils';
 
-import cssStyles from './drawer.module.css';
+import css from './drawer.module.css';
 
 const MobileDrawer = <T extends ValidComponent = 'div'>(
   ownProps: PopoverProps<T>,
@@ -57,7 +57,7 @@ const MobileDrawer = <T extends ValidComponent = 'div'>(
         popover="auto"
         role="dialog"
         tabIndex={0}
-        class={tw(cssStyles.drawer, local.class, 'max-w-[640px]')}
+        class={tw(css.drawer, local.class, 'max-w-[640px]')}
         onToggle={composeEventHandlers(props.onToggle, (event) => {
           setOpen(event.newState === 'open');
           if (event.newState === 'open') {

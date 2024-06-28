@@ -3,7 +3,7 @@ import { Icon, RadioCard, Text, tw, type SvgIcons } from '@nou/ui';
 
 import { createTranslator } from '~/server/i18n';
 
-import * as cssStyles from './species-selector.module.css';
+import css from './species-selector.module.css';
 
 interface SpeciesSelectorProps {
   /** input radio element name attribute for species */
@@ -73,7 +73,7 @@ const GenderSwitch = (props: { name: string }) => {
   const id = createUniqueId();
   return (
     <fieldset
-      class={tw(cssStyles.genderSwitch, 'flex flex-col gap-2')}
+      class={tw(css.genderSwitch, 'flex flex-col gap-2')}
       aria-labelledby={id}
     >
       <Text with="label-sm" as="label" id={id} class="ms-2">
@@ -81,7 +81,7 @@ const GenderSwitch = (props: { name: string }) => {
       </Text>
       <div
         class={tw(
-          cssStyles.genderWrapper,
+          css.genderWrapper,
           'grid grid-cols-[1fr,auto,1fr] items-center gap-2',
         )}
       >
@@ -89,17 +89,17 @@ const GenderSwitch = (props: { name: string }) => {
           name={props.name}
           value="male"
           label={t('animal-gender.male')!}
-          class={tw(cssStyles.genderSwitchCard, 'h-16')}
+          class={tw(css.genderSwitchCard, 'h-16')}
         />
         <SvgGender
-          class={tw(cssStyles.genderIcon, 'relative mt-1 size-10')}
+          class={tw(css.genderIcon, 'relative mt-1 size-10')}
           aria-hidden
         />
         <RadioCard
           name={props.name}
           value="female"
           label={t('animal-gender.female')!}
-          class={tw(cssStyles.genderSwitchCard, 'h-16')}
+          class={tw(css.genderSwitchCard, 'h-16')}
         />
       </div>
     </fieldset>

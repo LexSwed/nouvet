@@ -12,7 +12,7 @@
     "build:web": "dotenvx run -f .env.test -- npm run build -w @nou/web",
     "start:web": "dotenvx run -f .env.test -- npm run dev -w @nou/web",
     "typecheck": "tsc",
-    "lint": "eslint src",
+    "lint": "eslint .",
     "format": "prettier . --write"
   },
   "keywords": [],

@@ -3,7 +3,7 @@ import { children, createUniqueId, Show, splitProps, type JSX } from 'solid-js';
 import { Text } from '../text';
 import { tw } from '../tw';
 
-import * as cssStyle from './radio-card.module.css';
+import css from './radio-card.module.css';
 
 interface RadioCardProps
   extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type' | 'children'> {
@@ -28,17 +28,13 @@ const RadioCard = (ownProps: RadioCardProps) => {
   const label = children(() => local.label);
   const child = children(() => local.children);
   return (
-    <label
-      for={id()}
-      class={tw(cssStyle.card, local.class)}
-      style={local.style}
-    >
+    <label for={id()} class={tw(css.card, local.class)} style={local.style}>
       <input type="radio" id={id()} {...props} class={'sr-only'} />
-      <div class={cssStyle.wrapper} data-part="label">
+      <div class={css.wrapper} data-part="label">
         <Show when={icon()}>
-          <div class={cssStyle.icon}>{icon()}</div>
+          <div class={css.icon}>{icon()}</div>
         </Show>
-        <Text with="label" class={cssStyle.label}>
+        <Text with="label" class={css.label}>
           {label()}
         </Text>
       </div>

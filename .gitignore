@@ -34,3 +34,6 @@ sqlite.db
 
 # vinxi config
 app.config.ts.timestamp*
+
+# TypeScript incremental compilation files
+tsconfig.tsbuildinfo

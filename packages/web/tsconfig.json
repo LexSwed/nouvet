@@ -1,8 +1,14 @@
 {
   "extends": "@nou/config/tsconfig",
-  "include": ["./src", "./drizzle.config.ts", ".drizzle/migrate.ts"],
+  "include": [
+    "./src",
+    "./drizzle.config.ts",
+    ".drizzle/migrate.ts",
+    "app.config.ts",
+    "tailwind.config.ts"
+  ],
   "compilerOptions": {
-    "types": ["vinxi/types/client"],
+    "types": ["vite/client", "vinxi/types/client", "@solidjs/start/env"],
     "paths": {
       "~/*": ["./src/*"]
     }

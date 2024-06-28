@@ -5,7 +5,7 @@ import { Icon } from '../icon/icon';
 import { ListItem } from '../menu/list-item';
 import { tw } from '../tw';
 
-import * as cssStyle from './picker.module.css';
+import css from './picker.module.css';
 
 interface PickerProps
   extends FormFieldProps,
@@ -41,7 +41,7 @@ const Picker = (ownProps: PickerProps) => {
         return (
           <select
             {...props}
-            class={cssStyle.input}
+            class={css.input}
             id={aria.id}
             aria-describedby={aria.describedBy}
           >
@@ -56,7 +56,7 @@ const Picker = (ownProps: PickerProps) => {
               <selectedoption class="w-full" />
               {local.suffix}
             </button>
-            <datalist class={cssStyle.popover}>{child()}</datalist>
+            <datalist class={css.popover}>{child()}</datalist>
           </select>
         );
       }}
@@ -77,7 +77,7 @@ const Option = (
       {...props}
       class={tw(
         'select-none flex flex-col items-stretch justify-center gap-1',
-        cssStyle.option,
+        css.option,
         local.class,
       )}
     >

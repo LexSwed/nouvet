@@ -19,7 +19,7 @@ export default meta;
 export const AnimalShortcut = () => {
   return (
     <>
-      <Button popoverTarget="weight" variant="secondary">
+      <Button popoverTarget="weight" variant="tonal">
         Add pet's weight info
       </Button>
       <Drawer id="weight" aria-labelledby="weight-popup-label">
