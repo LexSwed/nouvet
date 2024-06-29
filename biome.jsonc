@@ -12,7 +12,7 @@
 		"rules": {
 			"recommended": true,
 			"style": {
-				"noNonNullAssertion": "warn"
+				"noNonNullAssertion": "info"
 			},
 			"correctness": {
 				"noChildrenProp": "off"
@@ -20,7 +20,7 @@
 			"nursery": {
 				"useSortedClasses": {
 					"level": "info",
-					"fix": "unsafe",
+					"fix": "safe",
 					"options": {
 						"attributes": ["class", "classList"],
 						"functions": ["cva", "tw"]
