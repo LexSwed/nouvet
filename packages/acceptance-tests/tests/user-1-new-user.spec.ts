@@ -1,7 +1,7 @@
 import { expect, test } from "../fixtures/users";
 
 test.describe("User 1 is a new user", () => {
-	test.fixme("can create pets", async ({ userOnePage: page }) => {
+	test("can create pets", async ({ userOnePage: page }) => {
 		page.goto("/app");
 		console.log("Has initial pet creation form expanded");
 		await expect(page.getByLabel("Add your pet")).toBeVisible();
@@ -26,7 +26,7 @@ test.describe("User 1 is a new user", () => {
 		await expect(page.getByRole("button", { name: "Burth date" })).toBeVisible();
 	});
 
-	test.fixme("can create family invites", async ({ userOnePage: page }) => {
+	test("can create family invites", async ({ userOnePage: page }) => {
 		page.goto("/app");
 		await page.waitForEvent("load");
 
