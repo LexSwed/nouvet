@@ -1,4 +1,7 @@
+import { isServer } from "solid-js/web";
 import { boolean, object, parse, picklist, string } from "valibot";
+
+if (!isServer) throw Error("This module cannot be imported from client module");
 
 const schema = object({
 	// Vite defaults

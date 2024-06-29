@@ -35,6 +35,9 @@ export default defineConfig({
 		},
 	},
 	vite: {
+		define: {
+			__RUNNING_ON_DEV__: process.env.NODE_ENV === "test",
+		},
 		css: {
 			postcss: "../config/postcss.config.cjs",
 		},

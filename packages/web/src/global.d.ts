@@ -4,10 +4,13 @@ interface ImportMetaEnv {
 	readonly DB: string;
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: <explanation>
 interface ImportMeta {
 	readonly env: ImportMetaEnv;
 }
+declare const __RUNNING_ON_DEV__: string;
 
+// biome-ignore lint/correctness/noUnusedVariables: <explanation>
 interface Document {
 	startViewTransition(
 		update:

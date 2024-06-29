@@ -5,7 +5,7 @@ import { deleteCookie, getCookie, getEvent } from "vinxi/http";
 import { createUserSession } from "~/server/auth/user-session";
 import { RETURN_URL_COOKIE } from "~/server/const";
 
-export async function loginDevServer(name: string) {
+async function loginDev(name: string) {
 	let returnUrl = getCookie(RETURN_URL_COOKIE);
 
 	if (returnUrl) {
@@ -33,3 +33,13 @@ export async function loginDevServer(name: string) {
 		throw error;
 	}
 }
+
+let loginDevServer: typeof loginDev;
+
+if (__RUNNING_ON_DEV__) {
+	loginDevServer = loginDev;
+} else {
+	throw new Error("LoginDev should not be used in Production");
+}
+
+export { loginDevServer };

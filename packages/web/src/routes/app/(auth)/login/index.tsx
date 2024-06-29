@@ -1,12 +1,17 @@
 import { ButtonLink, Icon } from "@nou/ui";
 import { Title } from "@solidjs/meta";
-import { createSignal, onCleanup } from "solid-js";
+import { type Component, Suspense, createSignal, lazy, onCleanup } from "solid-js";
 
 import { createTranslator } from "~/server/i18n";
 
-import DevLogin from "~/lib/dev-login-form";
 import { HeroImage } from "~/lib/hero-image";
 import { LogoLink } from "~/lib/logo-link";
+
+let DevLogin: Component = () => null;
+
+if (__RUNNING_ON_DEV__) {
+	DevLogin = lazy(() => import("~/lib/dev-login-form"));
+}
 
 function AppLoginPage() {
 	const t = createTranslator("login");
@@ -21,7 +26,6 @@ function AppLoginPage() {
 			clearTimeout(timeout);
 		});
 	};
-	const isDev = import.meta.env.DEV;
 
 	return (
 		<>
@@ -29,7 +33,9 @@ function AppLoginPage() {
 			<div class="flex min-h-full flex-col gap-12 bg-main pt-4 pb-8">
 				<header class="container flex flex-row items-center justify-between">
 					<LogoLink label={t("back-home")} />
-					{isDev && <DevLogin />}
+					<Suspense>
+						<DevLogin />
+					</Suspense>
 				</header>
 				<section class="container flex h-full flex-[2] flex-col items-center gap-12">
 					<div class="flex max-w-2xl flex-col gap-8">
