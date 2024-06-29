@@ -44,7 +44,7 @@ jobs:
           if [[ github.event_name == 'pull_request' ]]; then
             biome ci . --reporter=github
           else
-            biome ci .
+            biome ci . --diagnostic-level=error
           fi
       - name: Build webapp
         working-directory: packages/acceptance-tests
