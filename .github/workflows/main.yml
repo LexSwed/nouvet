@@ -48,7 +48,7 @@ jobs:
           fi
       - name: Build webapp
         working-directory: packages/acceptance-tests
-        run: npm run build -w @Nou/web
+        run: npm run build -w @nou/web
   acceptance-tests:
     needs: build
     timeout-minutes: 10
