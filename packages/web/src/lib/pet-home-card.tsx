@@ -76,7 +76,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 				<div class="grid size-16 shrink-0 place-content-center rounded-full bg-tertiary/10 text-tertiary">
 					<Show
 						when={props.pet.pictureUrl}
-						children={<img src={props.pet.pictureUrl!} class="aspect-square w-full" alt="" />}
+						children={(picture) => <img src={picture()} class="aspect-square w-full" alt="" />}
 						fallback={<Icon use={petIconMap[props.pet.species]} size="md" />}
 					/>
 				</div>

@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: acceptance-tests
     env:
-      NODE_ENV: test
       SESSION_SECRET: ${{secrets.SESSION_SECRET}}
       INVITES_SECRET: ${{secrets.INVITES_SECRET}}
       FACEBOOK_APP_ID: ${{secrets.FACEBOOK_APP_ID}}
@@ -40,12 +39,37 @@ jobs:
         with:
           version: latest
       - name: Run Biome
+        working-directory: ./
         run: |
           if [[ github.event_name == 'pull_request' ]]; then
             biome ci . --reporter=github
           else
             biome ci .
           fi
+      - name: Build webapp
+        working-directory: packages/acceptance-tests
+        run: npm run build -w @Nou/web
+  acceptance-tests:
+    needs: build
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    environment: acceptance-tests
+    env:
+      NODE_ENV: test
+      SESSION_SECRET: ${{secrets.SESSION_SECRET}}
+      INVITES_SECRET: ${{secrets.INVITES_SECRET}}
+      FACEBOOK_APP_ID: ${{secrets.FACEBOOK_APP_ID}}
+      FACEBOOK_APP_SECRET: ${{secrets.FACEBOOK_APP_SECRET}}
+      DB_CONNECTION: ${{secrets.DB_CONNECTION}}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Setup Node 20
+        with:
+          node-version: lts/iron
+        uses: actions/setup-node@v4
+      - name: Install dependencies
+        run: npm ci
       - name: Install Playwright Browsers
         working-directory: packages/acceptance-tests
         run: npx playwright install --with-deps
@@ -64,12 +88,12 @@ jobs:
           name: playwright-report
           path: ./packages/acceptance-tests/playwright-report/
           retention-days: 30
-  deploy:
+  deploy-test-results:
     permissions:
       contents: read
       pages: write
       id-token: write
-    needs: build
+    needs: acceptance-tests
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
