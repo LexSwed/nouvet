@@ -15,7 +15,8 @@
 				"noNonNullAssertion": "info"
 			},
 			"correctness": {
-				"noChildrenProp": "off"
+				"noChildrenProp": "off",
+				"noUnusedImports": "error"
 			},
 			"nursery": {
 				"useSortedClasses": {
@@ -39,6 +40,9 @@
 		"parser": {
 			"cssModules": true
 		}
+	},
+	"files": {
+		"ignore": ["./.vscode/**", "./.turbo/**"]
 	},
 	"overrides": [
 		{

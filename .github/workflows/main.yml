@@ -40,7 +40,7 @@ jobs:
         with:
           version: latest
       - name: Run Biome
-        run: biome ci .
+        run: biome ci . --reporter=github
       - name: Install Playwright Browsers
         working-directory: packages/acceptance-tests
         run: npx playwright install --with-deps
