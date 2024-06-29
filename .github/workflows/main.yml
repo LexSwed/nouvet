@@ -40,7 +40,12 @@ jobs:
         with:
           version: latest
       - name: Run Biome
-        run: biome ci . --reporter=github
+        run: |
+          if [[ github.event_name == 'pull_request' ]]; then
+            biome ci . --reporter=github
+          else
+            biome ci .
+          fi
       - name: Install Playwright Browsers
         working-directory: packages/acceptance-tests
         run: npx playwright install --with-deps

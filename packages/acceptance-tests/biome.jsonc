@@ -1,6 +1,0 @@
-{
-	"extends": ["../../biome.jsonc"],
-	"files": {
-		"ignore": [".turbo/**", "playwright-report/**", "test-results/**"]
-	}
-}

@@ -16,7 +16,7 @@
 	"scripts": {
 		"generate-themed-css": "node ./theme/generate.js",
 		"typecheck": "tsc",
-		"check": "npx @biomejs/biome check --write ."
+		"check": "npx @biomejs/biome check ."
 	},
 	"dependencies": {
 		"@fontsource-variable/rubik": "^5.0.22",

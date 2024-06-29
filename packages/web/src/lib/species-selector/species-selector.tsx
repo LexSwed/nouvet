@@ -1,5 +1,5 @@
 import { Icon, RadioCard, type SvgIcons, Text, tw } from "@nou/ui";
-import { type ComponentProps, For, createUniqueId, splitProps } from "solid-js";
+import { type ComponentProps, For, createUniqueId } from "solid-js";
 
 import { createTranslator } from "~/server/i18n";
 
@@ -95,8 +95,7 @@ const GenderSwitch = (props: { name: string }) => {
 	);
 };
 
-const SvgGender = (ownProps: ComponentProps<"svg">) => {
-	const [local, props] = splitProps(ownProps, []);
+const SvgGender = (props: ComponentProps<"svg">) => {
 	return (
 		<svg viewBox="0 0 236 272" role="presentation" xmlns="http://www.w3.org/2000/svg" {...props}>
 			<defs />

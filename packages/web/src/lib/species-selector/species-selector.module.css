@@ -1,82 +1,82 @@
-@import 'tailwindcss/components' layer(tw-components);
+@import "tailwindcss/components" layer(tw-components);
 
 @layer tw-components {
-  .genderSwitch {
-    &:has(input[value='male']:checked) {
-      & .genderSwitchCard:has(input[value='male']) {
-        color: theme('colors.tertiary');
-        background-color: theme('colors.tertiary/0.08');
-        border-color: theme('colors.tertiary');
-      }
-      & .genderIcon {
-        color: theme('colors.tertiary');
-        & [data-male] {
-          opacity: 1;
-        }
-        & [data-female] {
-          opacity: 0;
-          transform: rotate(-25deg);
-        }
-      }
-    }
+	.genderSwitch {
+		&:has(input[value="male"]:checked) {
+			& .genderSwitchCard:has(input[value="male"]) {
+				color: theme("colors.tertiary");
+				background-color: theme("colors.tertiary/0.08");
+				border-color: theme("colors.tertiary");
+			}
+			& .genderIcon {
+				color: theme("colors.tertiary");
+				& [data-male] {
+					opacity: 1;
+				}
+				& [data-female] {
+					opacity: 0;
+					transform: rotate(-25deg);
+				}
+			}
+		}
 
-    &:has(input[value='female']:checked) {
-      & .genderSwitchCard:has(input[value='female']) {
-        color: theme('colors.primary');
-        background-color: theme('colors.primary/0.08');
-        border-color: theme('colors.primary');
-      }
-      & .genderIcon {
-        color: theme('colors.primary');
-        & [data-female] {
-          opacity: 1;
-        }
-        & [data-male] {
-          opacity: 0;
-          transform: rotate(25deg);
-        }
-      }
-    }
-  }
+		&:has(input[value="female"]:checked) {
+			& .genderSwitchCard:has(input[value="female"]) {
+				color: theme("colors.primary");
+				background-color: theme("colors.primary/0.08");
+				border-color: theme("colors.primary");
+			}
+			& .genderIcon {
+				color: theme("colors.primary");
+				& [data-female] {
+					opacity: 1;
+				}
+				& [data-male] {
+					opacity: 0;
+					transform: rotate(25deg);
+				}
+			}
+		}
+	}
 
-  .genderSwitchCard {
-    border: theme('borderWidth.DEFAULT') solid theme('colors.on-surface/0.08');
-    & [data-part='label'] {
-      height: 100%;
-      justify-content: center;
-    }
-    &:where(:hover, :focus-within) {
-      border-color: theme('colors.on-surface/0.6');
-      background-color: theme('colors.on-surface/0.05');
-    }
-    &:has(:focus-visible):focus-within {
-      border-color: theme('colors.on-surface/0.6');
-      outline: solid 4px theme('colors.outline/0.4');
-      &:has(input[value='male']) {
-        outline-color: theme('colors.tertiary/0.4');
-      }
-      &:has(input[value='female']) {
-        outline-color: theme('colors.primary/0.4');
-      }
-    }
-  }
+	.genderSwitchCard {
+		border: theme("borderWidth.DEFAULT") solid theme("colors.on-surface/0.08");
+		& [data-part="label"] {
+			height: 100%;
+			justify-content: center;
+		}
+		&:where(:hover, :focus-within) {
+			border-color: theme("colors.on-surface/0.6");
+			background-color: theme("colors.on-surface/0.05");
+		}
+		&:has(:focus-visible):focus-within {
+			border-color: theme("colors.on-surface/0.6");
+			outline: solid 4px theme("colors.outline/0.4");
+			&:has(input[value="male"]) {
+				outline-color: theme("colors.tertiary/0.4");
+			}
+			&:has(input[value="female"]) {
+				outline-color: theme("colors.primary/0.4");
+			}
+		}
+	}
 
-  .genderWrapper {
-    &:has(input:checked) .genderIcon circle {
-      transform: none;
-    }
-  }
+	.genderWrapper {
+		&:has(input:checked) .genderIcon circle {
+			transform: none;
+		}
+	}
 
-  .genderIcon {
-    & g {
-      transform-origin: center;
-      opacity: 0;
-      transition: all 0.3s ease-out;
-    }
-    & circle {
-      transform-origin: center;
-      transform: scale(0.2);
-      transition: transform 0.2s ease-out;
-    }
-  }
+	.genderIcon {
+		& g {
+			transform-origin: center;
+			opacity: 0;
+			transition: all 0.3s ease-out;
+		}
+		& circle {
+			transform-origin: center;
+			transform: scale(0.2);
+			transition: transform 0.2s ease-out;
+		}
+	}
 }

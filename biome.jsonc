@@ -16,7 +16,8 @@
 			},
 			"correctness": {
 				"noChildrenProp": "off",
-				"noUnusedImports": "error"
+				"noUnusedImports": "error",
+				"noUnusedVariables": "error"
 			},
 			"nursery": {
 				"useSortedClasses": {
@@ -30,19 +31,26 @@
 			}
 		}
 	},
-	"css": {
-		"formatter": {
-			"enabled": true
-		},
-		"linter": {
-			"enabled": true
-		},
-		"parser": {
-			"cssModules": true
-		}
-	},
+	// "css": {
+	// 	"formatter": {
+	// 		"enabled": true
+	// 	},
+	// 	"linter": {
+	// 		"enabled": true
+	// 	},
+	// 	"parser": {
+	// 		"cssModules": true
+	// 	}
+	// },
 	"files": {
-		"ignore": ["./.vscode/**", "./.turbo/**"]
+		"ignore": [
+			".vscode/**",
+			".turbo/**",
+			".vinxi/**/*",
+			".output/**/*",
+			"playwright-report/**/*",
+			"test-results/**/*"
+		]
 	},
 	"overrides": [
 		{

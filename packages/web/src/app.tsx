@@ -1,5 +1,7 @@
+import "@nou/config/global.css";
+
 import { MetaProvider } from "@solidjs/meta";
-import { Router, useNavigate } from "@solidjs/router";
+import { Navigate, Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { ErrorBoundary, Suspense } from "solid-js";
 import { isDev } from "solid-js/web";
@@ -17,15 +19,7 @@ export default function App() {
 							if (isDev) {
 								throw error;
 							}
-							console.error(error);
-							if (error instanceof Error) {
-								console.log(error.cause);
-								console.log(error.name);
-								console.log(error.message.includes("Hydration Mismatch"));
-							}
-							const navigate = useNavigate();
-							navigate("/houston", { replace: false });
-							return null;
+							return <Navigate href="/houston" />;
 						}}
 					>
 						<MetaProvider>

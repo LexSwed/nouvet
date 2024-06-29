@@ -1,10 +1,8 @@
 import spriteHref from "@nou/config/icons/sprite.svg?url";
 import { type VariantProps, cva } from "class-variance-authority";
-import { type JSX, Show, splitProps } from "solid-js";
+import { type JSX, splitProps } from "solid-js";
 
 import { tw } from "../tw";
-
-import { mergeDefaultProps } from "../utils";
 import type { SvgIcons } from "./svg-icons.d.ts";
 
 export type { SvgIcons } from "./svg-icons.d.ts";

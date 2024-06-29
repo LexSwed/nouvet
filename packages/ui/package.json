@@ -14,7 +14,7 @@
 	"scripts": {
 		"typecheck": "tsc",
 		"dev": "storybook dev -p 6006",
-		"check": "npx @biomejs/biome check --write .",
+		"check": "npx @biomejs/biome check .",
 		"build": "storybook build"
 	},
 	"dependencies": {
