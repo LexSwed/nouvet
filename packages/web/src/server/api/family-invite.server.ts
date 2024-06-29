@@ -39,7 +39,7 @@ export async function getFamilyInviteServer() {
 		}
 
 		const url = new URL(
-			`${new URL(event?.request.url).origin}/app/family/invite/${invite.inviteCode}`,
+			`${new URL(event!.request.url).origin}/app/family/invite/${invite.inviteCode}`,
 		);
 
 		// 1 hour. Math.ceil instead of floor to shot it's lasting 1 hour, and it won't be shown if it's expired in < X minutes anyway.
@@ -112,6 +112,7 @@ export const joinFamilyWithQRCodeServer = async (invitationHash: string) => {
 		/** Revalidation happens after user sees the success dialog */
 		return json(family, { revalidate: [] });
 	} catch (error) {
+		console.error(error);
 		return json({ error: "Something went wrong" }, { status: 500, revalidate: [] });
 	}
 };

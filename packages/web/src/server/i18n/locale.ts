@@ -1,6 +1,6 @@
 import { getHeader } from "vinxi/http";
 
-import { tryUseUserSession } from "../auth/user-session";
+import { unsafe_useUserSession } from "../auth/user-session";
 
 import { acceptedLocaleLanguageTag } from "./shared";
 
@@ -23,12 +23,11 @@ export async function getLocale(): Promise<Intl.Locale> {
  * Attempts to get preferred language from cookies, for when the user manually updated it from the UI.
  */
 async function cookie(): Promise<Intl.Locale | null> {
-	try {
-		const locale = (await tryUseUserSession()).data.locale;
-		return new Intl.Locale(locale);
-	} catch (error) {
-		return null;
+	const session = await unsafe_useUserSession();
+	if ("locale" in session.data) {
+		return new Intl.Locale(session.data.locale);
 	}
+	return null;
 }
 
 /**
@@ -68,7 +67,7 @@ function header(): Intl.Locale | null {
 				return acceptedLocaleLanguageTag.includes(
 					locale.language as (typeof acceptedLocaleLanguageTag)[number],
 				);
-			} catch (error) {
+			} catch {
 				return false;
 			}
 		});

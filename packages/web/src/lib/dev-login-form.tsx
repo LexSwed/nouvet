@@ -45,7 +45,7 @@ const loginDev = action(async (formData: FormData) => {
 	try {
 		const { redirectUrl } = await loginDevServer(name);
 		return redirect(redirectUrl);
-	} catch (error) {
+	} catch {
 		return json({ failed: true }, { status: 500, revalidate: [] });
 	}
 }, "dev-login");

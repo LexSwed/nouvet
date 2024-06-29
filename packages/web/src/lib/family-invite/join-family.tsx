@@ -13,7 +13,7 @@ const JoinFamily = (props: { onCancel: () => void; onSuccess: () => void }) => {
 		try {
 			const devices = await navigator.mediaDevices?.enumerateDevices();
 			return devices?.some((device) => device.kind === "videoinput");
-		} catch (error) {
+		} catch {
 			return false;
 		}
 	});

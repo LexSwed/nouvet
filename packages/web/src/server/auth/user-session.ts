@@ -69,8 +69,8 @@ export async function validateAuthSession(event: HTTPEvent): Promise<User | null
 	//   }
 	// }
 	const lucia = useLucia();
-	const userSession = await tryUseUserSession();
-	if (!userSession.id) {
+	const userSession = await unsafe_useUserSession();
+	if (!("sessionId" in userSession.data)) {
 		// Cleanup just in case
 		await deleteUserSession();
 		return null;
@@ -107,8 +107,8 @@ export async function validateAuthSession(event: HTTPEvent): Promise<User | null
  * Logs user out, invalidating DB session and all associated cookies.
  */
 export async function deleteUserSession() {
-	const session = await tryUseUserSession();
-	if (session.data.sessionId) {
+	const session = await unsafe_useUserSession();
+	if ("sessionId" in session.data) {
 		await useLucia().invalidateSession(session.data.sessionId);
 	}
 	await session.clear();
@@ -117,10 +117,10 @@ export type UserSession = v.InferOutput<typeof userCookieSchema>;
 
 /**
  * DO NOT USE OR YOU WILL BE FIRED.
- * Should only be used when cookie is expected to possibly not be available (f.e. yet).
+ * Should only be used when the cookie is expected to possibly be not available.
  */
-export async function tryUseUserSession() {
-	const session = await useSession<UserSession>({
+export async function unsafe_useUserSession() {
+	const session = await useSession<UserSession | object>({
 		name: SESSION_COOKIE,
 		password: env.SESSION_SECRET,
 	});
@@ -128,8 +128,8 @@ export async function tryUseUserSession() {
 }
 
 export async function useUserSession() {
-	const session = await tryUseUserSession();
-	if (!session.data.userId) {
+	const session = await unsafe_useUserSession();
+	if (!("userId" in session.data)) {
 		await deleteUserSession();
 		throw sendRedirect("/app/login");
 	}

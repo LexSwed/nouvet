@@ -82,7 +82,6 @@ const QRCodeScanner = (props: {
 	onSuccess: (url: string, image: string) => void;
 }) => {
 	const [videoEl, setVideoElement] = createSignal<HTMLVideoElement | null>(null);
-	let canvas: HTMLCanvasElement | null = null;
 
 	createEffect(() => {
 		const ref = videoEl();
@@ -110,12 +109,7 @@ const QRCodeScanner = (props: {
 
 	return (
 		<div class="stack">
-			<canvas
-				ref={(el) => {
-					canvas = el;
-				}}
-				class="size-[300px] rounded-2xl"
-			/>
+			<canvas class="size-[300px] rounded-2xl" />
 			{/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}
 			<video ref={setVideoElement} class="size-[300px] rounded-2xl object-cover" />
 		</div>
