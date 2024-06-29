@@ -1,46 +1,48 @@
-import { splitProps, type JSX } from 'solid-js';
-import spriteHref from '@nou/config/icons/sprite.svg?url';
-import { cva, type VariantProps } from 'class-variance-authority';
+import spriteHref from "@nou/config/icons/sprite.svg?url";
+import { type VariantProps, cva } from "class-variance-authority";
+import { type JSX, Show, splitProps } from "solid-js";
 
-import { tw } from '../tw';
+import { tw } from "../tw";
 
-import type { SvgIcons } from './svg-icons.d.ts';
+import { mergeDefaultProps } from "../utils";
+import type { SvgIcons } from "./svg-icons.d.ts";
 
-export type { SvgIcons } from './svg-icons.d.ts';
+export type { SvgIcons } from "./svg-icons.d.ts";
 
-const iconVariants = cva('inline shrink-0 select-none', {
-  variants: {
-    size: {
-      font: 'size-font',
-      xs: 'size-4',
-      sm: 'size-6',
-      md: 'size-8',
-      lg: 'size-16',
-      xl: 'size-24',
-    },
-  },
-  defaultVariants: {
-    size: 'sm',
-  },
+const iconVariants = cva("inline shrink-0 select-none", {
+	variants: {
+		size: {
+			font: "size-font",
+			xs: "size-4",
+			sm: "size-6",
+			md: "size-8",
+			lg: "size-16",
+			xl: "size-24",
+		},
+	},
+	defaultVariants: {
+		size: "sm",
+	},
 });
 
 export interface IconProps
-  extends JSX.SvgSVGAttributes<SVGSVGElement>,
-    VariantProps<typeof iconVariants> {
-  use: SvgIcons;
+	extends JSX.SvgSVGAttributes<SVGSVGElement>,
+		VariantProps<typeof iconVariants> {
+	use: SvgIcons;
 }
 
 const Icon = (ownProps: IconProps) => {
-  const [local, props] = splitProps(ownProps, ['use', 'size']);
-  return (
-    <svg
-      {...props}
-      class={tw(iconVariants(local), props.class)}
-      aria-hidden={!(props['aria-label'] || props['aria-labelledby'])}
-    >
-      <use href={`${spriteHref}#${local.use}`} />
-    </svg>
-  );
+	const [local, props] = splitProps(ownProps, ["use", "size"]);
+	return (
+		// biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
+		<svg
+			{...props}
+			class={tw(iconVariants(local), props.class)}
+			aria-hidden={!(props["aria-label"] || props["aria-labelledby"])}
+		>
+			<use href={`${spriteHref}#${local.use}`} />
+		</svg>
+	);
 };
 
 export { Icon };

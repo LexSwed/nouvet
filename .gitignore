@@ -23,9 +23,6 @@ pnpm-debug.log*
 # just in case
 .npmrc
 
-# eslint cache
-.eslintcache
-
 # local sqlite file
 sqlite.db
 

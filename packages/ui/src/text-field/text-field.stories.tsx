@@ -1,11 +1,11 @@
-import { type Meta } from 'storybook-solidjs';
+import type { Meta } from "storybook-solidjs";
 
-import { TextField } from './';
+import { TextField } from "./";
 
 const meta = {
-  title: 'TextField',
-  component: TextField,
-  argTypes: {},
+	title: "TextField",
+	component: TextField,
+	argTypes: {},
 } satisfies Meta<typeof TextField>;
 
 export default meta;

@@ -1,10 +1,10 @@
-import preset from '@nou/config/tailwind';
+import preset from "@nou/config/tailwind";
 
-import { type Config } from 'tailwindcss';
+import type { Config } from "tailwindcss";
 
 const config = {
-  content: ['./src/**/*.{ts,tsx,css}', '../ui/src/**/*.{ts,tsx,css}'],
-  presets: [preset],
+	content: ["./src/**/*.{ts,tsx,css}", "../ui/src/**/*.{ts,tsx,css}"],
+	presets: [preset],
 } satisfies Config;
 
 export default config;

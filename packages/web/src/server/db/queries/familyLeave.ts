@@ -1,37 +1,32 @@
-import { and, eq, notExists } from 'drizzle-orm';
+import { and, eq, notExists } from "drizzle-orm";
 
-import { useDb } from '~/server/db';
-import {
-  familyTable,
-  familyUserTable,
-  familyWaitListTable,
-  type UserID,
-} from '~/server/db/schema';
-import { NotAllowedToPerformFamilyAction } from '~/server/errors';
+import { useDb } from "~/server/db";
+import { type UserID, familyTable, familyUserTable, familyWaitListTable } from "~/server/db/schema";
+import { NotAllowedToPerformFamilyAction } from "~/server/errors";
 
 export async function familyLeave(userId: UserID) {
-  const db = useDb();
+	const db = useDb();
 
-  const family = await db
-    .delete(familyUserTable)
-    .where(
-      and(
-        notExists(
-          db
-            .select({
-              id: familyTable.id,
-            })
-            .from(familyTable)
-            .where(eq(familyTable.ownerId, userId)),
-        ),
-        eq(familyUserTable.userId, userId),
-      ),
-    )
-    .returning({ familyId: familyWaitListTable.familyId })
-    .get();
+	const family = await db
+		.delete(familyUserTable)
+		.where(
+			and(
+				notExists(
+					db
+						.select({
+							id: familyTable.id,
+						})
+						.from(familyTable)
+						.where(eq(familyTable.ownerId, userId)),
+				),
+				eq(familyUserTable.userId, userId),
+			),
+		)
+		.returning({ familyId: familyWaitListTable.familyId })
+		.get();
 
-  if (!family?.familyId) {
-    throw new NotAllowedToPerformFamilyAction('The action is now allowed');
-  }
-  return family;
+	if (!family?.familyId) {
+		throw new NotAllowedToPerformFamilyAction("The action is now allowed");
+	}
+	return family;
 }

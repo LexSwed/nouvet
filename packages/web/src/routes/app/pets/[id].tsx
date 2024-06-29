@@ -1,49 +1,34 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { createAsync, type RouteDefinition } from '@solidjs/router';
-import { clientOnly } from '@solidjs/start';
-import {
-  createUniqueId,
-  For,
-  lazy,
-  Match,
-  Show,
-  Suspense,
-  Switch,
-} from 'solid-js';
-import { Button, Card, Icon } from '@nou/ui';
+import { Button, Card, Icon } from "@nou/ui";
+import { type RouteDefinition, createAsync } from "@solidjs/router";
+import { clientOnly } from "@solidjs/start";
+import { For, Match, Show, Suspense, Switch, createUniqueId, lazy } from "solid-js";
 
-import { getUserPets } from '~/server/api/pet';
-import { getUserFamily } from '~/server/api/user';
-import { cacheTranslations, createTranslator } from '~/server/i18n';
+import { getUserPets } from "~/server/api/pet";
+import { getUserFamily } from "~/server/api/user";
+import { cacheTranslations, createTranslator } from "~/server/i18n";
 
-import FamilyInviteDialog from '~/lib/family-invite/invite-dialog';
-import { PetHomeCard } from '~/lib/pet-home-card';
+import FamilyInviteDialog from "~/lib/family-invite/invite-dialog";
+import { PetHomeCard } from "~/lib/pet-home-card";
 
-const CreateNewPetForm = lazy(() => import('~/lib/create-new-pet-form'));
-const Drawer = clientOnly(() =>
-  import('@nou/ui').then((ui) => ({ default: ui.Drawer })),
-);
+const CreateNewPetForm = lazy(() => import("~/lib/create-new-pet-form"));
+const Drawer = clientOnly(() => import("@nou/ui").then((ui) => ({ default: ui.Drawer })));
 
 export const route = {
-  load() {
-    return Promise.all([
-      cacheTranslations('app'),
-      getUserPets(),
-      getUserFamily(),
-    ]);
-  },
+	load() {
+		return Promise.all([cacheTranslations("app"), getUserPets(), getUserFamily()]);
+	},
 } satisfies RouteDefinition;
 
 const PetPage = () => {
-  const t = createTranslator('app');
+	const t = createTranslator("app");
 
-  const pets = createAsync(() => getUserPets());
+	const pets = createAsync(() => getUserPets());
 
-  const user = createAsync(() => getUserFamily());
+	const user = createAsync(() => getUserFamily());
 
-  const hasPets = () => (pets()?.length ?? 0) > 0;
+	const hasPets = () => (pets()?.length ?? 0) > 0;
 
-  return <section class="container flex flex-col gap-8">Hello world</section>;
+	return <section class="container flex flex-col gap-8">Hello world</section>;
 };
 
 export default PetPage;

@@ -1,51 +1,50 @@
 {
-  "name": "@nou/ui",
-  "version": "0.0.1",
-  "type": "module",
-  "license": "GNU General Public License v3.0",
-  "engines": {
-    "node": ">=20"
-  },
-  "main": "./src/_index.tsx",
-  "exports": {
-    ".": "./src/_index.tsx",
-    "./src/drawer": "./src/drawer"
-  },
-  "scripts": {
-    "typecheck": "tsc",
-    "lint": "eslint src",
-    "format": "prettier . --write",
-    "dev": "storybook dev -p 6006",
-    "build": "storybook build"
-  },
-  "dependencies": {
-    "@corvu/drawer": "^0.2.1",
-    "@solid-primitives/media": "^2.2.9",
-    "@solid-primitives/presence": "^0.0.6",
-    "@solid-primitives/refs": "^1.0.8",
-    "@solidjs/router": "^0.13.6",
-    "class-variance-authority": "^0.7.0",
-    "solid-js": "^1.8.17",
-    "tailwind-merge": "^2.3.0"
-  },
-  "devDependencies": {
-    "@nou/config": "^1.0.0",
-    "@storybook/addon-essentials": "^8.1.11",
-    "@storybook/addon-interactions": "^8.1.11",
-    "@storybook/addon-links": "^8.1.11",
-    "@storybook/addon-mdx-gfm": "^8.1.11",
-    "@storybook/blocks": "^8.1.11",
-    "@storybook/builder-vite": "^8.1.11",
-    "@storybook/test": "^8.1.11",
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
-    "storybook": "^8.1.11",
-    "storybook-solidjs": "^1.0.0-beta.2",
-    "storybook-solidjs-vite": "^1.0.0-beta.2",
-    "tailwindcss": "^3.4.4",
-    "valibot": "^0.35.0",
-    "vite": "^5.3.2",
-    "vite-plugin-solid": "^2.10.2",
-    "vite-svg-sprite-wrapper": "^1.3.2"
-  }
+	"name": "@nou/ui",
+	"version": "0.0.1",
+	"type": "module",
+	"license": "GNU General Public License v3.0",
+	"engines": {
+		"node": ">=20"
+	},
+	"main": "./src/_index.tsx",
+	"exports": {
+		".": "./src/_index.tsx",
+		"./src/drawer": "./src/drawer"
+	},
+	"scripts": {
+		"typecheck": "tsc",
+		"dev": "storybook dev -p 6006",
+		"check": "npx @biomejs/biome check --write .",
+		"build": "storybook build"
+	},
+	"dependencies": {
+		"@corvu/drawer": "^0.2.1",
+		"@solid-primitives/media": "^2.2.9",
+		"@solid-primitives/presence": "^0.0.6",
+		"@solid-primitives/refs": "^1.0.8",
+		"@solidjs/router": "^0.13.6",
+		"class-variance-authority": "^0.7.0",
+		"solid-js": "^1.8.17",
+		"tailwind-merge": "^2.3.0"
+	},
+	"devDependencies": {
+		"@nou/config": "^1.0.0",
+		"@storybook/addon-essentials": "^8.1.11",
+		"@storybook/addon-interactions": "^8.1.11",
+		"@storybook/addon-links": "^8.1.11",
+		"@storybook/addon-mdx-gfm": "^8.1.11",
+		"@storybook/blocks": "^8.1.11",
+		"@storybook/builder-vite": "^8.1.11",
+		"@storybook/test": "^8.1.11",
+		"autoprefixer": "^10.4.19",
+		"postcss": "^8.4.38",
+		"storybook": "^8.1.11",
+		"storybook-solidjs": "^1.0.0-beta.2",
+		"storybook-solidjs-vite": "^1.0.0-beta.2",
+		"tailwindcss": "^3.4.4",
+		"valibot": "^0.35.0",
+		"vite": "^5.3.2",
+		"vite-plugin-solid": "^2.10.2",
+		"vite-svg-sprite-wrapper": "^1.3.2"
+	}
 }

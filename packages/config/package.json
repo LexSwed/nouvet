@@ -1,41 +1,34 @@
 {
-  "name": "@nou/config",
-  "version": "1.0.0",
-  "type": "module",
-  "license": "GNU General Public License v3.0",
-  "exports": {
-    "./eslint": "./.eslintrc.cjs",
-    "./tailwind": "./tailwind.ts",
-    "./tsconfig": "./tsconfig.json",
-    "./global.css": "./global.css",
-    "./icons/sprite.svg": "./icons/sprite.svg",
-    "./theme/theme.json": "./theme/theme.json"
-  },
-  "engines": {
-    "node": ">=20"
-  },
-  "scripts": {
-    "generate-themed-css": "node ./theme/generate.js",
-    "typecheck": "tsc",
-    "lint": "eslint .",
-    "format": "prettier . --write"
-  },
-  "dependencies": {
-    "@fontsource-variable/rubik": "^5.0.22",
-    "@tailwindcss/container-queries": "^0.1.1",
-    "@typescript-eslint/eslint-plugin": "^7.14.1",
-    "autoprefixer": "^10.4.19",
-    "eslint": "^8.57.0",
-    "eslint-plugin-solid": "^0.14.1",
-    "eslint-plugin-storybook": "^0.8.0",
-    "eslint-plugin-tailwindcss": "^3.17.4",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.4",
-    "tailwindcss-animate": "^1.0.7",
-    "typescript-plugin-css-modules": "^5.1.0",
-    "vite": "^5.3.2"
-  },
-  "devDependencies": {
-    "colorjs.io": "^0.5.2"
-  }
+	"name": "@nou/config",
+	"version": "1.0.0",
+	"type": "module",
+	"license": "GNU General Public License v3.0",
+	"exports": {
+		"./tailwind": "./tailwind.ts",
+		"./tsconfig": "./tsconfig.json",
+		"./global.css": "./global.css",
+		"./icons/sprite.svg": "./icons/sprite.svg",
+		"./theme/theme.json": "./theme/theme.json"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"scripts": {
+		"generate-themed-css": "node ./theme/generate.js",
+		"typecheck": "tsc",
+		"check": "npx @biomejs/biome check --write ."
+	},
+	"dependencies": {
+		"@fontsource-variable/rubik": "^5.0.22",
+		"@tailwindcss/container-queries": "^0.1.1",
+		"autoprefixer": "^10.4.19",
+		"postcss": "^8.4.38",
+		"tailwindcss": "^3.4.4",
+		"tailwindcss-animate": "^1.0.7",
+		"typescript-plugin-css-modules": "^5.1.0",
+		"vite": "^5.3.2"
+	},
+	"devDependencies": {
+		"colorjs.io": "^0.5.2"
+	}
 }

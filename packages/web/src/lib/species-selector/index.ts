@@ -1,1 +1,1 @@
-export { SpeciesSelector, GenderSwitch } from './species-selector';
+export { SpeciesSelector, GenderSwitch } from "./species-selector";

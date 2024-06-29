@@ -1,16 +1,16 @@
 {
-  "extends": "@nou/config/tsconfig",
-  "include": [
-    "./src",
-    "./drizzle.config.ts",
-    ".drizzle/migrate.ts",
-    "app.config.ts",
-    "tailwind.config.ts"
-  ],
-  "compilerOptions": {
-    "types": ["vite/client", "vinxi/types/client", "@solidjs/start/env"],
-    "paths": {
-      "~/*": ["./src/*"]
-    }
-  }
+	"extends": "@nou/config/tsconfig",
+	"include": [
+		"./src",
+		"./drizzle.config.ts",
+		".drizzle/migrate.ts",
+		"app.config.ts",
+		"tailwind.config.ts"
+	],
+	"compilerOptions": {
+		"types": ["vite/client", "vinxi/types/client", "@solidjs/start/env"],
+		"paths": {
+			"~/*": ["./src/*"]
+		}
+	}
 }

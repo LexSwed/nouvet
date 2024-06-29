@@ -1,15 +1,15 @@
-import { type RouteDefinition, type RouteSectionProps } from '@solidjs/router';
+import type { RouteDefinition, RouteSectionProps } from "@solidjs/router";
 
-import { cacheTranslations } from '~/server/i18n';
+import { cacheTranslations } from "~/server/i18n";
 
 export const route = {
-  async load() {
-    return Promise.all([cacheTranslations('app')]);
-  },
+	async load() {
+		return Promise.all([cacheTranslations("app")]);
+	},
 } satisfies RouteDefinition;
 
 function MainAppLayout(props: RouteSectionProps) {
-  return <>{props.children}</>;
+	return <>{props.children}</>;
 }
 
 export default MainAppLayout;

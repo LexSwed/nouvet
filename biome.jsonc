@@ -1,0 +1,49 @@
+{
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentWidth": 2,
+		"lineWidth": 100,
+		"attributePosition": "auto"
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"style": {
+				"noNonNullAssertion": "warn"
+			},
+			"correctness": {
+				"noChildrenProp": "off"
+			},
+			"nursery": {
+				"useSortedClasses": {
+					"level": "info",
+					"fix": "unsafe",
+					"options": {
+						"attributes": ["class", "classList"],
+						"functions": ["cva", "tw"]
+					}
+				}
+			}
+		}
+	},
+	"css": {
+		"formatter": {
+			"enabled": true
+		},
+		"linter": {
+			"enabled": true
+		},
+		"parser": {
+			"cssModules": true
+		}
+	},
+	"overrides": [
+		{
+			"include": ["*.json", ".*rc"],
+			"json": { "formatter": { "trailingCommas": "none" } }
+		}
+	]
+}

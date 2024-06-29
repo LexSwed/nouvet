@@ -1,37 +1,37 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js",
-    "allowJs": true,
-    "noEmit": true,
-    "strict": true,
-    "declaration": true,
-    "incremental": true,
-    "tsBuildInfoFile": "../../tsconfig.tsbuildinfo",
-    "rootDir": "../../",
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    "verbatimModuleSyntax": true,
-    "lib": ["ESNext", "DOM", "ESNext.Intl"],
-    "noUncheckedIndexedAccess": true,
-    "skipLibCheck": true,
-    "plugins": [
-      {
-        "name": "typescript-plugin-css-modules",
-        "options": {
-          "goToDefinition": true,
-          "classnameTransform": "camelCase",
-          "noUncheckedIndexedAccess": true,
-          "namedExports": true,
-          "postcssOptions": {
-            "useConfig": true
-          }
-        }
-      }
-    ]
-  }
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"jsx": "preserve",
+		"jsxImportSource": "solid-js",
+		"allowJs": true,
+		"noEmit": true,
+		"strict": true,
+		"declaration": true,
+		"incremental": true,
+		"tsBuildInfoFile": "../../tsconfig.tsbuildinfo",
+		"rootDir": "../../",
+		"isolatedModules": true,
+		"resolveJsonModule": true,
+		"verbatimModuleSyntax": true,
+		"lib": ["ESNext", "DOM", "ESNext.Intl"],
+		"noUncheckedIndexedAccess": true,
+		"skipLibCheck": true,
+		"plugins": [
+			{
+				"name": "typescript-plugin-css-modules",
+				"options": {
+					"goToDefinition": true,
+					"classnameTransform": "camelCase",
+					"noUncheckedIndexedAccess": true,
+					"namedExports": true,
+					"postcssOptions": {
+						"useConfig": true
+					}
+				}
+			}
+		]
+	}
 }

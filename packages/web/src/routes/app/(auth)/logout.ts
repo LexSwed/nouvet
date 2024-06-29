@@ -1,8 +1,8 @@
-import { sendRedirect } from 'vinxi/http';
+import { sendRedirect } from "vinxi/http";
 
-import { deleteUserSession } from '~/server/auth/user-session';
+import { deleteUserSession } from "~/server/auth/user-session";
 
 export const GET = async () => {
-  await deleteUserSession();
-  return sendRedirect('/app');
+	await deleteUserSession();
+	return sendRedirect("/app");
 };
