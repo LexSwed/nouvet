@@ -9,7 +9,7 @@ import { LogoLink } from "~/lib/logo-link";
 
 let DevLogin: Component = () => null;
 
-if (__RUNNING_ON_DEV__) {
+if (import.meta.env.DEV || import.meta.env.VITE_ACCEPTANCE_TESTING) {
 	DevLogin = lazy(() => import("~/lib/dev-login-form"));
 }
 

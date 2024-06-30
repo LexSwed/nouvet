@@ -8,7 +8,6 @@ import { env } from "~/server/env";
 export const useLucia = () => {
 	const db = useDb();
 	const adapter = new DrizzleSQLiteAdapter(db, sessionTable, userTable);
-
 	const lucia = new Lucia(adapter, {
 		sessionExpiresIn: new TimeSpan(30, "d"),
 		sessionCookie: {

@@ -4,6 +4,7 @@ import { deleteCookie, getCookie, getEvent } from "vinxi/http";
 
 import { createUserSession } from "~/server/auth/user-session";
 import { RETURN_URL_COOKIE } from "~/server/const";
+import { env } from "../env";
 
 async function loginDev(name: string) {
 	let returnUrl = getCookie(RETURN_URL_COOKIE);
@@ -36,7 +37,7 @@ async function loginDev(name: string) {
 
 let loginDevServer: typeof loginDev;
 
-if (__RUNNING_ON_DEV__) {
+if (!env.PROD) {
 	loginDevServer = loginDev;
 } else {
 	throw new Error("LoginDev should not be used in Production");
