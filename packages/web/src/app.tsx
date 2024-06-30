@@ -16,6 +16,7 @@ export default function App() {
 				return (
 					<ErrorBoundary
 						fallback={(error) => {
+							console.error(error);
 							if (isDev) {
 								throw error;
 							}

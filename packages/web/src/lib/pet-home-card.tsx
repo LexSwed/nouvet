@@ -11,7 +11,7 @@ import {
 	Text,
 } from "@nou/ui";
 import { A } from "@solidjs/router";
-import { Match, Show, Suspense, Switch, createUniqueId } from "solid-js";
+import { ErrorBoundary, Match, Show, Suspense, Switch, createUniqueId } from "solid-js";
 
 import type { DatabasePet, UserID } from "~/server/db/schema";
 import { createTranslator } from "~/server/i18n";
@@ -89,6 +89,20 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 					)}
 				</Show>
 			</Button>
+			<ErrorBoundary
+				fallback={(error) => {
+					console.error(error);
+					return null;
+				}}
+			>
+				<div class="-mt-6 flex flex-row items-center gap-2 px-3 py-2 empty:hidden">
+					<Show when={hasMissingInfo()}>
+						<Suspense fallback={null}>
+							<QuickSetters pet={props.pet} />
+						</Suspense>
+					</Show>
+				</div>
+			</ErrorBoundary>
 			<Popover
 				id={petPopoverId}
 				placement="top-to-top left-to-left"
@@ -152,13 +166,6 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 					placement="center"
 				/>
 			</Popover>
-			<div class="-mt-6 flex flex-row items-center gap-2 px-3 py-2 empty:hidden">
-				<Show when={hasMissingInfo()}>
-					<Suspense fallback={null}>
-						<QuickSetters pet={props.pet} />
-					</Suspense>
-				</Show>
-			</div>
 		</Card>
 	);
 };
@@ -177,7 +184,7 @@ function QuickSetters(props: { pet: PetHomeCardProps["pet"] }) {
 			<Match when={qs()?.showBirthDate}>
 				<SplitButton
 					variant="outline"
-					class="bg-surface outline outline-4 outline-surface"
+					class="max-w-40 bg-surface outline outline-4 outline-surface"
 					size="sm"
 				>
 					<SplitButton.Inner popoverTarget={`${props.pet.id}-birth-date`} class="gap-2 text-nowrap">
@@ -202,7 +209,7 @@ function QuickSetters(props: { pet: PetHomeCardProps["pet"] }) {
 			<Match when={qs()?.showWeight}>
 				<SplitButton
 					variant="outline"
-					class="bg-surface outline outline-4 outline-surface"
+					class="max-w-40 bg-surface outline outline-4 outline-surface"
 					size="sm"
 				>
 					<SplitButton.Inner class="gap-2 text-nowrap" popoverTarget={`${props.pet.id}-weight`}>
@@ -227,7 +234,7 @@ function QuickSetters(props: { pet: PetHomeCardProps["pet"] }) {
 			<Match when={qs()?.showBreed}>
 				<SplitButton
 					variant="outline"
-					class="bg-surface outline outline-4 outline-surface"
+					class="max-w-40 bg-surface outline outline-4 outline-surface"
 					size="sm"
 				>
 					<SplitButton.Inner class="gap-2 text-nowrap" popoverTarget={`${props.pet.id}-breed`}>

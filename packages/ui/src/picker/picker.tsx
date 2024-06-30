@@ -23,7 +23,7 @@ const Picker = (ownProps: PickerProps) => {
 		["children", "label", "prefix", "suffix"],
 	);
 	const label = children(() => local.label);
-	const child = children(() => local.children);
+	const options = children(() => local.children);
 	return (
 		<FormField
 			{...fieldProps}
@@ -52,7 +52,7 @@ const Picker = (ownProps: PickerProps) => {
 							<selectedoption class="w-full" />
 							{local.suffix}
 						</button>
-						<datalist class={css.popover}>{child()}</datalist>
+						<datalist class={css.popover}>{options()}</datalist>
 					</select>
 				);
 			}}

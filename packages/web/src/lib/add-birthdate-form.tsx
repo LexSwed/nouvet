@@ -19,7 +19,7 @@ interface AddBirthDateFormProps {
 
 const AddBirthDateForm = (props: AddBirthDateFormProps) => {
 	const t = createTranslator("pet-forms");
-	const locale = createAsync(() => getLocale());
+	const userLocale = createAsync(() => getLocale(), { deferStream: true });
 	const birthDateSubmission = useSubmission(updatePetBirthDate);
 
 	createEffect(() => {
@@ -33,13 +33,16 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
 	});
 
 	const monthNames = createMemo(() => {
-		const formatter = Intl.DateTimeFormat(locale()?.baseName, {
+		const locale = userLocale();
+		if (!locale) return;
+		const formatter = Intl.DateTimeFormat(locale.baseName, {
 			month: "long",
 		});
+		const date = new Date();
 		return Array.from({ length: 12 }).map((_, month) => {
-			const date = new Date();
 			date.setMonth(month, 1);
-			return formatter.format(date);
+			const monthName = formatter.format(date);
+			return monthName.charAt(0).toUpperCase() + monthName.slice(1);
 		});
 	});
 	const dateOfBirthError = () =>
@@ -87,7 +90,9 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
 						<Picker label={t("animal-add-birth-date.month")} name="bmonth" autocomplete="off">
 							<Option value="" />
 							<For each={monthNames()}>
-								{(month, index) => <Option value={index()}>{month}</Option>}
+								{(month, index) => (
+									<Option value={index()} label={<span class="capitalize">{month}</span>} />
+								)}
 							</For>
 						</Picker>
 						<TextField
