@@ -1,7 +1,11 @@
 node_modules/
+
+# playwright stuff
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
 playwright/.auth
+
+# DB stuff
 test-sqlite.db

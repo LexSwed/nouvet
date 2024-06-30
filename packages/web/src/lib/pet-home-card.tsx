@@ -184,7 +184,7 @@ function QuickSetters(props: { pet: PetHomeCardProps["pet"] }) {
 			<Match when={qs()?.showBirthDate}>
 				<SplitButton
 					variant="outline"
-					class="max-w-40 bg-surface outline outline-4 outline-surface"
+					class="max-w-48 gap-1 bg-surface outline outline-4 outline-surface"
 					size="sm"
 				>
 					<SplitButton.Inner popoverTarget={`${props.pet.id}-birth-date`} class="gap-2 text-nowrap">
@@ -209,10 +209,10 @@ function QuickSetters(props: { pet: PetHomeCardProps["pet"] }) {
 			<Match when={qs()?.showWeight}>
 				<SplitButton
 					variant="outline"
-					class="max-w-40 bg-surface outline outline-4 outline-surface"
+					class="max-w-48 gap-1 bg-surface outline outline-4 outline-surface"
 					size="sm"
 				>
-					<SplitButton.Inner class="gap-2 text-nowrap" popoverTarget={`${props.pet.id}-weight`}>
+					<SplitButton.Inner popoverTarget={`${props.pet.id}-weight`} class="gap-2 text-nowrap">
 						<Icon use="scales" size="sm" />
 						<Text with="label-sm">{t("animal-shortcut.weight")}</Text>
 					</SplitButton.Inner>
@@ -234,10 +234,10 @@ function QuickSetters(props: { pet: PetHomeCardProps["pet"] }) {
 			<Match when={qs()?.showBreed}>
 				<SplitButton
 					variant="outline"
-					class="max-w-40 bg-surface outline outline-4 outline-surface"
+					class="max-w-48 gap-1 bg-surface outline outline-4 outline-surface"
 					size="sm"
 				>
-					<SplitButton.Inner class="gap-2 text-nowrap" popoverTarget={`${props.pet.id}-breed`}>
+					<SplitButton.Inner popoverTarget={`${props.pet.id}-breed`} class="gap-2 text-nowrap">
 						<Icon use="paw-print" size="sm" />
 						<Text with="label-sm">{t("animal-shortcut.breed")}</Text>
 					</SplitButton.Inner>

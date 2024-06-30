@@ -42,7 +42,7 @@ export default defineConfig({
 			testMatch: "database.setup.ts",
 		},
 		{
-			name: "chromium",
+			name: "Desktop Chrome",
 			use: {
 				...devices["Desktop Chrome"],
 				locale: "en-GB",
