@@ -6,7 +6,8 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "dotenvx run -f .env.test -- npx playwright test",
-		"db:setup": "npm run db:push && npm run db:seed",
+		"db:setup": "npm run db:remove && npm run db:push && npm run db:seed",
+		"db:remove": "test -f .env.test && source .env.test && rm -f $DB_CONNECTION",
 		"db:push": "dotenvx run -f .env.test -- npm run db:push -w @nou/web",
 		"db:seed": "dotenvx run -f .env.test -- npm run db:seed -w @nou/web -- --seed-file=$INIT_CWD/.drizzle/seed.ts",
 		"build:web": "dotenvx run -f .env.test -- npm run build -w @nou/web",
@@ -21,7 +22,7 @@
 		"@types/node": "^20.14.9"
 	},
 	"dependencies": {
-		"@dotenvx/dotenvx": "^1.0.1",
+		"@dotenvx/dotenvx": "^1.3.0",
 		"@playwright/test": "^1.45.0"
 	}
 }

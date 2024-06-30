@@ -24,7 +24,7 @@
 		"@solid-primitives/refs": "^1.0.8",
 		"@solidjs/router": "^0.13.6",
 		"class-variance-authority": "^0.7.0",
-		"solid-js": "^1.8.17",
+		"solid-js": "^1.8.18",
 		"tailwind-merge": "^2.3.0"
 	},
 	"devDependencies": {
@@ -37,7 +37,7 @@
 		"@storybook/builder-vite": "^8.1.11",
 		"@storybook/test": "^8.1.11",
 		"autoprefixer": "^10.4.19",
-		"postcss": "^8.4.38",
+		"postcss": "^8.4.39",
 		"storybook": "^8.1.11",
 		"storybook-solidjs": "^1.0.0-beta.2",
 		"storybook-solidjs-vite": "^1.0.0-beta.2",
