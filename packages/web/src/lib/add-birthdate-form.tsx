@@ -88,7 +88,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
 							step="1"
 						/>
 						<Picker label={t("animal-add-birth-date.month")} name="bmonth" autocomplete="off">
-							<Option value="" />
+							<Option value="" label="" />
 							<For each={monthNames()}>
 								{(month, index) => (
 									<Option value={index()} label={<span class="capitalize">{month}</span>} />

@@ -7,7 +7,7 @@ import { tw } from "../tw";
 
 import css from "./picker.module.css";
 
-interface PickerProps
+export interface PickerProps
 	extends FormFieldProps,
 		Omit<JSX.SelectHTMLAttributes<HTMLSelectElement>, "prefix"> {
 	/** Prefix text or an icon */
@@ -62,7 +62,7 @@ const Picker = (ownProps: PickerProps) => {
 
 const Option = (
 	ownProps: Omit<JSX.OptionHTMLAttributes<HTMLOptionElement>, "label"> & {
-		label?: JSX.Element;
+		label: JSX.Element;
 	},
 ) => {
 	const [local, props] = splitProps(ownProps, ["label", "children", "class"]);
