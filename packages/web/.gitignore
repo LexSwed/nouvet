@@ -1,0 +1,14 @@
+# build output
+dist/
+.output
+.vinxi
+.wrangler
+
+# vinxi config
+app.config.ts.timestamp*
+
+# local sqlite file
+sqlite.db
+
+# local generated certificates
+.certs
