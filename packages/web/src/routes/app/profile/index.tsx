@@ -35,7 +35,7 @@ export default function ProfilePage() {
 							{(user) => (
 								<Card
 									variant="outlined"
-									class="fade-in slide-in-from-bottom-1 w-full max-w-96 animate-in"
+									class="fade-in slide-in-from-bottom-1 w-full max-w-[26rem] animate-in"
 									aria-labelledby="heading-profile"
 								>
 									<Form
@@ -72,7 +72,7 @@ export default function ProfilePage() {
 											</div>
 										</div>
 
-										<Fieldset class="grid grid-cols-2 gap-6">
+										<Fieldset class="grid gap-6 sm:grid-cols-2">
 											<Text as="legend" with="overline" class="mb-3">
 												{t("section.locale")}
 											</Text>
@@ -113,7 +113,7 @@ export default function ProfilePage() {
 											>
 												<Option
 													value={"metrical" satisfies DatabaseUser["measurementSystem"]}
-													label="Metric"
+													label={t("setting.measure-system.metric")}
 												>
 													<Text with="body-xs" tone="light">
 														{t("setting.measure-system.metric-example")}

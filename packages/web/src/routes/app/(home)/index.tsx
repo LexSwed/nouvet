@@ -17,7 +17,9 @@ const Drawer = clientOnly(() => import("@nou/ui").then((ui) => ({ default: ui.Dr
 
 export const route = {
 	load() {
-		return Promise.all([cacheTranslations("app"), getUserPets(), getUserFamily()]);
+		void cacheTranslations("app");
+		void getUserPets();
+		void getUserFamily();
 	},
 } satisfies RouteDefinition;
 
