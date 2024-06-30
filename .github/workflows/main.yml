@@ -93,6 +93,7 @@ jobs:
       contents: read
       pages: write
       id-token: write
+    if: ${{ always() }}
     needs: acceptance-tests
     environment:
       name: github-pages
