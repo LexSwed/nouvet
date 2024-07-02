@@ -3,7 +3,12 @@
 	"version": "0.0.1",
 	"type": "module",
 	"license": "GNU General Public License v3.0",
-	"workspaces": ["packages/acceptance-tests", "packages/config", "packages/ui", "packages/web"],
+	"workspaces": [
+		"packages/acceptance-tests",
+		"packages/config",
+		"packages/ui",
+		"packages/web"
+	],
 	"engines": {
 		"node": ">=20",
 		"npm": ">=10"
@@ -21,6 +26,6 @@
 		"@biomejs/biome": "^1.8.3",
 		"patch-package": "^8.0.0",
 		"turbo": "^2.0.5",
-		"typescript": "^5.5.2"
+		"typescript": "^5.5.3"
 	}
 }
