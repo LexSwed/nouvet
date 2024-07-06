@@ -16,6 +16,7 @@
 			},
 			"correctness": {
 				"noChildrenProp": "off",
+				"useJsxKeyInIterable": "off",
 				"noUnusedImports": "error",
 				"noUnusedVariables": "error"
 			},
