@@ -19,10 +19,10 @@
 	"author": "",
 	"devDependencies": {
 		"@faker-js/faker": "^8.4.1",
-		"@types/node": "^20.14.9"
+		"@types/node": "^20.14.10"
 	},
 	"dependencies": {
 		"@dotenvx/dotenvx": "^1.5.0",
-		"@playwright/test": "^1.45.0"
+		"@playwright/test": "^1.45.1"
 	}
 }
