@@ -1,54 +1,35 @@
-@import 'tailwindcss/base' layer(tw-base);
+@import "tailwindcss/components" layer(tw-components);
+
+/* Avoid consumers overriding this for all states with e.g. display: flex */
 
 @layer nou-ui {
   .drawer {
-    display: block;
-    position: fixed;
-    transition-property: transform, display;
-    transition-behavior: allow-discrete;
-    transition-timing-function: ease-out;
-    isolation: isolate;
-    top: unset;
-    bottom: theme('spacing.2');
-    inset-inline: theme('spacing.2');
-    margin: 0;
-    height: max-content;
-    width: calc(100% - theme('spacing.2') * 2);
-    max-height: 100%;
-    will-change: transform;
-    background-color: theme('colors.surface');
-    padding: theme('spacing.2') theme('spacing.4') theme('spacing.4');
-    border-radius: theme('borderRadius.xl');
-    outline: none;
+    pointer-events: all;
+    padding: theme("spacing.2") theme("spacing.4") theme("spacing.4");
 
     &:focus-visible {
-      outline: 2px auto theme('colors.on-surface');
+      outline: 2px auto theme("colors.on-surface");
       outline-offset: -2px;
     }
-
-    &[data-closed] {
-      display: none;
-      transform: none;
-    }
-    &[data-opening] {
-      transition-duration: 0.3s;
-    }
-    &[data-closing] {
-      transition-duration: 0.1s;
-      &::backdrop {
-        opacity: 0;
-      }
-    }
-
-    &::backdrop {
-      background-color: theme('colors.on-surface/0.3');
-      transition: opacity 0.2s ease-out allow-discrete;
-      opacity: 1;
-    }
   }
-  @starting-style {
-    .drawer::backdrop {
-      opacity: 0;
+
+  @media not all and (min-width: theme("screens[sm]")) {
+    .drawer {
+      position: fixed;
+      inset-block: auto theme("spacing.2");
+      inset-inline: theme("spacing.2");
+      margin: 0;
+      height: max-content;
+      width: calc(100% - theme("spacing.2") * 2);
+      max-height: 100svh;
+      transition: transform 0.24s ease-out;
+      opacity: 1;
+
+      @starting-style {
+        &:popover-open {
+          transform: translate3d(0, 100%, 0);
+        }
+      }
     }
   }
 }

@@ -128,10 +128,7 @@ export { Popover };
 
 function inlineAnchoring(id: string, placement: Placement): JSX.CSSProperties | undefined {
 	if (placement === "center") {
-		/** TODO: remove whn Chromium bug is fixed with centered popover failing the page */
-		return {
-			"position-anchor": `--anchor-${id}`,
-		};
+		return undefined;
 	}
 	const propertyToLogical = {
 		top: "inset-block-start",

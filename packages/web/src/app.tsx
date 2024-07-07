@@ -4,7 +4,6 @@ import { MetaProvider } from "@solidjs/meta";
 import { Navigate, Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { ErrorBoundary, Suspense } from "solid-js";
-import { isDev } from "solid-js/web";
 
 export default function App() {
 	return (
@@ -17,7 +16,7 @@ export default function App() {
 					<ErrorBoundary
 						fallback={(error) => {
 							console.error(error);
-							if (isDev) {
+							if (import.meta.env.DEV) {
 								throw error;
 							}
 							return <Navigate href="/houston" />;

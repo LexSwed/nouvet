@@ -1,4 +1,4 @@
-@import 'tailwindcss/components' layer(tw-components);
+@import "tailwindcss/components" layer(tw-components);
 
 /* Avoid consumers overriding this for all states with e.g. display: flex */
 @layer tw-utilities {
@@ -9,8 +9,8 @@
 
 @layer nou-ui {
   .popover {
-    background-color: theme('colors.surface');
-    color: theme('colors.on-surface');
+    background-color: theme("colors.surface");
+    color: theme("colors.on-surface");
     isolation: isolate;
     transition:
       opacity 0.16s ease-out,
@@ -22,8 +22,8 @@
     will-change: transform, opacity;
     margin: 0;
     inset: auto;
-    max-width: calc(100svw - theme('spacing.4'));
-    max-height: calc(100svh - theme('spacing.4'));
+    max-width: calc(100svw - theme("spacing.4"));
+    max-height: calc(100svh - theme("spacing.4"));
     content-visibility: auto;
     position-try-options: flip-block, flip-inline;
     overflow: auto;
@@ -34,11 +34,11 @@
       animation-play-state: paused;
     }
 
-    &[role='menu'] {
-      padding: theme('spacing.1');
+    &[role="menu"] {
+      padding: theme("spacing.1");
     }
-    &[role='dialog'] {
-      padding: theme('spacing.4');
+    &[role="dialog"] {
+      padding: theme("spacing.4");
     }
 
     &:popover-open {
@@ -46,84 +46,81 @@
       transform: none;
       @starting-style {
         opacity: 0;
-        transform: scale(0.94);
+        transform: scale(0.98);
       }
     }
-    &:not(:popover-open) {
+    &:where(:not(:popover-open)) {
       transition-duration: 0.1s;
       transition-timing-function: ease-in;
       opacity: 0;
     }
 
     &:where(
-        [data-placement*='left-to-right'],
-        [data-placement*='right-to-left']
+        [data-placement*="left-to-right"],
+        [data-placement*="right-to-left"]
       ) {
-      margin-inline: theme('spacing.2');
+      margin-inline: theme("spacing.2");
     }
     &:where(
-        [data-placement*='top-to-bottom'],
-        [data-placement*='bottom-to-top']
+        [data-placement*="top-to-bottom"],
+        [data-placement*="bottom-to-top"]
       ) {
-      margin-block: theme('spacing.2');
+      margin-block: theme("spacing.2");
     }
 
-    &:where([data-placement*='top'], [data-placement*='bottom']):not(
-        [data-placement*=' ']
+    &:where([data-placement*="top"], [data-placement*="bottom"]):not(
+        [data-placement*=" "]
       ) {
       inset-inline-start: anchor(center);
       justify-self: anchor-center;
     }
-    &:where([data-placement*='left'], [data-placement*='right']):not(
-        [data-placement*=' ']
+    &:where([data-placement*="left"], [data-placement*="right"]):not(
+        [data-placement*=" "]
       ) {
       inset-block-start: anchor(center);
       align-self: anchor-center;
     }
-    &[data-placement='center'] {
+    &:where([data-placement="center"]) {
       transform-origin: center;
       margin: auto;
       inset: 0;
       &::backdrop {
         opacity: 1;
-        transition: 0.2s ease-out;
-        background-color: theme('colors.on-surface/0.5');
+        transition: 0.16s ease-out;
+        background-color: theme("colors.on-surface/0.5");
       }
-    }
-    &[data-placement^='top'] {
-      transform-origin: center top;
-    }
-    &[data-placement^='bottom'] {
-      transform-origin: center bottom;
-    }
-    &[data-placement^='left'] {
-      transform-origin: left center;
-    }
-    &[data-placement^='right'] {
-      transform-origin: right center;
-    }
-    &[data-placement^='top'][data-placement*='left-to-'] {
-      transform-origin: left top;
-    }
-    &[data-placement^='bottom'][data-placement*='left-to-'] {
-      transform-origin: left bottom;
-    }
-    &[data-placement^='top'][data-placement*='right-to-'] {
-      transform-origin: right top;
-    }
-    &[data-placement^='bottom'][data-placement*='right-to-'] {
-      transform-origin: right bottom;
-    }
-  }
-
-  @starting-style {
-    [data-placement='center'] {
-      &:popover-open {
-        transform: translateY(1rem);
+      @starting-style {
+        &:popover-open {
+          transform: translateY(1rem);
+        }
         &::backdrop {
           opacity: 0;
         }
       }
+    }
+    &[data-placement^="top"] {
+      transform-origin: center top;
+    }
+    &[data-placement^="bottom"] {
+      transform-origin: center bottom;
+    }
+    &[data-placement^="left"] {
+      transform-origin: left center;
+    }
+    &[data-placement^="right"] {
+      transform-origin: right center;
+    }
+    &[data-placement^="top"][data-placement*="left-to-"] {
+      transform-origin: left top;
+    }
+    &[data-placement^="bottom"][data-placement*="left-to-"] {
+      transform-origin: left bottom;
+    }
+    &[data-placement^="top"][data-placement*="right-to-"] {
+      transform-origin: right top;
+    }
+    &[data-placement^="bottom"][data-placement*="right-to-"] {
+      transform-origin: right bottom;
     }
   }
 }
