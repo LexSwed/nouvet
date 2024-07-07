@@ -49,6 +49,7 @@
 			".turbo/**",
 			".vinxi/**/*",
 			".output/**/*",
+			".drizzle/migrations/**/*",
 			"playwright-report/**/*",
 			"playwright/.auth/**/*",
 			"test-results/**/*",
