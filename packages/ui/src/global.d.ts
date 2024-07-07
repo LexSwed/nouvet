@@ -1,9 +1,11 @@
+// biome-ignore lint/correctness/noUnusedVariables: <explanation>
 interface CSSStyleDeclaration {
 	"view-transition-name": string;
 	"position-anchor": string;
 	"inset-area": string;
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: <explanation>
 interface Document {
 	startViewTransition(
 		update:

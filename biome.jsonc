@@ -50,6 +50,7 @@
 			".vinxi/**/*",
 			".output/**/*",
 			"playwright-report/**/*",
+			"playwright/.auth/**/*",
 			"test-results/**/*",
 			"svg-icons.d.ts"
 		]
