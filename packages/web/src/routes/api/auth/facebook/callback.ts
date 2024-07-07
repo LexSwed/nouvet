@@ -23,9 +23,7 @@ export const GET = async (event: PageEvent) => {
 	// verify state
 	if (!state || !stateCookie || !code || stateCookie !== state) {
 		console.error("Facebook auth callback is called without state");
-		return new Response(null, {
-			status: 400,
-		});
+		return sendRedirect("/app/login", 422);
 	}
 
 	try {
@@ -65,13 +63,13 @@ export const GET = async (event: PageEvent) => {
 			provider: "facebook",
 			accountProviderId: facebookUser.id,
 			name: facebookUser.name,
-			locale: locale.baseName,
+			locale: locale.language,
 			measurementSystem: measurementSystem,
 		});
 
 		await createUserSession(event.nativeEvent, {
 			userId: user.id,
-			locale: locale.baseName,
+			locale: locale.language,
 			measurementSystem,
 		});
 

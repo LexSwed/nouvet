@@ -79,6 +79,10 @@ const Drawer = <T extends ValidComponent = "div">(ownProps: DrawerProps<T>) => {
 
 export { Drawer };
 
+/**
+ * This is mostly a copy and paste of Corvu Drawer:
+ * https://github.com/corvudev/corvu/tree/main/packages/drawer
+ */
 function createDragHandlers(props: { side: Side }) {
 	const [isDragging, setIsDragging] = createSignal();
 	const [translate, setTranslate] = createSignal(0);

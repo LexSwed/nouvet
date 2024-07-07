@@ -184,7 +184,7 @@ export type SupportedAuthProvider = (typeof authAccount.$inferInsert)["provider"
  */
 export const sessionTable = sqliteTable("user_session", {
 	/** User can have multiple sessions across devices */
-	id: text("id").notNull().primaryKey(),
+	id: text("id").notNull().unique().primaryKey(),
 	userId: text("user_id")
 		.notNull()
 		.references(() => userTable.id),
