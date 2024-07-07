@@ -1,14 +1,11 @@
-import { Button, Fieldset, Form, Icon, Option, Picker, Text, TextField } from "@nou/ui";
+import { Button, Drawer, Fieldset, Form, Icon, Option, Picker, Text, TextField } from "@nou/ui";
 import { createAsync, useSubmission } from "@solidjs/router";
-import { clientOnly } from "@solidjs/start";
 import { type ComponentProps, For, Show, createEffect, createMemo } from "solid-js";
 
 import { updatePetBirthDate } from "~/server/api/pet";
 import { createTranslator, getLocale } from "~/server/i18n";
 
 import { FormErrorMessage } from "./form-error-message";
-
-const Drawer = clientOnly(() => import("@nou/ui").then((ui) => ({ default: ui.Drawer })));
 
 interface AddBirthDateFormProps {
 	id: string;

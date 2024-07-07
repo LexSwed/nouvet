@@ -17,7 +17,7 @@ import { composeEventHandlers, mergeDefaultProps } from "../utils";
 import css from "./drawer.module.css";
 
 type Side = "top" | "bottom" | "left" | "right";
-type DrawerProps<T extends ValidComponent = "div"> = Omit<PopoverProps<T>, "placement" | "side"> & {
+type DrawerProps<T extends ValidComponent = "div"> = PopoverProps<T> & {
 	/**
 	 * The side from which the drawer is open.
 	 * @default "bottom"

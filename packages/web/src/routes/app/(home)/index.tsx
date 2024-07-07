@@ -1,7 +1,6 @@
-import { Button, ButtonLink, Card, Icon } from "@nou/ui";
+import { Button, ButtonLink, Card, Drawer, Icon } from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import { type RouteDefinition, createAsync } from "@solidjs/router";
-import { clientOnly } from "@solidjs/start";
 import { For, Match, Show, Suspense, Switch, createUniqueId, lazy } from "solid-js";
 
 import { getUserPets } from "~/server/api/pet";
@@ -13,7 +12,6 @@ import FamilyInviteDialog from "~/lib/family-invite/invite-dialog";
 import { PetHomeCard } from "~/lib/pet-home-card";
 
 const CreateNewPetForm = lazy(() => import("~/lib/create-new-pet-form"));
-const Drawer = clientOnly(() => import("@nou/ui").then((ui) => ({ default: ui.Drawer })));
 
 export const route = {
 	load() {
