@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "642165be-f1ad-4a70-8923-a4cc892e9068",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "442181ea-dd28-4baf-ab1d-795e37de1442",
+  "prevId": "642165be-f1ad-4a70-8923-a4cc892e9068",
   "tables": {
     "oauth_account": {
       "name": "oauth_account",
@@ -110,7 +110,15 @@
           "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "event_id_unique": {
+          "name": "event_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "event_pet_id_pet_id_fk": {
           "name": "event_pet_id_pet_id_fk",
@@ -235,6 +243,13 @@
         }
       },
       "indexes": {
+        "family_id_unique": {
+          "name": "family_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        },
         "owner_idx": {
           "name": "owner_idx",
           "columns": [
@@ -490,7 +505,15 @@
           "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "pet_id_unique": {
+          "name": "pet_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "pet_owner_id_user_id_fk": {
           "name": "pet_owner_id_user_id_fk",
@@ -542,7 +565,15 @@
           "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "reminder_id_unique": {
+          "name": "reminder_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "reminder_creator_id_user_id_fk": {
           "name": "reminder_creator_id_user_id_fk",
@@ -665,7 +696,15 @@
           "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_id_unique": {
+          "name": "user_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}

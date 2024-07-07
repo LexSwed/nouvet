@@ -121,6 +121,7 @@ export const petTable = sqliteTable("pet", {
 	pictureUrl: text("picture_url", { length: 120 }),
 	identityNumber: text("identity_number", { length: 120 }),
 	createdAt: utcDatetime("created_at"),
+	updatedAt: utcDatetime("updated_at", { autoUpdate: true }),
 });
 export type DatabasePet = typeof petTable.$inferSelect;
 
@@ -223,7 +224,7 @@ export const eventsTable = sqliteTable("event", {
 	 * TODO: This field is used for sorting, any chance for speed up? */
 	date: dateTime("date"),
 
-	updatedAt: utcDatetime("date"),
+	updatedAt: utcDatetime("date", { autoUpdate: true }),
 });
 
 /**
@@ -248,14 +249,17 @@ export const remindersTable = sqliteTable("reminder", {
 /**
  * ISO-8601 date time string stored in UTC.
  */
-function utcDatetime(columnName: Parameters<typeof text>[0]) {
-	return (
-		dateTime(columnName)
-			.notNull()
-			// see https://www.sqlite.org/lang_datefunc.html
-			// TODO: verify why datetime('now', 'utc') applies timezone twice. Drizzle bug? sqlite driver?
-			.default(sql`(strftime('%FT%TZ', datetime('now')))`)
-	);
+function utcDatetime(columnName: Parameters<typeof text>[0], { autoUpdate = false } = {}) {
+	const utcNow = sql<string>`(strftime('%FT%TZ', datetime('now')))`;
+	const column = dateTime(columnName)
+		.notNull()
+		// see https://www.sqlite.org/lang_datefunc.html
+		// TODO: verify why datetime('now', 'utc') applies timezone twice. Drizzle bug? sqlite driver?
+		.default(utcNow);
+	if (autoUpdate) {
+		column.$onUpdate(() => utcNow);
+	}
+	return column;
 }
 
 function dateTime(columnName: Parameters<typeof text>[0]) {
@@ -266,5 +270,6 @@ function primaryId(columnName: Parameters<typeof text>[0]) {
 	return text(columnName)
 		.notNull()
 		.primaryKey()
+		.unique()
 		.$default(() => uuidv7());
 }
