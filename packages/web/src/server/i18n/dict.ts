@@ -12,7 +12,7 @@ import type ProfileDict from "./locales/en/profile";
 import type WWWDict from "./locales/en/www";
 import type { SupportedLocale } from "./shared";
 
-export type NamespaceMap = {
+export interface NamespaceMap {
 	www: typeof WWWDict;
 	app: typeof AppDict;
 	family: typeof FamilyDict;
@@ -21,7 +21,7 @@ export type NamespaceMap = {
 	errors: typeof ErrorsDict;
 	"pet-forms": typeof PetFormsDict;
 	profile: typeof ProfileDict;
-};
+}
 export type Namespace = keyof NamespaceMap;
 
 async function fetchDictionary<T extends Namespace>(locale: SupportedLocale, namespace: T) {

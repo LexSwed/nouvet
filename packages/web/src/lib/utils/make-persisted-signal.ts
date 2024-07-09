@@ -1,5 +1,5 @@
 import { cache, createAsync, revalidate } from "@solidjs/router";
-import type { Accessor, Setter } from "solid-js";
+import { untrack } from "solid-js";
 import { isServer } from "solid-js/web";
 
 import { startViewTransition } from "./start-view-transition";
@@ -15,23 +15,23 @@ function serialize<T>(value: T): string {
 	}
 	return value === undefined ? "" : encodeURIComponent(`${value}`);
 }
-function deserialize<T>(cookieString: unknown): T | null {
+function deserialize(cookieString: unknown) {
 	if (typeof cookieString !== "string" || cookieString === "") return null;
 
-	return JSON.parse(decodeURIComponent(cookieString)) as T;
+	return JSON.parse(decodeURIComponent(cookieString));
 }
 
-const getServerSetting = async <T>(name: string) => {
+const getServerSetting = async (name: string) => {
 	"use server";
 	const { getCookie } = await import("vinxi/server");
-	return deserialize<T>(getCookie(name));
+	return deserialize(getCookie(name));
 };
 
-const setting = cache(async <T>(name: string) => {
+const setting = cache(async (name: string) => {
 	if (isServer) {
-		return getServerSetting<T>(name);
+		return getServerSetting(name);
 	}
-	return deserialize<T>(parseDocumentCookie()[name]);
+	return deserialize(parseDocumentCookie()[name]);
 }, "cookie-setting");
 
 type PersistedSettingParams = {
@@ -44,26 +44,21 @@ export function createPersistedSetting<
 		| string
 		| number
 		| boolean,
->(
-	name: string,
-	defaultValue: T,
-	params?: PersistedSettingParams,
-): [Accessor<T | null | undefined>, Setter<T>] {
-	const cookie = createAsync(async (): Promise<T | null> => {
-		const stored = await setting<T>(name);
-		return stored ?? defaultValue ?? null;
+>(name: string, defaultValue: T, params?: PersistedSettingParams) {
+	const cookie = createAsync(async () => {
+		const stored = await setting(name);
+		return (stored as T) ?? defaultValue;
 	});
 
-	// @ts-expect-error what do you want from me
-	const updateCookie: Setter<T> = (value) => {
-		// @ts-expect-error what do you want from me
-		const newValue: T = typeof value === "function" ? value(cookie()) : value;
+	const updateCookie = (value: T | ((oldValue: T) => T)) =>
+		untrack(() => {
+			const newValue: T = typeof value === "function" ? value(cookie() as T) : value;
 
-		document.cookie = `${name}=${serialize(newValue)};max-age=${60 * 60 * 24 * (params?.maxAgeInDays ?? 180)}`;
-		startViewTransition(() => {
-			revalidate(setting.keyFor(name));
+			document.cookie = `${name}=${serialize(newValue)};max-age=${60 * 60 * 24 * (params?.maxAgeInDays ?? 180)}`;
+			startViewTransition(() => {
+				revalidate(setting.keyFor(name));
+			});
 		});
-	};
 
 	return [cookie, updateCookie] as const;
 }

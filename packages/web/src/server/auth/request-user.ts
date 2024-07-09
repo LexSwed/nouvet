@@ -7,5 +7,6 @@ import { type UserSession, useUserSession } from "./user-session";
  * Redirects to /app/login page if user credentials are expired or missing.
  */
 export async function getRequestUser(): Promise<UserSession> {
-	return (await useUserSession()).data;
+	const session = await useUserSession();
+	return session.data;
 }

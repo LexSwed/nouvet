@@ -93,7 +93,7 @@ export async function validateAuthSession(event: HTTPEvent): Promise<User | null
 	// the session has been updated, update the cookie expiration date
 	if (session.fresh) {
 		const sessionCookie = lucia.createSessionCookie(session.id);
-		updateRequestUser(
+		await updateRequestUser(
 			event,
 			{ ...userSession.data, sessionId: session.id },
 			sessionCookie.attributes,
@@ -102,7 +102,6 @@ export async function validateAuthSession(event: HTTPEvent): Promise<User | null
 
 	return user;
 }
-
 /**
  * Logs user out, invalidating DB session and all associated cookies.
  */
@@ -120,7 +119,8 @@ export type UserSession = v.InferOutput<typeof userCookieSchema>;
  * Should only be used when the cookie is expected to possibly be not available.
  */
 export async function unsafe_useUserSession() {
-	const session = await useSession<UserSession | object>({
+	// biome-ignore lint/complexity/noBannedTypes: It works great here, forcing property check first on session.data
+	const session = await useSession<UserSession | {}>({
 		name: SESSION_COOKIE,
 		password: env.SESSION_SECRET,
 	});
@@ -133,7 +133,7 @@ export async function useUserSession() {
 		await deleteUserSession();
 		throw sendRedirect("/app/login");
 	}
-	return session;
+	return { ...session, data: session.data };
 }
 
 const userCookieSchema = v.object({

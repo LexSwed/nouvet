@@ -42,49 +42,52 @@ export const createPetServer = async (formData: FormData) => {
 	}
 };
 
+const PetBirthDaySchema = v.object({
+	bday: v.nullish(
+		v.config(v.pipe(v.unknown(), v.transform(Number), v.number(), v.minValue(1), v.maxValue(31)), {
+			message: "bday" satisfies ErrorKeys,
+		}),
+		1,
+	),
+	bmonth: v.nullish(
+		v.config(
+			v.pipe(
+				v.unknown(),
+				v.transform(Number),
+				v.number(),
+				v.minValue(0),
+				v.maxValue(new Date().getFullYear()),
+			),
+			{ message: "bmonth" satisfies ErrorKeys },
+		),
+		0,
+	),
+	byear: v.config(
+		v.pipe(
+			v.unknown(),
+			v.transform(Number),
+			v.number(),
+			v.minValue(1980),
+			v.maxValue(new Date().getFullYear()),
+		),
+		{ message: "byear" satisfies ErrorKeys },
+	),
+});
 const PetUpdateSchema = v.object({
 	petId: v.pipe(v.string(), v.trim(), v.nonEmpty()),
 	breed: v.optional(v.pipe(v.string(), v.trim())),
 	weight: v.optional(v.pipe(v.string(), v.transform(Number), v.number())),
-	birthDate: v.optional(
-		v.object({
-			bday: v.nullish(
-				v.config(
-					v.pipe(v.unknown(), v.transform(Number), v.number(), v.minValue(1), v.maxValue(31)),
-					{ message: "bday" satisfies ErrorKeys },
-				),
-				1,
-			),
-			bmonth: v.nullish(
-				v.config(
-					v.pipe(
-						v.unknown(),
-						v.transform(Number),
-						v.number(),
-						v.minValue(0),
-						v.maxValue(new Date().getFullYear()),
-					),
-					{ message: "bmonth" satisfies ErrorKeys },
-				),
-				0,
-			),
-			byear: v.config(
-				v.pipe(
-					v.unknown(),
-					v.transform(Number),
-					v.number(),
-					v.minValue(1980),
-					v.maxValue(new Date().getFullYear()),
-				),
-				{ message: "byear" satisfies ErrorKeys },
-			),
-		}),
-	),
+	birthDate: v.optional(PetBirthDaySchema),
+});
+
+const PetBirthDayUpdateSchema = v.object({
+	petId: v.pipe(v.string(), v.trim(), v.nonEmpty()),
+	birthDate: PetBirthDaySchema,
 });
 
 export const updatePetBirthDateServer = async (formData: FormData) => {
 	try {
-		const { petId, birthDate } = v.parse(PetUpdateSchema, {
+		const { petId, birthDate } = v.parse(PetBirthDayUpdateSchema, {
 			petId: formData.get("petId"),
 			birthDate: {
 				bday: formData.get("bday"),
