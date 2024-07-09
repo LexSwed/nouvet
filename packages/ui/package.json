@@ -22,10 +22,10 @@
 		"@solid-primitives/media": "^2.2.9",
 		"@solid-primitives/presence": "^0.0.6",
 		"@solid-primitives/refs": "^1.0.8",
-		"@solidjs/router": "^0.13.6",
+		"@solidjs/router": "^0.14.1",
 		"class-variance-authority": "^0.7.0",
 		"solid-js": "^1.8.18",
-		"tailwind-merge": "^2.3.0"
+		"tailwind-merge": "^2.4.0"
 	},
 	"devDependencies": {
 		"@nou/config": "^1.0.0",
