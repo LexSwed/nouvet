@@ -1,13 +1,7 @@
 import type { RouteDefinition } from "@solidjs/router";
 
-import { getUserPets } from "~/server/api/pet";
-import { getUserFamily } from "~/server/api/user";
-import { cacheTranslations } from "~/server/i18n";
-
 export const route = {
-	load() {
-		return Promise.all([cacheTranslations("app"), getUserPets(), getUserFamily()]);
-	},
+	preload() {},
 } satisfies RouteDefinition;
 
 const PetPage = () => {

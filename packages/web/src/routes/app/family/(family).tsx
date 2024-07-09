@@ -24,7 +24,7 @@ import { FamilyInviteDialog } from "~/lib/family-invite/invite-dialog";
 import { WaitingFamilyConfirmation } from "~/lib/family-invite/waiting-family-confirmation";
 
 export const route = {
-	load() {
+	preload() {
 		void cacheTranslations("family");
 		void getUserFamily();
 		void getFamilyMembers();

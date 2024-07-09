@@ -3,8 +3,8 @@ import type { RouteDefinition, RouteSectionProps } from "@solidjs/router";
 import { cacheTranslations } from "~/server/i18n";
 
 export const route = {
-	async load() {
-		return Promise.all([cacheTranslations("app")]);
+	async preload() {
+		void cacheTranslations("app");
 	},
 } satisfies RouteDefinition;
 

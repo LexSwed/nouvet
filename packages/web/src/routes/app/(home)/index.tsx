@@ -14,7 +14,7 @@ import { PetHomeCard } from "~/lib/pet-home-card";
 const CreateNewPetForm = lazy(() => import("~/lib/create-new-pet-form"));
 
 export const route = {
-	load() {
+	preload() {
 		void cacheTranslations("app");
 		void getUserPets();
 		void getUserFamily();

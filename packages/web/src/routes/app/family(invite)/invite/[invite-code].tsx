@@ -19,7 +19,7 @@ import { FamilyInviteBenefits } from "~/lib/family-invite-benefits";
 import { HeroImage } from "~/lib/hero-image";
 
 export const route = {
-	load() {
+	preload() {
 		void cacheTranslations("invited");
 		void getUserProfile();
 	},

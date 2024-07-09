@@ -7,8 +7,8 @@ import { cacheTranslations, createTranslator } from "~/server/i18n";
 import { LogoLink } from "~/lib/logo-link";
 
 export const route = {
-	load() {
-		return Promise.all([cacheTranslations("www")]);
+	preload() {
+		void cacheTranslations("www");
 	},
 } satisfies RouteDefinition;
 

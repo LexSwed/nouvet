@@ -10,7 +10,7 @@ import { AppHeader } from "~/lib/app-header";
 import FamilyInviteDialog from "~/lib/family-invite/invite-dialog";
 
 export const route = {
-	load() {
+	preload() {
 		void cacheTranslations("family");
 		void getUserFamily();
 	},

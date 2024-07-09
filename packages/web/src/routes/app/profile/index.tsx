@@ -11,7 +11,7 @@ import type { SupportedLocale } from "~/server/i18n/shared";
 import { AppHeader } from "~/lib/app-header";
 
 export const route = {
-	load() {
+	preload() {
 		void cacheTranslations("profile");
 		void getUserProfile();
 	},
