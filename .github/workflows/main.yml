@@ -46,6 +46,8 @@ jobs:
           else
             biome ci . --diagnostic-level=error
           fi
+      - name: Run TypeScript checks
+        run: npm run typecheck
       - name: Build webapp
         working-directory: packages/acceptance-tests
         run: npm run build -w @nou/web
