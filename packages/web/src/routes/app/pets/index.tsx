@@ -15,8 +15,8 @@ const PetPage = () => {
 	return (
 		<>
 			<Title>{t("meta.title")}</Title>
-			<AppHeader backLink="/app/pets" />
-			<div class="container min-h-full">Hello</div>
+			<AppHeader backLink="/app" />
+			<div class="container min-h-full">Hello pets</div>
 		</>
 	);
 };
