@@ -11,7 +11,7 @@ interface SpeciesSelectorProps {
 }
 
 const SpeciesSelector = (props: SpeciesSelectorProps) => {
-	const t = createTranslator("pet-forms");
+	const t = createTranslator("pets");
 	const species = (): Array<{
 		value: string;
 		label: string;
@@ -69,7 +69,7 @@ const SpeciesSelector = (props: SpeciesSelectorProps) => {
 };
 
 const GenderSwitch = (props: { name: string }) => {
-	const t = createTranslator("pet-forms");
+	const t = createTranslator("pets");
 	const id = createUniqueId();
 	return (
 		<fieldset class={tw(css.genderSwitch, "flex flex-col gap-2")} aria-labelledby={id}>

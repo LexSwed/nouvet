@@ -7,7 +7,7 @@ import { createTranslator } from "~/server/i18n";
 
 import { AccountMenu } from "./account-menu";
 
-export const AppHeader = (props: ParentProps & { backLink?: boolean }) => {
+export const AppHeader = (props: ParentProps & { backLink?: string }) => {
 	const user = createAsync(() => getUserFamily());
 	const t = createTranslator("app");
 	const child = children(() => props.children);
@@ -18,9 +18,11 @@ export const AppHeader = (props: ParentProps & { backLink?: boolean }) => {
 					<Switch>
 						<Match when={child()}>{child()}</Match>
 						<Match when={props.backLink}>
-							<ButtonLink href="/app" icon label={t("go-to-home-page")} variant="tonal">
-								<Icon use="chevron-left" />
-							</ButtonLink>
+							{(link) => (
+								<ButtonLink href={link()} icon label={t("go-to-home-page")} variant="tonal">
+									<Icon use="chevron-left" />
+								</ButtonLink>
+							)}
 						</Match>
 					</Switch>
 					<AccountMenu name={user().name || ""} avatarUrl={user().avatarUrl!} />

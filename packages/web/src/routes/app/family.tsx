@@ -1,4 +1,4 @@
-import { Button, ButtonLink, Card, Divider, Icon, Image, Text } from "@nou/ui";
+import { Button, Card, Divider, Image, Text } from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import { type RouteDefinition, type RouteSectionProps, createAsync } from "@solidjs/router";
 import { Match, Show, Suspense, Switch } from "solid-js";
@@ -33,11 +33,7 @@ function FamilyPage(props: RouteSectionProps) {
 				</Show>
 			</Title>
 			<div class="min-h-full bg-background">
-				<AppHeader>
-					<ButtonLink href="/app" icon variant="ghost">
-						<Icon use="chevron-left" />
-					</ButtonLink>
-				</AppHeader>
+				<AppHeader backLink="/app" />
 				<Suspense>
 					<Switch>
 						<Match when={user()?.family}>{props.children}</Match>

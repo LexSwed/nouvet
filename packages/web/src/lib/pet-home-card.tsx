@@ -117,7 +117,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 				}}
 			>
 				<A
-					href={`/app/pets/${props.pet.id}/`}
+					href={`/app/pets/${props.pet.id}`}
 					class="group/link -m-2 -outline-offset-4 flex flex-row items-center gap-4 rounded-[inherit] p-4 outline-on-surface focus:outline-4"
 				>
 					<div class="grid size-16 shrink-0 place-content-center rounded-full bg-tertiary/10 text-tertiary">
@@ -171,7 +171,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 };
 
 function QuickSetters(props: { pet: PetHomeCardProps["pet"] }) {
-	const t = createTranslator("pet-forms");
+	const t = createTranslator("pets");
 
 	const [qs, toggle] = createPersistedSetting(`qs-toggles-${props.pet.id}`, {
 		showBirthDate: !props.pet.dateOfBirth,

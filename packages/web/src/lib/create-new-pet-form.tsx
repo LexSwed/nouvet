@@ -11,7 +11,7 @@ import { GenderSwitch, SpeciesSelector } from "./species-selector";
 function CreateNewPetForm(props: {
 	onSuccess?: (pet: { name: string; id: string }) => void;
 }) {
-	const t = createTranslator("pet-forms");
+	const t = createTranslator("pets");
 	const createPetAction = useAction(createPet);
 	const petSubmission = useSubmission(createPet);
 

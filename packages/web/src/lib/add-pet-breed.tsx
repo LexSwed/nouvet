@@ -15,7 +15,7 @@ interface AddBreedFormProps {
 }
 
 const AddBreedForm = (props: AddBreedFormProps) => {
-	const t = createTranslator("pet-forms");
+	const t = createTranslator("pets");
 
 	const breedSubmission = useSubmission(updatePetBreed);
 

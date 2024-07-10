@@ -3,7 +3,7 @@ import { Card, Text, tw } from "@nou/ui";
 import { createTranslator } from "~/server/i18n";
 
 const FormErrorMessage = (props: { class?: string }) => {
-	const t = createTranslator("pet-forms");
+	const t = createTranslator("pets");
 
 	return (
 		<Card

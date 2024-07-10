@@ -1,4 +1,4 @@
-const petFormsDict = {
+const petsDict = {
 	"new-pet-heading": "Agrega a tu mascota",
 	"new-pet-text-field-label": "Nombre",
 	"new-pet-text-field-placeholder": "Garfield",
@@ -29,4 +29,4 @@ const petFormsDict = {
 	"cta.create": "Crear",
 } as const;
 
-export default petFormsDict;
+export default petsDict;

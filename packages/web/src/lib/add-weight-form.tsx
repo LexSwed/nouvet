@@ -44,7 +44,7 @@ interface AddWeightFormProps {
 }
 
 const AddWeightForm = (props: AddWeightFormProps) => {
-	const t = createTranslator("pet-forms");
+	const t = createTranslator("pets");
 	const locale = createAsync(() => getLocale());
 	const user = createAsync(() => getUser());
 	const weightSubmission = useSubmission(updatePetWeight);

@@ -15,7 +15,7 @@ interface AddBirthDateFormProps {
 }
 
 const AddBirthDateForm = (props: AddBirthDateFormProps) => {
-	const t = createTranslator("pet-forms");
+	const t = createTranslator("pets");
 	const userLocale = createAsync(() => getLocale(), { deferStream: true });
 	const birthDateSubmission = useSubmission(updatePetBirthDate);
 
