@@ -15,23 +15,23 @@ function serialize<T>(value: T): string {
 	}
 	return value === undefined ? "" : encodeURIComponent(`${value}`);
 }
-function deserialize(cookieString: unknown) {
+function deserialize<T>(cookieString: unknown) {
 	if (typeof cookieString !== "string" || cookieString === "") return null;
 
-	return JSON.parse(decodeURIComponent(cookieString));
+	return JSON.parse(decodeURIComponent(cookieString)) as T;
 }
 
-const getServerSetting = async (name: string) => {
+const getServerSetting = async <T>(name: string) => {
 	"use server";
 	const { getCookie } = await import("vinxi/server");
-	return deserialize(getCookie(name));
+	return deserialize<T>(getCookie(name));
 };
 
-const setting = cache(async (name: string) => {
+const setting = cache(async <T>(name: string): Promise<T | null> => {
 	if (isServer) {
-		return getServerSetting(name);
+		return getServerSetting<T>(name);
 	}
-	return deserialize(parseDocumentCookie()[name]);
+	return deserialize<T>(parseDocumentCookie()[name]);
 }, "cookie-setting");
 
 type PersistedSettingParams = {
