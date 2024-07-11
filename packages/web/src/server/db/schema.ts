@@ -1,19 +1,12 @@
-import { type SQL, sql } from "drizzle-orm";
-import {
-	type SQLiteColumn,
-	index,
-	integer,
-	primaryKey,
-	sqliteTable,
-	text,
-} from "drizzle-orm/sqlite-core";
-import { v7 as uuidv7 } from "uuid";
+import { sql } from "drizzle-orm";
+import { index, integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
+
+import { customAlphabet } from "nanoid";
 
 export const familyTable = sqliteTable(
 	"family",
 	{
-		id: primaryId("id"),
-		externalId: externalId((): SQLiteColumn => familyTable.id, "f_"),
+		id: primaryId("id", "f"),
 		name: text("name", { length: 100 }),
 		ownerId: text("owner_id")
 			.notNull()
@@ -104,8 +97,7 @@ export const familyWaitListTable = sqliteTable(
 );
 
 export const petTable = sqliteTable("pet", {
-	id: primaryId("id"),
-	externalId: externalId((): SQLiteColumn => petTable.id, "p_"),
+	id: primaryId("id", "p"),
 	/** Pets have an official owner that has access to all the data. Other people have access to pets only through families. */
 	ownerId: text("owner_id")
 		.notNull()
@@ -145,8 +137,7 @@ export type DatabasePet = typeof petTable.$inferSelect;
  * User profile details and preferences.
  */
 export const userTable = sqliteTable("user", {
-	id: primaryId("id"),
-	externalId: externalId((): SQLiteColumn => userTable.id, "u_"),
+	id: primaryId("id", "u"),
 	/** User's name, set by auth provider, or updated manually afterwards. */
 	name: text("name", { length: 200 }),
 	/** User's picture, only for personalization purposes. */
@@ -203,8 +194,7 @@ export const sessionTable = sqliteTable("user_session", {
 });
 
 export const activitiesTable = sqliteTable("activity", {
-	id: primaryId("id"),
-	externalId: externalId((): SQLiteColumn => activitiesTable.id, "a_"),
+	id: primaryId("id", "a"),
 	/** Type of the event selected by the client.
 	 * TODO: create index for faster look-ups
 	 */
@@ -252,17 +242,11 @@ function dateTime(columnName: Parameters<typeof text>[0]) {
 	return text(columnName, { mode: "text", length: 50 });
 }
 
-function primaryId(columnName: Parameters<typeof text>[0]) {
+const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 12);
+function primaryId(columnName: Parameters<typeof text>[0], prefix: string) {
 	return text(columnName)
 		.notNull()
 		.primaryKey()
 		.unique()
-		.$default(() => uuidv7());
-}
-
-function externalId<T extends SQLiteColumn>(column: () => T, prefix: string) {
-	return text("external_id")
-		.unique()
-		.notNull()
-		.generatedAlwaysAs((): SQL => sql<string>`('${prefix}' || HEX(${column()}))`);
+		.$default(() => `${prefix}_${nanoid()}`);
 }

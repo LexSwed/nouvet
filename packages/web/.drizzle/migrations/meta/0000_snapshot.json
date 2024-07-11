@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "36e6db10-1106-40b3-a786-3c0ba711c76c",
+  "id": "e8c5a748-2301-4292-b0f9-d0851b10368d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "activity": {
@@ -13,17 +13,6 @@
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
-        },
-        "external_id": {
-          "name": "external_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "generated": {
-            "as": "(('?' || HEX(\"id\")))",
-            "type": "virtual"
-          }
         },
         "type": {
           "name": "type",
@@ -74,13 +63,6 @@
           "name": "activity_id_unique",
           "columns": [
             "id"
-          ],
-          "isUnique": true
-        },
-        "activity_external_id_unique": {
-          "name": "activity_external_id_unique",
-          "columns": [
-            "external_id"
           ],
           "isUnique": true
         }
@@ -237,17 +219,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "external_id": {
-          "name": "external_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "generated": {
-            "as": "(('?' || HEX(\"id\")))",
-            "type": "virtual"
-          }
-        },
         "name": {
           "name": "name",
           "type": "text(100)",
@@ -276,13 +247,6 @@
           "name": "family_id_unique",
           "columns": [
             "id"
-          ],
-          "isUnique": true
-        },
-        "family_external_id_unique": {
-          "name": "family_external_id_unique",
-          "columns": [
-            "external_id"
           ],
           "isUnique": true
         },
@@ -454,17 +418,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "external_id": {
-          "name": "external_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "generated": {
-            "as": "(('?' || HEX(\"id\")))",
-            "type": "virtual"
-          }
-        },
         "owner_id": {
           "name": "owner_id",
           "type": "text",
@@ -559,13 +512,6 @@
             "id"
           ],
           "isUnique": true
-        },
-        "pet_external_id_unique": {
-          "name": "pet_external_id_unique",
-          "columns": [
-            "external_id"
-          ],
-          "isUnique": true
         }
       },
       "foreignKeys": {
@@ -648,17 +594,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "external_id": {
-          "name": "external_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "generated": {
-            "as": "(('?' || HEX(\"id\")))",
-            "type": "virtual"
-          }
-        },
         "name": {
           "name": "name",
           "type": "text(200)",
@@ -701,13 +636,6 @@
           "name": "user_id_unique",
           "columns": [
             "id"
-          ],
-          "isUnique": true
-        },
-        "user_external_id_unique": {
-          "name": "user_external_id_unique",
-          "columns": [
-            "external_id"
           ],
           "isUnique": true
         }

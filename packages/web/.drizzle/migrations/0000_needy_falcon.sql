@@ -1,6 +1,5 @@
 CREATE TABLE `activity` (
 	`id` text PRIMARY KEY NOT NULL,
-	`external_id` text NOT NULL GENERATED ALWAYS AS (('?' || HEX("id"))) VIRTUAL,
 	`type` text NOT NULL,
 	`name` text NOT NULL,
 	`pet_id` integer,
@@ -29,7 +28,6 @@ CREATE TABLE `family_invite` (
 --> statement-breakpoint
 CREATE TABLE `family` (
 	`id` text PRIMARY KEY NOT NULL,
-	`external_id` text NOT NULL GENERATED ALWAYS AS (('?' || HEX("id"))) VIRTUAL,
 	`name` text(100),
 	`owner_id` text NOT NULL,
 	`created_at` text(50) DEFAULT (strftime('%FT%TZ', datetime('now'))) NOT NULL,
@@ -56,7 +54,6 @@ CREATE TABLE `family_wait_list` (
 --> statement-breakpoint
 CREATE TABLE `pet` (
 	`id` text PRIMARY KEY NOT NULL,
-	`external_id` text NOT NULL GENERATED ALWAYS AS (('?' || HEX("id"))) VIRTUAL,
 	`owner_id` text NOT NULL,
 	`name` text(200) NOT NULL,
 	`gender` text,
@@ -81,7 +78,6 @@ CREATE TABLE `user_session` (
 --> statement-breakpoint
 CREATE TABLE `user` (
 	`id` text PRIMARY KEY NOT NULL,
-	`external_id` text NOT NULL GENERATED ALWAYS AS (('?' || HEX("id"))) VIRTUAL,
 	`name` text(200),
 	`avatar_url` text(200),
 	`locale` text NOT NULL,
@@ -90,13 +86,9 @@ CREATE TABLE `user` (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `activity_id_unique` ON `activity` (`id`);--> statement-breakpoint
-CREATE UNIQUE INDEX `activity_external_id_unique` ON `activity` (`external_id`);--> statement-breakpoint
 CREATE INDEX `hash_idx` ON `family_invite` (`invitation_hash`);--> statement-breakpoint
 CREATE UNIQUE INDEX `family_id_unique` ON `family` (`id`);--> statement-breakpoint
-CREATE UNIQUE INDEX `family_external_id_unique` ON `family` (`external_id`);--> statement-breakpoint
 CREATE INDEX `owner_idx` ON `family` (`owner_id`);--> statement-breakpoint
 CREATE UNIQUE INDEX `pet_id_unique` ON `pet` (`id`);--> statement-breakpoint
-CREATE UNIQUE INDEX `pet_external_id_unique` ON `pet` (`external_id`);--> statement-breakpoint
 CREATE UNIQUE INDEX `user_session_id_unique` ON `user_session` (`id`);--> statement-breakpoint
-CREATE UNIQUE INDEX `user_id_unique` ON `user` (`id`);--> statement-breakpoint
-CREATE UNIQUE INDEX `user_external_id_unique` ON `user` (`external_id`);
+CREATE UNIQUE INDEX `user_id_unique` ON `user` (`id`);

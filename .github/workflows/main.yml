@@ -96,7 +96,7 @@ jobs:
       pages: write
       id-token: write
     if: ${{ always() }}
-    needs: acceptance-tests
+    needs: [build, acceptance-tests]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
