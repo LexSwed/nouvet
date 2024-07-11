@@ -1,66 +1,70 @@
 @import "tailwindcss/base" layer(tw-base);
 
 @layer nou-ui {
-	.card {
-		position: relative;
-		flex-shrink: 0;
-		border-radius: theme("borderRadius.lg");
-		padding: theme("spacing.3");
-		transition: border-color 0.24s ease-out, background-color 0.24s ease-out, color 0.24s ease-out,
-			border-radius 0.24s ease-out, flex 0.3s ease-out;
-		background-color: theme("colors.surface");
-		border: theme("borderWidth.DEFAULT") solid theme("colors.on-surface/0.08");
-		&:where(:hover, :focus-within) {
-			border-color: theme("colors.on-surface/0.6");
-			background-color: theme("colors.on-surface/0.05");
-		}
-		&:where(:active) {
-			background-color: theme("colors.on-surface/0.08");
-		}
-		&:has(:focus-visible):focus-within {
-			outline: 4px solid theme("colors.on-surface/0.4");
-		}
-		&:has(input:checked) {
-			border-radius: theme("borderRadius.xl");
-			border-color: theme("colors.primary");
-			background-color: theme("colors.surface-container-lowest");
-			outline-color: theme("colors.primary/0.4");
-			color: theme("colors.primary");
-			& .icon {
-				background-color: theme("colors.primary/0.12");
-			}
-			&:has(:focus-visible):focus-within {
-				outline-color: theme("colors.primary/0.4");
-			}
-			&:before {
-				content: "";
-				pointer-events: none;
-				position: absolute;
-				inset: -2px;
-				border: 2px solid;
-				border-color: inherit;
-				opacity: 0.2;
-				border-radius: inherit;
-			}
-		}
-	}
-	.wrapper {
-		display: flex;
-		gap: theme("spacing.3");
-		align-items: center;
-	}
-	.icon,
-	.label {
-		transition: 0.24s ease-out;
-		transition-property: color, background-color;
-	}
-	.icon {
-		transition: all 0.24s ease-out;
-		padding: theme("spacing.2");
-		background-color: theme("colors.on-surface/0.08");
-		border-radius: theme("borderRadius.full");
-	}
-	.label {
-		transition: color 0.24s ease-out;
-	}
+  .card {
+    position: relative;
+    flex-shrink: 0;
+    border-radius: theme("borderRadius.lg");
+    padding: theme("spacing.3");
+    transition:
+      border-color 0.24s ease-out,
+      background-color 0.24s ease-out,
+      color 0.24s ease-out,
+      border-radius 0.24s ease-out,
+      flex 0.3s ease-out;
+    background-color: theme("colors.surface");
+    border: theme("borderWidth.DEFAULT") solid theme("colors.on-surface/0.08");
+    &:where(:hover, :focus-within) {
+      border-color: theme("colors.primary/0.3");
+      background-color: theme("colors.primary/0.05");
+    }
+    &:where(:active) {
+      background-color: theme("colors.primary/0.08");
+    }
+    &:has(:focus-visible):focus-within {
+      outline: 4px solid theme("colors.on-surface/0.4");
+    }
+    &:has(input:checked) {
+      border-radius: theme("borderRadius.xl");
+      border-color: theme("colors.primary");
+      background-color: theme("colors.surface-container-lowest");
+      outline-color: theme("colors.primary/0.4");
+      color: theme("colors.primary");
+      & .icon {
+        background-color: theme("colors.primary/0.12");
+      }
+      &:has(:focus-visible):focus-within {
+        outline-color: theme("colors.primary/0.4");
+      }
+      &:before {
+        content: "";
+        pointer-events: none;
+        position: absolute;
+        inset: -2px;
+        border: 2px solid;
+        border-color: inherit;
+        opacity: 0.2;
+        border-radius: inherit;
+      }
+    }
+  }
+  .wrapper {
+    display: flex;
+    gap: theme("spacing.3");
+    align-items: center;
+  }
+  .icon,
+  .label {
+    transition: 0.24s ease-out;
+    transition-property: color, background-color;
+  }
+  .icon {
+    transition: all 0.24s ease-out;
+    padding: theme("spacing.2");
+    background-color: theme("colors.on-surface/0.08");
+    border-radius: theme("borderRadius.full");
+  }
+  .label {
+    transition: color 0.24s ease-out;
+  }
 }

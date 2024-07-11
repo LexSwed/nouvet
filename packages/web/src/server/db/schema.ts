@@ -243,10 +243,10 @@ function dateTime(columnName: Parameters<typeof text>[0]) {
 }
 
 const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 12);
-function primaryId(columnName: Parameters<typeof text>[0], prefix: string) {
+function primaryId(columnName: Parameters<typeof text>[0], prefix?: string) {
 	return text(columnName)
 		.notNull()
 		.primaryKey()
 		.unique()
-		.$default(() => `${prefix}_${nanoid()}`);
+		.$default(() => (prefix ? `${prefix}_${nanoid()}` : nanoid()));
 }
