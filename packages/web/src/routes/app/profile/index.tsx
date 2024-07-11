@@ -28,7 +28,7 @@ export default function ProfilePage() {
 		<>
 			<Title>{t("meta.title")}</Title>
 			<div class="min-h-full bg-background">
-				<AppHeader backLink />
+				<AppHeader backLink="/app" />
 				<section class="container flex flex-col items-center gap-6">
 					<Suspense>
 						<Show when={user()}>

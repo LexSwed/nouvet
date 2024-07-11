@@ -40,9 +40,9 @@ export async function userPets(userId: UserID) {
 		.from(petTable)
 		.where(
 			or(
+				inArray(petTable.ownerId, familyUsers),
 				// when there's no family
 				eq(petTable.ownerId, userId),
-				inArray(petTable.ownerId, familyUsers),
 			),
 		)
 		.leftJoin(userTable, eq(userTable.id, petTable.ownerId))

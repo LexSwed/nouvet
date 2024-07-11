@@ -1,9 +1,121 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "642165be-f1ad-4a70-8923-a4cc892e9068",
+  "id": "36e6db10-1106-40b3-a786-3c0ba711c76c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "activity": {
+      "name": "activity",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "external_id": {
+          "name": "external_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "generated": {
+            "as": "(('?' || HEX(\"id\")))",
+            "type": "virtual"
+          }
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "pet_id": {
+          "name": "pet_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "creator_id": {
+          "name": "creator_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "data_json": {
+          "name": "data_json",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "date": {
+          "name": "date",
+          "type": "text(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(strftime('%FT%TZ', datetime('now')))"
+        }
+      },
+      "indexes": {
+        "activity_id_unique": {
+          "name": "activity_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        },
+        "activity_external_id_unique": {
+          "name": "activity_external_id_unique",
+          "columns": [
+            "external_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "activity_pet_id_pet_id_fk": {
+          "name": "activity_pet_id_pet_id_fk",
+          "tableFrom": "activity",
+          "tableTo": "pet",
+          "columnsFrom": [
+            "pet_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "activity_creator_id_user_id_fk": {
+          "name": "activity_creator_id_user_id_fk",
+          "tableFrom": "activity",
+          "tableTo": "user",
+          "columnsFrom": [
+            "creator_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "oauth_account": {
       "name": "oauth_account",
       "columns": {
@@ -54,92 +166,6 @@
           "name": "oauth_account_provider_id_provider_user_id_pk"
         }
       },
-      "uniqueConstraints": {}
-    },
-    "event": {
-      "name": "event",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "pet_id": {
-          "name": "pet_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "creator_id": {
-          "name": "creator_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "data_json": {
-          "name": "data_json",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "date": {
-          "name": "date",
-          "type": "text(50)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%FT%TZ', datetime('now')))"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "event_pet_id_pet_id_fk": {
-          "name": "event_pet_id_pet_id_fk",
-          "tableFrom": "event",
-          "tableTo": "pet",
-          "columnsFrom": [
-            "pet_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "event_creator_id_user_id_fk": {
-          "name": "event_creator_id_user_id_fk",
-          "tableFrom": "event",
-          "tableTo": "user",
-          "columnsFrom": [
-            "creator_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "family_invite": {
@@ -211,6 +237,17 @@
           "notNull": true,
           "autoincrement": false
         },
+        "external_id": {
+          "name": "external_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "generated": {
+            "as": "(('?' || HEX(\"id\")))",
+            "type": "virtual"
+          }
+        },
         "name": {
           "name": "name",
           "type": "text(100)",
@@ -235,6 +272,20 @@
         }
       },
       "indexes": {
+        "family_id_unique": {
+          "name": "family_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        },
+        "family_external_id_unique": {
+          "name": "family_external_id_unique",
+          "columns": [
+            "external_id"
+          ],
+          "isUnique": true
+        },
         "owner_idx": {
           "name": "owner_idx",
           "columns": [
@@ -403,6 +454,17 @@
           "notNull": true,
           "autoincrement": false
         },
+        "external_id": {
+          "name": "external_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "generated": {
+            "as": "(('?' || HEX(\"id\")))",
+            "type": "virtual"
+          }
+        },
         "owner_id": {
           "name": "owner_id",
           "type": "text",
@@ -490,7 +552,22 @@
           "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "pet_id_unique": {
+          "name": "pet_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        },
+        "pet_external_id_unique": {
+          "name": "pet_external_id_unique",
+          "columns": [
+            "external_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "pet_owner_id_user_id_fk": {
           "name": "pet_owner_id_user_id_fk",
@@ -498,71 +575,6 @@
           "tableTo": "user",
           "columnsFrom": [
             "owner_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "reminder": {
-      "name": "reminder",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "creator_id": {
-          "name": "creator_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "pet_id": {
-          "name": "pet_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text(50)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%FT%TZ', datetime('now')))"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "reminder_creator_id_user_id_fk": {
-          "name": "reminder_creator_id_user_id_fk",
-          "tableFrom": "reminder",
-          "tableTo": "user",
-          "columnsFrom": [
-            "creator_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "reminder_pet_id_pet_id_fk": {
-          "name": "reminder_pet_id_pet_id_fk",
-          "tableFrom": "reminder",
-          "tableTo": "pet",
-          "columnsFrom": [
-            "pet_id"
           ],
           "columnsTo": [
             "id"
@@ -599,7 +611,15 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_session_id_unique": {
+          "name": "user_session_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "user_session_user_id_user_id_fk": {
           "name": "user_session_user_id_user_id_fk",
@@ -627,6 +647,17 @@
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
+        },
+        "external_id": {
+          "name": "external_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "generated": {
+            "as": "(('?' || HEX(\"id\")))",
+            "type": "virtual"
+          }
         },
         "name": {
           "name": "name",
@@ -665,7 +696,22 @@
           "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_id_unique": {
+          "name": "user_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        },
+        "user_external_id_unique": {
+          "name": "user_external_id_unique",
+          "columns": [
+            "external_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}

@@ -1,22 +1,28 @@
-import { sql } from "drizzle-orm";
-import { index, integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { type SQL, sql } from "drizzle-orm";
+import {
+	type SQLiteColumn,
+	index,
+	integer,
+	primaryKey,
+	sqliteTable,
+	text,
+} from "drizzle-orm/sqlite-core";
 import { v7 as uuidv7 } from "uuid";
 
 export const familyTable = sqliteTable(
 	"family",
 	{
 		id: primaryId("id"),
+		externalId: externalId((): SQLiteColumn => familyTable.id, "f_"),
 		name: text("name", { length: 100 }),
 		ownerId: text("owner_id")
 			.notNull()
 			.references(() => userTable.id),
 		createdAt: utcDatetime("created_at"),
 	},
-	(table) => {
-		return {
-			ownerIdx: index("owner_idx").on(table.ownerId),
-		};
-	},
+	(table) => ({
+		ownerIdx: index("owner_idx").on(table.ownerId),
+	}),
 );
 
 /**
@@ -99,6 +105,7 @@ export const familyWaitListTable = sqliteTable(
 
 export const petTable = sqliteTable("pet", {
 	id: primaryId("id"),
+	externalId: externalId((): SQLiteColumn => petTable.id, "p_"),
 	/** Pets have an official owner that has access to all the data. Other people have access to pets only through families. */
 	ownerId: text("owner_id")
 		.notNull()
@@ -139,6 +146,7 @@ export type DatabasePet = typeof petTable.$inferSelect;
  */
 export const userTable = sqliteTable("user", {
 	id: primaryId("id"),
+	externalId: externalId((): SQLiteColumn => userTable.id, "u_"),
 	/** User's name, set by auth provider, or updated manually afterwards. */
 	name: text("name", { length: 200 }),
 	/** User's picture, only for personalization purposes. */
@@ -194,11 +202,9 @@ export const sessionTable = sqliteTable("user_session", {
 	expiresAt: integer("expires_at").notNull(),
 });
 
-/**
- * These are calendar events. They can be attached to the request for doctor’s visit.
- */
-export const eventsTable = sqliteTable("event", {
+export const activitiesTable = sqliteTable("activity", {
 	id: primaryId("id"),
+	externalId: externalId((): SQLiteColumn => activitiesTable.id, "a_"),
 	/** Type of the event selected by the client.
 	 * TODO: create index for faster look-ups
 	 */
@@ -223,27 +229,7 @@ export const eventsTable = sqliteTable("event", {
 	 * UTC with appended Z for Date constructor.
 	 * TODO: This field is used for sorting, any chance for speed up? */
 	date: dateTime("date"),
-
 	updatedAt: utcDatetime("date", { autoUpdate: true }),
-});
-
-/**
- * These are recurring events, an automatic Todo list for the owners.
- * Can include going for a walk, giving a pill, or having check-ups.
- * Reminders can create events.
- */
-export const remindersTable = sqliteTable("reminder", {
-	id: primaryId("id"),
-	creatorId: integer("creator_id")
-		.notNull()
-		.references(() => userTable.id),
-	petId: integer("pet_id")
-		.notNull()
-		.references(() => petTable.id),
-	/**
-	 * ISO-8601 date time string stored in UTC.
-	 */
-	createdAt: utcDatetime("created_at"),
 });
 
 /**
@@ -272,4 +258,11 @@ function primaryId(columnName: Parameters<typeof text>[0]) {
 		.primaryKey()
 		.unique()
 		.$default(() => uuidv7());
+}
+
+function externalId<T extends SQLiteColumn>(column: () => T, prefix: string) {
+	return text("external_id")
+		.unique()
+		.notNull()
+		.generatedAlwaysAs((): SQL => sql<string>`('${prefix}' || HEX(${column()}))`);
 }
