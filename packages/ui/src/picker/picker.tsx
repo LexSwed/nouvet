@@ -1,10 +1,8 @@
 import { type JSX, Show, children, splitProps } from "solid-js";
-
 import { FormField, type FormFieldProps } from "../form-field";
 import { Icon } from "../icon/icon";
 import { ListItem } from "../menu/list-item";
 import { tw } from "../tw";
-
 import css from "./picker.module.css";
 
 export interface PickerProps
@@ -66,6 +64,7 @@ const Option = (
 	},
 ) => {
 	const [local, props] = splitProps(ownProps, ["label", "children", "class"]);
+	const label = children(() => local.label);
 	const child = children(() => local.children);
 	return (
 		<ListItem
@@ -78,7 +77,7 @@ const Option = (
 			)}
 		>
 			<div class="flex flex-row items-center justify-stretch gap-2" data-part="label">
-				{local.label}
+				{label()}
 				<Show when={props.value === ""}>
 					<span class="sr-only" data-empty-option />
 				</Show>

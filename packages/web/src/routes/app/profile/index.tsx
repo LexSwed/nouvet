@@ -39,7 +39,7 @@ export default function ProfilePage() {
 									aria-labelledby="heading-profile"
 								>
 									<Form
-										class="flex flex-col gap-12"
+										class="flex flex-col gap-8"
 										method="post"
 										action={updateUserProfile}
 										validationErrors={
