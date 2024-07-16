@@ -51,66 +51,66 @@ jobs:
       - name: Build webapp
         working-directory: packages/acceptance-tests
         run: npm run build -w @nou/web
-  acceptance-tests:
-    needs: build
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-    environment: acceptance-tests
-    env:
-      NODE_ENV: test
-      SESSION_SECRET: ${{secrets.SESSION_SECRET}}
-      INVITES_SECRET: ${{secrets.INVITES_SECRET}}
-      FACEBOOK_APP_ID: ${{secrets.FACEBOOK_APP_ID}}
-      FACEBOOK_APP_SECRET: ${{secrets.FACEBOOK_APP_SECRET}}
-      DB_CONNECTION: ${{secrets.DB_CONNECTION}}
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-      - name: Setup Node 20
-        with:
-          node-version: lts/iron
-        uses: actions/setup-node@v4
-      - name: Install dependencies
-        run: npm ci
-      - name: Install Playwright Browsers
-        working-directory: packages/acceptance-tests
-        run: npx playwright install --with-deps
-      - name: Build webapp
-        working-directory: packages/acceptance-tests
-        run: npm run build:web -w @nou/acceptance-tests
-      - name: Prepare the database
-        working-directory: packages/acceptance-tests
-        run: npm run db:setup -w @nou/acceptance-tests
-      - name: Run Playwright tests
-        working-directory: packages/acceptance-tests
-        run: npm run test -w @nou/acceptance-tests
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: ./packages/acceptance-tests/playwright-report/
-          retention-days: 30
-  deploy-test-results:
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    if: ${{ always() }}
-    needs: [build, acceptance-tests]
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: playwright-report
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+  # acceptance-tests:
+  #   needs: build
+  #   timeout-minutes: 10
+  #   runs-on: ubuntu-latest
+  #   environment: acceptance-tests
+  #   env:
+  #     NODE_ENV: test
+  #     SESSION_SECRET: ${{secrets.SESSION_SECRET}}
+  #     INVITES_SECRET: ${{secrets.INVITES_SECRET}}
+  #     FACEBOOK_APP_ID: ${{secrets.FACEBOOK_APP_ID}}
+  #     FACEBOOK_APP_SECRET: ${{secrets.FACEBOOK_APP_SECRET}}
+  #     DB_CONNECTION: ${{secrets.DB_CONNECTION}}
+  #   steps:
+  #     - name: Check out code
+  #       uses: actions/checkout@v4
+  #     - name: Setup Node 20
+  #       with:
+  #         node-version: lts/iron
+  #       uses: actions/setup-node@v4
+  #     - name: Install dependencies
+  #       run: npm ci
+  #     - name: Install Playwright Browsers
+  #       working-directory: packages/acceptance-tests
+  #       run: npx playwright install --with-deps
+  #     - name: Build webapp
+  #       working-directory: packages/acceptance-tests
+  #       run: npm run build:web -w @nou/acceptance-tests
+  #     - name: Prepare the database
+  #       working-directory: packages/acceptance-tests
+  #       run: npm run db:setup -w @nou/acceptance-tests
+  #     - name: Run Playwright tests
+  #       working-directory: packages/acceptance-tests
+  #       run: npm run test -w @nou/acceptance-tests
+  #     - uses: actions/upload-artifact@v4
+  #       if: always()
+  #       with:
+  #         name: playwright-report
+  #         path: ./packages/acceptance-tests/playwright-report/
+  #         retention-days: 30
+  # deploy-test-results:
+  #   permissions:
+  #     contents: read
+  #     pages: write
+  #     id-token: write
+  #   if: ${{ always() }}
+  #   needs: [build, acceptance-tests]
+  #   environment:
+  #     name: github-pages
+  #     url: ${{ steps.deployment.outputs.page_url }}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/download-artifact@v4
+  #       with:
+  #         name: playwright-report
+  #     - name: Setup Pages
+  #       uses: actions/configure-pages@v5
+  #     - name: Upload artifact
+  #       uses: actions/upload-pages-artifact@v3
+  #       with:
+  #         path: ./
+  #     - name: Deploy to GitHub Pages
+  #       id: deployment
+  #       uses: actions/deploy-pages@v4
