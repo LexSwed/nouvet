@@ -22,6 +22,7 @@ export default function ProfilePage() {
 
 	const user = createAsync(() => getUserProfile());
 	const updateProfileAction = useAction(updateUserProfile);
+	// TODO: error handling, success handling
 	const profileSubmission = useSubmission(updateUserProfile);
 
 	return (
