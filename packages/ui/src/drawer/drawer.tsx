@@ -415,8 +415,7 @@ const getScrollAtLocation = (location: HTMLElement, axis: Axis, stopAt?: HTMLEle
 		if (currentElement === (stopAt ?? document.documentElement)) {
 			wrapperReached = true;
 		} else {
-			// @ts-expect-error: _$host is a custom SolidJS property
-			currentElement = currentElement._$host ?? currentElement.parentElement;
+			currentElement = currentElement.parentElement;
 		}
 	} while (currentElement && !wrapperReached);
 

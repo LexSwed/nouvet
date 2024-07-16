@@ -19,6 +19,7 @@
 		"lib": ["ESNext", "DOM", "ESNext.Intl"],
 		"noUncheckedIndexedAccess": true,
 		"skipLibCheck": true,
+		"isolatedDeclarations": true,
 		"plugins": [
 			{
 				"name": "typescript-plugin-css-modules",
