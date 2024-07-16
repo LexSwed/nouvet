@@ -33,9 +33,6 @@ export const buttonVariants = cva(
 				true: "p-0",
 				false: "",
 			},
-			split: {
-				true: "flex w-fit p-0 [&>*]:rounded-[inherit]",
-			},
 			tone: {
 				neutral: "",
 				primary: "",
@@ -49,96 +46,81 @@ export const buttonVariants = cva(
 			tone: "neutral",
 			size: "base",
 			icon: false,
-			split: false,
 		},
 		compoundVariants: [
 			{
-				split: false,
 				variant: "default",
 				class: "intent:filter-darker [--btn-bg:theme(colors.primary)]",
 			},
 			{
-				split: false,
 				variant: "default",
 				tone: "secondary",
 				class:
 					"intent:filter-darker bg-tertiary text-on-tertiary [--btn-bg:theme(colors.tertiary)]",
 			},
 			{
-				split: false,
 				variant: "default",
 				tone: "destructive",
 				class:
 					"bg-error intent:bg-error/90 text-on-error outline-error [--btn-bg:theme(colors.error)]",
 			},
 			{
-				split: false,
 				variant: "outline",
 				class: "intent:bg-on-surface/8",
 			},
 			{
-				split: false,
 				variant: "outline",
 				tone: "destructive",
 				class:
 					"border-error intent:bg-error-container/30 text-error outline-error [--btn-bg:theme(colors.surface)]",
 			},
 			{
-				split: false,
 				variant: "tonal",
 				tone: "neutral",
 				class:
 					"bg-on-surface/5 intent:bg-on-surface/8 text-on-surface [--btn-bg:theme(colors.surface)]",
 			},
 			{
-				split: false,
 				variant: "tonal",
 				tone: "primary",
 				class:
 					"intent:filter-darker bg-primary-container text-on-primary-container [--btn-bg:theme(colors.primary-container)]",
 			},
 			{
-				split: false,
 				variant: "tonal",
 				tone: "secondary",
 				class:
 					"intent:filter-darker bg-tertiary-container text-on-tertiary-container [--btn-bg:theme(colors.tertiary-container)]",
 			},
 			{
-				split: false,
 				variant: "tonal",
 				tone: "destructive",
 				class:
 					"bg-error/5 text-error [--btn-bg:theme(colors.error/0.05)] hover:bg-error/8 focus:bg-error/12",
 			},
 			{
-				split: false,
 				variant: "tonal",
 				tone: "success",
 				// TODO
 				class: "",
 			},
 			{
-				split: false,
 				variant: "ghost",
 				tone: "neutral",
 				class: "[--btn-bg:theme(colors.surface)] hover:bg-on-surface/5 focus:bg-on-surface/8",
 			},
 			{
-				split: false,
 				variant: "ghost",
 				tone: "primary",
 				class:
 					"text-primary outline-primary [--btn-bg:theme(colors.surface)] hover:bg-primary/5 focus:bg-primary/8",
 			},
 			{
-				split: false,
 				variant: "ghost",
 				tone: "destructive",
 				class: "text-error [--btn-bg:theme(colors.error/0.05)] hover:bg-error/5 focus:bg-error/8",
 			},
 			{
-				split: false,
 				variant: "link",
 				class: "intent:underline",
 			},
@@ -160,7 +142,6 @@ const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
 		"size",
 		"loading",
 		"variant",
-		"split",
 		"tone",
 		"icon",
 		"label",
@@ -221,7 +202,7 @@ const Button = (ownProps: Omit<BaseProps<"button">, "component" | "split">) => {
 	return <BaseComponent {...props} component="button" />;
 };
 
-const ButtonLink = (ownProps: Omit<BaseProps<typeof A>, "component" | "split">) => {
+const ButtonLink = (ownProps: Omit<BaseProps<typeof A>, "component">) => {
 	/**
 	 * When link={false} should use <a> without any link attribute
 	 * @link https://github.com/solidjs/solid-router/discussions/321
@@ -230,8 +211,15 @@ const ButtonLink = (ownProps: Omit<BaseProps<typeof A>, "component" | "split">) 
 	return <BaseComponent {...props} component={local.link === false ? "a" : A} />;
 };
 
-const SplitButton = (ownProps: Omit<BaseProps<"div">, "component" | "icon" | "split">) => {
-	return <BaseComponent {...ownProps} icon={false} split component="div" />;
+const SplitButton = (ownProps: Omit<BaseProps<"div">, "component" | "icon">) => {
+	return (
+		<BaseComponent
+			{...ownProps}
+			icon={false}
+			class={tw(ownProps.class, "flex w-fit p-0 [&>*]:rounded-[inherit]")}
+			component="div"
+		/>
+	);
 };
 SplitButton.Inner = (ownProps: Omit<BaseProps<"button">, "component">) => {
 	return <Button {...ownProps} size="sm" variant="ghost" />;

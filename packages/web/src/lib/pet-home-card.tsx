@@ -69,7 +69,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 		>
 			<Button
 				variant="ghost"
-				class="flex h-auto cursor-pointer flex-row items-center justify-start gap-4 rounded-[0.875rem] p-3"
+				class="flex h-auto cursor-pointer flex-row items-center justify-start gap-4 rounded-[0.875rem] p-3 pb-4"
 				popoverTarget={petPopoverId}
 				id={`pet-${props.pet.id}`}
 			>
@@ -95,7 +95,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 					return null;
 				}}
 			>
-				<div class="-mt-6 flex flex-row items-center gap-2 px-3 py-2 empty:hidden">
+				<div class="-mt-7 flex flex-row items-center gap-2 px-3 py-2 empty:hidden">
 					<Show when={hasMissingInfo()}>
 						<Suspense fallback={null}>
 							<QuickSetters pet={props.pet} />
@@ -183,8 +183,8 @@ function QuickSetters(props: { pet: PetHomeCardProps["pet"] }) {
 		<Switch>
 			<Match when={qs()?.showBirthDate}>
 				<SplitButton
-					variant="outline"
-					class="max-w-48 gap-1 bg-surface outline outline-4 outline-surface"
+					variant="tonal"
+					class="max-w-48 gap-1 outline outline-4 outline-surface outline-offset-0"
 					size="sm"
 				>
 					<SplitButton.Inner popoverTarget={`${props.pet.id}-birth-date`} class="gap-2 text-nowrap">
@@ -208,8 +208,8 @@ function QuickSetters(props: { pet: PetHomeCardProps["pet"] }) {
 			</Match>
 			<Match when={qs()?.showWeight}>
 				<SplitButton
-					variant="outline"
-					class="max-w-48 gap-1 bg-surface outline outline-4 outline-surface"
+					variant="tonal"
+					class="max-w-48 gap-1 outline outline-4 outline-surface outline-offset-0"
 					size="sm"
 				>
 					<SplitButton.Inner popoverTarget={`${props.pet.id}-weight`} class="gap-2 text-nowrap">
@@ -233,8 +233,8 @@ function QuickSetters(props: { pet: PetHomeCardProps["pet"] }) {
 			</Match>
 			<Match when={qs()?.showBreed}>
 				<SplitButton
-					variant="outline"
-					class="max-w-48 gap-1 bg-surface outline outline-4 outline-surface"
+					variant="tonal"
+					class="max-w-48 gap-1 outline outline-4 outline-surface outline-offset-0"
 					size="sm"
 				>
 					<SplitButton.Inner popoverTarget={`${props.pet.id}-breed`} class="gap-2 text-nowrap">
