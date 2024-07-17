@@ -131,5 +131,8 @@ export default {
 				}),
 			});
 		}),
+		plugin(function startingStyle({ addVariant }) {
+			addVariant("starting", "@starting-style");
+		}),
 	],
 } satisfies Config;
