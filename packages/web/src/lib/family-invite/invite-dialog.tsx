@@ -1,9 +1,8 @@
-import { Button, Icon, Popover, Text, mergeDefaultProps } from "@nou/ui";
+import { Button, Icon, Popover, Text, mergeDefaultProps, startViewTransition } from "@nou/ui";
 import { Match, Show, Suspense, Switch, createSignal } from "solid-js";
 
 import { createTranslator } from "~/server/i18n";
 
-import { startViewTransition } from "~/lib/utils/start-view-transition";
 import { FamilyInviteBenefits } from "../family-invite-benefits";
 
 import { FamilyInviteQRCode } from "./invite-qrcode";

@@ -35,3 +35,22 @@ export function composeEventHandlers<T, E extends Event>(
 }
 
 export type Merge<P1 = object, P2 = object> = Omit<P1, keyof P2> & P2;
+
+export function startViewTransition(
+	handler: Parameters<Document["startViewTransition"]>[0],
+): ReturnType<Document["startViewTransition"]> {
+	if (typeof document.startViewTransition === "function") {
+		return document.startViewTransition(handler);
+	}
+	if (typeof handler === "function") {
+		handler();
+	} else {
+		handler.update();
+	}
+	return {
+		finished: Promise.resolve(),
+		ready: Promise.resolve(),
+		skipTransition: () => {},
+		updateCallbackDone: Promise.resolve(),
+	};
+}

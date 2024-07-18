@@ -2,7 +2,7 @@ import { cache, createAsync, revalidate } from "@solidjs/router";
 import { untrack } from "solid-js";
 import { isServer } from "solid-js/web";
 
-import { startViewTransition } from "./start-view-transition";
+import { startViewTransition } from "@nou/ui";
 
 const parseDocumentCookie = () =>
 	Object.fromEntries(

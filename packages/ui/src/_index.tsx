@@ -17,4 +17,4 @@ export { Spinner } from "./spinner";
 export { Stack } from "./stack";
 export { Text } from "./text";
 export { tw } from "./tw";
-export { mergeDefaultProps } from "./utils";
+export { mergeDefaultProps, startViewTransition } from "./utils";

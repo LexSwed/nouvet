@@ -6,7 +6,7 @@ import { Match, Show, Switch, createEffect, createSignal, onCleanup } from "soli
 import { joinFamilyWithQRCode } from "~/server/api/family-invite";
 import { createTranslator } from "~/server/i18n";
 
-import { startViewTransition } from "../utils/start-view-transition";
+import { startViewTransition } from "@nou/ui";
 
 const QRCodeScannerPage = (props: { onSuccess: () => void }) => {
 	const t = createTranslator("family");
