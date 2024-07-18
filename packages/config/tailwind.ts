@@ -131,8 +131,21 @@ export default {
 				}),
 			});
 		}),
+		plugin(function anchorPositioning({ matchUtilities }) {
+			matchUtilities({
+				anchor: (value) => ({
+					anchorName: value,
+				}),
+				"to-anchor": (value) => ({
+					positionAnchor: value,
+				}),
+			});
+		}),
 		plugin(function startingStyle({ addVariant }) {
 			addVariant("starting", "@starting-style");
+		}),
+		plugin(function popoverOpen({ addVariant }) {
+			addVariant("popover-open", "&:popover-open");
 		}),
 	],
 } satisfies Config;
