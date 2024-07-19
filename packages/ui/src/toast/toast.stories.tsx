@@ -1,23 +1,21 @@
 import type { Meta } from "storybook-solidjs";
-import { Toaster, useToaster } from ".";
+import { Toast, Toaster, useToaster } from ".";
 import { Button } from "../button";
 
 const meta = {
 	title: "Toast",
 	argTypes: {},
-} satisfies Meta<ReturnType<typeof useToaster>>;
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+} satisfies Meta<ReturnType<typeof Toast>>;
 
 export const ToastExample = () => {
 	const toast = useToaster();
+	let counter = 0;
 	return (
 		<>
 			<Button
 				onClick={async () => {
-					toast(() => <div>Hello World</div>, { duration: 3000 });
-					await sleep(2000);
-					toast(() => <div>Hello world 2</div>, { duration: 3000 });
+					counter += 1;
+					toast(() => <Toast>#{counter} toast</Toast>);
 				}}
 			>
 				Create toast

@@ -1,0 +1,13 @@
+@tailwind utilities;
+
+.toast {
+  view-transition-class: nou-toast;
+}
+
+/* :global(::view-transition-group(nou-toast) ::view-transition-old(*)) {
+  @apply animate-out slide-out-to-top-8 fade-out-0 duration-1000;
+} */
+
+:global(:root::view-transition-group(.nou-toast)) {
+  @apply animate-in slide-in-from-top-8 fade-in-0 duration-1000;
+}
