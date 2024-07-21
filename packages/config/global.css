@@ -9,7 +9,13 @@
     --nou-font-sans: "Rubik Variable";
 
     --radius: 0.5rem;
+    view-transition-name: none;
   }
+
+  ::view-transition {
+    pointer-events: none;
+  }
+
   * {
     @apply border-outline min-w-0 font-sans;
   }
