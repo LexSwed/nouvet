@@ -116,7 +116,7 @@ export default {
 		containerQueryPlugin,
 		animatePlugin,
 		plugin(function hoverAndFocusVariant({ addVariant }) {
-			addVariant("intent", ["&:where(:hover,:focus-visible:focus)"]);
+			addVariant("intent", ["&:where(:hover,:focus)"]);
 		}),
 		plugin(function disabledVariant({ addVariant }) {
 			addVariant("disabled", ['&:where(disabled,[aria-disabled="true"])']);
