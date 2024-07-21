@@ -9,13 +9,13 @@ const meta = {
 
 export const ToastExample = () => {
 	const toast = useToaster();
-	let counter = 0;
+	let counter = 2;
 	return (
 		<>
 			<Button
 				onClick={async () => {
-					counter += 1;
-					toast(() => <Toast>#{counter} toast</Toast>);
+					counter = counter ** 2;
+					toast(() => <Toast class="max-w-80">#{counter} toast</Toast>);
 				}}
 			>
 				Create toast

@@ -1,13 +1,49 @@
 @tailwind utilities;
 
-.toast {
-  view-transition-class: nou-toast;
+@layer nou-ui {
+  .list {
+    view-transition-name: nou-toasts-list;
+    transition: all 0.4s ease-in-out allow-discrete;
+
+    &:is(:hover, :focus-within) {
+      & > .toast {
+        inset-block-start: calc(anchor(end) + theme(spacing.4));
+      }
+    }
+  }
+
+  .toast {
+    view-transition-class: nou-toast;
+    inset-block-start: calc(anchor(start) + theme(spacing.4));
+    align-self: anchor-center;
+    /* transform: translateY(-30px) scale(0.85); */
+    &:first-of-type {
+      top: anchor(top);
+    }
+  }
+  /* .toast:last-of-type {
+  transform: none;
 }
 
-/* :global(::view-transition-group(nou-toast) ::view-transition-old(*)) {
-  @apply animate-out slide-out-to-top-8 fade-out-0 duration-1000;
+.toast:nth-last-of-type(1) {
+  transform: translateY(-10px) scale(0.95);
+}
+.toast:nth-last-of-type(2) {
+  transform: translateY(-20px) scale(0.9);
+}
+.toast:nth-last-of-type(3) {
+  transform: translateY(-30px) scale(0.85);
 } */
 
-:global(:root::view-transition-group(.nou-toast)) {
-  @apply animate-in slide-in-from-top-8 fade-in-0 duration-1000;
+  /* :global(html::view-transition-group(*.nou-toast)) {
+  @apply duration-300 slide-in-from-top-0 ease-out fade-in-0;
+}
+
+:global(html::view-transition-new(nou-toast):only-child) {
+  @apply animate-in slide-in-from-top-8 ease-out fade-in-0 duration-300;
+}
+
+:global(:root::view-transition-old(nou-toast-removed):only-child) {
+  @apply animate-out slide-out-to-top-8 ease-in fade-out-0 duration-200;
+} */
 }
