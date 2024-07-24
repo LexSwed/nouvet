@@ -27,10 +27,12 @@ import css from "./toast.module.css";
  * - show all notifications as list when the pointer is over
  */
 
-interface ToastProps extends ComponentProps<typeof Card<"li">> {}
+interface ToastProps extends ComponentProps<typeof Card<"li">> {
+	style?: JSX.CSSProperties;
+}
 
 const Toast = (ownProps: ToastProps) => {
-	const [local, props] = splitProps(ownProps, ["id", "as"]);
+	const [local, props] = splitProps(ownProps, ["id", "style", "as"]);
 	const localId = createUniqueId();
 	const id = () => local.id || localId;
 	return (
@@ -42,14 +44,14 @@ const Toast = (ownProps: ToastProps) => {
 			{...props}
 			class={tw(
 				css.toast,
-				"allow-discrete absolute isolate border border-on-background/5 shadow-popover transition-all duration-300",
+				"allow-discrete isolate border border-on-background/5 shadow-popover transition-all duration-300",
 				props.class,
 			)}
-			id={id()}
 			style={{
-				"view-transition-name": `nou-toast-t-${id()}`,
-				"anchor-name": `--nou-toast-a-${id()}`,
+				...local.style,
+				"view-transition-name": `nou-toast-${id()}`,
 			}}
+			id={id()}
 			onClick={composeEventHandlers(props.onClick, (e) => {
 				(e.currentTarget as HTMLElement).dispatchEvent(new ToastDismissEvent(id()));
 			})}
@@ -124,24 +126,9 @@ function Toaster(props: { label: string }) {
 			ref={setRef}
 		>
 			<ol
-				class={tw(css.list, "empty:hidden")}
+				class={tw(css.list, "flex flex-col items-center gap-2 empty:hidden")}
 				tabIndex={-1}
 				on:toast-dismiss={(e) => toaster.removeById(e.detail.id)}
-				ref={(ol) => {
-					const observer = new MutationObserver(() => {
-						for (let i = 1; i < ol.childElementCount; i++) {
-							const toast = ol.children.item(i);
-							if (!(toast instanceof HTMLElement)) continue;
-							const previousElement = toast.previousElementSibling;
-							if (!(previousElement instanceof HTMLElement)) continue;
-							toast.style.setProperty(
-								"position-anchor",
-								previousElement.style.getPropertyValue("anchor-name"),
-							);
-						}
-					});
-					observer.observe(ol, { subtree: false, childList: true });
-				}}
 			>
 				<For each={toaster.items()}>{(el) => el()}</For>
 			</ol>
