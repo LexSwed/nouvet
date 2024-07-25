@@ -53,6 +53,7 @@ const Toast = (ownProps: ToastProps) => {
 			}}
 			id={id()}
 			onClick={composeEventHandlers(props.onClick, (e) => {
+				console.log(id());
 				(e.currentTarget as HTMLElement).dispatchEvent(new ToastDismissEvent(id()));
 			})}
 		>
@@ -68,7 +69,7 @@ const useToastsController = createSingletonRoot(() => {
 		items,
 		add: (el: Accessor<ResolvedChildren>) =>
 			startViewTransition(() => {
-				setItems((rendered) => [...rendered, el]);
+				setItems((rendered) => [el, ...rendered]);
 			}),
 		removeById: (elementId: string) =>
 			startViewTransition(() => {
@@ -77,6 +78,7 @@ const useToastsController = createSingletonRoot(() => {
 						const element = el();
 						return element instanceof HTMLElement && element.id === elementId;
 					});
+					console.log({ toRemoveIndex });
 					if (toRemoveIndex === -1) return rendered;
 					const el = rendered[toRemoveIndex]?.();
 					if (!(el instanceof HTMLElement)) return rendered;
@@ -90,6 +92,7 @@ const useToastsController = createSingletonRoot(() => {
 						const element = el();
 						return element instanceof HTMLElement && element === toRemove;
 					});
+					console.log({ toRemoveIndex });
 					if (toRemoveIndex === -1) return rendered;
 					const el = rendered[toRemoveIndex]?.();
 					if (!(el instanceof HTMLElement)) return rendered;
@@ -103,6 +106,8 @@ function Toaster(props: { label: string }) {
 	const toaster = useToastsController();
 	const [ref, setRef] = createSignal<HTMLElement | null>(null);
 	const hasToasts = createMemo(() => toaster.items().length > 0);
+	const [expanded, setExpanded] = createSignal(false);
+	const [pointerDown, setPointerDown] = createSignal(false);
 
 	createEffect(() => {
 		const root = ref();
@@ -112,6 +117,23 @@ function Toaster(props: { label: string }) {
 		} else {
 			root.hidePopover();
 		}
+	});
+
+	createEffect(() => {
+		document.addEventListener("pointerdown", (e) => {
+			if (e.target instanceof Node && ref()?.contains(e.target)) {
+				startViewTransition(() => {
+					setPointerDown(true);
+				});
+			}
+		});
+		document.addEventListener("pointerup", (e) => {
+			if (e.target instanceof Node && !ref()?.contains(e.target)) {
+				startViewTransition(() => {
+					setPointerDown(false);
+				});
+			}
+		});
 	});
 
 	return (
@@ -126,9 +148,23 @@ function Toaster(props: { label: string }) {
 			ref={setRef}
 		>
 			<ol
-				class={tw(css.list, "flex flex-col items-center gap-2 empty:hidden")}
+				class={tw(
+					css.list,
+					"-m-4 items-center gap-2 p-4 empty:hidden",
+					expanded() || pointerDown() ? css.expanded : undefined,
+				)}
 				tabIndex={-1}
-				on:toast-dismiss={(e) => toaster.removeById(e.detail.id)}
+				on:toast-dismiss={(e) => toaster.remove(e.currentTarget)}
+				onPointerEnter={() => {
+					startViewTransition(() => {
+						setExpanded(true);
+					});
+				}}
+				onPointerLeave={() => {
+					startViewTransition(() => {
+						setExpanded(false);
+					});
+				}}
 			>
 				<For each={toaster.items()}>{(el) => el()}</For>
 			</ol>

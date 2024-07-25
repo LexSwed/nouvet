@@ -2,10 +2,18 @@
 
 @layer nou-ui {
   .list {
-    view-transition-name: nou-toasts-list;
+    view-transition-name: none;
     transition: all 0.4s ease-in-out allow-discrete;
+    display: grid;
+    grid-template: 1fr / 100%;
+    & > .toast {
+      grid-area: 1 / 1;
+    }
+  }
 
-    &:is(:hover, :focus-within) {
+  .expanded {
+    & > .toast {
+      grid-area: auto;
     }
   }
 
@@ -27,15 +35,15 @@
   transform: translateY(-30px) scale(0.85);
 } */
 
-  /* :global(html::view-transition-group(*.nou-toast)) {
-  @apply duration-300 slide-in-from-top-0 ease-out fade-in-0;
-}
+  :global(html::view-transition-group(*.nou-toast)) {
+    @apply duration-300 slide-in-from-top-0 ease-out fade-in-0;
+  }
 
-:global(html::view-transition-new(nou-toast):only-child) {
-  @apply animate-in slide-in-from-top-8 ease-out fade-in-0 duration-300;
-}
+  :global(html::view-transition-new(nou-toast):only-child) {
+    @apply animate-in slide-in-from-top-8 ease-out fade-in-0 duration-300;
+  }
 
-:global(:root::view-transition-old(nou-toast-removed):only-child) {
-  @apply animate-out slide-out-to-top-8 ease-in fade-out-0 duration-200;
-} */
+  :global(:root::view-transition-old(nou-toast-removed):only-child) {
+    @apply animate-out slide-out-to-top-8 ease-in fade-out-0 duration-200;
+  }
 }
