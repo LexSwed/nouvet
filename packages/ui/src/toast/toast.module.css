@@ -2,25 +2,29 @@
 
 @layer nou-ui {
   .list {
-    view-transition-name: none;
+    --nou-toast-row-size: 0;
+    view-transition-name: nou-toast-list;
     transition: all 0.4s ease-in-out allow-discrete;
     display: grid;
-    grid-template: 1fr / 100%;
-    & > .toast {
-      grid-area: 1 / 1;
-    }
-  }
-
-  .expanded {
-    & > .toast {
-      grid-area: auto;
+    grid-template-columns: 1;
+    grid-template-rows: auto var(--nou-toast-row-size) var(--nou-toast-row-size) var(
+        --nou-toast-row-size
+      );
+    justify-items: center;
+    /* & > .toast:nth-child(n + 4) {
+      opacity: 0;
+      display: none;
+    } */
+    &:is(:hover, :focus, .expanded) {
+      --nou-toast-row-size: auto;
     }
   }
 
   .toast {
-    view-transition-class: nou-toast;
+    min-width: 0;
     /* transform: translateY(-30px) scale(0.85); */
   }
+
   /* .toast:last-of-type {
   transform: none;
 }
@@ -44,6 +48,10 @@
   }
 
   :global(:root::view-transition-old(nou-toast-removed):only-child) {
+    @apply animate-out slide-out-to-top-8 ease-in fade-out-0 duration-200;
+  }
+
+  :global(html::view-transition-new(nou-toast-latest):only-child) {
     @apply animate-out slide-out-to-top-8 ease-in fade-out-0 duration-200;
   }
 }

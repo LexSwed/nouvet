@@ -37,23 +37,21 @@ const Toast = (ownProps: ToastProps) => {
 	const id = () => local.id || localId;
 	return (
 		<Card
-			as="li"
 			aria-atomic="true"
 			role="status"
 			tabIndex={0}
 			{...props}
 			class={tw(
-				css.toast,
-				"allow-discrete isolate border border-on-background/5 shadow-popover transition-all duration-300",
+				"allow-discrete border border-on-background/5 shadow-popover transition-all duration-300",
 				props.class,
 			)}
 			style={{
 				...local.style,
+				"view-transition-class": "nou-toast",
 				"view-transition-name": `nou-toast-${id()}`,
 			}}
 			id={id()}
 			onClick={composeEventHandlers(props.onClick, (e) => {
-				console.log(id());
 				(e.currentTarget as HTMLElement).dispatchEvent(new ToastDismissEvent(id()));
 			})}
 		>
@@ -92,7 +90,6 @@ const useToastsController = createSingletonRoot(() => {
 						const element = el();
 						return element instanceof HTMLElement && element === toRemove;
 					});
-					console.log({ toRemoveIndex });
 					if (toRemoveIndex === -1) return rendered;
 					const el = rendered[toRemoveIndex]?.();
 					if (!(el instanceof HTMLElement)) return rendered;
@@ -106,7 +103,6 @@ function Toaster(props: { label: string }) {
 	const toaster = useToastsController();
 	const [ref, setRef] = createSignal<HTMLElement | null>(null);
 	const hasToasts = createMemo(() => toaster.items().length > 0);
-	const [expanded, setExpanded] = createSignal(false);
 	const [pointerDown, setPointerDown] = createSignal(false);
 
 	createEffect(() => {
@@ -120,21 +116,17 @@ function Toaster(props: { label: string }) {
 	});
 
 	createEffect(() => {
-		document.addEventListener("pointerdown", (e) => {
-			if (e.target instanceof Node && ref()?.contains(e.target)) {
-				startViewTransition(() => {
-					setPointerDown(true);
-				});
-			}
-		});
-		document.addEventListener("pointerup", (e) => {
-			if (e.target instanceof Node && !ref()?.contains(e.target)) {
-				startViewTransition(() => {
-					setPointerDown(false);
-				});
-			}
+		function onPointerUp() {
+			setPointerDown(false);
+		}
+		document.addEventListener("pointerup", onPointerUp);
+
+		onCleanup(() => {
+			document.removeEventListener("pointerup", onPointerUp);
 		});
 	});
+
+	const isExpanded = createMemo(() => pointerDown());
 
 	return (
 		<div
@@ -150,23 +142,30 @@ function Toaster(props: { label: string }) {
 			<ol
 				class={tw(
 					css.list,
-					"-m-4 items-center gap-2 p-4 empty:hidden",
-					expanded() || pointerDown() ? css.expanded : undefined,
+					"-m-4 pointer-events-auto items-center gap-2 p-4 empty:hidden",
+					isExpanded() ? css.expanded : undefined,
 				)}
 				tabIndex={-1}
-				on:toast-dismiss={(e) => toaster.remove(e.currentTarget)}
-				onPointerEnter={() => {
+				on:toast-dismiss={(e) => toaster.removeById(e.detail.id)}
+				onPointerDown={async () => {
 					startViewTransition(() => {
-						setExpanded(true);
-					});
-				}}
-				onPointerLeave={() => {
-					startViewTransition(() => {
-						setExpanded(false);
+						setPointerDown(true);
 					});
 				}}
 			>
-				<For each={toaster.items()}>{(el) => el()}</For>
+				<For each={toaster.items()}>
+					{(el, i) => (
+						<li
+							class={tw(css.toast)}
+							style={{
+								"z-index": toaster.items().length - i(),
+								"view-transition-name": i() === 3 ? "nou-toast-latest" : undefined,
+							}}
+						>
+							{el()}
+						</li>
+					)}
+				</For>
 			</ol>
 		</div>
 	);
