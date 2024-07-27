@@ -2,7 +2,7 @@ import { createSingletonRoot } from "@solid-primitives/rootless";
 import {
 	type Accessor,
 	type ComponentProps,
-	For,
+	Index,
 	type JSX,
 	type ResolvedChildren,
 	children,
@@ -16,7 +16,6 @@ import {
 	splitProps,
 } from "solid-js";
 import { Card } from "../card";
-import { composeEventHandlers, startViewTransition } from "../utils";
 
 import { tw } from "../tw";
 import css from "./toast.module.css";
@@ -32,9 +31,7 @@ interface ToastProps extends ComponentProps<typeof Card<"li">> {
 }
 
 const Toast = (ownProps: ToastProps) => {
-	const [local, props] = splitProps(ownProps, ["id", "style", "as"]);
-	const localId = createUniqueId();
-	const id = () => local.id || localId;
+	const [, props] = splitProps(ownProps, []);
 	return (
 		<Card
 			aria-atomic="true"
@@ -42,61 +39,32 @@ const Toast = (ownProps: ToastProps) => {
 			tabIndex={0}
 			{...props}
 			class={tw("allow-discrete border border-on-background/5 shadow-popover", props.class)}
-			style={{
-				...local.style,
-				"view-transition-name": `nou-toast-${id()}`,
-			}}
-			id={id()}
-			onClick={composeEventHandlers(props.onClick, (e) => {
-				(e.currentTarget as HTMLElement).dispatchEvent(new ToastDismissEvent(id()));
-			})}
 		>
 			{props.children}
 		</Card>
 	);
 };
 
+interface ToastEntry {
+	id: string;
+	element: Accessor<ResolvedChildren>;
+}
+
 const useToastsController = createSingletonRoot(() => {
-	const [items, setItems] = createSignal<Array<Accessor<ResolvedChildren>>>([]);
+	const [items, setItems] = createSignal<Array<ToastEntry>>([]);
 
 	return {
 		items,
-		add: (el: Accessor<ResolvedChildren>) => setItems((rendered) => [el, ...rendered]),
-		removeById: (elementId: string) =>
-			startViewTransition(() => {
-				setItems((rendered) => {
-					const toRemoveIndex = rendered.findIndex((el) => {
-						const element = el();
-						return element instanceof HTMLElement && element.id === elementId;
-					});
-					console.log({ toRemoveIndex });
-					if (toRemoveIndex === -1) return rendered;
-					const el = rendered[toRemoveIndex]?.();
-					if (!(el instanceof HTMLElement)) return rendered;
-					return rendered.toSpliced(toRemoveIndex, 1);
-				});
-			}),
-		remove: (toRemove: ResolvedChildren) =>
-			startViewTransition(() => {
-				setItems((rendered) => {
-					const toRemoveIndex = rendered.findIndex((el) => {
-						const element = el();
-						return element instanceof HTMLElement && element === toRemove;
-					});
-					if (toRemoveIndex === -1) return rendered;
-					const el = rendered[toRemoveIndex]?.();
-					if (!(el instanceof HTMLElement)) return rendered;
-					el.style["view-transition-name"] = "nou-toast-removed";
-					return rendered.toSpliced(toRemoveIndex, 1);
-				});
-			}),
+		add: (element: Accessor<ResolvedChildren>) => {
+			const id = createUniqueId();
+			setItems((rendered) => [{ id, element }, ...rendered]);
+		},
 	};
 });
 function Toaster(props: { label: string }) {
 	const toaster = useToastsController();
 	const [ref, setRef] = createSignal<HTMLElement | null>(null);
 	const hasToasts = createMemo(() => toaster.items().length > 0);
-	const [pointerDown, setPointerDown] = createSignal(false);
 
 	createEffect(() => {
 		const root = ref();
@@ -108,26 +76,13 @@ function Toaster(props: { label: string }) {
 		}
 	});
 
-	createEffect(() => {
-		function onPointerUp() {
-			setPointerDown(false);
-		}
-		document.addEventListener("pointerup", onPointerUp);
-
-		onCleanup(() => {
-			document.removeEventListener("pointerup", onPointerUp);
-		});
-	});
-
-	const isExpanded = createMemo(() => pointerDown());
-
 	return (
 		<div
 			// Popover is used to ensure that if notification is triggered from a dialog or any
 			// top layer element, the toast appears on top of it
 			popover="manual"
 			id="nou-ui-toaster"
-			class="fixed top-12 mx-auto my-0 overflow-visible bg-transparent p-0"
+			class="pointer-events-none fixed top-12 mx-auto my-0 overflow-visible bg-transparent p-0"
 			role="region"
 			aria-label={props.label}
 			ref={setRef}
@@ -135,18 +90,31 @@ function Toaster(props: { label: string }) {
 			<ol
 				class={tw(
 					css.list,
-					"-m-4 pointer-events-auto items-center gap-2 p-4 empty:hidden",
-					isExpanded() ? css.expanded : undefined,
+					"-m-4 pointer-events-auto relative items-center gap-2 p-4 empty:hidden",
 				)}
 				tabIndex={-1}
-				on:toast-dismiss={(e) => toaster.removeById(e.detail.id)}
-				onPointerDown={async () => {
-					startViewTransition(() => {
-						setPointerDown(true);
-					});
-				}}
 			>
-				<For each={toaster.items()}>{(el) => <li class={tw(css.toast)}>{el()}</li>}</For>
+				<Index each={toaster.items()}>
+					{(entry, i) => {
+						let positionAnchor: string | undefined = undefined;
+						console.log(i, `--nou-toast-anchor-${toaster.items().at(i - 1)?.id}`);
+						if (i > 0) {
+							positionAnchor = `--nou-toast-anchor-${toaster.items().at(i - 1)?.id}`;
+						}
+
+						return (
+							<li
+								class={tw(css.toast)}
+								style={{
+									"anchor-name": `--nou-toast-anchor-${entry().id}`,
+									"position-anchor": positionAnchor,
+								}}
+							>
+								{entry().element()}
+							</li>
+						);
+					}}
+				</Index>
 			</ol>
 		</div>
 	);
@@ -159,7 +127,7 @@ function useToaster() {
 		runWithOwner(owner, () => {
 			const child = children(element);
 			function cleanup() {
-				toaster.remove(child());
+				// toaster.remove(child());
 			}
 			toaster.add(child);
 			onCleanup(cleanup);
@@ -168,20 +136,3 @@ function useToaster() {
 }
 
 export { useToaster, Toast, Toaster };
-
-class ToastDismissEvent extends CustomEvent<{ id: string }> {
-	constructor(id: string) {
-		super("toast-dismiss", { bubbles: true, detail: { id } });
-	}
-}
-
-declare module "solid-js" {
-	namespace JSX {
-		interface CustomEvents {
-			"toast-dismiss": ToastDismissEvent;
-		}
-		interface CustomCaptureEvents {
-			"toast-dismiss": ToastDismissEvent;
-		}
-	}
-}
