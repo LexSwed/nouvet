@@ -41,13 +41,9 @@ const Toast = (ownProps: ToastProps) => {
 			role="status"
 			tabIndex={0}
 			{...props}
-			class={tw(
-				"allow-discrete border border-on-background/5 shadow-popover transition-all duration-300",
-				props.class,
-			)}
+			class={tw("allow-discrete border border-on-background/5 shadow-popover", props.class)}
 			style={{
 				...local.style,
-				"view-transition-class": "nou-toast",
 				"view-transition-name": `nou-toast-${id()}`,
 			}}
 			id={id()}
@@ -65,10 +61,7 @@ const useToastsController = createSingletonRoot(() => {
 
 	return {
 		items,
-		add: (el: Accessor<ResolvedChildren>) =>
-			startViewTransition(() => {
-				setItems((rendered) => [el, ...rendered]);
-			}),
+		add: (el: Accessor<ResolvedChildren>) => setItems((rendered) => [el, ...rendered]),
 		removeById: (elementId: string) =>
 			startViewTransition(() => {
 				setItems((rendered) => {
@@ -153,19 +146,7 @@ function Toaster(props: { label: string }) {
 					});
 				}}
 			>
-				<For each={toaster.items()}>
-					{(el, i) => (
-						<li
-							class={tw(css.toast)}
-							style={{
-								"z-index": toaster.items().length - i(),
-								"view-transition-name": i() === 3 ? "nou-toast-latest" : undefined,
-							}}
-						>
-							{el()}
-						</li>
-					)}
-				</For>
+				<For each={toaster.items()}>{(el) => <li class={tw(css.toast)}>{el()}</li>}</For>
 			</ol>
 		</div>
 	);

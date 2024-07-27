@@ -2,44 +2,58 @@
 
 @layer nou-ui {
   .list {
-    --nou-toast-row-size: 0;
     view-transition-name: nou-toast-list;
     transition: all 0.4s ease-in-out allow-discrete;
     display: grid;
-    grid-template-columns: 1;
-    grid-template-rows: auto var(--nou-toast-row-size) var(--nou-toast-row-size) var(
-        --nou-toast-row-size
-      );
+    grid-template: 1 / 1;
     justify-items: center;
-    /* & > .toast:nth-child(n + 4) {
-      opacity: 0;
-      display: none;
-    } */
+
     &:is(:hover, :focus, .expanded) {
-      --nou-toast-row-size: auto;
+      & > .toast {
+        grid-area: auto;
+        transform: none;
+      }
+    }
+    & > .toast:nth-child(n + 5) {
+      transition-delay: 400ms;
+    }
+    &:not(:hover, :focus, .expanded) > .toast:nth-child(n + 5) {
+      @apply animate-out hidden fill-mode-forwards fade-out translate-y-2;
     }
   }
 
   .toast {
     min-width: 0;
-    /* transform: translateY(-30px) scale(0.85); */
+    view-transition-class: nou-toast;
+    opacity: 1;
+    grid-area: 1 / 1;
+    transition: 0.4s ease-out allow-discrete;
+    transition-property: transform, display;
+
+    &:nth-of-type(1) {
+      z-index: 4;
+    }
+    &:nth-of-type(2) {
+      z-index: 3;
+      transform: scale(0.95) translateY(1rem);
+    }
+    &:nth-of-type(3) {
+      z-index: 2;
+      transform: scale(0.9) translateY(2rem);
+    }
+    &:nth-of-type(4) {
+      z-index: 1;
+      transform: scale(0.85) translateY(3rem);
+    }
   }
 
-  /* .toast:last-of-type {
-  transform: none;
-}
+  @starting-style {
+    .toast {
+      transform: translateY(-1rem);
+    }
+  }
 
-.toast:nth-last-of-type(1) {
-  transform: translateY(-10px) scale(0.95);
-}
-.toast:nth-last-of-type(2) {
-  transform: translateY(-20px) scale(0.9);
-}
-.toast:nth-last-of-type(3) {
-  transform: translateY(-30px) scale(0.85);
-} */
-
-  :global(html::view-transition-group(*.nou-toast)) {
+  /* :global(html::view-transition-group(*.nou-toast)) {
     @apply duration-300 slide-in-from-top-0 ease-out fade-in-0;
   }
 
@@ -53,5 +67,5 @@
 
   :global(html::view-transition-new(nou-toast-latest):only-child) {
     @apply animate-out slide-out-to-top-8 ease-in fade-out-0 duration-200;
-  }
+  } */
 }
