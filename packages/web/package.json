@@ -42,7 +42,7 @@
 		"solid-motionone": "^1.0.0",
 		"styled-qr-code": "^1.0.0",
 		"temporal-polyfill": "^0.2.5",
-		"valibot": "^0.36.0",
+		"valibot": "^0.37.0",
 		"vinxi": "0.4.1"
 	},
 	"devDependencies": {
@@ -50,7 +50,7 @@
 		"@nou/config": "^1.0.0",
 		"@types/better-sqlite3": "^7.6.11",
 		"dotenv": "^16.4.5",
-		"drizzle-kit": "^0.23.0",
+		"drizzle-kit": "^0.23.1",
 		"tailwindcss": "^3.4.7",
 		"tsx": "^4.16.2",
 		"vite": "^5.3.5",

@@ -14,7 +14,7 @@ export const ToastExample = () => {
 		<>
 			<Button
 				onClick={async () => {
-					counter = counter * 8;
+					counter = counter + 1;
 					toast(() => <Toast class="max-w-80">#{counter} toast</Toast>);
 				}}
 			>

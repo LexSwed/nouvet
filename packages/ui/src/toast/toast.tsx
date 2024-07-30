@@ -2,7 +2,7 @@ import { createSingletonRoot } from "@solid-primitives/rootless";
 import {
 	type Accessor,
 	type ComponentProps,
-	Index,
+	For,
 	type JSX,
 	type ResolvedChildren,
 	children,
@@ -18,6 +18,7 @@ import {
 import { Card } from "../card";
 
 import { tw } from "../tw";
+import { composeEventHandlers } from "../utils";
 import css from "./toast.module.css";
 /**
  * TODO:
@@ -39,6 +40,9 @@ const Toast = (ownProps: ToastProps) => {
 			tabIndex={0}
 			{...props}
 			class={tw("allow-discrete border border-on-background/5 shadow-popover", props.class)}
+			onClick={composeEventHandlers(props.onClick, (e) => {
+				(e.currentTarget as HTMLElement).dispatchEvent(new ToastDismissEvent());
+			})}
 		>
 			{props.children}
 		</Card>
@@ -47,6 +51,8 @@ const Toast = (ownProps: ToastProps) => {
 
 interface ToastEntry {
 	id: string;
+	anchorName: string;
+	positionAnchor?: string;
 	element: Accessor<ResolvedChildren>;
 }
 
@@ -57,7 +63,21 @@ const useToastsController = createSingletonRoot(() => {
 		items,
 		add: (element: Accessor<ResolvedChildren>) => {
 			const id = createUniqueId();
-			setItems((rendered) => [{ id, element }, ...rendered]);
+			setItems((rendered) => {
+				const newItem = { id, element, anchorName: `--nou-toast-anchor-${id}` };
+				const oldTopItem = rendered.at(0);
+				if (oldTopItem) {
+					const positionAnchor = `--nou-toast-anchor-${id}`;
+					// biome-ignore lint/style/noParameterAssign: ignore
+					rendered = rendered.with(0, {
+						...oldTopItem,
+						get positionAnchor() {
+							return positionAnchor;
+						},
+					});
+				}
+				return [newItem, ...rendered];
+			});
 		},
 	};
 });
@@ -65,6 +85,8 @@ function Toaster(props: { label: string }) {
 	const toaster = useToastsController();
 	const [ref, setRef] = createSignal<HTMLElement | null>(null);
 	const hasToasts = createMemo(() => toaster.items().length > 0);
+	const id = createUniqueId();
+	const listAnchorName = `--nou-toast-anchor-${id}`;
 
 	createEffect(() => {
 		const root = ref();
@@ -81,40 +103,31 @@ function Toaster(props: { label: string }) {
 			// Popover is used to ensure that if notification is triggered from a dialog or any
 			// top layer element, the toast appears on top of it
 			popover="manual"
-			id="nou-ui-toaster"
 			class="pointer-events-none fixed top-12 mx-auto my-0 overflow-visible bg-transparent p-0"
 			role="region"
 			aria-label={props.label}
 			ref={setRef}
 		>
-			<ol
-				class={tw(
-					css.list,
-					"-m-4 pointer-events-auto relative items-center gap-2 p-4 empty:hidden",
-				)}
-				tabIndex={-1}
-			>
-				<Index each={toaster.items()}>
-					{(entry, i) => {
-						let positionAnchor: string | undefined = undefined;
-						console.log(i, `--nou-toast-anchor-${toaster.items().at(i - 1)?.id}`);
-						if (i > 0) {
-							positionAnchor = `--nou-toast-anchor-${toaster.items().at(i - 1)?.id}`;
-						}
-
+			<div style={{ "anchor-name": listAnchorName }} class="absolute">
+				<div>Hello</div>
+			</div>
+			<ol class={css.list} tabIndex={-1}>
+				<For each={toaster.items()}>
+					{(entry) => {
 						return (
 							<li
 								class={tw(css.toast)}
 								style={{
-									"anchor-name": `--nou-toast-anchor-${entry().id}`,
-									"position-anchor": positionAnchor,
+									"anchor-name": entry.anchorName,
+									"position-anchor": entry.positionAnchor ?? listAnchorName,
 								}}
+								// on:toast-dismiss={(e) => toaster.removeById(entry().id)}
 							>
-								{entry().element()}
+								{entry.element()}
 							</li>
 						);
 					}}
-				</Index>
+				</For>
 			</ol>
 		</div>
 	);
@@ -136,3 +149,20 @@ function useToaster() {
 }
 
 export { useToaster, Toast, Toaster };
+
+class ToastDismissEvent extends Event {
+	constructor() {
+		super("toast-dismiss", { bubbles: true });
+	}
+}
+
+declare module "solid-js" {
+	namespace JSX {
+		interface CustomEvents {
+			"toast-dismiss": ToastDismissEvent;
+		}
+		interface CustomCaptureEvents {
+			"toast-dismiss": ToastDismissEvent;
+		}
+	}
+}
