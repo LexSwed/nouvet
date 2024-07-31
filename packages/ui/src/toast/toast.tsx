@@ -5,7 +5,6 @@ import {
 	For,
 	type JSX,
 	type ResolvedChildren,
-	type Signal,
 	children,
 	createEffect,
 	createMemo,
@@ -24,8 +23,7 @@ import css from "./toast.module.css";
 /**
  * TODO:
  * - reset timer when mouse is over the group of toasts
- * - move back older notifications behind the new one
- * - show all notifications as list when the pointer is over
+ * - reset timer when tab lost focus
  */
 
 interface ToastProps extends ComponentProps<typeof Card<"li">> {
@@ -53,7 +51,7 @@ const Toast = (ownProps: ToastProps) => {
 interface ToastEntry {
 	id: string;
 	anchorName: string;
-	positionAnchor: Signal<string | undefined>;
+	positionAnchor: string | undefined;
 	element: Accessor<ResolvedChildren>;
 }
 
@@ -64,20 +62,44 @@ const useToastsController = createSingletonRoot(() => {
 		items,
 		add: (element: Accessor<ResolvedChildren>) => {
 			const id = createUniqueId();
-			const positionAnchor = createSignal<string | undefined>(undefined);
+			const [positionAnchor, setPositionAnchor] = createSignal<string | undefined>(undefined);
 
 			setItems((rendered) => {
 				const newItem = {
 					id,
 					element,
 					anchorName: `--nou-toast-anchor-${id}`,
-					positionAnchor,
+					get positionAnchor(): string | undefined {
+						return positionAnchor();
+					},
+					set positionAnchor(value: string | undefined) {
+						setPositionAnchor(value);
+					},
 				};
 				const currentTopItem = rendered.at(0);
 				if (currentTopItem) {
-					currentTopItem.positionAnchor[1](newItem.anchorName);
+					currentTopItem.positionAnchor = newItem.anchorName;
 				}
 				return [newItem, ...rendered];
+			});
+		},
+		remove: (id: string) => {
+			setItems((rendered) => {
+				// TODO: move focus to the next toast
+				const index = rendered.findIndex((item) => item.id === id);
+				if (index === -1) return rendered;
+				// biome-ignore lint/style/noParameterAssign: it's ok
+				rendered = rendered.toSpliced(index, 1);
+				const newItemOnRemovedIndex = rendered.at(index);
+				const newTopItem = rendered.at(index - 1);
+				if (newItemOnRemovedIndex && newTopItem) {
+					newItemOnRemovedIndex.positionAnchor = newTopItem.anchorName;
+				}
+				const newElementOnRemovedIndex = newItemOnRemovedIndex?.element();
+				if (newElementOnRemovedIndex instanceof HTMLElement) {
+					newElementOnRemovedIndex.focus();
+				}
+				return rendered;
 			});
 		},
 	};
@@ -102,12 +124,12 @@ function Toaster(props: { label: string }) {
 			// Popover is used to ensure that if notification is triggered from a dialog or any
 			// top layer element, the toast appears on top of it
 			popover="manual"
-			class="pointer-events-none fixed top-12 mx-auto my-0 overflow-visible bg-transparent p-0"
+			class="fixed top-12 mx-auto my-0 overflow-visible bg-transparent p-0"
 			role="region"
 			aria-label={props.label}
 			ref={setRef}
 		>
-			<ol class={css.list} tabIndex={-1}>
+			<ol class={tw(css.list, "fixed min-w-96 empty:pointer-events-none")} tabIndex={-1}>
 				<For each={toaster.items()}>
 					{(entry) => {
 						return (
@@ -115,9 +137,9 @@ function Toaster(props: { label: string }) {
 								class={tw(css.toast)}
 								style={{
 									"anchor-name": entry.anchorName,
-									"position-anchor": entry.positionAnchor[0](),
+									"position-anchor": entry.positionAnchor,
 								}}
-								// on:toast-dismiss={(e) => toaster.removeById(entry().id)}
+								on:toast-dismiss={() => toaster.remove(entry.id)}
 							>
 								{entry.element()}
 							</li>

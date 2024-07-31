@@ -2,23 +2,16 @@
 
 @layer nou-ui {
   .list {
-    /* view-transition-name: nou-toast-list; */
-    position: fixed;
-    min-width: theme(spacing.64);
-
-    &:is(:hover, :focus) {
-      & > .toast {
-        inset-block-start: anchor(end);
-        translate: 0;
-        scale: 1;
-      }
+    &:is(:hover, :focus, :focus-within) > .toast {
+      inset-block-start: anchor(end);
+      translate: 0;
+      scale: 1;
     }
   }
 
   .toast {
-    pointer-events: auto;
     transition:
-      inset 0.1s ease,
+      inset 0.14s ease,
       0.3s allow-discrete;
     transition-property: opacity, display, inset, translate, scale;
     animation-duration: 0.3s;
