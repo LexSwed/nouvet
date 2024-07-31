@@ -5,6 +5,7 @@ import {
 	For,
 	type JSX,
 	type ResolvedChildren,
+	type Signal,
 	children,
 	createEffect,
 	createMemo,
@@ -52,7 +53,7 @@ const Toast = (ownProps: ToastProps) => {
 interface ToastEntry {
 	id: string;
 	anchorName: string;
-	positionAnchor?: string;
+	positionAnchor: Signal<string | undefined>;
 	element: Accessor<ResolvedChildren>;
 }
 
@@ -63,18 +64,18 @@ const useToastsController = createSingletonRoot(() => {
 		items,
 		add: (element: Accessor<ResolvedChildren>) => {
 			const id = createUniqueId();
+			const positionAnchor = createSignal<string | undefined>(undefined);
+
 			setItems((rendered) => {
-				const newItem = { id, element, anchorName: `--nou-toast-anchor-${id}` };
-				const oldTopItem = rendered.at(0);
-				if (oldTopItem) {
-					const positionAnchor = `--nou-toast-anchor-${id}`;
-					// biome-ignore lint/style/noParameterAssign: ignore
-					rendered = rendered.with(0, {
-						...oldTopItem,
-						get positionAnchor() {
-							return positionAnchor;
-						},
-					});
+				const newItem = {
+					id,
+					element,
+					anchorName: `--nou-toast-anchor-${id}`,
+					positionAnchor,
+				};
+				const currentTopItem = rendered.at(0);
+				if (currentTopItem) {
+					currentTopItem.positionAnchor[1](newItem.anchorName);
 				}
 				return [newItem, ...rendered];
 			});
@@ -85,8 +86,6 @@ function Toaster(props: { label: string }) {
 	const toaster = useToastsController();
 	const [ref, setRef] = createSignal<HTMLElement | null>(null);
 	const hasToasts = createMemo(() => toaster.items().length > 0);
-	const id = createUniqueId();
-	const listAnchorName = `--nou-toast-anchor-${id}`;
 
 	createEffect(() => {
 		const root = ref();
@@ -108,9 +107,6 @@ function Toaster(props: { label: string }) {
 			aria-label={props.label}
 			ref={setRef}
 		>
-			<div style={{ "anchor-name": listAnchorName }} class="absolute">
-				<div>Hello</div>
-			</div>
 			<ol class={css.list} tabIndex={-1}>
 				<For each={toaster.items()}>
 					{(entry) => {
@@ -119,7 +115,7 @@ function Toaster(props: { label: string }) {
 								class={tw(css.toast)}
 								style={{
 									"anchor-name": entry.anchorName,
-									"position-anchor": entry.positionAnchor ?? listAnchorName,
+									"position-anchor": entry.positionAnchor[0](),
 								}}
 								// on:toast-dismiss={(e) => toaster.removeById(entry().id)}
 							>

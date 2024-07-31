@@ -9,7 +9,7 @@ const meta = {
 
 export const ToastExample = () => {
 	const toast = useToaster();
-	let counter = 2;
+	let counter = 0;
 	return (
 		<>
 			<Button
