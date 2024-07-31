@@ -3,13 +3,13 @@
 @layer nou-ui {
   .list {
     /* view-transition-name: nou-toast-list; */
-    transition: all 0.2s ease-in-out allow-discrete;
     position: fixed;
     min-width: theme(spacing.64);
 
     &:is(:hover, :focus) {
       & > .toast {
         inset-block-start: anchor(end);
+        translate: 0;
         scale: 1;
       }
     }
@@ -17,11 +17,13 @@
 
   .toast {
     pointer-events: auto;
-    transition: 0.3s allow-discrete;
-    transition-property: display, inset, scale;
+    transition:
+      inset 0.1s ease,
+      0.3s allow-discrete;
+    transition-property: opacity, display, inset, translate, scale;
     animation-duration: 0.3s;
     position: absolute;
-    inset-block-start: calc(anchor(start, 0) + theme(spacing.4));
+    inset-block-start: anchor(start, 0);
     /* use padding instead of positioning to allow hover to remain stable for multiple toasts */
     padding: theme("spacing[1]") theme("spacing[2]");
 
@@ -37,18 +39,23 @@
     &:nth-of-type(2) {
       z-index: 3;
       scale: 0.9;
+      translate: 0 theme(spacing.4);
     }
     &:nth-of-type(3) {
       z-index: 2;
       scale: 0.85;
+      translate: 0 calc(2 * theme(spacing.4));
     }
     &:nth-of-type(4) {
       z-index: 1;
       scale: 0.8;
+      translate: 0 calc(3 * theme(spacing.4));
     }
     &:nth-child(n + 5) {
-      z-index: 0;
-      scale: 0.8;
+      opacity: 0;
+      display: none;
+      scale: 0.75;
+      translate: 0 calc(4 * theme(spacing.4));
     }
   }
 
