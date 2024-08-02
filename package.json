@@ -13,7 +13,7 @@
 		"node": ">=20",
 		"npm": ">=10"
 	},
-	"packageManager": "npm@10.2.4",
+	"packageManager": "npm@10.8.2",
 	"scripts": {
 		"dev": "npm run dev -w @nou/web",
 		"dev:web": "npm run dev -w @nou/web",
