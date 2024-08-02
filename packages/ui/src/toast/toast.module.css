@@ -14,7 +14,6 @@
       inset 0.14s ease,
       0.3s allow-discrete;
     transition-property: opacity, display, inset, translate, scale;
-    animation-duration: 0.3s;
     position: absolute;
     inset-block-start: anchor(start, 0);
     /* use padding instead of positioning to allow hover to remain stable for multiple toasts */
@@ -24,7 +23,7 @@
       inset-block-start: 0;
       z-index: 4;
 
-      @apply animate-in slide-in-from-top-8 fade-in-0 fill-mode-forwards;
+      @apply animate-in duration-300 slide-in-from-top-8 fade-in-0 fill-mode-forwards;
     }
     /* &:not(:nth-of-type(1)) > * > * {
       opacity: 0;
