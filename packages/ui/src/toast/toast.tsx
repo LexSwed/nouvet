@@ -12,6 +12,7 @@ import {
 	createUniqueId,
 	getOwner,
 	onCleanup,
+	onMount,
 	runWithOwner,
 	splitProps,
 } from "solid-js";
@@ -155,6 +156,25 @@ function Toaster(props: { label: string }) {
 		} else {
 			root.hidePopover();
 		}
+	});
+
+	onMount(() => {
+		const controller = new AbortController();
+		document.addEventListener(
+			"visibilitychange",
+			() => {
+				if (document.visibilityState === "hidden") {
+					toaster.resetTimers();
+				} else {
+					toaster.restartTimers();
+				}
+			},
+			{ signal: controller.signal },
+		);
+
+		onCleanup(() => {
+			controller.abort();
+		});
 	});
 
 	return (
