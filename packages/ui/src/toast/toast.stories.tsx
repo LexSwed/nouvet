@@ -12,14 +12,16 @@ export const ToastExample = () => {
 	let counter = 0;
 	return (
 		<>
-			<Button
-				onClick={async () => {
-					counter = counter + 1;
-					toast(() => <Toast class="max-w-80">#{counter} toast</Toast>);
-				}}
-			>
-				Create toast
-			</Button>
+			<div class="flex flex-row gap-4">
+				<Button
+					onClick={async () => {
+						counter = counter + 1;
+						toast(() => <Toast class="max-w-80">#{counter} toast</Toast>);
+					}}
+				>
+					Create toast
+				</Button>
+			</div>
 			<Toaster label="Notifications" />
 		</>
 	);

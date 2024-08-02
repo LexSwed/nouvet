@@ -22,8 +22,11 @@ import { composeEventHandlers } from "../utils";
 import css from "./toast.module.css";
 /**
  * TODO:
- * - reset timer when mouse is over the group of toasts
  * - reset timer when tab lost focus
+ * - swipe to remove
+ * - positions
+ * - tones
+ * - show how many toasts are hidden
  */
 
 interface ToastProps extends ComponentProps<typeof Card<"li">> {
@@ -34,7 +37,6 @@ const Toast = (ownProps: ToastProps) => {
 	const [, props] = splitProps(ownProps, []);
 	return (
 		<Card
-			aria-atomic="true"
 			role="status"
 			tabIndex={0}
 			{...props}
@@ -53,55 +55,91 @@ interface ToastEntry {
 	anchorName: string;
 	positionAnchor: string | undefined;
 	element: Accessor<ResolvedChildren>;
+	timer: { reset: () => void; restart: (delay: number) => void };
+}
+
+interface ToastOptions {
+	/** Time in ms after which the toast will be automatically hidden.
+	 * @example Infinity - disable automatic hiding.
+	 * @default 3000
+	 */
+	duration?: number;
 }
 
 const useToastsController = createSingletonRoot(() => {
 	const [items, setItems] = createSignal<Array<ToastEntry>>([]);
 
+	function addToast(element: Accessor<ResolvedChildren>, options?: ToastOptions) {
+		const id = createUniqueId();
+		const [positionAnchor, setPositionAnchor] = createSignal<string | undefined>(undefined);
+		const { duration = 3000 } = options || {};
+		let timer = setTimeout(() => removeToast(id), duration);
+		const newItem = {
+			id,
+			element,
+			anchorName: `--nou-toast-anchor-${id}`,
+			get positionAnchor(): string | undefined {
+				return positionAnchor();
+			},
+			set positionAnchor(value: string | undefined) {
+				setPositionAnchor(value);
+			},
+			timer: {
+				reset: () => clearTimeout(timer),
+				restart: (delay: number) => {
+					timer = setTimeout(() => removeToast(id), duration + delay);
+				},
+			},
+		} satisfies ToastEntry;
+
+		setItems((rendered) => {
+			const currentTopItem = rendered.at(0);
+			if (currentTopItem) {
+				currentTopItem.positionAnchor = newItem.anchorName;
+			}
+			return [newItem, ...rendered];
+		});
+		return newItem;
+	}
+
+	function removeToast(id: string) {
+		setItems((rendered) => {
+			// TODO: move focus to the next toast
+			const index = rendered.findIndex((item) => item.id === id);
+			if (index === -1) return rendered;
+			// biome-ignore lint/style/noParameterAssign: it's ok
+			rendered = rendered.toSpliced(index, 1);
+			const newItemOnRemovedIndex = rendered.at(index);
+			const newTopItem = rendered.at(index - 1);
+			if (newItemOnRemovedIndex && newTopItem) {
+				newItemOnRemovedIndex.positionAnchor = newTopItem.anchorName;
+			}
+			const newElementOnRemovedIndex = newItemOnRemovedIndex?.element();
+			if (newElementOnRemovedIndex instanceof HTMLElement) {
+				newElementOnRemovedIndex.focus();
+			}
+			return rendered;
+		});
+	}
+
+	function resetTimers() {
+		for (const item of items()) {
+			item.timer.reset();
+		}
+	}
+
+	function restartTimers() {
+		items().forEach((item, index, list) => {
+			item.timer.restart((list.length - index) * 300);
+		});
+	}
+
 	return {
 		items,
-		add: (element: Accessor<ResolvedChildren>) => {
-			const id = createUniqueId();
-			const [positionAnchor, setPositionAnchor] = createSignal<string | undefined>(undefined);
-
-			setItems((rendered) => {
-				const newItem = {
-					id,
-					element,
-					anchorName: `--nou-toast-anchor-${id}`,
-					get positionAnchor(): string | undefined {
-						return positionAnchor();
-					},
-					set positionAnchor(value: string | undefined) {
-						setPositionAnchor(value);
-					},
-				};
-				const currentTopItem = rendered.at(0);
-				if (currentTopItem) {
-					currentTopItem.positionAnchor = newItem.anchorName;
-				}
-				return [newItem, ...rendered];
-			});
-		},
-		remove: (id: string) => {
-			setItems((rendered) => {
-				// TODO: move focus to the next toast
-				const index = rendered.findIndex((item) => item.id === id);
-				if (index === -1) return rendered;
-				// biome-ignore lint/style/noParameterAssign: it's ok
-				rendered = rendered.toSpliced(index, 1);
-				const newItemOnRemovedIndex = rendered.at(index);
-				const newTopItem = rendered.at(index - 1);
-				if (newItemOnRemovedIndex && newTopItem) {
-					newItemOnRemovedIndex.positionAnchor = newTopItem.anchorName;
-				}
-				const newElementOnRemovedIndex = newItemOnRemovedIndex?.element();
-				if (newElementOnRemovedIndex instanceof HTMLElement) {
-					newElementOnRemovedIndex.focus();
-				}
-				return rendered;
-			});
-		},
+		add: addToast,
+		remove: removeToast,
+		resetTimers,
+		restartTimers,
 	};
 });
 function Toaster(props: { label: string }) {
@@ -129,7 +167,12 @@ function Toaster(props: { label: string }) {
 			aria-label={props.label}
 			ref={setRef}
 		>
-			<ol class={tw(css.list, "fixed min-w-96 empty:pointer-events-none")} tabIndex={-1}>
+			<ol
+				class={tw(css.list, "fixed min-w-96 empty:pointer-events-none")}
+				tabIndex={-1}
+				onMouseEnter={() => toaster.resetTimers()}
+				onMouseLeave={() => toaster.restartTimers()}
+			>
 				<For each={toaster.items()}>
 					{(entry) => {
 						return (
@@ -157,10 +200,10 @@ function useToaster() {
 	return (element: () => JSX.Element) =>
 		runWithOwner(owner, () => {
 			const child = children(element);
+			const item = toaster.add(child);
 			function cleanup() {
-				// toaster.remove(child());
+				toaster.remove(item.id);
 			}
-			toaster.add(child);
 			onCleanup(cleanup);
 			return cleanup;
 		});

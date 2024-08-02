@@ -17,7 +17,9 @@
     position: absolute;
     inset-block-start: anchor(start, 0);
     /* use padding instead of positioning to allow hover to remain stable for multiple toasts */
-    padding: theme("spacing[1]") theme("spacing[2]");
+    padding: theme("spacing[1]") theme("spacing[3]");
+    backdrop-filter: blur(2px);
+    border-radius: theme(borderRadius.2xl);
 
     &:nth-of-type(1) {
       inset-block-start: 0;
@@ -50,26 +52,4 @@
       translate: 0 calc(4 * theme(spacing.4));
     }
   }
-
-  /* @starting-style {
-    .toast {
-      transform: translateY(-1rem);
-    }
-  } */
-
-  /* :global(html::view-transition-group(*.nou-toast)) {
-    @apply duration-300 slide-in-from-top-0 ease-out fade-in-0;
-  }
-
-  :global(html::view-transition-new(nou-toast):only-child) {
-    @apply animate-in slide-in-from-top-8 ease-out fade-in-0 duration-300;
-  }
-
-  :global(:root::view-transition-old(nou-toast-removed):only-child) {
-    @apply animate-out slide-out-to-top-8 ease-in fade-out-0 duration-200;
-  }
-
-  :global(html::view-transition-new(nou-toast-latest):only-child) {
-    @apply animate-out slide-out-to-top-8 ease-in fade-out-0 duration-200;
-  } */
 }
