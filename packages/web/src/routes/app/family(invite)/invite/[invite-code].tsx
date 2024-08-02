@@ -122,7 +122,7 @@ export default function InviteAcceptPage(props: RouteSectionProps) {
 
 											<Show when={joinSubmission.error}>
 												<Card
-													aria-live="polite"
+													role="alert"
 													variant="tonal"
 													tone="failure"
 													class="col-span-4 col-start-1 row-[2] flex max-w-[320px] flex-col gap-6 self-end rounded-3xl [background-attachment:fixed] md:mb-4 lg:col-span-5 lg:col-start-2"
