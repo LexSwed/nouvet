@@ -98,6 +98,7 @@ const FormField = (ownProps: FieldInnerProps) => {
 				</div>
 			</div>
 			<Switch>
+				{/* TODO: switch to multiple aria-describedby support, keeping the description, but also showing the error message */}
 				<Match when={errorMessage()}>
 					<span id={aria.describedBy} aria-live="polite" class={css.description}>
 						{errorMessage()}
