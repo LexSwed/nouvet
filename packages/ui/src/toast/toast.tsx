@@ -23,11 +23,10 @@ import { composeEventHandlers } from "../utils";
 import css from "./toast.module.css";
 /**
  * TODO:
- * - reset timer when tab lost focus
+ * - show how many toasts are hidden
+ * - tones
  * - swipe to remove
  * - positions
- * - tones
- * - show how many toasts are hidden
  */
 
 interface ToastProps extends ComponentProps<typeof Card<"li">> {
@@ -66,6 +65,97 @@ interface ToastOptions {
 	 */
 	duration?: number;
 }
+
+function Toaster(props: { label: string }) {
+	const toaster = useToastsController();
+	const [ref, setRef] = createSignal<HTMLElement | null>(null);
+	const hasToasts = createMemo(() => toaster.items().length > 0);
+
+	createEffect(() => {
+		const root = ref();
+		if (!root) return;
+		if (hasToasts()) {
+			root.showPopover();
+		} else {
+			root.hidePopover();
+		}
+	});
+
+	onMount(() => {
+		const controller = new AbortController();
+		document.addEventListener(
+			"visibilitychange",
+			() => {
+				if (document.visibilityState === "hidden") {
+					toaster.resetTimers();
+				} else {
+					toaster.restartTimers();
+				}
+			},
+			{ signal: controller.signal },
+		);
+
+		onCleanup(() => {
+			controller.abort();
+		});
+	});
+
+	return (
+		<div
+			// Popover is used to ensure that if notification is triggered from a dialog or any
+			// top layer element, the toast appears on top of it
+			popover="manual"
+			class="fixed top-12 mx-auto my-0 overflow-visible bg-transparent p-0"
+			role="region"
+			aria-label={props.label}
+			ref={setRef}
+		>
+			<ol
+				class={tw(
+					css.list,
+					"fixed inset-x-0 flex w-full flex-col items-center empty:pointer-events-none",
+				)}
+				tabIndex={-1}
+				onMouseEnter={() => toaster.resetTimers()}
+				onMouseLeave={() => toaster.restartTimers()}
+			>
+				<For each={toaster.items()}>
+					{(entry) => {
+						return (
+							<li
+								class={tw(css.toast)}
+								style={{
+									"anchor-name": entry.anchorName,
+									"position-anchor": entry.positionAnchor,
+								}}
+								on:toast-dismiss={() => toaster.remove(entry.id)}
+							>
+								{entry.element()}
+							</li>
+						);
+					}}
+				</For>
+			</ol>
+		</div>
+	);
+}
+
+function useToaster() {
+	const toaster = useToastsController();
+	const owner = getOwner();
+	return (element: () => JSX.Element) =>
+		runWithOwner(owner, () => {
+			const child = children(element);
+			const item = toaster.add(child);
+			function cleanup() {
+				toaster.remove(item.id);
+			}
+			onCleanup(cleanup);
+			return cleanup;
+		});
+}
+
+export { useToaster, Toast, Toaster };
 
 const useToastsController = createSingletonRoot(() => {
 	const [items, setItems] = createSignal<Array<ToastEntry>>([]);
@@ -114,6 +204,8 @@ const useToastsController = createSingletonRoot(() => {
 			const newTopItem = rendered.at(index - 1);
 			if (newItemOnRemovedIndex && newTopItem) {
 				newItemOnRemovedIndex.positionAnchor = newTopItem.anchorName;
+			} else if (newItemOnRemovedIndex) {
+				newItemOnRemovedIndex.positionAnchor = undefined;
 			}
 			const newElementOnRemovedIndex = newItemOnRemovedIndex?.element();
 			if (newElementOnRemovedIndex instanceof HTMLElement) {
@@ -143,94 +235,6 @@ const useToastsController = createSingletonRoot(() => {
 		restartTimers,
 	};
 });
-function Toaster(props: { label: string }) {
-	const toaster = useToastsController();
-	const [ref, setRef] = createSignal<HTMLElement | null>(null);
-	const hasToasts = createMemo(() => toaster.items().length > 0);
-
-	createEffect(() => {
-		const root = ref();
-		if (!root) return;
-		if (hasToasts()) {
-			root.showPopover();
-		} else {
-			root.hidePopover();
-		}
-	});
-
-	onMount(() => {
-		const controller = new AbortController();
-		document.addEventListener(
-			"visibilitychange",
-			() => {
-				if (document.visibilityState === "hidden") {
-					toaster.resetTimers();
-				} else {
-					toaster.restartTimers();
-				}
-			},
-			{ signal: controller.signal },
-		);
-
-		onCleanup(() => {
-			controller.abort();
-		});
-	});
-
-	return (
-		<div
-			// Popover is used to ensure that if notification is triggered from a dialog or any
-			// top layer element, the toast appears on top of it
-			popover="manual"
-			class="fixed top-12 mx-auto my-0 overflow-visible bg-transparent p-0"
-			role="region"
-			aria-label={props.label}
-			ref={setRef}
-		>
-			<ol
-				class={tw(css.list, "fixed min-w-96 empty:pointer-events-none")}
-				tabIndex={-1}
-				onMouseEnter={() => toaster.resetTimers()}
-				onMouseLeave={() => toaster.restartTimers()}
-			>
-				<For each={toaster.items()}>
-					{(entry) => {
-						return (
-							<li
-								class={tw(css.toast)}
-								style={{
-									"anchor-name": entry.anchorName,
-									"position-anchor": entry.positionAnchor,
-								}}
-								on:toast-dismiss={() => toaster.remove(entry.id)}
-							>
-								{entry.element()}
-							</li>
-						);
-					}}
-				</For>
-			</ol>
-		</div>
-	);
-}
-
-function useToaster() {
-	const toaster = useToastsController();
-	const owner = getOwner();
-	return (element: () => JSX.Element) =>
-		runWithOwner(owner, () => {
-			const child = children(element);
-			const item = toaster.add(child);
-			function cleanup() {
-				toaster.remove(item.id);
-			}
-			onCleanup(cleanup);
-			return cleanup;
-		});
-}
-
-export { useToaster, Toast, Toaster };
-
 class ToastDismissEvent extends Event {
 	constructor() {
 		super("toast-dismiss", { bubbles: true });

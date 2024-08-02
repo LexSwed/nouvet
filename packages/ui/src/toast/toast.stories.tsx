@@ -1,6 +1,7 @@
 import type { Meta } from "storybook-solidjs";
 import { Toast, Toaster, useToaster } from ".";
 import { Button } from "../button";
+import { Text } from "../text";
 
 const meta = {
 	title: "Toast",
@@ -9,17 +10,31 @@ const meta = {
 
 export const ToastExample = () => {
 	const toast = useToaster();
-	let counter = 0;
 	return (
 		<>
 			<div class="flex flex-row gap-4">
 				<Button
 					onClick={async () => {
-						counter = counter + 1;
-						toast(() => <Toast class="max-w-80">#{counter} toast</Toast>);
+						if (Math.random() > 0.4) {
+							toast(() => (
+								<Toast class="max-w-80" tone="secondary">
+									<Text tone="success">Saved</Text>
+									<Text with="body-sm">The information is saved successfully</Text>
+								</Toast>
+							));
+						} else {
+							toast(() => (
+								<Toast class="max-w-80" tone="failure">
+									<Text tone="danger">Failed</Text>
+									<Text with="body-sm">
+										It was not possible to save the information at this moment. Try again.
+									</Text>
+								</Toast>
+							));
+						}
 					}}
 				>
-					Create toast
+					Save information
 				</Button>
 			</div>
 			<Toaster label="Notifications" />
