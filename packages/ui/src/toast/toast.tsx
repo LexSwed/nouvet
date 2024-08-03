@@ -27,6 +27,8 @@ import css from "./toast.module.css";
  * - tones
  * - swipe to remove
  * - positions
+ * - hotkey command to focus on notifications region
+ * - navigate through the items with keyboard arrows
  */
 
 interface ToastProps extends ComponentProps<typeof Card<"li">> {

@@ -26,10 +26,7 @@ export async function updateUserProfileServer(formData: FormData) {
 		return user;
 	} catch (error) {
 		if (isValiError<UpdateUserSchema>(error)) {
-			return json(
-				{ errors: await translateErrorTokens<UpdateUserSchema>(error) },
-				{ status: 422, revalidate: [] },
-			);
+			return json({ errors: await translateErrorTokens(error) }, { status: 422, revalidate: [] });
 		}
 		console.error(error);
 		return json({ failed: true }, { status: 500, revalidate: [] });

@@ -1,11 +1,14 @@
 import "@nou/config/global.css";
+import { Toaster } from "@nou/ui";
 
 import { MetaProvider } from "@solidjs/meta";
 import { Navigate, Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { ErrorBoundary, Suspense } from "solid-js";
+import { createTranslator } from "./server/i18n";
 
 export default function App() {
+	const t = createTranslator("app");
 	return (
 		<Router
 			explicitLinks={true}
@@ -25,6 +28,7 @@ export default function App() {
 						<MetaProvider>
 							<Suspense>{props.children}</Suspense>
 						</MetaProvider>
+						<Toaster label={t("notifications-region")!} />
 					</ErrorBoundary>
 				);
 			}}

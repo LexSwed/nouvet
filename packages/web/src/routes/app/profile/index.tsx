@@ -1,4 +1,16 @@
-import { Avatar, Button, Card, Fieldset, Form, Option, Picker, Text, TextField } from "@nou/ui";
+import {
+	Avatar,
+	Button,
+	Card,
+	Fieldset,
+	Form,
+	Option,
+	Picker,
+	Text,
+	TextField,
+	Toast,
+	useToaster,
+} from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import { type RouteDefinition, createAsync, useAction, useSubmission } from "@solidjs/router";
 import { Show, Suspense } from "solid-js";
@@ -24,6 +36,7 @@ export default function ProfilePage() {
 	const updateProfileAction = useAction(updateUserProfile);
 	// TODO: error handling, success handling
 	const profileSubmission = useSubmission(updateUserProfile);
+	const toast = useToaster();
 
 	return (
 		<>
@@ -44,7 +57,9 @@ export default function ProfilePage() {
 										method="post"
 										action={updateUserProfile}
 										validationErrors={
-											profileSubmission.result && "errors" in profileSubmission.result
+											profileSubmission.result &&
+											"errors" in profileSubmission.result &&
+											profileSubmission.result.errors
 												? profileSubmission.result.errors
 												: null
 										}
@@ -54,6 +69,20 @@ export default function ProfilePage() {
 											const updatedUser = await updateProfileAction(new FormData(e.currentTarget));
 											if ("locale" in updatedUser && updatedUser.locale !== initialLocale) {
 												location.reload();
+											} else {
+												if (profileSubmission.result && "failed" in profileSubmission.result) {
+													toast(() => (
+														<Toast>
+															<Text tone="danger">Something went wrong, try again?</Text>
+														</Toast>
+													));
+												} else if (profileSubmission.result && "id" in profileSubmission.result) {
+													toast(() => (
+														<Toast>
+															<Text tone="success">Saved!</Text>
+														</Toast>
+													));
+												}
 											}
 										}}
 									>

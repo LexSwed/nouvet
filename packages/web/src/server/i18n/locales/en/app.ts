@@ -1,5 +1,6 @@
 const appDict = {
 	login: "Log in",
+	"notifications-region": "Notifications",
 	"meta.title-new-user": "NouVet | Welcome",
 	"meta.title": "NouVet | {{familyName}}",
 	"family.no-name": "My Family",
