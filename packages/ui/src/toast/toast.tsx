@@ -19,7 +19,7 @@ import {
 import { Card } from "../card";
 
 import { tw } from "../tw";
-import { composeEventHandlers } from "../utils";
+import { composeEventHandlers, mergeDefaultProps } from "../utils";
 import css from "./toast.module.css";
 /**
  * TODO:
@@ -34,11 +34,12 @@ interface ToastProps extends ComponentProps<typeof Card<"li">> {
 }
 
 const Toast = (ownProps: ToastProps) => {
-	const [, props] = splitProps(ownProps, []);
+	const [, props] = splitProps(mergeDefaultProps(ownProps, { "aria-live": "polite" }), []);
 	return (
 		<Card
 			role="status"
 			tabIndex={0}
+			aria-atomic="true"
 			{...props}
 			class={tw("allow-discrete border border-on-background/5 shadow-popover", props.class)}
 			onClick={composeEventHandlers(props.onClick, (e) => {
@@ -113,12 +114,13 @@ function Toaster(props: { label: string }) {
 			<ol
 				class={tw(
 					css.list,
-					"fixed inset-x-0 flex w-full flex-col items-center empty:pointer-events-none",
+					"-m-4 fixed inset-x-0 flex w-full flex-col items-center empty:pointer-events-none",
 				)}
 				tabIndex={-1}
 				onMouseEnter={() => toaster.resetTimers()}
 				onMouseLeave={() => toaster.restartTimers()}
 			>
+				<div class="-m-1 absolute h-1 w-full [anchor-name:--nou-toast-anchor-list]" aria-hidden />
 				<For each={toaster.items()}>
 					{(entry) => {
 						return (
@@ -126,7 +128,7 @@ function Toaster(props: { label: string }) {
 								class={tw(css.toast)}
 								style={{
 									"anchor-name": entry.anchorName,
-									"position-anchor": entry.positionAnchor,
+									"position-anchor": entry.positionAnchor ?? "--nou-toast-anchor-list",
 								}}
 								on:toast-dismiss={() => toaster.remove(entry.id)}
 							>
@@ -201,7 +203,8 @@ const useToastsController = createSingletonRoot(() => {
 			// biome-ignore lint/style/noParameterAssign: it's ok
 			rendered = rendered.toSpliced(index, 1);
 			const newItemOnRemovedIndex = rendered.at(index);
-			const newTopItem = rendered.at(index - 1);
+			// NB: do not use .at() as it will map to the last element
+			const newTopItem = rendered[index - 1];
 			if (newItemOnRemovedIndex && newTopItem) {
 				newItemOnRemovedIndex.positionAnchor = newTopItem.anchorName;
 			} else if (newItemOnRemovedIndex) {

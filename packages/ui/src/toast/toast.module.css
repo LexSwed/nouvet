@@ -17,14 +17,12 @@
       scale;
     position: absolute;
     inset-block-start: anchor(start, 0);
-    inset-inline: anchor-center;
     /* use padding instead of positioning to allow hover to remain stable for multiple toasts */
     padding: theme("spacing[1]") theme("spacing[3]");
     backdrop-filter: blur(1px);
     border-radius: theme(borderRadius.2xl);
 
     &:nth-of-type(1) {
-      inset-block-start: 0;
       z-index: 4;
       translate: 0;
     }
