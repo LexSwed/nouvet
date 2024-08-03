@@ -2,10 +2,42 @@
 
 @layer nou-ui {
   .list {
-    &:is(:hover, :focus, :focus-within) > .toast {
-      inset-block-start: anchor(end);
-      translate: 0;
-      scale: 1;
+    &:is(:hover, :focus) {
+      & > .toast {
+        inset-block-start: anchor(end, 0);
+        scale: 1;
+      }
+    }
+    &:is(:focus-within) {
+      & > .toast:has(~ .toast:where(:focus, :focus-within)) {
+        scale: 0.75;
+        inset-block-start: calc(anchor(start, 0) + theme(spacing.4));
+        z-index: 1;
+      }
+
+      & > .toast:where(:focus, :focus-within) {
+        opacity: 1;
+        scale: 1;
+        z-index: 10;
+      }
+      & > .toast:where(:focus, :focus-within) + .toast,
+      & > .toast:has(+ .toast:where(:focus, :focus-within)) {
+        opacity: 1;
+        scale: 0.95;
+        z-index: 8;
+      }
+
+      & > .toast:where(:focus, :focus-within) + .toast {
+        inset-block-start: anchor(end);
+      }
+      & > .toast:nth-of-type(1):where(:focus, :focus-within) + .toast {
+        scale: 1;
+      }
+
+      & > .toast:has(+ .toast + .toast:where(:focus, :focus-within)) {
+        opacity: 1;
+        scale: 0.9;
+      }
     }
   }
 
@@ -19,12 +51,15 @@
     inset-block-start: anchor(start, 0);
     /* use padding instead of positioning to allow hover to remain stable for multiple toasts */
     padding: theme("spacing[1]") theme("spacing[3]");
-    backdrop-filter: blur(1px);
     border-radius: theme(borderRadius.2xl);
 
     &:nth-of-type(1) {
       z-index: 4;
-      translate: 0;
+      inset-block-start: anchor(start, 0) !important;
+    }
+
+    & + .toast {
+      inset-block-start: calc(anchor(start, 0) + theme(spacing.4));
     }
     /* &:not(:nth-of-type(1)) > * > * {
       opacity: 0;
@@ -32,23 +67,18 @@
     &:nth-of-type(2) {
       z-index: 3;
       scale: 0.9;
-      translate: 0 theme(spacing.4);
     }
     &:nth-of-type(3) {
       z-index: 2;
       scale: 0.85;
-      translate: 0 calc(2 * theme(spacing.4));
     }
     &:nth-of-type(4) {
       z-index: 1;
       scale: 0.8;
-      translate: 0 calc(3 * theme(spacing.4));
     }
     &:nth-child(n + 5) {
       opacity: 0;
-      display: none;
       scale: 0.75;
-      translate: 0 calc(4 * theme(spacing.4));
     }
   }
   @starting-style {

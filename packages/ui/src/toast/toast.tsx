@@ -34,7 +34,7 @@ interface ToastProps extends ComponentProps<typeof Card<"li">> {
 }
 
 const Toast = (ownProps: ToastProps) => {
-	const [, props] = splitProps(mergeDefaultProps(ownProps, { "aria-live": "polite" }), []);
+	const [, props] = splitProps(mergeDefaultProps(ownProps, { "aria-live": "assertive" }), []);
 	return (
 		<Card
 			role="status"
@@ -118,7 +118,9 @@ function Toaster(props: { label: string }) {
 				)}
 				tabIndex={-1}
 				onMouseEnter={() => toaster.resetTimers()}
-				onMouseLeave={() => toaster.restartTimers()}
+				// onMouseLeave={() => toaster.restartTimers()}
+				onFocusIn={() => toaster.resetTimers()}
+				// onFocusOut={() => toaster.restartTimers()}
 			>
 				<div class="-m-1 absolute h-1 w-full [anchor-name:--nou-toast-anchor-list]" aria-hidden />
 				<For each={toaster.items()}>
