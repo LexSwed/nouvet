@@ -35,7 +35,7 @@
 		"@storybook/blocks": "^8.2.7",
 		"@storybook/docs-tools": "^8.2.7",
 		"@storybook/test": "^8.2.7",
-		"autoprefixer": "^10.4.19",
+		"autoprefixer": "^10.4.20",
 		"postcss": "^8.4.40",
 		"remark-gfm": "^4.0.0",
 		"storybook": "^8.2.7",

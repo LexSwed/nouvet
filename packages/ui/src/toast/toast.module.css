@@ -1,6 +1,46 @@
 @tailwind utilities;
 
 @layer nou-ui {
+  .toast {
+    transition:
+      inset 0.14s ease,
+      0.3s allow-discrete;
+    transition-property: opacity, display, width, height, inset,
+      inset-block-start, translate, scale;
+    position: absolute;
+    inset-block-start: anchor(start, 0);
+    /* use padding instead of positioning to allow hover to remain stable for multiple toasts */
+    padding: theme("spacing[1]") theme("spacing[3]");
+    border-radius: theme(borderRadius.2xl);
+
+    &:nth-of-type(1) {
+      z-index: 4;
+      inset-block-start: anchor(start, 0) !important;
+    }
+
+    & + .toast {
+      inset-block-start: calc(anchor(start, 0) + theme(spacing.4));
+    }
+    /* &:not(:nth-of-type(1)) > * > * {
+      opacity: 0;
+    } */
+    &:nth-of-type(2) {
+      z-index: 3;
+      scale: 0.9;
+    }
+    &:nth-of-type(3) {
+      z-index: 2;
+      scale: 0.85;
+    }
+    &:nth-of-type(4) {
+      z-index: 1;
+      scale: 0.8;
+    }
+    &:nth-child(n + 5) {
+      opacity: 0;
+      scale: 0.75;
+    }
+  }
   .list {
     &:is(:hover, :focus) {
       & > .toast {
@@ -38,47 +78,6 @@
         opacity: 1;
         scale: 0.9;
       }
-    }
-  }
-
-  .toast {
-    transition:
-      inset 0.14s ease,
-      0.3s allow-discrete;
-    transition-property: opacity, display, inset, inset-block-start, translate,
-      scale;
-    position: absolute;
-    inset-block-start: anchor(start, 0);
-    /* use padding instead of positioning to allow hover to remain stable for multiple toasts */
-    padding: theme("spacing[1]") theme("spacing[3]");
-    border-radius: theme(borderRadius.2xl);
-
-    &:nth-of-type(1) {
-      z-index: 4;
-      inset-block-start: anchor(start, 0) !important;
-    }
-
-    & + .toast {
-      inset-block-start: calc(anchor(start, 0) + theme(spacing.4));
-    }
-    /* &:not(:nth-of-type(1)) > * > * {
-      opacity: 0;
-    } */
-    &:nth-of-type(2) {
-      z-index: 3;
-      scale: 0.9;
-    }
-    &:nth-of-type(3) {
-      z-index: 2;
-      scale: 0.85;
-    }
-    &:nth-of-type(4) {
-      z-index: 1;
-      scale: 0.8;
-    }
-    &:nth-child(n + 5) {
-      opacity: 0;
-      scale: 0.75;
     }
   }
   @starting-style {
