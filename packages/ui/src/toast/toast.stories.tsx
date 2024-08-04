@@ -12,31 +12,39 @@ export const ToastExample = () => {
 	const toast = useToaster();
 	return (
 		<>
-			<div class="flex flex-row gap-4">
-				<Button
-					onClick={async () => {
-						if (Math.random() > 0.4) {
+			<fieldset>
+				<Text as="legend" with="overline">
+					What to do in life?
+				</Text>
+				<div class="mt-4 flex flex-row gap-4">
+					<Button
+						tone="secondary"
+						onClick={async () => {
 							toast(() => (
 								<Toast class="max-w-80" tone="secondary">
-									<Text tone="success">Saved</Text>
-									<Text with="body-sm">The information is saved successfully</Text>
+									<Text tone="success">Succeeded</Text>
+									<Text with="body-sm">The success has suddenly come</Text>
 								</Toast>
 							));
-						} else {
+						}}
+					>
+						Succeed
+					</Button>
+					<Button
+						tone="destructive"
+						onClick={async () => {
 							toast(() => (
 								<Toast class="max-w-80" tone="failure">
 									<Text tone="danger">Failed</Text>
-									<Text with="body-sm">
-										It was not possible to save the information at this moment. Try again.
-									</Text>
+									<Text with="body-sm">You have successfully failed.</Text>
 								</Toast>
 							));
-						}
-					}}
-				>
-					Save information
-				</Button>
-			</div>
+						}}
+					>
+						Fail
+					</Button>
+				</div>
+			</fieldset>
 			<Toaster label="Notifications" />
 		</>
 	);
