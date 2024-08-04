@@ -47,13 +47,12 @@
         inset-block-start: anchor(end, 0);
         scale: 1;
         filter: none;
-        filter: contrast(0.95) brightness(1.01);
       }
     }
     &:is(:focus-within) {
       & > .toast:has(~ .toast:where(:focus, :focus-within)) {
         scale: 0.85;
-        inset-block-start: calc(anchor(start, 0) + theme(spacing.4));
+        inset-block-start: calc(anchor(start, 0) + theme(spacing.2));
         z-index: 1;
         filter: contrast(0.95) brightness(1.01);
         opacity: 1;
@@ -74,11 +73,28 @@
 
       & > .toast:where(:focus, :focus-within) + .toast {
         inset-block-start: anchor(end);
+        filter: none;
+        scale: 1;
+        opacity: 1;
       }
 
       & > .toast:has(+ .toast + .toast:where(:focus, :focus-within)) {
         opacity: 1;
         scale: 0.9;
+        inset-block-start: calc(anchor(start, 0) + theme(spacing.2));
+      }
+    }
+    &:is(:hover:focus-within) {
+      & > .toast:has(+ .toast:where(:focus, :focus-within)),
+      & > .toast:is(:focus, :focus-within) + .toast,
+      & > .toast:where(:focus, :focus-within) {
+        inset-block-start: anchor(end, 0);
+        scale: 1;
+        filter: none;
+        opacity: 1;
+      }
+      & > .toast:has(+ .toast:where(:focus, :focus-within)) {
+        inset-block-start: calc(anchor(start, 0) + theme(spacing.2));
       }
     }
   }
