@@ -21,6 +21,7 @@ import { cacheTranslations, createTranslator } from "~/server/i18n";
 import type { SupportedLocale } from "~/server/i18n/shared";
 
 import { AppHeader } from "~/lib/app-header";
+import { isSubmissionFailure } from "~/lib/utils/submission";
 
 export const route = {
 	preload() {
@@ -34,7 +35,6 @@ export default function ProfilePage() {
 
 	const user = createAsync(() => getUserProfile());
 	const updateProfileAction = useAction(updateUserProfile);
-	// TODO: error handling, success handling
 	const profileSubmission = useSubmission(updateUserProfile);
 	const toast = useToaster();
 
@@ -57,9 +57,7 @@ export default function ProfilePage() {
 										method="post"
 										action={updateUserProfile}
 										validationErrors={
-											profileSubmission.result &&
-											"errors" in profileSubmission.result &&
-											profileSubmission.result.errors
+											isSubmissionFailure(profileSubmission, "validation")
 												? profileSubmission.result.errors
 												: null
 										}
@@ -70,16 +68,19 @@ export default function ProfilePage() {
 											if ("locale" in updatedUser && updatedUser.locale !== initialLocale) {
 												location.reload();
 											} else {
-												if (profileSubmission.result && "failed" in profileSubmission.result) {
+												if (
+													"failureReason" in updatedUser &&
+													updatedUser.failureReason === "other"
+												) {
 													toast(() => (
-														<Toast>
+														<Toast variant="tonal" tone="failure">
 															<Text tone="danger">Something went wrong, try again?</Text>
 														</Toast>
 													));
 												} else if (profileSubmission.result && "id" in profileSubmission.result) {
 													toast(() => (
-														<Toast>
-															<Text tone="success">Saved!</Text>
+														<Toast variant="tonal" tone="secondary">
+															<Text>Saved!</Text>
 														</Toast>
 													));
 												}

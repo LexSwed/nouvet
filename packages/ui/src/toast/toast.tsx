@@ -19,7 +19,7 @@ import {
 import { Card } from "../card";
 
 import { tw } from "../tw";
-import { composeEventHandlers, mergeDefaultProps } from "../utils";
+import { mergeDefaultProps } from "../utils";
 import css from "./toast.module.css";
 /**
  * TODO:
@@ -44,9 +44,9 @@ const Toast = (ownProps: ToastProps) => {
 			aria-atomic="true"
 			{...props}
 			class={tw("allow-discrete border border-on-background/5 shadow-popover", props.class)}
-			onClick={composeEventHandlers(props.onClick, (e) => {
-				(e.currentTarget as HTMLElement).dispatchEvent(new ToastDismissEvent());
-			})}
+			// onClick={composeEventHandlers(props.onClick, (e) => {
+			// 	(e.currentTarget as HTMLElement).dispatchEvent(new ToastDismissEvent());
+			// })}
 		>
 			{props.children}
 		</Card>
@@ -120,9 +120,9 @@ function Toaster(props: { label: string }) {
 				)}
 				tabIndex={-1}
 				onMouseEnter={() => toaster.resetTimers()}
-				// onMouseLeave={() => toaster.restartTimers()}
+				onMouseLeave={() => toaster.restartTimers()}
 				onFocusIn={() => toaster.resetTimers()}
-				// onFocusOut={() => toaster.restartTimers()}
+				onFocusOut={() => toaster.restartTimers()}
 			>
 				<div class="-m-1 absolute h-1 w-full [anchor-name:--nou-toast-anchor-list]" aria-hidden />
 				<For each={toaster.items()}>
