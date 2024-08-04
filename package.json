@@ -3,12 +3,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"license": "GNU General Public License v3.0",
-	"workspaces": [
-		"packages/acceptance-tests",
-		"packages/config",
-		"packages/ui",
-		"packages/web"
-	],
+	"workspaces": ["packages/acceptance-tests", "packages/config", "packages/ui", "packages/web"],
 	"engines": {
 		"node": ">=20",
 		"npm": ">=10"
