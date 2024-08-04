@@ -5,26 +5,25 @@
     transition:
       inset 0.14s ease,
       0.3s allow-discrete;
-    transition-property: opacity, display, width, height, inset,
-      inset-block-start, translate, scale;
+    transition-property: opacity, display, filter, inset, inset-block-start,
+      translate, scale;
     position: absolute;
     inset-block-start: anchor(start, 0);
     /* use padding instead of positioning to allow hover to remain stable for multiple toasts */
     padding: theme("spacing[1]") theme("spacing[3]");
     border-radius: theme(borderRadius.2xl);
     min-width: theme(spacing.64);
+    filter: contrast(0.95) brightness(1.01);
 
     &:nth-of-type(1) {
       z-index: 4;
       inset-block-start: anchor(start, 0) !important;
+      filter: none;
     }
 
     & + .toast {
       inset-block-start: calc(anchor(start, 0) + theme(spacing.4));
     }
-    /* &:not(:nth-of-type(1)) > * > * {
-      opacity: 0;
-    } */
     &:nth-of-type(2) {
       z-index: 3;
       scale: 0.9;
@@ -43,10 +42,12 @@
     }
   }
   .list {
-    &:is(:hover, :focus) {
+    &:hover:not(:focus, :focus-within) {
       & > .toast {
         inset-block-start: anchor(end, 0);
         scale: 1;
+        filter: none;
+        filter: contrast(0.95) brightness(1.01);
       }
     }
     &:is(:focus-within) {
@@ -54,12 +55,14 @@
         scale: 0.75;
         inset-block-start: calc(anchor(start, 0) + theme(spacing.4));
         z-index: 1;
+        filter: contrast(0.95) brightness(1.01);
       }
 
       & > .toast:where(:focus, :focus-within) {
         opacity: 1;
         scale: 1;
         z-index: 10;
+        filter: none;
       }
       & > .toast:where(:focus, :focus-within) + .toast,
       & > .toast:has(+ .toast:where(:focus, :focus-within)) {

@@ -103,6 +103,9 @@ function Toaster(props: { label: string }) {
 		});
 	});
 
+	let isMouseIn = false;
+	let isFocusIn = false;
+
 	return (
 		<div
 			// Popover is used to ensure that if notification is triggered from a dialog or any
@@ -119,10 +122,26 @@ function Toaster(props: { label: string }) {
 					"-m-4 fixed inset-x-0 flex w-full flex-col items-center empty:pointer-events-none",
 				)}
 				tabIndex={-1}
-				onMouseEnter={() => toaster.resetTimers()}
-				onMouseLeave={() => toaster.restartTimers()}
-				onFocusIn={() => toaster.resetTimers()}
-				onFocusOut={() => toaster.restartTimers()}
+				onMouseEnter={() => {
+					isMouseIn = true;
+					toaster.resetTimers();
+				}}
+				onMouseLeave={() => {
+					isMouseIn = false;
+					if (!isFocusIn) {
+						toaster.restartTimers();
+					}
+				}}
+				onFocusIn={() => {
+					isFocusIn = true;
+					toaster.resetTimers();
+				}}
+				onFocusOut={() => {
+					isFocusIn = false;
+					if (!isMouseIn) {
+						toaster.restartTimers();
+					}
+				}}
 			>
 				<div class="-m-1 absolute h-1 w-full [anchor-name:--nou-toast-anchor-list]" aria-hidden />
 				<For each={toaster.items()}>
