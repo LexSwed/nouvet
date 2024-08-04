@@ -1,6 +1,7 @@
+import { Toaster } from "@nou/ui";
 import type { RouteDefinition, RouteSectionProps } from "@solidjs/router";
 
-import { cacheTranslations } from "~/server/i18n";
+import { cacheTranslations, createTranslator } from "~/server/i18n";
 
 export const route = {
 	async preload() {
@@ -9,7 +10,13 @@ export const route = {
 } satisfies RouteDefinition;
 
 function MainAppLayout(props: RouteSectionProps) {
-	return <>{props.children}</>;
+	const t = createTranslator("app");
+	return (
+		<>
+			{props.children}
+			<Toaster label={t("notifications-region")!} />
+		</>
+	);
 }
 
 export default MainAppLayout;
