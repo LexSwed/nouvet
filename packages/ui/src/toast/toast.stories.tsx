@@ -21,7 +21,7 @@ export const ToastExample = () => {
 						tone="secondary"
 						onClick={async () => {
 							toast(() => (
-								<Toast class="max-w-80" tone="secondary">
+								<Toast class="max-w-80">
 									<Text tone="success">Succeeded</Text>
 									<Text with="body-sm">The success has suddenly come</Text>
 								</Toast>

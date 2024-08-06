@@ -56,7 +56,7 @@ export const buttonVariants = cva(
 				variant: "default",
 				tone: "secondary",
 				class:
-					"intent:filter-darker bg-tertiary text-on-tertiary [--btn-bg:theme(colors.tertiary)]",
+					"intent:filter-darker bg-tertiary text-on-tertiary outline-tertiary [--btn-bg:theme(colors.tertiary)]",
 			},
 			{
 				variant: "default",
