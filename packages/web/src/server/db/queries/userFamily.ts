@@ -25,6 +25,8 @@ export async function userProfile(userId: UserID) {
 		.where(eq(userTable.id, userId))
 		.get();
 
+	if (!userProfile) throw new Error(`User ${userId} not found`);
+
 	return userProfile;
 }
 

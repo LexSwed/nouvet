@@ -11,6 +11,7 @@ const profileDict = {
 	"setting.measure-system.metric-example": "24kg, 18cm",
 	"setting.locale": "Locale",
 	"cta.save-profile": "Save",
+	"reset-locale": "Reset to default",
 } as const;
 
 export default profileDict;

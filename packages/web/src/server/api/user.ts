@@ -3,6 +3,7 @@ import { action, cache } from "@solidjs/router";
 import { getRequestUser } from "~/server/auth/request-user";
 import { userFamily, userProfile } from "~/server/db/queries/userFamily";
 
+import { header as getHeaderLang } from "../i18n/locale";
 import { updateUserProfileServer } from "./user.server";
 
 export const getUserFamily = cache(async () => {
@@ -25,8 +26,19 @@ export const getUser = cache(async () => {
 
 export const getUserProfile = cache(async () => {
 	"use server";
-	const user = await getRequestUser();
-	return await userProfile(user.userId);
+	try {
+		const user = await getRequestUser();
+		const profile = await userProfile(user.userId);
+		const headerLang = await getHeaderLang();
+
+		return {
+			...profile,
+			isLangNotMatching: headerLang ? headerLang.language !== profile.locale : false,
+		};
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
 }, "user-profile");
 
 export const updateUserProfile = action(

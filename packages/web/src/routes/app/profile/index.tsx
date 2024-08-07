@@ -107,36 +107,41 @@ export default function ProfilePage() {
 											<Text as="legend" with="overline" class="mb-3">
 												{t("section.locale")}
 											</Text>
-											<Picker
-												label={t("setting.locale")}
-												value={user().locale}
-												autocomplete="language"
-												class="[&_[data-part=trigger]_[data-flag]]:block"
-												name="locale"
-											>
-												<Option
-													value={"en" satisfies SupportedLocale}
-													label={
-														<div class="flex w-full flex-row justify-between gap-4">
-															English
-															<span class="hidden" data-flag>
-																🏴󠁧󠁢󠁥󠁮󠁧󠁿
-															</span>
-														</div>
-													}
-												/>
-												<Option
-													value={"es" satisfies SupportedLocale}
-													label={
-														<div class="flex w-full flex-row justify-between gap-4">
-															Español
-															<span class="hidden" data-flag>
-																🇪🇸
-															</span>
-														</div>
-													}
-												/>
-											</Picker>
+											<div class="flex flex-col gap-2">
+												<Picker
+													label={t("setting.locale")}
+													value={user().locale}
+													autocomplete="language"
+													class="[&_[data-part=trigger]_[data-flag]]:block"
+													name="locale"
+												>
+													<Option
+														value={"en" satisfies SupportedLocale}
+														label={
+															<div class="flex w-full flex-row justify-between gap-4">
+																English
+																<span class="hidden" data-flag>
+																	🏴󠁧󠁢󠁥󠁮󠁧󠁿
+																</span>
+															</div>
+														}
+													/>
+													<Option
+														value={"es" satisfies SupportedLocale}
+														label={
+															<div class="flex w-full flex-row justify-between gap-4">
+																Español
+																<span class="hidden" data-flag>
+																	🇪🇸
+																</span>
+															</div>
+														}
+													/>
+												</Picker>
+												<Show when={user().isLangNotMatching}>
+													<Button variant="link">{t("reset-locale")}</Button>
+												</Show>
+											</div>
 											<Picker
 												label={t("setting.measure-system.label")}
 												value={user().measurementSystem}

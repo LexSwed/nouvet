@@ -1,3 +1,4 @@
+"use server";
 import { getHeader } from "vinxi/http";
 
 import { unsafe_useUserSession } from "../auth/user-session";
@@ -34,7 +35,7 @@ async function cookie(): Promise<Intl.Locale | null> {
  * Attempts to get preferred language from Accept-Language header.
  * Verifies it's a correct language. Matches only to one of the supported locales.
  */
-function header(): Intl.Locale | null {
+export function header(): Intl.Locale | null {
 	/** @example en-GB,en;q=0.9,en-US;q=0.8,es;q=0.7. */
 	const rawHeader = getHeader("Accept-Language");
 	if (!rawHeader) return null;
