@@ -1,42 +1,41 @@
 @layer nou-ui {
-	.input {
-		appearance: base-select;
-		width: 100%;
-		outline: none;
+  .input {
+    appearance: base-select;
+    width: 100%;
+    outline: none;
 
-		& selectedoption:has([data-empty-option]) {
-			@apply text-transparent;
-		}
+    & selectedoption:has([data-empty-option]) {
+      @apply text-transparent;
+    }
 
-		& selectedoption [data-part="content"] {
-			display: none;
-		}
-	}
+    & selectedoption [data-part="content"] {
+      display: none;
+    }
+  }
 
-	.popover {
-		min-width: anchor-size(width);
-		@apply bg-surface shadow-popover text-on-surface isolate mt-2 overflow-auto overflow-y-auto rounded-2xl p-1;
-	}
+  .popover {
+    min-width: anchor-size(width);
+  }
 
-	.option {
-		&:where(:checked) > [data-part="label"] {
-			color: theme("colors.primary");
-		}
-		& > [data-part="label"]:after {
-			content: "";
-			mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><polyline points="40 144 96 200 224 72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"/></svg>');
-			@apply pointer-events-none size-4;
-		}
-		&:where(:checked) > [data-part="label"]:after {
-			@apply bg-primary;
-		}
-		&:where([value=""]:checked) > [data-part="label"]:after {
-			content: "";
-			mask: none;
-			@apply text-on-surface/65 bg-transparent;
-		}
-		&:where([value=""]) > [data-part="label"] {
-			@apply text-on-surface/65;
-		}
-	}
+  .option {
+    &:where(:checked) > [data-part="label"] {
+      color: theme("colors.primary");
+    }
+    & > [data-part="label"]:after {
+      content: "";
+      mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><polyline points="40 144 96 200 224 72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"/></svg>');
+      @apply pointer-events-none size-4;
+    }
+    &:where(:checked) > [data-part="label"]:after {
+      @apply bg-primary;
+    }
+    &:where([value=""]:checked) > [data-part="label"]:after {
+      content: "";
+      mask: none;
+      @apply text-on-surface/65 bg-transparent;
+    }
+    &:where([value=""]) > [data-part="label"] {
+      @apply text-on-surface/65;
+    }
+  }
 }
