@@ -2,11 +2,13 @@
 
 import { json } from "@solidjs/router";
 import { isValiError } from "valibot";
+import { header as getHeaderLang } from "../i18n/locale";
 
 import { getRequestUser } from "~/server/auth/request-user";
 import { type UpdateUserSchema, userUpdate } from "~/server/db/queries/userUpdate";
 
 import { useUserSession } from "../auth/user-session";
+import { userProfile } from "../db/queries/userFamily";
 import { translateErrorTokens } from "../utils";
 
 export async function updateUserProfileServer(formData: FormData) {
@@ -33,5 +35,21 @@ export async function updateUserProfileServer(formData: FormData) {
 		}
 		console.error(error);
 		return json({ failureReason: "other" as const }, { status: 500, revalidate: [] });
+	}
+}
+
+export async function getUserProfileServer() {
+	try {
+		const user = await getRequestUser();
+		const profile = await userProfile(user.userId);
+		const headerLang = getHeaderLang();
+
+		return {
+			...profile,
+			isLangNotMatching: headerLang ? headerLang.language !== profile.locale : false,
+		};
+	} catch (error) {
+		console.error(error);
+		throw error;
 	}
 }

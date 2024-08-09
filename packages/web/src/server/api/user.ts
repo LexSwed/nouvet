@@ -1,10 +1,9 @@
 import { action, cache } from "@solidjs/router";
 
 import { getRequestUser } from "~/server/auth/request-user";
-import { userFamily, userProfile } from "~/server/db/queries/userFamily";
+import { userFamily } from "~/server/db/queries/userFamily";
 
-import { header as getHeaderLang } from "../i18n/locale";
-import { updateUserProfileServer } from "./user.server";
+import { getUserProfileServer, updateUserProfileServer } from "./user.server";
 
 export const getUserFamily = cache(async () => {
 	"use server";
@@ -24,22 +23,7 @@ export const getUser = cache(async () => {
 	return user;
 }, "user");
 
-export const getUserProfile = cache(async () => {
-	"use server";
-	try {
-		const user = await getRequestUser();
-		const profile = await userProfile(user.userId);
-		const headerLang = await getHeaderLang();
-
-		return {
-			...profile,
-			isLangNotMatching: headerLang ? headerLang.language !== profile.locale : false,
-		};
-	} catch (error) {
-		console.error(error);
-		throw error;
-	}
-}, "user-profile");
+export const getUserProfile = cache(async () => getUserProfileServer(), "user-profile");
 
 export const updateUserProfile = action(
 	async (formData: FormData) => updateUserProfileServer(formData),
