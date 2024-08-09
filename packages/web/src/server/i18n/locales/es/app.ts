@@ -23,6 +23,7 @@ const appDict = {
 	"pet-menu.add-weight": "Agregar peso",
 	"pet-menu.add-note": "Agregar una nota",
 	"pet-menu.book": "Programar visita",
-} as const;
+	"notifications-region": "Notificaciones",
+} as const satisfies Record<keyof typeof import("../en/app").default, string>;
 
 export default appDict;

@@ -93,6 +93,6 @@ const familyDict = {
 		"Retirar tu solicitud te eliminará del proceso de unión actual para esta familia. Para unirte en el futuro, necesitarás una nueva invitación.",
 	"waiting.cancel-join-popup-close": "Mantener",
 	"waiting.cancel-join-popup-confirm": "Retirar solicitud",
-} as const;
+} as const satisfies Record<keyof typeof import("../en/family").default, string>;
 
 export default familyDict;

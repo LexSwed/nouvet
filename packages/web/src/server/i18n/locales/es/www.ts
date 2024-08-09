@@ -14,6 +14,6 @@ const wwwDict = {
 	"meta.main-title": "NouVet para el bienestar de las mascotas",
 	"meta.about-title": "Acerca de NouVet",
 	"meta.privacy-title": "Política de privacidad de NouVet",
-} as const;
+} as const satisfies Record<keyof typeof import("../en/www").default, string>;
 
 export default wwwDict;

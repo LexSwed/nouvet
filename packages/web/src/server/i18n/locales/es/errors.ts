@@ -15,6 +15,6 @@ const errorsDict = {
 	"user.name-max": "El nombre no puede exceder los 200 caracteres",
 	"user.locale": "El idioma no es compatible",
 	"user.measurementsSystem": "Este sistema de medición no es compatible",
-} as const;
+} as const satisfies Record<keyof typeof import("../en/errors").default, string>;
 
 export default errorsDict;

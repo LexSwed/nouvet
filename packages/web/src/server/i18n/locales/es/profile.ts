@@ -11,6 +11,6 @@ const profileDict = {
 	"setting.measure-system.metric-example": "24kg, 18cm",
 	"setting.locale": "Localidad",
 	"cta.save-profile": "Guardar",
-} as const;
+} as const satisfies Record<keyof typeof import("../en/profile").default, string>;
 
 export default profileDict;

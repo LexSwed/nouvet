@@ -1,4 +1,3 @@
-"use server";
 import { getHeader } from "vinxi/http";
 
 import { unsafe_useUserSession } from "../auth/user-session";

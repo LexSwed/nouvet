@@ -1,4 +1,5 @@
 const petsDict = {
+	"meta.title": "NouVet | Mascotas",
 	"new-pet-heading": "Agrega a tu mascota",
 	"new-pet-text-field-label": "Nombre",
 	"new-pet-text-field-placeholder": "Garfield",
@@ -27,6 +28,6 @@ const petsDict = {
 	"failure.title": "Hubo un error al guardar los datos.",
 	"failure.message": "Esto no es lo esperado, ¡pero la solución seguramente llegará pronto!",
 	"cta.create": "Crear",
-} as const;
+} as const satisfies Record<keyof typeof import("../en/pets").default, string>;
 
 export default petsDict;

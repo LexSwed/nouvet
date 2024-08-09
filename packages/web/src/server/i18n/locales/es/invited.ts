@@ -17,6 +17,6 @@ const invitedDict = {
 	"accept-invite.cta-join": "Unirse",
 	"acceptInvite.failed":
 		"Algo, en algún lugar, no funcionó como se esperaba. ¿Quizás la invitación ha expirado? Lo investigaremos, pero por favor, vuelve a intentarlo más tarde.",
-} as const;
+} as const satisfies Record<keyof typeof import("../en/invited").default, string>;
 
 export default invitedDict;
