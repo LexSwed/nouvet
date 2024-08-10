@@ -28,15 +28,10 @@
   #app {
     @apply overflow-x-hidden;
   }
-  ::selection {
-    background-color: highlight;
-    color: highlighttext;
-  }
 }
 
-@layer base {
-  :root,
-  ::selection {
+@layer tw-base {
+  :root {
     --nou-white: 0 0% 100%;
     --nou-black: 0 0% 0%;
     --nou-primary: 350 45.67% 49.8%;
@@ -78,7 +73,7 @@
   }
 }
 
-@layer utilities {
+@layer tw-utilities {
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;

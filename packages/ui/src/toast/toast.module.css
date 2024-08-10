@@ -1,5 +1,3 @@
-@tailwind utilities;
-
 @layer nou-ui {
   .toast {
     transition:
