@@ -3,98 +3,86 @@
 @layer nou-ui {
   .toast {
     transition:
-      inset 0.14s ease,
-      0.3s allow-discrete;
-    transition-property: opacity, display, filter, inset, inset-block-start,
-      translate, scale;
+      opacity 0.24s ease,
+      display 0.3s ease allow-discrete,
+      filter 0.3s ease,
+      translate 0.4s cubic-bezier(0.5, 0.85, 0.85, 1.25),
+      scale 0.3s ease,
+      inset-block-start 0.14s ease;
     position: absolute;
-    inset-block-start: anchor(start, 0);
+    inset-block-start: calc(anchor(start, 0) + theme(spacing.2));
     /* use padding instead of positioning to allow hover to remain stable for multiple toasts */
     padding: theme("spacing[1]") theme("spacing[3]");
     border-radius: theme(borderRadius.2xl);
     min-width: theme(spacing.64);
     filter: contrast(0.95) brightness(1.01);
+    z-index: var(--nou-toast-index);
 
-    &:nth-of-type(1) {
-      z-index: 4;
-      inset-block-start: anchor(start, 0) !important;
+    &:first-of-type {
+      scale: 1;
       filter: none;
+      opacity: 1;
+      inset-block-start: anchor(start, 0) !important;
     }
 
-    & + .toast {
-      inset-block-start: calc(anchor(start, 0) + theme(spacing.4));
-    }
-    &:nth-of-type(2) {
-      z-index: 3;
-      scale: 0.9;
-    }
-    &:nth-of-type(3) {
-      z-index: 2;
-      scale: 0.85;
-    }
-    &:nth-of-type(4) {
-      z-index: 1;
-      scale: 0.8;
-    }
-    &:nth-child(n + 5) {
-      opacity: 0;
-      scale: 0.75;
+    &:where(:focus, :hover, :focus-within) .removeToast {
+      scale: 1;
     }
   }
+  .removeToast {
+    scale: 0.2;
+  }
+
   .list {
-    &:hover:not(:focus, :focus-within) {
-      & > .toast {
+    &:hover > .toast {
+      &:nth-of-type(2),
+      &:nth-of-type(3) {
         inset-block-start: anchor(end, 0);
         scale: 1;
         filter: none;
+        opacity: 1;
       }
     }
     &:is(:focus-within) {
       & > .toast:has(~ .toast:where(:focus, :focus-within)) {
         scale: 0.85;
-        inset-block-start: calc(anchor(start, 0) + theme(spacing.2));
-        z-index: 1;
+        inset-block-start: anchor(start, 0);
         filter: contrast(0.95) brightness(1.01);
         opacity: 1;
       }
 
-      & > .toast:where(:focus, :focus-within) {
+      /* previous to focused */
+      & > .toast:has(+ .toast:where(:focus, :focus-within)),
+      /* if focused is the last element, target 2 previous ones */
+      & > .toast:has(+ .toast + .toast:last-of-type:where(:focus, :focus-within)) {
         opacity: 1;
         scale: 1;
-        z-index: 10;
         filter: none;
-      }
-      & > .toast:where(:focus, :focus-within) + .toast,
-      & > .toast:has(+ .toast:where(:focus, :focus-within)) {
-        opacity: 1;
-        scale: 0.95;
         z-index: 8;
+        inset-block-start: calc(anchor(start, 0) + theme(spacing.2));
       }
 
-      & > .toast:where(:focus, :focus-within) + .toast {
+      /* focused toast */
+      & > .toast:where(:focus, :focus-within):not(:first-of-type),
+      /* next to focused */
+      & > .toast:where(:focus, :focus-within) + .toast,
+      /* if focused is the first element */
+      & > .toast:where(:focus, :focus-within):first-of-type + .toast + .toast,
+      /* last to focused */
+      & > .toast:has(+ .toast:where(:focus, :focus-within):last-of-type),
+      /* if focused is 2nd to last, show the rest of the toasts */
+      & > .toast:where(:focus, :focus-within):nth-last-of-type(2) ~ .toast {
         inset-block-start: anchor(end);
         filter: none;
         scale: 1;
         opacity: 1;
       }
 
-      & > .toast:has(+ .toast + .toast:where(:focus, :focus-within)) {
-        opacity: 1;
-        scale: 0.9;
-        inset-block-start: calc(anchor(start, 0) + theme(spacing.2));
-      }
-    }
-    &:is(:hover:focus-within) {
-      & > .toast:has(+ .toast:where(:focus, :focus-within)),
-      & > .toast:is(:focus, :focus-within) + .toast,
       & > .toast:where(:focus, :focus-within) {
-        inset-block-start: anchor(end, 0);
-        scale: 1;
-        filter: none;
         opacity: 1;
-      }
-      & > .toast:has(+ .toast:where(:focus, :focus-within)) {
-        inset-block-start: calc(anchor(start, 0) + theme(spacing.2));
+        scale: 1;
+        z-index: 100;
+        filter: none;
       }
     }
   }

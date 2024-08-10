@@ -16,6 +16,6 @@ export { RadioCard, SegmentedButton } from "./radio";
 export { Spinner } from "./spinner";
 export { Stack } from "./stack";
 export { Text } from "./text";
-export { Toaster, Toast, useToaster } from "./toast";
+export { Toaster, Toast, toast } from "./toast";
 export { tw } from "./tw";
 export { mergeDefaultProps, startViewTransition } from "./utils";

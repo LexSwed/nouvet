@@ -5,19 +5,20 @@ import {
 	For,
 	type JSX,
 	type ResolvedChildren,
+	Show,
 	children,
 	createEffect,
 	createMemo,
 	createSignal,
 	createUniqueId,
-	getOwner,
 	onCleanup,
 	onMount,
-	runWithOwner,
 	splitProps,
 } from "solid-js";
 import { Card } from "../card";
 
+import { Icon } from "../_index";
+import { Button } from "../button";
 import { tw } from "../tw";
 import { mergeDefaultProps } from "../utils";
 import css from "./toast.module.css";
@@ -32,22 +33,50 @@ import css from "./toast.module.css";
  */
 
 interface ToastProps extends ComponentProps<typeof Card<"li">> {
+	heading?: JSX.Element;
 	style?: JSX.CSSProperties;
 }
 
 const Toast = (ownProps: ToastProps) => {
-	const [, props] = splitProps(mergeDefaultProps(ownProps, { "aria-live": "assertive" }), []);
+	const [local, props] = splitProps(mergeDefaultProps(ownProps, { "aria-live": "assertive" }), [
+		"heading",
+	]);
+	const heading = children(() => local.heading);
+	const ariaLabel = `nou-toast-${createUniqueId()}`;
 	return (
 		<Card
 			role="status"
 			tabIndex={0}
 			aria-atomic="true"
 			{...props}
-			class={tw("allow-discrete border border-on-background/5 shadow-popover", props.class)}
+			class={tw(
+				"allow-discrete max-w-80 border border-on-background/5 shadow-popover",
+				props.class,
+			)}
+			aria-labelledby={ariaLabel}
 			// onClick={composeEventHandlers(props.onClick, (e) => {
 			// 	(e.currentTarget as HTMLElement).dispatchEvent(new ToastDismissEvent());
 			// })}
 		>
+			<Show when={heading()}>
+				<div class={tw("flex items-baseline justify-between gap-3")}>
+					<div id={ariaLabel} class="contents">
+						{heading()}
+					</div>
+					<Button
+						type="reset"
+						variant="ghost"
+						size="sm"
+						icon
+						class={tw(css.removeToast, "-my-4 -me-3 leading-[inherit] transition-all duration-300")}
+						onClick={(e) => {
+							(e.currentTarget as HTMLElement).dispatchEvent(new ToastDismissEvent());
+						}}
+					>
+						<Icon use="x" size="xs" />
+					</Button>
+				</div>
+			</Show>
 			{props.children}
 		</Card>
 	);
@@ -145,13 +174,14 @@ function Toaster(props: { label: string }) {
 			>
 				<div class="-m-1 absolute h-1 w-full [anchor-name:--nou-toast-anchor-list]" aria-hidden />
 				<For each={toaster.items()}>
-					{(entry) => {
+					{(entry, index) => {
 						return (
 							<li
-								class={tw(css.toast)}
+								class={tw(css.toast, "min-h-16")}
 								style={{
 									"anchor-name": entry.anchorName,
 									"position-anchor": entry.positionAnchor ?? "--nou-toast-anchor-list",
+									"--nou-toast-index": toaster.items().length - index(),
 								}}
 								on:toast-dismiss={() => toaster.remove(entry.id)}
 							>
@@ -165,22 +195,20 @@ function Toaster(props: { label: string }) {
 	);
 }
 
-function useToaster() {
+function toast(element: () => JSX.Element) {
 	const toaster = useToastsController();
-	const owner = getOwner();
-	return (element: () => JSX.Element) =>
-		runWithOwner(owner, () => {
-			const child = children(element);
-			const item = toaster.add(child);
-			function cleanup() {
-				toaster.remove(item.id);
-			}
-			onCleanup(cleanup);
-			return cleanup;
-		});
+	const child = children(element);
+	const item = toaster.add(child);
+	function cleanup() {
+		toaster.remove(item.id);
+	}
+	onCleanup(cleanup);
+	return {
+		cleanup,
+	};
 }
 
-export { useToaster, Toast, Toaster };
+export { toast, Toast, Toaster };
 
 const useToastsController = createSingletonRoot(() => {
 	const [items, setItems] = createSignal<Array<ToastEntry>>([]);

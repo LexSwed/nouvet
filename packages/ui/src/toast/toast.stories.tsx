@@ -1,5 +1,5 @@
 import type { Meta } from "storybook-solidjs";
-import { Toast, Toaster, useToaster } from ".";
+import { Toast, Toaster, toast } from ".";
 import { Button } from "../button";
 import { Text } from "../text";
 
@@ -9,7 +9,6 @@ const meta = {
 } satisfies Meta<ReturnType<typeof Toast>>;
 
 export const ToastExample = () => {
-	const toast = useToaster();
 	return (
 		<>
 			<fieldset>
@@ -21,8 +20,7 @@ export const ToastExample = () => {
 						tone="secondary"
 						onClick={async () => {
 							toast(() => (
-								<Toast class="max-w-80">
-									<Text tone="success">Succeeded</Text>
+								<Toast class="max-w-80" heading={<Text tone="success">Succeeded</Text>}>
 									<Text with="body-sm">The success has suddenly come</Text>
 								</Toast>
 							));
@@ -34,8 +32,7 @@ export const ToastExample = () => {
 						tone="destructive"
 						onClick={async () => {
 							toast(() => (
-								<Toast class="max-w-80" tone="failure">
-									<Text tone="danger">Failed</Text>
+								<Toast class="max-w-80" tone="failure" heading={<Text tone="danger">Failed</Text>}>
 									<Text with="body-sm">You have successfully failed.</Text>
 								</Toast>
 							));
