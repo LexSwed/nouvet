@@ -1,14 +1,15 @@
 import { resolveTemplate, translator } from "@solid-primitives/i18n";
-import { cache, createAsync } from "@solidjs/router";
+import { cache, createAsync, json } from "@solidjs/router";
 import type { JSX, ParentProps } from "solid-js";
-import { getRequestEvent, isServer } from "solid-js/web";
+import { getRequestEvent } from "solid-js/web";
 
 import { getDictionary } from "./dict";
 import type { Namespace, NamespaceMap } from "./dict";
 
 export const cacheTranslations = cache(<T extends Namespace>(namespace: T) => {
 	"use server";
-	return getDictionary(namespace);
+	// 1 hour cache
+	return json(getDictionary(namespace), { headers: { "Cache-Control": "public, max-age=3600" } });
 }, "translations");
 
 /**
@@ -17,21 +18,11 @@ export const cacheTranslations = cache(<T extends Namespace>(namespace: T) => {
  * Hence, store all translations used during initial load on the client, as they don't have to be reactive.
  * TODO: look at public HTTP caching, revalidating the translations when the content (bundle) changes.
  */
-const clientMap = new Map<Namespace, NamespaceMap[Namespace]>();
 export const createTranslator = <T extends Namespace>(namespace: T) => {
-	const dict = createAsync(
-		async () => {
-			if (!isServer && clientMap.has(namespace)) {
-				return clientMap.get(namespace) as NamespaceMap[T];
-			}
-			const dict = await cacheTranslations(namespace);
-			if (!isServer) {
-				clientMap.set(namespace, dict);
-			}
-			return dict as NamespaceMap[T];
-		},
-		{ name: `t-${namespace}`, deferStream: true },
-	);
+	const dict = createAsync(() => cacheTranslations(namespace) as Promise<NamespaceMap[T]>, {
+		name: `t-${namespace}`,
+		deferStream: true,
+	});
 	return translator(dict, resolveTemplate);
 };
 

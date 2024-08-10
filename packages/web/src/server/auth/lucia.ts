@@ -7,6 +7,7 @@ import { env } from "~/server/env";
 
 export const useLucia = () => {
 	const db = useDb();
+	// @ts-expect-error lucia adapter
 	const adapter = new DrizzleSQLiteAdapter(db, sessionTable, userTable);
 	const lucia = new Lucia(adapter, {
 		sessionExpiresIn: new TimeSpan(30, "d"),
