@@ -38,7 +38,7 @@ interface ToastProps extends ComponentProps<typeof Card<"li">> {
 }
 
 const Toast = (ownProps: ToastProps) => {
-	const [local, props] = splitProps(mergeDefaultProps(ownProps, { "aria-live": "assertive" }), [
+	const [local, props] = splitProps(mergeDefaultProps(ownProps, { "aria-live": "polite" }), [
 		"heading",
 	]);
 	const heading = children(() => local.heading);
