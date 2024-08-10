@@ -9,7 +9,7 @@ import {
 	Text,
 	TextField,
 	Toast,
-	useToaster,
+	toast,
 } from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import { type RouteDefinition, createAsync, useAction, useSubmission } from "@solidjs/router";
@@ -36,7 +36,6 @@ export default function ProfilePage() {
 	const user = createAsync(() => getUserProfile());
 	const updateProfileAction = useAction(updateUserProfile);
 	const profileSubmission = useSubmission(updateUserProfile);
-	const toast = useToaster();
 
 	return (
 		<>
@@ -63,27 +62,21 @@ export default function ProfilePage() {
 										}
 										onSubmit={async (e) => {
 											e.preventDefault();
-											const initialLocale = user().locale;
-											const updatedUser = await updateProfileAction(new FormData(e.currentTarget));
-											if ("locale" in updatedUser && updatedUser.locale !== initialLocale) {
-												location.reload();
-											} else {
-												if (
-													"failureReason" in updatedUser &&
-													updatedUser.failureReason === "other"
-												) {
-													toast(() => (
-														<Toast variant="tonal" tone="failure">
-															<Text tone="danger">Something went wrong, try again?</Text>
-														</Toast>
-													));
-												} else if (profileSubmission.result && "id" in profileSubmission.result) {
-													toast(() => (
-														<Toast variant="tonal" tone="secondary">
-															<Text>Saved!</Text>
-														</Toast>
-													));
-												}
+											const formData = new FormData(e.currentTarget);
+											const result = await updateProfileAction(formData);
+											if ("failureReason" in result && result.failureReason === "other") {
+												toast(
+													() => (
+														<Toast
+															variant="tonal"
+															tone="failure"
+															heading={<Text tone="danger">Something went wrong, try again?</Text>}
+														/>
+													),
+													{ duration: Number.POSITIVE_INFINITY },
+												);
+											} else if ("id" in result) {
+												toast(() => <Toast heading={<Text tone="accent">Saved!</Text>} />);
 											}
 										}}
 									>

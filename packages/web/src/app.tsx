@@ -1,5 +1,3 @@
-import "@nou/config/global.css";
-
 import { MetaProvider } from "@solidjs/meta";
 import { Navigate, Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";

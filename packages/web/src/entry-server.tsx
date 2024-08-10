@@ -1,4 +1,6 @@
 // @refresh reload
+import globalCss from "@nou/config/global.css?url";
+
 import { StartServer, createHandler } from "@solidjs/start/server";
 
 export default createHandler((ctx) => {
@@ -29,6 +31,7 @@ export default createHandler((ctx) => {
 							<link rel="icon" href="/icons/favicon.ico" sizes="32x32" />
 							<link rel="icon" href="/icons/icon.svg" sizes="32x32" type="image/svg+xml" />
 							<link rel="apple-touch-icon" href="/icons/icon-apple.png" />
+							<link rel="stylesheet" href={globalCss} />
 							<link rel="manifest" href="/manifest.webmanifest" />
 							{props.assets}
 						</head>

@@ -68,7 +68,7 @@ const Toast = (ownProps: ToastProps) => {
 						variant="ghost"
 						size="sm"
 						icon
-						class={tw(css.removeToast, "-my-4 -me-3 leading-[inherit] transition-all duration-300")}
+						class={tw(css.removeToast, "-my-1.5 -me-2 float-end transition-all duration-300")}
 						onClick={(e) => {
 							(e.currentTarget as HTMLElement).dispatchEvent(new ToastDismissEvent());
 						}}
@@ -148,7 +148,7 @@ function Toaster(props: { label: string }) {
 			<ol
 				class={tw(
 					css.list,
-					"-m-4 fixed inset-x-0 flex w-full flex-col items-center empty:pointer-events-none",
+					"fixed inset-x-0 flex w-full flex-col items-center empty:pointer-events-none",
 				)}
 				tabIndex={-1}
 				onMouseEnter={() => {
@@ -195,10 +195,10 @@ function Toaster(props: { label: string }) {
 	);
 }
 
-function toast(element: () => JSX.Element) {
+function toast(element: () => JSX.Element, options?: ToastOptions) {
 	const toaster = useToastsController();
 	const child = children(element);
-	const item = toaster.add(child);
+	const item = toaster.add(child, options);
 	function cleanup() {
 		toaster.remove(item.id);
 	}
