@@ -73,13 +73,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 				popoverTarget={petPopoverId}
 				id={`pet-${props.pet.id}`}
 			>
-				<div class="grid size-16 shrink-0 place-content-center rounded-full bg-tertiary/10 text-tertiary">
-					<Show
-						when={props.pet.pictureUrl}
-						children={(picture) => <img src={picture()} class="aspect-square w-full" alt="" />}
-						fallback={<Icon use={petIconMap[props.pet.species]} size="md" />}
-					/>
-				</div>
+				<PetPicture pet={props.pet} />
 				<Text with="body-lg">{props.pet.name}</Text>
 				<Show when={props.owner}>
 					{(owner) => (
@@ -106,7 +100,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 			<Popover
 				id={petPopoverId}
 				placement="top-to-top left-to-left"
-				class="-m-1 flex transform-none flex-col gap-4 p-2"
+				class="-m-2 flex transform-none flex-col gap-4 p-2"
 				onToggle={(e: ToggleEvent) => {
 					if (triggerRef && e.newState === "open") {
 						triggerRef.scrollIntoView({
@@ -118,7 +112,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 			>
 				<A
 					href={`/app/pets/${props.pet.id}`}
-					class="group/link -m-2 -outline-offset-4 flex flex-row items-center gap-4 rounded-[inherit] p-4 outline-on-surface focus:outline-4"
+					class="group/link -outline-offset-4 -mb-2 flex flex-row items-center gap-4 rounded-[inherit] intent:bg-on-surface/5 p-3 outline-on-surface transition-colors duration-200 focus:outline-4"
 				>
 					<div class="grid size-16 shrink-0 place-content-center rounded-full bg-tertiary/10 text-tertiary">
 						<Show
@@ -129,23 +123,25 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 					</div>
 					<Text with="body-lg">{props.pet.name}</Text>
 					<Text class="sr-only">{t("go-to-pet-page", { petName: props.pet.name })}</Text>
-					<div class="ms-auto grid cursor-pointer place-content-center rounded-full bg-on-surface/5 p-3 transition-colors duration-200 group-hover/link:bg-on-surface/8">
-						<Icon use="pencil" size="sm" />
-					</div>
+					<Icon use="arrow-up-right" class="ms-auto" size="sm" />
 				</A>
 				<MenuList class="min-w-56">
-					<Show when={props.owner}>
-						{(owner) => (
-							<MenuItem as={A} href={`/app/family/${owner().id}/`}>
-								<Avatar avatarUrl={owner().avatarUrl || ""} name={owner().name || ""} size="xs" />
-								<Text>{owner().name || t("pet-owner-no-name")}</Text>
+					<Switch>
+						<Match when={props.owner}>
+							{(owner) => (
+								<MenuItem as={A} href={`/app/family/${owner().id}/`}>
+									<Avatar avatarUrl={owner().avatarUrl || ""} name={owner().name || ""} size="xs" />
+									<Text>{owner().name || t("pet-owner-no-name")}</Text>
+								</MenuItem>
+							)}
+						</Match>
+						<Match when={!props.owner}>
+							<MenuItem as={A} href={`/app/pets/${props.pet.id}/`}>
+								<Icon use="pencil" size="sm" />
+								{t("pet-menu.edit-info")}
 							</MenuItem>
-						)}
-					</Show>
-					<MenuItem as={A} href={`/app/pets/${props.pet.id}/`}>
-						<Icon use="pencil" size="sm" />
-						{t("pet-menu.edit-info")}
-					</MenuItem>
+						</Match>
+					</Switch>
 					<MenuItem as="button" type="button" popoverTarget={`${props.pet.id}-menu-weight`}>
 						<Icon use="scales" size="sm" />
 						{t("pet-menu.add-weight")}
@@ -169,6 +165,20 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 		</Card>
 	);
 };
+
+export function PetPicture(props: {
+	pet: { pictureUrl?: string | null; species: DatabasePet["species"] };
+}) {
+	return (
+		<div class="grid size-16 shrink-0 place-content-center rounded-full bg-tertiary/10 text-tertiary">
+			<Show
+				when={props.pet.pictureUrl}
+				children={(picture) => <img src={picture()} class="aspect-square w-full" alt="" />}
+				fallback={<Icon use={petIconMap[props.pet.species]} size="md" />}
+			/>
+		</div>
+	);
+}
 
 function QuickSetters(props: { pet: PetHomeCardProps["pet"] }) {
 	const t = createTranslator("pets");

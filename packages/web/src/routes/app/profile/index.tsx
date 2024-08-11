@@ -53,9 +53,13 @@ export default function ProfilePage() {
 				<AppHeader
 					backLink="/app"
 					onBackClick={(e) => {
-						if (location.state && "previous" in location.state) {
+						if (
+							location.state &&
+							"previous" in location.state &&
+							typeof location.state.previous === "string"
+						) {
 							e.preventDefault();
-							navigate(-1);
+							navigate(location.state.previous);
 						}
 					}}
 				/>
