@@ -1,5 +1,5 @@
 const petsDict = {
-	"meta.title": "NouVet | Mascotas",
+	"meta.title": "{{petName}} | Mascotas",
 	"new-pet-heading": "Agrega a tu mascota",
 	"new-pet-text-field-label": "Nombre",
 	"new-pet-text-field-placeholder": "Garfield",

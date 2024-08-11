@@ -54,9 +54,6 @@ const Toast = (ownProps: ToastProps) => {
 				props.class,
 			)}
 			aria-labelledby={ariaLabel}
-			// onClick={composeEventHandlers(props.onClick, (e) => {
-			// 	(e.currentTarget as HTMLElement).dispatchEvent(new ToastDismissEvent());
-			// })}
 		>
 			<Show when={heading()}>
 				<div class={tw("flex items-baseline justify-between gap-3")}>
@@ -68,7 +65,7 @@ const Toast = (ownProps: ToastProps) => {
 						variant="ghost"
 						size="sm"
 						icon
-						class={tw(css.removeToast, "-my-1.5 -me-2 float-end transition-all duration-300")}
+						class={tw(css.removeToast, "-my-1.5 -me-2 float-end transition-all duration-200")}
 						onClick={(e) => {
 							(e.currentTarget as HTMLElement).dispatchEvent(new ToastDismissEvent());
 						}}

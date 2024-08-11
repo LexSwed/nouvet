@@ -13,10 +13,10 @@ export const cacheTranslations = cache(<T extends Namespace>(namespace: T) => {
 }, "translations");
 
 /**
- * For client side JS, we don't want to call `cache` again as it's not configurable and might be "expired"
- * by the time it's called again, e.g. when lazy rendering dynamic parts of the app.
- * Hence, store all translations used during initial load on the client, as they don't have to be reactive.
+ *
  * TODO: look at public HTTP caching, revalidating the translations when the content (bundle) changes.
+ * Otherwise, if parts of UI are rendered lazily (modals, dialogs), the translations might be loaded multiple times,
+ * Revalidation is required to ensure no new deployed code is relying on translations that aren't available due to caching.
  */
 export const createTranslator = <T extends Namespace>(namespace: T) => {
 	const dict = createAsync(() => cacheTranslations(namespace) as Promise<NamespaceMap[T]>, {

@@ -14,7 +14,7 @@ const PetPage = () => {
 	const t = createTranslator("pets");
 	return (
 		<>
-			<Title>{t("meta.title")}</Title>
+			<Title>{t("meta.title", { petName: "Calala" })}</Title>
 			<AppHeader backLink="/app/pets" />
 			<div class="container min-h-full">Hello</div>
 		</>

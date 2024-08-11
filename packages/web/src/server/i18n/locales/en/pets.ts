@@ -1,4 +1,5 @@
 const petsDict = {
+	"meta.title": "{{petName}} | Pets",
 	"new-pet-heading": "Add your pet",
 	"new-pet-text-field-label": "Name",
 	"new-pet-text-field-placeholder": "Garfield",
@@ -27,7 +28,6 @@ const petsDict = {
 	"failure.title": "There was an error saving the data.",
 	"failure.message": "This is not expected, but the fix is surely coming soon!",
 	"cta.create": "Create",
-	"meta.title": "Your pets",
 } as const;
 
 export default petsDict;
