@@ -42,6 +42,7 @@
     &:popover-open {
       opacity: 1;
       transform: none;
+
       @starting-style {
         opacity: 0;
         transform: scale(0.98);
@@ -84,13 +85,21 @@
       inset: 0;
       &::backdrop {
         opacity: 1;
-        transition: 0.16s ease-out;
+        transition: opacity 0.16s ease;
         background-color: theme("colors.on-surface/0.5");
+      }
+
+      &:not(:popover-open) {
+        transform: translateY(1rem);
+        &::backdrop {
+          opacity: 0;
+        }
       }
       @starting-style {
         &:popover-open {
           transform: translateY(1rem);
         }
+
         &::backdrop {
           opacity: 0;
         }

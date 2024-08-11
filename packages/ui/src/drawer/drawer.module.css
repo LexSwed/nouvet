@@ -20,13 +20,16 @@
       height: max-content;
       width: calc(100% - theme("spacing.2") * 2);
       max-height: 100svh;
-      transition: transform 0.24s ease-out;
       opacity: 1;
+      transform: none;
+    }
+    .drawer:not(:popover-open) {
+      transform: translate3d(0, 100%, 0);
+    }
 
-      @starting-style {
-        &:popover-open {
-          transform: translate3d(0, 100%, 0);
-        }
+    @starting-style {
+      .drawer:popover-open {
+        transform: translate3d(0, 100%, 0);
       }
     }
   }
