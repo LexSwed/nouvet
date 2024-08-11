@@ -156,6 +156,7 @@ export const userTable = sqliteTable("user", {
 });
 export type DatabaseUser = typeof userTable.$inferSelect;
 export type UserID = DatabaseUser["id"];
+export type PetID = DatabasePet["id"];
 
 /**
  * Maps different OAuth accounts to the same user.

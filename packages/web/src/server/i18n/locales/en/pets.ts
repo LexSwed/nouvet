@@ -28,6 +28,8 @@ const petsDict = {
 	"failure.title": "There was an error saving the data.",
 	"failure.message": "This is not expected, but the fix is surely coming soon!",
 	"cta.create": "Create",
+	"header.all-pets": "Pets",
+	"pet-card.edit": "Update info",
 } as const;
 
 export default petsDict;

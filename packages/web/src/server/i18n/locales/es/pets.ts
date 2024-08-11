@@ -28,6 +28,8 @@ const petsDict = {
 	"failure.title": "Hubo un error al guardar los datos.",
 	"failure.message": "Esto no es lo esperado, ¡pero la solución seguramente llegará pronto!",
 	"cta.create": "Crear",
+	"header.all-pets": "Todas",
+	"pet-card.edit": "Actualizar",
 } as const satisfies Record<keyof typeof import("../en/pets").default, string>;
 
 export default petsDict;

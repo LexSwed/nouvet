@@ -2,6 +2,7 @@ import { action, cache } from "@solidjs/router";
 
 import {
 	createPetServer,
+	getPetServer,
 	getUserPetsServer,
 	updatePetBirthDateServer,
 	updatePetBreedServer,
@@ -29,3 +30,5 @@ export const updatePetBreed = action(
 	async (formData: FormData) => updatePetBreedServer(formData),
 	"update-pet-breed",
 );
+
+export const getPet = cache(async (petId: string) => getPetServer(petId), "user-pet");

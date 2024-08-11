@@ -9,6 +9,7 @@ import {
 	SplitButton,
 	type SvgIcons,
 	Text,
+	tw,
 } from "@nou/ui";
 import { A } from "@solidjs/router";
 import { ErrorBoundary, Match, Show, Suspense, Switch, createUniqueId } from "solid-js";
@@ -34,7 +35,10 @@ interface PetHomeCardProps {
 		color: string | null;
 		weight: number | null;
 	};
-	owner:
+	/**
+	 * The actual owner of the pet. If the user is not the owner, this should be `null`.
+	 */
+	actualOwner:
 		| {
 				id: UserID;
 				name: string | null | undefined;
@@ -75,7 +79,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 			>
 				<PetPicture pet={props.pet} />
 				<Text with="body-lg">{props.pet.name}</Text>
-				<Show when={props.owner}>
+				<Show when={props.actualOwner}>
 					{(owner) => (
 						<div class="-m-1 ms-auto self-start rounded-full bg-surface p-1">
 							<Avatar avatarUrl={owner().avatarUrl || ""} name={owner().name || ""} size="xs" />
@@ -90,7 +94,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 				}}
 			>
 				<div class="-mt-7 flex flex-row items-center gap-2 px-3 py-2 empty:hidden">
-					<Show when={hasMissingInfo()}>
+					<Show when={!props.actualOwner && hasMissingInfo()}>
 						<Suspense fallback={null}>
 							<QuickSetters pet={props.pet} />
 						</Suspense>
@@ -127,7 +131,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 				</A>
 				<MenuList class="min-w-56">
 					<Switch>
-						<Match when={props.owner}>
+						<Match when={props.actualOwner}>
 							{(owner) => (
 								<MenuItem as={A} href={`/app/family/${owner().id}/`}>
 									<Avatar avatarUrl={owner().avatarUrl || ""} name={owner().name || ""} size="xs" />
@@ -135,7 +139,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 								</MenuItem>
 							)}
 						</Match>
-						<Match when={!props.owner}>
+						<Match when={!props.actualOwner}>
 							<MenuItem as={A} href={`/app/pets/${props.pet.id}/`}>
 								<Icon use="pencil" size="sm" />
 								{t("pet-menu.edit-info")}
@@ -168,19 +172,25 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 
 export function PetPicture(props: {
 	pet: { pictureUrl?: string | null; species: DatabasePet["species"] };
+	class?: string;
 }) {
 	return (
-		<div class="grid size-16 shrink-0 place-content-center rounded-full bg-tertiary/10 text-tertiary">
+		<div
+			class={tw(
+				"flex size-16 shrink-0 items-center justify-center rounded-full bg-tertiary/10 text-tertiary",
+				props.class,
+			)}
+		>
 			<Show
 				when={props.pet.pictureUrl}
 				children={(picture) => <img src={picture()} class="aspect-square w-full" alt="" />}
-				fallback={<Icon use={petIconMap[props.pet.species]} size="md" />}
+				fallback={<Icon use={petIconMap[props.pet.species]} class="size-[50%]" />}
 			/>
 		</div>
 	);
 }
 
-function QuickSetters(props: { pet: PetHomeCardProps["pet"] }) {
+export function QuickSetters(props: { pet: PetHomeCardProps["pet"] }) {
 	const t = createTranslator("pets");
 
 	const [qs, toggle] = createPersistedSetting(`qs-toggles-${props.pet.id}`, {

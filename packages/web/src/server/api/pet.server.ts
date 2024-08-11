@@ -10,12 +10,19 @@ import { userPets } from "~/server/db/queries/userPets";
 import { getDictionary } from "~/server/i18n/dict";
 import { type ErrorKeys, translateErrorTokens } from "~/server/utils";
 
+import { userPet } from "~/server/db/queries/userPet";
 import { getUserPets } from "./pet";
 
 export const getUserPetsServer = async () => {
 	const currentUser = await getRequestUser();
 	const pets = await userPets(currentUser.userId);
 	return pets;
+};
+
+export const getPetServer = async (petId: string) => {
+	const currentUser = await getRequestUser();
+	const pet = await userPet(currentUser.userId, petId);
+	return pet;
 };
 
 export const createPetServer = async (formData: FormData) => {

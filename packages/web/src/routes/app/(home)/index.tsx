@@ -101,7 +101,7 @@ const UserPets = () => {
 								<li>
 									<PetHomeCard
 										pet={pet}
-										owner={user()?.id === pet.owner?.id ? undefined : pet.owner}
+										actualOwner={user()?.id === pet.owner?.id ? undefined : pet.owner}
 									/>
 								</li>
 							)}
