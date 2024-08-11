@@ -1,5 +1,5 @@
 import { Avatar, Button, Divider, Icon, MenuItem, MenuList, Popover, Text } from "@nou/ui";
-import { A } from "@solidjs/router";
+import { A, useLocation } from "@solidjs/router";
 
 import { createTranslator } from "~/server/i18n";
 
@@ -10,6 +10,7 @@ interface AccountMenu {
 
 export const AccountMenu = (props: AccountMenu) => {
 	const t = createTranslator("app");
+	const location = useLocation();
 	return (
 		<>
 			<Button popoverTarget="account-menu" variant="ghost" icon label={t("account-menu.label")}>
@@ -25,7 +26,7 @@ export const AccountMenu = (props: AccountMenu) => {
 					<Text with="label">{props.name}</Text>
 				</div>
 				<MenuList class="flex flex-col rounded-2xl bg-surface">
-					<MenuItem as={A} href="/app/profile" state={{ previous: true }}>
+					<MenuItem as={A} href="/app/profile" state={{ previous: location.pathname }}>
 						<Icon use="user-circle" size="sm" />
 						{t("account-menu.account")}
 					</MenuItem>
