@@ -25,7 +25,7 @@ export const AccountMenu = (props: AccountMenu) => {
 					<Text with="label">{props.name}</Text>
 				</div>
 				<MenuList class="flex flex-col rounded-2xl bg-surface">
-					<MenuItem as={A} href="/app/profile">
+					<MenuItem as={A} href="/app/profile" state={{ previous: true }}>
 						<Icon use="user-circle" size="sm" />
 						{t("account-menu.account")}
 					</MenuItem>
