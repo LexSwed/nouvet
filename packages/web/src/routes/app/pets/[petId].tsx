@@ -36,12 +36,13 @@ const PetPage = (props: RouteSectionProps) => {
 					{(pet) => (
 						<Show when={profile()}>
 							{(profile) => (
-								<div class="flex flex-col gap-4">
+								<div class="flex flex-col gap-6">
 									<Card variant="flat">
-										<div class="flex h-10 flex-row items-center justify-between gap-4">
-											<Text with="body-xl" class="ms-1">
-												{pet()?.name}
-											</Text>
+										<div class="flex flex-row items-center gap-2">
+											<PetPicture pet={pet()} class="size-12" />
+											<Text class="ms-1">{pet()?.name}</Text>
+										</div>
+										<div class="ms-auto mt-auto flex h-10 flex-row items-center justify-between gap-4">
 											<Switch>
 												<Match when={profile().id === pet().owner?.id}>
 													<ButtonLink size="sm" href={`/app/pets/${pet().id}/edit`} variant="tonal">
@@ -65,10 +66,6 @@ const PetPage = (props: RouteSectionProps) => {
 													</ButtonLink>
 												</Match>
 											</Switch>
-										</div>
-										<div class="flex flex-row items-end justify-between gap-4">
-											<PetPicture pet={pet()} class="size-24" />
-											Something please
 										</div>
 									</Card>
 									<Card variant="tonal" tone="primary">
