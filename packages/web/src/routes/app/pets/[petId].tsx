@@ -38,34 +38,40 @@ const PetPage = (props: RouteSectionProps) => {
 							{(profile) => (
 								<div class="flex flex-col gap-6">
 									<Card variant="flat">
-										<div class="flex flex-row items-center gap-2">
-											<PetPicture pet={pet()} class="size-12" />
-											<Text class="ms-1">{pet()?.name}</Text>
-										</div>
-										<div class="ms-auto mt-auto flex h-10 flex-row items-center justify-between gap-4">
-											<Switch>
-												<Match when={profile().id === pet().owner?.id}>
-													<ButtonLink size="sm" href={`/app/pets/${pet().id}/edit`} variant="tonal">
-														<Text>{t("pet-card.edit")}</Text>
-														<Icon use="pencil" size="sm" />
-													</ButtonLink>
-												</Match>
-												<Match when={profile().id !== pet().owner?.id}>
-													<ButtonLink
-														size="sm"
-														href={`/app/family/${pet().owner!.id}`}
-														variant="tonal"
-														state={{ previous: props.location.pathname }}
-													>
-														<Avatar
-															avatarUrl={pet().owner!.avatarUrl || ""}
-															name={pet().owner!.name || ""}
-															size="xs"
-														/>
-														<Text>{pet().owner!.name || appT("pet-owner-no-name")}</Text>
-													</ButtonLink>
-												</Match>
-											</Switch>
+										<div class="flex flex-row items-stretch gap-4">
+											<PetPicture pet={pet()} class="h-40 w-24 rounded-xl" />
+											<div class="flex h-full w-full flex-col gap-4">
+												<Text with="body-lg">{pet()?.name}</Text>
+												<div class="ms-auto mt-auto flex h-10 flex-row items-center justify-between gap-4 py-2">
+													<Switch>
+														<Match when={profile().id === pet().owner?.id}>
+															<ButtonLink
+																size="sm"
+																href={`/app/pets/${pet().id}/edit`}
+																variant="tonal"
+															>
+																<Text>{t("pet-card.edit")}</Text>
+																<Icon use="pencil" size="sm" />
+															</ButtonLink>
+														</Match>
+														<Match when={profile().id !== pet().owner?.id}>
+															<ButtonLink
+																size="sm"
+																href={`/app/family/${pet().owner!.id}`}
+																variant="tonal"
+																state={{ previous: props.location.pathname }}
+															>
+																<Avatar
+																	avatarUrl={pet().owner!.avatarUrl || ""}
+																	name={pet().owner!.name || ""}
+																	size="xs"
+																/>
+																<Text>{pet().owner!.name || appT("pet-owner-no-name")}</Text>
+															</ButtonLink>
+														</Match>
+													</Switch>
+												</div>
+											</div>
 										</div>
 									</Card>
 									<Card variant="tonal" tone="primary">
