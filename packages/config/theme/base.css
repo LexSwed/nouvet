@@ -1,12 +1,10 @@
-@import '@fontsource-variable/rubik/index.css';
+@import "@fontsource-variable/rubik/index.css";
 
-@layer tw-base, nou-ui, tw-components, tw-utilities;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@import 'tailwindcss/base' layer(tw-base);
-@import 'tailwindcss/components' layer(tw-components);
-@import 'tailwindcss/utilities' layer(tw-utilities);
-
-@layer tw-base {
+@layer base {
   * {
     @apply border-outline min-w-0 font-sans;
   }
@@ -23,13 +21,13 @@
   :root,
   ::backdrop,
   ::selection {
-    --nou-font-sans: 'Rubik Variable';
+    --nou-font-sans: "Rubik Variable";
 
     --radius: 0.5rem;
   }
 }
 
-@layer tw-utilities {
+@layer utilities {
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -43,7 +41,7 @@
     margin-inline: auto;
     padding-inline: 1rem;
     @media screen(xl) {
-      max-width: theme('screens.xl');
+      max-width: theme("screens.xl");
     }
   }
 

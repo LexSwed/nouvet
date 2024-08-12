@@ -5,7 +5,7 @@
   }
 }
 
-@layer nou-ui {
+@layer tw-components {
   .popover {
     background-color: theme("colors.surface");
     color: theme("colors.on-surface");

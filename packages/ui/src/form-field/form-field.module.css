@@ -1,4 +1,4 @@
-@layer nou-ui {
+@layer tw-components {
   .field {
     --border-color: theme("colors.outline");
     --border-scale-y: 0.75;

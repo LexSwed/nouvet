@@ -1,4 +1,4 @@
-@layer tw-base, nou-ui, tw-components, tw-utilities;
+@layer tw-base, tw-components, tw-utilities;
 
 @import "tailwindcss/base" layer(tw-base);
 @import "tailwindcss/components" layer(tw-components);

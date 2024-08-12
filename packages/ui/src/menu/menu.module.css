@@ -1,4 +1,4 @@
-@layer nou-ui {
+@layer tw-components {
   .listItem {
     display: flex;
     align-items: center;
@@ -45,10 +45,10 @@
   .listItemNeutral {
     color: theme("colors.on-surface");
     &:where(:hover, [aria-selected="true"], [aria-current="true"]) {
-      background-color: theme("colors.on-surface/0.05");
+      background-color: theme("colors.tertiary/0.05");
     }
     &:where(:focus, :focus-within, :active) {
-      background-color: theme("colors.on-surface/0.08");
+      background-color: theme("colors.tertiary/0.08");
     }
   }
   .listItemDestructive {

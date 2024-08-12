@@ -1,80 +1,80 @@
 @tailwind components;
 
-@layer nou-ui {
-	.button {
-		display: flex;
-		align-items: center;
-		gap: theme("spacing.2");
-		background-color: theme("colors.surface");
-		color: theme("colors.on-surface");
-		border: 1px solid theme("colors.outline");
-		border-radius: theme("borderRadius.full");
-		padding-inline: theme("spacing.5");
-		height: theme("spacing.10");
-		transition: 0.24s ease-out;
-		transition-property: background-color;
-		user-select: none;
+@layer tw-components {
+  .button {
+    display: flex;
+    align-items: center;
+    gap: theme("spacing.2");
+    background-color: theme("colors.surface");
+    color: theme("colors.on-surface");
+    border: 1px solid theme("colors.outline");
+    border-radius: theme("borderRadius.full");
+    padding-inline: theme("spacing.5");
+    height: theme("spacing.10");
+    transition: 0.24s ease-out;
+    transition-property: background-color;
+    user-select: none;
 
-		&:where(:hover, :focus-within) {
-			background-color: theme("colors.surface-container");
-		}
-		&:where(:has(:focus-visible):focus-within) {
-			outline: 4px auto theme("colors.primary/0.2");
-			outline-offset: 0px;
-		}
-		&:where(:first-of-type:not(:last-of-type)) {
-			border-start-end-radius: 0;
-			border-end-end-radius: 0;
-		}
-		&:where(:last-of-type:not(:first-of-type)) {
-			border-start-start-radius: 0;
-			border-end-start-radius: 0;
-		}
-		&:where(:not(:first-of-type)) {
-			margin-inline-start: -1px;
-		}
-		&:has(input:checked) {
-			background-color: theme("colors.secondary-container");
-			color: theme("colors.on-secondary-container");
-			isolation: isolate;
-			& .customIcon {
-				opacity: 0;
-			}
-			& .icon {
-				opacity: 1;
-			}
-			& .label {
-				transform: none;
-			}
-		}
-		&:where(:not(:has(.customIcon)), :not(:has(input[checked]))) .label {
-			transform: translateX(calc(-1 * var(--icon-size) / 2));
-		}
-		--icon-size: 1.4em;
-	}
-	.iconWrapper {
-		display: grid;
-		flex-shrink: 0;
-		& > * {
-			display: flex;
-			grid-area: 1 / 1;
-			font-size: var(--icon-size);
-			block-size: var(--icon-size);
-			inline-size: var(--icon-size);
-		}
-		@apply -ms-2;
-	}
-	.icon {
-		opacity: 0;
-		transition: opacity 0.2s ease-out;
-	}
-	.customIcon {
-		line-height: 1;
-		transition: opacity 0.2s ease-out;
-	}
-	.label {
-		transition: transform 0.24s ease-out;
-		isolation: isolate;
-		@apply text-sm;
-	}
+    &:where(:hover, :focus-within) {
+      background-color: theme("colors.surface-container");
+    }
+    &:where(:has(:focus-visible):focus-within) {
+      outline: 4px auto theme("colors.primary/0.2");
+      outline-offset: 0px;
+    }
+    &:where(:first-of-type:not(:last-of-type)) {
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+    }
+    &:where(:last-of-type:not(:first-of-type)) {
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+    }
+    &:where(:not(:first-of-type)) {
+      margin-inline-start: -1px;
+    }
+    &:has(input:checked) {
+      background-color: theme("colors.secondary-container");
+      color: theme("colors.on-secondary-container");
+      isolation: isolate;
+      & .customIcon {
+        opacity: 0;
+      }
+      & .icon {
+        opacity: 1;
+      }
+      & .label {
+        transform: none;
+      }
+    }
+    &:where(:not(:has(.customIcon)), :not(:has(input[checked]))) .label {
+      transform: translateX(calc(-1 * var(--icon-size) / 2));
+    }
+    --icon-size: 1.4em;
+  }
+  .iconWrapper {
+    display: grid;
+    flex-shrink: 0;
+    & > * {
+      display: flex;
+      grid-area: 1 / 1;
+      font-size: var(--icon-size);
+      block-size: var(--icon-size);
+      inline-size: var(--icon-size);
+    }
+    @apply -ms-2;
+  }
+  .icon {
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+  }
+  .customIcon {
+    line-height: 1;
+    transition: opacity 0.2s ease-out;
+  }
+  .label {
+    transition: transform 0.24s ease-out;
+    isolation: isolate;
+    @apply text-sm;
+  }
 }

@@ -1,16 +1,16 @@
-@layer nou-ui {
+@layer tw-components {
   .input {
     flex-basis: 100%;
     background: transparent;
     outline: none;
     field-sizing: content;
     resize: none;
-    &[type='number'] {
+    &[type="number"] {
       font-variant-numeric: tabular-nums;
       @media screen(md) {
-        padding-inline-end: theme('spacing.1');
+        padding-inline-end: theme("spacing.1");
         &::-webkit-inner-spin-button {
-          margin-inline-start: theme('spacing.1');
+          margin-inline-start: theme("spacing.1");
         }
       }
     }
