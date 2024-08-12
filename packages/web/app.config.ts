@@ -6,6 +6,9 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
 	ssr: true,
 	middleware: "./src/middleware.ts",
+	solid: {
+		hot: false,
+	},
 	server: {
 		prerender: {
 			// TODO: needs per-language generation
