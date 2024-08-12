@@ -13,8 +13,8 @@ import { tw } from "../tw";
 
 import { createMediaQuery } from "@solid-primitives/media";
 import { mergeRefs } from "@solid-primitives/refs";
+import css from "../popover/popover.module.css";
 import { composeEventHandlers, mergeDefaultProps } from "../utils";
-import css from "./drawer.module.css";
 
 type Side = "top" | "bottom" | "left" | "right";
 type DrawerProps<T extends ValidComponent = "div"> = PopoverProps<T> & {
