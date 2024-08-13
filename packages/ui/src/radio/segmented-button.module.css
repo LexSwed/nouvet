@@ -1,6 +1,6 @@
 @tailwind components;
 
-@layer tw-components {
+@layer components {
   .button {
     display: flex;
     align-items: center;

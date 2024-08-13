@@ -1,4 +1,6 @@
-@layer tw-components {
+@tailwind components;
+
+@layer components {
   .field {
     --border-color: theme("colors.outline");
     --border-scale-y: 0.75;

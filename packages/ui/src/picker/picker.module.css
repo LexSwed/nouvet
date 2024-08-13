@@ -1,4 +1,6 @@
-@layer tw-components {
+@tailwind components;
+
+@layer components {
   .input {
     appearance: base-select;
     width: 100%;
