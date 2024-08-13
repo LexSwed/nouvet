@@ -1,6 +1,4 @@
-@tailwind components;
-
-@layer components {
+@layer tw-components {
   .genderSwitch {
     &:has(input[value="male"]:checked) {
       & .genderSwitchCard:has(input[value="male"]) {

@@ -1,8 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer tw-base, tw-components, tw-utilities;
 
-@layer base {
+@import "tailwindcss/base" layer(tw-base);
+@import "tailwindcss/components" layer(tw-components);
+@import "tailwindcss/utilities" layer(tw-utilities);
+
+@layer tw-base {
   :root {
     --nou-font-sans: "Rubik Variable";
 
@@ -28,7 +30,7 @@
   }
 }
 
-@layer base {
+@layer tw-base {
   :root {
     --nou-white: 0 0% 100%;
     --nou-black: 0 0% 0%;
@@ -71,7 +73,7 @@
   }
 }
 
-@layer utilities {
+@layer tw-utilities {
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;

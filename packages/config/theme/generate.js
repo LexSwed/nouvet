@@ -23,7 +23,7 @@ const darkColors = generateHslThemeFromMaterialThemeBuilder(mdTheme.schemes.dark
 const baseCss = await fs.readFile(new URL("./base.css", import.meta.url));
 
 const themeCss = /* css */ `
-@layer base {
+@layer tw-base {
   :root,
   ::backdrop,
   ::selection {

@@ -1,12 +1,10 @@
-@tailwind components;
-
 @property --btn-ghost-to {
   syntax: "<percentage>";
   inherits: true;
   initial-value: 0%;
 }
 
-@layer components {
+@layer tw-components {
   .button {
     @apply transition;
   }

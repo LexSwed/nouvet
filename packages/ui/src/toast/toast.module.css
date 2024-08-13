@@ -1,6 +1,4 @@
-@tailwind components;
-
-@layer components {
+@layer tw-components {
   .toast {
     transition:
       opacity 0.24s ease,

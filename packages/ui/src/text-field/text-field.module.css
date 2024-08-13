@@ -1,6 +1,4 @@
-@tailwind components;
-
-@layer components {
+@layer tw-components {
   .input {
     flex-basis: 100%;
     background: transparent;

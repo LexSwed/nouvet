@@ -1,14 +1,11 @@
-@tailwind components;
-@tailwind utilities;
-
 /* Avoid consumers overriding this for all states with e.g. display: flex */
-@layer utilities {
+@layer tw-utilities {
   .popover:not(:popover-open) {
     display: none;
   }
 }
 
-@layer components {
+@layer tw-components {
   .popover {
     background-color: theme("colors.surface");
     color: theme("colors.on-surface");

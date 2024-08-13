@@ -1,6 +1,4 @@
-@tailwind components;
-
-@layer components {
+@layer tw-components {
   .card {
     position: relative;
     flex-shrink: 0;
