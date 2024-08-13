@@ -1,5 +1,5 @@
 import { ButtonLink, Icon } from "@nou/ui";
-import { createAsync } from "@solidjs/router";
+import { createAsync, useLocation, useNavigate } from "@solidjs/router";
 import { type JSX, Match, type ParentProps, Show, Switch, children } from "solid-js";
 
 import { getUserFamily } from "~/server/api/user";
@@ -16,6 +16,9 @@ export const AppHeader = (
 	const user = createAsync(() => getUserFamily());
 	const t = createTranslator("app");
 	const child = children(() => props.children);
+	const navigate = useNavigate();
+	const location = useLocation();
+
 	return (
 		<Show when={user()}>
 			{(user) => (
@@ -26,10 +29,19 @@ export const AppHeader = (
 							{(link) => (
 								<ButtonLink
 									href={link()}
-									onClick={props.onBackClick}
 									icon
 									label={t("go-to-home-page")}
 									variant="tonal"
+									onClick={(e) => {
+										if (
+											location.state &&
+											"previous" in location.state &&
+											typeof location.state.previous === "string"
+										) {
+											e.preventDefault();
+											navigate(location.state.previous);
+										}
+									}}
 								>
 									<Icon use="chevron-left" />
 								</ButtonLink>

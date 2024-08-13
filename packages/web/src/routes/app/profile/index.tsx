@@ -12,14 +12,7 @@ import {
 	toast,
 } from "@nou/ui";
 import { Title } from "@solidjs/meta";
-import {
-	type RouteDefinition,
-	createAsync,
-	useAction,
-	useLocation,
-	useNavigate,
-	useSubmission,
-} from "@solidjs/router";
+import { type RouteDefinition, createAsync, useAction, useSubmission } from "@solidjs/router";
 import { Show, Suspense } from "solid-js";
 
 import { getUserProfile, updateUserProfile } from "~/server/api/user";
@@ -43,26 +36,12 @@ export default function ProfilePage() {
 	const user = createAsync(() => getUserProfile());
 	const updateProfileAction = useAction(updateUserProfile);
 	const profileSubmission = useSubmission(updateUserProfile);
-	const navigate = useNavigate();
-	const location = useLocation();
 
 	return (
 		<>
 			<Title>{t("meta.title")}</Title>
 			<div class="min-h-full bg-background">
-				<AppHeader
-					backLink="/app"
-					onBackClick={(e) => {
-						if (
-							location.state &&
-							"previous" in location.state &&
-							typeof location.state.previous === "string"
-						) {
-							e.preventDefault();
-							navigate(location.state.previous);
-						}
-					}}
-				/>
+				<AppHeader backLink="/app" />
 				<section class="container flex flex-col items-center gap-6">
 					<Suspense>
 						<Show when={user()}>

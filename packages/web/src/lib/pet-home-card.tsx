@@ -11,7 +11,7 @@ import {
 	Text,
 	tw,
 } from "@nou/ui";
-import { A } from "@solidjs/router";
+import { A, useLocation } from "@solidjs/router";
 import { ErrorBoundary, Match, Show, Suspense, Switch, createUniqueId } from "solid-js";
 
 import type { DatabasePet, UserID } from "~/server/db/schema";
@@ -63,6 +63,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 	const t = createTranslator("app");
 
 	const hasMissingInfo = () => !props.pet.dateOfBirth || !props.pet.weight || !props.pet.breed;
+	const location = useLocation();
 
 	return (
 		<Card
@@ -140,7 +141,11 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 							)}
 						</Match>
 						<Match when={!props.actualOwner}>
-							<MenuItem as={A} href={`/app/pets/${props.pet.id}/`}>
+							<MenuItem
+								as={A}
+								href={`/app/pets/${props.pet.id}/edit`}
+								state={{ previous: location.pathname }}
+							>
 								<Icon use="pencil" size="sm" />
 								{t("pet-menu.edit-info")}
 							</MenuItem>

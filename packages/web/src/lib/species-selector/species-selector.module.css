@@ -38,7 +38,8 @@
   }
 
   .genderSwitchCard {
-    border: theme("borderWidth.DEFAULT") solid theme("colors.on-surface/0.08");
+    border: theme("borderWidth.DEFAULT") solid theme("colors.on-surface/0.12");
+    background-color: theme(colors.on-background/0.01);
     & [data-part="label"] {
       height: 100%;
       justify-content: center;

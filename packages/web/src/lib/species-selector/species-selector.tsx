@@ -68,7 +68,7 @@ const SpeciesSelector = (props: SpeciesSelectorProps) => {
 	);
 };
 
-const GenderSwitch = (props: { name: string }) => {
+const GenderSwitch = (props: { name: string; value: "male" | "female" | null | undefined }) => {
 	const t = createTranslator("pets");
 	const id = createUniqueId();
 	return (
@@ -80,6 +80,7 @@ const GenderSwitch = (props: { name: string }) => {
 				<RadioCard
 					name={props.name}
 					value="male"
+					checked={props.value === "male"}
 					label={t("animal-gender.male")!}
 					class={tw(css.genderSwitchCard, "h-16")}
 				/>
@@ -87,6 +88,7 @@ const GenderSwitch = (props: { name: string }) => {
 				<RadioCard
 					name={props.name}
 					value="female"
+					checked={props.value === "female"}
 					label={t("animal-gender.female")!}
 					class={tw(css.genderSwitchCard, "h-16")}
 				/>

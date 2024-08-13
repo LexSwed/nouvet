@@ -53,7 +53,7 @@ const Picker = (ownProps: PickerProps) => {
 						<datalist
 							class={tw(
 								css.popover,
-								"isolate mt-2 overflow-auto overflow-y-auto rounded-2xl rounded-t-sm border-on-surface/5 border-t bg-surface p-1 text-on-surface shadow-popover",
+								"isolate max-h-64 overflow-auto overflow-y-auto border-on-surface/5 border-t bg-surface p-1 text-on-surface shadow-popover",
 							)}
 						>
 							{options()}

@@ -30,6 +30,9 @@ const petsDict = {
 	"cta.create": "Create",
 	"header.all-pets": "Pets",
 	"pet-card.edit": "Update info",
+	"meta.edit-title": "More about {{petName}} | Pets",
+	"edit.headline": "More about <b>{{petName}}</b>",
+	"edit.delete-cta": "Delete {{petName}}",
 } as const;
 
 export default petsDict;

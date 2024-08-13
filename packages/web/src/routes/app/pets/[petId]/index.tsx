@@ -36,7 +36,7 @@ const PetPage = (props: RouteSectionProps) => {
 					{(pet) => (
 						<Show when={profile()}>
 							{(profile) => (
-								<div class="flex flex-col gap-6">
+								<div class="flex flex-col gap-8">
 									<Card variant="flat">
 										<div class="flex flex-row gap-4">
 											<div class="flex flex-col gap-4">
@@ -52,6 +52,7 @@ const PetPage = (props: RouteSectionProps) => {
 															size="sm"
 															href={`/app/pets/${pet().id}/edit`}
 															variant="tonal"
+															state={{ previous: props.location.pathname }}
 														>
 															<Text>{t("pet-card.edit")}</Text>
 															<Icon use="pencil" size="sm" />

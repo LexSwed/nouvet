@@ -51,3 +51,24 @@ export async function userPet(userId: UserID, petId: PetID) {
 		.leftJoin(userTable, eq(userTable.id, petTable.ownerId))
 		.get();
 }
+
+export async function userPetForEdit(userId: UserID, petId: PetID) {
+	const db = useDb();
+
+	return db
+		.select({
+			id: petTable.id,
+			name: petTable.name,
+			pictureUrl: petTable.pictureUrl,
+			species: petTable.species,
+			breed: petTable.breed,
+			gender: petTable.gender,
+			dateOfBirth: petTable.dateOfBirth,
+			color: petTable.color,
+			weight: petTable.weight,
+			identityCode: petTable.identityCode,
+		})
+		.from(petTable)
+		.where(and(eq(petTable.id, petId), eq(petTable.ownerId, userId)))
+		.get();
+}
