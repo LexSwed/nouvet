@@ -52,7 +52,7 @@ const PetEditPage = (props: RouteSectionProps) => {
 				<Show when={pet()}>
 					{(pet) => (
 						<>
-							<Card variant="flat" class="flex flex-col gap-8">
+							<Card class="flex max-w-[420px] flex-col gap-8">
 								<Text
 									with="headline-2"
 									as="h2"
@@ -67,48 +67,43 @@ const PetEditPage = (props: RouteSectionProps) => {
 										<Icon use="camera" /> Update
 									</Button>
 								</div>
-								<TextField label="Name" as="textarea" class="flex-[2]">
-									{pet().name}
-								</TextField>
-								<GenderSwitch name="gender" value={pet().gender} />
-								<fieldset>
-									<Text as="legend" with="label-sm" class="mb-2 inline-block">
-										Birth date
-									</Text>
-									<div class="flex flex-row gap-2">
-										<TextField
-											name="bday"
-											label="Day"
-											autocomplete="off"
-											type="number"
-											min="1"
-											max="31"
-											class="flex-1"
-										/>
-										<Picker label="Month" name="bmonth" autocomplete="off" class="flex-[2]">
-											<Option value="" label="None" />
-											<For each={monthNames()}>
-												{(month, index) => <Option value={index() + 1} label={month} />}
-											</For>
-										</Picker>
-										<TextField
-											name="byear"
-											label="Year"
-											autocomplete="off"
-											type="number"
-											min="1990"
-											max={new Date().getFullYear()}
-											class="flex-1"
-										/>
-									</div>
-								</fieldset>
-								<TextField label="Breed" name="breed" value={pet().breed ?? ""} />
-								<TextField
-									label="Identity code (REIAC)"
-									name="breed"
-									value={pet().identityCode ?? ""}
-								/>
-								<Button>Save</Button>
+								<form class="flex flex-col gap-8">
+									<TextField label="Name" value={pet().name} class="flex-[2]" required />
+									<GenderSwitch name="gender" value={pet().gender} />
+									<fieldset>
+										<Text as="legend" with="label-sm" class="mb-2 inline-block">
+											Birth date
+										</Text>
+										<div class="flex flex-row gap-2">
+											<TextField
+												name="bday"
+												label="Day"
+												autocomplete="off"
+												type="number"
+												min="1"
+												max="31"
+												class="flex-1"
+											/>
+											<Picker label="Month" name="bmonth" autocomplete="off" class="flex-[2]">
+												<Option value="" label="None" />
+												<For each={monthNames()}>
+													{(month, index) => <Option value={index() + 1} label={month} />}
+												</For>
+											</Picker>
+											<TextField
+												name="byear"
+												label="Year"
+												autocomplete="off"
+												type="number"
+												min="1990"
+												max={new Date().getFullYear()}
+												class="flex-1"
+											/>
+										</div>
+									</fieldset>
+									<TextField label="Breed" name="breed" value={pet().breed ?? ""} />
+									<Button type="submit">Save</Button>
+								</form>
 							</Card>
 							<Button variant="ghost" tone="destructive">
 								{t("edit.delete-cta", { petName: pet().name })}

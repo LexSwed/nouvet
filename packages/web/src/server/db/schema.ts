@@ -118,6 +118,7 @@ export const petTable = sqliteTable("pet", {
 	weight: integer("weight", { mode: "number" }),
 	/** A signed URL to animal picture */
 	pictureUrl: text("picture_url", { length: 120 }),
+	/** TODO: how this can be used now, without connections to doctors? */
 	identityCode: text("identity_code", { length: 120 }),
 	createdAt: utcDatetime("created_at"),
 	updatedAt: utcDatetime("updated_at", { autoUpdate: true }),

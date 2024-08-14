@@ -16,7 +16,7 @@ const PetPage = () => {
 		<>
 			<Title>{t("meta.title")}</Title>
 			<AppHeader backLink="/app" />
-			<div class="container min-h-full">Hello pets</div>
+			<div class="container">Hello pets</div>
 		</>
 	);
 };
