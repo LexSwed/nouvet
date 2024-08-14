@@ -13,16 +13,17 @@
     }
   }
 
-  @position-try --picker-top {
-    bottom: anchor(top);
-    border-radius: theme("borderRadius.2xl") theme("borderRadius.2xl") 0 0;
+  @position-try --nou-picker-top {
+    /* bottom: anchor(top);
+    border-radius: theme("borderRadius.2xl") theme("borderRadius.2xl") 0 0; */
+    inset-area: top;
     margin-block: 0 theme("spacing.2");
   }
 
   .popover {
     min-width: anchor-size(width);
-    position-try: --picker-top;
-    top: anchor(bottom);
+    position-try: --nou-picker-top;
+    inset-area: bottom;
     border-radius: 0 0 theme("borderRadius.2xl") theme("borderRadius.2xl");
     margin-block: theme("spacing.2") 0;
   }
