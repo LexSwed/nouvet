@@ -10,6 +10,8 @@ export class IncorrectFamilyId extends Error {}
 
 export class IncorrectFamilyMemberId extends Error {}
 
+export class PetActionNotAllowed extends Error {}
+
 /**
  * Allows matching Server errors on the client after serialization.
  * Only supports { error: Error } shape.

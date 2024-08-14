@@ -1,6 +1,6 @@
 "use server";
 
-import { json } from "@solidjs/router";
+import { json, redirect } from "@solidjs/router";
 import * as v from "valibot";
 
 import { getRequestUser } from "~/server/auth/request-user";
@@ -22,12 +22,18 @@ export const getUserPetsServer = async () => {
 export const getPetServer = async (petId: string) => {
 	const currentUser = await getRequestUser();
 	const pet = await userPet(currentUser.userId, petId);
+	if (!pet) {
+		throw redirect("/app/pets", { status: 404 });
+	}
 	return pet;
 };
 
 export const getPetForEditServer = async (petId: string) => {
 	const currentUser = await getRequestUser();
 	const pet = await userPetForEdit(currentUser.userId, petId);
+	if (!pet) {
+		throw redirect("/app/pets", { status: 404 });
+	}
 	return pet;
 };
 
