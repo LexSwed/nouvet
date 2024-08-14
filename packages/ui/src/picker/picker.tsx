@@ -53,7 +53,7 @@ const Picker = (ownProps: PickerProps) => {
 						<datalist
 							class={tw(
 								css.popover,
-								"isolate max-h-64 overflow-auto overflow-y-auto border-on-surface/5 border-t bg-surface p-1 text-on-surface shadow-popover",
+								"isolate max-h-64 overflow-auto overflow-y-auto rounded-2xl border border-on-surface/5 bg-surface p-1 text-on-surface shadow-popover",
 							)}
 						>
 							{options()}
@@ -78,7 +78,7 @@ const Option = (
 			as="option"
 			{...props}
 			class={tw(
-				"flex select-none flex-col items-stretch justify-center gap-1 first:rounded-t-sm",
+				"flex select-none flex-col items-stretch justify-center gap-1",
 				css.option,
 				local.class,
 			)}

@@ -14,18 +14,16 @@
   }
 
   @position-try --nou-picker-top {
-    /* bottom: anchor(top);
-    border-radius: theme("borderRadius.2xl") theme("borderRadius.2xl") 0 0; */
-    inset-area: top;
-    margin-block: 0 theme("spacing.2");
+    border-radius: theme("borderRadius.2xl") theme("borderRadius.2xl") 0 0;
+    bottom: calc(anchor(top) + theme(spacing.6));
+    top: unset;
   }
 
   .popover {
     min-width: anchor-size(width);
+    /* border-radius: 0 0 theme("borderRadius.2xl") theme("borderRadius.2xl"); */
+    top: calc(anchor(bottom) + theme(spacing.2));
     position-try: --nou-picker-top;
-    inset-area: bottom;
-    border-radius: 0 0 theme("borderRadius.2xl") theme("borderRadius.2xl");
-    margin-block: theme("spacing.2") 0;
   }
 
   .option {
