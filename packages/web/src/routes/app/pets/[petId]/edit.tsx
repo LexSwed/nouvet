@@ -64,35 +64,40 @@ const PetEditPage = (props: RouteSectionProps) => {
 								<div class="flex flex-row items-center gap-2">
 									<PetPicture pet={pet()} class="h-32 w-48 rounded-2xl" />
 									<Button variant="tonal">
-										<Icon use="camera" /> Update
+										<Icon use="camera" /> {t("edit.photo-update")}
 									</Button>
 								</div>
 								<form class="flex flex-col gap-8">
-									<TextField label="Name" value={pet().name} class="flex-[2]" required />
+									<TextField label={t("edit.name")} value={pet().name} class="flex-[2]" required />
 									<GenderSwitch name="gender" value={pet().gender} />
 									<fieldset>
 										<Text as="legend" with="label-sm" class="mb-2 inline-block">
-											Birth date
+											{t("edit.birth-date")}
 										</Text>
 										<div class="flex flex-row gap-2">
 											<TextField
 												name="bday"
-												label="Day"
+												label={t("edit.birth-day")}
 												autocomplete="off"
 												type="number"
 												min="1"
 												max="31"
 												class="flex-1"
 											/>
-											<Picker label="Month" name="bmonth" autocomplete="off" class="flex-[2]">
-												<Option value="" label="None" />
+											<Picker
+												label={t("edit.birth-month")}
+												name="bmonth"
+												autocomplete="off"
+												class="flex-[2]"
+											>
+												<Option value="" label={t("edit.birth-month-none")} />
 												<For each={monthNames()}>
 													{(month, index) => <Option value={index() + 1} label={month} />}
 												</For>
 											</Picker>
 											<TextField
 												name="byear"
-												label="Year"
+												label={t("edit.birth-year")}
 												autocomplete="off"
 												type="number"
 												min="1990"
@@ -101,8 +106,8 @@ const PetEditPage = (props: RouteSectionProps) => {
 											/>
 										</div>
 									</fieldset>
-									<TextField label="Breed" name="breed" value={pet().breed ?? ""} />
-									<Button type="submit">Save</Button>
+									<TextField label={t("edit.breed")} name="breed" value={pet().breed ?? ""} />
+									<Button type="submit">{t("edit.save-cta")}</Button>
 								</form>
 							</Card>
 							<Button variant="ghost" tone="destructive">

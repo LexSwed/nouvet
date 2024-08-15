@@ -33,6 +33,15 @@ const petsDict = {
 	"meta.edit-title": "More about {{petName}} | Pets",
 	"edit.headline": "More about <b>{{petName}}</b>",
 	"edit.delete-cta": "Delete {{petName}}",
+	"edit.photo-update": "Update",
+	"edit.name": "Name",
+	"edit.birth-date": "Birth date",
+	"edit.birth-day": "Day",
+	"edit.birth-month": "Month",
+	"edit.birth-month-none": "None",
+	"edit.birth-year": "Year",
+	"edit.breed": "Breed",
+	"edit.save-cta": "Save",
 } as const;
 
 export default petsDict;
