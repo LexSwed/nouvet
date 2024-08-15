@@ -20,7 +20,7 @@ export default function WWW() {
 						<ButtonLink
 							href="/app"
 							size="cta"
-							link={false}
+							target="_self"
 							preload={false}
 							class="-me-12 relative mt-16 flex shrink-0 items-center gap-4 self-start text-lg sm:me-0"
 						>

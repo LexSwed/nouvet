@@ -48,7 +48,7 @@ function AppLoginPage() {
 							href="/api/auth/facebook"
 							class="flex items-center gap-3 rounded-2xl bg-[#1877F2] intent:bg-[#1877F2] text-white outline-[#1877F2]"
 							size="lg"
-							link={false}
+							target="_self"
 							variant="tonal"
 							loading={loading()}
 							onClick={onClick}

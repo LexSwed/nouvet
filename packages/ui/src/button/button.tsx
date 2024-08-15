@@ -203,12 +203,7 @@ const Button = (ownProps: Omit<BaseProps<"button">, "component" | "split">) => {
 };
 
 const ButtonLink = (ownProps: Omit<BaseProps<typeof A>, "component">) => {
-	/**
-	 * When link={false} should use <a> without any link attribute
-	 * @link https://github.com/solidjs/solid-router/discussions/321
-	 */
-	const [local, props] = splitProps(ownProps, ["link"]);
-	return <BaseComponent {...props} component={local.link === false ? "a" : A} />;
+	return <BaseComponent {...ownProps} component={A} />;
 };
 
 const SplitButton = (ownProps: Omit<BaseProps<"div">, "component" | "icon">) => {

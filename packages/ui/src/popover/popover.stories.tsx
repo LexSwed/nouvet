@@ -60,7 +60,6 @@ export const AccountMenu = (props: PopoverProps<"div">) => {
 				<a
 					// biome-ignore lint/a11y/useValidAnchor: explained
 					href="#"
-					link={false}
 					class="flex w-full items-center justify-start gap-4 ps-3 text-primary"
 				>
 					John Doe
