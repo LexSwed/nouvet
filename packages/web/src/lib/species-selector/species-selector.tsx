@@ -68,7 +68,7 @@ const SpeciesSelector = (props: SpeciesSelectorProps) => {
 	);
 };
 
-const GenderSwitch = (props: { name: string; value: "male" | "female" | null | undefined }) => {
+const GenderSwitch = (props: { name: string; value?: "male" | "female" | null }) => {
 	const t = createTranslator("pets");
 	const id = createUniqueId();
 	return (
