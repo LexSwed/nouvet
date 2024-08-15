@@ -30,6 +30,18 @@ const petsDict = {
 	"cta.create": "Crear",
 	"header.all-pets": "Todas",
 	"pet-card.edit": "Actualizar",
+	"meta.edit-title": "Más sobre {{petName}}",
+	"edit.headline": "Más sobre <b>{{petName}}</b>",
+	"edit.delete-cta": "Eliminar {{petName}}",
+	"edit.photo-update": "Actualizar",
+	"edit.name": "Nombre",
+	"edit.birth-date": "Fecha de nacimiento",
+	"edit.birth-day": "Día",
+	"edit.birth-month": "Mes",
+	"edit.birth-month-none": "-",
+	"edit.birth-year": "Año",
+	"edit.breed": "Raza",
+	"edit.save-cta": "Guardar",
 } as const satisfies Record<keyof typeof import("../en/pets").default, string>;
 
 export default petsDict;
