@@ -34,6 +34,8 @@ const petsDict = {
 	"edit.headline": "More about <b>{{petName}}</b>",
 	"edit.delete-cta": "Delete {{petName}}",
 	"edit.photo-update": "Update",
+	"edit.photo-update-dialog-title": "Update {{petName}}'s picture",
+	"edit.photo-add": "Add a photo",
 	"edit.name": "Name",
 	"edit.birth-date": "Birth date",
 	"edit.birth-day": "Day",

@@ -3,6 +3,13 @@
   .popover:not(:popover-open) {
     display: none;
   }
+  :global(body):has(
+      .popover[data-placement="center"]:popover-open,
+      .drawer:popover-open
+    ) {
+    overflow: hidden;
+    pointer-events: none;
+  }
 }
 
 @layer tw-components {
@@ -95,15 +102,6 @@
           opacity: 0;
         }
       }
-      @starting-style {
-        &:popover-open {
-          transform: translateY(1rem);
-        }
-
-        &::backdrop {
-          opacity: 0;
-        }
-      }
     }
     &[data-placement^="top"] {
       transform-origin: center top;
@@ -128,6 +126,18 @@
     }
     &[data-placement^="bottom"][data-placement*="right-to-"] {
       transform-origin: right bottom;
+    }
+  }
+
+  @starting-style {
+    .popover:where([data-placement="center"]) {
+      &:popover-open {
+        transform: translateY(1rem);
+      }
+
+      &::backdrop {
+        opacity: 0;
+      }
     }
   }
 

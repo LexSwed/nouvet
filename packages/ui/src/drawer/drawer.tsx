@@ -137,8 +137,6 @@ function createDragHandlers(props: { side: Side }) {
 		setTranslate(0);
 
 		if (event.newState === "open") {
-			document.body.style.setProperty("overflow", "hidden");
-			document.body.style.setProperty("pointer-events", "none");
 			document.addEventListener("pointermove", onPointerMove);
 			document.addEventListener("touchmove", onTouchMove);
 			document.addEventListener("pointerup", onPointerUp);
@@ -150,9 +148,6 @@ function createDragHandlers(props: { side: Side }) {
 			document.removeEventListener("pointerup", onPointerUp);
 			document.removeEventListener("touchend", onTouchEnd);
 			document.removeEventListener("contextmenu", onUp);
-
-			document.body.style.removeProperty("overflow");
-			document.body.style.removeProperty("pointer-events");
 
 			currentPointerStart = [0, 0];
 		}
