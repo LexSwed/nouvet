@@ -9,7 +9,7 @@ import {
 	splitProps,
 	useContext,
 } from "solid-js";
-import { mergeDefaultProps } from "./utils";
+import { mergeDefaultProps } from "../utils";
 
 interface FormContext {
 	validationErrors?: Record<string, string | undefined | null> | null;
@@ -25,10 +25,7 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 	const [local, props] = splitProps(mergeDefaultProps(ownProps, { method: "post" }), [
 		"validationErrors",
 	]);
-	const [nativeErrors, setNativeErrors] = createSignal<FormContext["validationErrors"]>();
-	const value = () => ({
-		validationErrors: { ...local.validationErrors, ...nativeErrors() },
-	});
+	const [nativeErrors, setNativeErrors] = createSignal<FormContext["validationErrors"]>({});
 
 	/* Sets custom validation errors on validationErrors prop fields */
 	createEffect(
@@ -36,21 +33,63 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 			() => local.validationErrors,
 			(newPropErrors) => {
 				if (!formRef) return;
-				for (const element of Array.from(formRef?.elements)) {
-					if (!isValidatableInput(element)) return;
+				const errors = new Map<string, string>();
+				const fieldsets = new Map<string, Set<string>>();
+				main: for (const element of Array.from(formRef.elements)) {
+					if (!isValidatableInput(element)) continue;
+					// store fieldsets with their elements
+					if (element instanceof HTMLFieldSetElement) {
+						fieldsets.set(
+							element.name,
+							Array.from(element.elements).reduce((acc, el) => {
+								if (isValidatableInput(el)) acc.add(el.name);
+								return acc;
+							}, new Set<string>()),
+						);
+						// no need to check fieldsets for validity as they don't hold it
+						continue;
+					}
 					// reset custom message if it was set before
 					element.setCustomValidity("");
+
 					const errorString =
-						newPropErrors && element.name in newPropErrors && newPropErrors[element.name];
-					if (typeof errorString === "string") {
+						newPropErrors && element.name in newPropErrors
+							? newPropErrors[element.name]
+							: undefined;
+					if (typeof errorString !== "string") continue;
+
+					// for some reason the element is not rerendered with new error state
+					setTimeout(() => {
+						// ensure the field is reported as invalid
 						element.setCustomValidity(errorString);
+					}, 10);
+
+					// check if the field belongs to a fieldset and set the error on the fieldset
+					for (const [fieldsetName, fieldset] of fieldsets.entries()) {
+						if (fieldset.has(element.name)) {
+							errors.set(
+								fieldsetName,
+								errors.has(fieldsetName)
+									? [errors.get(fieldsetName), errorString].join("\n")
+									: errorString,
+							);
+							continue main;
+						}
 					}
+					// otherwise set the error on the field itself
+					errors.set(element.name, errorString);
 				}
+				setNativeErrors(Object.fromEntries(errors.entries()));
 			},
 		),
 	);
+
 	return (
-		<formContext.Provider value={value}>
+		<formContext.Provider
+			value={() => ({
+				validationErrors: nativeErrors(),
+			})}
+		>
 			<form
 				novalidate
 				{...props}
@@ -87,28 +126,23 @@ function setNativeValidationMessages(form: HTMLFormElement) {
 	for (const element of Array.from(form.elements)) {
 		if (!isValidatableInput(element)) continue;
 
-		const customValidationError = element.validity.customError
-			? (element as HTMLInputElement).validationMessage
-			: null;
+		const customValidationError = element.validity.customError ? element.validationMessage : null;
 		// reset possible custom message to check native validation
-		(element as HTMLInputElement).setCustomValidity("");
+		element.setCustomValidity("");
+
 		// if the field is still invalid – set new native validation message
 		if (!element.validity.valid) {
-			invalid.set(element.name, (element as HTMLInputElement).validationMessage);
+			invalid.set(element.name, element.validationMessage);
 			continue;
 		}
 		// if native validation passed, but there are still errors from props - set them.
 		if (customValidationError) {
-			(element as HTMLInputElement).setCustomValidity(customValidationError);
+			element.setCustomValidity(customValidationError);
 		}
 	}
 	return invalid;
 }
 
 function isValidatableInput(element: Element): element is HTMLInputElement & { name: string } {
-	return (
-		!!element.getAttribute("name") &&
-		"validity" in element &&
-		element.validity instanceof ValidityState
-	);
+	return "validity" in element && element.validity instanceof ValidityState;
 }

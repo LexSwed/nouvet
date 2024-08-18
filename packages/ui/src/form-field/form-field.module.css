@@ -8,7 +8,7 @@
     &:where(:has(:user-invalid)) {
       --border-color: theme("colors.error");
       --border-scale-y: 2;
-      & .description,
+      & .error,
       & .label {
         color: theme("colors.error");
       }
@@ -105,8 +105,11 @@
     cursor: default;
   }
   .label {
-    padding-inline: var(--start-padding);
-    padding-block-start: theme("spacing.2");
+    color: theme("colors.on-surface-variant");
+    &:not(legend) {
+      padding-inline: var(--start-padding);
+      padding-block-start: theme("spacing.2");
+    }
   }
   .description {
     /* same as label */
@@ -132,40 +135,15 @@
   }
 
   .fieldset {
-    position: relative;
     --errors-count: 0;
-    &:has(.field .description) {
-      --errors-count: 1;
-      padding-block-end: calc(
-        var(--errors-count) * theme("lineHeight.5") + 0.25rem
-      );
-
-      & .field .description {
-        position: absolute;
-        left: 0;
-        padding-inline: 0;
-        bottom: 0;
-      }
-    }
-    /* second field has a neightbor with an error */
-    &:has(.field:nth-of-type(2) .description):has(
-        .field:nth-of-type(2) + .field .description
-      ) {
-      --errors-count: 2;
-      & .field:nth-of-type(1) .description {
-        transform: translateY(calc(-100%));
-      }
-    }
-    /* all 3 fields have an error */
-    &:has(.field:nth-of-type(1) .description):has(
-        .field:nth-of-type(2) .description
-      ):has(.field:nth-of-type(3) .description) {
-      --errors-count: 3;
-      & .field:nth-of-type(1) .description {
-        transform: translateY(calc(-200%));
-      }
-      & .field:nth-of-type(2) .description {
-        transform: translateY(calc(-100%));
+    position: relative;
+    padding-block-end: calc(
+      var(--errors-count) * theme("lineHeight.5") + 0.25rem
+    );
+    &:where(:has(:user-invalid)) {
+      & > .error {
+        color: theme("colors.error");
+        white-space: pre;
       }
     }
   }

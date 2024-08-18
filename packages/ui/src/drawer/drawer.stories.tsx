@@ -1,7 +1,7 @@
 import type { Meta } from "storybook-solidjs";
 
 import { Button } from "../button";
-import { Form } from "../form";
+import { Form } from "../form-field/form";
 import { SegmentedButton } from "../radio";
 import { Text } from "../text";
 import { TextField } from "../text-field";

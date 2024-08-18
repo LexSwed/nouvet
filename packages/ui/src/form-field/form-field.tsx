@@ -12,9 +12,9 @@ import {
 	splitProps,
 } from "solid-js";
 
-import { useFormContext } from "../form";
 import { Text } from "../text";
 import { tw } from "../tw";
+import { useFormContext } from "./form";
 
 import css from "./form-field.module.css";
 
@@ -100,7 +100,7 @@ const FormField = (ownProps: FieldInnerProps) => {
 			<Switch>
 				{/* TODO: switch to multiple aria-describedby support, keeping the description, but also showing the error message */}
 				<Match when={errorMessage()}>
-					<span id={aria.describedBy} aria-live="polite" class={css.description}>
+					<span id={aria.describedBy} aria-live="polite" class={tw(css.error, css.description)}>
 						{errorMessage()}
 					</span>
 				</Match>
@@ -114,8 +114,30 @@ const FormField = (ownProps: FieldInnerProps) => {
 	);
 };
 
-const Fieldset = (props: ComponentProps<"fieldset">) => {
-	return <fieldset {...props} class={tw(css.fieldset, props.class)} />;
+const Fieldset = (ownProps: ComponentProps<"fieldset"> & { legend: JSX.Element }) => {
+	const [local, props] = splitProps(ownProps, ["legend", "children"]);
+
+	const formContext = useFormContext();
+
+	const errorMessage = () => (props.name ? formContext().validationErrors?.[props.name] : null);
+
+	const messageId = createUniqueId();
+
+	return (
+		<fieldset {...props} class={tw(css.fieldset, props.class)} aria-describedby={messageId}>
+			<Text as="legend" with="label-sm" class={tw(css.label, "ms-3 mb-2")}>
+				{local.legend}
+			</Text>
+			{local.children}
+			<Show when={errorMessage()}>
+				{(message) => (
+					<span aria-live="polite" class={tw(css.error, css.description)} id={messageId}>
+						{message()}
+					</span>
+				)}
+			</Show>
+		</fieldset>
+	);
 };
 
 export { FormField, Fieldset };
