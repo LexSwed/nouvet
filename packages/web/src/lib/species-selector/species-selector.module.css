@@ -38,8 +38,15 @@
   }
 
   .genderSwitchCard {
-    border: theme("borderWidth.DEFAULT") solid theme("colors.on-surface/0.12");
     background-color: theme(colors.on-background/0.01);
+    &:where(:hover, :focus-within):has(input[value="male"]) {
+      border-color: theme("colors.tertiary/0.4");
+      background-color: theme("colors.tertiary/0.05");
+    }
+    &:where(:hover, :focus-within):has(input[value="female"]) {
+      border-color: theme("colors.primary/0.4");
+      background-color: theme("colors.primary/0.05");
+    }
     & [data-part="label"] {
       height: 100%;
       justify-content: center;
