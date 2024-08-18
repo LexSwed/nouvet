@@ -7,7 +7,7 @@ import { useDb } from "~/server/db";
 import { type DatabasePet, type UserID, petTable } from "~/server/db/schema";
 import type { ErrorKeys } from "~/server/utils";
 
-export const UpdatePetSchema = v.object({
+const UpdatePetSchema = v.object({
 	name: v.optional(
 		v.pipe(
 			v.string("createPet.name.required" satisfies ErrorKeys),
@@ -24,12 +24,12 @@ export const UpdatePetSchema = v.object({
 	),
 	gender: v.optional(v.picklist(["male", "female"], "createPet.gender" satisfies ErrorKeys)),
 	breed: v.optional(
-		v.config(v.pipe(v.string(), v.trim(), v.minLength(2), v.maxLength(200)), {
+		v.config(v.pipe(v.string(), v.trim(), v.maxLength(200)), {
 			message: "createPet.breed" satisfies ErrorKeys,
 		}),
 	),
 	color: v.optional(
-		v.config(v.pipe(v.string(), v.trim(), v.minLength(2), v.maxLength(200)), {
+		v.config(v.pipe(v.string(), v.trim(), v.maxLength(200)), {
 			message: "createPet.color" satisfies ErrorKeys,
 		}),
 	),
@@ -58,6 +58,7 @@ export async function petUpdate(
 		UpdatePetSchema,
 		petData,
 	);
+	console.log(dateOfBirth?.toISOString());
 	const db = useDb();
 	const pet = await db
 		.update(petTable)
@@ -66,9 +67,9 @@ export async function petUpdate(
 			name,
 			species,
 			gender,
-			breed,
-			color,
-			dateOfBirth: dateOfBirth?.toUTCString(),
+			breed: breed === "" ? null : breed,
+			color: color === "" ? null : color,
+			dateOfBirth: dateOfBirth ? dateOfBirth.toISOString() : undefined,
 		})
 		.where(and(eq(petTable.id, petId), eq(petTable.ownerId, userId)))
 		.returning({
@@ -85,3 +86,5 @@ export async function petUpdate(
 
 	return pet;
 }
+
+export const getUpdatePetSchema = () => UpdatePetSchema;

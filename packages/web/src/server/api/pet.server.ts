@@ -5,7 +5,7 @@ import * as v from "valibot";
 
 import { getRequestUser } from "~/server/auth/request-user";
 import { petCreate } from "~/server/db/queries/petCreate";
-import { UpdatePetSchema, petUpdate } from "~/server/db/queries/petUpdate";
+import { getUpdatePetSchema, petUpdate } from "~/server/db/queries/petUpdate";
 import { userPets } from "~/server/db/queries/userPets";
 import { type ErrorKeys, translateErrorTokens } from "~/server/utils";
 
@@ -73,13 +73,7 @@ const PetBirthDaySchema = v.pipe(
 		),
 		bmonth: v.nullish(
 			v.config(
-				v.pipe(
-					v.unknown(),
-					v.transform(Number),
-					v.number(),
-					v.minValue(0),
-					v.maxValue(new Date().getFullYear()),
-				),
+				v.pipe(v.unknown(), v.transform(Number), v.number(), v.minValue(0), v.maxValue(11)),
 				{ message: "bmonth" satisfies ErrorKeys },
 			),
 			0,
@@ -142,7 +136,7 @@ export const updatePetWeightServer = async (formData: FormData) => {
 		if (!petId) {
 			throw new Error("petId is not provided");
 		}
-		const { weight } = v.parse(v.required(UpdatePetSchema, ["weight"]), {
+		const { weight } = v.parse(v.required(v.pick(getUpdatePetSchema(), ["weight"])), {
 			weight: formData.get("weight"),
 		});
 		const currentUser = await getRequestUser();
@@ -172,7 +166,7 @@ export const updatePetBreedServer = async (formData: FormData) => {
 		if (!petId) {
 			throw new Error("petId is not provided");
 		}
-		const { breed } = v.parse(v.required(UpdatePetSchema, ["breed"]), {
+		const { breed } = v.parse(v.required(v.pick(getUpdatePetSchema(), ["breed"])), {
 			breed: formData.get("breed"),
 		});
 		const currentUser = await getRequestUser();
@@ -191,6 +185,7 @@ export const updatePetBreedServer = async (formData: FormData) => {
 				{ status: 422, revalidate: [] },
 			);
 		}
+		console.error(error);
 		return json({ failed: true, errors: null }, { status: 500, revalidate: [] });
 	}
 };
@@ -201,11 +196,18 @@ export const updatePetServer = async (formData: FormData) => {
 		if (!petId) {
 			throw new Error("petId is not provided");
 		}
-		const dateOfBirth = v.parse(PetBirthDaySchema, {
+		let dateOfBirth: Date | undefined;
+		const birthDateData = {
 			bday: formData.get("bday"),
 			bmonth: formData.get("bmonth"),
 			byear: formData.get("byear"),
-		});
+		};
+		console.log(birthDateData);
+		// if one of the fields provided - validate, skip otherwise
+		if (birthDateData.byear || birthDateData.bmonth || birthDateData.bday) {
+			dateOfBirth = v.parse(PetBirthDaySchema, birthDateData);
+			console.log({ dateOfBirth });
+		}
 		const currentUser = await getRequestUser();
 		const pet = await petUpdate(
 			{
@@ -226,6 +228,7 @@ export const updatePetServer = async (formData: FormData) => {
 				{ status: 422, revalidate: [] },
 			);
 		}
+		console.error(error);
 		return json({ failed: true, errors: null }, { status: 500, revalidate: [] });
 	}
 };

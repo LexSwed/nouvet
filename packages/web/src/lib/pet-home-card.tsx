@@ -176,13 +176,20 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 };
 
 export function PetPicture(props: {
-	pet: { pictureUrl?: string | null; species: DatabasePet["species"] };
+	pet: {
+		pictureUrl?: string | null;
+		gender: DatabasePet["gender"];
+		species: DatabasePet["species"];
+	};
 	class?: string;
 }) {
 	return (
 		<div
 			class={tw(
-				"flex size-16 shrink-0 items-center justify-center rounded-full bg-tertiary/10 text-tertiary",
+				"flex size-16 shrink-0 items-center justify-center rounded-full",
+				props.pet.gender && props.pet.gender === "female"
+					? "bg-primary/10 text-primary"
+					: "bg-tertiary/10 text-tertiary",
 				props.class,
 			)}
 		>

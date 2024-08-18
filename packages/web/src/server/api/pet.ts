@@ -7,6 +7,7 @@ import {
 	getUserPetsServer,
 	updatePetBirthDateServer,
 	updatePetBreedServer,
+	updatePetServer,
 	updatePetWeightServer,
 } from "./pet.server";
 
@@ -30,6 +31,11 @@ export const updatePetWeight = action(
 export const updatePetBreed = action(
 	async (formData: FormData) => updatePetBreedServer(formData),
 	"update-pet-breed",
+);
+
+export const updatePet = action(
+	async (formData: FormData) => updatePetServer(formData),
+	"update-pet",
 );
 
 export const getPet = cache(async (petId: string) => getPetServer(petId), "user-pet");

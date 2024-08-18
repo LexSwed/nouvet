@@ -1,13 +1,31 @@
-import { Button, ButtonLink, Card, Icon, Option, Picker, Popover, Text, TextField } from "@nou/ui";
+import {
+	Button,
+	ButtonLink,
+	Card,
+	Fieldset,
+	Form,
+	Icon,
+	Option,
+	Picker,
+	Popover,
+	Text,
+	TextField,
+} from "@nou/ui";
 import { Title } from "@solidjs/meta";
-import { type RouteDefinition, type RouteSectionProps, createAsync } from "@solidjs/router";
+import {
+	type RouteDefinition,
+	type RouteSectionProps,
+	createAsync,
+	useSubmission,
+} from "@solidjs/router";
+import { parseISO } from "date-fns";
 import { For } from "solid-js";
 import { Show, createMemo } from "solid-js";
 
 import { AppHeader } from "~/lib/app-header";
 import { PetPicture } from "~/lib/pet-home-card";
 import { GenderSwitch } from "~/lib/species-selector";
-import { getPetForEdit } from "~/server/api/pet";
+import { getPetForEdit, updatePet } from "~/server/api/pet";
 import { getUser, getUserProfile } from "~/server/api/user";
 import type { DatabasePet } from "~/server/db/schema";
 import { T, cacheTranslations, createTranslator } from "~/server/i18n";
@@ -65,6 +83,7 @@ function PetPictureWithUpload(props: {
 		name: string;
 		pictureUrl: string | null;
 		species: DatabasePet["species"];
+		gender: DatabasePet["gender"];
 	};
 }) {
 	const t = createTranslator("pets");
@@ -96,6 +115,7 @@ function PetUpdateForm(props: { petId: string }) {
 	const pet = createAsync(() => getPetForEdit(props.petId!));
 	const t = createTranslator("pets");
 	const user = createAsync(() => getUser());
+	const updateSubmission = useSubmission(updatePet);
 
 	const monthNames = createMemo(() => {
 		const u = user();
@@ -112,16 +132,35 @@ function PetUpdateForm(props: { petId: string }) {
 		});
 	});
 
+	const birthDate = createMemo(() => {
+		const dateOfBirth = pet()?.dateOfBirth;
+		if (!dateOfBirth) return { bday: undefined, bmonth: undefined, byear: undefined };
+		const date = parseISO(dateOfBirth);
+		return {
+			bday: date.getDate(),
+			bmonth: date.getMonth(),
+			byear: date.getFullYear(),
+		};
+	});
+
 	return (
 		<Show when={pet()}>
 			{(pet) => (
-				<form class="flex flex-col gap-8">
-					<TextField label={t("edit.name")} value={pet().name} class="flex-[2]" required />
+				<Form
+					class="flex flex-col gap-8"
+					action={updatePet}
+					validationErrors={updateSubmission.result?.errors}
+				>
+					<input type="hidden" name="petId" value={pet().id} />
+					<TextField
+						name="name"
+						label={t("edit.name")}
+						value={pet().name}
+						class="flex-[2]"
+						required
+					/>
 					<GenderSwitch name="gender" value={pet().gender} />
-					<fieldset>
-						<Text as="legend" with="label-sm" class="mb-2 inline-block">
-							{t("edit.birth-date")}
-						</Text>
+					<Fieldset name="dateOfBirth" legend={t("edit.birth-date")}>
 						<div class="flex flex-row gap-2">
 							<TextField
 								name="bday"
@@ -131,16 +170,18 @@ function PetUpdateForm(props: { petId: string }) {
 								min="1"
 								max="31"
 								class="flex-1"
+								value={birthDate().bday}
 							/>
 							<Picker
 								label={t("edit.birth-month")}
 								name="bmonth"
 								autocomplete="off"
 								class="flex-[2]"
+								value={birthDate().bmonth}
 							>
 								<Option value="" label={t("edit.birth-month-none")} />
 								<For each={monthNames()}>
-									{(month, index) => <Option value={index() + 1} label={month} />}
+									{(month, index) => <Option value={index()} label={month} />}
 								</For>
 							</Picker>
 							<TextField
@@ -151,12 +192,15 @@ function PetUpdateForm(props: { petId: string }) {
 								min="1990"
 								max={new Date().getFullYear()}
 								class="flex-1"
+								value={birthDate().byear}
 							/>
 						</div>
-					</fieldset>
+					</Fieldset>
 					<TextField label={t("edit.breed")} name="breed" value={pet().breed ?? ""} />
-					<Button type="submit">{t("edit.save-cta")}</Button>
-				</form>
+					<Button type="submit" loading={updateSubmission.pending}>
+						{t("edit.save-cta")}
+					</Button>
+				</Form>
 			)}
 		</Show>
 	);
