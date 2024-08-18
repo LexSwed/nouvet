@@ -5,7 +5,7 @@
     --start-padding: theme("spacing.3");
     display: inline-flex;
     flex-flow: column nowrap;
-    &:where(:has(:user-invalid)) {
+    &:has(:user-invalid) {
       --border-color: theme("colors.error");
       --border-scale-y: 2;
       & .error,
@@ -114,7 +114,7 @@
   .description {
     /* same as label */
     padding-inline: var(--start-padding);
-    color: theme("colors.on-surface");
+    color: theme("colors.on-surface-variant");
     @apply text-sm;
   }
   .prefix,
@@ -140,11 +140,9 @@
     padding-block-end: calc(
       var(--errors-count) * theme("lineHeight.5") + 0.25rem
     );
-    &:where(:has(:user-invalid)) {
-      & > .error {
-        color: theme("colors.error");
-        white-space: pre;
-      }
+    & .error {
+      color: theme("colors.error");
+      white-space: pre;
     }
   }
 }

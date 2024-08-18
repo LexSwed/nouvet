@@ -56,20 +56,19 @@ interface FieldInnerProps
 }
 const FormField = (ownProps: FieldInnerProps) => {
 	const formContext = useFormContext();
-	const [local, props] = splitProps(ownProps, ["variant", "textSize"]);
+	const [local, props] = splitProps(ownProps, ["variant", "id", "textSize"]);
 	const localId = createUniqueId();
 
 	const errorMessage = () => (props.name ? formContext().validationErrors?.[props.name] : null);
 
 	const aria = {
 		get id() {
-			return props.id || localId;
+			return local.id || localId;
 		},
 		get describedBy() {
 			let str = `${aria.id}-description`;
 			const m = errorMessage();
-			if (!isServer && m instanceof HTMLFieldSetElement) {
-				console.log(m);
+			if (!isServer && m instanceof HTMLFieldSetElement && m.getAttribute("aria-describedby")) {
 				str += ` ${m.getAttribute("aria-describedby")}`;
 			}
 			return str;
@@ -82,7 +81,7 @@ const FormField = (ownProps: FieldInnerProps) => {
 	const description = children(() => props.description);
 	const child = createMemo(() => props.children(aria));
 	return (
-		<div class={tw(css.field, props.class)} style={props.style}>
+		<div id={local.id} class={tw(css.field, props.class)} style={props.style}>
 			<div class={formFieldVariants(local)}>
 				<Show when={label()}>
 					<Text as="label" for={aria.id} with="label-sm" class={css.label}>
@@ -117,34 +116,50 @@ const FormField = (ownProps: FieldInnerProps) => {
 	);
 };
 
-const Fieldset = (ownProps: ComponentProps<"fieldset"> & { legend: JSX.Element }) => {
+const Fieldset = (
+	ownProps: ComponentProps<"fieldset"> & { legend: JSX.Element; description?: JSX.Element },
+) => {
 	const [local, props] = splitProps(ownProps, ["id", "legend", "children"]);
 
 	const formContext = useFormContext();
 
 	const errorMessage = () => (props.name ? formContext().validationErrors?.[props.name] : null);
 
-	const genId = createUniqueId();
-	const id = () => local.id || genId;
-	const messageId = () => (errorMessage() ? `${id()}--error` : undefined);
+	const localId = createUniqueId();
+	const description = children(() => props.description);
+
+	const aria = {
+		get id() {
+			return local.id || localId;
+		},
+		get describedBy() {
+			if (errorMessage() || description()) {
+				return `${aria.id}-description`;
+			}
+			return undefined;
+		},
+	};
 
 	return (
 		<fieldset
 			{...props}
-			id={id()}
+			id={aria.id}
 			class={tw(css.fieldset, props.class)}
-			aria-describedby={messageId()}
+			aria-describedby={aria.describedBy}
 		>
 			<Text as="legend" with="label-sm" class={tw(css.label, "ms-3 mb-2")}>
 				{local.legend}
 			</Text>
 			{local.children}
-			<Show when={errorMessage()}>
-				{(message) => (
-					<span aria-live="polite" class={tw(css.error, css.description)} id={messageId()}>
-						{message()}
-					</span>
-				)}
+			<Show when={aria.describedBy}>
+				<span aria-live="polite" class={tw(css.description)} id={aria.describedBy}>
+					<Show when={description()}>{description()}</Show>
+					<Show when={errorMessage()}>
+						<span aria-live="polite" class={tw(css.error)}>
+							{errorMessage()}
+						</span>
+					</Show>
+				</span>
 			</Show>
 		</fieldset>
 	);

@@ -9,7 +9,7 @@ import {
 	splitProps,
 	useContext,
 } from "solid-js";
-import { mergeDefaultProps } from "../utils";
+import { mergeDefaultProps, startViewTransition } from "../utils";
 
 interface FormContext {
 	validationErrors?: Record<string, HTMLElement | string | undefined | null> | null;
@@ -58,11 +58,8 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 							: undefined;
 					if (typeof errorString !== "string") continue;
 
-					// for some reason the element is not rerendered with new error state
-					setTimeout(() => {
-						// ensure the field is reported as invalid
-						element.setCustomValidity(errorString);
-					}, 50);
+					// ensure the field is reported as invalid
+					element.setCustomValidity(errorString);
 
 					// check if the field belongs to a fieldset and set the error on the fieldset
 					for (const [fieldset, elements] of fieldsets.entries()) {
@@ -80,7 +77,9 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 					// otherwise set the error on the field itself
 					errors.set(element.name, errorString);
 				}
-				setNativeErrors(Object.fromEntries(errors.entries()));
+				startViewTransition(() => {
+					setNativeErrors(Object.fromEntries(errors.entries()));
+				});
 			},
 		),
 	);
@@ -98,7 +97,51 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 					formRef = el;
 				})}
 				onSubmit={(event) => {
-					const errors = setNativeValidationMessages(event.currentTarget);
+					if (!formRef) return;
+					// run through built-in validations, like `required` and `pattern`.
+					// if the field is reported as invalid, take the error message and store it in the context.
+					const errors = new Map<string, string | HTMLElement>();
+					const fieldsets = new Map<HTMLFieldSetElement, Set<string>>();
+					main: for (const element of Array.from(formRef.elements)) {
+						if (!isValidatableInput(element)) continue;
+						// store fieldsets with their elements
+						if (element instanceof HTMLFieldSetElement) {
+							fieldsets.set(
+								element,
+								Array.from(element.elements).reduce((acc, el) => {
+									if (isValidatableInput(el)) acc.add(el.name);
+									return acc;
+								}, new Set<string>()),
+							);
+							// no need to check fieldsets for validity as they don't hold it
+							continue;
+						}
+						// reset possible custom message to check native validation
+						element.setCustomValidity("");
+						// if the field is still invalid – set new native validation message
+						if (!element.validity.valid) {
+							for (const [fieldset, elements] of fieldsets.entries()) {
+								if (elements.has(element.name)) {
+									errors.set(
+										fieldset.name,
+										errors.has(fieldset.name)
+											? [errors.get(fieldset.name), element.validationMessage].join("\n")
+											: element.validationMessage,
+									);
+									errors.set(element.name, fieldset);
+									continue main;
+								}
+							}
+						}
+						const customValidationError = element.validity.customError
+							? element.validationMessage
+							: null;
+
+						// set back custom validation error
+						if (customValidationError) {
+							element.setCustomValidity(customValidationError);
+						}
+					}
 					setNativeErrors(Object.fromEntries(errors.entries()));
 					if (errors.size > 0) {
 						// prevent actions from execution
@@ -116,33 +159,6 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 		</formContext.Provider>
 	);
 };
-
-/**
- * Checks validatable form elements for native validation errors,
- * like `required` or `minLength`. Keeps custom error message, if it was set.
- * @returns native validation errors.
- */
-function setNativeValidationMessages(form: HTMLFormElement) {
-	const invalid = new Map<string, string>();
-	for (const element of Array.from(form.elements)) {
-		if (!isValidatableInput(element)) continue;
-
-		const customValidationError = element.validity.customError ? element.validationMessage : null;
-		// reset possible custom message to check native validation
-		element.setCustomValidity("");
-
-		// if the field is still invalid – set new native validation message
-		if (!element.validity.valid) {
-			invalid.set(element.name, element.validationMessage);
-			continue;
-		}
-		// if native validation passed, but there are still errors from props - set them.
-		if (customValidationError) {
-			element.setCustomValidity(customValidationError);
-		}
-	}
-	return invalid;
-}
 
 function isValidatableInput(element: Element): element is HTMLInputElement & { name: string } {
 	return "validity" in element && element.validity instanceof ValidityState;
