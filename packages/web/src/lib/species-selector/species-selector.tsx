@@ -1,5 +1,5 @@
-import { Icon, RadioCard, type SvgIcons, Text, tw } from "@nou/ui";
-import { type ComponentProps, For, createUniqueId } from "solid-js";
+import { Fieldset, Icon, RadioCard, type SvgIcons, tw } from "@nou/ui";
+import { type ComponentProps, For } from "solid-js";
 
 import { createTranslator } from "~/server/i18n";
 
@@ -70,12 +70,8 @@ const SpeciesSelector = (props: SpeciesSelectorProps) => {
 
 const GenderSwitch = (props: { name: string; value?: "male" | "female" | null }) => {
 	const t = createTranslator("pets");
-	const id = createUniqueId();
 	return (
-		<fieldset class={tw(css.genderSwitch, "flex flex-col gap-2")} aria-labelledby={id}>
-			<Text with="label-sm" as="label" id={id} class="ms-2">
-				{t("animal-gender")}
-			</Text>
+		<Fieldset class={tw(css.genderSwitch, "flex flex-col gap-2")} legend={t("animal-gender")}>
 			<div class={tw(css.genderWrapper, "grid grid-cols-[1fr,auto,1fr] items-center gap-2")}>
 				<RadioCard
 					name={props.name}
@@ -93,7 +89,7 @@ const GenderSwitch = (props: { name: string; value?: "male" | "female" | null })
 					class={tw(css.genderSwitchCard, "h-16")}
 				/>
 			</div>
-		</fieldset>
+		</Fieldset>
 	);
 };
 

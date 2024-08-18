@@ -95,10 +95,10 @@ export default function ProfilePage() {
 											</div>
 										</div>
 
-										<Fieldset class="grid gap-6 sm:grid-cols-2">
-											<Text as="legend" with="overline" class="mb-3">
-												{t("section.locale")}
-											</Text>
+										<Fieldset
+											class="grid gap-6 sm:grid-cols-2"
+											legend={<Text with="overline">{t("section.locale")}</Text>}
+										>
 											<Picker
 												label={t("setting.locale")}
 												value={user().locale}

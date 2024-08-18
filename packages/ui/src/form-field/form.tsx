@@ -12,7 +12,7 @@ import {
 import { mergeDefaultProps } from "../utils";
 
 interface FormContext {
-	validationErrors?: Record<string, string | undefined | null> | null;
+	validationErrors?: Record<string, HTMLElement | string | undefined | null> | null;
 }
 
 const formContext = createContext<Accessor<FormContext>>(() => ({
@@ -33,14 +33,14 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 			() => local.validationErrors,
 			(newPropErrors) => {
 				if (!formRef) return;
-				const errors = new Map<string, string>();
-				const fieldsets = new Map<string, Set<string>>();
+				const errors = new Map<string, string | HTMLElement>();
+				const fieldsets = new Map<HTMLFieldSetElement, Set<string>>();
 				main: for (const element of Array.from(formRef.elements)) {
 					if (!isValidatableInput(element)) continue;
 					// store fieldsets with their elements
 					if (element instanceof HTMLFieldSetElement) {
 						fieldsets.set(
-							element.name,
+							element,
 							Array.from(element.elements).reduce((acc, el) => {
 								if (isValidatableInput(el)) acc.add(el.name);
 								return acc;
@@ -62,17 +62,18 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 					setTimeout(() => {
 						// ensure the field is reported as invalid
 						element.setCustomValidity(errorString);
-					}, 10);
+					}, 50);
 
 					// check if the field belongs to a fieldset and set the error on the fieldset
-					for (const [fieldsetName, fieldset] of fieldsets.entries()) {
-						if (fieldset.has(element.name)) {
+					for (const [fieldset, elements] of fieldsets.entries()) {
+						if (elements.has(element.name)) {
 							errors.set(
-								fieldsetName,
-								errors.has(fieldsetName)
-									? [errors.get(fieldsetName), errorString].join("\n")
+								fieldset.name,
+								errors.has(fieldset.name)
+									? [errors.get(fieldset.name), errorString].join("\n")
 									: errorString,
 							);
+							errors.set(element.name, fieldset);
 							continue main;
 						}
 					}

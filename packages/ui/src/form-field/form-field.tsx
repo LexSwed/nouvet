@@ -3,9 +3,7 @@ import {
 	type ComponentProps,
 	type JSX,
 	type JSXElement,
-	Match,
 	Show,
-	Switch,
 	children,
 	createMemo,
 	createUniqueId,
@@ -16,6 +14,7 @@ import { Text } from "../text";
 import { tw } from "../tw";
 import { useFormContext } from "./form";
 
+import { isServer } from "solid-js/web";
 import css from "./form-field.module.css";
 
 export const formFieldVariants = cva(css.wrapper, {
@@ -60,16 +59,23 @@ const FormField = (ownProps: FieldInnerProps) => {
 	const [local, props] = splitProps(ownProps, ["variant", "textSize"]);
 	const localId = createUniqueId();
 
+	const errorMessage = () => (props.name ? formContext().validationErrors?.[props.name] : null);
+
 	const aria = {
 		get id() {
 			return props.id || localId;
 		},
 		get describedBy() {
-			return `${aria.id}-description`;
+			let str = `${aria.id}-description`;
+			const m = errorMessage();
+			if (!isServer && m instanceof HTMLFieldSetElement) {
+				console.log(m);
+				str += ` ${m.getAttribute("aria-describedby")}`;
+			}
+			return str;
 		},
 	};
 
-	const errorMessage = () => (props.name ? formContext().validationErrors?.[props.name] : null);
 	const prefix = children(() => props.prefix);
 	const suffix = children(() => props.suffix);
 	const label = children(() => props.label);
@@ -97,41 +103,45 @@ const FormField = (ownProps: FieldInnerProps) => {
 					</Show>
 				</div>
 			</div>
-			<Switch>
-				{/* TODO: switch to multiple aria-describedby support, keeping the description, but also showing the error message */}
-				<Match when={errorMessage()}>
-					<span id={aria.describedBy} aria-live="polite" class={tw(css.error, css.description)}>
-						{errorMessage()}
-					</span>
-				</Match>
-				<Match when={description()}>
-					<span id={aria.describedBy} class={css.description}>
-						{description()}
-					</span>
-				</Match>
-			</Switch>
+			<Show when={typeof errorMessage() === "string" || description()}>
+				<span id={aria.describedBy} class={css.description}>
+					{description()}
+					<Show when={typeof errorMessage() === "string"}>
+						<span aria-live="polite" class={tw(css.error)}>
+							{errorMessage()}
+						</span>
+					</Show>
+				</span>
+			</Show>
 		</div>
 	);
 };
 
 const Fieldset = (ownProps: ComponentProps<"fieldset"> & { legend: JSX.Element }) => {
-	const [local, props] = splitProps(ownProps, ["legend", "children"]);
+	const [local, props] = splitProps(ownProps, ["id", "legend", "children"]);
 
 	const formContext = useFormContext();
 
 	const errorMessage = () => (props.name ? formContext().validationErrors?.[props.name] : null);
 
-	const messageId = createUniqueId();
+	const genId = createUniqueId();
+	const id = () => local.id || genId;
+	const messageId = () => (errorMessage() ? `${id()}--error` : undefined);
 
 	return (
-		<fieldset {...props} class={tw(css.fieldset, props.class)} aria-describedby={messageId}>
+		<fieldset
+			{...props}
+			id={id()}
+			class={tw(css.fieldset, props.class)}
+			aria-describedby={messageId()}
+		>
 			<Text as="legend" with="label-sm" class={tw(css.label, "ms-3 mb-2")}>
 				{local.legend}
 			</Text>
 			{local.children}
 			<Show when={errorMessage()}>
 				{(message) => (
-					<span aria-live="polite" class={tw(css.error, css.description)} id={messageId}>
+					<span aria-live="polite" class={tw(css.error, css.description)} id={messageId()}>
 						{message()}
 					</span>
 				)}

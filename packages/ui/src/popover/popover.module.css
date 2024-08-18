@@ -32,6 +32,7 @@
     content-visibility: auto;
     position-try-options: flip-block, flip-inline;
     overflow: auto;
+    pointer-events: all;
     @apply bg-surface shadow-popover overflow-y-auto rounded-2xl;
 
     &:empty {
