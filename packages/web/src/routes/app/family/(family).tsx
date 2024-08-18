@@ -194,11 +194,7 @@ function FamilyHeaderMember() {
 						<Show when={open()}>
 							<div class="flex flex-col gap-4">
 								<Text as="p">{t("leave-family.description")}</Text>
-								<Form
-									action={leaveFamily}
-									method="post"
-									class="mt-4 grid grid-cols-2 gap-4 md:self-end"
-								>
+								<Form action={leaveFamily} class="mt-4 grid grid-cols-2 gap-4 md:self-end">
 									<Button
 										variant="ghost"
 										popoverTargetAction="hide"
@@ -262,11 +258,7 @@ function WaitingApproval() {
 					<Show when={open()}>
 						<div class="flex flex-col gap-4">
 							<Text as="p">{t("waiting.cancel-join-popup-description")}</Text>
-							<Form
-								action={cancelFamilyJoin}
-								method="post"
-								class="mt-4 grid grid-cols-2 gap-4 md:self-end"
-							>
+							<Form action={cancelFamilyJoin} class="mt-4 grid grid-cols-2 gap-4 md:self-end">
 								<Button
 									variant="ghost"
 									popoverTargetAction="hide"

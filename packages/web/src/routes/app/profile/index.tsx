@@ -53,7 +53,6 @@ export default function ProfilePage() {
 								>
 									<Form
 										class="flex flex-col gap-8"
-										method="post"
 										action={updateUserProfile}
 										validationErrors={
 											isSubmissionFailure(profileSubmission, "validation")

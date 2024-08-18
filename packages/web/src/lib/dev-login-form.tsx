@@ -20,7 +20,6 @@ const DevLogin = () => {
 					validationErrors={
 						login.result && "errors" in login.result ? login.result.errors : undefined
 					}
-					method="post"
 					action={loginDev}
 					class="flex flex-col gap-4"
 				>

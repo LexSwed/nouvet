@@ -30,7 +30,7 @@ export function WaitingFamilyConfirmation(props: {
 			<Text as="p" with="body-sm" class="p-2">
 				{t("invite.info-consent")}
 			</Text>
-			<Form action={moveUserFromTheWaitList} method="post">
+			<Form action={moveUserFromTheWaitList}>
 				<fieldset disabled={userWaitListSubmission.pending} class="flex flex-row gap-2">
 					<input type="hidden" name="user-id" value={props.user.id} readOnly />
 					<Button

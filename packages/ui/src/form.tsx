@@ -9,6 +9,7 @@ import {
 	splitProps,
 	useContext,
 } from "solid-js";
+import { mergeDefaultProps } from "./utils";
 
 interface FormContext {
 	validationErrors?: Record<string, string | undefined | null> | null;
@@ -21,7 +22,9 @@ export const useFormContext = () => useContext(formContext);
 
 export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 	let formRef: HTMLFormElement | undefined;
-	const [local, props] = splitProps(ownProps, ["validationErrors"]);
+	const [local, props] = splitProps(mergeDefaultProps(ownProps, { method: "post" }), [
+		"validationErrors",
+	]);
 	const [nativeErrors, setNativeErrors] = createSignal<FormContext["validationErrors"]>();
 	const value = () => ({
 		validationErrors: { ...local.validationErrors, ...nativeErrors() },

@@ -60,7 +60,6 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
 			<Form
 				class="flex flex-col gap-6 sm:max-w-[360px]"
 				action={updatePetBirthDate}
-				method="post"
 				validationErrors={birthDateSubmission.result?.errors}
 			>
 				<input type="hidden" name="petId" value={props.pet.id} />

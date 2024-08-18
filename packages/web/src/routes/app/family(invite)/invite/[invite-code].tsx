@@ -85,7 +85,6 @@ export default function InviteAcceptPage(props: RouteSectionProps) {
 									return (
 										<>
 											<Form
-												method="post"
 												action={joinFamilyWithLink}
 												class="z-10 col-span-6 col-start-1 row-[2] flex flex-col gap-6 rounded-3xl bg-background bg-main [background-attachment:fixed] sm:p-6 md:max-w-[600px] lg:col-span-5 lg:col-start-2"
 											>

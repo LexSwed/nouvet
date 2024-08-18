@@ -96,7 +96,6 @@ const AddWeightForm = (props: AddWeightFormProps) => {
 					<Form
 						class="flex flex-col gap-6 sm:max-w-[360px]"
 						action={updatePetWeight}
-						method="post"
 						validationErrors={
 							weightSubmission.result && "errors" in weightSubmission.result
 								? weightSubmission.result.errors

@@ -40,7 +40,6 @@ function CreateNewPetForm(props: {
 					? petSubmission.result.errors
 					: undefined
 			}
-			method="post"
 			aria-errormessage="error-message"
 		>
 			<Text with="headline-2" as="h3" id="new-pet-headline" class="ps-2">

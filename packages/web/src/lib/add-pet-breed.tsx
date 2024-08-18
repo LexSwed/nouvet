@@ -43,7 +43,6 @@ const AddBreedForm = (props: AddBreedFormProps) => {
 					<Form
 						class="flex flex-col gap-6"
 						action={updatePetBreed}
-						method="post"
 						validationErrors={breedSubmission.result?.errors}
 					>
 						<input type="hidden" name="petId" value={props.pet.id} />
