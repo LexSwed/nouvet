@@ -106,6 +106,7 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 						if (!isValidatableInput(element)) continue;
 						// store fieldsets with their elements
 						if (element instanceof HTMLFieldSetElement) {
+							if (!element.name) continue;
 							fieldsets.set(
 								element,
 								Array.from(element.elements).reduce((acc, el) => {
@@ -132,14 +133,15 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 									continue main;
 								}
 							}
-						}
-						const customValidationError = element.validity.customError
-							? element.validationMessage
-							: null;
+							// otherwise set to the element itself
+							const customValidationError = element.validity.customError
+								? element.validationMessage
+								: null;
 
-						// set back custom validation error
-						if (customValidationError) {
-							element.setCustomValidity(customValidationError);
+							// set back custom validation error
+							if (customValidationError) {
+								element.setCustomValidity(customValidationError);
+							}
 						}
 					}
 					setNativeErrors(Object.fromEntries(errors.entries()));
