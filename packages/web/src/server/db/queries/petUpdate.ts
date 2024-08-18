@@ -7,7 +7,7 @@ import { useDb } from "~/server/db";
 import { type DatabasePet, type UserID, petTable } from "~/server/db/schema";
 import type { ErrorKeys } from "~/server/utils";
 
-const UpdatePetSchema = v.object({
+export const UpdatePetSchema = v.object({
 	name: v.optional(
 		v.pipe(
 			v.string("createPet.name.required" satisfies ErrorKeys),

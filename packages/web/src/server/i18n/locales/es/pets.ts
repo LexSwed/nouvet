@@ -34,6 +34,7 @@ const petsDict = {
 	"edit.headline": "Más sobre <b>{{petName}}</b>",
 	"edit.delete-cta": "Eliminar {{petName}}",
 	"edit.photo-update": "Actualizar",
+	"edit.photo-add": "Agregar una foto",
 	"edit.name": "Nombre",
 	"edit.birth-date": "Fecha de nacimiento",
 	"edit.birth-day": "Día",
@@ -42,6 +43,7 @@ const petsDict = {
 	"edit.birth-year": "Año",
 	"edit.breed": "Raza",
 	"edit.save-cta": "Guardar",
+	"edit.photo-update-dialog-title": "Actualizar la foto de {{petName}}",
 } as const satisfies Record<keyof typeof import("../en/pets").default, string>;
 
 export default petsDict;
