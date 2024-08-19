@@ -58,7 +58,6 @@ export async function petUpdate(
 		UpdatePetSchema,
 		petData,
 	);
-	console.log(dateOfBirth?.toISOString());
 	const db = useDb();
 	const pet = await db
 		.update(petTable)
@@ -69,7 +68,7 @@ export async function petUpdate(
 			gender,
 			breed: breed === "" ? null : breed,
 			color: color === "" ? null : color,
-			dateOfBirth: dateOfBirth ? dateOfBirth.toISOString() : undefined,
+			dateOfBirth: dateOfBirth instanceof Date ? dateOfBirth.toISOString() : dateOfBirth,
 		})
 		.where(and(eq(petTable.id, petId), eq(petTable.ownerId, userId)))
 		.returning({

@@ -202,11 +202,9 @@ export const updatePetServer = async (formData: FormData) => {
 			bmonth: formData.get("bmonth"),
 			byear: formData.get("byear"),
 		};
-		console.log(birthDateData);
 		// if one of the fields provided - validate, skip otherwise
 		if (birthDateData.byear || birthDateData.bmonth || birthDateData.bday) {
 			dateOfBirth = v.parse(PetBirthDaySchema, birthDateData);
-			console.log({ dateOfBirth });
 		}
 		const currentUser = await getRequestUser();
 		const pet = await petUpdate(
