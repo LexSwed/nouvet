@@ -1,4 +1,4 @@
-import spriteHref from "@nou/config/icons/sprite.svg?url";
+import spriteHref from "@nou/config/icons/sprite.svg";
 import { type VariantProps, cva } from "class-variance-authority";
 import { type JSX, splitProps } from "solid-js";
 

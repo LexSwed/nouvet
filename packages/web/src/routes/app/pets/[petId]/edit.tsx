@@ -160,7 +160,19 @@ function PetUpdateForm(props: { petId: string }) {
 						required
 					/>
 					<GenderSwitch name="gender" value={pet().gender} />
-					<Fieldset name="dateOfBirth" legend={t("edit.birth-date")}>
+					<Fieldset
+						name="dateOfBirth"
+						legend={
+							<>
+								{t("edit.birth-date")}
+								<Show when={birthDate().byear}>
+									<Button label="Reset" variant="ghost" tone="neutral" size="sm" class="-mt-2 me-3">
+										<Icon use="x-circle" />
+									</Button>
+								</Show>
+							</>
+						}
+					>
 						<div class="flex flex-row gap-2">
 							<TextField
 								name="bday"

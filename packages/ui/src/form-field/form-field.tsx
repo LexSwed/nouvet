@@ -147,7 +147,11 @@ const Fieldset = (
 			class={tw(css.fieldset, props.class)}
 			aria-describedby={aria.describedBy}
 		>
-			<Text as="legend" with="label-sm" class={tw(css.label, "ms-3 mb-2")}>
+			<Text
+				as="legend"
+				with="label-sm"
+				class={tw(css.label, "ms-3 mb-2 flex w-full items-center justify-between gap-4")}
+			>
 				{local.legend}
 			</Text>
 			{local.children}
