@@ -119,33 +119,24 @@ function PetUpdateForm(props: { petId: string }) {
 						required
 					/>
 					<GenderSwitch name="gender" value={pet().gender} />
-					<div class="flex flex-row gap-2">
-						<TextField
-							name="dateOfBirth"
-							label={
-								<>
-									{t("edit.birth-date")}
-									<Show when={pet()?.dateOfBirth}>
-										<Button
-											label="Reset"
-											variant="ghost"
-											tone="neutral"
-											size="sm"
-											class="-mt-2 me-3"
-										>
-											<Icon use="x-circle" />
-										</Button>
-									</Show>
-								</>
-							}
-							autocomplete="off"
-							type="date"
-							class="flex-1"
-							min="2000-01-01"
-							value={pet().dateOfBirth ?? ""}
-							max={new Date().toISOString().split("T")[0]}
-						/>
-					</div>
+					<TextField
+						name="dateOfBirth"
+						label={
+							<>
+								{t("edit.birth-date")}
+								<Show when={pet()?.dateOfBirth}>
+									<Button label="Reset" variant="ghost" tone="neutral" size="sm" class="-mt-2 me-3">
+										<Icon use="x-circle" />
+									</Button>
+								</Show>
+							</>
+						}
+						autocomplete="off"
+						type="date"
+						value={pet().dateOfBirth ?? ""}
+						min="2000-01-01"
+						max={new Date().toISOString().split("T")[0]}
+					/>
 					<TextField label={t("edit.breed")} name="breed" value={pet().breed ?? ""} />
 					<Button type="submit" loading={updateSubmission.pending}>
 						{t("edit.save-cta")}

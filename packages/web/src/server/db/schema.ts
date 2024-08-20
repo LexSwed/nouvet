@@ -112,7 +112,7 @@ export const petTable = sqliteTable("pet", {
 	}).notNull(),
 	breed: text("breed_name", { length: 200 }),
 	color: text("color"),
-	/** Supports partial ISO, e.g. YYYY-MM */
+	/** ISO 8601 string yyyy-MM-dd */
 	dateOfBirth: dateTime("date_of_birth"),
 	/** Weight in user's measurement system */
 	weight: integer("weight", { mode: "number" }),

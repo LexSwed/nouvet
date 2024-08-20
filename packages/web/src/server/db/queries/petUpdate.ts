@@ -3,7 +3,7 @@
 import { and, eq } from "drizzle-orm";
 import * as v from "valibot";
 
-import { parseISO } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { useDb } from "~/server/db";
 import { type DatabasePet, type UserID, petTable } from "~/server/db/schema";
 import type { ErrorKeys } from "~/server/utils";
@@ -74,7 +74,6 @@ export async function petUpdate(
 		petData,
 	);
 	const db = useDb();
-	console.log({ original: petData.dateOfBirth, dateOfBirth, str: dateOfBirth?.toISOString() });
 	const pet = await db
 		.update(petTable)
 		.set({
@@ -84,7 +83,7 @@ export async function petUpdate(
 			gender,
 			breed: breed === "" ? null : breed,
 			color: color === "" ? null : color,
-			dateOfBirth: dateOfBirth instanceof Date ? dateOfBirth.toISOString() : dateOfBirth,
+			dateOfBirth: dateOfBirth instanceof Date ? format(dateOfBirth, "yyyy-MM-dd") : dateOfBirth,
 		})
 		.where(and(eq(petTable.id, petId), eq(petTable.ownerId, userId)))
 		.returning({
