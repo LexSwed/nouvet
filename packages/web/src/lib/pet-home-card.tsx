@@ -94,7 +94,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 					return null;
 				}}
 			>
-				<div class="-mt-7 flex flex-row items-center gap-2 px-3 py-2 empty:hidden">
+				<div class="-mt-6 flex flex-row items-center gap-2 px-3 py-2 empty:hidden">
 					<Show when={!props.actualOwner && hasMissingInfo()}>
 						<Suspense fallback={null}>
 							<QuickSetters pet={props.pet} />

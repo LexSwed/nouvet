@@ -86,7 +86,7 @@ const Option = (
 			<div class="flex flex-row items-center justify-stretch gap-2" data-part="label">
 				{label()}
 				<Show when={props.value === ""}>
-					<span class="sr-only" data-empty-option />
+					<span class="sr-only" data-part="empty-option" />
 				</Show>
 			</div>
 			<Show when={child()}>
