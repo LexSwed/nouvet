@@ -3,6 +3,7 @@
 import { and, eq } from "drizzle-orm";
 import * as v from "valibot";
 
+import { parseISO } from "date-fns";
 import { useDb } from "~/server/db";
 import { type DatabasePet, type UserID, petTable } from "~/server/db/schema";
 import type { ErrorKeys } from "~/server/utils";
@@ -34,9 +35,23 @@ const UpdatePetSchema = v.object({
 		}),
 	),
 	dateOfBirth: v.optional(
-		v.config(v.pipe(v.date(), v.minValue(new Date(2000, 0, 1)), v.maxValue(new Date())), {
-			message: "birthdate.range" satisfies ErrorKeys,
-		}),
+		v.config(
+			v.pipe(
+				v.string(),
+				v.isoDate(),
+				v.transform((str) => {
+					const date = parseISO(str);
+					const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+					console.log({ utcDate });
+					return utcDate;
+				}),
+				v.minValue(new Date(2000, 0, 1)),
+				v.maxValue(new Date()),
+			),
+			{
+				message: "birthdate.range" satisfies ErrorKeys,
+			},
+		),
 	),
 	weight: v.optional(
 		v.config(v.pipe(v.number(), v.minValue(0.1), v.maxValue(999)), {
@@ -59,6 +74,7 @@ export async function petUpdate(
 		petData,
 	);
 	const db = useDb();
+	console.log({ original: petData.dateOfBirth, dateOfBirth, str: dateOfBirth?.toISOString() });
 	const pet = await db
 		.update(petTable)
 		.set({

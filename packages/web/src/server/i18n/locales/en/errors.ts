@@ -8,7 +8,7 @@ const errorsDict = {
 	bday: "The day is not valid",
 	bmonth: "The month is not valid",
 	byear: "The year is not valid",
-	"birthdate.range": "The date cannot be before 1980 or after today",
+	"birthdate.range": "The birth date cannot be before 2000 or after today",
 	"weight.range": "The wight cannot be negative or too big",
 	"family.name": "Name cannot be empty",
 	"user.name-min": "Name cannot be empty",

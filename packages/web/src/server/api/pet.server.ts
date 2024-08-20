@@ -196,23 +196,13 @@ export const updatePetServer = async (formData: FormData) => {
 		if (!petId) {
 			throw new Error("petId is not provided");
 		}
-		let dateOfBirth: Date | undefined;
-		const birthDateData = {
-			bday: formData.get("bday"),
-			bmonth: formData.get("bmonth"),
-			byear: formData.get("byear"),
-		};
-		// if one of the fields provided - validate, skip otherwise
-		if (birthDateData.byear || birthDateData.bmonth || birthDateData.bday) {
-			dateOfBirth = v.parse(PetBirthDaySchema, birthDateData);
-		}
 		const currentUser = await getRequestUser();
 		const pet = await petUpdate(
 			{
 				name: formData.get("name") ?? undefined,
 				gender: formData.get("gender") ?? undefined,
 				color: formData.get("color") ?? undefined,
-				dateOfBirth,
+				dateOfBirth: formData.get("dateOfBirth") ?? undefined,
 				breed: formData.get("breed") ?? undefined,
 			},
 			petId.toString(),

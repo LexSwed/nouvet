@@ -1,16 +1,4 @@
-import {
-	Button,
-	ButtonLink,
-	Card,
-	Fieldset,
-	Form,
-	Icon,
-	Option,
-	Picker,
-	Popover,
-	Text,
-	TextField,
-} from "@nou/ui";
+import { Button, ButtonLink, Card, Form, Icon, Popover, Text, TextField } from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import {
 	type RouteDefinition,
@@ -18,15 +6,13 @@ import {
 	createAsync,
 	useSubmission,
 } from "@solidjs/router";
-import { parseISO } from "date-fns";
-import { For } from "solid-js";
-import { Show, createMemo } from "solid-js";
+import { Show } from "solid-js";
 
 import { AppHeader } from "~/lib/app-header";
 import { PetPicture } from "~/lib/pet-home-card";
 import { GenderSwitch } from "~/lib/species-selector";
 import { getPetForEdit, updatePet } from "~/server/api/pet";
-import { getUser, getUserProfile } from "~/server/api/user";
+import { getUserProfile } from "~/server/api/user";
 import type { DatabasePet } from "~/server/db/schema";
 import { T, cacheTranslations, createTranslator } from "~/server/i18n";
 
@@ -114,34 +100,7 @@ function PetPictureWithUpload(props: {
 function PetUpdateForm(props: { petId: string }) {
 	const pet = createAsync(() => getPetForEdit(props.petId!));
 	const t = createTranslator("pets");
-	const user = createAsync(() => getUser());
 	const updateSubmission = useSubmission(updatePet);
-
-	const monthNames = createMemo(() => {
-		const u = user();
-		if (!u) return [];
-
-		const formatter = Intl.DateTimeFormat(u.locale, {
-			month: "long",
-		});
-
-		return Array.from({ length: 12 }).map((_, month) => {
-			const date = new Date();
-			date.setMonth(month, 1);
-			return formatter.format(date);
-		});
-	});
-
-	const birthDate = createMemo(() => {
-		const dateOfBirth = pet()?.dateOfBirth;
-		if (!dateOfBirth) return { bday: undefined, bmonth: undefined, byear: undefined };
-		const date = parseISO(dateOfBirth);
-		return {
-			bday: date.getDate(),
-			bmonth: date.getMonth(),
-			byear: date.getFullYear(),
-		};
-	});
 
 	return (
 		<Show when={pet()}>
@@ -160,54 +119,33 @@ function PetUpdateForm(props: { petId: string }) {
 						required
 					/>
 					<GenderSwitch name="gender" value={pet().gender} />
-					<Fieldset
-						name="dateOfBirth"
-						legend={
-							<>
-								{t("edit.birth-date")}
-								<Show when={birthDate().byear}>
-									<Button label="Reset" variant="ghost" tone="neutral" size="sm" class="-mt-2 me-3">
-										<Icon use="x-circle" />
-									</Button>
-								</Show>
-							</>
-						}
-					>
-						<div class="flex flex-row gap-2">
-							<TextField
-								name="bday"
-								label={t("edit.birth-day")}
-								autocomplete="off"
-								type="number"
-								min="1"
-								max="31"
-								class="flex-1"
-								value={birthDate().bday}
-							/>
-							<Picker
-								label={t("edit.birth-month")}
-								name="bmonth"
-								autocomplete="off"
-								class="flex-[2]"
-								value={birthDate().bmonth}
-							>
-								<Option value="" label={t("edit.birth-month-none")} />
-								<For each={monthNames()}>
-									{(month, index) => <Option value={index()} label={month} />}
-								</For>
-							</Picker>
-							<TextField
-								name="byear"
-								label={t("edit.birth-year")}
-								autocomplete="off"
-								type="number"
-								min="1990"
-								max={new Date().getFullYear()}
-								class="flex-1"
-								value={birthDate().byear}
-							/>
-						</div>
-					</Fieldset>
+					<div class="flex flex-row gap-2">
+						<TextField
+							name="dateOfBirth"
+							label={
+								<>
+									{t("edit.birth-date")}
+									<Show when={pet()?.dateOfBirth}>
+										<Button
+											label="Reset"
+											variant="ghost"
+											tone="neutral"
+											size="sm"
+											class="-mt-2 me-3"
+										>
+											<Icon use="x-circle" />
+										</Button>
+									</Show>
+								</>
+							}
+							autocomplete="off"
+							type="date"
+							class="flex-1"
+							min="2000-01-01"
+							value={pet().dateOfBirth ?? ""}
+							max={new Date().toISOString().split("T")[0]}
+						/>
+					</div>
 					<TextField label={t("edit.breed")} name="breed" value={pet().breed ?? ""} />
 					<Button type="submit" loading={updateSubmission.pending}>
 						{t("edit.save-cta")}
