@@ -84,7 +84,12 @@ const FormField = (ownProps: FieldInnerProps) => {
 		<div id={local.id} class={tw(css.field, props.class)} style={props.style}>
 			<div class={formFieldVariants(local)}>
 				<Show when={label()}>
-					<Text as="label" for={aria.id} with="label-sm" class={css.label}>
+					<Text
+						as="label"
+						for={aria.id}
+						with="label-sm"
+						class={tw(css.label, "flex w-full flex-row items-center justify-between gap-4")}
+					>
 						{label()}
 					</Text>
 				</Show>

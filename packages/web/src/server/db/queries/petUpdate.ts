@@ -34,7 +34,7 @@ const UpdatePetSchema = v.object({
 			message: "createPet.color" satisfies ErrorKeys,
 		}),
 	),
-	dateOfBirth: v.optional(
+	dateOfBirth: v.nullish(
 		v.config(
 			v.pipe(
 				v.string(),
@@ -42,7 +42,6 @@ const UpdatePetSchema = v.object({
 				v.transform((str) => {
 					const date = parseISO(str);
 					const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-					console.log({ utcDate });
 					return utcDate;
 				}),
 				v.minValue(new Date(2000, 0, 1)),

@@ -197,12 +197,13 @@ export const updatePetServer = async (formData: FormData) => {
 			throw new Error("petId is not provided");
 		}
 		const currentUser = await getRequestUser();
+		const dateOfBirth = formData.get("dateOfBirth")?.toString();
 		const pet = await petUpdate(
 			{
 				name: formData.get("name") ?? undefined,
 				gender: formData.get("gender") ?? undefined,
 				color: formData.get("color") ?? undefined,
-				dateOfBirth: formData.get("dateOfBirth") ?? undefined,
+				dateOfBirth: dateOfBirth && !Number.isNaN(Date.parse(dateOfBirth)) ? dateOfBirth : null,
 				breed: formData.get("breed") ?? undefined,
 			},
 			petId.toString(),
