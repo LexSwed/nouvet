@@ -22,7 +22,7 @@
 		"@types/node": "^20.14.12"
 	},
 	"dependencies": {
-		"@dotenvx/dotenvx": "^1.7.0",
+		"@dotenvx/dotenvx": "^1.8.0",
 		"@playwright/test": "^1.46.1"
 	}
 }
