@@ -2,6 +2,7 @@ import {
 	Button,
 	ButtonLink,
 	Card,
+	Drawer,
 	Form,
 	Icon,
 	Popover,
@@ -50,11 +51,11 @@ export default function PetEditPage(props: RouteSectionProps) {
 					<Text with="body-sm">{pet()?.name}</Text>
 				</ButtonLink>
 			</AppHeader>
-			<div class="container flex flex-col gap-8 pb-24">
+			<div class="container flex flex-col items-center pb-24">
 				<Show when={pet()}>
 					{(pet) => (
-						<>
-							<Card class="flex max-w-[420px] flex-col gap-8">
+						<div class="flex max-w-[420px] flex-col gap-4">
+							<Card class="flex flex-col gap-8" variant="outlined">
 								<Text
 									with="headline-2"
 									as="h2"
@@ -66,10 +67,8 @@ export default function PetEditPage(props: RouteSectionProps) {
 								<PetPictureWithUpload pet={pet()} />
 								<PetUpdateForm petId={props.params.petId!} />
 							</Card>
-							<Button variant="ghost" tone="destructive">
-								{t("edit.delete-cta", { petName: pet().name })}
-							</Button>
-						</>
+							<PetDeleteForm pet={pet()} />
+						</div>
 					)}
 				</Show>
 			</div>
@@ -166,5 +165,36 @@ function PetUpdateForm(props: { petId: string }) {
 				</Form>
 			)}
 		</Show>
+	);
+}
+
+function PetDeleteForm(props: { pet: { id: string; name: string } }) {
+	const t = createTranslator("pets");
+	return (
+		<>
+			<Button variant="ghost" tone="destructive" popoverTarget="pet-delete-form" class="mx-5">
+				{t("edit.delete-cta")}
+			</Button>
+			<Drawer
+				id="pet-delete-form"
+				heading={t("delete.heading", { petName: props.pet.name })}
+				placement="center"
+			>
+				{t("delete.text", { petName: props.pet.name })}
+				<div class="mt-6 grid grid-cols-2 gap-4">
+					<Button
+						popoverTarget="pet-delete-form"
+						popoverTargetAction="hide"
+						variant="tonal"
+						tone="neutral"
+					>
+						{t("delete.cancel")}
+					</Button>
+					<Button variant="tonal" tone="destructive">
+						{t("delete.confirm")}
+					</Button>
+				</div>
+			</Drawer>
+		</>
 	);
 }

@@ -32,7 +32,7 @@ const petsDict = {
 	"pet-card.edit": "Actualizar",
 	"meta.edit-title": "Más sobre {{petName}}",
 	"edit.headline": "Más sobre <b>{{petName}}</b>",
-	"edit.delete-cta": "Eliminar {{petName}}",
+	"edit.delete-cta": "Eliminar",
 	"edit.photo-update": "Actualizar",
 	"edit.photo-add": "Agregar una foto",
 	"edit.name": "Nombre",
@@ -46,6 +46,11 @@ const petsDict = {
 	"edit.photo-update-dialog-title": "Actualizar la foto de {{petName}}",
 	"edit.saved-success": "¡Guardado!",
 	"edit.saved-failure": "La actualización no se guardó, por favor intenta de nuevo.",
+	"delete.heading": "¡{{petName}} se extrañará!",
+	"delete.text":
+		"¿Estás seguro de que quieres eliminar a {{petName}} de la aplicación? Esto eliminará todos los datos asociados con ellos.",
+	"delete.cancel": "Cancelar",
+	"delete.confirm": "Eliminar",
 } as const satisfies Record<keyof typeof import("../en/pets").default, string>;
 
 export default petsDict;

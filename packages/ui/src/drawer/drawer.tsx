@@ -36,7 +36,7 @@ const Drawer = <T extends ValidComponent = "div">(ownProps: DrawerProps<T>) => {
 	const child = createMemo(() => local.children);
 
 	const dragHandle = (
-		<div class="grid w-full place-content-center pt-2 pb-3 sm:hidden">
+		<div class="absolute inset-x-0 top-2 grid w-full place-content-center pt-2 pb-3 sm:hidden">
 			<div class="h-1 w-8 rounded-full bg-on-surface/30" />
 		</div>
 	);

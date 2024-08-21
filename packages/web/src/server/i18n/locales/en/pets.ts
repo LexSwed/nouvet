@@ -32,7 +32,7 @@ const petsDict = {
 	"pet-card.edit": "Update info",
 	"meta.edit-title": "More about {{petName}}",
 	"edit.headline": "More about <b>{{petName}}</b>",
-	"edit.delete-cta": "Delete {{petName}}",
+	"edit.delete-cta": "Delete",
 	"edit.photo-update": "Update",
 	"edit.photo-update-dialog-title": "Update {{petName}}'s picture",
 	"edit.photo-add": "Add a photo",
@@ -46,6 +46,11 @@ const petsDict = {
 	"edit.save-cta": "Save",
 	"edit.saved-success": "Saved!",
 	"edit.saved-failure": "The update was not saved, please try again.",
+	"delete.heading": "{{petName}} will be missed!",
+	"delete.text":
+		"Are you sure you want to delete {{petName}} from the app? This will remove all data associated with them.",
+	"delete.cancel": "Cancel",
+	"delete.confirm": "Delete",
 } as const;
 
 export default petsDict;

@@ -162,6 +162,7 @@
       height: max-content;
       width: calc(100% - theme("spacing.2") * 2);
       max-height: 100svh;
+      padding-top: theme("spacing.8");
       opacity: 1;
       transform: none;
       &:not(:popover-open) {
