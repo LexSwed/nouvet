@@ -44,6 +44,8 @@ const petsDict = {
 	"edit.breed": "Raza",
 	"edit.save-cta": "Guardar",
 	"edit.photo-update-dialog-title": "Actualizar la foto de {{petName}}",
+	"edit.saved-success": "¡Guardado!",
+	"edit.saved-failure": "La actualización no se guardó, por favor intenta de nuevo.",
 } as const satisfies Record<keyof typeof import("../en/pets").default, string>;
 
 export default petsDict;

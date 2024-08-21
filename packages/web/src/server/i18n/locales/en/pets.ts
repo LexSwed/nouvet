@@ -44,6 +44,8 @@ const petsDict = {
 	"edit.birth-year": "Year",
 	"edit.breed": "Breed",
 	"edit.save-cta": "Save",
+	"edit.saved-success": "Saved!",
+	"edit.saved-failure": "The update was not saved, please try again.",
 } as const;
 
 export default petsDict;
