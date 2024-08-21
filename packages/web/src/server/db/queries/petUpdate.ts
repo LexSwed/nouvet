@@ -34,7 +34,7 @@ const UpdatePetSchema = v.object({
 			message: "createPet.color" satisfies ErrorKeys,
 		}),
 	),
-	dateOfBirth: v.nullish(
+	dateOfBirth: v.nullable(
 		v.config(
 			v.pipe(
 				v.string(),
@@ -63,7 +63,7 @@ type UpdatePetInput = v.InferInput<typeof UpdatePetSchema>;
 
 export async function petUpdate(
 	petData: {
-		[K in keyof UpdatePetInput]?: NonNullable<unknown>;
+		[K in keyof UpdatePetInput]?: unknown;
 	},
 	petId: DatabasePet["id"],
 	userId: UserID,

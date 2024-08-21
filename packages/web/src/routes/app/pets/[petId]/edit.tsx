@@ -1,9 +1,21 @@
-import { Button, ButtonLink, Card, Form, Icon, Popover, Text, TextField } from "@nou/ui";
+import {
+	Button,
+	ButtonLink,
+	Card,
+	Form,
+	Icon,
+	Popover,
+	Text,
+	TextField,
+	Toast,
+	toast,
+} from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import {
 	type RouteDefinition,
 	type RouteSectionProps,
 	createAsync,
+	useAction,
 	useSubmission,
 } from "@solidjs/router";
 import { Show } from "solid-js";
@@ -11,6 +23,7 @@ import { Show } from "solid-js";
 import { AppHeader } from "~/lib/app-header";
 import { PetPicture } from "~/lib/pet-home-card";
 import { GenderSwitch } from "~/lib/species-selector";
+import { isSubmissionFailure } from "~/lib/utils/submission";
 import { getPetForEdit, updatePet } from "~/server/api/pet";
 import { getUserProfile } from "~/server/api/user";
 import type { DatabasePet } from "~/server/db/schema";
@@ -101,6 +114,7 @@ function PetUpdateForm(props: { petId: string }) {
 	const pet = createAsync(() => getPetForEdit(props.petId!));
 	const t = createTranslator("pets");
 	const updateSubmission = useSubmission(updatePet);
+	const updateAction = useAction(updatePet);
 
 	return (
 		<Show when={pet()}>
@@ -108,7 +122,24 @@ function PetUpdateForm(props: { petId: string }) {
 				<Form
 					class="flex flex-col gap-8"
 					action={updatePet}
-					validationErrors={updateSubmission.result?.errors}
+					validationErrors={
+						isSubmissionFailure(updateSubmission, "validation")
+							? updateSubmission.result.errors
+							: null
+					}
+					onSubmit={async (e) => {
+						e.preventDefault();
+						try {
+							const res = await updateAction(new FormData(e.currentTarget));
+							if ("pet" in res) {
+								toast(() => <Toast>{t("edit.saved-success", { petName: pet().name })}</Toast>);
+							} else if (res.failureReason === "other") {
+								toast(() => <Toast>{t("edit.saved-failure")}</Toast>);
+							}
+						} catch (error) {
+							console.error(error);
+						}
+					}}
 				>
 					<input type="hidden" name="petId" value={pet().id} />
 					<TextField
