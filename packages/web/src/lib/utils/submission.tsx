@@ -1,4 +1,4 @@
-import type { useSubmission } from "@solidjs/router";
+import { type RouterResponseInit, json, type useSubmission } from "@solidjs/router";
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 type Submission<T extends any[], U> = ReturnType<typeof useSubmission<T, U>>;
@@ -28,4 +28,16 @@ export function isSubmissionSuccess<
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): submission is S & { result: Exclude<SubmissionResult<S>, { failureReason: any }> } {
 	return submission !== undefined && !("failureReason" in submission);
+}
+
+export function jsonFailure<R extends "validation" | "other", T>(
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	data: T & (R extends "valudation" ? { failureReason: R; errors: any } : { failureReason: R }),
+	init?: RouterResponseInit,
+) {
+	return json(data, {
+		status: data.failureReason === "validation" ? 422 : 500,
+		revalidate: [],
+		...init,
+	});
 }

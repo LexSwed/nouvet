@@ -1,12 +1,11 @@
 "use server";
-
-import { json } from "@solidjs/router";
 import { isValiError } from "valibot";
 import { header as getHeaderLang } from "../i18n/locale";
 
 import { getRequestUser } from "~/server/auth/request-user";
 import { type UpdateUserSchema, userUpdate } from "~/server/db/queries/userUpdate";
 
+import { jsonFailure } from "~/lib/utils/submission";
 import { useUserSession } from "../auth/user-session";
 import { userProfile } from "../db/queries/userFamily";
 import { translateErrorTokens } from "../utils";
@@ -28,13 +27,13 @@ export async function updateUserProfileServer(formData: FormData) {
 		return user;
 	} catch (error) {
 		if (isValiError<UpdateUserSchema>(error)) {
-			return json(
-				{ failureReason: "validation" as const, errors: await translateErrorTokens(error) },
-				{ status: 422, revalidate: [] },
-			);
+			return jsonFailure({
+				failureReason: "validation",
+				errors: await translateErrorTokens(error),
+			});
 		}
 		console.error(error);
-		return json({ failureReason: "other" as const }, { status: 500, revalidate: [] });
+		return jsonFailure({ failureReason: "other" });
 	}
 }
 

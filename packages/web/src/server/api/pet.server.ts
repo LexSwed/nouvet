@@ -9,6 +9,7 @@ import { getUpdatePetSchema, petUpdate } from "~/server/db/queries/petUpdate";
 import { userPets } from "~/server/db/queries/userPets";
 import { type ErrorKeys, translateErrorTokens } from "~/server/utils";
 
+import { jsonFailure } from "~/lib/utils/submission";
 import { userPet, userPetForEdit } from "~/server/db/queries/userPet";
 import { getUserPets } from "./pet";
 
@@ -50,13 +51,13 @@ export const createPetServer = async (formData: FormData) => {
 		return json({ pet }, { revalidate: [getUserPets.key] });
 	} catch (error) {
 		if (v.isValiError(error)) {
-			return json(
-				{ failed: true, errors: await translateErrorTokens(error) },
-				{ status: 500, revalidate: [] },
-			);
+			return jsonFailure({
+				failureReason: "validation",
+				errors: await translateErrorTokens(error),
+			});
 		}
 		console.error(error);
-		return json({ failed: true, errors: null }, { status: 500, revalidate: [] });
+		return jsonFailure({ failureReason: "other" });
 	}
 };
 
@@ -117,16 +118,16 @@ export const updatePetBirthDateServer = async (formData: FormData) => {
 			petId.toString(),
 			currentUser.userId,
 		);
-		return json({ pet, failed: false, errors: null }, { revalidate: [getUserPets.key] });
+		return json({ pet }, { revalidate: [getUserPets.key] });
 	} catch (error) {
 		if (v.isValiError(error)) {
-			return json(
-				{ failed: true, errors: await translateErrorTokens(error) },
-				{ status: 422, revalidate: [] },
-			);
+			return jsonFailure({
+				failureReason: "validation",
+				errors: await translateErrorTokens(error),
+			});
 		}
 		console.error(error);
-		return json({ failed: true, errors: null }, { status: 500, revalidate: [] });
+		return jsonFailure({ failureReason: "other" });
 	}
 };
 
@@ -147,16 +148,16 @@ export const updatePetWeightServer = async (formData: FormData) => {
 			petId.toString(),
 			currentUser.userId,
 		);
-		return json({ pet, failed: false, errors: null }, { revalidate: [getUserPets.key] });
+		return json({ pet }, { revalidate: [getUserPets.key] });
 	} catch (error) {
 		if (v.isValiError(error)) {
-			return json(
-				{ failed: true, errors: await translateErrorTokens(error) },
-				{ status: 422, revalidate: [] },
-			);
+			return jsonFailure({
+				failureReason: "validation",
+				errors: await translateErrorTokens(error),
+			});
 		}
 		console.error(error);
-		return json({ failed: true, errors: null }, { status: 500, revalidate: [] });
+		return jsonFailure({ failureReason: "other" });
 	}
 };
 
@@ -177,16 +178,16 @@ export const updatePetBreedServer = async (formData: FormData) => {
 			petId.toString(),
 			currentUser.userId,
 		);
-		return json({ pet, failed: false, errors: null }, { revalidate: [getUserPets.key] });
+		return json({ pet }, { revalidate: [getUserPets.key] });
 	} catch (error) {
 		if (v.isValiError(error)) {
-			return json(
-				{ failed: true, errors: await translateErrorTokens(error) },
-				{ status: 422, revalidate: [] },
-			);
+			return jsonFailure({
+				failureReason: "validation",
+				errors: await translateErrorTokens(error),
+			});
 		}
 		console.error(error);
-		return json({ failed: true, errors: null }, { status: 500, revalidate: [] });
+		return jsonFailure({ failureReason: "other" });
 	}
 };
 
@@ -209,15 +210,15 @@ export const updatePetServer = async (formData: FormData) => {
 			petId.toString(),
 			currentUser.userId,
 		);
-		return json({ pet, failed: false, errors: null }, { revalidate: [getUserPets.key] });
+		return json({ pet }, { revalidate: [getUserPets.key] });
 	} catch (error) {
-		if (v.isValiError(error)) {
-			return json(
-				{ failed: true, errors: await translateErrorTokens(error) },
-				{ status: 422, revalidate: [] },
-			);
+		if (v.isValiError<ReturnType<typeof getUpdatePetSchema>>(error)) {
+			return jsonFailure({
+				failureReason: "validation",
+				errors: await translateErrorTokens(error),
+			});
 		}
 		console.error(error);
-		return json({ failed: true, errors: null }, { status: 500, revalidate: [] });
+		return jsonFailure({ failureReason: "other" });
 	}
 };
