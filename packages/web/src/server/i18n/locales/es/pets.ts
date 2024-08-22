@@ -46,9 +46,9 @@ const petsDict = {
 	"edit.photo-update-dialog-title": "Actualizar la foto de {{petName}}",
 	"edit.saved-success": "¡Guardado!",
 	"edit.saved-failure": "La actualización no se guardó, por favor intenta de nuevo.",
-	"delete.heading": "¡{{petName}} se extrañará!",
+	"delete.heading": "¿Eliminar a {{petName}} de la aplicación?",
 	"delete.text":
-		"¿Estás seguro de que quieres eliminar a {{petName}} de la aplicación? Esto eliminará todos los datos asociados con ellos.",
+		"¿Estás seguro de que deseas eliminar a {{petName}} y todos los datos asociados de la aplicación? Esta acción no se puede deshacer.",
 	"delete.cancel": "Cancelar",
 	"delete.confirm": "Eliminar",
 } as const satisfies Record<keyof typeof import("../en/pets").default, string>;

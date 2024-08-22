@@ -46,9 +46,9 @@ const petsDict = {
 	"edit.save-cta": "Save",
 	"edit.saved-success": "Saved!",
 	"edit.saved-failure": "The update was not saved, please try again.",
-	"delete.heading": "{{petName}} will be missed!",
+	"delete.heading": "Delete {{petName}} from the app?",
 	"delete.text":
-		"Are you sure you want to delete {{petName}} from the app? This will remove all data associated with them.",
+		"Are you sure you want to delete {{petName}} and all associated data from the app? This action cannot be undone.",
 	"delete.cancel": "Cancel",
 	"delete.confirm": "Delete",
 } as const;
