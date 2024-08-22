@@ -1,5 +1,6 @@
 import containerQueryPlugin from "@tailwindcss/container-queries";
 import animatePlugin from "tailwindcss-animate";
+import springPlugin from "tailwindcss-spring";
 import defaultConfig from "tailwindcss/defaultConfig";
 import plugin from "tailwindcss/plugin";
 
@@ -115,6 +116,7 @@ export default {
 	plugins: [
 		containerQueryPlugin,
 		animatePlugin,
+		springPlugin,
 		plugin(function hoverAndFocusVariant({ addVariant }) {
 			addVariant("intent", ["&:where(:hover,:focus)"]);
 		}),
