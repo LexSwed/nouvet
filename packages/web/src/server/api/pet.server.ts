@@ -11,33 +11,34 @@ import { type ErrorKeys, translateErrorTokens } from "~/server/utils";
 
 import { jsonFailure } from "~/lib/utils/submission";
 import { userPet, userPetForEdit } from "~/server/db/queries/userPet";
+import { petDelete } from "../db/queries/petDelete";
 import { getUserPets } from "./pet";
 
-export const getUserPetsServer = async () => {
+export async function getUserPetsServer() {
 	const currentUser = await getRequestUser();
 	const pets = await userPets(currentUser.userId);
 	return pets;
-};
+}
 
-export const getPetServer = async (petId: string) => {
+export async function getPetServer(petId: string) {
 	const currentUser = await getRequestUser();
 	const pet = await userPet(currentUser.userId, petId);
 	if (!pet) {
 		throw redirect("/app/pets", { status: 404 });
 	}
 	return pet;
-};
+}
 
-export const getPetForEditServer = async (petId: string) => {
+export async function getPetForEditServer(petId: string) {
 	const currentUser = await getRequestUser();
 	const pet = await userPetForEdit(currentUser.userId, petId);
 	if (!pet) {
 		throw redirect("/app/pets", { status: 404 });
 	}
 	return pet;
-};
+}
 
-export const createPetServer = async (formData: FormData) => {
+export async function createPetServer(formData: FormData) {
 	const currentUser = await getRequestUser();
 	try {
 		const pet = await petCreate(
@@ -59,7 +60,7 @@ export const createPetServer = async (formData: FormData) => {
 		console.error(error);
 		return jsonFailure({ failureReason: "other" });
 	}
-};
+}
 
 const PetBirthDaySchema = v.pipe(
 	v.object({
@@ -99,7 +100,7 @@ const PetBirthDaySchema = v.pipe(
 	v.date("bday" satisfies ErrorKeys),
 );
 
-export const updatePetBirthDateServer = async (formData: FormData) => {
+export async function updatePetBirthDateServer(formData: FormData) {
 	try {
 		const petId = formData.get("petId");
 		if (!petId) {
@@ -129,9 +130,9 @@ export const updatePetBirthDateServer = async (formData: FormData) => {
 		console.error(error);
 		return jsonFailure({ failureReason: "other" });
 	}
-};
+}
 
-export const updatePetWeightServer = async (formData: FormData) => {
+export async function updatePetWeightServer(formData: FormData) {
 	try {
 		const petId = formData.get("petId");
 		if (!petId) {
@@ -159,9 +160,9 @@ export const updatePetWeightServer = async (formData: FormData) => {
 		console.error(error);
 		return jsonFailure({ failureReason: "other" });
 	}
-};
+}
 
-export const updatePetBreedServer = async (formData: FormData) => {
+export async function updatePetBreedServer(formData: FormData) {
 	try {
 		const petId = formData.get("petId");
 		if (!petId) {
@@ -189,9 +190,9 @@ export const updatePetBreedServer = async (formData: FormData) => {
 		console.error(error);
 		return jsonFailure({ failureReason: "other" });
 	}
-};
+}
 
-export const updatePetServer = async (formData: FormData) => {
+export async function updatePetServer(formData: FormData) {
 	try {
 		const petId = formData.get("petId");
 		if (!petId) {
@@ -221,4 +222,30 @@ export const updatePetServer = async (formData: FormData) => {
 		console.error(error);
 		return jsonFailure({ failureReason: "other" });
 	}
-};
+}
+
+export async function deletePetServer(formData: FormData) {
+	const petId = formData.get("petId");
+	if (!petId) {
+		return jsonFailure({
+			failureReason: "other",
+		});
+	}
+	const currentUser = await getRequestUser();
+	try {
+		const deletedPetId = await petDelete(petId.toString(), currentUser.userId);
+		return json(
+			{ petId: deletedPetId },
+			{
+				revalidate: [getUserPets.key],
+				headers: {
+					Location: "/app/pets",
+				},
+				status: 302,
+			},
+		);
+	} catch (error) {
+		console.error(error);
+		return jsonFailure({ failureReason: "other" });
+	}
+}

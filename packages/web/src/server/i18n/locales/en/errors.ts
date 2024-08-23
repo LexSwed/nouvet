@@ -15,6 +15,8 @@ const errorsDict = {
 	"user.name-max": "Name cannot exceed 200 characters",
 	"user.locale": "Locale is not supported",
 	"user.measurementsSystem": "This measurements system is not supported",
+	"deletePet.petId": "Pet ID is not provided",
+	"deletePet.notFound": "Pet not found",
 } as const;
 
 export default errorsDict;

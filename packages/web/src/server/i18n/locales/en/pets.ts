@@ -51,6 +51,8 @@ const petsDict = {
 		"Are you sure you want to delete {{petName}} and all associated data from the app? This action cannot be undone.",
 	"delete.cancel": "Cancel",
 	"delete.confirm": "Delete",
+	"delete.success": "{{petName}} was deleted.",
+	"delete.failure": "There was an error deleting {{petName}}.",
 } as const;
 
 export default petsDict;

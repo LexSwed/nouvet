@@ -32,7 +32,7 @@ export function isSubmissionSuccess<
 
 export function jsonFailure<R extends "validation" | "other", T>(
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	data: T & (R extends "valudation" ? { failureReason: R; errors: any } : { failureReason: R }),
+	data: T & (R extends "validation" ? { failureReason: R; errors: any } : { failureReason: R }),
 	init?: RouterResponseInit,
 ) {
 	return json(data, {

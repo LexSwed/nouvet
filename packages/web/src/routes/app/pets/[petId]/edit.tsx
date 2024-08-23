@@ -15,6 +15,7 @@ import {
 	type RouteDefinition,
 	type RouteSectionProps,
 	createAsync,
+	redirect,
 	useAction,
 	useSubmission,
 } from "@solidjs/router";
@@ -24,8 +25,7 @@ import { AppHeader } from "~/lib/app-header";
 import { PetPicture } from "~/lib/pet-home-card";
 import { GenderSwitch } from "~/lib/species-selector";
 import { isSubmissionFailure } from "~/lib/utils/submission";
-import { getPetForEdit, updatePet } from "~/server/api/pet";
-import { getUserProfile } from "~/server/api/user";
+import { deletePet, getPetForEdit, updatePet } from "~/server/api/pet";
 import type { DatabasePet } from "~/server/db/schema";
 import { T, cacheTranslations, createTranslator } from "~/server/i18n";
 
@@ -33,7 +33,6 @@ export const route = {
 	preload({ params }) {
 		void cacheTranslations("pets");
 		void getPetForEdit(params.petId!);
-		void getUserProfile();
 	},
 } satisfies RouteDefinition;
 
@@ -177,6 +176,8 @@ function PetDeleteForm(props: {
 	};
 }) {
 	const t = createTranslator("pets");
+	const deleteAction = useAction(deletePet);
+	const deleteSubmission = useSubmission(deletePet);
 	return (
 		<>
 			<Button variant="ghost" tone="destructive" popoverTarget="pet-delete-form" class="mx-5">
@@ -187,7 +188,22 @@ function PetDeleteForm(props: {
 				placement="bottom-to-bottom"
 				class={"-mb-2 max-w-[anchor-size(width)] backdrop:bg-on-surface/5"}
 			>
-				<form class="flex flex-col justify-end gap-4">
+				<Form
+					class="flex flex-col justify-end gap-4"
+					action={deletePet}
+					onSubmit={async (e) => {
+						e.preventDefault();
+						const res = await deleteAction(new FormData(e.currentTarget));
+						if ("petId" in res) {
+							toast(() => <Toast>{t("delete.success", { petName: props.pet.name })}</Toast>);
+							return redirect("/app/pets");
+						}
+						toast(() => (
+							<Toast tone="failure">{t("delete.failure", { petName: props.pet.name })}</Toast>
+						));
+					}}
+				>
+					<input type="hidden" name="petId" value={props.pet.id} />
 					<PetPicture pet={props.pet} class="size-10 bg-error-container text-on-error-container" />
 					<Text with="headline-3" as="header">
 						{t("delete.heading", { petName: props.pet.name })}
@@ -202,11 +218,16 @@ function PetDeleteForm(props: {
 						>
 							{t("delete.cancel")}
 						</Button>
-						<Button variant="tonal" type="submit" tone="destructive">
+						<Button
+							variant="tonal"
+							type="submit"
+							tone="destructive"
+							loading={deleteSubmission.pending}
+						>
 							{t("delete.confirm")}
 						</Button>
 					</div>
-				</form>
+				</Form>
 			</Popover>
 		</>
 	);

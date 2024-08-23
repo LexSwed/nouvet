@@ -16,6 +16,7 @@
 		"db:studio": "drizzle-kit studio --port=3001"
 	},
 	"dependencies": {
+		"@date-fns/utc": "^1.2.0",
 		"@lucia-auth/adapter-drizzle": "^1.1.0",
 		"@nou/ui": "^0.0.1",
 		"@solid-primitives/devices": "^1.2.6",
