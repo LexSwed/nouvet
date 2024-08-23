@@ -61,6 +61,15 @@
       transition-timing-function: ease-in;
       opacity: 0;
     }
+    &::backdrop {
+      transition: all 0.24s ease allow-discrete;
+      opacity: 1;
+    }
+    &:not(:popover-open) {
+      &::backdrop {
+        opacity: 0;
+      }
+    }
 
     &:where(
         [data-placement*="left-to-right"],
@@ -165,16 +174,9 @@
       padding-top: theme("spacing.8");
       opacity: 1;
       transform: none;
-      &:not(:popover-open) {
-        transform: translate3d(0, 100%, 0);
-        &::backdrop {
-          opacity: 0;
-        }
-      }
       &::backdrop {
-        transition: all 0.24s ease allow-discrete;
-        background-color: theme("colors.on-surface/0.05");
-        opacity: 1;
+        /* backdrop-filter: none; */
+        background-color: theme("colors.on-surface/0.5");
       }
     }
 

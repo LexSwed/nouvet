@@ -8,9 +8,7 @@ import {
 	Text,
 	TextField,
 	Toast,
-	startViewTransition,
 	toast,
-	tw,
 } from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import {
@@ -20,7 +18,7 @@ import {
 	useAction,
 	useSubmission,
 } from "@solidjs/router";
-import { Show, createSignal } from "solid-js";
+import { Show } from "solid-js";
 
 import { AppHeader } from "~/lib/app-header";
 import { PetPicture } from "~/lib/pet-home-card";
@@ -30,8 +28,6 @@ import { getPetForEdit, updatePet } from "~/server/api/pet";
 import { getUserProfile } from "~/server/api/user";
 import type { DatabasePet } from "~/server/db/schema";
 import { T, cacheTranslations, createTranslator } from "~/server/i18n";
-
-import "./edit.module.css";
 
 export const route = {
 	preload({ params }) {
@@ -180,43 +176,18 @@ function PetDeleteForm(props: {
 		species: DatabasePet["species"];
 	};
 }) {
-	const [open, setOpen] = createSignal(false);
 	const t = createTranslator("pets");
-	const viewTransitions = {
-		get main() {
-			return { "view-transition-name": "delete-pet" };
-		},
-		get cta() {
-			return { "view-transition-name": "delete-pet-cta" };
-		},
-	};
 	return (
 		<>
-			<Button
-				variant="ghost"
-				tone="destructive"
-				popoverTarget="pet-delete-form"
-				class="mx-5"
-				style={open() ? undefined : viewTransitions.cta}
-			>
+			<Button variant="ghost" tone="destructive" popoverTarget="pet-delete-form" class="mx-5">
 				{t("edit.delete-cta")}
 			</Button>
 			<Popover
 				id="pet-delete-form"
 				placement="bottom-to-bottom"
-				class={tw(
-					"-mb-2 w-[anchor(width)] translate-y-0 opacity-100 transition-none backdrop:bg-on-surface/5",
-					"hidden data-[state=open]:block",
-				)}
-				onBeforeToggle={(e: ToggleEvent) => {
-					startViewTransition(() => {
-						setOpen(e.newState === "open");
-					});
-				}}
-				style={viewTransitions.main}
-				data-state={open() ? "open" : "closed"}
+				class={"-mb-2 max-w-[anchor-size(width)] backdrop:bg-on-surface/5"}
 			>
-				<div class="flex flex-col justify-end gap-4">
+				<form class="flex flex-col justify-end gap-4">
 					<PetPicture pet={props.pet} class="size-10 bg-error-container text-on-error-container" />
 					<Text with="headline-3" as="header">
 						{t("delete.heading", { petName: props.pet.name })}
@@ -231,15 +202,11 @@ function PetDeleteForm(props: {
 						>
 							{t("delete.cancel")}
 						</Button>
-						<Button
-							variant="tonal"
-							tone="destructive"
-							style={open() ? viewTransitions.cta : undefined}
-						>
+						<Button variant="tonal" type="submit" tone="destructive">
 							{t("delete.confirm")}
 						</Button>
 					</div>
-				</div>
+				</form>
 			</Popover>
 		</>
 	);
