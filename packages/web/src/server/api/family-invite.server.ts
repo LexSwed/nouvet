@@ -103,7 +103,7 @@ export const joinFamilyWithQRCodeServer = async (invitationHash: string) => {
 		// TODO: error handling
 		const family = await joinFamilyByInvitationHash(invitationHash, currentUser.userId);
 		/** Revalidation happens after user sees the success dialog */
-		return json(family, { revalidate: [] });
+		return json(family, { revalidate: "none" });
 	} catch (error) {
 		return jsonFailure(error);
 	}

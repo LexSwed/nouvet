@@ -24,7 +24,7 @@ import { Show } from "solid-js";
 import { AppHeader } from "~/lib/app-header";
 import { PetPicture } from "~/lib/pet-home-card";
 import { GenderSwitch } from "~/lib/species-selector";
-import { isSubmissionFailure } from "~/lib/utils/submission";
+import { isSubmissionValidationError } from "~/lib/utils/submission";
 import { deletePet, getPetForEdit, updatePet } from "~/server/api/pet";
 import type { DatabasePet } from "~/server/db/schema";
 import { T, cacheTranslations, createTranslator } from "~/server/i18n";
@@ -120,9 +120,7 @@ function PetUpdateForm(props: { petId: string }) {
 					class="flex flex-col gap-8"
 					action={updatePet}
 					validationErrors={
-						isSubmissionFailure(updateSubmission, "validation")
-							? updateSubmission.result.errors
-							: null
+						isSubmissionValidationError(updateSubmission) ? updateSubmission.result.errors : null
 					}
 					onSubmit={async (e) => {
 						e.preventDefault();

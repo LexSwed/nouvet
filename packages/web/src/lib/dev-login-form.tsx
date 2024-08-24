@@ -39,12 +39,12 @@ const loginDev = action(async (formData: FormData) => {
 	"use server";
 	const name = formData.get("name")?.toString().trim();
 	if (!name) {
-		return json({ errors: { name: "Cannot be empty " } }, { status: 500, revalidate: [] });
+		return json({ errors: { name: "Cannot be empty " } }, { status: 500, revalidate: "none" });
 	}
 	try {
 		const { redirectUrl } = await loginDevServer(name);
 		return redirect(redirectUrl);
 	} catch {
-		return json({ failed: true }, { status: 500, revalidate: [] });
+		return json({ failed: true }, { status: 500, revalidate: "none" });
 	}
 }, "dev-login");

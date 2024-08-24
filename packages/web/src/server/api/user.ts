@@ -23,9 +23,6 @@ export const getUser = cache(async () => {
 	return user;
 }, "user");
 
-export const getUserProfile = cache(async () => getUserProfileServer(), "user-profile");
+export const getUserProfile = cache(getUserProfileServer, "user-profile");
 
-export const updateUserProfile = action(
-	async (formData: FormData) => updateUserProfileServer(formData),
-	"update-user-profile",
-);
+export const updateUserProfile = action(updateUserProfileServer, "update-user-profile");

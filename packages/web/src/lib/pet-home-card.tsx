@@ -119,13 +119,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 					href={`/app/pets/${props.pet.id}`}
 					class="group/link -outline-offset-4 -mb-2 flex flex-row items-center gap-4 rounded-[inherit] intent:bg-on-surface/5 p-3 outline-on-surface transition-colors duration-200 focus:outline-4"
 				>
-					<div class="grid size-16 shrink-0 place-content-center rounded-full bg-tertiary/10 text-tertiary">
-						<Show
-							when={props.pet.pictureUrl}
-							children={<img src={props.pet.pictureUrl!} class="aspect-square w-full" alt="" />}
-							fallback={<Icon use={petIconMap[props.pet.species]} size="md" />}
-						/>
-					</div>
+					<PetPicture pet={props.pet} />
 					<Text with="body-lg">{props.pet.name}</Text>
 					<Text class="sr-only">{t("go-to-pet-page", { petName: props.pet.name })}</Text>
 					<Icon use="arrow-up-right" class="ms-auto" size="sm" />

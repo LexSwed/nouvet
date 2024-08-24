@@ -49,7 +49,7 @@ export async function jsonFailure<
 			} satisfies SubmissionError,
 			{
 				status: 422,
-				revalidate: [],
+				revalidate: "None",
 				...init,
 			},
 		);
@@ -57,7 +57,7 @@ export async function jsonFailure<
 	console.error(error);
 	return json({ failureReason: "other" } satisfies SubmissionError, {
 		status: 500,
-		revalidate: [],
+		revalidate: "None",
 		...init,
 	});
 }

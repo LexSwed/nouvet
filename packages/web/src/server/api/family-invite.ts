@@ -8,24 +8,15 @@ import {
 	moveUserFromTheWaitListServer,
 } from "./family-invite.server";
 
-export const getFamilyInvite = cache(() => getFamilyInviteServer(), "family-invite-code");
+export const getFamilyInvite = cache(getFamilyInviteServer, "family-invite-code");
 
-export const checkFamilyInvite = cache(
-	async (inviteCode: string) => checkFamilyInviteServer(inviteCode),
-	"check-family-invite",
-);
+export const checkFamilyInvite = cache(checkFamilyInviteServer, "check-family-invite");
 
-export const joinFamilyWithLink = action(
-	async (formData: FormData) => joinFamilyWithLinkServer(formData),
-	"join-family",
-);
+export const joinFamilyWithLink = action(joinFamilyWithLinkServer, "join-family");
 
-export const joinFamilyWithQRCode = action(
-	(invitationHash: string) => joinFamilyWithQRCodeServer(invitationHash),
-	"join-family-qr",
-);
+export const joinFamilyWithQRCode = action(joinFamilyWithQRCodeServer, "join-family-qr");
 
 export const moveUserFromTheWaitList = action(
-	async (formData: FormData) => moveUserFromTheWaitListServer(formData),
+	moveUserFromTheWaitListServer,
 	"move-user-from-the-wait-list",
 );

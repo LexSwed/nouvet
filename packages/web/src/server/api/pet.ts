@@ -12,41 +12,20 @@ import {
 	updatePetWeightServer,
 } from "./pet.server";
 
-export const getUserPets = cache(async () => getUserPetsServer(), "user-pets");
+export const getUserPets = cache(getUserPetsServer, "user-pets");
 
-export const createPet = action(
-	async (formData: FormData) => createPetServer(formData),
-	"create-pet",
-);
+export const createPet = action(createPetServer, "create-pet");
 
-export const updatePetBirthDate = action(
-	async (formData: FormData) => updatePetBirthDateServer(formData),
-	"update-pet-birth-date",
-);
+export const updatePetBirthDate = action(updatePetBirthDateServer, "update-pet-birth-date");
 
-export const updatePetWeight = action(
-	async (formData: FormData) => updatePetWeightServer(formData),
-	"update-pet-weight",
-);
+export const updatePetWeight = action(updatePetWeightServer, "update-pet-weight");
 
-export const updatePetBreed = action(
-	async (formData: FormData) => updatePetBreedServer(formData),
-	"update-pet-breed",
-);
+export const updatePetBreed = action(updatePetBreedServer, "update-pet-breed");
 
-export const updatePet = action(
-	async (formData: FormData) => updatePetServer(formData),
-	"update-pet",
-);
+export const updatePet = action(updatePetServer, "update-pet");
 
-export const getPet = cache(async (petId: string) => getPetServer(petId), "user-pet");
+export const getPet = cache(getPetServer, "user-pet");
 
-export const getPetForEdit = cache(
-	async (petId: string) => getPetForEditServer(petId),
-	"user-pet-edit",
-);
+export const getPetForEdit = cache(getPetForEditServer, "user-pet-edit");
 
-export const deletePet = action(
-	async (formData: FormData) => deletePetServer(formData),
-	"delete-pet",
-);
+export const deletePet = action(deletePetServer, "delete-pet");
