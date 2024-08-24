@@ -12,7 +12,7 @@ import { type ErrorKeys, translateErrorTokens } from "~/server/utils";
 import { jsonFailure } from "~/lib/utils/submission";
 import { userPet, userPetForEdit } from "~/server/db/queries/userPet";
 import { petDelete } from "../db/queries/petDelete";
-import { getUserPets } from "./pet";
+import { getPetForEdit, getUserPets } from "./pet";
 
 export async function getUserPetsServer() {
 	const currentUser = await getRequestUser();
@@ -211,7 +211,7 @@ export async function updatePetServer(formData: FormData) {
 			petId.toString(),
 			currentUser.userId,
 		);
-		return json({ pet }, { revalidate: [getUserPets.key] });
+		return json({ pet }, { revalidate: [getUserPets.key, getPetForEdit.keyFor(pet.id)] });
 	} catch (error) {
 		if (v.isValiError<ReturnType<typeof getUpdatePetSchema>>(error)) {
 			return jsonFailure({
@@ -237,7 +237,7 @@ export async function deletePetServer(formData: FormData) {
 		return json(
 			{ petId: deletedPetId },
 			{
-				revalidate: [getUserPets.key],
+				revalidate: [getUserPets.key, getPetForEdit.keyFor(deletedPetId)],
 				headers: {
 					Location: "/app/pets",
 				},
