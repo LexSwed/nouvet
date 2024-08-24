@@ -1,9 +1,10 @@
 "use server";
 
+import { type RouterResponseInit, json } from "@solidjs/router";
 import * as v from "valibot";
-
 import type ErrorsDict from "~/server/i18n/locales/en/errors";
 
+import type { SubmissionError } from "~/lib/utils/submission";
 import { getDictionary } from "./i18n/dict";
 
 type FlatErrorsTranslation<
@@ -33,4 +34,30 @@ export type ErrorKeys = keyof typeof ErrorsDict;
 
 export async function timeout(ms: number) {
 	await new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export async function jsonFailure<
+	TSchema extends
+		| v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>
+		| v.BaseSchemaAsync<unknown, unknown, v.BaseIssue<unknown>>,
+>(error: Error | unknown, init?: RouterResponseInit) {
+	if (v.isValiError<TSchema>(error)) {
+		return json(
+			{
+				failureReason: "validation",
+				errors: await translateErrorTokens(error),
+			} satisfies SubmissionError,
+			{
+				status: 422,
+				revalidate: [],
+				...init,
+			},
+		);
+	}
+	console.error(error);
+	return json({ failureReason: "other" } satisfies SubmissionError, {
+		status: 500,
+		revalidate: [],
+		...init,
+	});
 }

@@ -60,6 +60,7 @@ const UpdatePetSchema = v.object({
 });
 
 type UpdatePetInput = v.InferInput<typeof UpdatePetSchema>;
+export type UpdatePetSchema = typeof UpdatePetSchema;
 
 export async function petUpdate(
 	petData: {

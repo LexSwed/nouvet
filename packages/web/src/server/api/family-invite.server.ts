@@ -18,7 +18,7 @@ import { IncorrectFamilyInvite, InviteeNotInWaitList } from "~/server/errors";
 
 import { acceptUserToFamily } from "../db/queries/familyAcceptUser";
 import { familyRemoveFromWaitList } from "../db/queries/familyRemoveFromWaitList";
-import { translateErrorTokens } from "../utils";
+import { jsonFailure } from "../utils";
 
 import { getFamilyMembers } from "./family";
 import { getUserPets } from "./pet";
@@ -54,8 +54,7 @@ export async function getFamilyInviteServer() {
 			}).format(expiresIn, "minutes"),
 		};
 	} catch (error) {
-		console.error(error);
-		return json({ error: "Something went wrong" }, { revalidate: [], status: 500 });
+		return jsonFailure(error);
 	}
 }
 
@@ -72,13 +71,7 @@ export const checkFamilyInviteServer = async (inviteCode: string) => {
 
 		return { invite };
 	} catch (error) {
-		console.error(error);
-		return json(
-			{
-				error,
-			},
-			{ status: 400, revalidate: [] },
-		);
+		return jsonFailure(error);
 	}
 };
 
@@ -96,7 +89,7 @@ export const joinFamilyWithLinkServer = async (formData: FormData) => {
 		return redirect("/app/family");
 	} catch (error) {
 		console.error(error);
-		return json({ error: "Something went wrong" }, { status: 500, revalidate: [] });
+		return jsonFailure(error);
 	}
 };
 
@@ -112,8 +105,7 @@ export const joinFamilyWithQRCodeServer = async (invitationHash: string) => {
 		/** Revalidation happens after user sees the success dialog */
 		return json(family, { revalidate: [] });
 	} catch (error) {
-		console.error(error);
-		return json({ error: "Something went wrong" }, { status: 500, revalidate: [] });
+		return jsonFailure(error);
 	}
 };
 
@@ -147,19 +139,12 @@ export const moveUserFromTheWaitListServer = async (formData: FormData) => {
 			revalidate: [getFamilyMembers.key],
 		});
 	} catch (error) {
-		if (v.isValiError(error)) {
-			return json({ errors: translateErrorTokens(error) }, { status: 422, revalidate: [] });
-		}
 		if (error instanceof InviteeNotInWaitList) {
-			return json(
-				{ error: "Something went wrong" },
-				{
-					status: 500,
-					revalidate: [getFamilyMembers.key],
-				},
-			);
+			return json(null, {
+				status: 500,
+				revalidate: [getFamilyMembers.key],
+			});
 		}
-		console.error(error);
-		return json({ error: "Something went wrong" }, { status: 500, revalidate: [] });
+		return jsonFailure<typeof WaitListActionSchema>(error);
 	}
 };

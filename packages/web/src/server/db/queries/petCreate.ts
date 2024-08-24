@@ -35,6 +35,7 @@ const CreatePetSchema = v.object({
 });
 
 type CreatePetInput = v.InferInput<typeof CreatePetSchema>;
+export type CreatePetSchema = typeof CreatePetSchema;
 
 export async function petCreate(
 	input: {

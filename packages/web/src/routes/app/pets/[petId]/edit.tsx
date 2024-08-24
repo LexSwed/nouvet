@@ -129,9 +129,9 @@ function PetUpdateForm(props: { petId: string }) {
 						try {
 							const res = await updateAction(new FormData(e.currentTarget));
 							if ("pet" in res) {
-								toast(() => <Toast>{t("edit.saved-success", { petName: pet().name })}</Toast>);
+								toast(() => <Toast>{t("edit.update-success", { petName: pet().name })}</Toast>);
 							} else if (res.failureReason === "other") {
-								toast(() => <Toast>{t("edit.saved-failure")}</Toast>);
+								toast(() => <Toast>{t("edit.update-failure")}</Toast>);
 							}
 						} catch (error) {
 							console.error(error);

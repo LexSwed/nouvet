@@ -9,7 +9,7 @@ import { familyCancelJoin } from "~/server/db/queries/familyCancelJoin";
 import { familyDelete } from "~/server/db/queries/familyDelete";
 import { familyMember, familyMembers } from "~/server/db/queries/familyMembers";
 import { familyUpdate } from "~/server/db/queries/familyUpdate";
-import { type ErrorKeys, translateErrorTokens } from "~/server/utils";
+import { type ErrorKeys, jsonFailure } from "~/server/utils";
 
 import { familyLeave } from "../db/queries/familyLeave";
 import { IncorrectFamilyMemberId } from "../errors";
@@ -67,14 +67,7 @@ export async function updateFamilyServer(formData: FormData) {
 			},
 		);
 	} catch (error) {
-		if (v.isValiError(error)) {
-			return json(
-				{ failed: true, errors: await translateErrorTokens(error) },
-				{ status: 500, revalidate: [] },
-			);
-		}
-		console.error(error);
-		return json({ failed: true, errors: null }, { status: 500, revalidate: [] });
+		return jsonFailure<typeof FamilyUpdateSchema>(error);
 	}
 }
 
@@ -93,8 +86,7 @@ export async function deleteFamilyServer() {
 			},
 		);
 	} catch (error) {
-		console.error(error);
-		return json({ failed: true, errors: null }, { status: 500, revalidate: [] });
+		return jsonFailure(error);
 	}
 }
 
@@ -104,8 +96,7 @@ export async function cancelFamilyJoinServer() {
 		await familyCancelJoin(user.userId);
 		return redirect("/app", { revalidate: [getUserFamily.key] });
 	} catch (error) {
-		console.error(error);
-		return json({ error: "Something went wrong" }, { status: 500, revalidate: [] });
+		return jsonFailure(error);
 	}
 }
 
@@ -115,7 +106,6 @@ export async function leaveFamilyServer() {
 		await familyLeave(user.userId);
 		return redirect("/app", { revalidate: [getUserFamily.key] });
 	} catch (error) {
-		console.error(error);
-		return json({ error: "Something went wrong" }, { status: 500, revalidate: [] });
+		return jsonFailure(error);
 	}
 }

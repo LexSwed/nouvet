@@ -1,14 +1,12 @@
 "use server";
-import { isValiError } from "valibot";
 import { header as getHeaderLang } from "../i18n/locale";
 
 import { getRequestUser } from "~/server/auth/request-user";
 import { type UpdateUserSchema, userUpdate } from "~/server/db/queries/userUpdate";
 
-import { jsonFailure } from "~/lib/utils/submission";
 import { useUserSession } from "../auth/user-session";
 import { userProfile } from "../db/queries/userFamily";
-import { translateErrorTokens } from "../utils";
+import { jsonFailure } from "../utils";
 
 export async function updateUserProfileServer(formData: FormData) {
 	const currentUser = await getRequestUser();
@@ -26,14 +24,7 @@ export async function updateUserProfileServer(formData: FormData) {
 		});
 		return user;
 	} catch (error) {
-		if (isValiError<UpdateUserSchema>(error)) {
-			return jsonFailure({
-				failureReason: "validation",
-				errors: await translateErrorTokens(error),
-			});
-		}
-		console.error(error);
-		return jsonFailure({ failureReason: "other" });
+		return jsonFailure<UpdateUserSchema>(error);
 	}
 }
 
