@@ -46,7 +46,6 @@ const Drawer = <T extends ValidComponent = "div">(ownProps: DrawerProps<T>) => {
 			class={tw(css.drawer, local.class, "max-w-[640px]")}
 			{...props}
 			ref={mergeRefs(local.ref, dragHandlers.ref)}
-			// === SharedElementProps ===
 			style={{
 				...dragHandlers.style,
 				...local.style,
@@ -134,7 +133,9 @@ function createDragHandlers(props: { side: Side }) {
 	const onPopoverToggle = (event: ToggleEvent) => {
 		if (!isMobile()) return null;
 
-		setTranslate(0);
+		if (event.newState === "open") {
+			setTranslate(0);
+		}
 
 		if (event.newState === "open") {
 			document.addEventListener("pointermove", onPointerMove);
@@ -281,7 +282,6 @@ function createDragHandlers(props: { side: Side }) {
 
 	return {
 		get style() {
-			if (!isDragging()) return undefined;
 			return {
 				transform: transformValue(),
 				"transition-duration": isDragging() ? "0ms" : undefined,
