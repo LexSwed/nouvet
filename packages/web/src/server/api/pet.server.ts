@@ -151,9 +151,7 @@ export async function updatePetServer(formData: FormData) {
 export async function deletePetServer(formData: FormData) {
 	const petId = formData.get("petId");
 	if (!petId) {
-		return jsonFailure({
-			failureReason: "other",
-		});
+		throw new Error("petId is not provided");
 	}
 	const currentUser = await getRequestUser();
 	try {
