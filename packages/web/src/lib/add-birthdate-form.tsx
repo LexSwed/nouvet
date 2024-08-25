@@ -19,16 +19,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
 	const t = createTranslator("pets");
 	const birthDateSubmission = useSubmission(updatePetBirthDate);
 	const updateBirthDateAction = useAction(updatePetBirthDate);
-	const validationErrors = pickSubmissionValidationErrors(birthDateSubmission);
-	console.log(validationErrors?.dateOfBirth);
-	if (
-		birthDateSubmission.result &&
-		"failureReason" in birthDateSubmission.result &&
-		birthDateSubmission.result.failureReason === "validation" &&
-		birthDateSubmission.result.errors
-	) {
-		console.log(birthDateSubmission.result.errors.dateOfBirth);
-	}
+
 	return (
 		<Drawer
 			id={props.id}
@@ -50,7 +41,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
 			<Form
 				class="flex flex-col gap-6 sm:max-w-[360px]"
 				action={updatePetBirthDate}
-				validationErrors={validationErrors}
+				validationErrors={pickSubmissionValidationErrors(birthDateSubmission)}
 				onSubmit={async (e) => {
 					e.preventDefault();
 					const result = await updateBirthDateAction(new FormData(e.currentTarget));

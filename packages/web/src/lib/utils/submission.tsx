@@ -6,31 +6,21 @@ type Submission<T extends any[], U> = ReturnType<typeof useSubmission<T, U>>;
 export type SubmissionResult<S> = S extends Submission<any, infer U> ? U : never;
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-type ValidationError<Errors = any> = { failureReason: "validation"; errors: Errors };
-type GenericError = { failureReason: "other" };
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export type SubmissionError<R extends "validation" | "other", E = any> = R extends "validation"
-	? ValidationError<E>
-	: GenericError;
+export type ValidationError<E = any> = {
+	failureReason: "validation";
+	errors: E;
+};
+export type GenericError = {
+	failureReason: "other";
+};
 
-type AnyOrSubmissionError<
-	R extends "validation" | "other",
-	Errors = any,
-	U = unknown,
-> = U extends SubmissionError<R, Errors>
-	? Extract<U, SubmissionError<R, Errors>>
-	: // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		Exclude<U, { failureReason: any }>;
+export type SubmissionError<R> = R extends "validation" ? ValidationError : GenericError;
 
 export function isSubmissionFailure<
-	Reason extends "validation" | "other",
+	const Reason extends "validation" | "other",
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	S extends Submission<any[], AnyOrSubmissionError<Reason, Errors>>,
-	Errors,
->(
-	submission: S,
-	reason: Reason,
-): submission is S & { result: Extract<SubmissionResult<S>, SubmissionError<Reason, Errors>> } {
+	const S extends Submission<any[], any>,
+>(submission: S, reason: Reason) {
 	return !!(
 		typeof submission.result === "object" &&
 		submission.result !== null &&
@@ -41,24 +31,46 @@ export function isSubmissionFailure<
 
 export function isSubmissionValidationError<
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	S extends Submission<any[], AnyOrSubmissionError<"validation", Errors>>,
-	Errors,
->(submission: S) {
+	S extends Submission<any[], any>,
+>(
+	submission: S,
+): submission is Exclude<S, "result"> &
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	(S extends Submission<any[], infer U>
+		? {
+				result: U extends ValidationError<infer Errors> ? ValidationError<Errors> : never;
+			}
+		: never) {
 	return isSubmissionFailure(submission, "validation");
 }
 
-export function pickSubmissionValidationErrors<
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	S extends Submission<any[], AnyOrSubmissionError<"validation", Errors>>,
-	Errors,
->(submission: S) {
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export function pickSubmissionValidationErrors<S extends Submission<any[], any>>(
+	submission: S,
+):
+	| (Exclude<S, "result"> &
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			(S extends Submission<any[], infer U>
+				? {
+						result: U extends ValidationError<infer Errors> ? ValidationError<Errors> : never;
+					}
+				: never))["result"]["errors"]
+	| null {
 	return isSubmissionValidationError(submission) ? submission.result.errors : null;
 }
 
 export function isSubmissionGenericError<
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	S extends Submission<any[], AnyOrSubmissionError<"other">>,
->(submission: S) {
+	S extends Submission<any[], any>,
+>(
+	submission: S,
+): submission is Exclude<S, "result"> &
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	(S extends Submission<any[], infer U>
+		? {
+				result: U extends GenericError ? GenericError : never;
+			}
+		: never) {
 	return isSubmissionFailure(submission, "other");
 }
 

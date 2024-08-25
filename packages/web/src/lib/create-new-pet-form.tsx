@@ -21,7 +21,7 @@ function CreateNewPetForm(props: {
 			aria-labelledby="new-pet-headline"
 			class="flex flex-col gap-6"
 			action={createPet}
-			validationErrors={pickSubmissionValidationErrors(petSubmission).name}
+			validationErrors={pickSubmissionValidationErrors(petSubmission)}
 			onSubmit={async (event) => {
 				event.preventDefault();
 				const result = await createPetAction(new FormData(event.currentTarget));
