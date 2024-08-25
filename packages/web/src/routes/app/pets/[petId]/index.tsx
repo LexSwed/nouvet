@@ -51,7 +51,7 @@ const PetPage = (props: RouteSectionProps) => {
 														<ButtonLink
 															size="sm"
 															href={`/app/pets/${pet().id}/edit`}
-															variant="outline"
+															variant="tonal"
 															state={{ previous: props.location.pathname }}
 														>
 															<Text>{t("pet-card.edit")}</Text>
