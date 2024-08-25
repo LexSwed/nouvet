@@ -7,39 +7,28 @@ import { createTranslator } from "~/server/i18n";
 
 import { FormErrorMessage } from "./form-error-message";
 import { GenderSwitch, SpeciesSelector } from "./species-selector";
+import { isSubmissionGenericError, pickSubmissionValidationErrors } from "./utils/submission";
 
 function CreateNewPetForm(props: {
 	onSuccess?: (pet: { name: string; id: string }) => void;
 }) {
 	const t = createTranslator("pets");
-	const createPetAction = useAction(createPet);
 	const petSubmission = useSubmission(createPet);
-
-	const hasUnknownError = () =>
-		petSubmission.result &&
-		"failed" in petSubmission.result &&
-		petSubmission.result.failed &&
-		!petSubmission.result.errors;
+	const createPetAction = useAction(createPet);
 
 	return (
 		<Form
 			aria-labelledby="new-pet-headline"
 			class="flex flex-col gap-6"
 			action={createPet}
+			validationErrors={pickSubmissionValidationErrors(petSubmission).name}
 			onSubmit={async (event) => {
-				// progressively enhancing, allowing onSuccess to be executed even after the submission
 				event.preventDefault();
-				const formData = new FormData(event.currentTarget);
-				const result = await createPetAction(formData);
+				const result = await createPetAction(new FormData(event.currentTarget));
 				if ("pet" in result) {
 					props.onSuccess?.(result.pet);
 				}
 			}}
-			validationErrors={
-				petSubmission.result && "errors" in petSubmission.result
-					? petSubmission.result.errors
-					: undefined
-			}
 			aria-errormessage="error-message"
 		>
 			<Text with="headline-2" as="h3" id="new-pet-headline" class="ps-2">
@@ -54,7 +43,7 @@ function CreateNewPetForm(props: {
 			<SpeciesSelector name="species" />
 			<GenderSwitch name="gender" />
 
-			<Show when={hasUnknownError()}>
+			<Show when={isSubmissionGenericError(petSubmission)}>
 				<FormErrorMessage />
 			</Show>
 

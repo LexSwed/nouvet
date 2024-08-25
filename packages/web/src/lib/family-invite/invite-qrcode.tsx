@@ -20,7 +20,7 @@ export const FamilyInviteQRCode = (props: { onNext: () => void }) => {
 	);
 	const invite = () => {
 		const inviteInfo = inviteData();
-		return inviteInfo && "error" in inviteInfo ? null : inviteInfo;
+		return inviteInfo && "failureReason" in inviteInfo ? null : inviteInfo;
 	};
 
 	async function share() {

@@ -5,13 +5,13 @@ import { type ComponentProps, Show } from "solid-js";
 import { updatePetBirthDate } from "~/server/api/pet";
 import { createTranslator } from "~/server/i18n";
 
-import { isSubmissionGenericError, isSubmissionValidationError } from "~/lib/utils/submission";
+import { isSubmissionGenericError, pickSubmissionValidationErrors } from "~/lib/utils/submission";
 import { FormErrorMessage } from "./form-error-message";
 
 interface AddBirthDateFormProps {
 	id: string;
 	pet: { id: string; name: string; dateOfBirth: string | null };
-	onDismiss: () => void;
+	onDismiss?: () => void;
 	placement?: ComponentProps<typeof Drawer>["placement"];
 }
 
@@ -19,7 +19,16 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
 	const t = createTranslator("pets");
 	const birthDateSubmission = useSubmission(updatePetBirthDate);
 	const updateBirthDateAction = useAction(updatePetBirthDate);
-
+	const validationErrors = pickSubmissionValidationErrors(birthDateSubmission);
+	console.log(validationErrors?.dateOfBirth);
+	if (
+		birthDateSubmission.result &&
+		"failureReason" in birthDateSubmission.result &&
+		birthDateSubmission.result.failureReason === "validation" &&
+		birthDateSubmission.result.errors
+	) {
+		console.log(birthDateSubmission.result.errors.dateOfBirth);
+	}
 	return (
 		<Drawer
 			id={props.id}
@@ -41,19 +50,15 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
 			<Form
 				class="flex flex-col gap-6 sm:max-w-[360px]"
 				action={updatePetBirthDate}
-				validationErrors={
-					isSubmissionValidationError(birthDateSubmission)
-						? birthDateSubmission.result.errors
-						: null
-				}
+				validationErrors={validationErrors}
 				onSubmit={async (e) => {
 					e.preventDefault();
 					const result = await updateBirthDateAction(new FormData(e.currentTarget));
 					if ("pet" in result) {
 						toast(() => <Toast>{t("edit.update-success")}</Toast>);
-						props.onDismiss();
+						props.onDismiss?.();
 					} else if (result.failureReason === "other") {
-						toast(() => <Toast>{t("edit.update-failure")}</Toast>);
+						toast(() => <Toast tone="failure">{t("edit.update-failure")}</Toast>);
 					}
 				}}
 			>

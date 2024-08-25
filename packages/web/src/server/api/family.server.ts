@@ -57,15 +57,9 @@ export async function updateFamilyServer(formData: FormData) {
 		});
 		const family = await familyUpdate({ familyOwnerId: user.userId, name });
 
-		return json(
-			{
-				family,
-				errors: null,
-			},
-			{
-				revalidate: [getUserFamily.key],
-			},
-		);
+		return json(family, {
+			revalidate: [getUserFamily.key],
+		});
 	} catch (error) {
 		return jsonFailure<typeof FamilyUpdateSchema>(error);
 	}

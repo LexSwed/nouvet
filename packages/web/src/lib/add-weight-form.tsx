@@ -1,6 +1,6 @@
-import { Button, Drawer, Form, Icon, Text, TextField } from "@nou/ui";
-import { createAsync, useSubmission } from "@solidjs/router";
-import { type ComponentProps, Show, createEffect, createMemo } from "solid-js";
+import { Button, Drawer, Form, Icon, Text, TextField, Toast, toast } from "@nou/ui";
+import { createAsync, useAction, useSubmission } from "@solidjs/router";
+import { type ComponentProps, Show, createMemo } from "solid-js";
 
 import { updatePetWeight } from "~/server/api/pet";
 import { getUser } from "~/server/api/user";
@@ -8,6 +8,7 @@ import type { DatabasePet } from "~/server/db/schema";
 import { createTranslator, getLocale } from "~/server/i18n";
 
 import { FormErrorMessage } from "./form-error-message";
+import { isSubmissionGenericError, pickSubmissionValidationErrors } from "./utils/submission";
 
 const petSpeciesToMetricMeasurement: {
 	metrical: Record<DatabasePet["species"], "kilogram" | "gram">;
@@ -48,16 +49,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
 	const locale = createAsync(() => getLocale());
 	const user = createAsync(() => getUser());
 	const weightSubmission = useSubmission(updatePetWeight);
-
-	createEffect(() => {
-		if (
-			weightSubmission.result &&
-			"pet" in weightSubmission.result &&
-			weightSubmission.result.pet
-		) {
-			props.onDismiss?.();
-		}
-	});
+	const submitWeightAction = useAction(updatePetWeight);
 
 	const localisedUnit = createMemo(() => {
 		let unit = "kilogram";
@@ -75,12 +67,6 @@ const AddWeightForm = (props: AddWeightFormProps) => {
 		);
 	});
 
-	const hasUnknownError = () =>
-		weightSubmission.result &&
-		"failed" in weightSubmission.result &&
-		weightSubmission.result.failed &&
-		!weightSubmission.result.errors;
-
 	return (
 		<Drawer
 			id={props.id}
@@ -90,17 +76,22 @@ const AddWeightForm = (props: AddWeightFormProps) => {
 		>
 			{(open) => (
 				<Show when={open()}>
-					<Show when={hasUnknownError()}>
+					<Show when={isSubmissionGenericError(weightSubmission)}>
 						<FormErrorMessage class="mb-3" />
 					</Show>
 					<Form
 						class="flex flex-col gap-6 sm:max-w-[360px]"
 						action={updatePetWeight}
-						validationErrors={
-							weightSubmission.result && "errors" in weightSubmission.result
-								? weightSubmission.result.errors
-								: undefined
-						}
+						validationErrors={pickSubmissionValidationErrors(weightSubmission)}
+						onSubmit={async (e) => {
+							const res = await submitWeightAction(new FormData(e.currentTarget));
+							if ("pet" in res) {
+								toast(() => <Toast>{t("edit.update-success")}</Toast>);
+								props.onDismiss?.();
+							} else if (res.failureReason === "other") {
+								toast(() => <Toast tone="failure">{t("edit.update-failure")}</Toast>);
+							}
+						}}
 					>
 						<input type="hidden" name="petId" value={props.pet.id} />
 						<div class="flex flex-row gap-4">

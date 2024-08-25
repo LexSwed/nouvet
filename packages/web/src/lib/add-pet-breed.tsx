@@ -1,16 +1,17 @@
-import { Button, Drawer, Form, Icon, Text, TextField } from "@nou/ui";
-import { useSubmission } from "@solidjs/router";
-import { type ComponentProps, Show, createEffect } from "solid-js";
+import { Button, Drawer, Form, Icon, Text, TextField, Toast, toast } from "@nou/ui";
+import { useAction, useSubmission } from "@solidjs/router";
+import { type ComponentProps, Show } from "solid-js";
 
 import { updatePetBreed } from "~/server/api/pet";
 import { createTranslator } from "~/server/i18n";
 
 import { FormErrorMessage } from "./form-error-message";
+import { isSubmissionGenericError, pickSubmissionValidationErrors } from "./utils/submission";
 
 interface AddBreedFormProps {
 	id: string;
 	pet: { id: string; name: string };
-	onDismiss: () => void;
+	onDismiss?: () => void;
 	placement?: ComponentProps<typeof Drawer>["placement"];
 }
 
@@ -18,15 +19,7 @@ const AddBreedForm = (props: AddBreedFormProps) => {
 	const t = createTranslator("pets");
 
 	const breedSubmission = useSubmission(updatePetBreed);
-
-	createEffect(() => {
-		if (breedSubmission.result && "pet" in breedSubmission.result && breedSubmission.result.pet) {
-			props.onDismiss();
-		}
-	});
-
-	const submissionFailed = () =>
-		breedSubmission.result && "failed" in breedSubmission.result && breedSubmission.result.failed;
+	const submitBreedAction = useAction(updatePetBreed);
 
 	return (
 		<Drawer
@@ -37,13 +30,22 @@ const AddBreedForm = (props: AddBreedFormProps) => {
 		>
 			{(open) => (
 				<Show when={open()}>
-					<Show when={submissionFailed()}>
+					<Show when={isSubmissionGenericError(breedSubmission)}>
 						<FormErrorMessage class="mb-3" />
 					</Show>
 					<Form
 						class="flex flex-col gap-6"
 						action={updatePetBreed}
-						validationErrors={breedSubmission.result?.errors}
+						validationErrors={pickSubmissionValidationErrors(breedSubmission)}
+						onSubmit={async (e) => {
+							const res = await submitBreedAction(new FormData(e.currentTarget));
+							if ("pet" in res) {
+								toast(() => <Toast>{t("edit.update-success")}</Toast>);
+								props.onDismiss?.();
+							} else if (res.failureReason === "other") {
+								toast(() => <Toast tone="failure">{t("edit.update-failure")}</Toast>);
+							}
+						}}
 					>
 						<input type="hidden" name="petId" value={props.pet.id} />
 						<div class="flex flex-row gap-4">

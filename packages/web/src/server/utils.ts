@@ -46,7 +46,7 @@ export async function jsonFailure<
 			{
 				failureReason: "validation",
 				errors: await translateErrorTokens(error),
-			} satisfies SubmissionError,
+			} satisfies SubmissionError<"validation">,
 			{
 				status: 422,
 				revalidate: "None",
@@ -55,7 +55,7 @@ export async function jsonFailure<
 		);
 	}
 	console.error(error);
-	return json({ failureReason: "other" } satisfies SubmissionError, {
+	return json({ failureReason: "other" } satisfies SubmissionError<"other">, {
 		status: 500,
 		revalidate: "None",
 		...init,
