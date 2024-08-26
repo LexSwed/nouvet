@@ -21,7 +21,7 @@ import { cacheTranslations, createTranslator } from "~/server/i18n";
 import type { SupportedLocale } from "~/server/i18n/shared";
 
 import { AppHeader } from "~/lib/app-header";
-import { isSubmissionFailure } from "~/lib/utils/submission";
+import { pickSubmissionValidationErrors } from "~/lib/utils/submission";
 
 export const route = {
 	preload() {
@@ -54,11 +54,7 @@ export default function ProfilePage() {
 									<Form
 										class="flex flex-col gap-8"
 										action={updateUserProfile}
-										validationErrors={
-											isSubmissionFailure(profileSubmission, "validation")
-												? profileSubmission.result.errors
-												: null
-										}
+										validationErrors={pickSubmissionValidationErrors(profileSubmission)}
 										onSubmit={async (e) => {
 											e.preventDefault();
 											const formData = new FormData(e.currentTarget);

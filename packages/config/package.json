@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"type": "module",
 	"license": "GNU General Public License v3.0",
+	"types": "./globals.d.ts",
 	"exports": {
 		"./tailwind": "./tailwind.ts",
 		"./tsconfig": "./tsconfig.json",
