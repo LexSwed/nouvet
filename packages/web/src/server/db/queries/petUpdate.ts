@@ -1,5 +1,3 @@
-"use server";
-
 import { and, eq } from "drizzle-orm";
 import * as v from "valibot";
 
@@ -8,7 +6,7 @@ import { useDb } from "~/server/db";
 import { type DatabasePet, type UserID, petTable } from "~/server/db/schema";
 import type { ErrorKeys } from "~/server/utils";
 
-const UpdatePetSchema = v.object({
+export const UpdatePetSchema = v.object({
 	name: v.optional(
 		v.pipe(
 			v.string("createPet.name.required" satisfies ErrorKeys),
@@ -60,7 +58,6 @@ const UpdatePetSchema = v.object({
 });
 
 type UpdatePetInput = v.InferInput<typeof UpdatePetSchema>;
-export type UpdatePetSchema = typeof UpdatePetSchema;
 
 export async function petUpdate(
 	petData: {
@@ -100,5 +97,3 @@ export async function petUpdate(
 
 	return pet;
 }
-
-export const getUpdatePetSchema = () => UpdatePetSchema;

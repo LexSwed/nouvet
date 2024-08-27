@@ -5,7 +5,7 @@ import * as v from "valibot";
 
 import { getRequestUser } from "~/server/auth/request-user";
 import { type CreatePetSchema, petCreate } from "~/server/db/queries/petCreate";
-import { type UpdatePetSchema, getUpdatePetSchema, petUpdate } from "~/server/db/queries/petUpdate";
+import { UpdatePetSchema, petUpdate } from "~/server/db/queries/petUpdate";
 import { userPets } from "~/server/db/queries/userPets";
 import { jsonFailure } from "~/server/utils";
 
@@ -71,11 +71,11 @@ export async function updatePetBirthDateServer(formData: FormData) {
 		);
 		return json({ pet }, { revalidate: [getUserPets.key] });
 	} catch (error) {
-		return jsonFailure<UpdatePetSchema>(error);
+		return jsonFailure<typeof UpdatePetSchema>(error);
 	}
 }
 
-const UpdatePetWeightSchema = v.required(v.pick(getUpdatePetSchema(), ["weight"]));
+const UpdatePetWeightSchema = v.required(v.pick(UpdatePetSchema, ["weight"]));
 export async function updatePetWeightServer(formData: FormData) {
 	try {
 		const petId = formData.get("petId");
@@ -99,7 +99,7 @@ export async function updatePetWeightServer(formData: FormData) {
 	}
 }
 
-const UpdatePetBreedSchema = v.required(v.pick(getUpdatePetSchema(), ["breed"]));
+const UpdatePetBreedSchema = v.required(v.pick(UpdatePetSchema, ["breed"]));
 export async function updatePetBreedServer(formData: FormData) {
 	try {
 		const petId = formData.get("petId");
@@ -144,7 +144,7 @@ export async function updatePetServer(formData: FormData) {
 		);
 		return json({ pet }, { revalidate: [getUserPets.key, getPetForEdit.keyFor(pet.id)] });
 	} catch (error) {
-		return jsonFailure<UpdatePetSchema>(error);
+		return jsonFailure<typeof UpdatePetSchema>(error);
 	}
 }
 
