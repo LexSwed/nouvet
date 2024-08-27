@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { aliasedTable, sql } from "drizzle-orm";
 import { index, integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 import { customAlphabet } from "nanoid";
@@ -196,33 +196,52 @@ export const sessionTable = sqliteTable("user_session", {
 });
 
 export const activitiesTable = sqliteTable("activity", {
-	id: primaryId("id", "a"),
+	id: primaryId("id", "ac"),
+	petId: text("pet_id").references(() => petTable.id),
+	creatorId: text("creator_id").references(() => userTable.id),
 	/** Type of the event selected by the client.
 	 * TODO: create index for faster look-ups
 	 */
 	type: text("type", {
 		mode: "text",
-		// TODO: extract into own const?
-		enum: ["weight-in", "new-pill", "observation", "food-change", "doctor-visit"],
+		enum: ["observation", "medication", "vaccination", "appointment"] as const,
 	}).notNull(),
-	/** Should default to event type default name.
-	 * Stored separately for quick access without loading all the details from the `data` JSON field; */
-	name: text("name").notNull(),
-	petId: integer("pet_id").references(() => petTable.id),
-	creatorId: integer("creator_id").references(() => userTable.id),
-	// TODO: events can be referenced to each other? Many to Many? Or more linear?
-	/** Inner structure is typed in code, based on the EventType.
-	 */
-	dataJson: text("data_json", { mode: "json" }),
-	/**
-	 * TODO: Don't want to update whole JSON when attaching new files, maybe separate field is better? */
-	// attachments: []
-	/**
-	 * UTC with appended Z for Date constructor.
-	 * TODO: This field is used for sorting, any chance for speed up? */
-	date: dateTime("date"),
-	updatedAt: utcDatetime("date", { autoUpdate: true }),
+	note: text("note", { length: 1000 }),
+	// attachments: [],
+	/*	TODO: This field is used for sorting, any chance for speed up? */
+	date: utcDatetime("activity_date"),
 });
+
+export const vaccinationsTable = sqliteTable("vaccination", {
+	id: primaryId("id", "vc"),
+	activityId: text("activity_id").references(() => activitiesTable.id, { onDelete: "cascade" }),
+	name: text("vaccine_name", { length: 200 }).notNull(),
+	administeredDate: dateTime("administered_date").notNull(),
+	nextDueDate: dateTime("next_due_date"),
+	batchNumber: text("batch_number", { length: 50 }),
+});
+
+export const activityRelationships = sqliteTable(
+	"activity_relationships",
+	{
+		parentActivityId: text("parent_activity_id").references(() => activitiesTable.id, {
+			onDelete: "cascade",
+		}),
+		childActivityId: text("child_activity_id").references(() => activitiesTable.id, {
+			onDelete: "cascade",
+		}),
+	},
+	(table) => {
+		return {
+			pk: primaryKey({
+				columns: [table.parentActivityId, table.childActivityId],
+			}),
+		};
+	},
+);
+
+export const parentActivity = aliasedTable(activitiesTable, "parentActivity");
+export const childActivity = aliasedTable(activitiesTable, "childActivity");
 
 /**
  * ISO-8601 date time string stored in UTC.

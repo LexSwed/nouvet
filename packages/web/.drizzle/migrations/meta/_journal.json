@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1720686085912,
-      "tag": "0000_needy_falcon",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1723581955942,
-      "tag": "0001_acoustic_gauntlet",
+      "when": 1724788039398,
+      "tag": "0000_mysterious_spot",
       "breakpoints": true
     }
   ]

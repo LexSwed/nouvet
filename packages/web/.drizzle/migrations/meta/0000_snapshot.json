@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "e8c5a748-2301-4292-b0f9-d0851b10368d",
+  "id": "75e2d359-efea-4f50-9a81-bf28c204d871",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "activity": {
@@ -14,6 +14,20 @@
           "notNull": true,
           "autoincrement": false
         },
+        "pet_id": {
+          "name": "pet_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "creator_id": {
+          "name": "creator_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "type": {
           "name": "type",
           "type": "text",
@@ -21,36 +35,15 @@
           "notNull": true,
           "autoincrement": false
         },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "pet_id": {
-          "name": "pet_id",
-          "type": "integer",
+        "note": {
+          "name": "note",
+          "type": "text(1000)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "creator_id": {
-          "name": "creator_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "data_json": {
-          "name": "data_json",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "date": {
-          "name": "date",
+        "activity_date": {
+          "name": "activity_date",
           "type": "text(50)",
           "primaryKey": false,
           "notNull": true,
@@ -96,6 +89,64 @@
         }
       },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "activity_relationships": {
+      "name": "activity_relationships",
+      "columns": {
+        "parent_activity_id": {
+          "name": "parent_activity_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "child_activity_id": {
+          "name": "child_activity_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "activity_relationships_parent_activity_id_activity_id_fk": {
+          "name": "activity_relationships_parent_activity_id_activity_id_fk",
+          "tableFrom": "activity_relationships",
+          "tableTo": "activity",
+          "columnsFrom": [
+            "parent_activity_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "activity_relationships_child_activity_id_activity_id_fk": {
+          "name": "activity_relationships_child_activity_id_activity_id_fk",
+          "tableFrom": "activity_relationships",
+          "tableTo": "activity",
+          "columnsFrom": [
+            "child_activity_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "activity_relationships_parent_activity_id_child_activity_id_pk": {
+          "columns": [
+            "parent_activity_id",
+            "child_activity_id"
+          ],
+          "name": "activity_relationships_parent_activity_id_child_activity_id_pk"
+        }
+      },
       "uniqueConstraints": {}
     },
     "oauth_account": {
@@ -334,8 +385,8 @@
       "compositePrimaryKeys": {
         "family_user_user_id_family_id_pk": {
           "columns": [
-            "family_id",
-            "user_id"
+            "user_id",
+            "family_id"
           ],
           "name": "family_user_user_id_family_id_pk"
         }
@@ -400,8 +451,8 @@
       "compositePrimaryKeys": {
         "family_wait_list_user_id_family_id_pk": {
           "columns": [
-            "family_id",
-            "user_id"
+            "user_id",
+            "family_id"
           ],
           "name": "family_wait_list_user_id_family_id_pk"
         }
@@ -481,8 +532,8 @@
           "notNull": false,
           "autoincrement": false
         },
-        "identity_number": {
-          "name": "identity_number",
+        "identity_code": {
+          "name": "identity_code",
           "type": "text(120)",
           "primaryKey": false,
           "notNull": false,
@@ -641,6 +692,79 @@
         }
       },
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "vaccination": {
+      "name": "vaccination",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "activity_id": {
+          "name": "activity_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "vaccine_name": {
+          "name": "vaccine_name",
+          "type": "text(200)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "administered_date": {
+          "name": "administered_date",
+          "type": "text(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "next_due_date": {
+          "name": "next_due_date",
+          "type": "text(50)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "batch_number": {
+          "name": "batch_number",
+          "type": "text(50)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "vaccination_id_unique": {
+          "name": "vaccination_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "vaccination_activity_id_activity_id_fk": {
+          "name": "vaccination_activity_id_activity_id_fk",
+          "tableFrom": "vaccination",
+          "tableTo": "activity",
+          "columnsFrom": [
+            "activity_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }
