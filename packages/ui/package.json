@@ -24,7 +24,7 @@
 		"@solid-primitives/rootless": "^1.4.5",
 		"@solidjs/router": "^0.14.3",
 		"class-variance-authority": "^0.7.0",
-		"solid-js": "^1.8.21",
+		"solid-js": "^1.8.22",
 		"tailwind-merge": "^2.5.2"
 	},
 	"devDependencies": {
