@@ -17,6 +17,7 @@ import {
 } from "solid-js";
 import { Card } from "../card";
 
+import { createRoot } from "solid-js";
 import { Icon } from "../_index";
 import { Button } from "../button";
 import { tw } from "../tw";
@@ -193,16 +194,16 @@ function Toaster(props: { label: string }) {
 }
 
 function toast(element: () => JSX.Element, options?: ToastOptions) {
-	const toaster = useToastsController();
-	const child = children(element);
-	const item = toaster.add(child, options);
-	function cleanup() {
-		toaster.remove(item.id);
-	}
-	onCleanup(cleanup);
-	return {
-		cleanup,
-	};
+	return createRoot(() => {
+		const toaster = useToastsController();
+		const child = children(element);
+		const item = toaster.add(child, options);
+		return {
+			cleanup: () => {
+				toaster.remove(item.id);
+			},
+		};
+	});
 }
 
 export { toast, Toast, Toaster };
