@@ -11,6 +11,8 @@ const profileDict = {
 	"setting.measure-system.metric-example": "24kg, 18cm",
 	"setting.locale": "Localidad",
 	"cta.save-profile": "Guardar",
+	"save.success": "Perfil actualizado",
+	"save.failure": "No se pudo guardar el perfil, por favor inténtelo de nuevo",
 } as const satisfies Record<keyof typeof import("../en/profile").default, string>;
 
 export default profileDict;

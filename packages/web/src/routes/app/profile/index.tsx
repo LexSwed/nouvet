@@ -65,13 +65,15 @@ export default function ProfilePage() {
 														<Toast
 															variant="tonal"
 															tone="failure"
-															heading={<Text tone="danger">Something went wrong, try again?</Text>}
+															heading={<Text tone="danger">{t("save.failure")}</Text>}
 														/>
 													),
 													{ duration: Number.POSITIVE_INFINITY },
 												);
 											} else if ("id" in result) {
-												toast(() => <Toast heading={<Text tone="accent">Saved!</Text>} />);
+												toast(() => (
+													<Toast heading={<Text tone="accent">{t("save.success")}</Text>} />
+												));
 											}
 										}}
 									>
@@ -97,13 +99,13 @@ export default function ProfilePage() {
 										>
 											<Picker
 												label={t("setting.locale")}
-												value={user().locale}
 												autocomplete="language"
 												class="[&_[data-part=trigger]_[data-flag]]:block"
 												name="locale"
 											>
 												<Option
 													value={"en" satisfies SupportedLocale}
+													selected={user().locale === "en"}
 													label={
 														<div class="flex w-full flex-row justify-between gap-4">
 															English
@@ -115,6 +117,7 @@ export default function ProfilePage() {
 												/>
 												<Option
 													value={"es" satisfies SupportedLocale}
+													selected={user().locale === "es"}
 													label={
 														<div class="flex w-full flex-row justify-between gap-4">
 															Español
@@ -125,13 +128,13 @@ export default function ProfilePage() {
 													}
 												/>
 											</Picker>
-											<Picker
-												label={t("setting.measure-system.label")}
-												value={user().measurementSystem}
-												name="measurementSystem"
-											>
+											<Picker label={t("setting.measure-system.label")} name="measurementSystem">
 												<Option
 													value={"metrical" satisfies DatabaseUser["measurementSystem"]}
+													selected={
+														user().measurementSystem ===
+														("metrical" satisfies DatabaseUser["measurementSystem"])
+													}
 													label={t("setting.measure-system.metric")}
 												>
 													<Text with="body-xs" tone="light">
@@ -140,6 +143,10 @@ export default function ProfilePage() {
 												</Option>
 												<Option
 													value={"imperial" satisfies DatabaseUser["measurementSystem"]}
+													selected={
+														user().measurementSystem ===
+														("imperial" satisfies DatabaseUser["measurementSystem"])
+													}
 													label={t("setting.measure-system.imperial")}
 												>
 													<Text with="body-xs" tone="light">

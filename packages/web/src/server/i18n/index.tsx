@@ -1,15 +1,18 @@
 import { resolveTemplate, translator } from "@solid-primitives/i18n";
-import { cache, createAsync, json } from "@solidjs/router";
+import { cache, createAsync } from "@solidjs/router";
 import type { JSX, ParentProps } from "solid-js";
 import { getRequestEvent } from "solid-js/web";
 
 import { getDictionary } from "./dict";
 import type { Namespace, NamespaceMap } from "./dict";
 
-export const cacheTranslations = cache(<T extends Namespace>(namespace: T) => {
+export const cacheTranslations = cache(async <T extends Namespace>(namespace: T) => {
 	"use server";
-	// 1 hour cache
-	return json(getDictionary(namespace), { headers: { "Cache-Control": "public, max-age=3600" } });
+	return getDictionary(namespace);
+	// 1 hour browser cache
+	// return json(await getDictionary(namespace), {
+	// 	headers: { "Cache-Control": "public, max-age=3600" },
+	// });
 }, "translations");
 
 /**
