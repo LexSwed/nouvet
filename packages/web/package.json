@@ -42,7 +42,7 @@
 		"solid-motionone": "^1.0.0",
 		"styled-qr-code": "^1.0.0",
 		"temporal-polyfill": "^0.2.5",
-		"valibot": "^0.39.0",
+		"valibot": "^0.40.0",
 		"vinxi": "0.4.2"
 	},
 	"devDependencies": {
