@@ -50,7 +50,7 @@ function AppLoginPage() {
 							size="lg"
 							target="_self"
 							variant="tonal"
-							loading={loading()}
+							pending={loading()}
 							onClick={onClick}
 							style={{ "--btn-bg": "#1877F2" }}
 						>

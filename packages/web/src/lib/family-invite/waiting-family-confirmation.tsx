@@ -41,7 +41,7 @@ export function WaitingFamilyConfirmation(props: {
 						variant="outline"
 						class="flex-1 gap-3"
 						aria-disabled={userWaitListSubmission.pending}
-						loading={
+						pending={
 							userWaitListSubmission.pending &&
 							userWaitListSubmission.input[0].get("action") === "decline"
 						}
@@ -57,7 +57,7 @@ export function WaitingFamilyConfirmation(props: {
 						variant="outline"
 						class="flex-1 gap-3"
 						aria-disabled={userWaitListSubmission.pending}
-						loading={
+						pending={
 							userWaitListSubmission.pending &&
 							userWaitListSubmission.input[0].get("action") === "accept"
 						}

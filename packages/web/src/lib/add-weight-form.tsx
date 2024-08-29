@@ -127,7 +127,7 @@ const AddWeightForm = (props: AddWeightFormProps) => {
 							<Button
 								type="submit"
 								class="px-6"
-								loading={weightSubmission.pending}
+								pending={weightSubmission.pending}
 								popoverTargetAction="hide"
 								popoverTarget={props.id}
 							>

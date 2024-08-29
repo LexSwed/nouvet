@@ -74,7 +74,7 @@ const AddBirthDateForm = (props: AddBirthDateFormProps) => {
 					>
 						{t("animal.drawer.cancel")}
 					</Button>
-					<Button type="submit" class="px-6" loading={birthDateSubmission.pending}>
+					<Button type="submit" class="px-6" pending={birthDateSubmission.pending}>
 						{t("animal.drawer.save")}
 					</Button>
 				</div>

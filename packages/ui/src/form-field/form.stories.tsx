@@ -204,7 +204,7 @@ export const CreatePet = () => {
 						icon={<Icon size="sm" use="alien" />}
 					/>
 				</div>
-				<Button type="submit" loading={loading()} class="ms-auto w-28">
+				<Button type="submit" pending={loading()} class="ms-auto w-28">
 					Submit
 				</Button>
 			</Form>

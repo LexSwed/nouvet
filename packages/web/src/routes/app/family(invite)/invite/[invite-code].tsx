@@ -102,7 +102,7 @@ export default function InviteAcceptPage(props: RouteSectionProps) {
 														{t("accept-invite.cta-cancel")}
 													</ButtonLink>
 													<input type="hidden" value={code} name="invite-code" />
-													<Button type="submit" loading={joinSubmission.pending}>
+													<Button type="submit" pending={joinSubmission.pending}>
 														{t("accept-invite.cta-join")}
 													</Button>
 												</div>

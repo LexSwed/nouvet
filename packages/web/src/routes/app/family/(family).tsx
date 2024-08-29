@@ -207,7 +207,7 @@ function FamilyHeaderMember() {
 										variant="outline"
 										tone="destructive"
 										type="submit"
-										loading={leaveFamilySubmission.pending}
+										pending={leaveFamilySubmission.pending}
 									>
 										{t("leave-family.confirm")}
 									</Button>
@@ -271,7 +271,7 @@ function WaitingApproval() {
 									variant="outline"
 									tone="destructive"
 									type="submit"
-									loading={cancelJoinSubmission.pending}
+									pending={cancelJoinSubmission.pending}
 								>
 									{t("waiting.cancel-join-popup-confirm")}
 								</Button>

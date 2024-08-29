@@ -47,7 +47,7 @@ function CreateNewPetForm(props: {
 				<FormErrorMessage />
 			</Show>
 
-			<Button loading={petSubmission.pending} type="submit">
+			<Button pending={petSubmission.pending} type="submit">
 				{t("cta.create")}
 			</Button>
 		</Form>

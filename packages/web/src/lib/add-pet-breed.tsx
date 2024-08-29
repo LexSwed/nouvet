@@ -70,7 +70,7 @@ const AddBreedForm = (props: AddBreedFormProps) => {
 							<Button
 								type="submit"
 								class="px-6"
-								loading={breedSubmission.pending}
+								pending={breedSubmission.pending}
 								popoverTargetAction="hide"
 								popoverTarget={props.id}
 							>

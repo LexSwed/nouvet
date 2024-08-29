@@ -24,7 +24,7 @@ const DevLogin = () => {
 					class="flex flex-col gap-4"
 				>
 					<TextField name="name" label="Name" />
-					<Button type="submit" loading={login.pending}>
+					<Button type="submit" pending={login.pending}>
 						Login
 					</Button>
 				</Form>

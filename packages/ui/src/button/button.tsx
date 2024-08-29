@@ -25,7 +25,7 @@ export const buttonVariants = cva(
 				ghost: "text-on-surface outline-on-surface",
 				link: "text-primary underline-offset-4",
 			},
-			loading: {
+			pending: {
 				true: "disabled:opacity-90",
 				false: "",
 			},
@@ -140,7 +140,7 @@ type BaseProps<T extends ValidComponent> = Merge<
 const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
 	const [local, props] = splitProps(ownProps as BaseProps<"button">, [
 		"size",
-		"loading",
+		"pending",
 		"variant",
 		"tone",
 		"icon",
@@ -152,12 +152,12 @@ const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
 		<Dynamic
 			{...(props as DynamicProps<T>)}
 			aria-label={local.label}
-			aria-busy={local.loading}
+			aria-busy={local.pending}
 			title={local.title ?? local.label}
 			class={tw(buttonVariants(local), props.class)}
 			onClick={(event: MouseEvent) => {
 				if (
-					local.loading ||
+					local.pending ||
 					props.disabled ||
 					(props["aria-disabled"] && props["aria-disabled"] !== "false")
 				) {
@@ -175,7 +175,7 @@ const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
 					props.onClick[1](props.onClick[0], event);
 				}
 			}}
-			aria-disabled={local.loading || undefined}
+			aria-disabled={local.pending || undefined}
 			style={
 				props.popoverTarget
 					? ({
@@ -186,7 +186,7 @@ const BaseComponent = <T extends ValidComponent>(ownProps: BaseProps<T>) => {
 			}
 		>
 			{props.children}
-			<Show when={local.loading}>
+			<Show when={local.pending}>
 				<div class="absolute inset-0 isolate flex cursor-default items-center justify-center rounded-[inherit] bg-[radial-gradient(circle_at_50%_50%,color-mix(in_lch,var(--btn-bg)_92%,transparent)_30%,transparent)]">
 					<Spinner size={local.size} />
 				</div>

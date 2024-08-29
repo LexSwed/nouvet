@@ -155,7 +155,7 @@ function PetUpdateForm(props: { petId: string }) {
 						max={new Date().toISOString().split("T")[0]}
 					/>
 					<TextField label={t("edit.breed")} name="breed" value={pet().breed ?? ""} />
-					<Button type="submit" loading={updateSubmission.pending}>
+					<Button type="submit" pending={updateSubmission.pending}>
 						{t("edit.save-cta")}
 					</Button>
 				</Form>
@@ -220,7 +220,7 @@ function PetDeleteForm(props: {
 							variant="tonal"
 							type="submit"
 							tone="destructive"
-							loading={deleteSubmission.pending}
+							pending={deleteSubmission.pending}
 						>
 							{t("delete.confirm")}
 						</Button>
