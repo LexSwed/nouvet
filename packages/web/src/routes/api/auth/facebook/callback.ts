@@ -19,13 +19,6 @@ export const GET = async (event: PageEvent) => {
 	const url = new URL(request.url);
 	const state = url.searchParams.get("state");
 	const code = url.searchParams.get("code");
-	let timeZoneId = decodeURI(getCookie(USER_TIMEZONE_COOKIE) ?? "");
-	deleteCookie(USER_TIMEZONE_COOKIE);
-
-	if (!timeZoneId) {
-		timeZoneId = "UTC";
-		console.error("Timezone not found in cookie");
-	}
 
 	// verify state
 	if (!state || !stateCookie || !code || stateCookie !== state) {
@@ -66,6 +59,9 @@ export const GET = async (event: PageEvent) => {
 
 		const measurementSystem =
 			locale.region && ["US", "LR", "MM"].includes(locale.region) ? "imperial" : "metrical";
+
+		const timeZoneId = decodeURI(getCookie(USER_TIMEZONE_COOKIE) ?? "");
+		deleteCookie(USER_TIMEZONE_COOKIE);
 
 		const user = await userCreate({
 			provider: "facebook",

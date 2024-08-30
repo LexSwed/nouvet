@@ -4,7 +4,7 @@ import * as v from "valibot";
 import { format, parseISO } from "date-fns";
 import { useDb } from "~/server/db";
 import { type DatabasePet, type UserID, petTable } from "~/server/db/schema";
-import { type ErrorKeys, getCurrentZonedDateTimeISO } from "~/server/utils";
+import type { ErrorKeys } from "~/server/utils";
 
 export const UpdatePetSchema = v.object({
 	name: v.optional(
@@ -81,7 +81,6 @@ export async function petUpdate(
 			breed: breed === "" ? null : breed,
 			color: color === "" ? null : color,
 			dateOfBirth: dateOfBirth instanceof Date ? format(dateOfBirth, "yyyy-MM-dd") : dateOfBirth,
-			updatedAt: await getCurrentZonedDateTimeISO(),
 		})
 		.where(and(eq(petTable.id, petId), eq(petTable.ownerId, userId)))
 		.returning({

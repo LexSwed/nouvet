@@ -4,7 +4,7 @@ import * as v from "valibot";
 
 import { useDb } from "~/server/db";
 import { type UserID, petTable } from "~/server/db/schema";
-import { type ErrorKeys, getCurrentZonedDateTimeISO } from "~/server/utils";
+import type { ErrorKeys } from "~/server/utils";
 
 const CreatePetSchema = v.object({
 	name: v.config(
@@ -50,8 +50,6 @@ export async function petCreate(
 		.values({
 			...petInfo,
 			ownerId: userId,
-			createdAt: await getCurrentZonedDateTimeISO(),
-			updatedAt: await getCurrentZonedDateTimeISO(),
 		})
 		.returning({
 			id: petTable.id,

@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { index, integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { customAlphabet } from "nanoid";
 
@@ -9,8 +10,7 @@ export const familyTable = sqliteTable(
 		ownerId: text("owner_id")
 			.notNull()
 			.references(() => userTable.id),
-		/** Zoned date time ISO */
-		createdAt: zonedDateTimeISO("created_at"),
+		createdAt: utcDateTime("created_at"),
 	},
 	(table) => ({
 		ownerIdx: index("owner_idx").on(table.ownerId),
@@ -63,7 +63,7 @@ export const familyUserTable = sqliteTable(
 			.notNull()
 			.references(() => userTable.id, { onDelete: "cascade" }),
 		/** Zoned date time ISO */
-		joinedAt: zonedDateTimeISO("joined_at"),
+		joinedAt: utcDateTime("joined_at"),
 	},
 	(table) => {
 		return {
@@ -85,7 +85,7 @@ export const familyWaitListTable = sqliteTable(
 			.notNull()
 			.references(() => userTable.id, { onDelete: "cascade" }),
 		/** Zoned date time ISO */
-		joinedAt: zonedDateTimeISO("joined_at"),
+		joinedAt: utcDateTime("joined_at"),
 	},
 	(table) => {
 		return {
@@ -121,10 +121,8 @@ export const petTable = sqliteTable("pet", {
 	pictureUrl: text("picture_url", { length: 120 }),
 	/** TODO: how this can be used now, without connections to doctors? */
 	identityCode: text("identity_code", { length: 120 }),
-	/** Zoned date time ISO */
-	createdAt: zonedDateTimeISO("created_at"),
-	/** Zoned date time ISO */
-	updatedAt: zonedDateTimeISO("updated_at"),
+	createdAt: utcDateTime("created_at"),
+	updatedAt: utcDateTime("updated_at", { autoUpdate: true }),
 });
 export type DatabasePet = typeof petTable.$inferSelect;
 
@@ -134,7 +132,7 @@ export type DatabasePet = typeof petTable.$inferSelect;
 //   uploaderId: text('uploader_id')
 //     .notNull()
 //     .references(() => userTable.id, { onDelete: 'cascade' }),
-//   uploadDate: zonedDateTimeISO('created_at'),
+//   uploadDate: utcDateTime('created_at'),
 // });
 
 /**
@@ -154,10 +152,7 @@ export const userTable = sqliteTable("user", {
 		mode: "text",
 		enum: ["imperial", "metrical"] as const,
 	}).notNull(),
-	/**
-	 * UTC with appended Z for Date constructor.
-	 */
-	createdAt: zonedDateTimeISO("created_at"),
+	createdAt: utcDateTime("created_at"),
 });
 export type DatabaseUser = typeof userTable.$inferSelect;
 export type UserID = DatabaseUser["id"];
@@ -252,6 +247,22 @@ export const activityRelationships = sqliteTable(
  */
 function zonedDateTimeISO(columnName: Parameters<typeof text>[0]) {
 	return dateTime(columnName).notNull();
+}
+
+/**
+ * ISO-8601 date time string stored in UTC.
+ */
+function utcDateTime(columnName: Parameters<typeof text>[0], { autoUpdate = false } = {}) {
+	const utcNow = sql<string>`(strftime('%FT%TZ', datetime('now')))`;
+	const column = dateTime(columnName)
+		.notNull()
+		// see https://www.sqlite.org/lang_datefunc.html
+		// TODO: verify why datetime('now', 'utc') applies timezone twice. Drizzle bug? sqlite driver?
+		.default(utcNow);
+	if (autoUpdate) {
+		column.$onUpdate(() => utcNow);
+	}
+	return column;
 }
 
 function dateTime(columnName: Parameters<typeof text>[0]) {

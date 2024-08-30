@@ -5,7 +5,6 @@ import * as v from "valibot";
 import { useDb } from "~/server/db";
 import { authAccount, userTable } from "~/server/db/schema";
 import { acceptedLocaleLanguageTag } from "~/server/i18n/shared";
-import { getCurrentZonedDateTimeISO } from "~/server/utils";
 
 const CreateUserSchema = v.object({
 	provider: v.picklist(["facebook"]),
@@ -36,7 +35,6 @@ export const userCreate = async (
 			measurementSystem: userInfo.measurementSystem,
 			locale: userInfo.locale,
 			timeZoneId: userInfo.timeZoneId,
-			createdAt: await getCurrentZonedDateTimeISO(),
 		})
 		.returning({ id: userTable.id })
 		.get();

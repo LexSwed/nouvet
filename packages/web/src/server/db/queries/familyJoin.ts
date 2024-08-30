@@ -11,7 +11,6 @@ import {
 	familyWaitListTable,
 } from "~/server/db/schema";
 import { IncorrectFamilyInvite, UserAlreadyInFamily } from "~/server/errors";
-import { getCurrentZonedDateTimeISO } from "~/server/utils";
 
 export async function joinFamilyByInvitationHash(invitationHash: string, userId: UserID) {
 	return familyJoin(userId, { invitationHash });
@@ -83,18 +82,15 @@ async function familyJoin(
 	if (!family?.familyId) {
 		family = db
 			.insert(familyTable)
-			.values({ ownerId: invite.inviterId, createdAt: await getCurrentZonedDateTimeISO() })
+			.values({ ownerId: invite.inviterId })
 			.returning({ familyId: familyTable.id })
 			.get();
 
 		// add the inviter as a first member of the new family
-		await db
-			.insert(familyUserTable)
-			.values({
-				userId: invite.inviterId,
-				familyId: family.familyId,
-				joinedAt: await getCurrentZonedDateTimeISO(),
-			});
+		await db.insert(familyUserTable).values({
+			userId: invite.inviterId,
+			familyId: family.familyId,
+		});
 	}
 
 	// delete the user from all possible invites to other families
@@ -102,22 +98,16 @@ async function familyJoin(
 
 	// When joining via QR Code (with hash), the user is added to the family directly.
 	if ("invitationHash" in params) {
-		await db
-			.insert(familyUserTable)
-			.values({
-				familyId: family.familyId,
-				userId: userId,
-				joinedAt: await getCurrentZonedDateTimeISO(),
-			});
+		await db.insert(familyUserTable).values({
+			familyId: family.familyId,
+			userId: userId,
+		});
 	} else {
 		// Otherwise they go through the wait list
-		await db
-			.insert(familyWaitListTable)
-			.values({
-				familyId: family.familyId,
-				userId: userId,
-				joinedAt: await getCurrentZonedDateTimeISO(),
-			});
+		await db.insert(familyWaitListTable).values({
+			familyId: family.familyId,
+			userId: userId,
+		});
 	}
 
 	return family;
