@@ -1,13 +1,12 @@
-import { UTCDate } from "@date-fns/utc";
 import { Avatar, Button, ButtonLink, Card, Chip, Icon, Text } from "@nou/ui";
 import { createAsync, useMatch } from "@solidjs/router";
-import { differenceInMinutes } from "date-fns/differenceInMinutes";
 import { Match, Show, Suspense, Switch } from "solid-js";
 
 import { getFamilyMembers } from "~/server/api/family";
 import { getUserFamily } from "~/server/api/user";
 import { createTranslator } from "~/server/i18n";
 
+import { Temporal } from "temporal-polyfill";
 import { FamilyNameForm } from "./family-name-form";
 import { WaitingFamilyConfirmation } from "./waiting-family-confirmation";
 
@@ -21,7 +20,10 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
 		return (
 			members.find((member) => member.role === "waiting") ||
 			members.find((member) => {
-				return differenceInMinutes(new UTCDate(), new UTCDate(member.joinedAt)) < 60;
+				const joinedAt = Temporal.ZonedDateTime.from(member.joinedAt);
+				return (
+					joinedAt.since(Temporal.Now.zonedDateTimeISO(joinedAt.timeZoneId)).total("minutes") < 60
+				);
 			})
 		);
 	});

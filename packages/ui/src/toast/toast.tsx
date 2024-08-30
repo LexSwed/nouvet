@@ -94,6 +94,7 @@ interface ToastOptions {
 	 * @default 3000
 	 */
 	duration?: number;
+	position?: "top" | "bottom";
 }
 
 function Toaster(props: { label: string }) {

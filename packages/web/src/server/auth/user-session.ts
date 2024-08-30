@@ -11,7 +11,6 @@ import {
 import { useLucia } from "~/server/auth/lucia";
 import { SESSION_COOKIE } from "~/server/const";
 import type { DatabaseUser } from "~/server/db/schema";
-
 import { env } from "../env";
 
 /**
@@ -24,9 +23,11 @@ export async function createUserSession(
 	{
 		userId,
 		locale,
+		timeZoneId,
 		measurementSystem,
 	}: {
 		userId: UserSession["userId"];
+		timeZoneId: UserSession["timeZoneId"];
 		locale: UserSession["locale"];
 		measurementSystem: UserSession["measurementSystem"];
 	},
@@ -39,6 +40,7 @@ export async function createUserSession(
 		{
 			userId,
 			locale,
+			timeZoneId,
 			measurementSystem,
 			sessionId: authSession.id,
 		},
@@ -140,7 +142,12 @@ const userCookieSchema = v.object({
 	userId: v.pipe(v.string(), v.trim(), v.nonEmpty()),
 	sessionId: v.string(),
 	locale: v.string(),
-	// timeZone: date(),
+	timeZoneId: v.pipe(
+		v.string(),
+		v.trim(),
+		v.nonEmpty(),
+		v.picklist(Intl.supportedValuesOf("timeZone")),
+	),
 	measurementSystem: v.picklist(["imperial", "metrical"] as const satisfies Array<
 		DatabaseUser["measurementSystem"]
 	>),

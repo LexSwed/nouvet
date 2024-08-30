@@ -28,7 +28,7 @@ const petsDict = {
 	"header.all-pets": "Pets",
 	"pet-card.edit": "Update info",
 	"meta.edit-title": "More about {{petName}}",
-	"edit.headline": "More about <b>{{petName}}</b>",
+	"edit.headline": "Update <b>{{petName}}</b>",
 	"edit.delete-cta": "Delete",
 	"edit.photo-update": "Update",
 	"edit.photo-update-dialog-title": "Update {{petName}}'s picture",

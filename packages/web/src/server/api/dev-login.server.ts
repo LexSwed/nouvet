@@ -25,6 +25,7 @@ async function loginDev(name: string) {
 		await createUserSession(event, {
 			userId: name,
 			locale: "en-GB",
+			timeZoneId: "Europe/London",
 			measurementSystem: "metrical",
 		});
 

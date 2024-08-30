@@ -13,6 +13,7 @@ export const getUserByAuthProviderId = async (
 		.select({
 			id: authAccount.userId,
 			locale: userTable.locale,
+			timeZoneId: userTable.timeZoneId,
 			measurementSystem: userTable.measurementSystem,
 		})
 		.from(authAccount)

@@ -5,6 +5,7 @@ import { and, eq } from "drizzle-orm";
 import { useDb } from "~/server/db";
 import { type UserID, familyTable, familyUserTable, familyWaitListTable } from "~/server/db/schema";
 import { InviteeNotInWaitList, NotAllowedToPerformFamilyAction } from "~/server/errors";
+import { getCurrentZonedDateTimeISO } from "~/server/utils";
 
 export async function acceptUserToFamily(params: {
 	familyOwnerId: UserID;
@@ -38,6 +39,7 @@ export async function acceptUserToFamily(params: {
 	await db.insert(familyUserTable).values({
 		familyId: family.familyId,
 		userId: invitee.inviteeId,
+		joinedAt: await getCurrentZonedDateTimeISO(),
 	});
 
 	await db

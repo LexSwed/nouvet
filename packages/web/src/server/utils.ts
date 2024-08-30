@@ -4,7 +4,9 @@ import { type RouterResponseInit, json } from "@solidjs/router";
 import * as v from "valibot";
 import type ErrorsDict from "~/server/i18n/locales/en/errors";
 
+import { Temporal } from "temporal-polyfill";
 import type { SubmissionError } from "~/lib/utils/submission";
+import { getRequestUser } from "./auth/request-user";
 import { getDictionary } from "./i18n/dict";
 
 type FlatErrorsTranslation<
@@ -60,4 +62,10 @@ export async function jsonFailure<
 		revalidate: "None",
 		...init,
 	});
+}
+
+export async function getCurrentZonedDateTimeISO() {
+	const user = await getRequestUser();
+
+	return Temporal.Now.zonedDateTimeISO(user.timeZoneId).toString();
 }

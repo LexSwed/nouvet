@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "75e2d359-efea-4f50-9a81-bf28c204d871",
+  "id": "63eab13b-61ae-40a9-8589-c63a842533b9",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "activity": {
@@ -44,11 +44,10 @@
         },
         "activity_date": {
           "name": "activity_date",
-          "type": "text(50)",
+          "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%FT%TZ', datetime('now')))"
+          "autoincrement": false
         }
       },
       "indexes": {
@@ -286,11 +285,10 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "text(50)",
+          "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%FT%TZ', datetime('now')))"
+          "autoincrement": false
         }
       },
       "indexes": {
@@ -346,11 +344,10 @@
         },
         "joined_at": {
           "name": "joined_at",
-          "type": "text(50)",
+          "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%FT%TZ', datetime('now')))"
+          "autoincrement": false
         }
       },
       "indexes": {},
@@ -412,11 +409,10 @@
         },
         "joined_at": {
           "name": "joined_at",
-          "type": "text(50)",
+          "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%FT%TZ', datetime('now')))"
+          "autoincrement": false
         }
       },
       "indexes": {},
@@ -513,7 +509,7 @@
         },
         "date_of_birth": {
           "name": "date_of_birth",
-          "type": "text(50)",
+          "type": "text(100)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -541,19 +537,17 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "text(50)",
+          "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%FT%TZ', datetime('now')))"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "text(50)",
+          "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%FT%TZ', datetime('now')))"
+          "autoincrement": false
         }
       },
       "indexes": {
@@ -661,7 +655,14 @@
         },
         "locale": {
           "name": "locale",
-          "type": "text",
+          "type": "text(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "time_zone_id": {
+          "name": "time_zone_id",
+          "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -675,11 +676,10 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "text(50)",
+          "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%FT%TZ', datetime('now')))"
+          "autoincrement": false
         }
       },
       "indexes": {
@@ -721,14 +721,14 @@
         },
         "administered_date": {
           "name": "administered_date",
-          "type": "text(50)",
+          "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "next_due_date": {
           "name": "next_due_date",
-          "type": "text(50)",
+          "type": "text(100)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false

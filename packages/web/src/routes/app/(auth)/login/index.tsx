@@ -1,11 +1,12 @@
 import { ButtonLink, Icon } from "@nou/ui";
 import { Title } from "@solidjs/meta";
-import { type Component, Suspense, createSignal, lazy, onCleanup } from "solid-js";
+import { type Component, Suspense, createSignal, lazy, onCleanup, onMount } from "solid-js";
 
 import { createTranslator } from "~/server/i18n";
 
 import { HeroImage } from "~/lib/hero-image";
 import { LogoLink } from "~/lib/logo-link";
+import { USER_TIMEZONE_COOKIE } from "~/server/const";
 
 let DevLogin: Component = () => null;
 
@@ -26,6 +27,10 @@ function AppLoginPage() {
 			clearTimeout(timeout);
 		});
 	};
+
+	onMount(() => {
+		document.cookie = `${USER_TIMEZONE_COOKIE}=${encodeURIComponent(Intl.DateTimeFormat().resolvedOptions().timeZone)};path=/;max-age=${60 * 10}`;
+	});
 
 	return (
 		<>

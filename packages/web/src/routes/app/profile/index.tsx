@@ -155,7 +155,7 @@ export default function ProfilePage() {
 												</Option>
 											</Picker>
 										</Fieldset>
-										<Button type="submit" loading={profileSubmission.pending}>
+										<Button type="submit" pending={profileSubmission.pending}>
 											{t("cta.save-profile")}
 										</Button>
 									</Form>

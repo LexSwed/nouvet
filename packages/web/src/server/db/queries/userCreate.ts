@@ -5,6 +5,7 @@ import * as v from "valibot";
 import { useDb } from "~/server/db";
 import { authAccount, userTable } from "~/server/db/schema";
 import { acceptedLocaleLanguageTag } from "~/server/i18n/shared";
+import { getCurrentZonedDateTimeISO } from "~/server/utils";
 
 const CreateUserSchema = v.object({
 	provider: v.picklist(["facebook"]),
@@ -15,6 +16,7 @@ const CreateUserSchema = v.object({
 		v.maxLength(200),
 	),
 	locale: v.picklist(acceptedLocaleLanguageTag),
+	timeZoneId: v.pipe(v.string(), v.trim(), v.picklist(Intl.supportedValuesOf("timeZone"))),
 	measurementSystem: v.picklist(["imperial", "metrical"]),
 });
 
@@ -33,6 +35,8 @@ export const userCreate = async (
 			name: userInfo.name,
 			measurementSystem: userInfo.measurementSystem,
 			locale: userInfo.locale,
+			timeZoneId: userInfo.timeZoneId,
+			createdAt: await getCurrentZonedDateTimeISO(),
 		})
 		.returning({ id: userTable.id })
 		.get();

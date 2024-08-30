@@ -1,4 +1,4 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { aliasedTable, and, eq, inArray } from "drizzle-orm";
 import { useDb } from "~/server/db";
 import { PetActionNotAllowed } from "~/server/errors";
 import {
@@ -6,12 +6,13 @@ import {
 	type UserID,
 	activitiesTable,
 	activityRelationships,
-	childActivity,
 	familyUserTable,
 	petTable,
 	userTable,
 	vaccinationsTable,
 } from "../schema";
+
+const childActivity = aliasedTable(activitiesTable, "childActivity");
 
 export async function getPetActivities(petId: PetID, userId: UserID) {
 	const db = useDb();

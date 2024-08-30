@@ -55,7 +55,7 @@ export default function PetEditPage(props: RouteSectionProps) {
 						<div class="flex max-w-[420px] flex-col gap-4">
 							<Card class="flex flex-col gap-8" variant="outlined">
 								<Text
-									with="headline-2"
+									with="headline-3"
 									as="h2"
 									class="font-normal [&_b]:font-semibold [&_b]:text-on-background"
 									tone="light"

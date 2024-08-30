@@ -4,7 +4,7 @@ import { object, parse, string } from "valibot";
 import { deleteCookie, getCookie, sendRedirect } from "vinxi/http";
 
 import { createUserSession } from "~/server/auth/user-session";
-import { RETURN_URL_COOKIE } from "~/server/const";
+import { RETURN_URL_COOKIE, USER_TIMEZONE_COOKIE } from "~/server/const";
 import { getUserByAuthProviderId } from "~/server/db/queries/getUserByAuthProviderId";
 import { userCreate } from "~/server/db/queries/userCreate";
 import { getLocale } from "~/server/i18n/locale";
@@ -19,6 +19,13 @@ export const GET = async (event: PageEvent) => {
 	const url = new URL(request.url);
 	const state = url.searchParams.get("state");
 	const code = url.searchParams.get("code");
+	let timeZoneId = decodeURI(getCookie(USER_TIMEZONE_COOKIE) ?? "");
+	deleteCookie(USER_TIMEZONE_COOKIE);
+
+	if (!timeZoneId) {
+		timeZoneId = "UTC";
+		console.error("Timezone not found in cookie");
+	}
 
 	// verify state
 	if (!state || !stateCookie || !code || stateCookie !== state) {
@@ -48,8 +55,9 @@ export const GET = async (event: PageEvent) => {
 		if (existingUser) {
 			await createUserSession(event.nativeEvent, {
 				userId: existingUser.id,
-				locale: existingUser.locale ?? "en-GB",
-				measurementSystem: existingUser.measurementSystem ?? "metrical",
+				locale: existingUser.locale!,
+				timeZoneId: existingUser.timeZoneId!,
+				measurementSystem: existingUser.measurementSystem!,
 			});
 
 			return sendRedirect(returnUrl || "/app");
@@ -64,24 +72,35 @@ export const GET = async (event: PageEvent) => {
 			accountProviderId: facebookUser.id,
 			name: facebookUser.name,
 			locale: locale.language,
+			timeZoneId: timeZoneId,
 			measurementSystem: measurementSystem,
 		});
 
 		await createUserSession(event.nativeEvent, {
 			userId: user.id,
+			timeZoneId: timeZoneId,
 			locale: locale.language,
 			measurementSystem,
 		});
 
 		return sendRedirect(returnUrl || "/app");
 	} catch (error) {
-		console.log(error);
+		if (error instanceof Response || error instanceof Promise) {
+			return error;
+		}
 		if (error instanceof OAuth2RequestError) {
 			// bad verification code, invalid credentials, etc
 			return new Response(null, {
 				status: 400,
 			});
 		}
+		console.log(
+			"error happened",
+			error instanceof Response,
+			error instanceof Promise,
+			error instanceof Error,
+		);
+		console.error(error);
 		return new Response(null, {
 			status: 500,
 		});

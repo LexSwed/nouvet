@@ -24,7 +24,7 @@ const QRCodeScannerPage = (props: { onSuccess: () => void }) => {
 				});
 			}
 		} catch (error) {
-			console.log("error", error);
+			console.warn("error", error);
 		}
 	};
 
