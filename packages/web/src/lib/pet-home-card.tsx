@@ -68,6 +68,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 	return (
 		<Card
 			class="flex min-w-52 flex-col gap-4 rounded-2xl p-0.5"
+			variant="flat"
 			ref={(el: HTMLElement) => {
 				triggerRef = el;
 			}}

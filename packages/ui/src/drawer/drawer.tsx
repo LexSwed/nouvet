@@ -43,7 +43,7 @@ const Drawer = <T extends ValidComponent = "div">(ownProps: DrawerProps<T>) => {
 
 	return (
 		<Popover
-			class={tw(css.drawer, local.class, "max-w-[640px]")}
+			class={tw(css.drawer, local.class)}
 			{...props}
 			ref={mergeRefs(local.ref, dragHandlers.ref)}
 			style={{

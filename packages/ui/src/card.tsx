@@ -85,7 +85,7 @@ const cardVariants = cva("flex flex-col gap-2 rounded-2xl p-4", {
 	],
 	defaultVariants: {
 		tone: "neutral",
-		variant: "elevated",
+		variant: "flat",
 	},
 });
 

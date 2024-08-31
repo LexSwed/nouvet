@@ -96,23 +96,15 @@ const UserPets = () => {
 						class="overflow-snap -mx-4 -my-2 flex scroll-px-4 flex-row items-stretch gap-4 px-4 py-2"
 						aria-labelledby={headingId}
 					>
-						<For each={pets()}>
-							{(pet) => (
-								<li>
-									<PetHomeCard
-										pet={pet}
-										actualOwner={user()?.id === pet.owner?.id ? undefined : pet.owner}
-									/>
-								</li>
-							)}
-						</For>
-						<li class="self-center">
+						<li>
 							<Button
 								label={t("add-another")}
 								size="base"
 								icon
 								variant="tonal"
+								tone="primary"
 								popoverTarget="create-new-pet-drawer"
+								class="h-full rounded-2xl"
 							>
 								<Icon use="plus" size="sm" />
 							</Button>
@@ -120,7 +112,7 @@ const UserPets = () => {
 								id="create-new-pet-drawer"
 								placement="center"
 								role="dialog"
-								class="md:max-w-[420px]"
+								class="sm:max-w-[420px]"
 							>
 								{(open) => (
 									<Show when={open()}>
@@ -135,6 +127,16 @@ const UserPets = () => {
 								)}
 							</Drawer>
 						</li>
+						<For each={pets()}>
+							{(pet) => (
+								<li>
+									<PetHomeCard
+										pet={pet}
+										actualOwner={user()?.id === pet.owner?.id ? undefined : pet.owner}
+									/>
+								</li>
+							)}
+						</For>
 					</ul>
 				</div>
 			</Match>
