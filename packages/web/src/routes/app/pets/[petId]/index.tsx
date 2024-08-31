@@ -2,8 +2,6 @@ import { Avatar, ButtonLink, Card, Icon, Text } from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import { type RouteDefinition, type RouteSectionProps, createAsync } from "@solidjs/router";
 import { Match, Show, Switch } from "solid-js";
-
-import { AppHeader } from "~/lib/app-header";
 import { PetPicture } from "~/lib/pet-home-card";
 import { getPet } from "~/server/api/pet";
 import { getUserProfile } from "~/server/api/user";
@@ -25,12 +23,6 @@ const PetPage = (props: RouteSectionProps) => {
 	return (
 		<>
 			<Title>{t("meta.title", { petName: pet()?.name ?? "" })}</Title>
-			<AppHeader>
-				<ButtonLink href={"/app/pets"} variant="tonal">
-					<Icon use="chevron-left" class="-ms-2" />
-					<Text with="body-sm">{t("header.all-pets")}</Text>
-				</ButtonLink>
-			</AppHeader>
 			<div class="container">
 				<Show when={pet()}>
 					{(pet) => (
@@ -38,12 +30,12 @@ const PetPage = (props: RouteSectionProps) => {
 							{(profile) => (
 								<div class="flex flex-col gap-8">
 									<Card variant="flat">
-										<div class="flex flex-row gap-4">
-											<div class="flex flex-col gap-4">
+										<div class="flex flex-col gap-4">
+											<div class="flex flex-row items-center gap-4">
+												<PetPicture pet={pet()} />
 												<Text with="headline-2" as="h2">
 													{pet()?.name}
 												</Text>
-												<PetPicture pet={pet()} />
 											</div>
 											<div class="ms-auto mt-auto flex h-10 flex-row items-center justify-between gap-4">
 												<Switch>

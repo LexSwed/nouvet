@@ -9,9 +9,9 @@ import { UpdatePetSchema, petUpdate } from "~/server/db/queries/petUpdate";
 import { userPets } from "~/server/db/queries/userPets";
 import { jsonFailure } from "~/server/utils";
 
-import { userPet, userPetForEdit } from "~/server/db/queries/userPet";
+import { userPet } from "~/server/db/queries/userPet";
 import { petDelete } from "../db/queries/petDelete";
-import { getPetForEdit, getUserPets } from "./pet";
+import { getPet, getUserPets } from "./pet";
 
 export async function getUserPetsServer() {
 	const currentUser = await getRequestUser();
@@ -22,15 +22,6 @@ export async function getUserPetsServer() {
 export async function getPetServer(petId: string) {
 	const currentUser = await getRequestUser();
 	const pet = await userPet(currentUser.userId, petId);
-	if (!pet) {
-		throw redirect("/app/pets", { status: 404 });
-	}
-	return pet;
-}
-
-export async function getPetForEditServer(petId: string) {
-	const currentUser = await getRequestUser();
-	const pet = await userPetForEdit(currentUser.userId, petId);
 	if (!pet) {
 		throw redirect("/app/pets", { status: 404 });
 	}
@@ -142,7 +133,7 @@ export async function updatePetServer(formData: FormData) {
 			petId.toString(),
 			currentUser.userId,
 		);
-		return json({ pet }, { revalidate: [getUserPets.key, getPetForEdit.keyFor(pet.id)] });
+		return json({ pet }, { revalidate: [getUserPets.key, getPet.keyFor(pet.id)] });
 	} catch (error) {
 		return jsonFailure<typeof UpdatePetSchema>(error);
 	}
@@ -159,7 +150,7 @@ export async function deletePetServer(formData: FormData) {
 		return json(
 			{ petId: deletedPetId },
 			{
-				revalidate: [getUserPets.key, getPetForEdit.keyFor(deletedPetId)],
+				revalidate: [getUserPets.key, getPet.keyFor(deletedPetId)],
 				headers: {
 					Location: "/app/pets",
 				},

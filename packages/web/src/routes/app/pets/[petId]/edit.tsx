@@ -1,15 +1,4 @@
-import {
-	Button,
-	ButtonLink,
-	Card,
-	Form,
-	Icon,
-	Popover,
-	Text,
-	TextField,
-	Toast,
-	toast,
-} from "@nou/ui";
+import { Button, Card, Form, Icon, Popover, Text, TextField, Toast, toast } from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import {
 	type RouteDefinition,
@@ -21,34 +10,27 @@ import {
 } from "@solidjs/router";
 import { Show } from "solid-js";
 
-import { AppHeader } from "~/lib/app-header";
 import { PetPicture } from "~/lib/pet-home-card";
 import { GenderSwitch } from "~/lib/species-selector";
 import { isSubmissionValidationError } from "~/lib/utils/submission";
-import { deletePet, getPetForEdit, updatePet } from "~/server/api/pet";
+import { deletePet, getPet, updatePet } from "~/server/api/pet";
 import type { DatabasePet } from "~/server/db/schema";
 import { T, cacheTranslations, createTranslator } from "~/server/i18n";
 
 export const route = {
 	preload({ params }) {
 		void cacheTranslations("pets");
-		void getPetForEdit(params.petId!);
+		void getPet(params.petId!);
 	},
 } satisfies RouteDefinition;
 
 export default function PetEditPage(props: RouteSectionProps) {
 	const t = createTranslator("pets");
-	const pet = createAsync(() => getPetForEdit(props.params.petId!));
+	const pet = createAsync(() => getPet(props.params.petId!));
 
 	return (
 		<>
 			<Title>{t("meta.edit-title", { petName: pet()?.name ?? "" })}</Title>
-			<AppHeader>
-				<ButtonLink href={`/app/pets/${props.params.petId}`} variant="tonal">
-					<Icon use="chevron-left" class="-ms-2" />
-					<Text with="body-sm">{pet()?.name}</Text>
-				</ButtonLink>
-			</AppHeader>
 			<div class="container flex flex-col items-center pb-24">
 				<Show when={pet()}>
 					{(pet) => (
@@ -108,7 +90,7 @@ function PetPictureWithUpload(props: {
 }
 
 function PetUpdateForm(props: { petId: string }) {
-	const pet = createAsync(() => getPetForEdit(props.petId!));
+	const pet = createAsync(() => getPet(props.petId!));
 	const t = createTranslator("pets");
 	const updateSubmission = useSubmission(updatePet);
 	const updateAction = useAction(updatePet);

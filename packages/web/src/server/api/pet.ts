@@ -3,7 +3,6 @@ import { action, cache } from "@solidjs/router";
 import {
 	createPetServer,
 	deletePetServer,
-	getPetForEditServer,
 	getPetServer,
 	getUserPetsServer,
 	updatePetBirthDateServer,
@@ -25,7 +24,5 @@ export const updatePetBreed = action(updatePetBreedServer, "update-pet-breed");
 export const updatePet = action(updatePetServer, "update-pet");
 
 export const getPet = cache(getPetServer, "user-pet");
-
-export const getPetForEdit = cache(getPetForEditServer, "user-pet-edit");
 
 export const deletePet = action(deletePetServer, "delete-pet");
