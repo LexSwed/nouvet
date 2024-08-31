@@ -180,6 +180,16 @@
       }
     }
 
+    :global(body) {
+      transition: transform 0.4s ease;
+      isolation: isolate;
+      will-change: transform;
+      transform: perspective(16rem);
+    }
+    :global(body):has(.drawer:popover-open) {
+      transform: perspective(16rem) translate3d(0, -1rem, -1rem);
+    }
+
     @starting-style {
       .drawer:is(.popover):popover-open {
         transform: translate3d(0, 100%, 0) !important;

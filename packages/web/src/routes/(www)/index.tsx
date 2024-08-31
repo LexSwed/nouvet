@@ -22,6 +22,7 @@ export default function WWW() {
 							size="cta"
 							target="_self"
 							preload={false}
+							variant="accent"
 							class="-me-12 relative mt-16 flex shrink-0 items-center gap-4 self-start text-lg sm:me-0"
 						>
 							{t("cta-start")}

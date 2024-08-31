@@ -18,7 +18,7 @@ export const buttonVariants = cva(
 				cta: "min-h-16 min-w-16 rounded-full px-8 text-lg",
 			},
 			variant: {
-				default: "bg-primary text-on-primary outline-primary",
+				accent: "bg-primary text-on-primary outline-primary",
 				tonal: "outline-on-surface",
 				outline:
 					"border border-outline bg-transparent text-on-surface outline-on-surface outline-offset-0",
@@ -42,24 +42,24 @@ export const buttonVariants = cva(
 			},
 		},
 		defaultVariants: {
-			variant: "default",
+			variant: "tonal",
 			tone: "neutral",
 			size: "base",
 			icon: false,
 		},
 		compoundVariants: [
 			{
-				variant: "default",
+				variant: "accent",
 				class: "intent:filter-darker [--btn-bg:theme(colors.primary)]",
 			},
 			{
-				variant: "default",
+				variant: "accent",
 				tone: "secondary",
 				class:
 					"intent:filter-darker bg-tertiary text-on-tertiary outline-tertiary [--btn-bg:theme(colors.tertiary)]",
 			},
 			{
-				variant: "default",
+				variant: "accent",
 				tone: "destructive",
 				class:
 					"bg-error intent:bg-error/90 text-on-error outline-error [--btn-bg:theme(colors.error)]",

@@ -25,7 +25,6 @@ const petsDict = {
 	"failure.title": "Hubo un error al guardar los datos.",
 	"failure.message": "Esto no es lo esperado, ¡pero la solución seguramente llegará pronto!",
 	"cta.create": "Crear",
-	"header.all-pets": "Todas",
 	"pet-card.edit": "Actualizar",
 	"meta.edit-title": "Más sobre {{petName}}",
 	"edit.headline": "Actualizar <b>{{petName}}</b>",

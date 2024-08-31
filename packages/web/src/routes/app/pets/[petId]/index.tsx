@@ -1,4 +1,4 @@
-import { Avatar, ButtonLink, Card, Icon, Text } from "@nou/ui";
+import { Avatar, Button, ButtonLink, Card, Drawer, Icon, Text } from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import {
 	type RouteDefinition,
@@ -34,9 +34,15 @@ const PetPage = (props: RouteSectionProps) => {
 							{(profile) => (
 								<div class="flex flex-col gap-8">
 									<MainPetCard pet={pet} profile={profile} />
-									<Card variant="tonal" tone="primary">
-										More
-									</Card>
+									<div class="flex flex-row items-center gap-4">
+										<Button variant="tonal" tone="primary" popoverTarget="create-activity">
+											<Icon use="stack-plus" />
+											Create
+										</Button>
+										<Drawer id="create-activity" heading="New activity">
+											Something
+										</Drawer>
+									</div>
 								</div>
 							)}
 						</Show>
