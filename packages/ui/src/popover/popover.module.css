@@ -4,8 +4,8 @@
     display: none;
   }
   :global(body):has(
-      .popover[data-placement="center"]:popover-open,
-      .drawer:popover-open
+      .popover[data-placement="center"]:not([data-state="closed"]),
+      .drawer:not([data-state="closed"])
     ) {
     overflow: hidden;
     pointer-events: none;

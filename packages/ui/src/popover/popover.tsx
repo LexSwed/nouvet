@@ -81,6 +81,7 @@ const Popover = <T extends ValidComponent = "div">(ownProps: PopoverProps<T>) =>
 			component={component()}
 			{...props}
 			data-placement={local.placement}
+			data-state={shownState()}
 			style={{
 				...local.style,
 				...inlineAnchoring(local.id, local.placement),
