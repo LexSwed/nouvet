@@ -12,7 +12,7 @@ import {
 import { mergeDefaultProps, startViewTransition } from "../utils";
 
 interface FormContext {
-	validationErrors?: Record<string, HTMLElement | string | undefined | null> | null;
+	validationErrors?: Record<string, string | undefined | null> | null;
 }
 
 const formContext = createContext<Accessor<FormContext>>(() => ({
@@ -20,6 +20,17 @@ const formContext = createContext<Accessor<FormContext>>(() => ({
 }));
 export const useFormContext = () => useContext(formContext);
 
+/**
+ * Form component that provides validation errors to its children.
+ * `onSubmit` the component will remove any custom validation messages set
+ * via `validationErrors` and check the form for native validation errors.
+ * If any of the fields includes native validation errors, the submission will be prevented,
+ * and those error messages will be set into `nativeErrors`
+ *
+ * When `validationErrors` prop is updated (usually coming from submission), the component will
+ * go over each field in the errors, find the corresponding Input element in the form and set the error message,
+ * making element's validity state being reported as invalid.
+ */
 export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 	let formRef: HTMLFormElement | undefined;
 	const [local, props] = splitProps(mergeDefaultProps(ownProps, { method: "post" }), [
@@ -33,22 +44,11 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 			() => local.validationErrors,
 			(newPropErrors) => {
 				if (!formRef) return;
-				const errors = new Map<string, string | HTMLElement>();
-				const fieldsets = new Map<HTMLFieldSetElement, Set<string>>();
-				main: for (const element of Array.from(formRef.elements)) {
+				const errors = new Map<string, string>();
+				for (const element of Array.from(formRef.elements)) {
 					if (!isValidatableInput(element)) continue;
 					// store fieldsets with their elements
-					if (element instanceof HTMLFieldSetElement) {
-						fieldsets.set(
-							element,
-							Array.from(element.elements).reduce((acc, el) => {
-								if (isValidatableInput(el)) acc.add(el.name);
-								return acc;
-							}, new Set<string>()),
-						);
-						// no need to check fieldsets for validity as they don't hold it
-						continue;
-					}
+
 					// reset custom message if it was set before
 					element.setCustomValidity("");
 
@@ -61,20 +61,7 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 					// ensure the field is reported as invalid
 					element.setCustomValidity(errorString);
 
-					// check if the field belongs to a fieldset and set the error on the fieldset
-					for (const [fieldset, elements] of fieldsets.entries()) {
-						if (elements.has(element.name)) {
-							errors.set(
-								fieldset.name,
-								errors.has(fieldset.name)
-									? [errors.get(fieldset.name), errorString].join("\n")
-									: errorString,
-							);
-							errors.set(element.name, fieldset);
-							continue main;
-						}
-					}
-					// otherwise set the error on the field itself
+					// update errors map with this field's error
 					errors.set(element.name, errorString);
 				}
 				startViewTransition(() => {
@@ -100,40 +87,16 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 					if (!formRef) return;
 					// run through built-in validations, like `required` and `pattern`.
 					// if the field is reported as invalid, take the error message and store it in the context.
-					const errors = new Map<string, string | HTMLElement>();
-					const fieldsets = new Map<HTMLFieldSetElement, Set<string>>();
-					main: for (const element of Array.from(formRef.elements)) {
+					const errors = new Map<string, string>();
+					for (const element of Array.from(formRef.elements)) {
 						if (!isValidatableInput(element)) continue;
-						// store fieldsets with their elements
-						if (element instanceof HTMLFieldSetElement) {
-							if (!element.name) continue;
-							fieldsets.set(
-								element,
-								Array.from(element.elements).reduce((acc, el) => {
-									if (isValidatableInput(el)) acc.add(el.name);
-									return acc;
-								}, new Set<string>()),
-							);
-							// no need to check fieldsets for validity as they don't hold it
-							continue;
-						}
+
 						// reset possible custom message to check native validation
 						element.setCustomValidity("");
 						// if the field is still invalid – set new native validation message
 						if (!element.validity.valid) {
-							for (const [fieldset, elements] of fieldsets.entries()) {
-								if (elements.has(element.name)) {
-									errors.set(
-										fieldset.name,
-										errors.has(fieldset.name)
-											? [errors.get(fieldset.name), element.validationMessage].join("\n")
-											: element.validationMessage,
-									);
-									errors.set(element.name, fieldset);
-									continue main;
-								}
-							}
-							// otherwise set to the element itself
+							errors.set(element.name, element.validationMessage);
+
 							const customValidationError = element.validity.customError
 								? element.validationMessage
 								: null;

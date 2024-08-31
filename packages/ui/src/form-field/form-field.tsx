@@ -13,8 +13,6 @@ import {
 import { Text } from "../text";
 import { tw } from "../tw";
 import { useFormContext } from "./form";
-
-import { isServer } from "solid-js/web";
 import css from "./form-field.module.css";
 
 export const formFieldVariants = cva(css.wrapper, {
@@ -66,12 +64,7 @@ const FormField = (ownProps: FieldInnerProps) => {
 			return local.id || localId;
 		},
 		get describedBy() {
-			let str = `${aria.id}-description`;
-			const m = errorMessage();
-			if (!isServer && m instanceof HTMLFieldSetElement && m.getAttribute("aria-describedby")) {
-				str += ` ${m.getAttribute("aria-describedby")}`;
-			}
-			return str;
+			return `${aria.id}-description`;
 		},
 	};
 
@@ -108,14 +101,14 @@ const FormField = (ownProps: FieldInnerProps) => {
 				</div>
 			</div>
 			<Show when={typeof errorMessage() === "string" || description()}>
-				<span id={aria.describedBy} class={css.description}>
+				<div id={aria.describedBy} class={css.description}>
 					{description()}
 					<Show when={typeof errorMessage() === "string"}>
-						<span aria-live="polite" class={tw(css.error)}>
+						<div aria-live="polite" class={tw(css.error)}>
 							{errorMessage()}
-						</span>
+						</div>
 					</Show>
-				</span>
+				</div>
 			</Show>
 		</div>
 	);
@@ -161,14 +154,14 @@ const Fieldset = (
 			</Text>
 			{local.children}
 			<Show when={aria.describedBy}>
-				<span aria-live="polite" class={tw(css.description)} id={aria.describedBy}>
+				<div aria-live="polite" class={tw(css.description)} id={aria.describedBy}>
 					<Show when={description()}>{description()}</Show>
 					<Show when={errorMessage()}>
-						<span aria-live="polite" class={tw(css.error)}>
+						<div aria-live="polite" class={tw(css.error)}>
 							{errorMessage()}
-						</span>
+						</div>
 					</Show>
-				</span>
+				</div>
 			</Show>
 		</fieldset>
 	);
