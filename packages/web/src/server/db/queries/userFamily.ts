@@ -20,6 +20,7 @@ export async function userProfile(userId: UserID) {
 			avatarUrl: userTable.avatarUrl,
 			measurementSystem: userTable.measurementSystem,
 			locale: userTable.locale,
+			timeZoneId: userTable.timeZoneId,
 		})
 		.from(userTable)
 		.where(eq(userTable.id, userId))

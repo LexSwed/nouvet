@@ -9,7 +9,7 @@ import {
 	updateFamilyServer,
 } from "./family.server";
 
-export const getFamilyMembers = cache(async () => getFamilyMembersServer(), "family-members");
+export const getFamilyMembers = cache(getFamilyMembersServer, "family-members");
 
 export const getFamilyMember = cache(getFamilyMemberServer, "family-member");
 
