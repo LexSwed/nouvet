@@ -205,7 +205,7 @@ export const activitiesTable = sqliteTable("activity", {
 	 */
 	type: text("type", {
 		mode: "text",
-		enum: ["observation", "medication", "vaccination", "appointment"] as const,
+		enum: ["observation", "prescription", "vaccination", "appointment"] as const,
 	}).notNull(),
 	note: text("note", { length: 1000 }),
 	// attachments: [],

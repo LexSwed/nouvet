@@ -55,7 +55,7 @@ const SpeciesSelector = (props: SpeciesSelectorProps) => {
 				{(item) => {
 					return (
 						<RadioCard
-							class="basis-[8.5rem] snap-start will-change-[flex-basis] last-of-type:snap-end has-[input:checked]:basis-[9.25rem]"
+							class="basis-[8.5rem] will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
 							name={props.name}
 							value={item.value}
 							label={item.label}

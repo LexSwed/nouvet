@@ -124,36 +124,39 @@ function ActivityQuickCreator() {
 			</Button>
 			<Drawer id="create-activity" heading="New event">
 				<Form class="flex flex-col gap-3">
-					<Fieldset legend="Type of the event">
+					<Fieldset legend={<span class="sr-only">Type of the event</span>}>
 						<div class="overflow-snap -mx-4 flex scroll-px-4 flex-row gap-2 px-4">
 							<RadioCard
 								name="activity-type"
 								value={"observation" satisfies ActivityType}
 								checked
 								label="Note"
-								class="min-h-16 min-w-0 flex-1 shrink-0 basis-32"
+								icon={<Icon use="note" />}
+								class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
 							/>
 							<RadioCard
 								name="activity-type"
 								value={"appointment" satisfies ActivityType}
 								label="Appointment"
-								class="min-h-16 min-w-0 flex-1 shrink-0 basis-32"
+								icon={<Icon use="first-aid" />}
+								class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
 							/>
 							<RadioCard
 								name="activity-type"
-								value={"medication" satisfies ActivityType}
-								label="Medication"
-								class="min-h-16 min-w-0 flex-1 shrink-0 basis-32"
+								value={"prescription" satisfies ActivityType}
+								label="Prescription"
+								icon={<Icon use="pill" />}
+								class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
 							/>
 							<RadioCard
 								name="activity-type"
 								value={"vaccination" satisfies ActivityType}
 								label="Vaccination"
-								class="min-h-16 min-w-0 flex-1 shrink-0 basis-32"
+								icon={<Icon use="syringe" />}
+								class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
 							/>
 						</div>
 					</Fieldset>
-					{/* Type - start from Note */}
 					<TextField
 						as="textarea"
 						name="note"
@@ -162,6 +165,8 @@ function ActivityQuickCreator() {
 						placeholder="What happened?"
 						variant="ghost"
 						rows="2"
+						maxLength={1000}
+						class="part-[input]:max-h-[5lh]"
 					/>
 					{/* <Fieldset legend="Date" name="event-date" class="flex flex-row gap-2">
 						<TextField name="date" label="Date" autocomplete="off" type="date" class="flex-[3]" />
