@@ -6,6 +6,7 @@ import {
 	createAsync,
 	redirect,
 	useAction,
+	useNavigate,
 	useSubmission,
 } from "@solidjs/router";
 import { Show } from "solid-js";
@@ -94,6 +95,7 @@ function PetUpdateForm(props: { petId: string }) {
 	const t = createTranslator("pets");
 	const updateSubmission = useSubmission(updatePet);
 	const updateAction = useAction(updatePet);
+	const navigate = useNavigate();
 
 	return (
 		<Show when={pet()}>
@@ -110,6 +112,7 @@ function PetUpdateForm(props: { petId: string }) {
 							const res = await updateAction(new FormData(e.currentTarget));
 							if ("pet" in res) {
 								toast(() => <Toast>{t("edit.update-success", { petName: pet().name })}</Toast>);
+								navigate(`/app/pets/${pet().id}`);
 							} else if (res.failureReason === "other") {
 								toast(() => <Toast>{t("edit.update-failure")}</Toast>);
 							}
