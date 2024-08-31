@@ -34,7 +34,7 @@ export const FamilyNameForm = (props: {
 				name="family-name"
 				aria-disabled={updateFamilySubmission.pending}
 				suffix={<Icon use="pencil" size="sm" />}
-				class="w-full [&_textarea]:placeholder:text-on-surface"
+				class="w-full part-[input]:placeholder:text-on-surface"
 				textSize="lg"
 			>
 				{props.familyName ?? ""}

@@ -149,5 +149,8 @@ export default {
 		plugin(function popoverOpen({ addVariant }) {
 			addVariant("popover-open", "&:popover-open");
 		}),
+		plugin(function partStyle({ matchVariant }) {
+			matchVariant("part", (value) => `& [data-part="${value}"]`, {});
+		}),
 	],
 } satisfies Config;
