@@ -20,9 +20,9 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
 		return (
 			members.find((member) => member.role === "waiting") ||
 			members.find((member) => {
-				const joinedAt = Temporal.ZonedDateTime.from(member.joinedAt);
+				const joinedAt = Temporal.Instant.from(member.joinedAt).toZonedDateTimeISO("UTC");
 				return (
-					joinedAt.since(Temporal.Now.zonedDateTimeISO(joinedAt.timeZoneId)).total("minutes") < 60
+					Temporal.Now.zonedDateTimeISO(joinedAt.timeZoneId).since(joinedAt).total("minutes") < 60
 				);
 			})
 		);
