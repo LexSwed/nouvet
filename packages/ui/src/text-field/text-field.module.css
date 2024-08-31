@@ -20,26 +20,35 @@
     } */
     /** set same sizing/position styles as for custom ones */
     &[type="date"]::-webkit-calendar-picker-indicator,
+    &[type="time"]::-webkit-calendar-picker-indicator,
     &[type="search"]::-webkit-search-cancel-button {
       /* position: absolute; */
       width: theme("spacing.7");
       height: theme("spacing.7");
       padding-inline-end: theme("spacing.1");
+      margin: 0;
+      padding: 0;
       &:focus-visible {
         outline: 2px solid currentColor;
       }
     }
 
+    &[type="time"]::-webkit-calendar-picker-indicator {
+      background-image: url("../../../config/icons/source/clock.svg");
+    }
     &[type="date"]::-webkit-calendar-picker-indicator {
       background-image: url("../../../config/icons/source/calendar-dot.svg");
-      margin: 0;
-      padding: 0;
     }
 
     &[type="search"]::-webkit-search-cancel-button {
       appearance: none;
-      margin: 0;
-      padding: 0;
+    }
+
+    &[rows="2"] {
+      min-height: 3lh;
+    }
+    &[rows="3"] {
+      min-height: 4lh;
     }
   }
 }

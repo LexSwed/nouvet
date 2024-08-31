@@ -25,10 +25,14 @@ export const formFieldVariants = cva(css.wrapper, {
 			base: css.sizeBase,
 			lg: css.sizeLg,
 		},
+		inline: {
+			true: css.wrapperInline,
+		},
 	},
 	defaultVariants: {
 		variant: "underline",
 		textSize: "base",
+		inline: false,
 	},
 });
 
@@ -148,7 +152,7 @@ const Fieldset = (
 			<Text
 				as="legend"
 				with="label-sm"
-				class={tw(css.label, "ms-3 mb-2 flex w-full items-center justify-between gap-4")}
+				class={tw(css.label, "ms-3 mb-1 flex w-full items-center justify-between gap-4")}
 			>
 				{local.legend}
 			</Text>

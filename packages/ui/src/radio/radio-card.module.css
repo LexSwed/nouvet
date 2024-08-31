@@ -10,7 +10,7 @@
       color 0.24s ease-out,
       border-radius 0.24s ease-out,
       flex 0.3s ease-out;
-    background-color: theme("colors.surface");
+    background-color: theme("colors.on-background/0.01");
     border: theme("borderWidth.DEFAULT") solid theme("colors.on-surface/0.08");
     &:where(:hover, :focus-within) {
       border-color: theme("colors.primary/0.3");

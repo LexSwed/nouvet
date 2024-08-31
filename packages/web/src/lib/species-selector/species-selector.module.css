@@ -38,7 +38,6 @@
   }
 
   .genderSwitchCard {
-    background-color: theme(colors.on-background/0.01);
     &:where(:hover, :focus-within):has(input[value="male"]) {
       border-color: theme("colors.tertiary/0.4");
       background-color: theme("colors.tertiary/0.05");

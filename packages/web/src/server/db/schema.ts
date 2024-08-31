@@ -213,6 +213,8 @@ export const activitiesTable = sqliteTable("activity", {
 	date: zonedDateTimeISO("activity_date"),
 });
 
+export type ActivityType = (typeof activitiesTable.$inferInsert)["type"];
+
 export const vaccinationsTable = sqliteTable("vaccination", {
 	id: primaryId("id", "vc"),
 	activityId: text("activity_id").references(() => activitiesTable.id, { onDelete: "cascade" }),

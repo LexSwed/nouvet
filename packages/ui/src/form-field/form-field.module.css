@@ -55,12 +55,18 @@
     & > .inputWrapper {
       transition: background-color 0.2s ease-out;
       border-radius: theme("borderRadius.lg");
+      background-color: theme("colors.on-surface/0.03");
     }
     &:where(:hover) > .inputWrapper {
       background-color: theme("colors.on-surface/0.05");
     }
     &:where(:focus-within) > .inputWrapper {
       background-color: theme("colors.on-surface/0.08");
+    }
+  }
+  .wrapperInline {
+    & > .inputWrapper {
+      background-color: transparent;
     }
     &:has(:where(input, textarea):not(:placeholder-shown)) {
       & > .label {
@@ -105,7 +111,7 @@
     cursor: default;
   }
   .label {
-    color: theme("colors.on-surface-variant");
+    color: theme("colors.on-surface");
     &:not(legend) {
       padding-inline: var(--start-padding);
       padding-block-start: theme("spacing.2");
