@@ -115,8 +115,10 @@ export const petTable = sqliteTable("pet", {
 	color: text("color"),
 	/** ISO 8601 string yyyy-MM-dd */
 	dateOfBirth: dateTime("date_of_birth"),
-	/** Weight in user's measurement system */
+	/** Weight in metrical system of measurement */
 	weight: integer("weight", { mode: "number" }),
+	/** Height in metrical system of measurement */
+	height: integer("height", { mode: "number" }),
 	/** A signed URL to animal picture */
 	pictureUrl: text("picture_url", { length: 120 }),
 	/** TODO: how this can be used now, without connections to doctors? */

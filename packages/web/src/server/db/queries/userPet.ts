@@ -31,6 +31,7 @@ export async function userPet(userId: UserID, petId: PetID) {
 			dateOfBirth: petTable.dateOfBirth,
 			color: petTable.color,
 			weight: petTable.weight,
+			height: petTable.height,
 			owner: {
 				id: userTable.id,
 				name: userTable.name,

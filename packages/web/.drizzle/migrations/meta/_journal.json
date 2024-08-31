@@ -8,6 +8,13 @@
       "when": 1725000469338,
       "tag": "0000_unusual_shinobi_shaw",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1725098411593,
+      "tag": "0001_simple_paper_doll",
+      "breakpoints": true
     }
   ]
 }
