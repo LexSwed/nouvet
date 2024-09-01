@@ -11,6 +11,7 @@ import {
 	Text,
 	TextField,
 	Toast,
+	startViewTransition,
 	toast,
 } from "@nou/ui";
 import { Title } from "@solidjs/meta";
@@ -22,7 +23,7 @@ import {
 	useLocation,
 	useSubmission,
 } from "@solidjs/router";
-import { type Accessor, Match, Show, Switch } from "solid-js";
+import { type Accessor, Match, Show, Suspense, Switch, createSignal } from "solid-js";
 import { Temporal } from "temporal-polyfill";
 import { PetPicture } from "~/lib/pet-home-card";
 import { createFormattedDate } from "~/lib/utils/format-date";
@@ -32,6 +33,7 @@ import { getPet } from "~/server/api/pet";
 import { getUser, getUserProfile } from "~/server/api/user";
 import type { ActivityType } from "~/server/db/schema";
 import { cacheTranslations, createTranslator } from "~/server/i18n";
+import type { SupportedLocale } from "~/server/i18n/shared";
 
 export const route = {
 	preload({ params }) {
@@ -124,16 +126,7 @@ function MainPetCard(props: {
 
 function ActivityQuickCreator(props: { petId: string }) {
 	const t = createTranslator("pets");
-	const submission = useSubmission(createPetActivity);
-	const action = useAction(createPetActivity);
 	const user = createAsync(() => getUser());
-
-	const zoned = Temporal.Now.zonedDateTimeISO();
-
-	const currentDateFormatted = createFormattedDate(
-		() => new Date(zoned.epochMilliseconds),
-		() => user()?.locale,
-	);
 
 	return (
 		<>
@@ -142,102 +135,160 @@ function ActivityQuickCreator(props: { petId: string }) {
 				{t("new-activity.create")}
 			</Button>
 			<Drawer id="create-activity" heading={t("new-activity.heading")}>
-				<Form
-					class="flex flex-col gap-3"
-					validationErrors={pickSubmissionValidationErrors(submission)}
-					onSubmit={async (e) => {
-						e.preventDefault();
-						const form = e.currentTarget;
-						const formData = new FormData(form);
-						const type = formData.get("activity-type");
-						const res = await action(formData);
-						if ("activity" in res) {
-							// TODO: different text depending on saved activity type
-							toast(() => <Toast heading={`The ${type} is saved!`} />);
-							form.reset();
-							document.getElementById("create-activity")?.hidePopover();
-						} else if (res.failureReason === "other") {
-							// TODO: different text depending on saved activity type
-							toast(() => <Toast tone="failure" heading={"Failed to save the note"} />);
-						}
-					}}
-				>
-					<input type="hidden" name="petId" value={props.petId} />
-					<Fieldset legend={<span class="sr-only">{t("new-activity.type-label")}</span>}>
-						<div class="overflow-snap -mx-4 flex scroll-px-4 flex-row gap-2 px-4">
-							<RadioCard
-								name="activity-type"
-								value={"observation" satisfies ActivityType}
-								checked
-								label={t("new-activity.type-observation")}
-								icon={<Icon use="note" />}
-								class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
-							/>
-							<RadioCard
-								name="activity-type"
-								value={"appointment" satisfies ActivityType}
-								label={t("new-activity.type-appointment")}
-								icon={<Icon use="first-aid" />}
-								class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
-							/>
-							<RadioCard
-								name="activity-type"
-								value={"prescription" satisfies ActivityType}
-								label={t("new-activity.type-prescription")}
-								icon={<Icon use="pill" />}
-								class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
-							/>
-							<RadioCard
-								name="activity-type"
-								value={"vaccination" satisfies ActivityType}
-								label={t("new-activity.type-vaccination")}
-								icon={<Icon use="syringe" />}
-								class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
-							/>
-						</div>
-					</Fieldset>
+				{(open) => (
+					<Show when={user() && open()}>
+						<Suspense fallback={null}>
+							<NewActivityForm petId={props.petId} locale={user()!.locale} />
+						</Suspense>
+					</Show>
+				)}
+			</Drawer>
+		</>
+	);
+}
+
+function NewActivityForm(props: { petId: string; locale: SupportedLocale }) {
+	const t = createTranslator("pets");
+	const submission = useSubmission(createPetActivity);
+	const action = useAction(createPetActivity);
+
+	const [dateChange, setDateChange] = createSignal(false);
+
+	const zoned = Temporal.Now.zonedDateTimeISO();
+	let currentDateISO = zoned.toString({ calendarName: "never", timeZoneName: "never" });
+	currentDateISO = currentDateISO.substring(0, currentDateISO.indexOf("T") + 6);
+
+	const currentDateFormatted = createFormattedDate(
+		() => new Date(zoned.toInstant().epochMilliseconds),
+		() => props.locale,
+	);
+	let dateInputElement: HTMLElement | null = null;
+
+	return (
+		<Form
+			class="flex flex-col gap-3"
+			validationErrors={pickSubmissionValidationErrors(submission)}
+			onSubmit={async (e) => {
+				e.preventDefault();
+				const form = e.currentTarget;
+				const formData = new FormData(form);
+				const type = formData.get("activity-type");
+				const res = await action(formData);
+				if ("activity" in res) {
+					// TODO: different text depending on saved activity type
+					toast(() => <Toast heading={`The ${type} is saved!`} />);
+					form.reset();
+					document.getElementById("create-activity")?.hidePopover();
+				} else if (res.failureReason === "other") {
+					// TODO: different text depending on saved activity type
+					toast(() => <Toast tone="failure" heading={"Failed to save the note"} />);
+				}
+			}}
+		>
+			<input type="hidden" name="petId" value={props.petId} />
+			<Fieldset legend={<span class="sr-only">{t("new-activity.type-label")}</span>}>
+				<div class="overflow-snap -mx-4 flex scroll-px-4 flex-row gap-2 px-4">
+					<RadioCard
+						name="activity-type"
+						value={"observation" satisfies ActivityType}
+						checked
+						label={t("new-activity.type-observation")}
+						icon={<Icon use="note" />}
+						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
+					/>
+					<RadioCard
+						name="activity-type"
+						value={"appointment" satisfies ActivityType}
+						label={t("new-activity.type-appointment")}
+						icon={<Icon use="first-aid" />}
+						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
+					/>
+					<RadioCard
+						name="activity-type"
+						value={"prescription" satisfies ActivityType}
+						label={t("new-activity.type-prescription")}
+						icon={<Icon use="pill" />}
+						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
+					/>
+					<RadioCard
+						name="activity-type"
+						value={"vaccination" satisfies ActivityType}
+						label={t("new-activity.type-vaccination")}
+						icon={<Icon use="syringe" />}
+						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
+					/>
+				</div>
+			</Fieldset>
+			<Show
+				when={dateChange()}
+				children={
+					<TextField
+						variant="ghost"
+						type="datetime-local"
+						name="date"
+						label="Date"
+						description="Change recorded date and time"
+						class="view-transition-[new-activity-date-input]"
+						value={currentDateISO}
+						ref={(el) => {
+							dateInputElement = el;
+						}}
+					/>
+				}
+				fallback={
 					<div class="flex flex-row justify-start">
-						<Button variant="tonal" size="sm">
+						<Button
+							variant="tonal"
+							label="Change recorded date and time"
+							onClick={(event) => {
+								// @ts-expect-error view-transition-name is not a standard attribute
+								event.currentTarget.style["view-transition-name"] = "new-activity-date-button";
+								startViewTransition(() => {
+									setDateChange(true);
+								}).finished.then(() => {
+									dateInputElement?.focus();
+								});
+							}}
+						>
 							<Text
 								as="time"
-								datetime={zoned.toString()}
+								datetime={currentDateISO}
 								tone="light"
-								class="flex flex-row items-center gap-2 font-light"
+								class="flex flex-row items-center gap-2 font-light text-sm"
 							>
 								{currentDateFormatted()}
 								<Icon use="pencil" size="xs" />
 							</Text>
 						</Button>
 					</div>
-					<TextField variant="ghost" type="datetime-local" name="date" label="Date" />
-					<TextField
-						as="textarea"
-						name="note"
-						label={t("new-activity.note-label")}
-						description={t("new-activity.note-description")}
-						placeholder={t("new-activity.note-placeholder")}
-						variant="ghost"
-						rows="2"
-						maxLength={1000}
-						class="part-[input]:max-h-[5lh]"
-						onKeyDown={(e) => {
-							if (e.key === "Enter" && e.metaKey) {
-								e.preventDefault();
-								e.currentTarget.form?.dispatchEvent(new Event("submit"));
-							}
-						}}
-					/>
-					<div class="mt-4 flex flex-row justify-end gap-4 *:flex-1">
-						<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
-							{t("new-activity.cta-cancel")}
-						</Button>
-						<Button type="submit" variant="tonal" tone="primary" pending={submission.pending}>
-							{t("new-activity.cta-create")}
-						</Button>
-					</div>
-				</Form>
-			</Drawer>
-		</>
+				}
+			/>
+			<TextField
+				as="textarea"
+				name="note"
+				label={t("new-activity.note-label")}
+				description={t("new-activity.note-description")}
+				placeholder={t("new-activity.note-placeholder")}
+				variant="ghost"
+				rows="2"
+				maxLength={1000}
+				class="part-[input]:max-h-[5lh]"
+				onKeyDown={(e) => {
+					if (e.key === "Enter" && e.metaKey) {
+						e.preventDefault();
+						e.currentTarget.form?.dispatchEvent(new Event("submit"));
+					}
+				}}
+			/>
+			<div class="mt-4 flex flex-row justify-end gap-4 *:flex-1">
+				<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
+					{t("new-activity.cta-cancel")}
+				</Button>
+				<Button type="submit" variant="tonal" tone="primary" pending={submission.pending}>
+					{t("new-activity.cta-create")}
+				</Button>
+			</div>
+		</Form>
 	);
 }
 
