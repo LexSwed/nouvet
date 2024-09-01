@@ -136,12 +136,14 @@ function ActivityQuickCreator(props: { petId: string }) {
 					validationErrors={pickSubmissionValidationErrors(submission)}
 					onSubmit={async (e) => {
 						e.preventDefault();
-						const formData = new FormData(e.currentTarget);
+						const form = e.currentTarget;
+						const formData = new FormData(form);
 						const type = formData.get("activity-type");
 						const res = await action(formData);
 						if ("activity" in res) {
 							// TODO: different text depending on saved activity type
 							toast(() => <Toast heading={`The ${type} is saved!`} />);
+							form.reset();
 							document.getElementById("create-activity")?.hidePopover();
 						} else if (res.failureReason === "other") {
 							// TODO: different text depending on saved activity type

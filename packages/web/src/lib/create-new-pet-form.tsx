@@ -26,6 +26,7 @@ function CreateNewPetForm(props: {
 				event.preventDefault();
 				const result = await createPetAction(new FormData(event.currentTarget));
 				if ("pet" in result) {
+					event.currentTarget.reset();
 					props.onSuccess?.(result.pet);
 				}
 			}}
