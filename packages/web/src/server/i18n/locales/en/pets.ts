@@ -45,6 +45,18 @@ const petsDict = {
 	"delete.confirm": "Delete",
 	"delete.success": "{{petName}} was deleted.",
 	"delete.failure": "There was an error deleting {{petName}}.",
+	"new-activity.create": "Create",
+	"new-activity.heading": "New event",
+	"new-activity.type-label": "Type of the event",
+	"new-activity.type-observation": "Note",
+	"new-activity.type-appointment": "Appointment",
+	"new-activity.type-prescription": "Prescription",
+	"new-activity.type-vaccination": "Vaccination",
+	"new-activity.note-label": "Note",
+	"new-activity.note-description": "The observation you want to record",
+	"new-activity.note-placeholder": "What happened?",
+	"new-activity.cta-cancel": "Cancel",
+	"new-activity.cta-create": "Create",
 } as const;
 
 export default petsDict;

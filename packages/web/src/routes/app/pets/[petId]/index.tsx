@@ -128,9 +128,9 @@ function ActivityQuickCreator(props: { petId: string }) {
 		<>
 			<Button variant="tonal" tone="primary" popoverTarget="create-activity">
 				<Icon use="stack-plus" />
-				Create
+				{t("new-activity.create")}
 			</Button>
-			<Drawer id="create-activity" heading="New event">
+			<Drawer id="create-activity" heading={t("new-activity.heading")}>
 				<Form
 					class="flex flex-col gap-3"
 					validationErrors={pickSubmissionValidationErrors(submission)}
@@ -152,34 +152,34 @@ function ActivityQuickCreator(props: { petId: string }) {
 					}}
 				>
 					<input type="hidden" name="petId" value={props.petId} />
-					<Fieldset legend={<span class="sr-only">Type of the event</span>}>
+					<Fieldset legend={<span class="sr-only">{t("new-activity.type-label")}</span>}>
 						<div class="overflow-snap -mx-4 flex scroll-px-4 flex-row gap-2 px-4">
 							<RadioCard
 								name="activity-type"
 								value={"observation" satisfies ActivityType}
 								checked
-								label="Note"
+								label={t("new-activity.type-observation")}
 								icon={<Icon use="note" />}
 								class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
 							/>
 							<RadioCard
 								name="activity-type"
 								value={"appointment" satisfies ActivityType}
-								label="Appointment"
+								label={t("new-activity.type-appointment")}
 								icon={<Icon use="first-aid" />}
 								class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
 							/>
 							<RadioCard
 								name="activity-type"
 								value={"prescription" satisfies ActivityType}
-								label="Prescription"
+								label={t("new-activity.type-prescription")}
 								icon={<Icon use="pill" />}
 								class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
 							/>
 							<RadioCard
 								name="activity-type"
 								value={"vaccination" satisfies ActivityType}
-								label="Vaccination"
+								label={t("new-activity.type-vaccination")}
 								icon={<Icon use="syringe" />}
 								class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
 							/>
@@ -188,9 +188,9 @@ function ActivityQuickCreator(props: { petId: string }) {
 					<TextField
 						as="textarea"
 						name="note"
-						label="Note"
-						description="The observation you want to record"
-						placeholder="What happened?"
+						label={t("new-activity.note-label")}
+						description={t("new-activity.note-description")}
+						placeholder={t("new-activity.note-placeholder")}
 						variant="ghost"
 						rows="2"
 						maxLength={1000}
@@ -208,10 +208,10 @@ function ActivityQuickCreator(props: { petId: string }) {
 					</Fieldset> */}
 					<div class="mt-4 flex flex-row justify-end gap-4 *:flex-1">
 						<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
-							Cancel
+							{t("new-activity.cta-cancel")}
 						</Button>
 						<Button type="submit" variant="tonal" tone="primary" pending={submission.pending}>
-							Create
+							{t("new-activity.cta-create")}
 						</Button>
 					</div>
 				</Form>

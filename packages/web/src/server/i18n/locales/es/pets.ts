@@ -45,6 +45,18 @@ const petsDict = {
 	"delete.confirm": "Eliminar",
 	"delete.success": "{{petName}} fue eliminado.",
 	"delete.failure": "Hubo un error al eliminar a {{petName}}.",
+	"new-activity.create": "Crear",
+	"new-activity.heading": "Nuevo evento",
+	"new-activity.type-label": "Tipo de evento",
+	"new-activity.type-observation": "Nota",
+	"new-activity.type-appointment": "Cita",
+	"new-activity.type-prescription": "Receta",
+	"new-activity.type-vaccination": "Vacunación",
+	"new-activity.note-label": "Nota",
+	"new-activity.note-description": "La observación que deseas registrar",
+	"new-activity.note-placeholder": "¿Qué pasó?",
+	"new-activity.cta-cancel": "Cancelar",
+	"new-activity.cta-create": "Crear",
 } as const satisfies Record<keyof typeof import("../en/pets").default, string>;
 
 export default petsDict;
