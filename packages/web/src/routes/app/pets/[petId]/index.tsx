@@ -10,16 +10,22 @@ import {
 	RadioCard,
 	Text,
 	TextField,
+	Toast,
+	toast,
 } from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import {
 	type RouteDefinition,
 	type RouteSectionProps,
 	createAsync,
+	useAction,
 	useLocation,
+	useSubmission,
 } from "@solidjs/router";
 import { type Accessor, Match, Show, Switch } from "solid-js";
 import { PetPicture } from "~/lib/pet-home-card";
+import { pickSubmissionValidationErrors } from "~/lib/utils/submission";
+import { createPetActivity } from "~/server/api/activity";
 import { getPet } from "~/server/api/pet";
 import { getUserProfile } from "~/server/api/user";
 import type { ActivityType } from "~/server/db/schema";
@@ -48,7 +54,7 @@ const PetPage = (props: RouteSectionProps) => {
 								<div class="flex flex-col gap-8">
 									<MainPetCard pet={pet} profile={profile} />
 									<div class="flex flex-row items-center gap-4">
-										<ActivityQuickCreator />
+										<ActivityQuickCreator petId={pet().id} />
 									</div>
 								</div>
 							)}
@@ -113,8 +119,10 @@ function MainPetCard(props: {
 	);
 }
 
-function ActivityQuickCreator() {
+function ActivityQuickCreator(props: { petId: string }) {
 	const t = createTranslator("pets");
+	const submission = useSubmission(createPetActivity);
+	const action = useAction(createPetActivity);
 
 	return (
 		<>
@@ -123,7 +131,25 @@ function ActivityQuickCreator() {
 				Create
 			</Button>
 			<Drawer id="create-activity" heading="New event">
-				<Form class="flex flex-col gap-3">
+				<Form
+					class="flex flex-col gap-3"
+					validationErrors={pickSubmissionValidationErrors(submission)}
+					onSubmit={async (e) => {
+						e.preventDefault();
+						const formData = new FormData(e.currentTarget);
+						const type = formData.get("activity-type");
+						const res = await action(formData);
+						if ("activity" in res) {
+							// TODO: different text depending on saved activity type
+							toast(() => <Toast heading={`The ${type} is saved!`} />);
+							document.getElementById("create-activity")?.hidePopover();
+						} else if (res.failureReason === "other") {
+							// TODO: different text depending on saved activity type
+							toast(() => <Toast tone="failure" heading={"Failed to save the note"} />);
+						}
+					}}
+				>
+					<input type="hidden" name="petId" value={props.petId} />
 					<Fieldset legend={<span class="sr-only">Type of the event</span>}>
 						<div class="overflow-snap -mx-4 flex scroll-px-4 flex-row gap-2 px-4">
 							<RadioCard
@@ -167,6 +193,12 @@ function ActivityQuickCreator() {
 						rows="2"
 						maxLength={1000}
 						class="part-[input]:max-h-[5lh]"
+						onKeyDown={(e) => {
+							if (e.key === "Enter" && e.metaKey) {
+								e.preventDefault();
+								e.currentTarget.form?.dispatchEvent(new Event("submit"));
+							}
+						}}
 					/>
 					{/* <Fieldset legend="Date" name="event-date" class="flex flex-row gap-2">
 						<TextField name="date" label="Date" autocomplete="off" type="date" class="flex-[3]" />
@@ -176,7 +208,7 @@ function ActivityQuickCreator() {
 						<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
 							Cancel
 						</Button>
-						<Button type="submit" variant="tonal" tone="primary">
+						<Button type="submit" variant="tonal" tone="primary" pending={submission.pending}>
 							Create
 						</Button>
 					</div>

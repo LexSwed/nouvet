@@ -1,24 +1,15 @@
 "use server";
 
-import { and, eq, inArray, or } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 import { useDb } from "~/server/db";
-import { type PetID, type UserID, familyUserTable, petTable, userTable } from "~/server/db/schema";
+import { type PetID, type UserID, petTable, userTable } from "~/server/db/schema";
+import { checkCanPerformPetAction } from "./canPerformPetAction";
 
 export async function userPet(userId: UserID, petId: PetID) {
 	const db = useDb();
-	const familyUsers = db
-		.select({ userId: familyUserTable.userId })
-		.from(familyUserTable)
-		.where(
-			eq(
-				familyUserTable.familyId,
-				db
-					.select({ familyId: familyUserTable.familyId })
-					.from(familyUserTable)
-					.where(eq(familyUserTable.userId, userId)),
-			),
-		);
+
+	checkCanPerformPetAction(petId, userId);
 
 	return db
 		.select({
@@ -39,16 +30,7 @@ export async function userPet(userId: UserID, petId: PetID) {
 			},
 		})
 		.from(petTable)
-		.where(
-			and(
-				eq(petTable.id, petId),
-				or(
-					inArray(petTable.ownerId, familyUsers),
-					// when there's no family
-					eq(petTable.ownerId, userId),
-				),
-			),
-		)
+		.where(eq(petTable.id, petId))
 		.leftJoin(userTable, eq(userTable.id, petTable.ownerId))
 		.get();
 }

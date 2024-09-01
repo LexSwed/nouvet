@@ -1,43 +1,21 @@
-import { aliasedTable, and, eq, inArray } from "drizzle-orm";
+import { aliasedTable, eq } from "drizzle-orm";
 import { useDb } from "~/server/db";
-import { PetActionNotAllowed } from "~/server/errors";
 import {
 	type PetID,
 	type UserID,
 	activitiesTable,
 	activityRelationships,
-	familyUserTable,
-	petTable,
 	userTable,
 	vaccinationsTable,
 } from "../schema";
+import { checkCanPerformPetAction } from "./canPerformPetAction";
 
 const childActivity = aliasedTable(activitiesTable, "childActivity");
 
 export async function getPetActivities(petId: PetID, userId: UserID) {
+	checkCanPerformPetAction(petId, userId);
+
 	const db = useDb();
-	const familyUsers = db
-		.select({ userId: familyUserTable.userId })
-		.from(familyUserTable)
-		.where(
-			eq(
-				familyUserTable.familyId,
-				db
-					.select({ familyId: familyUserTable.familyId })
-					.from(familyUserTable)
-					.where(eq(familyUserTable.userId, userId)),
-			),
-		);
-
-	const isPetInFamily = db
-		.select({ id: petTable.id })
-		.from(petTable)
-		.where(and(eq(petTable.id, petId), inArray(petTable.ownerId, familyUsers)))
-		.get();
-
-	if (!isPetInFamily) {
-		throw new PetActionNotAllowed();
-	}
 
 	const petActivities = await db
 		.select({
@@ -62,7 +40,6 @@ export async function getPetActivities(petId: PetID, userId: UserID) {
 		.leftJoin(childActivity, eq(childActivity.id, activityRelationships.childActivityId))
 		.leftJoin(vaccinationsTable, eq(vaccinationsTable.activityId, activitiesTable.id))
 		.leftJoin(userTable, eq(userTable.id, activitiesTable.creatorId))
-		.leftJoin(petTable, eq(petTable.id, activitiesTable.petId))
 		.orderBy(
 			activitiesTable.date,
 			childActivity.date,
