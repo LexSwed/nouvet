@@ -2,6 +2,7 @@ import { createAsync } from "@solidjs/router";
 import { type Accessor, createMemo } from "solid-js";
 
 import { getUser } from "~/server/api/user";
+import type { SupportedLocale } from "~/server/i18n/shared";
 
 /**
  * Formats date using user's locale.
@@ -9,6 +10,7 @@ import { getUser } from "~/server/api/user";
  */
 export function createFormattedDate(
 	date: Accessor<Date | undefined>,
+	locale: Accessor<SupportedLocale | undefined>,
 	options: Intl.DateTimeFormatOptions = {
 		month: "long",
 		day: "numeric",
@@ -16,10 +18,9 @@ export function createFormattedDate(
 		minute: "numeric",
 	},
 ) {
-	const user = createAsync(() => getUser());
 	const formatted = createMemo(() => {
-		if (user() && date()) {
-			const formatter = new Intl.DateTimeFormat(user()?.locale, options);
+		if (date() && locale()) {
+			const formatter = new Intl.DateTimeFormat(locale(), options);
 			return formatter.format(date());
 		}
 		return undefined;

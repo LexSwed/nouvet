@@ -12,6 +12,7 @@ import { useLucia } from "~/server/auth/lucia";
 import { SESSION_COOKIE } from "~/server/const";
 import type { DatabaseUser } from "~/server/db/schema";
 import { env } from "../env";
+import { acceptedLocaleLanguageTag } from "../i18n/shared";
 
 /**
  * Creates new auth session and stores it in cookie with other user basic user info.
@@ -141,7 +142,7 @@ export async function useUserSession() {
 const userCookieSchema = v.object({
 	userId: v.pipe(v.string(), v.trim(), v.nonEmpty()),
 	sessionId: v.string(),
-	locale: v.string(),
+	locale: v.picklist(acceptedLocaleLanguageTag),
 	timeZoneId: v.pipe(
 		v.string(),
 		v.trim(),

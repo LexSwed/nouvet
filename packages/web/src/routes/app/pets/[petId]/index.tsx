@@ -23,11 +23,13 @@ import {
 	useSubmission,
 } from "@solidjs/router";
 import { type Accessor, Match, Show, Switch } from "solid-js";
+import { Temporal } from "temporal-polyfill";
 import { PetPicture } from "~/lib/pet-home-card";
+import { createFormattedDate } from "~/lib/utils/format-date";
 import { pickSubmissionValidationErrors } from "~/lib/utils/submission";
 import { createPetActivity } from "~/server/api/activity";
 import { getPet } from "~/server/api/pet";
-import { getUserProfile } from "~/server/api/user";
+import { getUser, getUserProfile } from "~/server/api/user";
 import type { ActivityType } from "~/server/db/schema";
 import { cacheTranslations, createTranslator } from "~/server/i18n";
 
@@ -36,6 +38,7 @@ export const route = {
 		void cacheTranslations("pets");
 		void getPet(params.petId!);
 		void getUserProfile();
+		void getUser();
 	},
 } satisfies RouteDefinition;
 
@@ -123,6 +126,14 @@ function ActivityQuickCreator(props: { petId: string }) {
 	const t = createTranslator("pets");
 	const submission = useSubmission(createPetActivity);
 	const action = useAction(createPetActivity);
+	const user = createAsync(() => getUser());
+
+	const zoned = Temporal.Now.zonedDateTimeISO();
+
+	const currentDateFormatted = createFormattedDate(
+		() => new Date(zoned.epochMilliseconds),
+		() => user()?.locale,
+	);
 
 	return (
 		<>
@@ -185,6 +196,19 @@ function ActivityQuickCreator(props: { petId: string }) {
 							/>
 						</div>
 					</Fieldset>
+					<div class="flex flex-row justify-start">
+						<Button variant="tonal" size="sm">
+							<Text
+								as="time"
+								datetime={zoned.toString()}
+								tone="light"
+								class="flex flex-row items-center gap-2 font-light"
+							>
+								{currentDateFormatted()}
+								<Icon use="pencil" size="xs" />
+							</Text>
+						</Button>
+					</div>
 					<TextField
 						as="textarea"
 						name="note"
@@ -202,10 +226,6 @@ function ActivityQuickCreator(props: { petId: string }) {
 							}
 						}}
 					/>
-					{/* <Fieldset legend="Date" name="event-date" class="flex flex-row gap-2">
-						<TextField name="date" label="Date" autocomplete="off" type="date" class="flex-[3]" />
-						<TextField name="time" label="Time" autocomplete="off" type="time" class="flex-[2]" />
-					</Fieldset> */}
 					<div class="mt-4 flex flex-row justify-end gap-4 *:flex-1">
 						<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
 							{t("new-activity.cta-cancel")}
