@@ -209,6 +209,7 @@ function ActivityQuickCreator(props: { petId: string }) {
 							</Text>
 						</Button>
 					</div>
+					<TextField variant="ghost" type="datetime-local" name="date" label="Date" />
 					<TextField
 						as="textarea"
 						name="note"

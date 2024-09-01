@@ -24,7 +24,9 @@ export interface NamespaceMap {
 }
 export type Namespace = keyof NamespaceMap;
 
-async function fetchDictionary<T extends Namespace>(locale: SupportedLocale, namespace: T) {
+type LocaleLanguage = SupportedLocale extends `${infer Language}-${string}` ? Language : never;
+
+async function fetchDictionary<T extends Namespace>(locale: LocaleLanguage, namespace: T) {
 	const localeFiles = import.meta.glob("./locales/*/*.ts", {
 		import: "default",
 	});
@@ -37,5 +39,5 @@ async function fetchDictionary<T extends Namespace>(locale: SupportedLocale, nam
 export const getDictionary = async <T extends Namespace>(namespace: T) => {
 	const event = getRequestEvent();
 	const locale = event!.locals.locale;
-	return await fetchDictionary(locale.language as SupportedLocale, namespace);
+	return await fetchDictionary(locale.language as LocaleLanguage, namespace);
 };

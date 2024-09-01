@@ -104,8 +104,8 @@ export default function ProfilePage() {
 												name="locale"
 											>
 												<Option
-													value={"en" satisfies SupportedLocale}
-													selected={user().locale === "en"}
+													value={"en-GB" satisfies SupportedLocale}
+													selected={user().locale.startsWith("en")}
 													label={
 														<div class="flex w-full flex-row justify-between gap-4">
 															English
@@ -116,8 +116,8 @@ export default function ProfilePage() {
 													}
 												/>
 												<Option
-													value={"es" satisfies SupportedLocale}
-													selected={user().locale === "es"}
+													value={"es-ES" satisfies SupportedLocale}
+													selected={user().locale.startsWith("es")}
 													label={
 														<div class="flex w-full flex-row justify-between gap-4">
 															Español

@@ -35,7 +35,7 @@ async function cookie(): Promise<Intl.Locale | null> {
  * Verifies it's a correct language. Matches only to one of the supported locales.
  */
 export function header(): Intl.Locale | null {
-	/** @example en-GB,en;q=0.9,en-US;q=0.8,es;q=0.7. */
+	/** @example en-GB,en;q=0.9,en-US;q=0.8,es;q=0.7.	*/
 	const rawHeader = getHeader("Accept-Language");
 	if (!rawHeader) return null;
 	const maybeMatching = rawHeader
@@ -43,7 +43,7 @@ export function header(): Intl.Locale | null {
 		.reduce(
 			(res, lang) => {
 				/**
-				 * Split with priority en-GB;q=0.9 -> en-GB, 0.9.
+				 * Split with priority en-GB,en;q=0.9 -> [[en-GB,1], [en, 0.9]].
 				 * First language might not have q, getting 1.0 assigned.
 				 */
 				const [code, priority = 1] = lang.split(";q=");
@@ -59,18 +59,14 @@ export function header(): Intl.Locale | null {
 				}
 				return res;
 			},
-			[] as unknown as Array<readonly [Intl.Locale, number]>,
+			[] as Array<readonly [Intl.Locale, number]>,
 		)
 		.toSorted((a, b) => b[1] - a[1])
-		.find(([locale]) => {
-			try {
-				return acceptedLocaleLanguageTag.includes(
-					locale.language as (typeof acceptedLocaleLanguageTag)[number],
-				);
-			} catch {
-				return false;
-			}
-		});
+		.find(([locale]) =>
+			acceptedLocaleLanguageTag.includes(
+				locale.baseName as (typeof acceptedLocaleLanguageTag)[number],
+			),
+		);
 
 	if (maybeMatching) {
 		return maybeMatching[0];

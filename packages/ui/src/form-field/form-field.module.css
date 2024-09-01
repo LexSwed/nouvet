@@ -52,7 +52,9 @@
     }
   }
   .wrapperGhost {
+    --border-color: transparent;
     & > .inputWrapper {
+      border: 1px solid var(--border-color);
       transition: background-color 0.2s ease-out;
       border-radius: theme("borderRadius.lg");
       background-color: theme("colors.on-surface/0.03");
