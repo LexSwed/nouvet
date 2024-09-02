@@ -29,7 +29,7 @@ function AppLoginPage() {
 	};
 
 	onMount(() => {
-		document.cookie = `${USER_TIMEZONE_COOKIE}=${encodeURIComponent(Intl.DateTimeFormat().resolvedOptions().timeZone)};path=/;max-age=${60 * 10}`;
+		document.cookie = `${USER_TIMEZONE_COOKIE}=${encodeURIComponent(Intl.DateTimeFormat().resolvedOptions().timeZone)};path=/;max-age=${60 * 60}`;
 	});
 
 	return (

@@ -64,8 +64,6 @@ export async function jsonFailure<
 	});
 }
 
-export async function getCurrentZonedDateTimeISO(timeZoneId: string | null) {
-	return Temporal.Now.zonedDateTimeISO(
-		timeZoneId ?? (await getRequestUser()).timeZoneId,
-	).toString();
+export async function getCurrentZonedDateTime(timeZoneId: string | null) {
+	return Temporal.Now.zonedDateTimeISO(timeZoneId ?? (await getRequestUser()).timeZoneId);
 }

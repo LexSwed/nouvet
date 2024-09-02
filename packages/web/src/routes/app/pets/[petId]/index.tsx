@@ -155,8 +155,7 @@ function NewActivityForm(props: { petId: string; locale: SupportedLocale }) {
 	const [dateChange, setDateChange] = createSignal(false);
 
 	const zoned = Temporal.Now.zonedDateTimeISO();
-	let currentDateISO = zoned.toString({ calendarName: "never", timeZoneName: "never" });
-	currentDateISO = currentDateISO.substring(0, currentDateISO.indexOf("T") + 6);
+	const currentDateISO = zoned.toString().slice(0, zoned.toString().indexOf("T") + 6);
 
 	const currentDateFormatted = createFormattedDate(
 		() => new Date(zoned.toInstant().epochMilliseconds),
@@ -172,7 +171,7 @@ function NewActivityForm(props: { petId: string; locale: SupportedLocale }) {
 				e.preventDefault();
 				const form = e.currentTarget;
 				const formData = new FormData(form);
-				const type = formData.get("activity-type");
+				const type = formData.get("activityType");
 				const res = await action(formData);
 				if ("activity" in res) {
 					// TODO: different text depending on saved activity type
@@ -189,7 +188,7 @@ function NewActivityForm(props: { petId: string; locale: SupportedLocale }) {
 			<Fieldset legend={<span class="sr-only">{t("new-activity.type-label")}</span>}>
 				<div class="overflow-snap -mx-4 flex scroll-px-4 flex-row gap-2 px-4">
 					<RadioCard
-						name="activity-type"
+						name="activityType"
 						value={"observation" satisfies ActivityType}
 						checked
 						label={t("new-activity.type-observation")}
@@ -197,21 +196,21 @@ function NewActivityForm(props: { petId: string; locale: SupportedLocale }) {
 						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
 					/>
 					<RadioCard
-						name="activity-type"
+						name="activityType"
 						value={"appointment" satisfies ActivityType}
 						label={t("new-activity.type-appointment")}
 						icon={<Icon use="first-aid" />}
 						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
 					/>
 					<RadioCard
-						name="activity-type"
+						name="activityType"
 						value={"prescription" satisfies ActivityType}
 						label={t("new-activity.type-prescription")}
 						icon={<Icon use="pill" />}
 						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
 					/>
 					<RadioCard
-						name="activity-type"
+						name="activityType"
 						value={"vaccination" satisfies ActivityType}
 						label={t("new-activity.type-vaccination")}
 						icon={<Icon use="syringe" />}
@@ -225,7 +224,7 @@ function NewActivityForm(props: { petId: string; locale: SupportedLocale }) {
 					<TextField
 						variant="ghost"
 						type="datetime-local"
-						name="date"
+						name="recordedDate"
 						label="Date"
 						description="Change recorded date and time"
 						class="view-transition-[new-activity-date-input]"
@@ -263,6 +262,7 @@ function NewActivityForm(props: { petId: string; locale: SupportedLocale }) {
 					</div>
 				}
 			/>
+			<input type="hidden" name="currentTimeZone" value={zoned.timeZoneId} />
 			<TextField
 				as="textarea"
 				name="note"

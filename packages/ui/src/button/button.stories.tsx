@@ -10,7 +10,7 @@ const meta = {
 	component: Button,
 	argTypes: {
 		variant: {
-			options: ["default", "tonal", "outline", "ghost", "link", null] as const satisfies Array<
+			options: ["accent", "tonal", "outline", "ghost", "link", null] as const satisfies Array<
 				ButtonProps["variant"]
 			>,
 			control: { type: "select" },

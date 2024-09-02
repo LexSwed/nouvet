@@ -4,12 +4,12 @@ import { useDb } from "~/server/db";
 import { type ActivityType, type PetID, type UserID, activitiesTable } from "../schema";
 import { checkCanPerformPetAction } from "./canPerformPetAction";
 
-const ActivityCreateSchema = v.variant("type", [
+const ActivityCreateSchema = v.variant("activityType", [
 	v.object({
-		type: v.literal("observation" satisfies ActivityType),
+		activityType: v.literal("observation" satisfies ActivityType),
 		note: v.nullable(v.pipe(v.string(), v.trim(), v.maxLength(1000))),
 		// TODO: ZonedDateTime validation
-		date: v.nullable(v.string()),
+		recordedDate: v.nullable(v.string()),
 	}),
 ]);
 
@@ -35,7 +35,7 @@ export async function activityCreate(
 			petId,
 			creatorId: userId,
 			note: activityInfo.note,
-			type: activityInfo.type,
+			type: activityInfo.activityType,
 		})
 		.returning({
 			id: activitiesTable.id,
