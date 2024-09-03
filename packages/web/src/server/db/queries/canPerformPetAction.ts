@@ -1,7 +1,8 @@
 import { and, eq, inArray, or } from "drizzle-orm";
 import { useDb } from "~/server/db";
-import { type PetID, type UserID, familyUserTable, petTable } from "~/server/db/schema";
+import { familyUserTable, petTable } from "~/server/db/schema";
 import { PetActionNotAllowed } from "~/server/errors";
+import type { PetID, UserID } from "~/server/types";
 
 export function checkCanPerformPetAction(petId: PetID, userId: UserID) {
 	const db = useDb();

@@ -1,23 +1,29 @@
-import { aliasedTable, eq } from "drizzle-orm";
+"use server";
+
+import { desc, eq, gt } from "drizzle-orm";
 import { useDb } from "~/server/db";
 import {
-	type PetID,
-	type UserID,
+	type DatabaseActivity,
 	activitiesTable,
 	activityRelationships,
 	userTable,
 	vaccinationsTable,
-} from "../schema";
+} from "~/server/db/schema";
+import type { Branded, PetID, UserID } from "~/server/types";
 import { checkCanPerformPetAction } from "./canPerformPetAction";
 
-const childActivity = aliasedTable(activitiesTable, "childActivity");
+// const childActivity = aliasedTable(activitiesTable, "childActivity");
 
-export async function getPetActivities(petId: PetID, userId: UserID) {
-	checkCanPerformPetAction(petId, userId);
-
+export async function petActivities(
+	cursor: PetActivitiesCursor | null,
+	petId: PetID,
+	userId: UserID,
+) {
 	const db = useDb();
 
-	const petActivities = await db
+	checkCanPerformPetAction(petId, userId);
+
+	let petActivities = db
 		.select({
 			id: activitiesTable.id,
 			note: activitiesTable.note,
@@ -33,20 +39,49 @@ export async function getPetActivities(petId: PetID, userId: UserID) {
 				nextDueDate: vaccinationsTable.nextDueDate,
 				batchNumber: vaccinationsTable.batchNumber,
 			},
+			// child: {
+			// 	id: activityRelationships.childActivityId,
+			// },
 		})
 		.from(activitiesTable)
 		.where(eq(activitiesTable.petId, petId))
-		.leftJoin(activityRelationships, eq(activitiesTable.id, activityRelationships.parentActivityId))
-		.leftJoin(childActivity, eq(childActivity.id, activityRelationships.childActivityId))
+		.leftJoin(activityRelationships, eq(activityRelationships.parentActivityId, activitiesTable.id))
+		// .leftJoin(childActivity, eq(childActivity.id, activityRelationships.childActivityId))
 		.leftJoin(vaccinationsTable, eq(vaccinationsTable.activityId, activitiesTable.id))
 		.leftJoin(userTable, eq(userTable.id, activitiesTable.creatorId))
 		.orderBy(
-			activitiesTable.date,
-			childActivity.date,
-			vaccinationsTable.nextDueDate,
-			vaccinationsTable.administeredDate,
+			desc(activitiesTable.date),
+			desc(vaccinationsTable.nextDueDate),
+			desc(vaccinationsTable.administeredDate),
 		)
-		.all();
+		.$dynamic();
 
-	return petActivities;
+	if (cursor) {
+		const { lastDate } = decodeCursor(cursor);
+		petActivities = petActivities.where(gt(activitiesTable.date, lastDate));
+	}
+
+	const activities = petActivities
+		.limit(50)
+		.all()
+		.map((activity) => {
+			(activity as typeof activity & { cursor: PetActivitiesCursor }).cursor = encodeCursor(
+				activity.date,
+			);
+			return activity as typeof activity & { cursor: PetActivitiesCursor };
+		});
+
+	return activities;
+}
+
+export type PetActivitiesCursor = Branded<string, "PetActivitiesCursor">;
+
+function encodeCursor(lastDate: DatabaseActivity["date"]) {
+	const cursorData = JSON.stringify({ lastDate });
+	return Buffer.from(cursorData).toString("base64") as PetActivitiesCursor;
+}
+
+function decodeCursor(cursor: PetActivitiesCursor): { lastDate: DatabaseActivity["date"] } {
+	const decoded = Buffer.from(cursor, "base64").toString("utf8");
+	return JSON.parse(decoded);
 }

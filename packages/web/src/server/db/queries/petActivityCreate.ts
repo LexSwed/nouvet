@@ -1,7 +1,10 @@
+"use server";
 import * as v from "valibot";
-
+import type { UserSession } from "~/server/auth/user-session";
 import { useDb } from "~/server/db";
-import { type ActivityType, type PetID, type UserID, activitiesTable } from "../schema";
+import type { ActivityType, PetID } from "~/server/types";
+import { getCurrentZonedDateTime } from "~/server/utils";
+import { activitiesTable } from "../schema";
 import { checkCanPerformPetAction } from "./canPerformPetAction";
 
 const ActivityCreateSchema = v.variant("activityType", [
@@ -21,21 +24,22 @@ export async function activityCreate(
 		[K in keyof ActivityCreateInput]?: unknown;
 	},
 	petId: PetID,
-	userId: UserID,
+	user: UserSession,
 ) {
-	checkCanPerformPetAction(petId, userId);
+	checkCanPerformPetAction(petId, user.userId);
 
 	const db = useDb();
 
 	const activityInfo = v.parse(ActivityCreateSchema, activityData);
 
 	const pet = await db
-		.update(activitiesTable)
-		.set({
+		.insert(activitiesTable)
+		.values({
 			petId,
-			creatorId: userId,
+			creatorId: user.userId,
 			note: activityInfo.note,
 			type: activityInfo.activityType,
+			date: activityInfo.recordedDate ?? getCurrentZonedDateTime(user.timeZoneId).toString(),
 		})
 		.returning({
 			id: activitiesTable.id,

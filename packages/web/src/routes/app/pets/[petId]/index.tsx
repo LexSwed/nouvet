@@ -23,17 +23,17 @@ import {
 	useLocation,
 	useSubmission,
 } from "@solidjs/router";
-import { type Accessor, Match, Show, Suspense, Switch, createSignal } from "solid-js";
+import { type Accessor, For, Match, Show, Suspense, Switch, createSignal } from "solid-js";
 import { Temporal } from "temporal-polyfill";
 import { PetPicture } from "~/lib/pet-home-card";
 import { createFormattedDate } from "~/lib/utils/format-date";
 import { pickSubmissionValidationErrors } from "~/lib/utils/submission";
-import { createPetActivity } from "~/server/api/activity";
+import { createPetActivity, getPetActivities } from "~/server/api/activity";
 import { getPet } from "~/server/api/pet";
 import { getUser, getUserProfile } from "~/server/api/user";
-import type { ActivityType } from "~/server/db/schema";
 import { cacheTranslations, createTranslator } from "~/server/i18n";
 import type { SupportedLocale } from "~/server/i18n/shared";
+import type { ActivityType, PetID } from "~/server/types";
 
 export const route = {
 	preload({ params }) {
@@ -48,24 +48,40 @@ const PetPage = (props: RouteSectionProps) => {
 	const t = createTranslator("pets");
 	const profile = createAsync(() => getUserProfile());
 	const pet = createAsync(() => getPet(props.params.petId!));
+	const activities = createAsync(() => getPetActivities(null, props.params.petId as PetID));
 	return (
 		<>
 			<Title>{t("meta.title", { petName: pet()?.name ?? "" })}</Title>
 			<div class="container">
-				<Show when={pet()}>
-					{(pet) => (
-						<Show when={profile()}>
-							{(profile) => (
-								<div class="flex flex-col gap-8">
-									<MainPetCard pet={pet} profile={profile} />
-									<div class="flex flex-row items-center gap-4">
-										<ActivityQuickCreator petId={pet().id} />
-									</div>
-								</div>
-							)}
-						</Show>
-					)}
-				</Show>
+				<div class="flex flex-col gap-8">
+					<Show when={pet()}>
+						{(pet) => (
+							<Show when={profile()}>
+								{(profile) => (
+									<>
+										<MainPetCard pet={pet} profile={profile} />
+										<div class="flex flex-row items-center gap-4">
+											<ActivityQuickCreator petId={pet().id} />
+										</div>
+									</>
+								)}
+							</Show>
+						)}
+					</Show>
+					<Show when={activities()}>
+						{(activities) => (
+							<div class="flex flex-col gap-4">
+								<For each={activities()}>
+									{(act) => (
+										<div>
+											{act.id} - {act.date}
+										</div>
+									)}
+								</For>
+							</div>
+						)}
+					</Show>
+				</div>
 			</div>
 		</>
 	);
