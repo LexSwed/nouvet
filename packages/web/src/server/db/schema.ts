@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import { index, integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { customAlphabet } from "nanoid";
+import type { Branded } from "../utils";
 
 export const familyTable = sqliteTable(
 	"family",
@@ -157,8 +158,10 @@ export const userTable = sqliteTable("user", {
 	createdAt: utcDateTime("created_at"),
 });
 export type DatabaseUser = typeof userTable.$inferSelect;
-export type UserID = DatabaseUser["id"];
-export type PetID = DatabasePet["id"];
+
+export type UserID = Branded<DatabaseUser["id"], "UserID">;
+export type PetID = Branded<DatabasePet["id"], "PetID">;
+export type ActivityID = Branded<DatabaseActivity["id"], "ActivityID">;
 
 /**
  * Maps different OAuth accounts to the same user.
@@ -212,8 +215,8 @@ export const activitiesTable = sqliteTable("activity", {
 	/*	TODO: This field is used for sorting, any chance for speed up? */
 	date: zonedDateTimeISO("activity_date"),
 });
-
-export type ActivityType = (typeof activitiesTable.$inferInsert)["type"];
+export type DatabaseActivity = typeof activitiesTable.$inferSelect;
+export type ActivityType = DatabaseActivity["type"];
 
 export const vaccinationsTable = sqliteTable("vaccination", {
 	id: primaryId("id", "vc"),

@@ -67,3 +67,7 @@ export async function jsonFailure<
 export async function getCurrentZonedDateTime(timeZoneId: string | null) {
 	return Temporal.Now.zonedDateTimeISO(timeZoneId ?? (await getRequestUser()).timeZoneId);
 }
+
+declare const __brand: unique symbol;
+type Brand<B> = { [__brand]: B };
+export type Branded<T, B> = T & Brand<B>;
