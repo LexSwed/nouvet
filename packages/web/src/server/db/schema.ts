@@ -194,22 +194,29 @@ export const sessionTable = sqliteTable("user_session", {
 	expiresAt: integer("expires_at").notNull(),
 });
 
-export const activitiesTable = sqliteTable("activity", {
-	id: primaryId("id", "ac"),
-	petId: text("pet_id").references(() => petTable.id),
-	creatorId: text("creator_id").references(() => userTable.id),
-	/** Type of the event selected by the client.
-	 * TODO: create index for faster look-ups
-	 */
-	type: text("type", {
-		mode: "text",
-		enum: ["observation", "prescription", "vaccination", "appointment"] as const,
-	}).notNull(),
-	note: text("note", { length: 1000 }),
-	// attachments: [],
-	/*	TODO: This field is used for sorting, any chance for speed up? */
-	date: zonedDateTimeISO("activity_date"),
-});
+export const activitiesTable = sqliteTable(
+	"activity",
+	{
+		id: primaryId("id", "ac"),
+		petId: text("pet_id").references(() => petTable.id),
+		creatorId: text("creator_id").references(() => userTable.id),
+		/** Type of the event selected by the client.
+		 * TODO: create index for faster look-ups
+		 */
+		type: text("type", {
+			mode: "text",
+			enum: ["observation", "prescription", "vaccination", "appointment"] as const,
+		}).notNull(),
+		note: text("note", { length: 1000 }),
+		// attachments: [],
+		/*	TODO: This field is used for sorting, any chance for speed up? */
+		date: zonedDateTimeISO("activity_date"),
+	},
+	(table) => ({
+		petIds: index("pet_id_idx").on(table.petId),
+		dateIdx: index("date_idx").on(table.date),
+	}),
+);
 export type DatabaseActivity = typeof activitiesTable.$inferSelect;
 
 export const vaccinationsTable = sqliteTable("vaccination", {
