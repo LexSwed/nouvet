@@ -6,7 +6,6 @@ import type ErrorsDict from "~/server/i18n/locales/en/errors";
 
 import { Temporal } from "temporal-polyfill";
 import type { SubmissionError } from "~/lib/utils/submission";
-import { getRequestUser } from "./auth/request-user";
 import { getDictionary } from "./i18n/dict";
 
 type FlatErrorsTranslation<
@@ -64,10 +63,6 @@ export async function jsonFailure<
 	});
 }
 
-export async function getCurrentZonedDateTime(timeZoneId: string | null) {
-	return Temporal.Now.zonedDateTimeISO(timeZoneId ?? (await getRequestUser()).timeZoneId);
+export function getCurrentZonedDateTime(timeZoneId: string) {
+	return Temporal.Now.zonedDateTimeISO(timeZoneId);
 }
-
-declare const __brand: unique symbol;
-type Brand<B> = { [__brand]: B };
-export type Branded<T, B> = T & Brand<B>;

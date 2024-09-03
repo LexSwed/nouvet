@@ -11,8 +11,9 @@ import {
 import { useLucia } from "~/server/auth/lucia";
 import { SESSION_COOKIE } from "~/server/const";
 import type { DatabaseUser } from "~/server/db/schema";
-import { env } from "../env";
-import { acceptedLocaleLanguageTag } from "../i18n/shared";
+import { env } from "~/server/env";
+import { acceptedLocaleLanguageTag } from "~/server/i18n/shared";
+import type { UserID } from "~/server/types";
 
 /**
  * Creates new auth session and stores it in cookie with other user basic user info.
@@ -115,7 +116,7 @@ export async function deleteUserSession() {
 	}
 	await session.clear();
 }
-export type UserSession = v.InferOutput<typeof userCookieSchema>;
+export type UserSession = v.InferOutput<typeof userCookieSchema> & { userId: UserID };
 
 /**
  * DO NOT USE OR YOU WILL BE FIRED.
