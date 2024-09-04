@@ -1,12 +1,14 @@
 @layer tw-base, tw-components, tw-utilities;
 
+@import "@fontsource-variable/inter/index.css" layer(tw-base);
+
 @import "tailwindcss/base" layer(tw-base);
 @import "tailwindcss/components" layer(tw-components);
 @import "tailwindcss/utilities" layer(tw-utilities);
 
 @layer tw-base {
   :root {
-    --nou-font-sans: "Rubik Variable";
+    --nou-font-sans: "Inter Variable";
 
     --radius: 0.5rem;
     view-transition-name: none;

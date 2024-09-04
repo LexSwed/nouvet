@@ -1,4 +1,4 @@
-@import "@fontsource-variable/rubik/index.css";
+@import "@fontsource-variable/inter/index.css" layer(tw-base);
 
 @layer tw-base, tw-components, tw-utilities;
 
