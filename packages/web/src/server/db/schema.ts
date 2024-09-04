@@ -1,11 +1,12 @@
 import { sql } from "drizzle-orm";
 import { index, integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { customAlphabet } from "nanoid";
+import type { Branded } from "../types";
 
 export const familyTable = sqliteTable(
 	"family",
 	{
-		id: primaryId("id", "f"),
+		id: primaryId<"FamilyID">("id", "f"),
 		name: text("name", { length: 100 }),
 		ownerId: text("owner_id")
 			.notNull()
@@ -98,7 +99,7 @@ export const familyWaitListTable = sqliteTable(
 );
 
 export const petTable = sqliteTable("pet", {
-	id: primaryId("id", "p"),
+	id: primaryId<"PetID">("id", "p"),
 	/** Pets have an official owner that has access to all the data. Other people have access to pets only through families. */
 	ownerId: text("owner_id")
 		.notNull()
@@ -141,7 +142,7 @@ export type DatabasePet = typeof petTable.$inferSelect;
  * User profile details and preferences.
  */
 export const userTable = sqliteTable("user", {
-	id: primaryId("id", "u"),
+	id: primaryId<"UserID">("id", "u"),
 	/** User's name, set by auth provider, or updated manually afterwards. */
 	name: text("name", { length: 200 }),
 	/** User's picture, only for personalization purposes. */
@@ -197,7 +198,7 @@ export const sessionTable = sqliteTable("user_session", {
 export const activitiesTable = sqliteTable(
 	"activity",
 	{
-		id: primaryId("id", "ac"),
+		id: primaryId<"ActivityID">("id", "ac"),
 		petId: text("pet_id").references(() => petTable.id),
 		creatorId: text("creator_id").references(() => userTable.id),
 		/** Type of the event selected by the client.
@@ -220,7 +221,7 @@ export const activitiesTable = sqliteTable(
 export type DatabaseActivity = typeof activitiesTable.$inferSelect;
 
 export const vaccinationsTable = sqliteTable("vaccination", {
-	id: primaryId("id", "vc"),
+	id: primaryId<"VaccinationID">("id", "vc"),
 	activityId: text("activity_id").references(() => activitiesTable.id, { onDelete: "cascade" }),
 	name: text("vaccine_name", { length: 200 }).notNull(),
 	administeredDate: dateTime("administered_date").notNull(),
@@ -278,10 +279,11 @@ function dateTime(columnName: Parameters<typeof text>[0]) {
 }
 
 const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 12);
-function primaryId(columnName: Parameters<typeof text>[0], prefix?: string) {
+function primaryId<U extends string>(columnName: Parameters<typeof text>[0], prefix?: string) {
 	return text(columnName)
 		.notNull()
 		.primaryKey()
 		.unique()
-		.$default(() => (prefix ? `${prefix}_${nanoid()}` : nanoid()));
+		.$default(() => (prefix ? `${prefix}_${nanoid()}` : nanoid()))
+		.$type<Branded<string, U>>();
 }

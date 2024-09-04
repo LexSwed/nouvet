@@ -1,6 +1,7 @@
 import { eq, sql } from "drizzle-orm";
+import type { UserID } from "~/server/types";
 import { useDb } from ".";
-import { type UserID, familyUserTable } from "./schema";
+import { familyUserTable } from "./schema";
 
 const db = useDb();
 

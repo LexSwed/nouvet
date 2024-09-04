@@ -4,7 +4,7 @@ import { json } from "@solidjs/router";
 import { Temporal } from "temporal-polyfill";
 import { getRequestUser } from "~/server/auth/request-user";
 import { type PetActivitiesCursor, petActivities } from "~/server/db/queries/petActivities";
-import { activityCreate } from "~/server/db/queries/petActivityCreate";
+import { petActivityCreate } from "~/server/db/queries/petActivityCreate";
 import type { ActivityCreateSchema } from "~/server/db/queries/petActivityCreate";
 import type { PetID } from "~/server/types";
 import { jsonFailure } from "~/server/utils";
@@ -43,7 +43,7 @@ export async function createPetActivityServer(formData: FormData) {
 			console.error(error);
 		}
 
-		const activity = await activityCreate(
+		const activity = await petActivityCreate(
 			{
 				activityType: formData.get("activityType"),
 				note: formData.get("note") || null,

@@ -19,7 +19,7 @@ const ActivityCreateSchema = v.variant("activityType", [
 export type ActivityCreateSchema = typeof ActivityCreateSchema;
 type ActivityCreateInput = v.InferInput<ActivityCreateSchema>;
 
-export async function activityCreate(
+export async function petActivityCreate(
 	activityData: {
 		[K in keyof ActivityCreateInput]?: unknown;
 	},
