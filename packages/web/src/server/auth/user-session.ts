@@ -116,7 +116,9 @@ export async function deleteUserSession() {
 	}
 	await session.clear();
 }
-export type UserSession = v.InferOutput<typeof userCookieSchema> & { userId: UserID };
+export type UserSession = Omit<v.InferOutput<typeof userCookieSchema>, "userId"> & {
+	userId: UserID;
+};
 
 /**
  * DO NOT USE OR YOU WILL BE FIRED.

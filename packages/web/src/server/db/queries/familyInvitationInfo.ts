@@ -3,8 +3,9 @@
 import { and, eq, sql } from "drizzle-orm";
 
 import { useDb } from "~/server/db";
-import { type UserID, familyInviteTable, familyUserTable, userTable } from "~/server/db/schema";
+import { familyInviteTable, familyUserTable, userTable } from "~/server/db/schema";
 import { UserAlreadyInFamily } from "~/server/errors";
+import type { UserID } from "~/server/types";
 
 /**
  * Finds the invite by the code from the invite link.

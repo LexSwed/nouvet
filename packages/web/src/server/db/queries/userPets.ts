@@ -3,7 +3,8 @@
 import { desc, eq, inArray, or } from "drizzle-orm";
 
 import { useDb } from "~/server/db";
-import { type UserID, familyUserTable, petTable, userTable } from "~/server/db/schema";
+import { familyUserTable, petTable, userTable } from "~/server/db/schema";
+import type { UserID } from "~/server/types";
 
 export async function userPets(userId: UserID) {
 	const db = useDb();

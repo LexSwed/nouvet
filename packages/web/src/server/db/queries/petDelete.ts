@@ -1,9 +1,10 @@
 import { and, eq } from "drizzle-orm";
 import { useDb } from "~/server/db";
 import { PetActionNotAllowed } from "~/server/errors";
+import type { PetID, UserID } from "~/server/types";
 import { petTable } from "../schema";
 
-export async function petDelete(petId: string, userId: string) {
+export async function petDelete(petId: PetID, userId: UserID) {
 	const db = useDb();
 	const pet = await db
 		.delete(petTable)

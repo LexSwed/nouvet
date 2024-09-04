@@ -38,7 +38,7 @@ import type { ActivityType, PetID } from "~/server/types";
 export const route = {
 	preload({ params }) {
 		void cacheTranslations("pets");
-		void getPet(params.petId!);
+		void getPet(params.petId as PetID);
 		void getUserProfile();
 		void getUser();
 	},
@@ -47,7 +47,7 @@ export const route = {
 const PetPage = (props: RouteSectionProps) => {
 	const t = createTranslator("pets");
 	const profile = createAsync(() => getUserProfile());
-	const pet = createAsync(() => getPet(props.params.petId!));
+	const pet = createAsync(() => getPet(props.params.petId as PetID));
 	const activities = createAsync(() => getPetActivities(null, props.params.petId as PetID));
 	return (
 		<>

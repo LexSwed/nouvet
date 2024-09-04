@@ -4,11 +4,12 @@ import { Show } from "solid-js";
 
 import { getFamilyMember, getFamilyMembers } from "~/server/api/family";
 import { cacheTranslations } from "~/server/i18n";
+import type { UserID } from "~/server/types";
 
 export const route = {
 	load({ params }) {
 		void cacheTranslations("family");
-		void getFamilyMember(params.memberId);
+		void getFamilyMember(params.memberId as UserID);
 	},
 } satisfies RouteDefinition;
 
@@ -17,7 +18,7 @@ function FamilyUserPage(props: RouteSectionProps) {
 		const members = await getFamilyMembers();
 		return members.find((m) => m.id === props.params.memberId);
 	});
-	const member = createAsync(() => getFamilyMember(props.params.memberId));
+	const member = createAsync(() => getFamilyMember(props.params.memberId as UserID));
 
 	const memberInfo = () => member() || partialMember();
 

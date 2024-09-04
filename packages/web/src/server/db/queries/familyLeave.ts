@@ -1,8 +1,9 @@
 import { and, eq, notExists } from "drizzle-orm";
 
 import { useDb } from "~/server/db";
-import { type UserID, familyTable, familyUserTable, familyWaitListTable } from "~/server/db/schema";
+import { familyTable, familyUserTable, familyWaitListTable } from "~/server/db/schema";
 import { NotAllowedToPerformFamilyAction } from "~/server/errors";
+import type { UserID } from "~/server/types";
 
 export async function familyLeave(userId: UserID) {
 	const db = useDb();

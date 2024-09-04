@@ -3,7 +3,8 @@
 import { TimeSpan } from "lucia";
 
 import { useDb } from "~/server/db";
-import { type UserID, familyInviteTable } from "~/server/db/schema";
+import { familyInviteTable } from "~/server/db/schema";
+import type { UserID } from "~/server/types";
 
 /**
  * Creates new invitation code.

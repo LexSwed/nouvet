@@ -3,7 +3,8 @@
 import { and, eq, sql } from "drizzle-orm";
 
 import { useDb } from "~/server/db";
-import { type UserID, familyInviteTable } from "~/server/db/schema";
+import { familyInviteTable } from "~/server/db/schema";
+import type { UserID } from "~/server/types";
 
 export async function familyInvite(userId: UserID) {
 	const db = useDb();

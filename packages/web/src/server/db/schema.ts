@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import { index, integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { customAlphabet } from "nanoid";
+import { acceptedLocaleLanguageTag } from "../i18n/shared";
 import type { Branded } from "../types";
 
 export const familyTable = sqliteTable(
@@ -35,7 +36,8 @@ export const familyInviteTable = sqliteTable(
 		 */
 		inviterId: text("inviter_id")
 			.notNull()
-			.references(() => userTable.id),
+			.references(() => userTable.id)
+			.$type<DatabaseUser["id"]>(),
 		/**
 		 * UNIX timestamp in **seconds**.
 		 */
@@ -59,10 +61,12 @@ export const familyUserTable = sqliteTable(
 	{
 		familyId: text("family_id")
 			.notNull()
-			.references(() => familyTable.id, { onDelete: "cascade" }),
+			.references(() => familyTable.id, { onDelete: "cascade" })
+			.$type<DatabaseFamily["id"]>(),
 		userId: text("user_id")
 			.notNull()
-			.references(() => userTable.id, { onDelete: "cascade" }),
+			.references(() => userTable.id, { onDelete: "cascade" })
+			.$type<DatabaseUser["id"]>(),
 		/** Zoned date time ISO */
 		joinedAt: utcDateTime("joined_at"),
 	},
@@ -81,10 +85,12 @@ export const familyWaitListTable = sqliteTable(
 	{
 		familyId: text("family_id")
 			.notNull()
-			.references(() => familyTable.id, { onDelete: "cascade" }),
+			.references(() => familyTable.id, { onDelete: "cascade" })
+			.$type<DatabaseFamily["id"]>(),
 		userId: text("user_id")
 			.notNull()
-			.references(() => userTable.id, { onDelete: "cascade" }),
+			.references(() => userTable.id, { onDelete: "cascade" })
+			.$type<DatabaseUser["id"]>(),
 		/** Zoned date time ISO */
 		joinedAt: utcDateTime("joined_at"),
 	},
@@ -104,7 +110,8 @@ export const petTable = sqliteTable("pet", {
 	ownerId: text("owner_id")
 		.notNull()
 		// TODO: add constraint for Max amount of pets, when the constraints are available
-		.references(() => userTable.id),
+		.references(() => userTable.id)
+		.$type<DatabaseUser["id"]>(),
 	/** Name of a pet */
 	name: text("name", { length: 200 }).notNull(),
 	gender: text("gender", { mode: "text", enum: ["male", "female"] as const }),
@@ -148,7 +155,7 @@ export const userTable = sqliteTable("user", {
 	/** User's picture, only for personalization purposes. */
 	avatarUrl: text("avatar_url", { length: 200 }),
 	/** Full ISO code, language and region. Inferred from browser on creation, can be changed later. */
-	locale: text("locale", { length: 10 }).notNull(),
+	locale: text("locale", { mode: "text", enum: acceptedLocaleLanguageTag }).notNull(),
 	timeZoneId: text("time_zone_id", { length: 100 }).notNull(),
 	/** Used for weights formatting, etc. Stored separately in case user wants to change it. */
 	measurementSystem: text("measurement_system", {
@@ -168,7 +175,8 @@ export const authAccount = sqliteTable(
 		provider: text("provider_id", { enum: ["facebook"] }).notNull(),
 		userId: text("user_id")
 			.notNull()
-			.references(() => userTable.id),
+			.references(() => userTable.id)
+			.$type<DatabaseUser["id"]>(),
 		/** ID of the user on the auth provider side */
 		providerUserId: text("provider_user_id").notNull(),
 	},
@@ -188,7 +196,8 @@ export const sessionTable = sqliteTable("user_session", {
 	id: text("id").notNull().unique().primaryKey(),
 	userId: text("user_id")
 		.notNull()
-		.references(() => userTable.id),
+		.references(() => userTable.id)
+		.$type<DatabaseUser["id"]>(),
 	/**
 	 * unix seconds
 	 */
@@ -199,8 +208,12 @@ export const activitiesTable = sqliteTable(
 	"activity",
 	{
 		id: primaryId<"ActivityID">("id", "ac"),
-		petId: text("pet_id").references(() => petTable.id),
-		creatorId: text("creator_id").references(() => userTable.id),
+		petId: text("pet_id")
+			.references(() => petTable.id)
+			.$type<DatabasePet["id"]>(),
+		creatorId: text("creator_id")
+			.references(() => userTable.id)
+			.$type<DatabaseUser["id"]>(),
 		/** Type of the event selected by the client.
 		 * TODO: create index for faster look-ups
 		 */

@@ -3,7 +3,8 @@
 import { eq } from "drizzle-orm";
 
 import { useDb } from "~/server/db";
-import { type PetID, type UserID, petTable, userTable } from "~/server/db/schema";
+import { petTable, userTable } from "~/server/db/schema";
+import type { PetID, UserID } from "~/server/types";
 import { checkCanPerformPetAction } from "./canPerformPetAction";
 
 export async function userPet(userId: UserID, petId: PetID) {

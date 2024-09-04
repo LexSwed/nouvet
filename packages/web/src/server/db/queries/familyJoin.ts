@@ -4,13 +4,13 @@ import { and, eq, sql } from "drizzle-orm";
 
 import { useDb } from "~/server/db";
 import {
-	type UserID,
 	familyInviteTable,
 	familyTable,
 	familyUserTable,
 	familyWaitListTable,
 } from "~/server/db/schema";
 import { IncorrectFamilyInvite, UserAlreadyInFamily } from "~/server/errors";
+import type { UserID } from "~/server/types";
 
 export async function joinFamilyByInvitationHash(invitationHash: string, userId: UserID) {
 	return familyJoin(userId, { invitationHash });

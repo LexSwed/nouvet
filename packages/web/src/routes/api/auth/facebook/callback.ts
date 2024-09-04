@@ -9,6 +9,7 @@ import { getUserByAuthProviderId } from "~/server/db/queries/getUserByAuthProvid
 import { userCreate } from "~/server/db/queries/userCreate";
 import { getLocale } from "~/server/i18n/locale";
 
+import type { SupportedLocale } from "~/server/i18n/shared";
 import { getFacebookOAuthStateCookie, useFacebookAuth } from "./_shared";
 
 export const GET = async (event: PageEvent) => {
@@ -75,7 +76,7 @@ export const GET = async (event: PageEvent) => {
 		await createUserSession(event.nativeEvent, {
 			userId: user.id,
 			timeZoneId: timeZoneId,
-			locale: locale.language,
+			locale: locale.language as SupportedLocale,
 			measurementSystem,
 		});
 

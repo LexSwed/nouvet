@@ -3,7 +3,8 @@
 import * as v from "valibot";
 
 import { useDb } from "~/server/db";
-import { type UserID, petTable } from "~/server/db/schema";
+import { petTable } from "~/server/db/schema";
+import type { UserID } from "~/server/types";
 import type { ErrorKeys } from "~/server/utils";
 
 const CreatePetSchema = v.object({

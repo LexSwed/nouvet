@@ -3,7 +3,8 @@
 import { eq } from "drizzle-orm";
 
 import { useDb } from "~/server/db";
-import { type UserID, familyInviteTable, familyTable } from "~/server/db/schema";
+import { familyInviteTable, familyTable } from "~/server/db/schema";
+import type { UserID } from "~/server/types";
 
 export async function familyDelete(userId: UserID) {
 	const db = useDb();

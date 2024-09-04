@@ -2,8 +2,9 @@
 
 import { and, eq } from "drizzle-orm";
 
-import { type UserID, familyTable } from "../schema";
+import { familyTable } from "../schema";
 
+import type { UserID } from "~/server/types";
 import { useDb } from "..";
 
 export function familyUpdate(params: { name: string; familyOwnerId: UserID }) {

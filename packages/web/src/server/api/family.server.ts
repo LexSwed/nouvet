@@ -7,12 +7,12 @@ import { getUserFamily } from "~/server/api/user";
 import { getRequestUser } from "~/server/auth/request-user";
 import { familyCancelJoin } from "~/server/db/queries/familyCancelJoin";
 import { familyDelete } from "~/server/db/queries/familyDelete";
+import { familyLeave } from "~/server/db/queries/familyLeave";
 import { familyMember, familyMembers } from "~/server/db/queries/familyMembers";
 import { familyUpdate } from "~/server/db/queries/familyUpdate";
+import { IncorrectFamilyMemberId } from "~/server/errors";
+import type { UserID } from "~/server/types";
 import { type ErrorKeys, jsonFailure } from "~/server/utils";
-
-import { familyLeave } from "../db/queries/familyLeave";
-import { IncorrectFamilyMemberId } from "../errors";
 
 export async function getFamilyMembersServer() {
 	try {
@@ -27,7 +27,7 @@ export async function getFamilyMembersServer() {
 	}
 }
 
-export async function getFamilyMemberServer(memberId: unknown) {
+export async function getFamilyMemberServer(memberId: UserID) {
 	try {
 		const user = await getRequestUser();
 		if (typeof memberId !== "string") throw new Error("Invalid request");

@@ -20,6 +20,7 @@ import { acceptUserToFamily } from "../db/queries/familyAcceptUser";
 import { familyRemoveFromWaitList } from "../db/queries/familyRemoveFromWaitList";
 import { jsonFailure } from "../utils";
 
+import type { UserID } from "~/server/types";
 import { getFamilyMembers } from "./family";
 import { getUserPets } from "./pet";
 import { getUserFamily } from "./user";
@@ -124,7 +125,7 @@ export const moveUserFromTheWaitListServer = async (formData: FormData) => {
 		if (data.action === "accept") {
 			const family = await acceptUserToFamily({
 				familyOwnerId: user.userId,
-				inviteeId: data.userId,
+				inviteeId: data.userId as UserID,
 			});
 
 			return json(family, {
@@ -133,7 +134,7 @@ export const moveUserFromTheWaitListServer = async (formData: FormData) => {
 		}
 		const family = await familyRemoveFromWaitList({
 			familyOwnerId: user.userId,
-			waitListMemberId: data.userId,
+			waitListMemberId: data.userId as UserID,
 		});
 		return json(family, {
 			revalidate: [getFamilyMembers.key],

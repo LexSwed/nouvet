@@ -14,11 +14,11 @@ import {
 import { A, useLocation } from "@solidjs/router";
 import { ErrorBoundary, Match, Show, Suspense, Switch, createUniqueId } from "solid-js";
 
-import type { DatabasePet, UserID } from "~/server/db/schema";
 import { createTranslator } from "~/server/i18n";
 
 import { createPersistedSetting } from "~/lib/utils/make-persisted-signal";
 
+import type { PetGender, PetSpecies, UserID } from "~/server/types";
 import AddBirthDateForm from "./add-birthdate-form";
 import AddBreedForm from "./add-pet-breed";
 import AddWeightForm from "./add-weight-form";
@@ -28,8 +28,8 @@ interface PetHomeCardProps {
 		id: string;
 		pictureUrl: string | null;
 		name: string;
-		species: DatabasePet["species"];
-		gender: DatabasePet["gender"];
+		species: PetSpecies;
+		gender: PetGender;
 		breed: string | null;
 		dateOfBirth: string | null;
 		color: string | null;
@@ -48,7 +48,7 @@ interface PetHomeCardProps {
 		| null;
 }
 
-const petIconMap: Record<DatabasePet["species"], SvgIcons> = {
+const petIconMap: Record<PetSpecies, SvgIcons> = {
 	dog: "dog",
 	cat: "cat",
 	bird: "bird",
@@ -173,8 +173,8 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 export function PetPicture(props: {
 	pet: {
 		pictureUrl?: string | null;
-		gender: DatabasePet["gender"];
-		species: DatabasePet["species"];
+		gender: PetGender;
+		species: PetSpecies;
 	};
 	class?: string;
 }) {

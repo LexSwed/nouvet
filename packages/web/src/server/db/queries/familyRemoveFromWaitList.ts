@@ -2,10 +2,11 @@
 
 import { and, eq } from "drizzle-orm";
 
-import { type UserID, familyTable, familyWaitListTable } from "~/server/db/schema";
+import { familyTable, familyWaitListTable } from "~/server/db/schema";
 import { NotAllowedToPerformFamilyAction } from "~/server/errors";
 
-import { useDb } from "..";
+import { useDb } from "~/server/db";
+import type { UserID } from "~/server/types";
 
 export async function familyRemoveFromWaitList(params: {
 	familyOwnerId: UserID;

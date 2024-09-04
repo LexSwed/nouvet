@@ -3,8 +3,9 @@
 import { and, eq } from "drizzle-orm";
 
 import { useDb } from "~/server/db";
-import { type UserID, familyTable, familyUserTable, familyWaitListTable } from "~/server/db/schema";
+import { familyTable, familyUserTable, familyWaitListTable } from "~/server/db/schema";
 import { InviteeNotInWaitList, NotAllowedToPerformFamilyAction } from "~/server/errors";
+import type { UserID } from "~/server/types";
 
 export async function acceptUserToFamily(params: {
 	familyOwnerId: UserID;

@@ -11,6 +11,7 @@ import { jsonFailure } from "~/server/utils";
 
 import { userPet } from "~/server/db/queries/userPet";
 import { petDelete } from "../db/queries/petDelete";
+import type { PetID } from "../types";
 import { getPet, getUserPets } from "./pet";
 
 export async function getUserPetsServer() {
@@ -19,7 +20,7 @@ export async function getUserPetsServer() {
 	return pets;
 }
 
-export async function getPetServer(petId: string) {
+export async function getPetServer(petId: PetID) {
 	const currentUser = await getRequestUser();
 	const pet = await userPet(currentUser.userId, petId);
 	if (!pet) {
@@ -47,7 +48,7 @@ export async function createPetServer(formData: FormData) {
 
 export async function updatePetBirthDateServer(formData: FormData) {
 	try {
-		const petId = formData.get("petId");
+		const petId = formData.get("petId")?.toString();
 		if (!petId) {
 			throw new Error("petId is not provided");
 		}
@@ -57,7 +58,7 @@ export async function updatePetBirthDateServer(formData: FormData) {
 			{
 				dateOfBirth: dateOfBirth && !Number.isNaN(Date.parse(dateOfBirth)) ? dateOfBirth : null,
 			},
-			petId.toString(),
+			petId as PetID,
 			currentUser.userId,
 		);
 		return json({ pet }, { revalidate: [getUserPets.key] });
@@ -69,7 +70,7 @@ export async function updatePetBirthDateServer(formData: FormData) {
 const UpdatePetWeightSchema = v.required(v.pick(UpdatePetSchema, ["weight"]));
 export async function updatePetWeightServer(formData: FormData) {
 	try {
-		const petId = formData.get("petId");
+		const petId = formData.get("petId")?.toString();
 		if (!petId) {
 			throw new Error("petId is not provided");
 		}
@@ -81,7 +82,7 @@ export async function updatePetWeightServer(formData: FormData) {
 			{
 				weight,
 			},
-			petId.toString(),
+			petId as PetID,
 			currentUser.userId,
 		);
 		return json({ pet }, { revalidate: [getUserPets.key] });
@@ -93,7 +94,7 @@ export async function updatePetWeightServer(formData: FormData) {
 const UpdatePetBreedSchema = v.required(v.pick(UpdatePetSchema, ["breed"]));
 export async function updatePetBreedServer(formData: FormData) {
 	try {
-		const petId = formData.get("petId");
+		const petId = formData.get("petId")?.toString();
 		if (!petId) {
 			throw new Error("petId is not provided");
 		}
@@ -105,7 +106,7 @@ export async function updatePetBreedServer(formData: FormData) {
 			{
 				breed,
 			},
-			petId.toString(),
+			petId as PetID,
 			currentUser.userId,
 		);
 		return json({ pet }, { revalidate: [getUserPets.key] });
@@ -116,7 +117,7 @@ export async function updatePetBreedServer(formData: FormData) {
 
 export async function updatePetServer(formData: FormData) {
 	try {
-		const petId = formData.get("petId");
+		const petId = formData.get("petId")?.toString();
 		if (!petId) {
 			throw new Error("petId is not provided");
 		}
@@ -130,7 +131,7 @@ export async function updatePetServer(formData: FormData) {
 				dateOfBirth: dateOfBirth && !Number.isNaN(Date.parse(dateOfBirth)) ? dateOfBirth : null,
 				breed: formData.get("breed") ?? undefined,
 			},
-			petId.toString(),
+			petId as PetID,
 			currentUser.userId,
 		);
 		return json({ pet }, { revalidate: [getUserPets.key, getPet.keyFor(pet.id)] });
@@ -140,13 +141,13 @@ export async function updatePetServer(formData: FormData) {
 }
 
 export async function deletePetServer(formData: FormData) {
-	const petId = formData.get("petId");
+	const petId = formData.get("petId")?.toString();
 	if (!petId) {
 		throw new Error("petId is not provided");
 	}
 	const currentUser = await getRequestUser();
 	try {
-		const deletedPetId = await petDelete(petId.toString(), currentUser.userId);
+		const deletedPetId = await petDelete(petId as PetID, currentUser.userId);
 		return json(
 			{ petId: deletedPetId },
 			{

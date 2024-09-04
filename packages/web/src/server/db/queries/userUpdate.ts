@@ -4,8 +4,9 @@ import { eq } from "drizzle-orm";
 import * as v from "valibot";
 
 import { useDb } from "~/server/db";
-import { type UserID, userTable } from "~/server/db/schema";
+import { userTable } from "~/server/db/schema";
 import { acceptedLocaleLanguageTag } from "~/server/i18n/shared";
+import type { UserID } from "~/server/types";
 import type { ErrorKeys } from "~/server/utils";
 
 const UpdateUserSchema = v.object({

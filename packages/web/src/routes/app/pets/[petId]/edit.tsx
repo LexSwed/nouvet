@@ -17,17 +17,18 @@ import { isSubmissionValidationError } from "~/lib/utils/submission";
 import { deletePet, getPet, updatePet } from "~/server/api/pet";
 import type { DatabasePet } from "~/server/db/schema";
 import { T, cacheTranslations, createTranslator } from "~/server/i18n";
+import type { PetGender, PetID, PetSpecies } from "~/server/types";
 
 export const route = {
 	preload({ params }) {
 		void cacheTranslations("pets");
-		void getPet(params.petId!);
+		void getPet(params.petId as PetID);
 	},
 } satisfies RouteDefinition;
 
 export default function PetEditPage(props: RouteSectionProps) {
 	const t = createTranslator("pets");
-	const pet = createAsync(() => getPet(props.params.petId!));
+	const pet = createAsync(() => getPet(props.params.petId as PetID));
 
 	return (
 		<>
@@ -46,7 +47,7 @@ export default function PetEditPage(props: RouteSectionProps) {
 									<T>{t("edit.headline", { petName: pet().name })}</T>
 								</Text>
 								<PetPictureWithUpload pet={pet()} />
-								<PetUpdateForm petId={props.params.petId!} />
+								<PetUpdateForm petId={props.params.petId as PetID} />
 							</Card>
 							<PetDeleteForm pet={pet()} />
 						</div>
@@ -61,8 +62,8 @@ function PetPictureWithUpload(props: {
 	pet: {
 		name: string;
 		pictureUrl: string | null;
-		species: DatabasePet["species"];
-		gender: DatabasePet["gender"];
+		species: PetSpecies;
+		gender: PetGender;
 	};
 }) {
 	const t = createTranslator("pets");
@@ -90,7 +91,7 @@ function PetPictureWithUpload(props: {
 	);
 }
 
-function PetUpdateForm(props: { petId: string }) {
+function PetUpdateForm(props: { petId: PetID }) {
 	const pet = createAsync(() => getPet(props.petId!));
 	const t = createTranslator("pets");
 	const updateSubmission = useSubmission(updatePet);

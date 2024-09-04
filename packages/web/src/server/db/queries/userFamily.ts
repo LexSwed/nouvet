@@ -3,13 +3,8 @@
 import { eq, or, sql } from "drizzle-orm";
 
 import { useDb } from "~/server/db";
-import {
-	type UserID,
-	familyTable,
-	familyUserTable,
-	familyWaitListTable,
-	userTable,
-} from "~/server/db/schema";
+import { familyTable, familyUserTable, familyWaitListTable, userTable } from "~/server/db/schema";
+import type { UserID } from "~/server/types";
 
 export async function userProfile(userId: UserID) {
 	const db = useDb();

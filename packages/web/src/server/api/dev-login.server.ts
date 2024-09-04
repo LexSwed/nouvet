@@ -4,9 +4,10 @@ import { deleteCookie, getCookie, getEvent } from "vinxi/http";
 
 import { createUserSession } from "~/server/auth/user-session";
 import { RETURN_URL_COOKIE } from "~/server/const";
-import { env } from "../env";
+import { env } from "~/server/env";
+import type { UserID } from "~/server/types";
 
-async function loginDev(name: string) {
+async function loginDev(userId: UserID) {
 	let returnUrl = getCookie(RETURN_URL_COOKIE);
 
 	if (returnUrl) {
@@ -23,7 +24,7 @@ async function loginDev(name: string) {
 	try {
 		const event = getEvent();
 		await createUserSession(event, {
-			userId: name,
+			userId: userId,
 			locale: "en-GB",
 			timeZoneId: "Europe/London",
 			measurementSystem: "metrical",

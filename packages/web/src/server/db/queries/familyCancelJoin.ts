@@ -1,8 +1,9 @@
 import { eq } from "drizzle-orm";
 
 import { useDb } from "~/server/db";
-import { type UserID, familyWaitListTable } from "~/server/db/schema";
+import { familyWaitListTable } from "~/server/db/schema";
 import { NotAllowedToPerformFamilyAction } from "~/server/errors";
+import type { UserID } from "~/server/types";
 
 export async function familyCancelJoin(userId: UserID) {
 	const db = useDb();

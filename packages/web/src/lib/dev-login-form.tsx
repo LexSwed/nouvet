@@ -2,6 +2,7 @@ import { Button, Form, Icon, Popover, TextField } from "@nou/ui";
 import { action, json, redirect, useSubmission } from "@solidjs/router";
 
 import { loginDevServer } from "~/server/api/dev-login.server";
+import type { UserID } from "~/server/types";
 
 const DevLogin = () => {
 	const login = useSubmission(loginDev);
@@ -42,7 +43,7 @@ const loginDev = action(async (formData: FormData) => {
 		return json({ errors: { name: "Cannot be empty " } }, { status: 500, revalidate: "none" });
 	}
 	try {
-		const { redirectUrl } = await loginDevServer(name);
+		const { redirectUrl } = await loginDevServer(name as UserID);
 		return redirect(redirectUrl);
 	} catch {
 		return json({ failed: true }, { status: 500, revalidate: "none" });

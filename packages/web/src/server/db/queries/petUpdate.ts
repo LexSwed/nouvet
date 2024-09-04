@@ -3,7 +3,8 @@ import * as v from "valibot";
 
 import { format, parseISO } from "date-fns";
 import { useDb } from "~/server/db";
-import { type DatabasePet, type UserID, petTable } from "~/server/db/schema";
+import { type DatabasePet, petTable } from "~/server/db/schema";
+import type { UserID } from "~/server/types";
 import type { ErrorKeys } from "~/server/utils";
 
 export const UpdatePetSchema = v.object({

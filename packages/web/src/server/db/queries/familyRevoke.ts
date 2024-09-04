@@ -2,9 +2,10 @@
 
 import { and, eq } from "drizzle-orm";
 
-import { type UserID, familyTable, familyUserTable } from "~/server/db/schema";
+import { familyTable, familyUserTable } from "~/server/db/schema";
 import { NotAllowedToPerformFamilyAction } from "~/server/errors";
 
+import type { UserID } from "~/server/types";
 import { useDb } from "..";
 
 export async function revokeUserMembership(params: {
