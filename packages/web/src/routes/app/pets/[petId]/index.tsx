@@ -53,32 +53,53 @@ const PetPage = (props: RouteSectionProps) => {
 		<>
 			<Title>{t("meta.title", { petName: pet()?.name ?? "" })}</Title>
 			<div class="container">
-				<div class="flex flex-col gap-8">
+				<div class="flex flex-col gap-6">
 					<Show when={pet()}>
 						{(pet) => (
 							<Show when={profile()}>
-								{(profile) => (
-									<>
-										<MainPetCard pet={pet} profile={profile} />
-										<div class="flex flex-row items-center gap-4">
-											<ActivityQuickCreator petId={pet().id} />
-										</div>
-									</>
-								)}
+								{(profile) => <MainPetCard pet={pet} profile={profile} />}
 							</Show>
 						)}
 					</Show>
 					<Show when={activities()}>
 						{(activities) => (
-							<div class="flex flex-col gap-4">
-								<For each={activities()}>
-									{(act) => (
-										<div>
-											{act.id} - {act.date}
-										</div>
-									)}
-								</For>
-							</div>
+							<Card class="flex flex-col gap-6" aria-labelledby="pet-activities-headline">
+								<ActivityQuickCreator petId={props.params.petId as PetID} />
+								<Text as="h3" with="headline-3" id="pet-activities-headline">
+									Past activities
+								</Text>
+								<ul class="flex flex-col gap-6">
+									<For each={Object.entries(activities())}>
+										{([date, activities]) => (
+											<li>
+												<Text with="overline">{date}</Text>
+												<ul class="flex flex-col gap-4 ps-4">
+													<For each={activities}>
+														{(act) => (
+															<li class="flex flex-row items-center gap-2">
+																<Text as="time" datetime={act.date} with="overline">
+																	{act.date}
+																</Text>
+																<div class="flex flex-1 flex-row gap-2 rounded-2xl p-3">
+																	<Icon
+																		use="note"
+																		class="size-10 rounded-full bg-yellow-100 p-2 text-yellow-950"
+																	/>
+																	<div class="flex flex-col gap-2">
+																		<Text with="body-sm" tone="light">
+																			{act.note}
+																		</Text>
+																	</div>
+																</div>
+															</li>
+														)}
+													</For>
+												</ul>
+											</li>
+										)}
+									</For>
+								</ul>
+							</Card>
 						)}
 					</Show>
 				</div>

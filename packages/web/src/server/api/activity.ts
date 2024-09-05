@@ -18,7 +18,29 @@ export const getPetActivities = cache(async function getPetActivitiesServer(
 	}
 	try {
 		const activities = await petActivities(cursor, petId, currentUser.userId);
-		return activities;
+		if (activities.length === 0) return {};
+
+		const groupedActivities: { [key: string]: Array<(typeof activities)[number]> } = {};
+		const shortFormatter = new Intl.DateTimeFormat(currentUser.locale, {
+			day: "numeric",
+			month: "short",
+		});
+		const longFormatter = new Intl.DateTimeFormat(currentUser.locale, {
+			// day: "numeric",
+			// month: "short",
+			timeStyle: "short",
+		});
+
+		for (const activity of activities) {
+			const date = Temporal.ZonedDateTime.from(activity.date);
+			const key = shortFormatter.format(date.epochMilliseconds);
+			if (!groupedActivities[key]) {
+				groupedActivities[key] = [];
+			}
+			activity.date = longFormatter.format(date.epochMilliseconds);
+			groupedActivities[key].push(activity);
+		}
+		return groupedActivities;
 	} catch (error) {
 		// TODO: error handling?
 		console.error(error);
