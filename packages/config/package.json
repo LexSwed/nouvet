@@ -30,7 +30,6 @@
 		"vite": "^5.4.3"
 	},
 	"devDependencies": {
-		"colorjs.io": "^0.5.2",
-		"postcss-import": "^16.1.0"
+		"colorjs.io": "^0.5.2"
 	}
 }
