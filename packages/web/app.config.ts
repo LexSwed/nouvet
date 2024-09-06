@@ -21,6 +21,14 @@ export default defineConfig({
 		// },
 	},
 	vite: {
+		css: {
+			transformer: "lightningcss",
+			lightningcss: {
+				drafts: {
+					customMedia: true,
+				},
+			},
+		},
 		build: {
 			target: "esnext",
 		},

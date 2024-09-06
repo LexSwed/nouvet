@@ -1,4 +1,4 @@
-@import "tailwindcss/theme" theme(reference);
+@import "tailwindcss/theme";
 
 @theme {
   --color-primary: hsl(350 45.67% 49.8%);

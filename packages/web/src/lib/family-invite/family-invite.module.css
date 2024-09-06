@@ -1,5 +1,7 @@
 @import "@nou/config/theme.css" theme(reference);
 
+@plugin "tailwindcss-animate";
+
 :global(html:active-view-transition-type(backwards, forwards)) {
   &::view-transition-old(invite-dialog-content),
   &::view-transition-new(invite-dialog-content) {
