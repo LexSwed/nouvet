@@ -1,5 +1,6 @@
 import type { useDb } from "../../web/src/server/db";
 import * as schema from "../../web/src/server/db/schema";
+import type { UserID } from "../../web/src/server/types";
 
 export async function seed(db: ReturnType<typeof useDb>) {
 	await Promise.all([
@@ -16,34 +17,39 @@ export async function seed(db: ReturnType<typeof useDb>) {
 		.insert(schema.userTable)
 		.values([
 			{
-				id: "1",
+				id: "1" as UserID,
 				name: "User One",
 				locale: "en-GB",
 				measurementSystem: "metrical",
+				timeZoneId: "Europe/London",
 			},
 			{
-				id: "2",
+				id: "2" as UserID,
 				name: "User Two",
 				locale: "en-GB",
 				measurementSystem: "metrical",
+				timeZoneId: "Europe/London",
 			},
 			{
-				id: "3",
+				id: "3" as UserID,
 				name: "User Three",
 				locale: "en-GB",
 				measurementSystem: "metrical",
+				timeZoneId: "Europe/London",
 			},
 			{
-				id: "4",
+				id: "4" as UserID,
 				name: "User Four",
 				locale: "en-GB",
 				measurementSystem: "metrical",
+				timeZoneId: "Europe/London",
 			},
 			{
-				id: "5",
+				id: "5" as UserID,
 				name: "User Five",
 				locale: "en-GB",
 				measurementSystem: "metrical",
+				timeZoneId: "Europe/London",
 			},
 		])
 		.returning({ id: schema.userTable.id });
