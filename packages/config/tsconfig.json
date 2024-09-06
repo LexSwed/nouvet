@@ -33,5 +33,6 @@
 				}
 			}
 		]
-	}
+	},
+	"exclude": ["./plugins.js"]
 }

@@ -18,11 +18,11 @@
 	"keywords": [],
 	"author": "",
 	"devDependencies": {
-		"@faker-js/faker": "^8.4.1",
+		"@faker-js/faker": "^9.0.0",
 		"@types/node": "^20.14.12"
 	},
 	"dependencies": {
-		"@dotenvx/dotenvx": "^1.13.3",
-		"@playwright/test": "^1.46.1"
+		"@dotenvx/dotenvx": "^1.14.0",
+		"@playwright/test": "^1.47.0"
 	}
 }

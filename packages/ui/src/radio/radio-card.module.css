@@ -1,4 +1,6 @@
-@layer tw-components {
+@import "@nou/config/theme.css" theme(reference);
+
+@layer components {
   .card {
     position: relative;
     flex-shrink: 0;

@@ -1,4 +1,6 @@
-@layer tw-components {
+@import "@nou/config/theme.css" theme(reference);
+
+@layer components {
   .genderSwitch {
     &:has(input[value="male"]:checked) {
       & .genderSwitchCard:has(input[value="male"]) {

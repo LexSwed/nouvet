@@ -1,4 +1,6 @@
-@layer tw-components {
+@import "@nou/config/theme.css" theme(reference);
+
+@layer components {
   .button {
     display: flex;
     align-items: center;
@@ -32,7 +34,7 @@
       margin-inline-start: -1px;
     }
     &:has(input:checked) {
-      background-color: theme("colors.secondary-container");
+      background-color: theme(colors.secondary-container);
       color: theme("colors.on-secondary-container");
       isolation: isolate;
       & .customIcon {

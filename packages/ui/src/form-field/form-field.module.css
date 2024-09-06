@@ -1,4 +1,6 @@
-@layer tw-components {
+@import "@nou/config/theme.css" theme(reference);
+
+@layer components {
   .field {
     --border-color: theme("colors.outline");
     --border-scale-y: 0.75;
@@ -85,7 +87,8 @@
   }
   .sizeBase {
     @apply text-base;
-    & :where(input, textarea),
+    & input,
+    & textarea,
     & select > button {
       padding: theme("spacing.3") var(--start-padding);
       min-height: theme("spacing.12");

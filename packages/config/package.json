@@ -7,6 +7,7 @@
 		"./tailwind": "./tailwind.ts",
 		"./tsconfig": "./tsconfig.json",
 		"./global.css": "./global.css",
+		"./theme.css": "./theme.css",
 		"./icons/sprite.svg": "./icons/sprite.svg",
 		"./theme/theme.json": "./theme/theme.json"
 	},
@@ -20,10 +21,9 @@
 	},
 	"dependencies": {
 		"@fontsource-variable/inter": "^5.0.20",
-		"@tailwindcss/container-queries": "^0.1.1",
 		"autoprefixer": "^10.4.20",
 		"postcss": "^8.4.45",
-		"tailwindcss": "^3.4.10",
+		"tailwindcss": "^4.0.0-alpha.23",
 		"tailwindcss-animate": "^1.0.7",
 		"tailwindcss-spring": "^1.0.1",
 		"typescript-plugin-css-modules": "^5.1.0",

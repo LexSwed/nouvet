@@ -1,3 +1,4 @@
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import solid from "vite-plugin-solid";
 import viteSvgSpriteWrapper from "vite-svg-sprite-wrapper";
@@ -7,6 +8,7 @@ export default defineConfig({
 		postcss: "../config/postcss.config.cjs",
 	},
 	plugins: [
+		tailwindcss(),
 		solid(),
 		viteSvgSpriteWrapper({
 			icons: "../config/icons/source/*.svg",

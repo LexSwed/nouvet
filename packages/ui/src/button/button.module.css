@@ -1,10 +1,12 @@
+@import "@nou/config/theme.css" theme(reference);
+
 @property --btn-ghost-to {
   syntax: "<percentage>";
   inherits: true;
   initial-value: 0%;
 }
 
-@layer tw-components {
+@layer components {
   .button {
     @apply transition;
   }

@@ -1,4 +1,6 @@
-@layer tw-components {
+@import "@nou/config/theme.css" theme(reference);
+
+@layer components {
   .toast {
     transition:
       opacity 0.24s ease,

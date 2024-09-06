@@ -1,0 +1,78 @@
+@import "tailwindcss/theme" theme(reference);
+
+@theme {
+  --color-primary: hsl(350 45.67% 49.8%);
+  --color-on-primary: hsl(0 0% 100%);
+  --color-primary-container: hsl(355 100% 92.5%);
+  --color-on-primary-container: hsl(346 78.8% 12.9%);
+  --color-secondary: hsl(354 15.7% 40%);
+  --color-on-secondary: hsl(0 0% 100%);
+  --color-secondary-container: hsl(355 100% 92.5%);
+  --color-on-secondary-container: hsl(352 35.4% 12.7%);
+  --color-tertiary: hsl(193 85.5% 27.1%);
+  --color-on-tertiary: hsl(0 0% 100%);
+  --color-tertiary-container: hsl(198 100% 86.3%);
+  --color-on-tertiary-container: hsl(195 100% 8.04%);
+  --color-error: hsl(0 75.5% 41.6%);
+  --color-on-error: hsl(0 0% 100%);
+  --color-error-container: hsl(5.85 100% 92%);
+  --color-on-error-container: hsl(358 100% 12.7%);
+  --color-background: hsl(7.5 16% 97.6%);
+  --color-on-background: hsl(353 15.3% 11.6%);
+  --color-surface: hsl(349 2.9% 99.8%);
+  --color-on-surface: hsl(353 15.3% 11.6%);
+  --color-surface-variant: hsl(357 51.1% 91.2%);
+  --color-on-surface-variant: hsl(356 10.1% 29.2%);
+  --color-outline: hsl(356 7% 61%);
+  --color-outline-variant: hsl(355 21.6% 80%);
+  --color-shadow: hsl(0 0% 0%);
+  --color-scrim: hsl(0 0% 0%);
+  --color-inverse-surface: hsl(354 9.8% 20%);
+  --color-inverse-on-surface: hsl(0 100% 96.5%);
+  --color-inverse-primary: hsl(354 100% 84.9%);
+  --color-surface-dim: hsl(356 26.2% 87.3%);
+  --color-surface-bright: hsl(7.5 100% 98.4%);
+  --color-surface-container-lowest: hsl(0 0% 100%);
+  --color-surface-container-low: hsl(0 100% 97.1%);
+  --color-surface-container: hsl(0 75% 95.3%);
+  --color-surface-container-high: hsl(357 50% 92.9%);
+  --color-surface-container-highest: hsl(357 37.5% 90.6%);
+  --color-main-bg: linear-gradient(
+    135deg,
+    hsl(theme(colors.secondary-container/0.3)) 0%,
+    hsl(theme(colors.tertiary-container/0.3)) 100%
+  );
+
+  --breakpoint-xs: 35rem;
+  --breakpoint-2xl: 90rem;
+
+  --opacity-2: 0.02;
+  --opacity-8: 0.08;
+  --opacity-12: 0.12;
+
+  --spacing-font: 1em;
+
+  --font-family-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --shadow-flat: 0 0 1px 2px theme(colors.on-surface/0.2);
+  --shadow-popover: 0 0 1px theme(colors.on-surface-variant/0.2),
+    theme(boxShadow.lg);
+
+  --animate-spinner-circle: spinner-circle 1.8s linear infinite;
+
+  @keyframes spinner-circle {
+    0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+    }
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
+    }
+  }
+}

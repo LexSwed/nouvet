@@ -1,16 +1,21 @@
-@layer tw-base, tw-components, tw-utilities;
+@layer theme, base, components, utilities;
+@import "tailwindcss/preflight" layer(base);
+@import "tailwindcss/utilities" layer(utilities);
+@import "./theme.css" layer(theme);
 
-@import "@fontsource-variable/inter/index.css" layer(tw-base);
+@plugin "tailwindcss-animate";
+@plugin "./plugins";
 
-@import "tailwindcss/base" layer(tw-base);
-@import "tailwindcss/components" layer(tw-components);
-@import "tailwindcss/utilities" layer(tw-utilities);
+@variant intent (&:where(:hover,:focus));
+@variant disabled (&:where(disabled,[aria-disabled="true"]));
+@variant starting (@starting-style);
+@variant popover-open (&:popover-open);
 
-@layer tw-base {
+@import "@fontsource-variable/inter/index.css" layer(theme);
+
+@layer base {
   :root {
-    --nou-font-sans: "Inter Variable";
-
-    --radius: 0.5rem;
+    --nou-font-sans: ;
     view-transition-name: none;
   }
 
@@ -19,7 +24,7 @@
   }
 
   * {
-    @apply border-outline min-w-0 font-sans;
+    @apply min-w-0 font-sans;
   }
   html,
   body,
@@ -32,88 +37,44 @@
   }
 }
 
-@layer tw-base {
-  :root {
-    --nou-white: 0 0% 100%;
-    --nou-black: 0 0% 0%;
-    --nou-primary: 350 45.67% 49.8%;
-    --nou-on-primary: 0 0% 100%;
-    --nou-primary-container: 355 100% 92.5%;
-    --nou-on-primary-container: 346 78.8% 12.9%;
-    --nou-secondary: 354 15.7% 40%;
-    --nou-on-secondary: 0 0% 100%;
-    --nou-secondary-container: 355 100% 92.5%;
-    --nou-on-secondary-container: 352 35.4% 12.7%;
-    --nou-tertiary: 193 85.5% 27.1%;
-    --nou-on-tertiary: 0 0% 100%;
-    --nou-tertiary-container: 198 100% 86.3%;
-    --nou-on-tertiary-container: 195 100% 8.04%;
-    --nou-error: 0 75.5% 41.6%;
-    --nou-on-error: 0 0% 100%;
-    --nou-error-container: 5.85 100% 92%;
-    --nou-on-error-container: 358 100% 12.7%;
-    --nou-background: 7.5 16% 97.6%;
-    --nou-on-background: 353 15.3% 11.6%;
-    --nou-surface: 349 2.9% 99.8%;
-    --nou-on-surface: 353 15.3% 11.6%;
-    --nou-surface-variant: 357 51.1% 91.2%;
-    --nou-on-surface-variant: 356 10.1% 29.2%;
-    --nou-outline: 356 7% 61%;
-    --nou-outline-variant: 355 21.6% 80%;
-    --nou-shadow: 0 0% 0%;
-    --nou-scrim: 0 0% 0%;
-    --nou-inverse-surface: 354 9.8% 20%;
-    --nou-inverse-on-surface: 0 100% 96.5%;
-    --nou-inverse-primary: 354 100% 84.9%;
-    --nou-surface-dim: 356 26.2% 87.3%;
-    --nou-surface-bright: 7.5 100% 98.4%;
-    --nou-surface-container-lowest: 0 0% 100%;
-    --nou-surface-container-low: 0 100% 97.1%;
-    --nou-surface-container: 0 75% 95.3%;
-    --nou-surface-container-high: 357 50% 92.9%;
-    --nou-surface-container-highest: 357 37.5% 90.6%;
-  }
-}
-
-@layer tw-utilities {
-  .scrollbar-none {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-  .container {
-    width: 100%;
-    max-width: 100%;
-    margin-inline: auto;
-    padding-inline: 1rem;
-
-    @media screen(sm) {
-      padding-inline: 2rem;
-    }
-    @media screen(xl) {
-      max-width: theme("screens.xl");
-    }
-  }
-
-  .filter-darker {
-    filter: brightness(0.96) saturate(1.2);
-  }
-
-  .overflow-snap {
-    @apply scrollbar-none -my-2 snap-x snap-mandatory overflow-auto [&>:last-of-type]:snap-end py-2 [&>*]:shrink-0 [&>*]:snap-start [&>*]:snap-always;
-  }
-
-  .stack {
-    @apply grid place-items-center *:[grid-area:1/1];
-  }
-
-  .allow-discrete {
-    transition-behavior: allow-discrete;
-  }
-}
-
 @view-transition {
   navigation: auto;
+}
+
+@utility scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility container {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-inline: 1rem;
+
+  @media screen(sm) {
+    padding-inline: 2rem;
+  }
+  @media screen(xl) {
+    max-width: var(--screen-xl);
+  }
+}
+
+@utility filter-darker {
+  filter: brightness(0.96) saturate(1.2);
+}
+
+@utility overflow-snap {
+  @apply scrollbar-none -my-2 snap-x snap-mandatory overflow-auto [&>:last-of-type]:snap-end py-2 [&>*]:shrink-0 [&>*]:snap-start [&>*]:snap-always;
+}
+
+@utility stack {
+  @apply grid place-items-center *:[grid-area:1/1];
+}
+
+@utility allow-discrete {
+  transition-behavior: allow-discrete;
 }

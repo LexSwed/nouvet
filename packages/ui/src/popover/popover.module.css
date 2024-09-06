@@ -1,5 +1,7 @@
+@import "@nou/config/theme.css" theme(reference);
+
 /* Avoid consumers overriding this for all states with e.g. display: flex */
-@layer tw-utilities {
+@layer utilities {
   .popover:not(:popover-open) {
     display: none;
   }
@@ -12,7 +14,7 @@
   }
 }
 
-@layer tw-components {
+@layer components {
   .popover {
     background-color: theme("colors.surface");
     color: theme("colors.on-surface");
@@ -33,7 +35,8 @@
     position-try-options: flip-block, flip-inline;
     overflow: auto;
     pointer-events: all;
-    @apply bg-surface shadow-popover overflow-y-auto rounded-2xl;
+    box-shadow: theme(shadow.popover);
+    border-radius: theme(radius.2xl);
 
     &:empty {
       visibility: hidden;
