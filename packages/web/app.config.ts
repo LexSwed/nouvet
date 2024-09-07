@@ -29,6 +29,9 @@ export default defineConfig({
 		},
 		css: {
 			postcss: "../config/postcss.config.cjs",
+			modules: {
+				globalModulePaths: [/global\.(css|scss|sass)$/],
+			},
 		},
 		plugins: [
 			patchCssModules(),

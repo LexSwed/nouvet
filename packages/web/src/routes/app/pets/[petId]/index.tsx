@@ -24,6 +24,7 @@ import {
 	useSubmission,
 } from "@solidjs/router";
 import { type Accessor, For, Match, Show, Suspense, Switch, createSignal } from "solid-js";
+import { isServer } from "solid-js/web";
 import { Temporal } from "temporal-polyfill";
 import { PetPicture } from "~/lib/pet-home-card";
 import { createFormattedDate } from "~/lib/utils/format-date";
@@ -299,7 +300,7 @@ function NewActivityForm(props: { petId: string; locale: SupportedLocale }) {
 					</div>
 				}
 			/>
-			<input type="hidden" name="currentTimeZone" value={zoned.timeZoneId} />
+			{isServer ? null : <input type="hidden" name="currentTimeZone" value={zoned.timeZoneId} />}
 			<TextField
 				as="textarea"
 				name="note"
