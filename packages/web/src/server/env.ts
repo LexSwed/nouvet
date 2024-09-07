@@ -23,7 +23,6 @@ const schema = object({
 
 export const env = parse(schema, {
 	...import.meta.env,
-	PROD: import.meta.env.VITE_ACCEPTANCE_TESTING ? false : import.meta.env.PROD,
 	SESSION_SECRET: process.env.SESSION_SECRET,
 	INVITES_SECRET: process.env.INVITES_SECRET,
 	FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
