@@ -9,8 +9,6 @@
 @layer tw-base {
   :root {
     --nou-font-sans: "Inter Variable";
-
-    --radius: 0.5rem;
     view-transition-name: none;
   }
 
@@ -18,9 +16,6 @@
     pointer-events: none;
   }
 
-  * {
-    @apply border-outline min-w-0 font-sans;
-  }
   html,
   body,
   #app {
@@ -60,8 +55,6 @@
     --nou-on-surface-variant: 356 10.1% 29.2%;
     --nou-outline: 356 7% 61%;
     --nou-outline-variant: 355 21.6% 80%;
-    --nou-shadow: 0 0% 0%;
-    --nou-scrim: 0 0% 0%;
     --nou-inverse-surface: 354 9.8% 20%;
     --nou-inverse-on-surface: 0 100% 96.5%;
     --nou-inverse-primary: 354 100% 84.9%;
@@ -89,10 +82,10 @@
     margin-inline: auto;
     padding-inline: 1rem;
 
-    @media screen(sm) {
+    @media (min-width: theme(screens.sm)) {
       padding-inline: 2rem;
     }
-    @media screen(xl) {
+    @media (min-width: theme(screens.xl)) {
       max-width: theme("screens.xl");
     }
   }

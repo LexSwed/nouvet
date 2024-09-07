@@ -1,4 +1,5 @@
 import { defineConfig } from "@solidjs/start/config";
+import { patchCssModules } from "vite-css-modules";
 import { imagetools } from "vite-imagetools";
 import viteSvgSpriteWrapper from "vite-svg-sprite-wrapper";
 import tsconfigPaths from "vite-tsconfig-paths";
@@ -18,20 +19,6 @@ export default defineConfig({
 		// rollupConfig: {
 		//   external: ['node:async_hooks'],
 		// },
-		database: {
-			// D1
-			// default: {
-			//   connector: 'cloudflare-d1',
-			//   options: { bindingName: 'db' }
-			// },
-			default: {
-				connector: "sqlite",
-				options: { name: "db" },
-			},
-		},
-		experimental: {
-			database: true,
-		},
 	},
 	vite: {
 		build: {
@@ -44,6 +31,7 @@ export default defineConfig({
 			postcss: "../config/postcss.config.cjs",
 		},
 		plugins: [
+			patchCssModules(),
 			tsconfigPaths(),
 			imagetools(),
 			viteSvgSpriteWrapper({
