@@ -1,0 +1,1 @@
+ALTER TABLE `prescription` DROP COLUMN `duration`;

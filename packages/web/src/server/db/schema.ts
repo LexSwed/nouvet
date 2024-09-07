@@ -227,20 +227,12 @@ export const activitiesTable = sqliteTable(
 		date: zonedDateTimeISO("activity_date"),
 	},
 	(table) => ({
-		petIds: index("pet_id_idx").on(table.petId),
+		petIdx: index("pet_id_idx").on(table.petId),
+		typeIdx: index("type_idx").on(table.type),
 		dateIdx: index("date_idx").on(table.date),
 	}),
 );
 export type DatabaseActivity = typeof activitiesTable.$inferSelect;
-
-export const vaccinationsTable = sqliteTable("vaccination", {
-	id: primaryId<"VaccinationID">("id", "vc"),
-	activityId: text("activity_id").references(() => activitiesTable.id, { onDelete: "cascade" }),
-	name: text("vaccine_name", { length: 200 }).notNull(),
-	administeredDate: dateTime("administered_date").notNull(),
-	nextDueDate: dateTime("next_due_date"),
-	batchNumber: text("batch_number", { length: 50 }),
-});
 
 export const activityRelationships = sqliteTable(
 	"activity_relationships",
@@ -262,9 +254,41 @@ export const activityRelationships = sqliteTable(
 );
 
 /**
+ * Stores the prescription details.
+ */
+export const prescriptionsTable = sqliteTable("prescription", {
+	id: primaryId<"PrescriptionID">("id", "pr"),
+	activityId: text("activity_id")
+		.references(() => activitiesTable.id, { onDelete: "cascade" })
+		.notNull()
+		.$type<DatabaseActivity["id"]>(),
+	/** Name of the drug */
+	name: text("drug_name", { length: 200 }).notNull(),
+	/** Schedule and dosage for taking the drug */
+	schedule: text("schedule", { mode: "json" }).$type<PrescriptionSchedule>(),
+	/** UTC start date of taking the medication */
+	dateStarted: dateTime("date_started"),
+	/** TODO: media storage for photos */
+});
+
+export type DatabasePrescription = typeof prescriptionsTable.$inferSelect;
+
+export const vaccinationsTable = sqliteTable("vaccination", {
+	id: primaryId<"VaccinationID">("id", "vc"),
+	activityId: text("activity_id")
+		.references(() => activitiesTable.id, { onDelete: "cascade" })
+		.notNull()
+		.$type<DatabaseActivity["id"]>(),
+	name: text("vaccine_name", { length: 200 }).notNull(),
+	administeredDate: dateTime("administered_date").notNull(),
+	nextDueDate: dateTime("next_due_date"),
+	batchNumber: text("batch_number", { length: 100 }),
+});
+
+/**
  * Stores date in a ZonedDateTimeISO format.
  * If you need ZonedDateTime, it should be sent from the client.
- * @example '2024-03-07T03:24:30.000003500+05:30[Asia/Kolkata]'
+ * @example '2024-03-07T03:24:30.000003500+05:30[Europe/Madrid]'
  * @link https://tc39.es/proposal-temporal/docs/zoneddatetime.html
  */
 function zonedDateTimeISO(columnName: Parameters<typeof text>[0]) {
@@ -300,3 +324,44 @@ function primaryId<U extends string>(columnName: Parameters<typeof text>[0], pre
 		.$default(() => (prefix ? `${prefix}_${nanoid()}` : nanoid()))
 		.$type<Branded<string, U>>();
 }
+
+export interface DosageBase {
+	time: "morning" | "afternoon" | "evening" | "night" | null;
+}
+export interface PillDosage extends DosageBase {
+	/** 1 for 1 pill, 0.5 for 1/2 pill */
+	amount: number;
+}
+export interface InjectionDosage extends DosageBase {
+	/** 2 for 2 units */
+	amount: number;
+	unit: "unit" | "mg" | "ml";
+}
+export interface LiquidDosage extends DosageBase {
+	/** 5 for 5ml */
+	amount: number;
+	/** Unit of the dosage. ml - milliliter, tsp - teaspoon, tbsp - tablespoon */
+	unit: "ml" | "tsp" | "tbsp";
+}
+export interface OintmentDosage extends DosageBase {
+	amount: string;
+}
+export interface OtherDosage extends DosageBase {
+	amount: string;
+}
+export type ScheduleDuration = {
+	/** Duration unit */
+	unit: "day" | "week" | "month" | "year";
+	/** Duration amount */
+	amount: number;
+};
+export type PrescriptionSchedule =
+	| {
+			type: "pill";
+			dosage: PillDosage[] | null;
+			duration: ScheduleDuration | null;
+	  }
+	| { type: "injection"; dosage: InjectionDosage[] | null; duration: ScheduleDuration | null }
+	| { type: "liquid"; dosage: LiquidDosage[] | null; duration: ScheduleDuration | null }
+	| { type: "ointment"; dosage: OintmentDosage[] | null; duration: ScheduleDuration | null }
+	| { type: "other"; dosage: OtherDosage[] | null; duration: ScheduleDuration | null };

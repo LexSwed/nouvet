@@ -6,6 +6,7 @@ import {
 	type DatabaseActivity,
 	activitiesTable,
 	activityRelationships,
+	prescriptionsTable,
 	userTable,
 	vaccinationsTable,
 } from "~/server/db/schema";
@@ -33,6 +34,11 @@ export async function petActivities(
 				id: userTable.id,
 				name: userTable.name,
 			},
+			prescription: {
+				name: prescriptionsTable.name,
+				schedule: prescriptionsTable.schedule,
+				dateStarted: prescriptionsTable.dateStarted,
+			},
 			vaccine: {
 				name: vaccinationsTable.name,
 				administeredDate: vaccinationsTable.administeredDate,
@@ -46,6 +52,7 @@ export async function petActivities(
 		.from(activitiesTable)
 		.where(eq(activitiesTable.petId, petId))
 		.leftJoin(activityRelationships, eq(activityRelationships.parentActivityId, activitiesTable.id))
+		.leftJoin(prescriptionsTable, eq(prescriptionsTable.activityId, activitiesTable.id))
 		// .leftJoin(childActivity, eq(childActivity.id, activityRelationships.childActivityId))
 		.leftJoin(vaccinationsTable, eq(vaccinationsTable.activityId, activitiesTable.id))
 		.leftJoin(userTable, eq(userTable.id, activitiesTable.creatorId))
