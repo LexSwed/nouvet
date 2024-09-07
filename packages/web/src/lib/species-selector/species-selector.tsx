@@ -72,7 +72,7 @@ const GenderSwitch = (props: { name: string; value?: "male" | "female" | null })
 	const t = createTranslator("pets");
 	return (
 		<Fieldset class={tw(css.genderSwitch, "flex flex-col gap-2")} legend={t("animal-gender")}>
-			<div class={tw(css.genderWrapper, "grid grid-cols-[1fr,auto,1fr] items-center gap-2")}>
+			<div class={tw(css.genderWrapper, "grid grid-cols-[1fr_auto_1fr] items-center gap-2")}>
 				<RadioCard
 					name={props.name}
 					value="male"

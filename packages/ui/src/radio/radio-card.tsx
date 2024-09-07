@@ -32,7 +32,7 @@ const RadioCard = (ownProps: RadioCardProps) => {
 			<input type="radio" id={id()} {...props} class={"sr-only"} />
 			<div class={css.wrapper} data-part="label">
 				<Show when={icon()}>
-					<div class={css.icon}>{icon()}</div>
+					<div class={tw(css.icon, "shrink-0")}>{icon()}</div>
 				</Show>
 				<Text with="label" class={css.label}>
 					{label()}

@@ -4,6 +4,7 @@
   .input {
     flex-basis: 100%;
     background: transparent;
+    border: none;
     outline: none;
     field-sizing: content;
     resize: none;

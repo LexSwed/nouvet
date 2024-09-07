@@ -141,7 +141,7 @@ function PetUpdateForm(props: { petId: PetID }) {
 						max={new Date().toISOString().split("T")[0]}
 					/>
 					<TextField label={t("edit.breed")} name="breed" value={pet().breed ?? ""} />
-					<Button type="submit" pending={updateSubmission.pending}>
+					<Button variant="accent" type="submit" pending={updateSubmission.pending}>
 						{t("edit.save-cta")}
 					</Button>
 				</Form>

@@ -1,6 +1,7 @@
 @import "tailwindcss/theme";
 
 @theme {
+  --color-*: initial;
   --color-primary: hsl(350 45.67% 49.8%);
   --color-on-primary: hsl(0 0% 100%);
   --color-primary-container: hsl(355 100% 92.5%);
@@ -55,7 +56,7 @@
   --font-family-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
-  --shadow-flat: 0 0 1px 2px theme(colors.on-surface/0.2);
+  --shadow-flat: 0 0 1px 2px theme(colors.on-surface/0.005);
   --shadow-popover: 0 0 1px theme(colors.on-surface-variant/0.2),
     theme(boxShadow.lg);
 

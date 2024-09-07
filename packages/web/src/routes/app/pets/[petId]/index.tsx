@@ -230,28 +230,28 @@ function NewActivityForm(props: { petId: string; locale: SupportedLocale }) {
 						checked
 						label={t("new-activity.type-observation")}
 						icon={<Icon use="note" />}
-						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
+						class="basis-[10rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[11rem]"
 					/>
 					<RadioCard
 						name="activityType"
 						value={"appointment" satisfies ActivityType}
 						label={t("new-activity.type-appointment")}
 						icon={<Icon use="first-aid" />}
-						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
+						class="basis-[10rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[11rem]"
 					/>
 					<RadioCard
 						name="activityType"
 						value={"prescription" satisfies ActivityType}
 						label={t("new-activity.type-prescription")}
 						icon={<Icon use="pill" />}
-						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
+						class="basis-[10rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[11rem]"
 					/>
 					<RadioCard
 						name="activityType"
 						value={"vaccination" satisfies ActivityType}
 						label={t("new-activity.type-vaccination")}
 						icon={<Icon use="syringe" />}
-						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
+						class="basis-[10rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[11rem]"
 					/>
 				</div>
 			</Fieldset>

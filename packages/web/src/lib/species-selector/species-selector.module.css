@@ -9,7 +9,7 @@
         border-color: theme("colors.tertiary");
       }
       & .genderIcon {
-        color: theme("colors.tertiary");
+        color: theme(colors.tertiary);
         & [data-male] {
           opacity: 1;
         }
