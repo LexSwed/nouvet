@@ -1,5 +1,4 @@
 import { defineConfig } from "@solidjs/start/config";
-import { patchCssModules } from "vite-css-modules";
 import { imagetools } from "vite-imagetools";
 import viteSvgSpriteWrapper from "vite-svg-sprite-wrapper";
 import tsconfigPaths from "vite-tsconfig-paths";
@@ -31,7 +30,6 @@ export default defineConfig({
 			},
 		},
 		plugins: [
-			patchCssModules(),
 			tsconfigPaths(),
 			imagetools(),
 			viteSvgSpriteWrapper({
