@@ -46,7 +46,7 @@ const petsDict = {
 	"delete.success": "{{petName}} fue eliminado.",
 	"delete.failure": "Hubo un error al eliminar a {{petName}}.",
 	"new-activity.create": "Crear",
-	"new-activity.heading": "Nuevo evento",
+	"new-activity.heading": "Registrar una nueva actividad",
 	"new-activity.type-label": "Tipo de evento",
 	"new-activity.type-observation": "Nota",
 	"new-activity.type-appointment": "Cita",

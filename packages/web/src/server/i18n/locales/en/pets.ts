@@ -46,7 +46,7 @@ const petsDict = {
 	"delete.success": "{{petName}} was deleted.",
 	"delete.failure": "There was an error deleting {{petName}}.",
 	"new-activity.create": "Create",
-	"new-activity.heading": "New event",
+	"new-activity.heading": "Record activity",
 	"new-activity.type-label": "Type of the event",
 	"new-activity.type-observation": "Note",
 	"new-activity.type-appointment": "Appointment",
