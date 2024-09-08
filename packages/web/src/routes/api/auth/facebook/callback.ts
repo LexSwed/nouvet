@@ -5,8 +5,8 @@ import { deleteCookie, getCookie, sendRedirect } from "vinxi/http";
 
 import { createUserSession } from "~/server/auth/user-session";
 import { RETURN_URL_COOKIE, USER_TIMEZONE_COOKIE } from "~/server/const";
-import { getUserByAuthProviderId } from "~/server/db/queries/getUserByAuthProviderId";
-import { userCreate } from "~/server/db/queries/userCreate";
+import { userCreate } from "~/server/db/queries/user-create";
+import { getUserByAuthProviderId } from "~/server/db/queries/user-get";
 import { getLocale } from "~/server/i18n/locale";
 
 import type { SupportedLocale } from "~/server/i18n/shared";
