@@ -11,7 +11,7 @@ import {
 	vaccinationsTable,
 } from "~/server/db/schema";
 import type { Branded, PetID, UserID } from "~/server/types";
-import { checkCanPerformPetAction } from "./canPerformPetAction";
+import { checkCanPerformPetAction } from "./can-perform-pet-action";
 
 // const childActivity = aliasedTable(activitiesTable, "childActivity");
 

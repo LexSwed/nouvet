@@ -13,7 +13,7 @@ import {
 } from "~/server/db/schema";
 import type { ActivityType, PetID, PrescriptionMedicationType } from "~/server/types";
 import { getCurrentZonedDateTime } from "~/server/utils";
-import { checkCanPerformPetAction } from "./canPerformPetAction";
+import { checkCanPerformPetAction } from "./can-perform-pet-action";
 
 const ActivityNoteSchema = v.nullable(v.pipe(v.string(), v.trim(), v.maxLength(1000)));
 const PrescriptionDurationSchema = v.nullable(

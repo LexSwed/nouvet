@@ -2,11 +2,11 @@
 import { header as getHeaderLang, getLocale } from "../i18n/locale";
 
 import { getRequestUser } from "~/server/auth/request-user";
-import { type UpdateUserSchema, userUpdate } from "~/server/db/queries/userUpdate";
+import { type UpdateUserSchema, userUpdate } from "~/server/db/queries/user-update";
 
 import { getRequestEvent } from "solid-js/web";
 import { useUserSession } from "../auth/user-session";
-import { userProfile } from "../db/queries/userFamily";
+import { userProfile } from "../db/queries/user-family";
 import { jsonFailure } from "../utils";
 
 export async function updateUserProfileServer(formData: FormData) {

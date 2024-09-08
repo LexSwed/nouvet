@@ -1,7 +1,7 @@
 import { action, cache } from "@solidjs/router";
 
 import { getRequestUser } from "~/server/auth/request-user";
-import { userFamily } from "~/server/db/queries/userFamily";
+import { userFamily } from "~/server/db/queries/user-family";
 
 import { getUserProfileServer, updateUserProfileServer } from "./user.server";
 

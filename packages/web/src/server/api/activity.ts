@@ -1,9 +1,11 @@
 import { action, cache, json } from "@solidjs/router";
 import { Temporal } from "temporal-polyfill";
 import { getRequestUser } from "~/server/auth/request-user";
-import { type PetActivitiesCursor, petActivities } from "~/server/db/queries/petActivities";
-import { petActivityCreate } from "~/server/db/queries/petActivityCreate";
-import type { ActivityCreateSchema } from "~/server/db/queries/petActivityCreate";
+import { type PetActivitiesCursor, petActivities } from "~/server/db/queries/pet-activities";
+import {
+	type ActivityCreateSchema,
+	petActivityCreate,
+} from "~/server/db/queries/pet-activity-create";
 import type { PetID } from "~/server/types";
 import { jsonFailure } from "~/server/utils";
 

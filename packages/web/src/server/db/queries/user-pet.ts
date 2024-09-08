@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { useDb } from "~/server/db";
 import { petTable, userTable } from "~/server/db/schema";
 import type { PetID, UserID } from "~/server/types";
-import { checkCanPerformPetAction } from "./canPerformPetAction";
+import { checkCanPerformPetAction } from "./can-perform-pet-action";
 
 export async function userPet(userId: UserID, petId: PetID) {
 	const db = useDb();

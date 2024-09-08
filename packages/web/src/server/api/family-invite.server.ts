@@ -6,24 +6,25 @@ import { getRequestEvent } from "solid-js/web";
 import * as v from "valibot";
 
 import { getRequestUser } from "~/server/auth/request-user";
-import { createFamilyInvite } from "~/server/db/queries/familyCreateInvite";
-import { familyInvitationInfo } from "~/server/db/queries/familyInvitationInfo";
-import { familyInvite } from "~/server/db/queries/familyInvite";
+import { acceptUserToFamily } from "~/server/db/queries/family-accept-user";
+import { createFamilyInvite } from "~/server/db/queries/family-create-invite";
+import { familyInvitationInfo } from "~/server/db/queries/family-invitation-info";
+import { familyInvite } from "~/server/db/queries/family-invite";
 import {
 	joinFamilyByInvitationHash,
 	requestFamilyAdmissionByInviteCode,
-} from "~/server/db/queries/familyJoin";
+} from "~/server/db/queries/family-join";
+import { familyRemoveFromWaitList } from "~/server/db/queries/family-remove-from-wait-list";
 import { env } from "~/server/env";
 import { IncorrectFamilyInvite, InviteeNotInWaitList } from "~/server/errors";
 
-import { acceptUserToFamily } from "../db/queries/familyAcceptUser";
-import { familyRemoveFromWaitList } from "../db/queries/familyRemoveFromWaitList";
-import { jsonFailure } from "../utils";
-
 import type { UserID } from "~/server/types";
+
 import { getFamilyMembers } from "./family";
 import { getUserPets } from "./pet";
 import { getUserFamily } from "./user";
+
+import { jsonFailure } from "../utils";
 
 // TODO: Heavily rate limit this
 export async function getFamilyInviteServer() {

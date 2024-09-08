@@ -5,11 +5,11 @@ import * as v from "valibot";
 
 import { getUserFamily } from "~/server/api/user";
 import { getRequestUser } from "~/server/auth/request-user";
-import { familyCancelJoin } from "~/server/db/queries/familyCancelJoin";
-import { familyDelete } from "~/server/db/queries/familyDelete";
-import { familyLeave } from "~/server/db/queries/familyLeave";
-import { familyMember, familyMembers } from "~/server/db/queries/familyMembers";
-import { familyUpdate } from "~/server/db/queries/familyUpdate";
+import { familyCancelJoin } from "~/server/db/queries/family-cancel-join";
+import { familyDelete } from "~/server/db/queries/family-delete";
+import { familyLeave } from "~/server/db/queries/family-leave";
+import { familyMember, familyMembers } from "~/server/db/queries/family-members";
+import { familyUpdate } from "~/server/db/queries/family-update";
 import { IncorrectFamilyMemberId } from "~/server/errors";
 import type { UserID } from "~/server/types";
 import { type ErrorKeys, jsonFailure } from "~/server/utils";
