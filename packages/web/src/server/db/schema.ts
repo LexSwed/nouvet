@@ -280,7 +280,6 @@ export const vaccinationsTable = sqliteTable("vaccination", {
 		.notNull()
 		.$type<DatabaseActivity["id"]>(),
 	name: text("vaccine_name", { length: 200 }).notNull(),
-	administeredDate: dateTime("administered_date").notNull(),
 	nextDueDate: dateTime("next_due_date"),
 	batchNumber: text("batch_number", { length: 100 }),
 });

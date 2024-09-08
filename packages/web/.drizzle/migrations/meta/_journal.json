@@ -43,6 +43,13 @@
       "when": 1725731058061,
       "tag": "0005_true_wallflower",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1725808696235,
+      "tag": "0006_overconfident_oracle",
+      "breakpoints": true
     }
   ]
 }

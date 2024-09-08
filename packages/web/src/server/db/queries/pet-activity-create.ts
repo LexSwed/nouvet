@@ -43,7 +43,6 @@ const ActivityCreateSchema = v.variant("activityType", [
 		note: ActivityNoteSchema,
 		// TODO: ZonedDateTime validation
 		recordedDate: v.nullable(v.string()),
-		administeredDate: v.pipe(v.string(), v.isoDate()),
 		nextDueDate: v.nullable(v.pipe(v.string(), v.isoDate())),
 		batchNumber: v.nullable(v.pipe(v.string(), v.trim(), v.maxLength(100))),
 	}),
@@ -160,7 +159,6 @@ export async function petActivityCreate(
 				tx.insert(vaccinationsTable).values({
 					activityId: activity.id,
 					name: activityInfo.name,
-					administeredDate: activityInfo.administeredDate,
 					nextDueDate: activityInfo.nextDueDate,
 					batchNumber: activityInfo.batchNumber,
 				});

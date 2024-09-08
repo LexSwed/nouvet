@@ -41,7 +41,6 @@ export async function petActivities(
 			},
 			vaccine: {
 				name: vaccinationsTable.name,
-				administeredDate: vaccinationsTable.administeredDate,
 				nextDueDate: vaccinationsTable.nextDueDate,
 				batchNumber: vaccinationsTable.batchNumber,
 			},
@@ -56,11 +55,7 @@ export async function petActivities(
 		// .leftJoin(childActivity, eq(childActivity.id, activityRelationships.childActivityId))
 		.leftJoin(vaccinationsTable, eq(vaccinationsTable.activityId, activitiesTable.id))
 		.leftJoin(userTable, eq(userTable.id, activitiesTable.creatorId))
-		.orderBy(
-			desc(activitiesTable.date),
-			desc(vaccinationsTable.nextDueDate),
-			desc(vaccinationsTable.administeredDate),
-		)
+		.orderBy(desc(activitiesTable.date), desc(vaccinationsTable.nextDueDate))
 		.$dynamic();
 
 	if (cursor) {
