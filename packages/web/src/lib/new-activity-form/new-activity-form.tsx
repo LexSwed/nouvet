@@ -104,7 +104,7 @@ export function NewActivityForm(props: { petId: string; locale: SupportedLocale 
 				}
 			/>
 			<Fieldset legend={<span class="sr-only">{t("new-activity.type-label")}</span>}>
-				<div class="overflow-snap -mx-4 flex scroll-px-4 flex-row gap-2 px-4">
+				<div class="overflow-snap -mx-4 scroll-px-4 gap-2 px-4">
 					<RadioCard
 						name="activityType"
 						value={"observation" satisfies ActivityType}

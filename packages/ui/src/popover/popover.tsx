@@ -116,7 +116,7 @@ const Popover = <T extends ValidComponent = "div">(ownProps: PopoverProps<T>) =>
 			aria-labelledby={heading() ? `${local.id}-heading` : undefined}
 		>
 			<Show when={heading()}>
-				<Text with="headline-3" as="header" id={`${local.id}-heading`} class="mb-4">
+				<Text with="headline-3" as="header" id={`${local.id}-heading`} class="ms-3 mb-4">
 					{heading()}
 				</Text>
 			</Show>

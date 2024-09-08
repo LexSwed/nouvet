@@ -25,6 +25,10 @@
   #app {
     @apply overflow-x-hidden;
   }
+  /* Flex box children should be able to shrink */
+  * {
+    min-width: 0;
+  }
 }
 
 @layer tw-base {
@@ -95,7 +99,7 @@
   }
 
   .overflow-snap {
-    @apply scrollbar-none -my-2 snap-x snap-mandatory overflow-auto [&>:last-of-type]:snap-end py-2 [&>*]:shrink-0 [&>*]:snap-start [&>*]:snap-always;
+    @apply flex flex-row flex-nowrap scrollbar-none -my-2 snap-x snap-mandatory overflow-auto [&>:last-of-type]:snap-end py-2 [&>*]:shrink-0 [&>*]:snap-start [&>*]:snap-always;
   }
 
   .stack {
