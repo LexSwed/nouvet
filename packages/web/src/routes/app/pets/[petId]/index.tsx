@@ -1,4 +1,4 @@
-import { Avatar, Button, ButtonLink, Card, Drawer, Icon, Text } from "@nou/ui";
+import { Avatar, Button, ButtonLink, Card, Icon, Text } from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import {
 	type RouteDefinition,
@@ -7,7 +7,7 @@ import {
 	useLocation,
 } from "@solidjs/router";
 import { type Accessor, For, Match, Show, Suspense, Switch } from "solid-js";
-import { NewActivityForm } from "~/lib/new-activity-form";
+import { NewActivityCreator } from "~/lib/new-activity-creator";
 import { PetPicture } from "~/lib/pet-home-card";
 import { getPetActivities } from "~/server/api/activity";
 import { getPet } from "~/server/api/pet";
@@ -151,15 +151,11 @@ function ActivityQuickCreator(props: { petId: string }) {
 				<Icon use="stack-plus" />
 				{t("new-activity.create")}
 			</Button>
-			<Drawer id="create-activity" heading={t("new-activity.heading")}>
-				{(open) => (
-					<Show when={user() && open()}>
-						<Suspense fallback={null}>
-							<NewActivityForm petId={props.petId} locale={user()!.locale} />
-						</Suspense>
-					</Show>
-				)}
-			</Drawer>
+			<Suspense fallback={null}>
+				<Show when={user()}>
+					<NewActivityCreator petId={props.petId} locale={user()!.locale} />
+				</Show>
+			</Suspense>
 		</>
 	);
 }

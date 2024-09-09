@@ -11,17 +11,99 @@ import {
 	toast,
 } from "@nou/ui";
 import { useAction, useSubmission } from "@solidjs/router";
-import { Show, createSignal } from "solid-js";
+import { Match, Show, Switch, createSignal } from "solid-js";
 import { isServer } from "solid-js/web";
 import { Temporal } from "temporal-polyfill";
 import { createPetActivity } from "~/server/api/activity";
 import { createTranslator } from "~/server/i18n";
 import type { SupportedLocale } from "~/server/i18n/shared";
 import type { ActivityType } from "~/server/types";
+import {
+	MultiScreenPopover,
+	MultiScreenPopoverContent,
+	MultiScreenPopoverHeader,
+} from "../multi-screen-popover";
 import { createFormattedDate } from "../utils/format-date";
 import { pickSubmissionValidationErrors } from "../utils/submission";
 
-export function NewActivityForm(props: { petId: string; locale: SupportedLocale }) {
+type Step = ActivityType | "type-select";
+
+export function NewActivityCreator(props: { petId: string; locale: SupportedLocale }) {
+	const id = "create-activity";
+	return (
+		<MultiScreenPopover id={id} component="drawer">
+			{(controls) => {
+				const t = createTranslator("pets");
+				const [step, setStep] = createSignal<Step>("type-select");
+				const update = async (newStep: Step, direction: "forwards" | "backwards" = "forwards") => {
+					console.log("update", newStep, direction);
+
+					controls.update(() => {
+						setStep(newStep);
+					}, direction);
+				};
+				return (
+					<>
+						<MultiScreenPopoverHeader class="mb-4">
+							<Show when={step() !== "type-select"} fallback={<div />}>
+								<Button
+									variant="ghost"
+									icon
+									// label={t("invite.back")}
+									onClick={() => update("type-select", "backwards")}
+								>
+									<Icon use="chevron-left" />
+								</Button>
+							</Show>
+							<Switch>
+								<Match when={step() === "type-select"}>
+									<Text class="sr-only">{t("new-activity.heading")}</Text>
+								</Match>
+								<Match when={step() === "observation"}>Note behavior</Match>
+							</Switch>
+						</MultiScreenPopoverHeader>
+						<MultiScreenPopoverContent>
+							<Switch>
+								<Match when={step() === "type-select"}>
+									<ActivitySelection update={update} />
+								</Match>
+								<Match when={step() === "observation"}>
+									<ObservationActivityForm petId={props.petId} locale={props.locale} />
+								</Match>
+							</Switch>
+						</MultiScreenPopoverContent>
+					</>
+				);
+			}}
+		</MultiScreenPopover>
+	);
+}
+
+function ActivitySelection(props: { update: (newStep: Step) => void }) {
+	const t = createTranslator("pets");
+	return (
+		<div class="grid gap-2">
+			<Button onClick={() => props.update("observation")}>
+				<Icon use="note" />
+				<Text>{t("new-activity.type-observation")}</Text>
+			</Button>
+			<Button onClick={() => props.update("appointment")}>
+				<Icon use="first-aid" />
+				<Text>{t("new-activity.type-appointment")}</Text>
+			</Button>
+			<Button onClick={() => props.update("prescription")}>
+				<Icon use="pill" />
+				<Text>{t("new-activity.type-prescription")}</Text>
+			</Button>
+			<Button onClick={() => props.update("vaccination")}>
+				<Icon use="syringe" />
+				<Text>{t("new-activity.type-vaccination")}</Text>
+			</Button>
+		</div>
+	);
+}
+
+function ObservationActivityForm(props: { petId: string; locale: SupportedLocale }) {
 	const t = createTranslator("pets");
 	const submission = useSubmission(createPetActivity);
 	const action = useAction(createPetActivity);

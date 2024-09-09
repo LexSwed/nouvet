@@ -1,11 +1,13 @@
-import { Button, Icon, Popover, Text, startViewTransition } from "@nou/ui";
-import { type JSX, type ParentProps, Show, Suspense } from "solid-js";
-import { createTranslator } from "~/server/i18n";
+import { Drawer, Popover, startViewTransition, tw } from "@nou/ui";
+import { type Accessor, type JSX, type ParentProps, Show, Suspense } from "solid-js";
 
 import "./multi-screen-popover.module.css";
+import { Dynamic } from "solid-js/web";
 
 interface MultiScreenPopoverProps {
 	id: string;
+	class?: string;
+	component?: "popover" | "drawer";
 	children: (controls: MultiScreenPopoverControls) => JSX.Element;
 }
 
@@ -15,11 +17,9 @@ export type MultiScreenPopoverControls = {
 };
 
 export function MultiScreenPopover(props: MultiScreenPopoverProps) {
-	const update = async (callback: () => void, direction: "forwards" | "backwards" = "forwards") => {
+	const update = async (update: () => void, direction: "forwards" | "backwards" = "forwards") => {
 		await startViewTransition({
-			update: () => {
-				callback();
-			},
+			update,
 			types: ["slide", direction],
 		}).finished;
 
@@ -33,14 +33,14 @@ export function MultiScreenPopover(props: MultiScreenPopoverProps) {
 	};
 
 	return (
-		<Popover
+		<Dynamic
+			component={props.component === "drawer" ? Drawer : Popover}
 			id={props.id}
 			placement="center"
 			aria-labelledby={`${props.id}-headline`}
-			role="dialog"
-			class="view-transition-[multi-screen-popover] mt-[16vh] flex w-[94svw] max-w-[420px] flex-col gap-6 bg-gradient-to-b from-surface via-65% via-surface to-primary/10 p-6 md:mt-[20vh]"
+			class={tw("view-transition-[multi-screen-popover]", props.class)}
 		>
-			{(open) => {
+			{(open: Accessor<boolean>) => {
 				return (
 					<Suspense>
 						<Show when={open()}>
@@ -52,36 +52,30 @@ export function MultiScreenPopover(props: MultiScreenPopoverProps) {
 					</Suspense>
 				);
 			}}
-		</Popover>
+		</Dynamic>
 	);
 }
 
 export function MultiScreenPopoverHeader(props: {
-	id: string;
-	headline: JSX.Element;
-	backButton: JSX.Element;
+	children: JSX.Element;
+	class?: string;
 }) {
-	const t = createTranslator("app");
 	return (
-		<header class="view-transition-[multi-screen-popover-header] -m-4 z-10 flex flex-row items-center justify-between gap-2">
-			{props.backButton}
-			<Text aria-hidden class="sr-only" id={`${props.id}-headline`} aria-live="polite">
-				{props.headline}
-			</Text>
-			<Button
-				variant="ghost"
-				popoverTarget={props.id}
-				popoverTargetAction="hide"
-				aria-controls={props.id}
-				icon
-				label={t("dialog.close")}
-			>
-				<Icon use="x" />
-			</Button>
+		<header
+			class={tw(
+				"view-transition-[multi-screen-popover-header] -mt-4 -mx-2 z-10 flex flex-row items-center gap-2",
+				props.class,
+			)}
+		>
+			{props.children}
 		</header>
 	);
 }
 
-export function MultiScreenPopoverContent(props: ParentProps) {
-	return <div class="view-transition-[dialog-content] flex flex-col gap-6">{props.children}</div>;
+export function MultiScreenPopoverContent(props: ParentProps<{ class?: string }>) {
+	return (
+		<div class={tw("view-transition-[multi-screen-popover-content]", props.class)}>
+			{props.children}
+		</div>
+	);
 }
