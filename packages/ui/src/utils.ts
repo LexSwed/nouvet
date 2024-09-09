@@ -48,9 +48,9 @@ export function startViewTransition(
 		handler.update();
 	}
 	return {
-		finished: Promise.resolve(),
-		ready: Promise.resolve(),
+		finished: Promise.resolve(undefined),
+		ready: Promise.resolve(undefined),
 		skipTransition: () => {},
-		updateCallbackDone: Promise.resolve(),
+		updateCallbackDone: Promise.resolve(undefined),
 	};
 }
