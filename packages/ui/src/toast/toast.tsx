@@ -18,8 +18,8 @@ import {
 import { Card } from "../card";
 
 import { createRoot } from "solid-js";
-import { Icon } from "../_index";
 import { Button } from "../button";
+import { Icon } from "../icon";
 import { tw } from "../tw";
 import { mergeDefaultProps } from "../utils";
 import css from "./toast.module.css";
