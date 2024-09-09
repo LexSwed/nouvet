@@ -8,7 +8,7 @@ import { getUserFamily } from "~/server/api/user";
 import { cacheTranslations, createTranslator } from "~/server/i18n";
 
 import { AppHeader } from "~/lib/app-header";
-import FamilyInviteDialog from "~/lib/family-invite/invite-dialog";
+import { FamilyInviteDialog } from "~/lib/family-invite";
 import { PetHomeCard } from "~/lib/pet-home-card";
 
 const CreateNewPetForm = lazy(() => import("~/lib/create-new-pet-form"));
@@ -48,9 +48,7 @@ const AppHomePage = () => {
 											<Button popoverTarget="family-invite" variant="link">
 												{t("family.no-name")}
 											</Button>
-											<Suspense>
-												<FamilyInviteDialog id="family-invite" />
-											</Suspense>
+											<FamilyInviteDialog id="family-invite" />
 										</>
 									</Match>
 									<Match when={user().family?.id}>

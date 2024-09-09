@@ -19,8 +19,8 @@ import { cancelFamilyJoin, getFamilyMembers, leaveFamily } from "~/server/api/fa
 import { getUserFamily } from "~/server/api/user";
 import { T, cacheTranslations, createTranslator } from "~/server/i18n";
 
+import { FamilyInviteDialog } from "~/lib/family-invite";
 import { FamilyNameForm } from "~/lib/family-invite/family-name-form";
-import { FamilyInviteDialog } from "~/lib/family-invite/invite-dialog";
 import { WaitingFamilyConfirmation } from "~/lib/family-invite/waiting-family-confirmation";
 
 export const route = {
@@ -63,9 +63,7 @@ export default function FamilyRootPage() {
 					</Switch>
 				</Suspense>
 			</section>
-			<Suspense>
-				<FamilyInviteDialog id="family-invite" />
-			</Suspense>
+			<FamilyInviteDialog id="family-invite" />
 		</>
 	);
 }

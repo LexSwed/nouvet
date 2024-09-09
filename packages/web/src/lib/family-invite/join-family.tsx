@@ -6,7 +6,7 @@ import { Match, Show, Suspense, Switch, createUniqueId, lazy } from "solid-js";
 import { createTranslator } from "~/server/i18n";
 
 const QRCodeScanner = lazy(() => import("./qr-scanner"));
-const JoinFamily = (props: { onCancel: () => void; onSuccess: () => void }) => {
+export function JoinFamily(props: { onCancel: () => void; onSuccess: () => void }) {
 	const t = createTranslator("family");
 
 	const supportsCamera = createAsync(async () => {
@@ -61,7 +61,10 @@ const JoinFamily = (props: { onCancel: () => void; onSuccess: () => void }) => {
 				<Match when={camera() !== "granted"}>
 					<div class="flex flex-col items-center gap-4">
 						<Show when={supportsCamera()}>
-							<Button onClick={() => navigator.mediaDevices.getUserMedia({ video: true })}>
+							<Button
+								variant="accent"
+								onClick={() => navigator.mediaDevices.getUserMedia({ video: true })}
+							>
 								{t("invite.join-scan-cta")}
 							</Button>
 							<Text with="body-sm">{orText}</Text>
@@ -75,6 +78,4 @@ const JoinFamily = (props: { onCancel: () => void; onSuccess: () => void }) => {
 			</Button>
 		</div>
 	);
-};
-
-export default JoinFamily;
+}

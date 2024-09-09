@@ -1,22 +1,24 @@
+@tailwind utilities;
+
 :global(html:active-view-transition-type(backwards, forwards)) {
-  &::view-transition-old(invite-dialog-content),
-  &::view-transition-new(invite-dialog-content) {
+  &::view-transition-old(dialog-content),
+  &::view-transition-new(dialog-content) {
     @apply w-full overflow-clip object-none;
   }
-  &::view-transition-old(invite-dialog-content) {
+  &::view-transition-old(dialog-content) {
     @apply animate-out fade-out-0 fill-mode-forwards duration-200;
   }
-  &::view-transition-new(invite-dialog-content) {
+  &::view-transition-new(dialog-content) {
     @apply animate-in fade-in-0 fill-mode-forwards duration-300;
   }
 }
 
-:global(::view-transition-old(family-invite-dialog)),
-:global(::view-transition-new(family-invite-dialog)) {
+:global(::view-transition-old(multi-screen-popover)),
+:global(::view-transition-new(multi-screen-popover)) {
   height: 100%;
 }
 
-:global(::view-transition-group(invite-dialog-content)) {
+:global(::view-transition-group(dialog-content)) {
   /* Clip the views as they overflow the group */
   overflow: clip;
   overflow-clip-margin: 1.5rem;
@@ -24,21 +26,21 @@
 
 :global(
     html:active-view-transition-type(backwards)::view-transition-old(
-        invite-dialog-content
+        dialog-content
       )
   ) {
   @apply slide-out-to-right-[20%];
 }
 :global(
     html:active-view-transition-type(backwards)::view-transition-new(
-        invite-dialog-content
+        dialog-content
       )
   ) {
   @apply slide-in-from-left-[20%];
 }
 :global(
     html:active-view-transition-type(forwards)::view-transition-old(
-        invite-dialog-content
+        dialog-content
       )
   ) {
   /* animation: slide-out-to-left 0.1s ease-in forwards; */
@@ -46,7 +48,7 @@
 }
 :global(
     html:active-view-transition-type(forwards)::view-transition-new(
-        invite-dialog-content
+        dialog-content
       )
   ) {
   @apply slide-in-from-right-[20%];

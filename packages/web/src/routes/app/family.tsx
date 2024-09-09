@@ -7,7 +7,7 @@ import { getUserFamily } from "~/server/api/user";
 import { T, cacheTranslations, createTranslator } from "~/server/i18n";
 
 import { AppHeader } from "~/lib/app-header";
-import FamilyInviteDialog from "~/lib/family-invite/invite-dialog";
+import { FamilyInviteDialog } from "~/lib/family-invite";
 
 export const route = {
 	preload() {
@@ -42,9 +42,7 @@ function FamilyPage(props: RouteSectionProps) {
 						</Match>
 					</Switch>
 				</Suspense>
-				<Suspense>
-					<FamilyInviteDialog id="family-invite" />
-				</Suspense>
+				<FamilyInviteDialog id="family-invite" />
 			</div>
 		</>
 	);
