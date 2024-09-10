@@ -132,5 +132,3 @@ export function FamilyInviteDialog(ownProps: {
 		</MultiScreenPopover>
 	);
 }
-
-export default FamilyInviteDialog;

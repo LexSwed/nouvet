@@ -1,18 +1,6 @@
-import {
-	Button,
-	Fieldset,
-	Form,
-	Icon,
-	RadioCard,
-	Text,
-	TextField,
-	Toast,
-	startViewTransition,
-	toast,
-} from "@nou/ui";
+import { Button, Form, Icon, Text, TextField, Toast, startViewTransition, toast } from "@nou/ui";
 import { useAction, useSubmission } from "@solidjs/router";
 import { Match, Show, Switch, createSignal } from "solid-js";
-import { isServer } from "solid-js/web";
 import { Temporal } from "temporal-polyfill";
 import { createPetActivity } from "~/server/api/activity";
 import { createTranslator } from "~/server/i18n";
@@ -28,20 +16,21 @@ import { pickSubmissionValidationErrors } from "../utils/submission";
 
 type Step = ActivityType | "type-select";
 
-export function NewActivityCreator(props: { petId: string; locale: SupportedLocale }) {
-	const id = "create-activity";
+export function NewActivityCreator(props: {
+	petId: string;
+	locale: SupportedLocale;
+}) {
 	return (
-		<MultiScreenPopover id={id} component="drawer">
+		<MultiScreenPopover id={"create-activity"} component="drawer">
 			{(controls) => {
 				const t = createTranslator("pets");
 				const [step, setStep] = createSignal<Step>("type-select");
 				const update = async (newStep: Step, direction: "forwards" | "backwards" = "forwards") => {
-					console.log("update", newStep, direction);
-
-					controls.update(() => {
+					controls.update(async () => {
 						setStep(newStep);
 					}, direction);
 				};
+
 				return (
 					<>
 						<MultiScreenPopoverHeader class="mb-4">
@@ -55,12 +44,17 @@ export function NewActivityCreator(props: { petId: string; locale: SupportedLoca
 									<Icon use="chevron-left" />
 								</Button>
 							</Show>
-							<Switch>
-								<Match when={step() === "type-select"}>
-									<Text class="sr-only">{t("new-activity.heading")}</Text>
-								</Match>
-								<Match when={step() === "observation"}>Note behavior</Match>
-							</Switch>
+							<Text with="label">
+								<Switch>
+									<Match when={step() === "type-select"}>
+										<Text class="sr-only">{t("new-activity.heading")}</Text>
+									</Match>
+									<Match when={step() === "observation"}>Note behavior</Match>
+									<Match when={step() === "appointment"}>Create appointment</Match>
+									<Match when={step() === "prescription"}>Create prescription</Match>
+									<Match when={step() === "vaccination"}>Create vaccination event</Match>
+								</Switch>
+							</Text>
 						</MultiScreenPopoverHeader>
 						<MultiScreenPopoverContent>
 							<Switch>
@@ -69,6 +63,15 @@ export function NewActivityCreator(props: { petId: string; locale: SupportedLoca
 								</Match>
 								<Match when={step() === "observation"}>
 									<ObservationActivityForm petId={props.petId} locale={props.locale} />
+								</Match>
+								<Match when={step() === "appointment"}>
+									<AppointmentActivityForm petId={props.petId} />
+								</Match>
+								<Match when={step() === "prescription"}>
+									<PrescriptionActivityForm petId={props.petId} />
+								</Match>
+								<Match when={step() === "vaccination"}>
+									<VaccinationActivityForm petId={props.petId} />
 								</Match>
 							</Switch>
 						</MultiScreenPopoverContent>
@@ -82,20 +85,32 @@ export function NewActivityCreator(props: { petId: string; locale: SupportedLoca
 function ActivitySelection(props: { update: (newStep: Step) => void }) {
 	const t = createTranslator("pets");
 	return (
-		<div class="grid gap-2">
-			<Button onClick={() => props.update("observation")}>
+		<div class="grid grid-cols-2 gap-2">
+			<Button
+				class="flex flex-col items-start gap-3 rounded-2xl p-3"
+				onClick={() => props.update("observation")}
+			>
 				<Icon use="note" />
 				<Text>{t("new-activity.type-observation")}</Text>
 			</Button>
-			<Button onClick={() => props.update("appointment")}>
+			<Button
+				class="flex flex-col items-start gap-3 rounded-2xl p-3"
+				onClick={() => props.update("appointment")}
+			>
 				<Icon use="first-aid" />
 				<Text>{t("new-activity.type-appointment")}</Text>
 			</Button>
-			<Button onClick={() => props.update("prescription")}>
+			<Button
+				class="flex flex-col items-start gap-3 rounded-2xl p-3"
+				onClick={() => props.update("prescription")}
+			>
 				<Icon use="pill" />
 				<Text>{t("new-activity.type-prescription")}</Text>
 			</Button>
-			<Button onClick={() => props.update("vaccination")}>
+			<Button
+				class="flex flex-col items-start gap-3 rounded-2xl p-3"
+				onClick={() => props.update("vaccination")}
+			>
 				<Icon use="syringe" />
 				<Text>{t("new-activity.type-vaccination")}</Text>
 			</Button>
@@ -103,7 +118,10 @@ function ActivitySelection(props: { update: (newStep: Step) => void }) {
 	);
 }
 
-function ObservationActivityForm(props: { petId: string; locale: SupportedLocale }) {
+function ObservationActivityForm(props: {
+	petId: string;
+	locale: SupportedLocale;
+}) {
 	const t = createTranslator("pets");
 	const submission = useSubmission(createPetActivity);
 	const action = useAction(createPetActivity);
@@ -185,40 +203,8 @@ function ObservationActivityForm(props: { petId: string; locale: SupportedLocale
 					</div>
 				}
 			/>
-			<Fieldset legend={<span class="sr-only">{t("new-activity.type-label")}</span>}>
-				<div class="overflow-snap -mx-4 scroll-px-4 gap-2 px-4">
-					<RadioCard
-						name="activityType"
-						value={"observation" satisfies ActivityType}
-						checked
-						label={t("new-activity.type-observation")}
-						icon={<Icon use="note" />}
-						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
-					/>
-					<RadioCard
-						name="activityType"
-						value={"appointment" satisfies ActivityType}
-						label={t("new-activity.type-appointment")}
-						icon={<Icon use="first-aid" />}
-						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
-					/>
-					<RadioCard
-						name="activityType"
-						value={"prescription" satisfies ActivityType}
-						label={t("new-activity.type-prescription")}
-						icon={<Icon use="pill" />}
-						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
-					/>
-					<RadioCard
-						name="activityType"
-						value={"vaccination" satisfies ActivityType}
-						label={t("new-activity.type-vaccination")}
-						icon={<Icon use="syringe" />}
-						class="basis-[8.5rem] part-[label]:flex-col part-[label]:items-start will-change-[flex-basis] has-[input:checked]:basis-[9.25rem]"
-					/>
-				</div>
-			</Fieldset>
-			{isServer ? null : <input type="hidden" name="currentTimeZone" value={zoned.timeZoneId} />}
+			<input type="hidden" name="activityType" value="observation" />
+			<input type="hidden" name="currentTimeZone" value={zoned.timeZoneId} />
 			<TextField
 				as="textarea"
 				name="note"
@@ -246,4 +232,16 @@ function ObservationActivityForm(props: { petId: string; locale: SupportedLocale
 			</div>
 		</Form>
 	);
+}
+
+function AppointmentActivityForm(props: { petId: string }) {
+	return <div>Create appointment</div>;
+}
+
+function PrescriptionActivityForm(props: { petId: string }) {
+	return <div>Create prescription</div>;
+}
+
+function VaccinationActivityForm(props: { petId: string }) {
+	return <div>Create vaccination event</div>;
 }

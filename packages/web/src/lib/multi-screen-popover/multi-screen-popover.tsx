@@ -17,14 +17,19 @@ export type MultiScreenPopoverControls = {
 };
 
 export function MultiScreenPopover(props: MultiScreenPopoverProps) {
-	const update = async (update: () => void, direction: "forwards" | "backwards" = "forwards") => {
+	/**
+	 * - Call callback to set new step
+	 * - Transition starts
+	 * - Rendering is finished and transition is ended
+	 * - start view transition
+	 *
+	 */
+	const update = async (callback: () => void, direction: "forwards" | "backwards" = "forwards") => {
 		await startViewTransition({
-			update,
+			update: callback,
 			types: ["slide", direction],
 		}).finished;
-
-		const popover = document.getElementById(props.id);
-		popover?.focus();
+		document.getElementById(props.id)?.focus();
 	};
 
 	const close = () => {
@@ -45,8 +50,9 @@ export function MultiScreenPopover(props: MultiScreenPopoverProps) {
 					<Suspense>
 						<Show when={open()}>
 							{(open) => {
-								if (open()!) return props.children({ update, close });
-								return null;
+								if (!open()) return null;
+
+								return props.children({ update, close });
 							}}
 						</Show>
 					</Suspense>
