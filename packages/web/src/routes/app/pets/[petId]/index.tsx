@@ -141,7 +141,7 @@ function MainPetCard(props: {
 	);
 }
 
-function ActivityQuickCreator(props: { petId: string }) {
+function ActivityQuickCreator(props: { petId: PetID }) {
 	const t = createTranslator("pets");
 	const user = createAsync(() => getUser());
 

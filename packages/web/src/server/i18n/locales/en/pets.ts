@@ -57,6 +57,8 @@ const petsDict = {
 	"new-activity.note-placeholder": "What happened?",
 	"new-activity.cta-cancel": "Cancel",
 	"new-activity.cta-create": "Create",
+	"new-activity.recorded-date.label": "Date",
+	"new-activity.recorded-date.description": "Change the date of the activity",
 } as const;
 
 export default petsDict;

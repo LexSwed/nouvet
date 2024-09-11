@@ -1,11 +1,11 @@
 import { Button, Form, Icon, Text, TextField, Toast, startViewTransition, toast } from "@nou/ui";
 import { useAction, useSubmission } from "@solidjs/router";
-import { Match, Show, Switch, createSignal } from "solid-js";
+import { Match, type ParentProps, Show, Switch, createSignal } from "solid-js";
 import { Temporal } from "temporal-polyfill";
 import { createPetActivity } from "~/server/api/activity";
 import { createTranslator } from "~/server/i18n";
 import type { SupportedLocale } from "~/server/i18n/shared";
-import type { ActivityType } from "~/server/types";
+import type { ActivityType, PetID } from "~/server/types";
 import {
 	MultiScreenPopover,
 	MultiScreenPopoverContent,
@@ -16,8 +16,13 @@ import { pickSubmissionValidationErrors } from "../utils/submission";
 
 type Step = ActivityType | "type-select";
 
+type ActivityCreatorProps = {
+	petId: PetID;
+	locale: SupportedLocale;
+};
+
 export function NewActivityCreator(props: {
-	petId: string;
+	petId: PetID;
 	locale: SupportedLocale;
 }) {
 	return (
@@ -62,16 +67,16 @@ export function NewActivityCreator(props: {
 									<ActivitySelection update={update} />
 								</Match>
 								<Match when={step() === "observation"}>
-									<ObservationActivityForm petId={props.petId} locale={props.locale} />
+									<ObservationActivityForm {...props} />
 								</Match>
 								<Match when={step() === "appointment"}>
-									<AppointmentActivityForm petId={props.petId} />
+									<AppointmentActivityForm {...props} />
 								</Match>
 								<Match when={step() === "prescription"}>
-									<PrescriptionActivityForm petId={props.petId} />
+									<PrescriptionActivityForm {...props} />
 								</Match>
 								<Match when={step() === "vaccination"}>
-									<VaccinationActivityForm petId={props.petId} />
+									<VaccinationActivityForm {...props} />
 								</Match>
 							</Switch>
 						</MultiScreenPopoverContent>
@@ -85,46 +90,45 @@ export function NewActivityCreator(props: {
 function ActivitySelection(props: { update: (newStep: Step) => void }) {
 	const t = createTranslator("pets");
 	return (
-		<div class="grid grid-cols-2 gap-2">
+		<div class="mt-12 grid grid-cols-2 gap-2">
 			<Button
 				class="flex flex-col items-start gap-3 rounded-2xl p-3"
 				onClick={() => props.update("observation")}
 			>
-				<Icon use="note" />
+				<Icon use="note" class="size-10 rounded-full bg-on-surface/8 p-2 transition-colors" />
 				<Text>{t("new-activity.type-observation")}</Text>
 			</Button>
 			<Button
 				class="flex flex-col items-start gap-3 rounded-2xl p-3"
 				onClick={() => props.update("appointment")}
 			>
-				<Icon use="first-aid" />
+				<Icon use="first-aid" class="size-10 rounded-full bg-on-surface/8 p-2 transition-colors" />
 				<Text>{t("new-activity.type-appointment")}</Text>
 			</Button>
 			<Button
 				class="flex flex-col items-start gap-3 rounded-2xl p-3"
 				onClick={() => props.update("prescription")}
 			>
-				<Icon use="pill" />
+				<Icon use="pill" class="size-10 rounded-full bg-on-surface/8 p-2 transition-colors" />
 				<Text>{t("new-activity.type-prescription")}</Text>
 			</Button>
 			<Button
 				class="flex flex-col items-start gap-3 rounded-2xl p-3"
 				onClick={() => props.update("vaccination")}
 			>
-				<Icon use="syringe" />
+				<Icon use="syringe" class="size-10 rounded-full bg-on-surface/8 p-2 transition-colors" />
 				<Text>{t("new-activity.type-vaccination")}</Text>
 			</Button>
 		</div>
 	);
 }
 
-function ObservationActivityForm(props: {
-	petId: string;
-	locale: SupportedLocale;
-}) {
-	const t = createTranslator("pets");
+function NewActivityForm(
+	props: ParentProps<ActivityCreatorProps & { activityType: ActivityType }>,
+) {
 	const submission = useSubmission(createPetActivity);
 	const action = useAction(createPetActivity);
+	const t = createTranslator("pets");
 
 	const [dateChange, setDateChange] = createSignal(false);
 
@@ -159,52 +163,72 @@ function ObservationActivityForm(props: {
 			}}
 		>
 			<input type="hidden" name="petId" value={props.petId} />
-			<Show
-				when={dateChange()}
-				children={
-					<TextField
-						variant="ghost"
-						type="datetime-local"
-						name="recordedDate"
-						label="Date"
-						description="Change recorded date and time"
-						class="view-transition-[new-activity-date-input]"
-						value={currentDateISO}
-						ref={(el) => {
-							dateInputElement = el;
-						}}
-					/>
-				}
-				fallback={
-					<div class="flex flex-row justify-start">
-						<Button
-							variant="tonal"
-							label="Change recorded date and time"
-							onClick={(event) => {
-								// @ts-expect-error view-transition-name is not a standard attribute
-								event.currentTarget.style["view-transition-name"] = "new-activity-date-button";
-								startViewTransition(() => {
-									setDateChange(true);
-								}).finished.then(() => {
-									dateInputElement?.focus();
-								});
-							}}
-						>
-							<Text
-								as="time"
-								datetime={currentDateISO}
-								tone="light"
-								class="flex flex-row items-center gap-2 font-light text-sm"
-							>
-								{currentDateFormatted()}
-								<Icon use="pencil" size="xs" />
-							</Text>
-						</Button>
-					</div>
-				}
-			/>
 			<input type="hidden" name="activityType" value="observation" />
-			<input type="hidden" name="currentTimeZone" value={zoned.timeZoneId} />
+			<>
+				<input type="hidden" name="currentTimeZone" value={zoned.timeZoneId} />
+				<Show
+					when={dateChange()}
+					children={
+						<TextField
+							variant="ghost"
+							type="datetime-local"
+							name="recordedDate"
+							label={t("new-activity.recorded-date.label")}
+							description={t("new-activity.recorded-date.description")}
+							class="view-transition-[new-activity-date-input]"
+							value={currentDateISO}
+							ref={(el) => {
+								dateInputElement = el;
+							}}
+						/>
+					}
+					fallback={
+						<div class="flex flex-row justify-start">
+							<Button
+								variant="tonal"
+								label={t("new-activity.recorded-date.description")}
+								onClick={(event) => {
+									// @ts-expect-error view-transition-name is not a standard attribute
+									event.currentTarget.style["view-transition-name"] = "new-activity-date-button";
+									startViewTransition(() => {
+										setDateChange(true);
+									}).finished.then(() => {
+										dateInputElement?.focus();
+									});
+								}}
+							>
+								<Text
+									as="time"
+									datetime={currentDateISO}
+									tone="light"
+									class="flex flex-row items-center gap-2 font-light text-sm"
+								>
+									{currentDateFormatted()}
+									<Icon use="pencil" size="xs" />
+								</Text>
+							</Button>
+						</div>
+					}
+				/>
+			</>
+			{props.children}
+			<div class="mt-4 flex flex-row justify-end gap-4 *:flex-1">
+				<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
+					{t("new-activity.cta-cancel")}
+				</Button>
+				<Button type="submit" variant="tonal" tone="primary" pending={submission.pending}>
+					{t("new-activity.cta-create")}
+				</Button>
+			</div>
+		</Form>
+	);
+}
+
+function ObservationActivityForm(props: ActivityCreatorProps) {
+	const t = createTranslator("pets");
+
+	return (
+		<NewActivityForm activityType="observation" petId={props.petId} locale={props.locale}>
 			<TextField
 				as="textarea"
 				name="note"
@@ -222,26 +246,30 @@ function ObservationActivityForm(props: {
 					}
 				}}
 			/>
-			<div class="mt-4 flex flex-row justify-end gap-4 *:flex-1">
-				<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
-					{t("new-activity.cta-cancel")}
-				</Button>
-				<Button type="submit" variant="tonal" tone="primary" pending={submission.pending}>
-					{t("new-activity.cta-create")}
-				</Button>
-			</div>
-		</Form>
+		</NewActivityForm>
 	);
 }
 
-function AppointmentActivityForm(props: { petId: string }) {
-	return <div>Create appointment</div>;
+function AppointmentActivityForm(props: ActivityCreatorProps) {
+	return (
+		<NewActivityForm activityType="appointment" petId={props.petId} locale={props.locale}>
+			Appointment
+		</NewActivityForm>
+	);
 }
 
-function PrescriptionActivityForm(props: { petId: string }) {
-	return <div>Create prescription</div>;
+function PrescriptionActivityForm(props: ActivityCreatorProps) {
+	return (
+		<NewActivityForm activityType="prescription" petId={props.petId} locale={props.locale}>
+			Prescription
+		</NewActivityForm>
+	);
 }
 
-function VaccinationActivityForm(props: { petId: string }) {
-	return <div>Create vaccination event</div>;
+function VaccinationActivityForm(props: ActivityCreatorProps) {
+	return (
+		<NewActivityForm activityType="vaccination" petId={props.petId} locale={props.locale}>
+			Vaccination
+		</NewActivityForm>
+	);
 }
