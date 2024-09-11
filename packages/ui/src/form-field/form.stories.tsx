@@ -152,7 +152,7 @@ export const CreatePet = () => {
 						</div>
 					</fieldset>
 				</div>
-				<div class="overflow-snap -m-3 flex scroll-px-3 flex-row gap-2 p-3">
+				<div class="overflow-snap-3 gap-2">
 					<RadioCard
 						class="w-32 snap-x"
 						name="animal-type"

@@ -98,10 +98,6 @@
     filter: brightness(0.96) saturate(1.2);
   }
 
-  .overflow-snap {
-    @apply flex flex-row flex-nowrap scrollbar-none -my-2 snap-x snap-mandatory overflow-auto [&>:last-of-type]:snap-end py-2 [&>*]:shrink-0 [&>*]:snap-start [&>*]:snap-always;
-  }
-
   .stack {
     @apply grid place-items-center *:[grid-area:1/1];
   }

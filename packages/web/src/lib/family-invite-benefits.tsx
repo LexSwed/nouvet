@@ -9,7 +9,7 @@ export const FamilyInviteBenefits = (props: {
   - shared notes
   - access to doctor visits and prescriptions */
 	return (
-		<ul class={tw("overflow-snap flex flex-row gap-4 [&>*]:snap-center", props.class)}>
+		<ul class={tw("overflow-snap-0 gap-4 [&>*]:snap-center", props.class)}>
 			<li class="h-28 w-[95%] rounded-2xl bg-tertiary/15" />
 			<li class="h-28 w-[95%] rounded-2xl bg-tertiary/15" />
 			<li class="h-28 w-[95%] rounded-2xl bg-tertiary/15" />

@@ -90,10 +90,7 @@ const UserPets = () => {
 					<h2 id={headingId} class="sr-only">
 						{t("pet-list")}
 					</h2>
-					<ul
-						class="overflow-snap -mx-4 -my-2 flex scroll-px-4 flex-row items-stretch gap-4 px-4 py-2"
-						aria-labelledby={headingId}
-					>
+					<ul class="overflow-snap-4 items-stretch gap-4" aria-labelledby={headingId}>
 						<li>
 							<Button
 								label={t("add-another")}
