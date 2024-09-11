@@ -1,4 +1,15 @@
-import { Button, Form, Icon, Text, TextField, Toast, startViewTransition, toast } from "@nou/ui";
+import {
+	Button,
+	Fieldset,
+	Form,
+	Icon,
+	RadioCard,
+	Text,
+	TextField,
+	Toast,
+	startViewTransition,
+	toast,
+} from "@nou/ui";
 import { useAction, useSubmission } from "@solidjs/router";
 import { Match, type ParentProps, Show, Switch, createSignal } from "solid-js";
 import { Temporal } from "temporal-polyfill";
@@ -38,7 +49,7 @@ export function NewActivityCreator(props: {
 
 				return (
 					<>
-						<MultiScreenPopoverHeader class="mb-4">
+						<MultiScreenPopoverHeader class="mb-4 justify-between">
 							<Show when={step() !== "type-select"} fallback={<div />}>
 								<Button
 									variant="ghost"
@@ -49,17 +60,48 @@ export function NewActivityCreator(props: {
 									<Icon use="chevron-left" />
 								</Button>
 							</Show>
-							<Text with="label">
-								<Switch>
-									<Match when={step() === "type-select"}>
-										<Text class="sr-only">{t("new-activity.heading")}</Text>
-									</Match>
-									<Match when={step() === "observation"}>Note behavior</Match>
-									<Match when={step() === "appointment"}>Create appointment</Match>
-									<Match when={step() === "prescription"}>Create prescription</Match>
-									<Match when={step() === "vaccination"}>Create vaccination event</Match>
-								</Switch>
-							</Text>
+
+							<Switch>
+								<Match when={step() === "type-select"}>
+									<Text class="sr-only">{t("new-activity.heading")}</Text>
+								</Match>
+								<Match when={step() === "observation"}>
+									<>
+										<Text with="label">Note observation</Text>
+										<Icon
+											use="note"
+											class="m-2 size-10 rounded-full bg-primary/8 p-2 text-primary"
+										/>
+									</>
+								</Match>
+								<Match when={step() === "appointment"}>
+									<>
+										<Text with="label">New appointment</Text>
+										<Icon
+											use="first-aid"
+											class="m-2 size-10 rounded-full bg-primary/8 p-2 text-primary"
+										/>
+									</>
+								</Match>
+								<Match when={step() === "prescription"}>
+									<>
+										<Text with="label">New prescription</Text>
+										<Icon
+											use="pill"
+											class="m-2 size-10 rounded-full bg-primary/8 p-2 text-primary"
+										/>
+									</>
+								</Match>
+								<Match when={step() === "vaccination"}>
+									<>
+										<Text with="label">Record vaccination</Text>
+										<Icon
+											use="syringe"
+											class="m-2 size-10 rounded-full bg-primary/8 p-2 text-primary"
+										/>
+									</>
+								</Match>
+							</Switch>
 						</MultiScreenPopoverHeader>
 						<MultiScreenPopoverContent>
 							<Switch>
@@ -95,28 +137,28 @@ function ActivitySelection(props: { update: (newStep: Step) => void }) {
 				class="flex flex-col items-start gap-3 rounded-2xl p-3"
 				onClick={() => props.update("observation")}
 			>
-				<Icon use="note" class="size-10 rounded-full bg-on-surface/8 p-2 transition-colors" />
+				<Icon use="note" class="size-10 rounded-full bg-on-surface/8 p-2" />
 				<Text>{t("new-activity.type-observation")}</Text>
 			</Button>
 			<Button
 				class="flex flex-col items-start gap-3 rounded-2xl p-3"
 				onClick={() => props.update("appointment")}
 			>
-				<Icon use="first-aid" class="size-10 rounded-full bg-on-surface/8 p-2 transition-colors" />
+				<Icon use="first-aid" class="size-10 rounded-full bg-on-surface/8 p-2" />
 				<Text>{t("new-activity.type-appointment")}</Text>
 			</Button>
 			<Button
 				class="flex flex-col items-start gap-3 rounded-2xl p-3"
 				onClick={() => props.update("prescription")}
 			>
-				<Icon use="pill" class="size-10 rounded-full bg-on-surface/8 p-2 transition-colors" />
+				<Icon use="pill" class="size-10 rounded-full bg-on-surface/8 p-2" />
 				<Text>{t("new-activity.type-prescription")}</Text>
 			</Button>
 			<Button
 				class="flex flex-col items-start gap-3 rounded-2xl p-3"
 				onClick={() => props.update("vaccination")}
 			>
-				<Icon use="syringe" class="size-10 rounded-full bg-on-surface/8 p-2 transition-colors" />
+				<Icon use="syringe" class="size-10 rounded-full bg-on-surface/8 p-2" />
 				<Text>{t("new-activity.type-vaccination")}</Text>
 			</Button>
 		</div>
@@ -143,7 +185,7 @@ function NewActivityForm(
 
 	return (
 		<Form
-			class="flex flex-col gap-3"
+			class="flex flex-col gap-4"
 			validationErrors={pickSubmissionValidationErrors(submission)}
 			onSubmit={async (e) => {
 				e.preventDefault();
@@ -204,7 +246,7 @@ function NewActivityForm(
 									class="flex flex-row items-center gap-2 font-light text-sm"
 								>
 									{currentDateFormatted()}
-									<Icon use="pencil" size="xs" />
+									<Icon use="pencil" size="sm" />
 								</Text>
 							</Button>
 						</div>
@@ -267,9 +309,41 @@ function PrescriptionActivityForm(props: ActivityCreatorProps) {
 }
 
 function VaccinationActivityForm(props: ActivityCreatorProps) {
+	const t = createTranslator("pets");
 	return (
 		<NewActivityForm activityType="vaccination" petId={props.petId} locale={props.locale}>
-			Vaccination
+			<TextField
+				name="name"
+				label={t("new-activity.vaccine.name.label")}
+				description={t("new-activity.vaccine.name.description")}
+				as="textarea"
+			/>
+			<Fieldset legend={t("new-activity.vaccine.next-due-date.label")}>
+				<div class="overflow-snap-4 gap-2">
+					<RadioCard
+						name="nextDueDate"
+						label="1 month"
+						class="basis-[6rem] items-center has-[input:checked]:basis-[6.5rem]"
+					/>
+					<RadioCard
+						name="nextDueDate"
+						label="6 months"
+						checked
+						class="basis-[6rem] items-center has-[input:checked]:basis-[6.5rem]"
+					/>
+					<RadioCard
+						name="nextDueDate"
+						label="1 year"
+						class="basis-[6rem] items-center has-[input:checked]:basis-[6.5rem]"
+					/>
+				</div>
+				<TextField
+					name="nextDueDate"
+					label="Other"
+					class="basis-[8rem] items-center has-[input:checked]:basis-[10rem]"
+				/>
+			</Fieldset>
+			<TextField name="batchNumber" label={t("new-activity.vaccine.batch-number.label")} />
 		</NewActivityForm>
 	);
 }

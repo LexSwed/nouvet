@@ -130,7 +130,7 @@ export async function petActivityCreate(
 	checkCanPerformPetAction(petId, user.userId);
 
 	const db = useDb();
-
+	console.log(activityData);
 	const activityInfo = v.parse(ActivityCreateSchema, activityData);
 
 	const activity = db.transaction(async (tx) => {

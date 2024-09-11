@@ -57,6 +57,8 @@ const petsDict = {
 	"new-activity.note-placeholder": "¿Qué pasó?",
 	"new-activity.cta-cancel": "Cancelar",
 	"new-activity.cta-create": "Crear",
+	"new-activity.recorded-date.label": "Fecha",
+	"new-activity.recorded-date.description": "Cambia la fecha de la actividad",
 } as const satisfies Record<keyof typeof import("../en/pets").default, string>;
 
 export default petsDict;

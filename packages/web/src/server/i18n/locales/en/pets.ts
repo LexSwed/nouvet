@@ -59,6 +59,11 @@ const petsDict = {
 	"new-activity.cta-create": "Create",
 	"new-activity.recorded-date.label": "Date",
 	"new-activity.recorded-date.description": "Change the date of the activity",
+	"new-activity.vaccine.name.label": "Vaccine name",
+	"new-activity.vaccine.name.description": "Names of the vaccines administered",
+	"new-activity.vaccine.next-due-date.label": "Next due date",
+	"new-activity.vaccine.next-due-date.description": "The due date of the next vaccination",
+	"new-activity.vaccine.batch-number.label": "Batch number",
 } as const;
 
 export default petsDict;
