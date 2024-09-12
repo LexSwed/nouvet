@@ -337,6 +337,8 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 						class="basis-[6rem] items-center has-[input:checked]:basis-[6.5rem]"
 					/>
 				</div>
+				{/* Date field is updated with the values from the buttons above and serves as a single source of truth.
+				Users can edit the field directly */}
 				<TextField
 					name="nextDueDate"
 					label="Other"
