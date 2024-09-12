@@ -5,7 +5,8 @@
 		"formatWithErrors": false,
 		"indentWidth": 2,
 		"lineWidth": 100,
-		"attributePosition": "auto"
+		"attributePosition": "auto",
+		"useEditorconfig": true
 	},
 	"linter": {
 		"enabled": true,
