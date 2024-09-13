@@ -58,7 +58,7 @@ interface FieldInnerProps
 }
 const FormField = (ownProps: FieldInnerProps) => {
 	const formContext = useFormContext();
-	const [local, props] = splitProps(ownProps, ["variant", "id", "textSize"]);
+	const [local, props] = splitProps(ownProps, ["variant", "inline", "id", "textSize"]);
 	const localId = createUniqueId();
 
 	const errorMessage = () => (props.name ? formContext().validationErrors?.[props.name] : null);

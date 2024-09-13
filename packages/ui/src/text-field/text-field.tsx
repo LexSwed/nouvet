@@ -24,7 +24,18 @@ const TextField = <T extends "input" | "textarea" = "input">(ownProps: TextField
 			// TODO: remove this default for textarea
 			type: "text",
 		}),
-		["class", "style", "id", "label", "description", "variant", "textSize", "prefix", "suffix"],
+		[
+			"class",
+			"inline",
+			"style",
+			"id",
+			"label",
+			"description",
+			"variant",
+			"textSize",
+			"prefix",
+			"suffix",
+		],
 	);
 
 	// TODO: Max length handling to allow surpassing it, but showing as native error somehow still
