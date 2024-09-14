@@ -25,7 +25,7 @@
 		"@solid-primitives/refs": "^1.0.8",
 		"@solid-primitives/storage": "^4.2.1",
 		"@solidjs/meta": "^0.29.4",
-		"@solidjs/router": "^0.14.3",
+		"@solidjs/router": "^0.14.5",
 		"@solidjs/start": "^1.0.6",
 		"arctic": "^1.9.2",
 		"better-sqlite3": "^11.3.0",
@@ -42,7 +42,7 @@
 		"styled-qr-code": "^1.0.0",
 		"temporal-polyfill": "^0.2.5",
 		"valibot": "^0.41.0",
-		"vinxi": "0.4.2"
+		"vinxi": "0.4.3"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^9.0.0",

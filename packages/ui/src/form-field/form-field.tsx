@@ -22,6 +22,7 @@ export const formFieldVariants = cva(css.wrapper, {
 			ghost: css.wrapperGhost,
 		},
 		textSize: {
+			sm: css.sizeSm,
 			base: css.sizeBase,
 			lg: css.sizeLg,
 		},

@@ -67,22 +67,39 @@
     }
   }
   .wrapperInline {
+    & > .label {
+      position: absolute;
+      padding-block: 0;
+    }
     & > .inputWrapper {
       background-color: transparent;
     }
     &:has(:where(input, textarea):not(:placeholder-shown)) {
       & > .label {
         opacity: 0;
-        transform: translateY(2px);
+        translate: 0 -80%;
         transition: 0.2s ease-out;
-        transition-property: opacity, transform;
+        transition-property: opacity, translate;
       }
       &:focus-within > .label {
-        transform: none;
+        translate: 0 -90%;
         opacity: 1;
       }
     }
   }
+  .sizeSm {
+    @apply text-sm;
+    & :where(input, textarea),
+    & select > button {
+      padding: theme("spacing.2") var(--start-padding);
+      min-height: theme("spacing.12");
+    }
+
+    & :where(.prefix, .suffix) {
+      padding-block-start: theme("spacing.2");
+    }
+  }
+
   .sizeBase {
     @apply text-base;
     & :where(input, textarea),

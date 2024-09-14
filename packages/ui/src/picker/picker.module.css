@@ -1,6 +1,9 @@
 @layer tw-components {
-  .input {
+  .input,
+  ::picker(.input) {
     appearance: base-select;
+  }
+  .input {
     width: 100%;
     outline: none;
 
