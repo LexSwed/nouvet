@@ -1,18 +1,6 @@
-import {
-	Button,
-	Fieldset,
-	Form,
-	Icon,
-	RadioCard,
-	Text,
-	TextField,
-	Toast,
-	startViewTransition,
-	toast,
-} from "@nou/ui";
+import { Button, Fieldset, Form, Icon, RadioCard, Text, TextField, Toast, toast } from "@nou/ui";
 import { useAction, useSubmission } from "@solidjs/router";
 import { Match, type ParentProps, Show, Switch, createSignal } from "solid-js";
-import { Temporal } from "temporal-polyfill";
 import { createPetActivity } from "~/server/api/activity";
 import { createTranslator } from "~/server/i18n";
 import type { SupportedLocale } from "~/server/i18n/shared";
@@ -24,6 +12,7 @@ import {
 } from "../multi-screen-popover";
 import { createFormattedDate } from "../utils/format-date";
 import { pickSubmissionValidationErrors } from "../utils/submission";
+import { Temporal } from "temporal-polyfill";
 
 type Step = ActivityType | "type-select";
 
@@ -165,23 +154,64 @@ function ActivitySelection(props: { update: (newStep: Step) => void }) {
 	);
 }
 
+function DateSelector(props: {
+	locale: SupportedLocale;
+	name: string;
+	defaultValue: Temporal.ZonedDateTime;
+	class?: string;
+	label?: string;
+	description?: string;
+}) {
+	const [value, setValue] = createSignal(props.defaultValue);
+	const currentDateFormatted = createFormattedDate(value, () => props.locale, {
+		year: "numeric",
+	});
+	const isoString = () =>
+		value()
+			.toString()
+			.slice(0, value().toString().indexOf("T") + 6);
+
+	return (
+		<div class="stack place-items-baseline rounded-full bg-on-surface/5 focus-within:bg-on-surface/8">
+			<TextField
+				value={isoString()}
+				onInput={(e) => {
+					const d = new Date(e.currentTarget.value);
+					const newDate = value().with({
+						year: d.getFullYear(),
+						month: d.getMonth() + 1,
+						day: d.getDate(),
+						hour: d.getHours(),
+						minute: d.getMinutes(),
+					});
+					setValue(newDate);
+				}}
+				variant="ghost"
+				type="datetime-local"
+				inline
+				textSize="sm"
+				name={props.name}
+				label={props.label}
+				description={props.description}
+				class="peer w-full part-[input]:text-transparent part-[input]:transition-all part-[input]:duration-150 part-[input]:focus-within:text-on-surface"
+			/>
+			<Text
+				with="label-sm"
+				tone="light"
+				class="pointer-events-none ps-3.5 pe-12 transition-opacity duration-150 peer-has-[:focus-within]:opacity-0"
+			>
+				{currentDateFormatted()}
+			</Text>
+		</div>
+	);
+}
+
 function NewActivityForm(
 	props: ParentProps<ActivityCreatorProps & { activityType: ActivityType }>,
 ) {
 	const submission = useSubmission(createPetActivity);
 	const action = useAction(createPetActivity);
 	const t = createTranslator("pets");
-
-	const [dateChange, setDateChange] = createSignal(false);
-
-	const zoned = Temporal.Now.zonedDateTimeISO();
-	const currentDateISO = zoned.toString().slice(0, zoned.toString().indexOf("T") + 6);
-
-	const currentDateFormatted = createFormattedDate(
-		() => new Date(zoned.toInstant().epochMilliseconds),
-		() => props.locale,
-	);
-	let dateInputElement: HTMLElement | null = null;
 
 	return (
 		<Form
@@ -206,53 +236,15 @@ function NewActivityForm(
 		>
 			<input type="hidden" name="petId" value={props.petId} />
 			<input type="hidden" name="activityType" value="observation" />
-			<>
-				<input type="hidden" name="currentTimeZone" value={zoned.timeZoneId} />
-				<Show
-					when={dateChange()}
-					children={
-						<TextField
-							variant="ghost"
-							type="datetime-local"
-							name="recordedDate"
-							label={t("new-activity.recorded-date.label")}
-							description={t("new-activity.recorded-date.description")}
-							class="view-transition-[new-activity-date-input]"
-							value={currentDateISO}
-							ref={(el) => {
-								dateInputElement = el;
-							}}
-						/>
-					}
-					fallback={
-						<div class="flex flex-row justify-start">
-							<Button
-								variant="tonal"
-								label={t("new-activity.recorded-date.description")}
-								onClick={(event) => {
-									// @ts-expect-error view-transition-name is not a standard attribute
-									event.currentTarget.style["view-transition-name"] = "new-activity-date-button";
-									startViewTransition(() => {
-										setDateChange(true);
-									}).finished.then(() => {
-										dateInputElement?.focus();
-									});
-								}}
-							>
-								<Text
-									as="time"
-									datetime={currentDateISO}
-									tone="light"
-									class="flex flex-row items-center gap-2 font-light text-sm"
-								>
-									{currentDateFormatted()}
-									<Icon use="pencil" size="sm" />
-								</Text>
-							</Button>
-						</div>
-					}
+			<div class="flex flex-row justify-start">
+				<DateSelector
+					defaultValue={Temporal.Now.zonedDateTimeISO()}
+					locale={props.locale}
+					name="recordedDate"
+					label={t("new-activity.recorded-date.label")}
+					class="view-transition-[new-activity-date-input]"
 				/>
-			</>
+			</div>
 			{props.children}
 			<div class="mt-4 flex flex-row justify-end gap-4 *:flex-1">
 				<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
