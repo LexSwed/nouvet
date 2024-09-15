@@ -11,7 +11,15 @@ import {
 	tw,
 } from "@nou/ui";
 import { useAction, useSubmission } from "@solidjs/router";
-import { Match, type ParentProps, Show, Switch, createEffect, createSignal, on } from "solid-js";
+import {
+	type ComponentProps,
+	Match,
+	type ParentProps,
+	Show,
+	Switch,
+	batch,
+	createSignal,
+} from "solid-js";
 import { createPetActivity } from "~/server/api/activity";
 import { createTranslator } from "~/server/i18n";
 import type { SupportedLocale } from "~/server/i18n/shared";
@@ -168,52 +176,49 @@ function ActivitySelection(props: { update: (newStep: Step) => void }) {
 function DateSelector(props: {
 	locale: SupportedLocale;
 	name: string;
-	value: Temporal.ZonedDateTime;
+	value: Temporal.ZonedDateTime | null;
+	onChange: (newDate: Temporal.ZonedDateTime) => void;
 	min?: Temporal.ZonedDateTime;
 	max?: Temporal.ZonedDateTime;
-	onChange?: (newDate: Temporal.ZonedDateTime) => void;
 	class?: string;
 	label?: string;
 	id?: string;
 	description?: string;
+	placeholder?: string;
 	showHour: boolean;
 }) {
-	const [value, setValue] = createSignal(props.value);
-	const currentDateFormatted = createFormattedDate(value, () => props.locale, {
-		year: "numeric",
-		hour: props.showHour ? "numeric" : null,
-	});
+	const currentDateFormatted = createFormattedDate(
+		() => props.value ?? undefined,
+		() => props.locale,
+		{
+			year: "numeric",
+			hour: props.showHour ? "numeric" : null,
+		},
+	);
 	const toIsoString = (date: Temporal.ZonedDateTime) =>
 		props.showHour
-			? date.toString().slice(0, value().toString().indexOf("T") + 6)
-			: date.toString().slice(0, value().toString().indexOf("T"));
-
-	createEffect(
-		on(
-			() => props.value,
-			(newValue) => setValue(newValue),
-		),
-	);
+			? date.toString().slice(0, date.toString().indexOf("T") + 6)
+			: date.toString().slice(0, date.toString().indexOf("T"));
 
 	return (
 		<div class={tw("stack place-items-baseline", props.class)}>
 			<TextField
 				id={props.id}
-				value={toIsoString(value())}
+				value={props.value ? toIsoString(props.value) : ""}
 				min={props.min ? toIsoString(props.min) : undefined}
 				max={props.max ? toIsoString(props.max) : undefined}
 				onInput={(e) => {
 					const d = new Date(e.currentTarget.value);
-					if (Number.isNaN(d.getTime())) return;
+					if (!props.value || Number.isNaN(d.getTime())) return;
 
-					const newDate = value().with({
+					const newDate = props.value.with({
 						year: d.getFullYear(),
 						month: d.getMonth() + 1,
 						day: d.getDate(),
 						hour: d.getHours(),
 						minute: d.getMinutes(),
 					});
-					setValue(newDate);
+					props.onChange(newDate);
 				}}
 				variant="ghost"
 				type={props.showHour ? "datetime-local" : "date"}
@@ -222,6 +227,7 @@ function DateSelector(props: {
 				name={props.name}
 				label={props.label}
 				description={props.description}
+				placeholder={props.placeholder}
 				class="peer w-full part-[input]:text-transparent part-[input]:transition-all part-[input]:duration-150 part-[input]:focus-within:text-on-surface"
 			/>
 			<Text
@@ -229,18 +235,30 @@ function DateSelector(props: {
 				tone="light"
 				class="pointer-events-none ps-3.5 pe-12 transition-opacity duration-150 peer-has-[:focus-within]:opacity-0"
 			>
-				{currentDateFormatted()}
+				<Show
+					when={props.value}
+					fallback={<span class="text-on-surface/75">{props.placeholder}</span>}
+				>
+					{currentDateFormatted()}
+				</Show>
 			</Text>
 		</div>
 	);
 }
 
 function NewActivityForm(
-	props: ParentProps<ActivityCreatorProps & { activityType: ActivityType }>,
+	props: ParentProps<
+		ActivityCreatorProps & {
+			activityType: ActivityType;
+			onChange?: ComponentProps<typeof Form>["onChange"];
+		}
+	>,
 ) {
 	const submission = useSubmission(createPetActivity);
 	const action = useAction(createPetActivity);
 	const t = createTranslator("pets");
+
+	const now = Temporal.Now.zonedDateTimeISO();
 
 	return (
 		<Form
@@ -262,12 +280,14 @@ function NewActivityForm(
 					toast(() => <Toast tone="failure" heading={"Failed to save the note"} />);
 				}
 			}}
+			onChange={props.onChange}
 		>
 			<input type="hidden" name="petId" value={props.petId} />
 			<input type="hidden" name="activityType" value="observation" />
 			<div class="flex flex-row justify-start">
 				<DateSelector
-					value={Temporal.Now.zonedDateTimeISO()}
+					value={now}
+					onChange={() => {}}
 					locale={props.locale}
 					name="recordedDate"
 					showHour
@@ -332,11 +352,48 @@ function PrescriptionActivityForm(props: ActivityCreatorProps) {
 
 function VaccinationActivityForm(props: ActivityCreatorProps) {
 	const t = createTranslator("pets");
-	const now = Temporal.Now.zonedDateTimeISO();
-	const [nextDueDate, setNextDueDate] = createSignal(now.add({ months: 6 }));
+	const [startDate, setStartDate] = createSignal(Temporal.Now.zonedDateTimeISO());
+	const [nextDueDate, setNextDueDate] = createSignal<Temporal.ZonedDateTime | null>(null);
+
+	/**
+	 * Compare only starts of the months.
+	 */
+	const monthsDiff = () =>
+		nextDueDate()
+			? nextDueDate()
+					?.with({ hour: 0, minute: 0, day: 1 })
+					.since(startDate().with({ hour: 0, minute: 0, day: 1 }), {
+						smallestUnit: "months",
+						largestUnit: "months",
+					}).months
+			: null;
 
 	return (
-		<NewActivityForm activityType="vaccination" petId={props.petId} locale={props.locale}>
+		<NewActivityForm
+			activityType="vaccination"
+			petId={props.petId}
+			locale={props.locale}
+			onChange={(e) => {
+				const formData = new FormData(e.currentTarget);
+				const recordedDate = new Date(formData.get("recordedDate")!.toString());
+				const nextDueDateShortCut = formData.get("next-due-date-shortcut")
+					? Number.parseInt(formData.get("next-due-date-shortcut")!.toString())
+					: 6;
+				const newStartDate = startDate().with({
+					year: recordedDate.getFullYear(),
+					month: recordedDate.getMonth() + 1,
+					day: recordedDate.getDate(),
+					hour: recordedDate.getHours(),
+					minute: recordedDate.getMinutes(),
+				});
+				if (nextDueDate() && newStartDate.equals(startDate())) return;
+
+				batch(() => {
+					setNextDueDate(newStartDate.add({ months: nextDueDateShortCut }));
+					setStartDate(newStartDate);
+				});
+			}}
+		>
 			<TextField
 				name="name"
 				variant="ghost"
@@ -354,39 +411,39 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 						class="mx-2 my-1 flex flex-row items-center gap-2"
 						onChange={(e) => {
 							const value = Number.parseInt((e.target as HTMLInputElement).value);
-							setNextDueDate(now.add({ months: value }));
+							setNextDueDate(startDate().add({ months: value }));
 						}}
 					>
 						<RadioCard
 							label="1 month"
-							checked={nextDueDate().since(now, { smallestUnit: "months" }).months === 1}
+							checked={monthsDiff() === 1}
 							name="next-due-date-shortcut"
-							value="1"
+							value={1}
 							class="rounded-full bg-surface"
 						/>
 						<RadioCard
 							label="6 month"
-							checked={nextDueDate().since(now, { smallestUnit: "months" }).months === 6}
+							checked={monthsDiff() === 6}
 							name="next-due-date-shortcut"
-							value="6"
+							value={6}
 							class="rounded-full bg-surface"
 						/>
 						<RadioCard
 							label="1 year"
-							checked={nextDueDate().since(now, { smallestUnit: "months" }).months === 12}
+							checked={monthsDiff() === 12}
 							name="next-due-date-shortcut"
-							value="12"
+							value={12}
 							class="rounded-full bg-surface"
 						/>
 					</Fieldset>
 					<DateSelector
 						name="nextDueDate"
 						value={nextDueDate()}
-						min={now}
+						onChange={setNextDueDate}
+						placeholder={t("new-activity.vaccine.next-due-date.description")}
 						showHour={false}
 						id="vaccine-next-due-date"
 						locale={props.locale}
-						onChange={setNextDueDate}
 						class="pb-2"
 					/>
 				</div>

@@ -61,7 +61,7 @@ const petsDict = {
 	"new-activity.vaccine.name.label": "Vaccines",
 	"new-activity.vaccine.name.description": "Names of the vaccines administered",
 	"new-activity.vaccine.next-due-date.label": "Next due date",
-	"new-activity.vaccine.next-due-date.description": "The due date of the next vaccination",
+	"new-activity.vaccine.next-due-date.description": "The date of the next vaccination",
 	"new-activity.vaccine.batch-number.label": "Batch number",
 } as const;
 
