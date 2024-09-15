@@ -39,7 +39,7 @@ const ActivityCreateSchema = v.variant("activityType", [
 	}),
 	v.object({
 		activityType: v.literal("vaccination" satisfies ActivityType),
-		name: v.pipe(v.string(), v.trim(), v.maxLength(200)),
+		name: v.pipe(v.string(), v.trim(), v.minLength(2), v.maxLength(200)),
 		note: ActivityNoteSchema,
 		// TODO: ZonedDateTime validation
 		recordedDate: v.nullable(v.string()),
@@ -118,7 +118,7 @@ const ActivityCreateSchema = v.variant("activityType", [
 ]);
 
 export type ActivityCreateSchema = typeof ActivityCreateSchema;
-type ActivityCreateInput = v.InferInput<ActivityCreateSchema>;
+export type ActivityCreateInput = v.InferInput<ActivityCreateSchema>;
 
 export async function petActivityCreate(
 	activityData: {

@@ -283,7 +283,8 @@ function NewActivityForm(
 			onChange={props.onChange}
 		>
 			<input type="hidden" name="petId" value={props.petId} />
-			<input type="hidden" name="activityType" value="observation" />
+			<input type="hidden" name="activityType" value={props.activityType} />
+			<input type="hidden" name="currentTimeZone" value={now.timeZoneId} />
 			<div class="flex flex-row justify-start">
 				<DateSelector
 					value={now}

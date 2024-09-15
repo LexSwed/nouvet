@@ -1,12 +1,14 @@
 import { action, cache, json } from "@solidjs/router";
 import { Temporal } from "temporal-polyfill";
 import { getRequestUser } from "~/server/auth/request-user";
-import { type PetActivitiesCursor, petActivities } from "~/server/db/queries/pet-activities";
-import {
-	type ActivityCreateSchema,
-	petActivityCreate,
+import { petActivities } from "~/server/db/queries/pet-activities";
+import type { PetActivitiesCursor } from "~/server/db/queries/pet-activities";
+import { petActivityCreate } from "~/server/db/queries/pet-activity-create";
+import type {
+	ActivityCreateSchema,
+	ActivityCreateInput,
 } from "~/server/db/queries/pet-activity-create";
-import type { PetID } from "~/server/types";
+import type { ActivityType, PetID } from "~/server/types";
 import { jsonFailure } from "~/server/utils";
 
 export const getPetActivities = cache(async function getPetActivitiesServer(
@@ -59,25 +61,39 @@ export const createPetActivity = action(async function createPetActivityServer(f
 			throw new Error("petId is not provided");
 		}
 		let recordedDate: string | null = null;
+		const timeZone = formData.get("currentTimeZone")!.toString();
+		// TODO: move field adjustment to validation schema
 		try {
 			recordedDate = formData.get("recordedDate")?.toString() || null;
-			const timeZone = formData.get("currentTimeZone")?.toString() || null;
-			if (recordedDate && timeZone) {
+			if (recordedDate) {
 				recordedDate = Temporal.ZonedDateTime.from(`${recordedDate}[${timeZone}]`).toString();
 			}
 		} catch (error) {
 			console.error(error);
 		}
-
-		const activity = await petActivityCreate(
-			{
-				activityType: formData.get("activityType"),
-				note: formData.get("note") || null,
+		const activityType = formData.get("activityType")?.toString() as ActivityType;
+		let input: ActivityCreateInput;
+		if (activityType === "observation") {
+			input = {
+				activityType,
+				note: formData.get("note")?.toString() || null,
 				recordedDate,
-			},
-			petId as PetID,
-			currentUser,
-		);
+			};
+		} else if (activityType === "vaccination") {
+			input = {
+				activityType,
+				name: formData.get("name")!.toString(),
+				nextDueDate: formData.get("nextDueDate")?.toString() || null,
+				batchNumber: formData.get("batchNumber")?.toString() || null,
+				note: formData.get("note")?.toString() || null,
+				recordedDate,
+			};
+		} else {
+			throw new Error("Invalid activity type");
+		}
+
+		const activity = await petActivityCreate(input, petId as PetID, currentUser);
+
 		return json({ activity }, { revalidate: [getPetActivities.key] });
 	} catch (error) {
 		return jsonFailure<ActivityCreateSchema>(error);
