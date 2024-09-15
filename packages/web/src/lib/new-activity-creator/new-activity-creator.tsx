@@ -1,6 +1,17 @@
-import { Button, Fieldset, Form, Icon, RadioCard, Text, TextField, Toast, toast } from "@nou/ui";
+import {
+	Button,
+	Fieldset,
+	Form,
+	Icon,
+	RadioCard,
+	Text,
+	TextField,
+	Toast,
+	toast,
+	tw,
+} from "@nou/ui";
 import { useAction, useSubmission } from "@solidjs/router";
-import { Match, type ParentProps, Show, Switch, createSignal } from "solid-js";
+import { Match, type ParentProps, Show, Switch, createEffect, createSignal, on } from "solid-js";
 import { createPetActivity } from "~/server/api/activity";
 import { createTranslator } from "~/server/i18n";
 import type { SupportedLocale } from "~/server/i18n/shared";
@@ -157,26 +168,44 @@ function ActivitySelection(props: { update: (newStep: Step) => void }) {
 function DateSelector(props: {
 	locale: SupportedLocale;
 	name: string;
-	defaultValue: Temporal.ZonedDateTime;
+	value: Temporal.ZonedDateTime;
+	min?: Temporal.ZonedDateTime;
+	max?: Temporal.ZonedDateTime;
+	onChange?: (newDate: Temporal.ZonedDateTime) => void;
 	class?: string;
 	label?: string;
+	id?: string;
 	description?: string;
+	showHour: boolean;
 }) {
-	const [value, setValue] = createSignal(props.defaultValue);
+	const [value, setValue] = createSignal(props.value);
 	const currentDateFormatted = createFormattedDate(value, () => props.locale, {
 		year: "numeric",
+		hour: props.showHour ? "numeric" : null,
 	});
-	const isoString = () =>
-		value()
-			.toString()
-			.slice(0, value().toString().indexOf("T") + 6);
+	const toIsoString = (date: Temporal.ZonedDateTime) =>
+		props.showHour
+			? date.toString().slice(0, value().toString().indexOf("T") + 6)
+			: date.toString().slice(0, value().toString().indexOf("T"));
+
+	createEffect(
+		on(
+			() => props.value,
+			(newValue) => setValue(newValue),
+		),
+	);
 
 	return (
-		<div class="stack place-items-baseline rounded-full bg-on-surface/5 focus-within:bg-on-surface/8">
+		<div class={tw("stack place-items-baseline", props.class)}>
 			<TextField
-				value={isoString()}
+				id={props.id}
+				value={toIsoString(value())}
+				min={props.min ? toIsoString(props.min) : undefined}
+				max={props.max ? toIsoString(props.max) : undefined}
 				onInput={(e) => {
 					const d = new Date(e.currentTarget.value);
+					if (Number.isNaN(d.getTime())) return;
+
 					const newDate = value().with({
 						year: d.getFullYear(),
 						month: d.getMonth() + 1,
@@ -187,7 +216,7 @@ function DateSelector(props: {
 					setValue(newDate);
 				}}
 				variant="ghost"
-				type="datetime-local"
+				type={props.showHour ? "datetime-local" : "date"}
 				inline
 				textSize="sm"
 				name={props.name}
@@ -196,7 +225,7 @@ function DateSelector(props: {
 				class="peer w-full part-[input]:text-transparent part-[input]:transition-all part-[input]:duration-150 part-[input]:focus-within:text-on-surface"
 			/>
 			<Text
-				with="label-sm"
+				with="label"
 				tone="light"
 				class="pointer-events-none ps-3.5 pe-12 transition-opacity duration-150 peer-has-[:focus-within]:opacity-0"
 			>
@@ -238,11 +267,12 @@ function NewActivityForm(
 			<input type="hidden" name="activityType" value="observation" />
 			<div class="flex flex-row justify-start">
 				<DateSelector
-					defaultValue={Temporal.Now.zonedDateTimeISO()}
+					value={Temporal.Now.zonedDateTimeISO()}
 					locale={props.locale}
 					name="recordedDate"
+					showHour
 					label={t("new-activity.recorded-date.label")}
-					class="view-transition-[new-activity-date-input]"
+					class="w-[80%] rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8"
 				/>
 			</div>
 			{props.children}
@@ -302,42 +332,70 @@ function PrescriptionActivityForm(props: ActivityCreatorProps) {
 
 function VaccinationActivityForm(props: ActivityCreatorProps) {
 	const t = createTranslator("pets");
+	const now = Temporal.Now.zonedDateTimeISO();
+	const [nextDueDate, setNextDueDate] = createSignal(now.add({ months: 6 }));
+
 	return (
 		<NewActivityForm activityType="vaccination" petId={props.petId} locale={props.locale}>
 			<TextField
 				name="name"
+				variant="ghost"
 				label={t("new-activity.vaccine.name.label")}
 				description={t("new-activity.vaccine.name.description")}
 				as="textarea"
 			/>
-			<Fieldset legend={t("new-activity.vaccine.next-due-date.label")}>
-				<div class="overflow-snap-4 gap-2">
-					<RadioCard
+			<div class="flex w-full flex-col gap-2">
+				<Text class="-mb-2 ps-3" with="label-sm" as="label" for="vaccine-next-due-date">
+					{t("new-activity.vaccine.next-due-date.label")}
+				</Text>
+				<div class="rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8">
+					<Fieldset
+						legend={<span class="sr-only">Common intervals</span>}
+						class="mx-2 my-1 flex flex-row items-center gap-2"
+						onChange={(e) => {
+							const value = Number.parseInt((e.target as HTMLInputElement).value);
+							setNextDueDate(now.add({ months: value }));
+						}}
+					>
+						<RadioCard
+							label="1 month"
+							checked={nextDueDate().since(now, { smallestUnit: "months" }).months === 1}
+							name="next-due-date-shortcut"
+							value="1"
+							class="rounded-full bg-surface"
+						/>
+						<RadioCard
+							label="6 month"
+							checked={nextDueDate().since(now, { smallestUnit: "months" }).months === 6}
+							name="next-due-date-shortcut"
+							value="6"
+							class="rounded-full bg-surface"
+						/>
+						<RadioCard
+							label="1 year"
+							checked={nextDueDate().since(now, { smallestUnit: "months" }).months === 12}
+							name="next-due-date-shortcut"
+							value="12"
+							class="rounded-full bg-surface"
+						/>
+					</Fieldset>
+					<DateSelector
 						name="nextDueDate"
-						label="1 month"
-						class="basis-[6rem] items-center has-[input:checked]:basis-[6.5rem]"
-					/>
-					<RadioCard
-						name="nextDueDate"
-						label="6 months"
-						checked
-						class="basis-[6rem] items-center has-[input:checked]:basis-[6.5rem]"
-					/>
-					<RadioCard
-						name="nextDueDate"
-						label="1 year"
-						class="basis-[6rem] items-center has-[input:checked]:basis-[6.5rem]"
+						value={nextDueDate()}
+						min={now}
+						showHour={false}
+						id="vaccine-next-due-date"
+						locale={props.locale}
+						onChange={setNextDueDate}
+						class="pb-2"
 					/>
 				</div>
-				{/* Date field is updated with the values from the buttons above and serves as a single source of truth.
-				Users can edit the field directly */}
-				<TextField
-					name="nextDueDate"
-					label="Other"
-					class="basis-[8rem] items-center has-[input:checked]:basis-[10rem]"
-				/>
-			</Fieldset>
-			<TextField name="batchNumber" label={t("new-activity.vaccine.batch-number.label")} />
+			</div>
+			<TextField
+				variant="ghost"
+				name="batchNumber"
+				label={t("new-activity.vaccine.batch-number.label")}
+			/>
 		</NewActivityForm>
 	);
 }

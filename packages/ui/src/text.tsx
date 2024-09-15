@@ -13,7 +13,7 @@ const textVariants = cva("m-0 whitespace-pre-line font-sans", {
 			"body-lg": "font-normal text-lg",
 			"body-xl": "font-normal text-xl",
 			label: "font-medium text-sm",
-			"label-sm": "text-sm",
+			"label-sm": "font-medium text-xs",
 			"label-lg": "font-medium text-lg",
 			"headline-1": "font-semibold text-3xl",
 			"headline-2": "font-semibold text-2xl",

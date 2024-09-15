@@ -41,11 +41,11 @@
 		"solid-motionone": "^1.0.1",
 		"styled-qr-code": "^1.0.0",
 		"temporal-polyfill": "^0.2.5",
-		"valibot": "^0.41.0",
+		"valibot": "^0.42.0",
 		"vinxi": "0.4.3"
 	},
 	"devDependencies": {
-		"@faker-js/faker": "^9.0.0",
+		"@faker-js/faker": "^9.0.1",
 		"@nou/config": "^1.0.0",
 		"@storybook/builder-vite": "^8.3.0",
 		"@types/better-sqlite3": "^7.6.11",

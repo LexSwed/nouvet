@@ -12,7 +12,7 @@ import type { SupportedLocale } from "~/server/i18n/shared";
 export function createFormattedDate(
 	date: Accessor<Date | Temporal.ZonedDateTime | undefined>,
 	locale: Accessor<SupportedLocale | undefined>,
-	options: Intl.DateTimeFormatOptions = {},
+	options: { [K in keyof Intl.DateTimeFormatOptions]: Intl.DateTimeFormatOptions[K] | null } = {},
 ) {
 	const formatted = createMemo(() => {
 		const d = date();
@@ -20,9 +20,9 @@ export function createFormattedDate(
 			const formatter = new Intl.DateTimeFormat(locale(), {
 				month: options.month ?? "long",
 				day: options.day ?? "numeric",
-				hour: options.hour ?? "numeric",
-				minute: options.minute ?? "numeric",
-				year: options.year,
+				hour: options.hour === null ? undefined : (options.hour ?? "numeric"),
+				minute: options.hour === null ? undefined : (options.minute ?? "numeric"),
+				year: options.year ?? undefined,
 			});
 			return formatter.format(
 				d instanceof Temporal.ZonedDateTime ? new Date(d.epochMilliseconds) : d,

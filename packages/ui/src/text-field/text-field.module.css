@@ -26,7 +26,7 @@
       height: 2em;
       width: auto;
       aspect-ratio: 1 / 1;
-      background-size: 2em;
+      background-size: 1.75em;
       background-position: center;
       padding-inline-end: theme("spacing.1");
       margin: 0;

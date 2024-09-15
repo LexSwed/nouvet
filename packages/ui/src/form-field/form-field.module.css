@@ -56,7 +56,7 @@
     & > .inputWrapper {
       border: 1px solid var(--border-color);
       transition: background-color 0.2s ease-out;
-      border-radius: theme("borderRadius.lg");
+      border-radius: theme("borderRadius.xl");
       background-color: theme("colors.on-surface/0.03");
     }
     &:where(:hover) > .inputWrapper {
