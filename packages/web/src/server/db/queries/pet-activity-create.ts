@@ -14,6 +14,7 @@ import {
 import type { ActivityType, PetID, PrescriptionMedicationType } from "~/server/types";
 import { getCurrentZonedDateTime } from "~/server/utils";
 import { checkCanPerformPetAction } from "./can-perform-pet-action";
+import { Temporal } from "temporal-polyfill";
 
 const ActivityNoteSchema = v.nullable(v.pipe(v.string(), v.trim(), v.maxLength(1000)));
 const PrescriptionDurationSchema = v.nullable(
@@ -30,28 +31,40 @@ const PrescriptionTimeSchema = v.nullable(
 	>),
 );
 
+const ZonedDateTimeSchema = v.pipe(
+	v.string(),
+	v.trim(),
+	v.check((value) => {
+		try {
+			Temporal.ZonedDateTime.from(value);
+			return true;
+		} catch {
+			return false;
+		}
+	}),
+);
+
+// TODO: localised string errors, validation for ZonedDateTime that adds timezoneID
+
 const ActivityCreateSchema = v.variant("activityType", [
 	v.object({
 		activityType: v.literal("observation" satisfies ActivityType),
 		note: ActivityNoteSchema,
-		// TODO: ZonedDateTime validation
-		recordedDate: v.nullable(v.string()),
+		recordedDate: ZonedDateTimeSchema,
 	}),
 	v.object({
 		activityType: v.literal("vaccination" satisfies ActivityType),
-		name: v.pipe(v.string(), v.trim(), v.minLength(2), v.maxLength(200)),
 		note: ActivityNoteSchema,
-		// TODO: ZonedDateTime validation
-		recordedDate: v.nullable(v.string()),
+		recordedDate: ZonedDateTimeSchema,
+		name: v.pipe(v.string(), v.trim(), v.minLength(2), v.maxLength(200)),
 		nextDueDate: v.nullable(v.pipe(v.string(), v.isoDate())),
 		batchNumber: v.nullable(v.pipe(v.string(), v.trim(), v.maxLength(100))),
 	}),
 	v.object({
 		activityType: v.literal("prescription" satisfies ActivityType),
-		name: v.pipe(v.string(), v.trim(), v.maxLength(200)),
 		note: ActivityNoteSchema,
-		// TODO: ZonedDateTime validation
-		recordedDate: v.nullable(v.string()),
+		recordedDate: ZonedDateTimeSchema,
+		name: v.pipe(v.string(), v.trim(), v.maxLength(200)),
 		dateStarted: v.nullable(v.pipe(v.string(), v.isoDate())),
 		schedule: v.nullable(
 			v.variant("type", [
@@ -130,7 +143,6 @@ export async function petActivityCreate(
 	checkCanPerformPetAction(petId, user.userId);
 
 	const db = useDb();
-	console.log(activityData);
 	const activityInfo = v.parse(ActivityCreateSchema, activityData);
 
 	const activity = db.transaction(async (tx) => {

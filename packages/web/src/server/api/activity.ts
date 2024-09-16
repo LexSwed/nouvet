@@ -60,17 +60,9 @@ export const createPetActivity = action(async function createPetActivityServer(f
 		if (!petId) {
 			throw new Error("petId is not provided");
 		}
-		let recordedDate: string | null = null;
+		let recordedDate = formData.get("recordedDate")!.toString();
 		const timeZone = formData.get("currentTimeZone")!.toString();
-		// TODO: move field adjustment to validation schema
-		try {
-			recordedDate = formData.get("recordedDate")?.toString() || null;
-			if (recordedDate) {
-				recordedDate = Temporal.ZonedDateTime.from(`${recordedDate}[${timeZone}]`).toString();
-			}
-		} catch (error) {
-			console.error(error);
-		}
+		recordedDate = Temporal.ZonedDateTime.from(`${recordedDate}[${timeZone}]`).toString();
 		const activityType = formData.get("activityType")?.toString() as ActivityType;
 		let input: ActivityCreateInput;
 		if (activityType === "observation") {

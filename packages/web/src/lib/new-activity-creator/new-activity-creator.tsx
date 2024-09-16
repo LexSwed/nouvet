@@ -177,7 +177,7 @@ function DateSelector(props: {
 	locale: SupportedLocale;
 	name: string;
 	value: Temporal.ZonedDateTime | null;
-	onChange: (newDate: Temporal.ZonedDateTime) => void;
+	onChange?: (newDate: Temporal.ZonedDateTime) => void;
 	min?: Temporal.ZonedDateTime;
 	max?: Temporal.ZonedDateTime;
 	class?: string;
@@ -186,6 +186,7 @@ function DateSelector(props: {
 	description?: string;
 	placeholder?: string;
 	showHour: boolean;
+	required?: boolean;
 }) {
 	const currentDateFormatted = createFormattedDate(
 		() => props.value ?? undefined,
@@ -208,6 +209,7 @@ function DateSelector(props: {
 				min={props.min ? toIsoString(props.min) : undefined}
 				max={props.max ? toIsoString(props.max) : undefined}
 				onInput={(e) => {
+					if (!props.onChange) return;
 					const d = new Date(e.currentTarget.value);
 					if (!props.value || Number.isNaN(d.getTime())) return;
 
@@ -224,6 +226,7 @@ function DateSelector(props: {
 				type={props.showHour ? "datetime-local" : "date"}
 				inline
 				textSize="sm"
+				required={props.required}
 				name={props.name}
 				label={props.label}
 				description={props.description}
@@ -288,12 +291,12 @@ function NewActivityForm(
 			<div class="flex flex-row justify-start">
 				<DateSelector
 					value={now}
-					onChange={() => {}}
 					locale={props.locale}
 					name="recordedDate"
 					showHour
 					label={t("new-activity.recorded-date.label")}
 					class="w-[80%] rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8"
+					required
 				/>
 			</div>
 			{props.children}
@@ -449,11 +452,6 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 					/>
 				</div>
 			</div>
-			<TextField
-				variant="ghost"
-				name="batchNumber"
-				label={t("new-activity.vaccine.batch-number.label")}
-			/>
 		</NewActivityForm>
 	);
 }
