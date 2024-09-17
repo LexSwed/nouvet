@@ -46,7 +46,12 @@ const petsDict = {
 	"delete.success": "{{petName}} was deleted.",
 	"delete.failure": "There was an error deleting {{petName}}.",
 	"new-activity.create": "Create",
-	"new-activity.heading": "Record activity",
+	"new-activity.heading-main": "Create a new activity",
+	"new-activity.heading-observation": "Note observation",
+	"new-activity.heading-appointment": "Appointment",
+	"new-activity.heading-prescription": "Prescription",
+	"new-activity.heading-vaccination": "Vaccination",
+	"new-activity.back-button": "Return to options",
 	"new-activity.type-label": "Type of the event",
 	"new-activity.type-observation": "Note",
 	"new-activity.type-appointment": "Appointment",
@@ -63,6 +68,10 @@ const petsDict = {
 	"new-activity.vaccine.next-due-date.label": "Next due date",
 	"new-activity.vaccine.next-due-date.description": "The date of the next vaccination",
 	"new-activity.vaccine.batch-number.label": "Batch number",
+	"new-activity.vaccine.due-date.label": "Common intervals",
+	"new-activity.vaccine.due-date.1-month": "1 month",
+	"new-activity.vaccine.due-date.6-months": "6 months",
+	"new-activity.vaccine.due-date.1-year": "1 year",
 } as const;
 
 export default petsDict;

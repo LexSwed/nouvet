@@ -20,6 +20,7 @@ import {
 	batch,
 	createSignal,
 } from "solid-js";
+import { Temporal } from "temporal-polyfill";
 import { createPetActivity } from "~/server/api/activity";
 import { createTranslator } from "~/server/i18n";
 import type { SupportedLocale } from "~/server/i18n/shared";
@@ -31,7 +32,6 @@ import {
 } from "../multi-screen-popover";
 import { createFormattedDate } from "../utils/format-date";
 import { pickSubmissionValidationErrors } from "../utils/submission";
-import { Temporal } from "temporal-polyfill";
 
 type Step = ActivityType | "type-select";
 
@@ -62,7 +62,7 @@ export function NewActivityCreator(props: {
 								<Button
 									variant="ghost"
 									icon
-									// label={t("invite.back")}
+									label={t("new-activity.back-button")}
 									onClick={() => update("type-select", "backwards")}
 								>
 									<Icon use="chevron-left" />
@@ -71,11 +71,11 @@ export function NewActivityCreator(props: {
 
 							<Switch>
 								<Match when={step() === "type-select"}>
-									<Text class="sr-only">{t("new-activity.heading")}</Text>
+									<Text class="sr-only">{t("new-activity.heading-main")}</Text>
 								</Match>
 								<Match when={step() === "observation"}>
 									<>
-										<Text with="label">Note observation</Text>
+										<Text with="label">{t("new-activity.heading-observation")}</Text>
 										<Icon
 											use="note"
 											class="m-2 size-10 rounded-full bg-primary/8 p-2 text-primary"
@@ -84,7 +84,7 @@ export function NewActivityCreator(props: {
 								</Match>
 								<Match when={step() === "appointment"}>
 									<>
-										<Text with="label">New appointment</Text>
+										<Text with="label">{t("new-activity.heading-appointment")}</Text>
 										<Icon
 											use="first-aid"
 											class="m-2 size-10 rounded-full bg-primary/8 p-2 text-primary"
@@ -93,7 +93,7 @@ export function NewActivityCreator(props: {
 								</Match>
 								<Match when={step() === "prescription"}>
 									<>
-										<Text with="label">New prescription</Text>
+										<Text with="label">{t("new-activity.heading-prescription")}</Text>
 										<Icon
 											use="pill"
 											class="m-2 size-10 rounded-full bg-primary/8 p-2 text-primary"
@@ -102,7 +102,7 @@ export function NewActivityCreator(props: {
 								</Match>
 								<Match when={step() === "vaccination"}>
 									<>
-										<Text with="label">Record vaccination</Text>
+										<Text with="label">{t("new-activity.heading-vaccination")}</Text>
 										<Icon
 											use="syringe"
 											class="m-2 size-10 rounded-full bg-primary/8 p-2 text-primary"
@@ -411,7 +411,7 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 				</Text>
 				<div class="rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8">
 					<Fieldset
-						legend={<span class="sr-only">Common intervals</span>}
+						legend={<span class="sr-only">{t("new-activity.vaccine.due-date.label")}</span>}
 						class="mx-2 my-1 flex flex-row items-center gap-2"
 						onChange={(e) => {
 							const value = Number.parseInt((e.target as HTMLInputElement).value);
@@ -419,21 +419,21 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 						}}
 					>
 						<RadioCard
-							label="1 month"
+							label={t("new-activity.vaccine.due-date.1-month")}
 							checked={monthsDiff() === 1}
 							name="next-due-date-shortcut"
 							value={1}
 							class="rounded-full bg-surface"
 						/>
 						<RadioCard
-							label="6 month"
+							label={t("new-activity.vaccine.due-date.6-months")}
 							checked={monthsDiff() === 6}
 							name="next-due-date-shortcut"
 							value={6}
 							class="rounded-full bg-surface"
 						/>
 						<RadioCard
-							label="1 year"
+							label={t("new-activity.vaccine.due-date.1-year")}
 							checked={monthsDiff() === 12}
 							name="next-due-date-shortcut"
 							value={12}
