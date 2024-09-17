@@ -16,6 +16,18 @@ const errorsDict = {
 	"user.locale": "Locale is not supported",
 	"user.measurementsSystem": "This measurements system is not supported",
 	"deletePet.notFound": "Pet not found",
+	"create-activity.recordedDate": "The date of the activity is not valid",
+	"create-activity.note": "The note is too long",
+	"create-activity.vaccine.name-short": "The vaccine name is too short",
+	"create-activity.vaccine.name-long": "The vaccine name is too long",
+	"create-activity.vaccine.name": "The vaccine name is not valid",
+	"create-activity.vaccine.batch-number": "The batch number is too long",
+	"create-activity.vaccine.due-date": "The due date is not valid",
+	"create-activity.prescription.name-required": "The name of the medication is required",
+	"create-activity.prescription.name-length": "The name of the medication is too long",
+	"create-activity.prescription.date-started": "The date started is not valid",
+	"create-activity.prescription.schedule": "The schedule is not valid",
+	"create-activity.prescription.dosage": "The dosage is not valid",
 } as const;
 
 export default errorsDict;
