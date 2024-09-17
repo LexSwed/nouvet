@@ -3,6 +3,8 @@
   .popover:not(:popover-open) {
     display: none;
   }
+}
+@layer tw-base {
   :global(body):has(
       .popover[data-placement="center"]:not([data-state="closed"]),
       .drawer:not([data-state="closed"])
@@ -17,11 +19,7 @@
     background-color: theme("colors.surface");
     color: theme("colors.on-surface");
     isolation: isolate;
-    transition:
-      opacity 0.16s,
-      transform 0.24s,
-      display 0.24s,
-      overlay 0.24s;
+    transition: opacity 0.16s, transform 0.24s, display 0.24s, overlay 0.24s;
     transition-behavior: allow-discrete;
     width: max-content;
     will-change: transform, opacity;

@@ -135,62 +135,63 @@ function Toaster(props: { label: string }) {
 	let isFocusIn = false;
 
 	return (
-		<div
+		<section
 			// Popover is used to ensure that if notification is triggered from a dialog or any
 			// top layer element, the toast appears on top of it
 			popover="manual"
-			class="fixed top-12 mx-auto my-0 overflow-visible bg-transparent p-0"
-			role="region"
+			class="fixed top-12 mx-auto my-0 overflow-visible bg-transparent p-0 empty:hidden"
 			aria-label={props.label}
 			ref={setRef}
 		>
-			<ol
-				class={tw(
-					css.list,
-					"fixed inset-x-0 flex w-full flex-col items-center empty:pointer-events-none",
-				)}
-				tabIndex={-1}
-				onMouseEnter={() => {
-					isMouseIn = true;
-					toaster.resetTimers();
-				}}
-				onMouseLeave={() => {
-					isMouseIn = false;
-					if (!isFocusIn) {
-						toaster.restartTimers();
-					}
-				}}
-				onFocusIn={() => {
-					isFocusIn = true;
-					toaster.resetTimers();
-				}}
-				onFocusOut={() => {
-					isFocusIn = false;
-					if (!isMouseIn) {
-						toaster.restartTimers();
-					}
-				}}
-			>
-				<div class="-m-1 absolute h-1 w-full [anchor-name:--nou-toast-anchor-list]" aria-hidden />
-				<For each={toaster.items()}>
-					{(entry, index) => {
-						return (
-							<li
-								class={tw(css.toast, "min-h-16")}
-								style={{
-									"anchor-name": entry.anchorName,
-									"position-anchor": entry.positionAnchor ?? "--nou-toast-anchor-list",
-									"--nou-toast-index": toaster.items().length - index(),
-								}}
-								on:toast-dismiss={() => toaster.remove(entry.id)}
-							>
-								{entry.element()}
-							</li>
-						);
+			<Show when={toaster.items().length > 0}>
+				<ol
+					class={tw(css.list, "fixed inset-x-0 flex w-full flex-col items-center")}
+					tabIndex={-1}
+					onMouseEnter={() => {
+						isMouseIn = true;
+						toaster.resetTimers();
 					}}
-				</For>
-			</ol>
-		</div>
+					onMouseLeave={() => {
+						isMouseIn = false;
+						if (!isFocusIn) {
+							toaster.restartTimers();
+						}
+					}}
+					onFocusIn={() => {
+						isFocusIn = true;
+						toaster.resetTimers();
+					}}
+					onFocusOut={() => {
+						isFocusIn = false;
+						if (!isMouseIn) {
+							toaster.restartTimers();
+						}
+					}}
+				>
+					<div
+						class="-m-1 absolute h-1 w-full [anchor-name:--nou-toast-anchor-list]"
+						aria-hidden="true"
+					/>
+					<For each={toaster.items()}>
+						{(entry, index) => {
+							return (
+								<li
+									class={tw(css.toast, "min-h-16")}
+									style={{
+										"anchor-name": entry.anchorName,
+										"position-anchor": entry.positionAnchor ?? "--nou-toast-anchor-list",
+										"--nou-toast-index": toaster.items().length - index(),
+									}}
+									on:toast-dismiss={() => toaster.remove(entry.id)}
+								>
+									{entry.element()}
+								</li>
+							);
+						}}
+					</For>
+				</ol>
+			</Show>
+		</section>
 	);
 }
 
