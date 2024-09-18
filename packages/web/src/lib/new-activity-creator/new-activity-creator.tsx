@@ -1,5 +1,6 @@
 import {
 	Button,
+	Card,
 	Fieldset,
 	Form,
 	Icon,
@@ -7,6 +8,7 @@ import {
 	Text,
 	TextField,
 	Toast,
+	startViewTransition,
 	toast,
 	tw,
 } from "@nou/ui";
@@ -31,7 +33,7 @@ import {
 	MultiScreenPopoverHeader,
 } from "../multi-screen-popover";
 import { createFormattedDate } from "../utils/format-date";
-import { pickSubmissionValidationErrors } from "../utils/submission";
+import { isSubmissionGenericError, pickSubmissionValidationErrors } from "../utils/submission";
 
 type Step = ActivityType | "type-select";
 
@@ -45,7 +47,7 @@ export function NewActivityCreator(props: {
 	locale: SupportedLocale;
 }) {
 	return (
-		<MultiScreenPopover id={"create-activity"} component="drawer">
+		<MultiScreenPopover id={"create-activity"} component="drawer" class="md:min-w-[420px]">
 			{(controls) => {
 				const t = createTranslator("pets");
 				const [step, setStep] = createSignal<Step>("type-select");
@@ -173,82 +175,6 @@ function ActivitySelection(props: { update: (newStep: Step) => void }) {
 	);
 }
 
-function DateSelector(props: {
-	locale: SupportedLocale;
-	name: string;
-	value: Temporal.ZonedDateTime | null;
-	onChange?: (newDate: Temporal.ZonedDateTime) => void;
-	min?: Temporal.ZonedDateTime;
-	max?: Temporal.ZonedDateTime;
-	class?: string;
-	label?: string;
-	id?: string;
-	description?: string;
-	placeholder?: string;
-	showHour: boolean;
-	required?: boolean;
-}) {
-	const currentDateFormatted = createFormattedDate(
-		() => props.value ?? undefined,
-		() => props.locale,
-		{
-			year: "numeric",
-			hour: props.showHour ? "numeric" : null,
-		},
-	);
-	const toIsoString = (date: Temporal.ZonedDateTime) =>
-		props.showHour
-			? date.toString().slice(0, date.toString().indexOf("T") + 6)
-			: date.toString().slice(0, date.toString().indexOf("T"));
-
-	return (
-		<div class={tw("stack place-items-baseline", props.class)}>
-			<TextField
-				id={props.id}
-				value={props.value ? toIsoString(props.value) : ""}
-				min={props.min ? toIsoString(props.min) : undefined}
-				max={props.max ? toIsoString(props.max) : undefined}
-				onInput={(e) => {
-					if (!props.onChange) return;
-					const d = new Date(e.currentTarget.value);
-					if (!props.value || Number.isNaN(d.getTime())) return;
-
-					const newDate = props.value.with({
-						year: d.getFullYear(),
-						month: d.getMonth() + 1,
-						day: d.getDate(),
-						hour: d.getHours(),
-						minute: d.getMinutes(),
-					});
-					props.onChange(newDate);
-				}}
-				variant="ghost"
-				type={props.showHour ? "datetime-local" : "date"}
-				inline
-				textSize="sm"
-				required={props.required}
-				name={props.name}
-				label={props.label}
-				description={props.description}
-				placeholder={props.placeholder}
-				class="peer w-full part-[input]:text-transparent part-[input]:transition-all part-[input]:duration-150 part-[input]:focus-within:text-on-surface"
-			/>
-			<Text
-				with="label"
-				tone="light"
-				class="pointer-events-none ps-3.5 pe-12 transition-opacity duration-150 peer-has-[:focus-within]:opacity-0"
-			>
-				<Show
-					when={props.value}
-					fallback={<span class="text-on-surface/75">{props.placeholder}</span>}
-				>
-					{currentDateFormatted()}
-				</Show>
-			</Text>
-		</div>
-	);
-}
-
 function NewActivityForm(
 	props: ParentProps<
 		ActivityCreatorProps & {
@@ -272,22 +198,27 @@ function NewActivityForm(
 				const form = e.currentTarget;
 				const formData = new FormData(form);
 				const type = formData.get("activityType");
-				const res = await action(formData);
-				if ("activity" in res) {
-					// TODO: different text depending on saved activity type
-					toast(() => <Toast heading={`The ${type} is saved!`} />);
-					form.reset();
-					document.getElementById("create-activity")?.hidePopover();
-				} else if (res.failureReason === "other") {
-					// TODO: different text depending on saved activity type
-					toast(() => <Toast tone="failure" heading={"Failed to save the note"} />);
-				}
+				startViewTransition(async () => {
+					const res = await action(formData);
+					if ("activity" in res) {
+						// TODO: different text depending on saved activity type
+						toast(() => <Toast heading={`The ${type} is saved!`} />);
+						form.reset();
+						document.getElementById("create-activity")?.hidePopover();
+					} else if (res.failureReason === "other") {
+						// TODO: different text depending on saved activity type
+						toast(() => <Toast tone="failure" heading={"Failed to save the note"} />);
+					}
+				});
 			}}
 			onChange={props.onChange}
 		>
 			<input type="hidden" name="petId" value={props.petId} />
 			<input type="hidden" name="activityType" value={props.activityType} />
 			<input type="hidden" name="currentTimeZone" value={now.timeZoneId} />
+			<Show when={isSubmissionGenericError(submission)}>
+				<Card tone="failure">{t("new-activity.error")}</Card>
+			</Show>
 			<div class="flex flex-row justify-start">
 				<DateSelector
 					value={now}
@@ -453,5 +384,81 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 				</div>
 			</div>
 		</NewActivityForm>
+	);
+}
+
+function DateSelector(props: {
+	locale: SupportedLocale;
+	name: string;
+	value: Temporal.ZonedDateTime | null;
+	onChange?: (newDate: Temporal.ZonedDateTime) => void;
+	min?: Temporal.ZonedDateTime;
+	max?: Temporal.ZonedDateTime;
+	class?: string;
+	label?: string;
+	id?: string;
+	description?: string;
+	placeholder?: string;
+	showHour: boolean;
+	required?: boolean;
+}) {
+	const currentDateFormatted = createFormattedDate(
+		() => props.value ?? undefined,
+		() => props.locale,
+		{
+			year: "numeric",
+			hour: props.showHour ? "numeric" : null,
+		},
+	);
+	const toIsoString = (date: Temporal.ZonedDateTime) =>
+		props.showHour
+			? date.toString().slice(0, date.toString().indexOf("T") + 6)
+			: date.toString().slice(0, date.toString().indexOf("T"));
+
+	return (
+		<div class={tw("stack place-items-baseline", props.class)}>
+			<TextField
+				id={props.id}
+				value={props.value ? toIsoString(props.value) : ""}
+				min={props.min ? toIsoString(props.min) : undefined}
+				max={props.max ? toIsoString(props.max) : undefined}
+				onInput={(e) => {
+					if (!props.onChange) return;
+					const d = new Date(e.currentTarget.value);
+					if (!props.value || Number.isNaN(d.getTime())) return;
+
+					const newDate = props.value.with({
+						year: d.getFullYear(),
+						month: d.getMonth() + 1,
+						day: d.getDate(),
+						hour: d.getHours(),
+						minute: d.getMinutes(),
+					});
+					props.onChange(newDate);
+				}}
+				variant="ghost"
+				type={props.showHour ? "datetime-local" : "date"}
+				inline
+				textSize="sm"
+				required={props.required}
+				name={props.name}
+				label={props.label}
+				description={props.description}
+				placeholder={props.placeholder}
+				class="peer w-full part-[input]:text-transparent part-[input]:transition-all part-[input]:duration-150 part-[input]:focus-within:text-on-surface"
+			/>
+			<Text
+				with="label"
+				tone="light"
+				class="pointer-events-none ps-3.5 pe-12 transition-opacity duration-150 peer-has-[:focus-within]:opacity-0"
+			>
+				<Show
+					when={props.value}
+					fallback={<span class="text-on-surface/75">{props.placeholder}</span>}
+				>
+					{currentDateFormatted()}
+				</Show>
+			</Text>
+		</div>
 	);
 }

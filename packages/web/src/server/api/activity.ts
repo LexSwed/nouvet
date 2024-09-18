@@ -5,10 +5,10 @@ import { petActivities } from "~/server/db/queries/pet-activities";
 import type { PetActivitiesCursor } from "~/server/db/queries/pet-activities";
 import { petActivityCreate } from "~/server/db/queries/pet-activity-create";
 import type {
-	ActivityCreateSchema,
 	ActivityCreateInput,
+	ActivityCreateSchema,
 } from "~/server/db/queries/pet-activity-create";
-import type { ActivityType, PetID } from "~/server/types";
+import type { PetID } from "~/server/types";
 import { jsonFailure } from "~/server/utils";
 
 export const getPetActivities = cache(async function getPetActivitiesServer(
@@ -63,7 +63,7 @@ export const createPetActivity = action(async function createPetActivityServer(f
 		let recordedDate = formData.get("recordedDate")!.toString();
 		const timeZone = formData.get("currentTimeZone")!.toString();
 		recordedDate = Temporal.ZonedDateTime.from(`${recordedDate}[${timeZone}]`).toString();
-		const activityType = formData.get("activityType")?.toString() as ActivityType;
+		const activityType = "appointment" as string; // formData.get("activityType")?.toString() as ActivityType;
 		let input: ActivityCreateInput;
 		if (activityType === "observation") {
 			input = {

@@ -57,6 +57,7 @@ const petsDict = {
 	"new-activity.type-appointment": "Appointment",
 	"new-activity.type-prescription": "Prescription",
 	"new-activity.type-vaccination": "Vaccination",
+	"new-activity.error": "Something didn't go as expected, we will fix it really soon!",
 	"new-activity.note-label": "Note",
 	"new-activity.note-description": "The observation you want to record",
 	"new-activity.note-placeholder": "What happened?",

@@ -56,6 +56,7 @@ export async function jsonFailure<
 		);
 	}
 	console.error(error);
+
 	return json({ failureReason: "other" } satisfies SubmissionError<"other">, {
 		status: 500,
 		revalidate: "None",
