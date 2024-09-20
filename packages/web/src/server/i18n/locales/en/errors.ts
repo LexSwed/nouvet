@@ -18,7 +18,8 @@ const errorsDict = {
 	"deletePet.notFound": "Pet not found",
 	"create-activity.recordedDate": "The date of the activity is not valid",
 	"create-activity.note": "The note is too long",
-	"create-activity.vaccine.name-short": "The vaccine name is too short",
+	"create-activity.vaccine.name-short":
+		"Recording vaccines names helps to easily check them in the future!",
 	"create-activity.vaccine.name-long": "The vaccine name is too long",
 	"create-activity.vaccine.name": "The vaccine name is not valid",
 	"create-activity.vaccine.batch-number": "The batch number is too long",
