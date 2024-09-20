@@ -57,13 +57,13 @@
       border: 1px solid var(--border-color);
       transition: background-color 0.2s ease-out;
       border-radius: theme("borderRadius.xl");
-      background-color: theme("colors.on-surface/0.03");
+      background-color: theme("colors.on-surface/0.02");
     }
     &:where(:hover) > .inputWrapper {
-      background-color: theme("colors.on-surface/0.05");
+      background-color: theme("colors.on-surface/0.03");
     }
     &:where(:focus-within) > .inputWrapper {
-      background-color: theme("colors.on-surface/0.08");
+      background-color: theme("colors.on-surface/0.05");
     }
   }
   .wrapperInline {

@@ -18,10 +18,9 @@ export type TextFieldProps<T extends "input" | "textarea"> = FormFieldProps &
 	};
 
 const TextField = <T extends "input" | "textarea" = "input">(ownProps: TextFieldProps<T>) => {
-	const [fieldProps, props] = splitProps(
+	const [fieldProps, local, props] = splitProps(
 		mergeDefaultProps(ownProps as TextFieldProps<"input">, {
 			as: "input",
-			// TODO: remove this default for textarea
 			type: "text",
 		}),
 		[
@@ -36,6 +35,7 @@ const TextField = <T extends "input" | "textarea" = "input">(ownProps: TextField
 			"prefix",
 			"suffix",
 		],
+		["as", "type"],
 	);
 
 	// TODO: Max length handling to allow surpassing it, but showing as native error somehow still
@@ -44,7 +44,8 @@ const TextField = <T extends "input" | "textarea" = "input">(ownProps: TextField
 			{(aria) => (
 				<Dynamic
 					{...props}
-					component={props.as}
+					component={local.as}
+					type={local.as === "input" ? local.type : undefined}
 					class={css.input}
 					id={aria.id}
 					aria-describedby={aria.describedBy}
