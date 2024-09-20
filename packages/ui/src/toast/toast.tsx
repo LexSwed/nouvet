@@ -91,10 +91,10 @@ interface ToastEntry {
 
 interface ToastOptions {
 	/** Time in ms after which the toast will be automatically hidden.
-	 * @example Infinity - disable automatic hiding.
+	 * @example null - disable automatic hiding.
 	 * @default 3000
 	 */
-	duration?: number;
+	duration?: number | null;
 	position?: "top" | "bottom";
 }
 
@@ -220,7 +220,7 @@ const useToastsController = createSingletonRoot(() => {
 		const id = createUniqueId();
 		const [positionAnchor, setPositionAnchor] = createSignal<string | undefined>(undefined);
 		const { duration = 3000 } = options || {};
-		let timer = setTimeout(() => removeToast(id), duration);
+		let timer = duration ? setTimeout(() => removeToast(id), duration) : null;
 		const newItem = {
 			id,
 			element,
@@ -232,9 +232,9 @@ const useToastsController = createSingletonRoot(() => {
 				setPositionAnchor(value);
 			},
 			timer: {
-				reset: () => clearTimeout(timer),
+				reset: () => (timer ? clearTimeout(timer) : undefined),
 				restart: (delay: number) => {
-					timer = setTimeout(() => removeToast(id), duration + delay);
+					timer = duration ? setTimeout(() => removeToast(id), duration + delay) : null;
 				},
 			},
 		} satisfies ToastEntry;
