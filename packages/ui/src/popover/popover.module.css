@@ -19,7 +19,8 @@
     background-color: theme("colors.surface");
     color: theme("colors.on-surface");
     isolation: isolate;
-    transition: opacity 0.16s, transform 0.24s, display 0.24s, overlay 0.24s;
+    transition: opacity 0.16s, transform 0.24s, display 0.24s, overlay 0.24s,
+      height 0.4s;
     transition-behavior: allow-discrete;
     width: max-content;
     will-change: transform, opacity;

@@ -10,6 +10,7 @@
   :root {
     --nou-font-sans: "Inter Variable";
     view-transition-name: none;
+    interpolate-size: allow-keywords;
   }
 
   ::view-transition {

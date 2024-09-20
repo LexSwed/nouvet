@@ -8,7 +8,6 @@ import {
 	Text,
 	TextField,
 	Toast,
-	startViewTransition,
 	toast,
 	tw,
 } from "@nou/ui";
@@ -190,56 +189,59 @@ function NewActivityForm(
 	const now = Temporal.Now.zonedDateTimeISO();
 
 	return (
-		<Form
-			class="flex flex-col gap-4"
-			validationErrors={pickSubmissionValidationErrors(submission)}
-			onSubmit={async (e) => {
-				e.preventDefault();
-				const form = e.currentTarget;
-				const formData = new FormData(form);
-				const type = formData.get("activityType");
-				startViewTransition(async () => {
+		<>
+			<Show when={isSubmissionGenericError(submission)}>
+				<Card
+					tone="failure"
+					aria-live="assertive"
+					class="-mt-2 fade-in-0 mb-3 animate-in duration-300"
+				>
+					{t("new-activity.error")}
+				</Card>
+			</Show>
+			<Form
+				class="flex flex-col gap-4"
+				validationErrors={pickSubmissionValidationErrors(submission)}
+				onSubmit={async (e) => {
+					e.preventDefault();
+					const form = e.currentTarget;
+					const formData = new FormData(form);
+					const type = formData.get("activityType");
 					const res = await action(formData);
 					if ("activity" in res) {
 						// TODO: different text depending on saved activity type
 						toast(() => <Toast heading={`The ${type} is saved!`} />);
 						form.reset();
 						document.getElementById("create-activity")?.hidePopover();
-					} else if (res.failureReason === "other") {
-						// TODO: different text depending on saved activity type
-						toast(() => <Toast tone="failure" heading={"Failed to save the note"} />);
 					}
-				});
-			}}
-			onChange={props.onChange}
-		>
-			<input type="hidden" name="petId" value={props.petId} />
-			<input type="hidden" name="activityType" value={props.activityType} />
-			<input type="hidden" name="currentTimeZone" value={now.timeZoneId} />
-			<Show when={isSubmissionGenericError(submission)}>
-				<Card tone="failure">{t("new-activity.error")}</Card>
-			</Show>
-			<div class="flex flex-row justify-start">
-				<DateSelector
-					value={now}
-					locale={props.locale}
-					name="recordedDate"
-					showHour
-					label={t("new-activity.recorded-date.label")}
-					class="w-[80%] rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8"
-					required
-				/>
-			</div>
-			{props.children}
-			<div class="mt-4 flex flex-row justify-end gap-4 *:flex-1">
-				<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
-					{t("new-activity.cta-cancel")}
-				</Button>
-				<Button type="submit" variant="tonal" tone="primary" pending={submission.pending}>
-					{t("new-activity.cta-create")}
-				</Button>
-			</div>
-		</Form>
+				}}
+				onChange={props.onChange}
+			>
+				<input type="hidden" name="petId" value={props.petId} />
+				<input type="hidden" name="activityType" value={props.activityType} />
+				<input type="hidden" name="currentTimeZone" value={now.timeZoneId} />
+				<div class="flex flex-row justify-start">
+					<DateSelector
+						value={now}
+						locale={props.locale}
+						name="recordedDate"
+						showHour
+						label={t("new-activity.recorded-date.label")}
+						class="w-[80%] rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8"
+						required
+					/>
+				</div>
+				{props.children}
+				<div class="mt-4 flex flex-row justify-end gap-4 *:flex-1">
+					<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
+						{t("new-activity.cta-cancel")}
+					</Button>
+					<Button type="submit" variant="tonal" tone="primary" pending={submission.pending}>
+						{t("new-activity.cta-create")}
+					</Button>
+				</div>
+			</Form>
+		</>
 	);
 }
 
@@ -340,7 +342,7 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 				<Text class="-mb-2 ps-3" with="label-sm" as="label" for="vaccine-next-due-date">
 					{t("new-activity.vaccine.next-due-date.label")}
 				</Text>
-				<div class="rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8">
+				<div class="rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/5">
 					<Fieldset
 						legend={<span class="sr-only">{t("new-activity.vaccine.due-date.label")}</span>}
 						class="mx-2 my-1 flex flex-row items-center gap-2"
@@ -379,7 +381,7 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 						showHour={false}
 						id="vaccine-next-due-date"
 						locale={props.locale}
-						class="pb-2"
+						class="pb-1"
 					/>
 				</div>
 			</div>

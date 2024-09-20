@@ -23,7 +23,7 @@ const cardVariants = cva("flex flex-col gap-2 rounded-2xl p-4", {
 			primary: "",
 			"primary-light": "",
 			secondary: "",
-			failure: "",
+			failure: "bg-error-container text-on-error-container",
 		},
 	},
 	compoundVariants: [
@@ -70,11 +70,6 @@ const cardVariants = cva("flex flex-col gap-2 rounded-2xl p-4", {
 			tone: "neutral",
 			_link: true,
 			class: "intent:bg-on-surface/8 outline-on-surface",
-		},
-		{
-			variant: "tonal",
-			tone: "failure",
-			class: "bg-error-container text-on-error-container",
 		},
 		{
 			variant: "flat",

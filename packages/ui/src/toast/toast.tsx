@@ -49,6 +49,7 @@ const Toast = (ownProps: ToastProps) => {
 			role="status"
 			tabIndex={0}
 			aria-atomic="true"
+			variant="elevated"
 			{...props}
 			class={tw(
 				"allow-discrete max-w-80 border border-on-background/5 shadow-popover",
@@ -136,8 +137,10 @@ function Toaster(props: { label: string }) {
 
 	return (
 		<section
-			// Popover is used to ensure that if notification is triggered from a dialog or any
-			// top layer element, the toast appears on top of it
+			/* Popover is used to ensure that if notification is triggered from a dialog or any
+			top layer element, the toast appears on top of it.
+			For the same reason we don't want to create Popover within existing popover. Closing a popover with success
+			message shouldn't remove the toast from the DOM. */
 			popover="manual"
 			class="fixed top-12 mx-auto my-0 overflow-visible bg-transparent p-0 empty:hidden"
 			aria-label={props.label}
