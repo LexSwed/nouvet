@@ -223,7 +223,6 @@ export const activitiesTable = sqliteTable(
 		}).notNull(),
 		note: text("note", { length: 1000 }),
 		// attachments: [],
-		/*	TODO: This field is used for sorting, any chance for speed up? */
 		date: zonedDateTimeISO("activity_date"),
 	},
 	(table) => ({
@@ -282,6 +281,16 @@ export const vaccinationsTable = sqliteTable("vaccination", {
 	name: text("vaccine_name", { length: 200 }).notNull(),
 	nextDueDate: dateTime("next_due_date"),
 	batchNumber: text("batch_number", { length: 100 }),
+});
+
+export const appointmentsTable = sqliteTable("appointment", {
+	id: primaryId<"VaccinationID">("id", "ap"),
+	activityId: text("activity_id")
+		.references(() => activitiesTable.id, { onDelete: "cascade" })
+		.notNull()
+		.$type<DatabaseActivity["id"]>(),
+	location: text("location", { length: 400 }),
+	date: dateTime("date"),
 });
 
 /**

@@ -82,6 +82,13 @@ const ActivityCreateSchema = v.variant("activityType", [
 		),
 	}),
 	v.object({
+		activityType: v.literal("appointment" satisfies ActivityType),
+		note: ActivityNoteSchema,
+		recordedDate: ActivityRecordedDateSchema,
+		date: ActivityRecordedDateSchema,
+		location: v.pipe(v.string(), v.trim(), v.maxLength(400)),
+	}),
+	v.object({
 		activityType: v.literal("prescription" satisfies ActivityType),
 		note: ActivityNoteSchema,
 		recordedDate: ActivityRecordedDateSchema,

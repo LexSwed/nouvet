@@ -178,6 +178,7 @@ function NewActivityForm(
 	props: ParentProps<
 		ActivityCreatorProps & {
 			activityType: ActivityType;
+			recordedDateHidden?: boolean;
 			onChange?: ComponentProps<typeof Form>["onChange"];
 		}
 	>,
@@ -223,6 +224,7 @@ function NewActivityForm(
 				<div class="flex flex-row justify-start">
 					<DateSelector
 						value={now}
+						hidden={props.recordedDateHidden}
 						locale={props.locale}
 						name="recordedDate"
 						showHour
@@ -246,35 +248,35 @@ function NewActivityForm(
 }
 
 function ObservationActivityForm(props: ActivityCreatorProps) {
-	const t = createTranslator("pets");
-
 	return (
 		<NewActivityForm activityType="observation" petId={props.petId} locale={props.locale}>
-			<TextField
-				as="textarea"
-				name="note"
-				label={t("new-activity.note-label")}
-				description={t("new-activity.note-description")}
-				placeholder={t("new-activity.note-placeholder")}
-				variant="ghost"
-				rows="2"
-				maxLength={1000}
-				class="part-[input]:max-h-[5lh]"
-				onKeyDown={(e) => {
-					if (e.key === "Enter" && e.metaKey) {
-						e.preventDefault();
-						e.currentTarget.form?.dispatchEvent(new Event("submit"));
-					}
-				}}
-			/>
+			<NoteTextField />
 		</NewActivityForm>
 	);
 }
 
 function AppointmentActivityForm(props: ActivityCreatorProps) {
 	return (
-		<NewActivityForm activityType="appointment" petId={props.petId} locale={props.locale}>
-			Appointment
+		<NewActivityForm
+			recordedDateHidden={true}
+			activityType="appointment"
+			petId={props.petId}
+			locale={props.locale}
+		>
+			<TextField
+				name="location"
+				label="Location"
+				description="Name of the clinic, or its address"
+			/>
+			<DateSelector
+				name="date"
+				label="Date of the appointment"
+				showHour
+				locale={props.locale}
+				value={null}
+				required
+			/>
+			<NoteTextField />
 		</NewActivityForm>
 	);
 }
@@ -385,7 +387,31 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 					/>
 				</div>
 			</div>
+			<NoteTextField />
 		</NewActivityForm>
+	);
+}
+
+function NoteTextField() {
+	const t = createTranslator("pets");
+	return (
+		<TextField
+			as="textarea"
+			name="note"
+			label={t("new-activity.note-label")}
+			description={t("new-activity.note-description")}
+			placeholder={t("new-activity.note-placeholder")}
+			variant="ghost"
+			rows="2"
+			maxLength={1000}
+			class="part-[input]:max-h-[5lh]"
+			onKeyDown={(e) => {
+				if (e.key === "Enter" && e.metaKey && e.currentTarget.form) {
+					e.preventDefault();
+					e.currentTarget.form.dispatchEvent(new Event("submit"));
+				}
+			}}
+		/>
 	);
 }
 
@@ -396,6 +422,7 @@ function DateSelector(props: {
 	onChange?: (newDate: Temporal.ZonedDateTime) => void;
 	min?: Temporal.ZonedDateTime;
 	max?: Temporal.ZonedDateTime;
+	hidden?: boolean;
 	class?: string;
 	label?: string;
 	id?: string;
@@ -418,49 +445,61 @@ function DateSelector(props: {
 			: date.toString().slice(0, date.toString().indexOf("T"));
 
 	return (
-		<div class={tw("stack place-items-baseline", props.class)}>
-			<TextField
-				id={props.id}
-				value={props.value ? toIsoString(props.value) : ""}
-				min={props.min ? toIsoString(props.min) : undefined}
-				max={props.max ? toIsoString(props.max) : undefined}
-				onInput={(e) => {
-					if (!props.onChange) return;
-					const d = new Date(e.currentTarget.value);
-					if (!props.value || Number.isNaN(d.getTime())) return;
+		<Show
+			when={!props.hidden}
+			fallback={
+				<input
+					type="hidden"
+					value={props.value ? toIsoString(props.value) : ""}
+					required={props.required}
+					name={props.name}
+				/>
+			}
+		>
+			<div class={tw("stack place-items-baseline", props.class)}>
+				<TextField
+					id={props.id}
+					value={props.value ? toIsoString(props.value) : ""}
+					min={props.min ? toIsoString(props.min) : undefined}
+					max={props.max ? toIsoString(props.max) : undefined}
+					onInput={(e) => {
+						if (!props.onChange) return;
+						const d = new Date(e.currentTarget.value);
+						if (!props.value || Number.isNaN(d.getTime())) return;
 
-					const newDate = props.value.with({
-						year: d.getFullYear(),
-						month: d.getMonth() + 1,
-						day: d.getDate(),
-						hour: d.getHours(),
-						minute: d.getMinutes(),
-					});
-					props.onChange(newDate);
-				}}
-				variant="ghost"
-				type={props.showHour ? "datetime-local" : "date"}
-				inline
-				textSize="sm"
-				required={props.required}
-				name={props.name}
-				label={props.label}
-				description={props.description}
-				placeholder={props.placeholder}
-				class="peer w-full part-[input]:text-transparent part-[input]:transition-all part-[input]:duration-150 part-[input]:focus-within:text-on-surface"
-			/>
-			<Text
-				with="label"
-				tone="light"
-				class="pointer-events-none ps-3.5 pe-12 transition-opacity duration-150 peer-has-[:focus-within]:opacity-0"
-			>
-				<Show
-					when={props.value}
-					fallback={<span class="text-on-surface/75">{props.placeholder}</span>}
+						const newDate = props.value.with({
+							year: d.getFullYear(),
+							month: d.getMonth() + 1,
+							day: d.getDate(),
+							hour: d.getHours(),
+							minute: d.getMinutes(),
+						});
+						props.onChange(newDate);
+					}}
+					variant="ghost"
+					type={props.showHour ? "datetime-local" : "date"}
+					inline
+					textSize="sm"
+					required={props.required}
+					name={props.name}
+					label={props.label}
+					description={props.description}
+					placeholder={props.placeholder}
+					class="peer w-full part-[input]:text-transparent part-[input]:transition-all part-[input]:duration-150 part-[input]:focus-within:text-on-surface"
+				/>
+				<Text
+					with="label"
+					tone="light"
+					class="pointer-events-none ps-3.5 pe-12 transition-opacity duration-150 peer-has-[:focus-within]:opacity-0"
 				>
-					{currentDateFormatted()}
-				</Show>
-			</Text>
-		</div>
+					<Show
+						when={props.value}
+						fallback={<span class="text-on-surface/75">{props.placeholder}</span>}
+					>
+						{currentDateFormatted()}
+					</Show>
+				</Text>
+			</div>
+		</Show>
 	);
 }
