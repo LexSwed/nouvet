@@ -23,6 +23,6 @@
 	},
 	"dependencies": {
 		"@dotenvx/dotenvx": "^1.14.1",
-		"@playwright/test": "^1.47.1"
+		"@playwright/test": "^1.47.2"
 	}
 }
