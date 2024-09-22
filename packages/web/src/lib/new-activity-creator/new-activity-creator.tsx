@@ -9,7 +9,6 @@ import {
 	TextField,
 	Toast,
 	toast,
-	tw,
 } from "@nou/ui";
 import { useAction, useSubmission } from "@solidjs/router";
 import {
@@ -221,18 +220,17 @@ function NewActivityForm(
 				<input type="hidden" name="petId" value={props.petId} />
 				<input type="hidden" name="activityType" value={props.activityType} />
 				<input type="hidden" name="currentTimeZone" value={now.timeZoneId} />
-				<div class="flex flex-row justify-start">
-					<DateSelector
-						value={now}
-						hidden={props.recordedDateHidden}
-						locale={props.locale}
-						name="recordedDate"
-						showHour
-						label={t("new-activity.recorded-date.label")}
-						class="w-[80%] rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8"
-						required
-					/>
-				</div>
+				<DateSelector
+					value={now}
+					hidden={props.recordedDateHidden}
+					locale={props.locale}
+					name="recordedDate"
+					inline
+					showHour
+					label={t("new-activity.recorded-date.label")}
+					class="w-[80%] self-start rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8"
+					required
+				/>
 				{props.children}
 				<div class="mt-4 flex flex-row justify-end gap-4 *:flex-1">
 					<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
@@ -256,6 +254,7 @@ function ObservationActivityForm(props: ActivityCreatorProps) {
 }
 
 function AppointmentActivityForm(props: ActivityCreatorProps) {
+	const [date, setDate] = createSignal<Temporal.ZonedDateTime | null>(null);
 	return (
 		<NewActivityForm
 			recordedDateHidden={true}
@@ -267,13 +266,16 @@ function AppointmentActivityForm(props: ActivityCreatorProps) {
 				name="location"
 				label="Location"
 				description="Name of the clinic, or its address"
+				variant="ghost"
 			/>
 			<DateSelector
 				name="date"
+				value={date()}
+				onChange={setDate}
 				label="Date of the appointment"
 				showHour
+				inline={false}
 				locale={props.locale}
-				value={null}
 				required
 			/>
 			<NoteTextField />
@@ -314,6 +316,12 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 			locale={props.locale}
 			onChange={(e) => {
 				const formData = new FormData(e.currentTarget);
+				const nextDueDateValue = formData.get("nextDueDate")?.toString();
+				// next due date is cleaned up
+				if (!nextDueDateValue) {
+					setNextDueDate(null);
+					return;
+				}
 				const recordedDate = new Date(formData.get("recordedDate")!.toString());
 				const nextDueDateShortCut = formData.get("next-due-date-shortcut")
 					? Number.parseInt(formData.get("next-due-date-shortcut")!.toString())
@@ -383,6 +391,7 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 						showHour={false}
 						id="vaccine-next-due-date"
 						locale={props.locale}
+						inline
 						class="pb-1"
 					/>
 				</div>
@@ -419,7 +428,8 @@ function DateSelector(props: {
 	locale: SupportedLocale;
 	name: string;
 	value: Temporal.ZonedDateTime | null;
-	onChange?: (newDate: Temporal.ZonedDateTime) => void;
+	inline: boolean;
+	onChange?: (newDate: Temporal.ZonedDateTime | null) => void;
 	min?: Temporal.ZonedDateTime;
 	max?: Temporal.ZonedDateTime;
 	hidden?: boolean;
@@ -432,7 +442,7 @@ function DateSelector(props: {
 	required?: boolean;
 }) {
 	const currentDateFormatted = createFormattedDate(
-		() => props.value ?? undefined,
+		() => props.value,
 		() => props.locale,
 		{
 			year: "numeric",
@@ -456,7 +466,7 @@ function DateSelector(props: {
 				/>
 			}
 		>
-			<div class={tw("stack place-items-baseline", props.class)}>
+			<div class={props.class}>
 				<TextField
 					id={props.id}
 					value={props.value ? toIsoString(props.value) : ""}
@@ -465,9 +475,9 @@ function DateSelector(props: {
 					onInput={(e) => {
 						if (!props.onChange) return;
 						const d = new Date(e.currentTarget.value);
-						if (!props.value || Number.isNaN(d.getTime())) return;
+						if (Number.isNaN(d.getTime())) return props.onChange(null);
 
-						const newDate = props.value.with({
+						const newDate = (props.value || Temporal.Now.zonedDateTimeISO()).with({
 							year: d.getFullYear(),
 							month: d.getMonth() + 1,
 							day: d.getDate(),
@@ -478,27 +488,15 @@ function DateSelector(props: {
 					}}
 					variant="ghost"
 					type={props.showHour ? "datetime-local" : "date"}
-					inline
+					inline={props.inline}
 					textSize="sm"
 					required={props.required}
 					name={props.name}
 					label={props.label}
 					description={props.description}
 					placeholder={props.placeholder}
-					class="peer w-full part-[input]:text-transparent part-[input]:transition-all part-[input]:duration-150 part-[input]:focus-within:text-on-surface"
+					overlay={<div class="pe-12">{currentDateFormatted()}</div>}
 				/>
-				<Text
-					with="label"
-					tone="light"
-					class="pointer-events-none ps-3.5 pe-12 transition-opacity duration-150 peer-has-[:focus-within]:opacity-0"
-				>
-					<Show
-						when={props.value}
-						fallback={<span class="text-on-surface/75">{props.placeholder}</span>}
-					>
-						{currentDateFormatted()}
-					</Show>
-				</Text>
 			</div>
 		</Show>
 	);
