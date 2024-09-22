@@ -185,8 +185,9 @@ function NewActivityForm(
 	const submission = useSubmission(createPetActivity);
 	const action = useAction(createPetActivity);
 	const t = createTranslator("pets");
-
-	const now = Temporal.Now.zonedDateTimeISO();
+	const [recordedDate, setRecordedDate] = createSignal<Temporal.ZonedDateTime | null>(
+		Temporal.Now.zonedDateTimeISO(),
+	);
 
 	return (
 		<>
@@ -219,9 +220,10 @@ function NewActivityForm(
 			>
 				<input type="hidden" name="petId" value={props.petId} />
 				<input type="hidden" name="activityType" value={props.activityType} />
-				<input type="hidden" name="currentTimeZone" value={now.timeZoneId} />
+				<input type="hidden" name="currentTimeZone" value={recordedDate()?.timeZoneId} />
 				<DateSelector
-					value={now}
+					value={recordedDate()}
+					onChange={setRecordedDate}
 					hidden={props.recordedDateHidden}
 					locale={props.locale}
 					name="recordedDate"
@@ -427,11 +429,11 @@ function NoteTextField() {
 function DateSelector(props: {
 	locale: SupportedLocale;
 	name: string;
-	value: Temporal.ZonedDateTime | null;
-	inline: boolean;
+	value?: Temporal.ZonedDateTime | null;
 	onChange?: (newDate: Temporal.ZonedDateTime | null) => void;
 	min?: Temporal.ZonedDateTime;
 	max?: Temporal.ZonedDateTime;
+	inline: boolean;
 	hidden?: boolean;
 	class?: string;
 	label?: string;
