@@ -38,6 +38,7 @@ export const formFieldVariants = cva(css.wrapper, {
 });
 
 export interface FormFieldProps extends VariantProps<typeof formFieldVariants> {
+	overlay?: JSXElement;
 	/** Field label. */
 	label?: JSXElement;
 	/** Helper text. */
@@ -78,6 +79,7 @@ const FormField = (ownProps: FieldInnerProps) => {
 	const label = children(() => props.label);
 	const description = children(() => props.description);
 	const child = createMemo(() => props.children(aria));
+	const overlay = children(() => props.overlay);
 	return (
 		<div id={local.id} class={tw(css.field, props.class)} style={props.style}>
 			<div class={formFieldVariants(local)}>
@@ -91,17 +93,24 @@ const FormField = (ownProps: FieldInnerProps) => {
 						{label()}
 					</Text>
 				</Show>
-				<div class={css.inputWrapper}>
-					<Show when={prefix()}>
-						<label for={aria.id} class={css.prefix}>
-							{prefix()}
-						</label>
-					</Show>
-					{child()}
-					<Show when={suffix()}>
-						<label for={aria.id} class={css.suffix}>
-							{suffix()}
-						</label>
+				<div class="stack w-full place-items-baseline">
+					<div class={css.inputWrapper}>
+						<Show when={prefix()}>
+							<label for={aria.id} class={css.prefix}>
+								{prefix()}
+							</label>
+						</Show>
+						{child()}
+						<Show when={suffix()}>
+							<label for={aria.id} class={css.suffix}>
+								{suffix()}
+							</label>
+						</Show>
+					</div>
+					<Show when={overlay()}>
+						<Text as="label" with="label" tone="light" for={aria.id} class={css.overlay}>
+							{overlay()}
+						</Text>
 					</Show>
 				</div>
 			</div>

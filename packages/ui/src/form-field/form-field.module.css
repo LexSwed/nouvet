@@ -5,6 +5,7 @@
     --start-padding: theme("spacing.3");
     display: inline-flex;
     flex-flow: column nowrap;
+    width: 100%;
     &:has(:user-invalid) {
       --border-color: theme("colors.error");
       --border-scale-y: 2;
@@ -53,16 +54,16 @@
   }
   .wrapperGhost {
     --border-color: transparent;
-    & > .inputWrapper {
+    & .inputWrapper {
       border: 1px solid var(--border-color);
       transition: background-color 0.2s ease-out;
       border-radius: theme("borderRadius.xl");
       background-color: theme("colors.on-surface/0.03");
     }
-    &:where(:hover) > .inputWrapper {
+    &:where(:hover) .inputWrapper {
       background-color: theme("colors.on-surface/0.05");
     }
-    &:where(:focus-within) > .inputWrapper {
+    &:where(:focus-within) .inputWrapper {
       background-color: theme("colors.on-surface/0.08");
     }
   }
@@ -71,7 +72,7 @@
       position: absolute;
       padding-block: 0;
     }
-    & > .inputWrapper {
+    & .inputWrapper {
       background-color: transparent;
     }
     &:has(:where(input, textarea):not(:placeholder-shown)) {
@@ -128,6 +129,7 @@
     display: flex;
     align-items: flex-start;
     cursor: default;
+    width: 100%;
   }
   .label {
     color: theme("colors.on-surface");
@@ -168,6 +170,24 @@
     & .error {
       color: theme("colors.error");
       white-space: pre;
+    }
+  }
+
+  .overlay {
+    pointer-events: none;
+    padding-inline: theme("spacing[3.5]");
+    transition: opacity 0.15s ease-out;
+    opacity: 0;
+  }
+  .field [data-part="input"] {
+    transition-property: all 0.15s ease;
+  }
+  .field:has(:where(input, textarea):not(:focus-within)) {
+    & .overlay:not(:empty) {
+      opacity: 1;
+    }
+    &:has(.overlay:not(:empty) *:not(:empty)) [data-part="input"] {
+      color: transparent;
     }
   }
 }

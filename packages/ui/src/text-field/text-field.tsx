@@ -34,6 +34,7 @@ const TextField = <T extends "input" | "textarea" = "input">(ownProps: TextField
 			"textSize",
 			"prefix",
 			"suffix",
+			"overlay",
 		],
 		["as", "type"],
 	);
