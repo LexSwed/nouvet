@@ -59,8 +59,8 @@ const petsDict = {
 	"new-activity.type-vaccination": "Vaccination",
 	"new-activity.error": "Something didn't go as expected, we will fix it really soon!",
 	"new-activity.note-label": "Note",
-	"new-activity.note-description": "The observation you want to record",
-	"new-activity.note-placeholder": "What happened?",
+	"new-activity.note-description-observation": "The observation you want to record",
+	"new-activity.note-placeholder-observation": "What happened?",
 	"new-activity.cta-cancel": "Cancel",
 	"new-activity.cta-create": "Create",
 	"new-activity.recorded-date.label": "Date of the event",
@@ -73,6 +73,10 @@ const petsDict = {
 	"new-activity.vaccine.due-date.1-month": "1 month",
 	"new-activity.vaccine.due-date.6-months": "6 months",
 	"new-activity.vaccine.due-date.1-year": "1 year",
+	"new-activity.note-description-vaccine": "Recommendations, reaction, side effects, etc.",
+	"new-activity.note-placeholder-vaccine": "Anything worth remembering?",
+	"new-activity.note-description-appointment": "Relevant information for the appointment",
+	"new-activity.note-placeholder-appointment": "Symptoms, observations, concerns, etc.",
 } as const;
 
 export default petsDict;

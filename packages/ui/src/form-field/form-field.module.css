@@ -141,6 +141,7 @@
   .description {
     /* same as label */
     padding-inline: var(--start-padding);
+    padding-block-end: theme("spacing.2");
     color: theme("colors.on-surface-variant");
     @apply text-sm;
   }

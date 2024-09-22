@@ -248,14 +248,19 @@ function NewActivityForm(
 }
 
 function ObservationActivityForm(props: ActivityCreatorProps) {
+	const t = createTranslator("pets");
 	return (
 		<NewActivityForm activityType="observation" petId={props.petId} locale={props.locale}>
-			<NoteTextField />
+			<NoteTextField
+				description={t("new-activity.note-description-observation")}
+				placeholder={t("new-activity.note-placeholder-observation")}
+			/>
 		</NewActivityForm>
 	);
 }
 
 function AppointmentActivityForm(props: ActivityCreatorProps) {
+	const t = createTranslator("pets");
 	const [date, setDate] = createSignal<Temporal.ZonedDateTime | null>(null);
 	return (
 		<NewActivityForm
@@ -280,7 +285,10 @@ function AppointmentActivityForm(props: ActivityCreatorProps) {
 				locale={props.locale}
 				required
 			/>
-			<NoteTextField />
+			<NoteTextField
+				placeholder={t("new-activity.note-placeholder-appointment")}
+				description={t("new-activity.note-description-observation")}
+			/>
 		</NewActivityForm>
 	);
 }
@@ -398,20 +406,23 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 					/>
 				</div>
 			</div>
-			<NoteTextField />
+			<NoteTextField
+				placeholder={t("new-activity.note-placeholder-vaccine")}
+				description={t("new-activity.note-description-vaccine")}
+			/>
 		</NewActivityForm>
 	);
 }
 
-function NoteTextField() {
+function NoteTextField(props: { placeholder?: string; description?: string }) {
 	const t = createTranslator("pets");
 	return (
 		<TextField
 			as="textarea"
 			name="note"
 			label={t("new-activity.note-label")}
-			description={t("new-activity.note-description")}
-			placeholder={t("new-activity.note-placeholder")}
+			placeholder={props.placeholder}
+			description={props.description}
 			variant="ghost"
 			rows="2"
 			maxLength={1000}
