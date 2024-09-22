@@ -85,8 +85,12 @@ const ActivityCreateSchema = v.variant("activityType", [
 		activityType: v.literal("appointment" satisfies ActivityType),
 		note: ActivityNoteSchema,
 		recordedDate: ActivityRecordedDateSchema,
-		date: ActivityRecordedDateSchema,
-		location: v.pipe(v.string(), v.trim(), v.maxLength(400)),
+		date: v.config(ActivityRecordedDateSchema, {
+			message: "create-activity.appointment.date" satisfies ErrorKeys,
+		}),
+		location: v.config(v.pipe(v.string(), v.trim(), v.maxLength(400)), {
+			message: "create-activity.appointment.location" satisfies ErrorKeys,
+		}),
 	}),
 	v.object({
 		activityType: v.literal("prescription" satisfies ActivityType),

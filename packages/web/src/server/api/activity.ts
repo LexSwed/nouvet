@@ -81,11 +81,14 @@ export const createPetActivity = action(async function createPetActivityServer(f
 				recordedDate,
 			};
 		} else if (activityType === "appointment") {
+			let date = formData.get("date")!.toString();
+			const timeZone = formData.get("currentTimeZone")!.toString();
+			date = Temporal.ZonedDateTime.from(`${date}[${timeZone}]`).toString();
 			input = {
 				activityType,
 				note: formData.get("note")?.toString() || null,
 				recordedDate,
-				date: formData.get("date")!.toString(),
+				date,
 				location: formData.get("location")!.toString(),
 			};
 		} else {
