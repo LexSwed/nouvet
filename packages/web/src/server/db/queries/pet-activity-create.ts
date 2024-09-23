@@ -52,45 +52,27 @@ const ActivityCreateSchema = v.variant("activityType", [
 		note: ActivityNoteSchema,
 		recordedDate: ActivityRecordedDateSchema,
 	}),
-	v.pipe(
-		v.object({
-			activityType: v.literal("vaccination" satisfies ActivityType),
-			note: ActivityNoteSchema,
-			recordedDate: ActivityRecordedDateSchema,
-			name: v.pipe(
-				v.string("create-activity.vaccine.name" satisfies ErrorKeys),
-				v.trim(),
-				v.minLength(2, "create-activity.vaccine.name-short" satisfies ErrorKeys),
-				v.maxLength(400, "create-activity.vaccine.name-long" satisfies ErrorKeys),
-			),
-			nextDueDate: v.nullable(
-				v.config(v.pipe(v.string(), v.trim(), v.isoDate()), {
-					message: "create-activity.vaccine.due-date" satisfies ErrorKeys,
-				}),
-			),
-			batchNumber: v.nullable(
-				v.config(v.pipe(v.string(), v.trim(), v.maxLength(100)), {
-					message: "create-activity.vaccine.due-date" satisfies ErrorKeys,
-				}),
-			),
-		}),
-		v.forward(
-			v.partialCheck(
-				[["recordedDate"], ["nextDueDate"]],
-				(input) => {
-					const { recordedDate, nextDueDate } = input;
-					if (recordedDate && nextDueDate) {
-						const recordedDateParsed = parseISO(recordedDate);
-						const nextDueDateParsed = parseISO(nextDueDate);
-						return recordedDateParsed.getTime() <= nextDueDateParsed.getTime();
-					}
-					return true;
-				},
-				"create-activity.vaccine.due-date" satisfies ErrorKeys,
-			),
-			["nextDueDate"],
+	v.object({
+		activityType: v.literal("vaccination" satisfies ActivityType),
+		note: ActivityNoteSchema,
+		recordedDate: ActivityRecordedDateSchema,
+		name: v.pipe(
+			v.string("create-activity.vaccine.name" satisfies ErrorKeys),
+			v.trim(),
+			v.minLength(2, "create-activity.vaccine.name-short" satisfies ErrorKeys),
+			v.maxLength(400, "create-activity.vaccine.name-long" satisfies ErrorKeys),
 		),
-	),
+		nextDueDate: v.nullable(
+			v.config(v.pipe(v.string(), v.trim(), v.isoDate()), {
+				message: "create-activity.vaccine.due-date" satisfies ErrorKeys,
+			}),
+		),
+		batchNumber: v.nullable(
+			v.config(v.pipe(v.string(), v.trim(), v.maxLength(100)), {
+				message: "create-activity.vaccine.due-date" satisfies ErrorKeys,
+			}),
+		),
+	}),
 	v.object({
 		activityType: v.literal("appointment" satisfies ActivityType),
 		note: ActivityNoteSchema,
@@ -118,9 +100,11 @@ const ActivityCreateSchema = v.variant("activityType", [
 					message: "create-activity.prescription.date-started" satisfies ErrorKeys,
 				}),
 			),
-			endDate: v.config(ActivityRecordedDateSchema, {
-				message: "create-activity.prescription.end-date" satisfies ErrorKeys,
-			}),
+			endDate: v.nullable(
+				v.config(v.pipe(v.string(), v.isoDate()), {
+					message: "create-activity.prescription.end-date" satisfies ErrorKeys,
+				}),
+			),
 			schedule: v.nullable(
 				v.config(
 					v.variant("type", [
