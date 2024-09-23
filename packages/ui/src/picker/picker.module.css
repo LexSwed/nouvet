@@ -1,6 +1,6 @@
 @layer tw-components {
-  .input,
-  ::picker(.input) {
+  .input:is(select) {
+    /* ::picker(.input) { */
     appearance: base-select;
   }
   .input {
