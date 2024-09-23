@@ -29,8 +29,9 @@ const errorsDict = {
 	"create-activity.prescription.date-started": "The date started is not valid",
 	"create-activity.prescription.schedule": "The schedule is not valid",
 	"create-activity.prescription.dosage": "The dosage is not valid",
-	"create-activity.appointment.date": "Check that the date is correct",
+	"create-activity.appointment.date": "Please, verify that the date is correct",
 	"create-activity.appointment.location": "The location is too long",
+	"create-activity.prescription.end-date": "The end date is not valid",
 } as const;
 
 export default errorsDict;

@@ -1,4 +1,5 @@
 "use server";
+import { parseISO } from "date-fns";
 import { Temporal } from "temporal-polyfill";
 import * as v from "valibot";
 import type { UserSession } from "~/server/auth/user-session";
@@ -7,7 +8,6 @@ import {
 	type DosageBase,
 	type InjectionDosage,
 	type LiquidDosage,
-	type ScheduleDuration,
 	activitiesTable,
 	prescriptionsTable,
 	vaccinationsTable,
@@ -16,14 +16,6 @@ import type { ActivityType, PetID, PrescriptionMedicationType } from "~/server/t
 import { type ErrorKeys, getCurrentZonedDateTime } from "~/server/utils";
 import { checkCanPerformPetAction } from "./can-perform-pet-action";
 
-const PrescriptionDurationSchema = v.nullable(
-	v.object({
-		amount: v.number(),
-		unit: v.picklist(["day", "week", "month", "year"] as const satisfies Array<
-			ScheduleDuration["unit"]
-		>),
-	}),
-);
 const PrescriptionTimeSchema = v.nullable(
 	v.picklist(["morning", "afternoon", "evening", "night"] as const satisfies Array<
 		DosageBase["time"]
@@ -60,27 +52,45 @@ const ActivityCreateSchema = v.variant("activityType", [
 		note: ActivityNoteSchema,
 		recordedDate: ActivityRecordedDateSchema,
 	}),
-	v.object({
-		activityType: v.literal("vaccination" satisfies ActivityType),
-		note: ActivityNoteSchema,
-		recordedDate: ActivityRecordedDateSchema,
-		name: v.pipe(
-			v.string("create-activity.vaccine.name" satisfies ErrorKeys),
-			v.trim(),
-			v.minLength(2, "create-activity.vaccine.name-short" satisfies ErrorKeys),
-			v.maxLength(400, "create-activity.vaccine.name-long" satisfies ErrorKeys),
+	v.pipe(
+		v.object({
+			activityType: v.literal("vaccination" satisfies ActivityType),
+			note: ActivityNoteSchema,
+			recordedDate: ActivityRecordedDateSchema,
+			name: v.pipe(
+				v.string("create-activity.vaccine.name" satisfies ErrorKeys),
+				v.trim(),
+				v.minLength(2, "create-activity.vaccine.name-short" satisfies ErrorKeys),
+				v.maxLength(400, "create-activity.vaccine.name-long" satisfies ErrorKeys),
+			),
+			nextDueDate: v.nullable(
+				v.config(v.pipe(v.string(), v.trim(), v.isoDate()), {
+					message: "create-activity.vaccine.due-date" satisfies ErrorKeys,
+				}),
+			),
+			batchNumber: v.nullable(
+				v.config(v.pipe(v.string(), v.trim(), v.maxLength(100)), {
+					message: "create-activity.vaccine.due-date" satisfies ErrorKeys,
+				}),
+			),
+		}),
+		v.forward(
+			v.partialCheck(
+				[["recordedDate"], ["nextDueDate"]],
+				(input) => {
+					const { recordedDate, nextDueDate } = input;
+					if (recordedDate && nextDueDate) {
+						const recordedDateParsed = parseISO(recordedDate);
+						const nextDueDateParsed = parseISO(nextDueDate);
+						return recordedDateParsed.getTime() <= nextDueDateParsed.getTime();
+					}
+					return true;
+				},
+				"create-activity.vaccine.due-date" satisfies ErrorKeys,
+			),
+			["nextDueDate"],
 		),
-		nextDueDate: v.nullable(
-			v.config(v.pipe(v.string(), v.isoDate()), {
-				message: "create-activity.vaccine.due-date" satisfies ErrorKeys,
-			}),
-		),
-		batchNumber: v.nullable(
-			v.config(v.pipe(v.string(), v.trim(), v.maxLength(100)), {
-				message: "create-activity.vaccine.due-date" satisfies ErrorKeys,
-			}),
-		),
-	}),
+	),
 	v.object({
 		activityType: v.literal("appointment" satisfies ActivityType),
 		note: ActivityNoteSchema,
@@ -92,86 +102,90 @@ const ActivityCreateSchema = v.variant("activityType", [
 			message: "create-activity.appointment.location" satisfies ErrorKeys,
 		}),
 	}),
-	v.object({
-		activityType: v.literal("prescription" satisfies ActivityType),
-		note: ActivityNoteSchema,
-		recordedDate: ActivityRecordedDateSchema,
-		name: v.pipe(
-			v.string(),
-			v.trim(),
-			v.minLength(2, "create-activity.prescription.name-required" satisfies ErrorKeys),
-			v.maxLength(200, "create-activity.prescription.name-length" satisfies ErrorKeys),
-		),
-		dateStarted: v.nullable(
-			v.config(v.pipe(v.string(), v.isoDate()), {
-				message: "create-activity.prescription.date-started" satisfies ErrorKeys,
-			}),
-		),
-		schedule: v.nullable(
-			v.config(
-				v.variant("type", [
-					v.object({
-						type: v.literal("pill" satisfies PrescriptionMedicationType),
-						duration: PrescriptionDurationSchema,
-						dosage: v.nullable(
-							v.array(v.object({ time: PrescriptionTimeSchema, amount: v.number() })),
-						),
-					}),
-					v.object({
-						type: v.literal("injection" satisfies PrescriptionMedicationType),
-						duration: PrescriptionDurationSchema,
-						dosage: v.nullable(
-							v.array(
-								v.object({
-									time: PrescriptionTimeSchema,
-									amount: v.number(),
-									unit: v.picklist(["ml", "mg", "unit"] satisfies Array<InjectionDosage["unit"]>),
-								}),
-							),
-						),
-					}),
-					v.object({
-						type: v.literal("liquid" satisfies PrescriptionMedicationType),
-						duration: PrescriptionDurationSchema,
-						dosage: v.nullable(
-							v.array(
-								v.object({
-									time: PrescriptionTimeSchema,
-									amount: v.number(),
-									unit: v.picklist(["ml", "tbsp", "tsp"] satisfies Array<LiquidDosage["unit"]>),
-								}),
-							),
-						),
-					}),
-					v.object({
-						type: v.literal("ointment" satisfies PrescriptionMedicationType),
-						duration: PrescriptionDurationSchema,
-						dosage: v.nullable(
-							v.array(
-								v.object({
-									time: PrescriptionTimeSchema,
-									amount: v.pipe(v.string(), v.trim(), v.maxLength(100)),
-								}),
-							),
-						),
-					}),
-					v.object({
-						type: v.literal("other" satisfies PrescriptionMedicationType),
-						duration: PrescriptionDurationSchema,
-						dosage: v.nullable(
-							v.array(
-								v.object({
-									time: PrescriptionTimeSchema,
-									amount: v.pipe(v.string(), v.trim(), v.maxLength(100)),
-								}),
-							),
-						),
-					}),
-				]),
-				{ message: "create-activity.prescription.schedule" satisfies ErrorKeys },
+	v.pipe(
+		v.object({
+			activityType: v.literal("prescription" satisfies ActivityType),
+			note: ActivityNoteSchema,
+			recordedDate: ActivityRecordedDateSchema,
+			name: v.pipe(
+				v.string(),
+				v.trim(),
+				v.minLength(2, "create-activity.prescription.name-required" satisfies ErrorKeys),
+				v.maxLength(200, "create-activity.prescription.name-length" satisfies ErrorKeys),
 			),
+			dateStarted: v.nullable(
+				v.config(v.pipe(v.string(), v.isoDate()), {
+					message: "create-activity.prescription.date-started" satisfies ErrorKeys,
+				}),
+			),
+			endDate: v.config(ActivityRecordedDateSchema, {
+				message: "create-activity.prescription.end-date" satisfies ErrorKeys,
+			}),
+			schedule: v.nullable(
+				v.config(
+					v.variant("type", [
+						v.object({
+							type: v.literal("pill" satisfies PrescriptionMedicationType),
+							dosage: v.nullable(
+								v.array(v.object({ time: PrescriptionTimeSchema, amount: v.number() })),
+							),
+						}),
+						v.object({
+							type: v.literal("injection" satisfies PrescriptionMedicationType),
+							dosage: v.nullable(
+								v.array(
+									v.object({
+										time: PrescriptionTimeSchema,
+										amount: v.number(),
+										unit: v.picklist(["ml", "mg", "unit"] satisfies Array<InjectionDosage["unit"]>),
+									}),
+								),
+							),
+						}),
+						v.object({
+							type: v.literal("liquid" satisfies PrescriptionMedicationType),
+							dosage: v.nullable(
+								v.array(
+									v.object({
+										time: PrescriptionTimeSchema,
+										amount: v.number(),
+										unit: v.picklist(["ml", "tbsp", "tsp"] satisfies Array<LiquidDosage["unit"]>),
+									}),
+								),
+							),
+						}),
+						v.object({
+							type: v.literal("other" satisfies PrescriptionMedicationType),
+							dosage: v.nullable(
+								v.array(
+									v.object({
+										time: PrescriptionTimeSchema,
+										amount: v.pipe(v.string(), v.trim(), v.maxLength(100)),
+									}),
+								),
+							),
+						}),
+					]),
+					{ message: "create-activity.prescription.schedule" satisfies ErrorKeys },
+				),
+			),
+		}),
+		v.forward(
+			v.partialCheck(
+				[["dateStarted"], ["endDate"]],
+				function isEndDateAfterStartDate(appointment) {
+					if (appointment.dateStarted && appointment.endDate) {
+						const dateStarted = parseISO(appointment.dateStarted);
+						const endDate = parseISO(appointment.endDate);
+						return dateStarted.getTime() <= endDate.getTime();
+					}
+					return true;
+				},
+				"create-activity.appointment.date" satisfies ErrorKeys,
+			),
+			["endDate"],
 		),
-	}),
+	),
 ]);
 
 export type ActivityCreateSchema = typeof ActivityCreateSchema;
