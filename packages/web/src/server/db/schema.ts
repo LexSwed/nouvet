@@ -267,6 +267,8 @@ export const prescriptionsTable = sqliteTable("prescription", {
 	schedule: text("schedule", { mode: "json" }).$type<PrescriptionSchedule>(),
 	/** UTC start date of taking the medication */
 	dateStarted: dateTime("date_started"),
+	/** UTC date for ending the medication */
+	endDate: dateTime("end_date"),
 	/** TODO: media storage for photos */
 });
 
@@ -357,19 +359,11 @@ export interface OintmentDosage extends DosageBase {
 export interface OtherDosage extends DosageBase {
 	amount: string;
 }
-export type ScheduleDuration = {
-	/** Duration unit */
-	unit: "day" | "week" | "month" | "year";
-	/** Duration amount */
-	amount: number;
-};
 export type PrescriptionSchedule =
 	| {
 			type: "pill";
 			dosage: PillDosage[] | null;
-			duration: ScheduleDuration | null;
 	  }
-	| { type: "injection"; dosage: InjectionDosage[] | null; duration: ScheduleDuration | null }
-	| { type: "liquid"; dosage: LiquidDosage[] | null; duration: ScheduleDuration | null }
-	| { type: "ointment"; dosage: OintmentDosage[] | null; duration: ScheduleDuration | null }
-	| { type: "other"; dosage: OtherDosage[] | null; duration: ScheduleDuration | null };
+	| { type: "injection"; dosage: InjectionDosage[] | null }
+	| { type: "liquid"; dosage: LiquidDosage[] | null }
+	| { type: "other"; dosage: OtherDosage[] | null };

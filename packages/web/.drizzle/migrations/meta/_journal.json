@@ -50,6 +50,13 @@
       "when": 1725808696235,
       "tag": "0006_overconfident_oracle",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1727111124426,
+      "tag": "0007_complete_raza",
+      "breakpoints": true
     }
   ]
 }
