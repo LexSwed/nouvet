@@ -16,7 +16,6 @@ export function createFormattedDate(
 ) {
 	const formatted = createMemo(
 		on(date, (date) => {
-			console.log(date);
 			if (date && locale()) {
 				const formatter = new Intl.DateTimeFormat(locale(), {
 					month: options.month ?? "long",
