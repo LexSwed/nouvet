@@ -359,11 +359,10 @@ export interface OintmentDosage extends DosageBase {
 export interface OtherDosage extends DosageBase {
 	amount: string;
 }
+
 export type PrescriptionSchedule =
-	| {
-			type: "pill";
-			dosage: PillDosage[] | null;
-	  }
+	| { type: "pill"; dosage: PillDosage[] | null }
 	| { type: "injection"; dosage: InjectionDosage[] | null }
 	| { type: "liquid"; dosage: LiquidDosage[] | null }
+	| { type: "ointment"; dosage: OintmentDosage[] | null }
 	| { type: "other"; dosage: OtherDosage[] | null };

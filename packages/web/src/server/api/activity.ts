@@ -91,6 +91,17 @@ export const createPetActivity = action(async function createPetActivityServer(f
 				date,
 				location: formData.get("location")!.toString(),
 			};
+		} else if (activityType === "prescription") {
+			input = {
+				activityType,
+				name: formData.get("name")!.toString(),
+				schedule: formData.get("schedule")!.toString(),
+				dateStarted: formData.get("dateStarted")!.toString(),
+				endDate: formData.get("endDate")?.toString() || null,
+				dosage: formData.get("dosage")!.toString(),
+				note: formData.get("note")?.toString() || null,
+				recordedDate,
+			};
 		} else {
 			throw new Error("Invalid activity type");
 		}
