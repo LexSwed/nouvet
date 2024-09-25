@@ -152,32 +152,37 @@ export default {
 		plugin(function partStyle({ matchVariant }) {
 			matchVariant("part", (value) => `& [data-part="${value}"]`, {});
 		}),
-		plugin(function overflowSnap({ matchUtilities, theme }) {
+		plugin(function overflowSnap({ matchUtilities, addUtilities, theme }) {
+			const css = {
+				display: "flex",
+				"flex-direction": "row",
+				"flex-wrap": "nowrap",
+				"scrollbar-width": "none",
+				"margin-block": `calc(-1*${theme("spacing.2")})`,
+				"padding-block": `${theme("spacing.2")}`,
+				"scroll-snap-type": "x mandatory",
+				"overflow-x": "auto",
+				"&>:last-of-type": {
+					"scroll-snap-align": "end",
+				},
+				"&>*": {
+					"flex-shrink": "0",
+					"scroll-snap-align": "start",
+					"scroll-snap-stop": "always",
+				},
+			};
+			addUtilities({
+				"overflow-snap": css,
+			});
 			matchUtilities(
 				{
 					"overflow-snap": (value) => {
-						const css = {
-							display: "flex",
-							"flex-direction": "row",
-							"flex-wrap": "nowrap",
-							"scrollbar-width": "none",
-							"margin-block": `calc(-1*${theme("spacing.2")})`,
-							"padding-block": `${theme("spacing.2")}`,
-							"scroll-snap-type": "x mandatory",
-							"overflow-x": "auto",
+						return {
+							...css,
 							"margin-inline": `calc(-1*${value})`,
 							"padding-inline": `${value}`,
 							"scroll-padding-inline": `${value}`,
-							"&>:last-of-type": {
-								"scroll-snap-align": "end",
-							},
-							"&>*": {
-								"flex-shrink": "0",
-								"scroll-snap-align": "start",
-								"scroll-snap-stop": "always",
-							},
 						};
-						return css;
 					},
 				},
 				{ values: theme("spacing") },
