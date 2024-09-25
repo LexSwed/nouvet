@@ -12,19 +12,23 @@ import {
 } from "@nou/ui";
 import { useAction, useSubmission } from "@solidjs/router";
 import {
+	type Accessor,
 	type ComponentProps,
+	type JSX,
 	Match,
 	type ParentProps,
 	Show,
 	Switch,
 	batch,
+	createMemo,
 	createSignal,
+	createUniqueId,
 } from "solid-js";
 import { Temporal } from "temporal-polyfill";
 import { createPetActivity } from "~/server/api/activity";
 import { createTranslator } from "~/server/i18n";
 import type { SupportedLocale } from "~/server/i18n/shared";
-import type { ActivityType, PetID } from "~/server/types";
+import type { ActivityType, PetID, PrescriptionMedicationType } from "~/server/types";
 import {
 	MultiScreenPopover,
 	MultiScreenPopoverContent,
@@ -178,16 +182,15 @@ function NewActivityForm(
 		ActivityCreatorProps & {
 			activityType: ActivityType;
 			recordedDateHidden?: boolean;
-			onChange?: ComponentProps<typeof Form>["onChange"];
+			recordedDate: Accessor<Temporal.ZonedDateTime | null>;
+			onRecordedDateChange?: ComponentProps<typeof DateSelector>["onChange"];
+			ref?: (el: HTMLFormElement) => void;
 		}
 	>,
 ) {
 	const submission = useSubmission(createPetActivity);
 	const action = useAction(createPetActivity);
 	const t = createTranslator("pets");
-	const [recordedDate, setRecordedDate] = createSignal<Temporal.ZonedDateTime | null>(
-		Temporal.Now.zonedDateTimeISO(),
-	);
 
 	return (
 		<>
@@ -216,23 +219,33 @@ function NewActivityForm(
 						document.getElementById("create-activity")?.hidePopover();
 					}
 				}}
-				onChange={props.onChange}
+				ref={props.ref}
 			>
 				<input type="hidden" name="petId" value={props.petId} />
 				<input type="hidden" name="activityType" value={props.activityType} />
-				<input type="hidden" name="currentTimeZone" value={recordedDate()?.timeZoneId} />
-				<DateSelector
-					value={recordedDate()}
-					onChange={setRecordedDate}
-					hidden={props.recordedDateHidden}
-					locale={props.locale}
-					name="recordedDate"
-					inline
-					showHour
-					label={t("new-activity.recorded-date.label")}
-					class="w-[80%] self-start rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8"
-					required
-				/>
+				<input type="hidden" name="currentTimeZone" value={props.recordedDate()?.timeZoneId} />
+				<Show
+					when={!props.recordedDateHidden}
+					fallback={
+						<input
+							type="hidden"
+							name="recordedDate"
+							value={props.recordedDate() ? toIsoString(props.recordedDate()!) : ""}
+						/>
+					}
+				>
+					<DateSelector
+						value={props.recordedDate()}
+						onChange={props.onRecordedDateChange}
+						locale={props.locale}
+						name="recordedDate"
+						inline
+						showHour
+						label={t("new-activity.recorded-date.label")}
+						class="w-[80%] self-start rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8"
+						required
+					/>
+				</Show>
 				{props.children}
 				<div class="mt-4 flex flex-row justify-end gap-4 *:flex-1">
 					<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
@@ -249,8 +262,19 @@ function NewActivityForm(
 
 function ObservationActivityForm(props: ActivityCreatorProps) {
 	const t = createTranslator("pets");
+
+	const [recordedDate, setRecordedDate] = createSignal<Temporal.ZonedDateTime | null>(
+		Temporal.Now.zonedDateTimeISO(),
+	);
+
 	return (
-		<NewActivityForm activityType="observation" petId={props.petId} locale={props.locale}>
+		<NewActivityForm
+			recordedDate={recordedDate}
+			onRecordedDateChange={setRecordedDate}
+			activityType="observation"
+			petId={props.petId}
+			locale={props.locale}
+		>
 			<NoteTextField
 				description={t("new-activity.note-description-observation")}
 				placeholder={t("new-activity.note-placeholder-observation")}
@@ -262,10 +286,15 @@ function ObservationActivityForm(props: ActivityCreatorProps) {
 function AppointmentActivityForm(props: ActivityCreatorProps) {
 	const t = createTranslator("pets");
 	const [date, setDate] = createSignal<Temporal.ZonedDateTime | null>(null);
+
+	// hidden, unchangeable recorded date
+	const recordedDate = () => Temporal.Now.zonedDateTimeISO();
+
 	return (
 		<NewActivityForm
-			recordedDateHidden={true}
 			activityType="appointment"
+			recordedDate={recordedDate}
+			recordedDateHidden={true}
 			petId={props.petId}
 			locale={props.locale}
 		>
@@ -294,60 +323,102 @@ function AppointmentActivityForm(props: ActivityCreatorProps) {
 }
 
 function PrescriptionActivityForm(props: ActivityCreatorProps) {
+	// hidden, unchangeable recorded date
+	const recordedDate = () => Temporal.Now.zonedDateTimeISO();
+
 	return (
-		<NewActivityForm activityType="prescription" petId={props.petId} locale={props.locale}>
-			Prescription
+		<NewActivityForm
+			activityType="prescription"
+			recordedDate={recordedDate}
+			recordedDateHidden={true}
+			petId={props.petId}
+			locale={props.locale}
+		>
+			<Fieldset legend="Type">
+				<div class="overflow-snap">
+					<RadioCard
+						name="schedule.type"
+						label="Pill"
+						value={"pill" satisfies PrescriptionMedicationType}
+					/>
+					<RadioCard
+						name="schedule.type"
+						label="Liquid"
+						value={"liquid" satisfies PrescriptionMedicationType}
+					/>
+					<RadioCard
+						name="schedule.type"
+						label="Injection"
+						value={"injection" satisfies PrescriptionMedicationType}
+					/>
+					<RadioCard
+						name="schedule.type"
+						label="Other"
+						value={"other" satisfies PrescriptionMedicationType}
+					/>
+				</div>
+			</Fieldset>
+			<DateSelector
+				name="recordedDate"
+				label="Start date"
+				showHour={false}
+				inline={false}
+				locale={props.locale}
+				required
+			/>
 		</NewActivityForm>
 	);
 }
 
 function VaccinationActivityForm(props: ActivityCreatorProps) {
 	const t = createTranslator("pets");
-	const [startDate, setStartDate] = createSignal(Temporal.Now.zonedDateTimeISO());
+	const [recordedDate, setRecordedDate] = createSignal<Temporal.ZonedDateTime | null>(
+		Temporal.Now.zonedDateTimeISO(),
+	);
 	const [nextDueDate, setNextDueDate] = createSignal<Temporal.ZonedDateTime | null>(null);
 
-	/**
-	 * Compare only starts of the months.
-	 */
-	const monthsDiff = () =>
-		nextDueDate()
-			? nextDueDate()
-					?.with({ hour: 0, minute: 0, day: 1 })
-					.since(startDate().with({ hour: 0, minute: 0, day: 1 }), {
-						smallestUnit: "months",
-						largestUnit: "months",
-					}).months
-			: null;
+	const monthsDiff = createMemo(() => {
+		const recorded = recordedDate();
+		const nextDue = nextDueDate();
+		if (!recorded || !nextDue) return null;
+		return (
+			nextDue
+				// compare only the starts of the months
+				.with({ hour: 0, minute: 0, day: 1 })
+				.since(recorded.with({ hour: 0, minute: 0, day: 1 }), {
+					smallestUnit: "months",
+					largestUnit: "months",
+				}).months
+		);
+	});
+	let formRef: HTMLFormElement | null = null;
 
 	return (
 		<NewActivityForm
 			activityType="vaccination"
 			petId={props.petId}
 			locale={props.locale}
-			onChange={(e) => {
-				const formData = new FormData(e.currentTarget);
-				const nextDueDateValue = formData.get("nextDueDate")?.toString();
-				// next due date is cleaned up
-				if (!nextDueDateValue) {
-					setNextDueDate(null);
+			recordedDate={recordedDate}
+			ref={(el) => {
+				formRef = el;
+			}}
+			onRecordedDateChange={(newDate) => {
+				const nextDueCurrent = nextDueDate();
+				if (!nextDueCurrent || !newDate) {
+					setRecordedDate(newDate);
 					return;
 				}
-				const recordedDate = new Date(formData.get("recordedDate")!.toString());
-				const nextDueDateShortCut = formData.get("next-due-date-shortcut")
-					? Number.parseInt(formData.get("next-due-date-shortcut")!.toString())
-					: 6;
-				const newStartDate = startDate().with({
-					year: recordedDate.getFullYear(),
-					month: recordedDate.getMonth() + 1,
-					day: recordedDate.getDate(),
-					hour: recordedDate.getHours(),
-					minute: recordedDate.getMinutes(),
-				});
-				if (nextDueDate() && newStartDate.equals(startDate())) return;
+				const nextDueDateShortCutField = new FormData(formRef!)
+					.get("next-due-date-shortcut")
+					?.toString();
+				const nextDueDateShortCut = nextDueDateShortCutField
+					? Number.parseInt(nextDueDateShortCutField)
+					: null;
+				if (!nextDueDateShortCut || Number.isNaN(nextDueDateShortCut)) return;
 
 				batch(() => {
-					setNextDueDate(newStartDate.add({ months: nextDueDateShortCut }));
-					setStartDate(newStartDate);
+					setRecordedDate(newDate);
+					setNextDueDate(newDate.add({ months: nextDueDateShortCut }));
 				});
 			}}
 		>
@@ -358,54 +429,45 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 				description={t("new-activity.vaccine.name.description")}
 				as="textarea"
 			/>
-			<div class="flex w-full flex-col gap-2">
-				<Text class="-mb-2 ps-3" with="label-sm" as="label" for="vaccine-next-due-date">
-					{t("new-activity.vaccine.next-due-date.label")}
-				</Text>
-				<div class="rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/5">
-					<Fieldset
-						legend={<span class="sr-only">{t("new-activity.vaccine.due-date.label")}</span>}
-						class="mx-2 my-1 flex flex-row items-center gap-2"
-						onChange={(e) => {
-							const value = Number.parseInt((e.target as HTMLInputElement).value);
-							setNextDueDate(startDate().add({ months: value }));
-						}}
-					>
-						<RadioCard
-							label={t("new-activity.vaccine.due-date.1-month")}
-							checked={monthsDiff() === 1}
-							name="next-due-date-shortcut"
-							value={1}
-							class="rounded-full bg-surface"
-						/>
-						<RadioCard
-							label={t("new-activity.vaccine.due-date.6-months")}
-							checked={monthsDiff() === 6}
-							name="next-due-date-shortcut"
-							value={6}
-							class="rounded-full bg-surface"
-						/>
-						<RadioCard
-							label={t("new-activity.vaccine.due-date.1-year")}
-							checked={monthsDiff() === 12}
-							name="next-due-date-shortcut"
-							value={12}
-							class="rounded-full bg-surface"
-						/>
-					</Fieldset>
-					<DateSelector
-						name="nextDueDate"
-						value={nextDueDate()}
-						onChange={setNextDueDate}
-						placeholder={t("new-activity.vaccine.next-due-date.description")}
-						showHour={false}
-						id="vaccine-next-due-date"
-						locale={props.locale}
-						inline
-						class="pb-1"
-					/>
-				</div>
-			</div>
+			<EndDateSelector
+				name="nextDueDate"
+				label={t("new-activity.vaccine.next-due-date.label")}
+				legend={<span class="sr-only">{t("new-activity.vaccine.due-date.label")}</span>}
+				endDate={nextDueDate}
+				onEndDateChange={setNextDueDate}
+				placeholder={t("new-activity.vaccine.next-due-date.description")}
+				locale={props.locale}
+				onPresetChange={(duration) => {
+					const currentStartDate = recordedDate();
+					if (!currentStartDate) return;
+					setNextDueDate(currentStartDate.add(duration));
+				}}
+			>
+				<RadioCard
+					label={t("new-activity.vaccine.due-date.1-month")}
+					checked={monthsDiff() === 1}
+					name="next-due-date-shortcut"
+					value={1}
+					data-duration="months"
+					class="rounded-full bg-surface"
+				/>
+				<RadioCard
+					label={t("new-activity.vaccine.due-date.6-months")}
+					checked={monthsDiff() === 6}
+					name="next-due-date-shortcut"
+					value={6}
+					data-duration="months"
+					class="rounded-full bg-surface"
+				/>
+				<RadioCard
+					label={t("new-activity.vaccine.due-date.1-year")}
+					checked={monthsDiff() === 12}
+					name="next-due-date-shortcut"
+					value={12}
+					data-duration="months"
+					class="rounded-full bg-surface"
+				/>
+			</EndDateSelector>
 			<NoteTextField
 				placeholder={t("new-activity.note-placeholder-vaccine")}
 				description={t("new-activity.note-description-vaccine")}
@@ -437,6 +499,55 @@ function NoteTextField(props: { placeholder?: string; description?: string }) {
 	);
 }
 
+function EndDateSelector(
+	props: ParentProps<{
+		name: string;
+		label?: string;
+		legend?: JSX.Element;
+		placeholder?: string;
+		description?: string;
+		locale: SupportedLocale;
+		endDate: Accessor<Temporal.ZonedDateTime | null>;
+		onEndDateChange: (newDate: Temporal.ZonedDateTime | null) => void;
+		onPresetChange: (duration: Temporal.Duration) => void;
+	}>,
+) {
+	const id = createUniqueId();
+	return (
+		<div class="flex w-full flex-col gap-2">
+			<Text class="-mb-2 ps-3" with="label-sm" as="label" for={id}>
+				{props.label}
+			</Text>
+			<div class="rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/5">
+				<Fieldset
+					onChange={(e) => {
+						if (!(e.target instanceof HTMLInputElement)) return;
+						const number = Number.parseInt(e.target.value);
+						const duration = e.target.dataset.duration as keyof Temporal.DurationLike;
+						if (Number.isNaN(number) || !duration) return;
+						props.onPresetChange(Temporal.Duration.from({ [duration]: number }));
+					}}
+					legend={props.legend}
+					class="mx-2 my-1 flex flex-row items-center gap-2"
+				>
+					{props.children}
+				</Fieldset>
+				<DateSelector
+					name={props.name}
+					value={props.endDate()}
+					onChange={props.onEndDateChange}
+					placeholder={props.placeholder}
+					showHour={false}
+					id={id}
+					locale={props.locale}
+					inline
+					class="pb-1"
+				/>
+			</div>
+		</div>
+	);
+}
+
 function DateSelector(props: {
 	locale: SupportedLocale;
 	name: string;
@@ -445,7 +556,6 @@ function DateSelector(props: {
 	min?: Temporal.ZonedDateTime;
 	max?: Temporal.ZonedDateTime;
 	inline: boolean;
-	hidden?: boolean;
 	class?: string;
 	label?: string;
 	id?: string;
@@ -462,55 +572,45 @@ function DateSelector(props: {
 			hour: props.showHour ? "numeric" : null,
 		},
 	);
-	const toIsoString = (date: Temporal.ZonedDateTime) =>
-		props.showHour
-			? date.toString().slice(0, date.toString().indexOf("T") + 6)
-			: date.toString().slice(0, date.toString().indexOf("T"));
 
 	return (
-		<Show
-			when={!props.hidden}
-			fallback={
-				<input
-					type="hidden"
-					value={props.value ? toIsoString(props.value) : ""}
-					required={props.required}
-					name={props.name}
-				/>
-			}
-		>
-			<div class={props.class}>
-				<TextField
-					id={props.id}
-					value={props.value ? toIsoString(props.value) : ""}
-					min={props.min ? toIsoString(props.min) : undefined}
-					max={props.max ? toIsoString(props.max) : undefined}
-					onInput={(e) => {
-						if (!props.onChange) return;
-						const d = new Date(e.currentTarget.value);
-						if (Number.isNaN(d.getTime())) return props.onChange(null);
+		<div class={props.class}>
+			<TextField
+				id={props.id}
+				value={props.value ? toIsoString(props.value, props.showHour) : ""}
+				min={props.min ? toIsoString(props.min, props.showHour) : undefined}
+				max={props.max ? toIsoString(props.max, props.showHour) : undefined}
+				onInput={(e) => {
+					if (!props.onChange) return;
+					const d = new Date(e.currentTarget.value);
+					if (Number.isNaN(d.getTime())) return props.onChange(null);
 
-						const newDate = (props.value || Temporal.Now.zonedDateTimeISO()).with({
-							year: d.getFullYear(),
-							month: d.getMonth() + 1,
-							day: d.getDate(),
-							hour: d.getHours(),
-							minute: d.getMinutes(),
-						});
-						props.onChange(newDate);
-					}}
-					variant="ghost"
-					type={props.showHour ? "datetime-local" : "date"}
-					inline={props.inline}
-					textSize="sm"
-					required={props.required}
-					name={props.name}
-					label={props.label}
-					description={props.description}
-					placeholder={props.placeholder}
-					overlay={<div class="pe-12">{currentDateFormatted()}</div>}
-				/>
-			</div>
-		</Show>
+					const newDate = (props.value || Temporal.Now.zonedDateTimeISO()).with({
+						year: d.getFullYear(),
+						month: d.getMonth() + 1,
+						day: d.getDate(),
+						hour: d.getHours(),
+						minute: d.getMinutes(),
+					});
+					props.onChange(newDate);
+				}}
+				variant="ghost"
+				type={props.showHour ? "datetime-local" : "date"}
+				inline={props.inline}
+				textSize="sm"
+				required={props.required}
+				name={props.name}
+				label={props.label}
+				description={props.description}
+				placeholder={props.placeholder}
+				overlay={<div class="pe-12">{currentDateFormatted()}</div>}
+			/>
+		</div>
 	);
+}
+
+function toIsoString(date: Temporal.ZonedDateTime, showHour = true) {
+	return showHour
+		? date.toString().slice(0, date.toString().indexOf("T") + 6)
+		: date.toString().slice(0, date.toString().indexOf("T"));
 }
