@@ -14,7 +14,6 @@ import { useAction, useSubmission } from "@solidjs/router";
 import {
 	type Accessor,
 	type ComponentProps,
-	type JSX,
 	Match,
 	type ParentProps,
 	Show,
@@ -372,12 +371,13 @@ function PrescriptionActivityForm(props: ActivityCreatorProps) {
 
 function VaccinationActivityForm(props: ActivityCreatorProps) {
 	const t = createTranslator("pets");
+
 	const [recordedDate, setRecordedDate] = createSignal<Temporal.ZonedDateTime | null>(
 		Temporal.Now.zonedDateTimeISO(),
 	);
 	const [nextDueDate, setNextDueDate] = createSignal<Temporal.ZonedDateTime | null>(null);
 
-	const monthsDiff = createMemo(() => {
+	const monthsDiffDerived = createMemo(() => {
 		const recorded = recordedDate();
 		const nextDue = nextDueDate();
 		if (!recorded || !nextDue) return null;
@@ -391,7 +391,6 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 				}).months
 		);
 	});
-	let formRef: HTMLFormElement | null = null;
 
 	return (
 		<NewActivityForm
@@ -399,26 +398,15 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 			petId={props.petId}
 			locale={props.locale}
 			recordedDate={recordedDate}
-			ref={(el) => {
-				formRef = el;
-			}}
-			onRecordedDateChange={(newDate) => {
-				const nextDueCurrent = nextDueDate();
-				if (!nextDueCurrent || !newDate) {
-					setRecordedDate(newDate);
-					return;
-				}
-				const nextDueDateShortCutField = new FormData(formRef!)
-					.get("next-due-date-shortcut")
-					?.toString();
-				const nextDueDateShortCut = nextDueDateShortCutField
-					? Number.parseInt(nextDueDateShortCutField)
-					: null;
-				if (!nextDueDateShortCut || Number.isNaN(nextDueDateShortCut)) return;
-
+			onRecordedDateChange={(newRecordedDate) => {
+				const oldRecordedDate = recordedDate();
+				const dueDate = nextDueDate();
 				batch(() => {
-					setRecordedDate(newDate);
-					setNextDueDate(newDate.add({ months: nextDueDateShortCut }));
+					setRecordedDate(newRecordedDate);
+					if (newRecordedDate && oldRecordedDate && dueDate) {
+						const diff = dueDate.since(oldRecordedDate);
+						setNextDueDate(newRecordedDate.add(diff));
+					}
 				});
 			}}
 		>
@@ -432,41 +420,45 @@ function VaccinationActivityForm(props: ActivityCreatorProps) {
 			<EndDateSelector
 				name="nextDueDate"
 				label={t("new-activity.vaccine.next-due-date.label")}
-				legend={<span class="sr-only">{t("new-activity.vaccine.due-date.label")}</span>}
 				endDate={nextDueDate}
 				onEndDateChange={setNextDueDate}
 				placeholder={t("new-activity.vaccine.next-due-date.description")}
 				locale={props.locale}
-				onPresetChange={(duration) => {
-					const currentStartDate = recordedDate();
-					if (!currentStartDate) return;
-					setNextDueDate(currentStartDate.add(duration));
-				}}
 			>
-				<RadioCard
-					label={t("new-activity.vaccine.due-date.1-month")}
-					checked={monthsDiff() === 1}
-					name="next-due-date-shortcut"
-					value={1}
-					data-duration="months"
-					class="rounded-full bg-surface"
-				/>
-				<RadioCard
-					label={t("new-activity.vaccine.due-date.6-months")}
-					checked={monthsDiff() === 6}
-					name="next-due-date-shortcut"
-					value={6}
-					data-duration="months"
-					class="rounded-full bg-surface"
-				/>
-				<RadioCard
-					label={t("new-activity.vaccine.due-date.1-year")}
-					checked={monthsDiff() === 12}
-					name="next-due-date-shortcut"
-					value={12}
-					data-duration="months"
-					class="rounded-full bg-surface"
-				/>
+				<Fieldset
+					legend={<span class="sr-only">{t("new-activity.vaccine.due-date.label")}</span>}
+					onChange={(e) => {
+						const startDate = recordedDate();
+						if (startDate) {
+							const months = Number.parseInt((e.target as HTMLInputElement).value);
+							const newDate = startDate.add({ months });
+							setNextDueDate(newDate);
+						}
+					}}
+					class="flex flex-row items-center gap-2"
+				>
+					<RadioCard
+						label={t("new-activity.vaccine.due-date.1-month")}
+						checked={monthsDiffDerived() === 1}
+						name="next-due-date-shortcut"
+						value={1}
+						class="rounded-full bg-surface"
+					/>
+					<RadioCard
+						label={t("new-activity.vaccine.due-date.6-months")}
+						checked={monthsDiffDerived() === 6}
+						name="next-due-date-shortcut"
+						value={6}
+						class="rounded-full bg-surface"
+					/>
+					<RadioCard
+						label={t("new-activity.vaccine.due-date.1-year")}
+						checked={monthsDiffDerived() === 12}
+						name="next-due-date-shortcut"
+						value={12}
+						class="rounded-full bg-surface"
+					/>
+				</Fieldset>
 			</EndDateSelector>
 			<NoteTextField
 				placeholder={t("new-activity.note-placeholder-vaccine")}
@@ -503,13 +495,11 @@ function EndDateSelector(
 	props: ParentProps<{
 		name: string;
 		label?: string;
-		legend?: JSX.Element;
 		placeholder?: string;
 		description?: string;
 		locale: SupportedLocale;
 		endDate: Accessor<Temporal.ZonedDateTime | null>;
 		onEndDateChange: (newDate: Temporal.ZonedDateTime | null) => void;
-		onPresetChange: (duration: Temporal.Duration) => void;
 	}>,
 ) {
 	const id = createUniqueId();
@@ -519,19 +509,7 @@ function EndDateSelector(
 				{props.label}
 			</Text>
 			<div class="rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/5">
-				<Fieldset
-					onChange={(e) => {
-						if (!(e.target instanceof HTMLInputElement)) return;
-						const number = Number.parseInt(e.target.value);
-						const duration = e.target.dataset.duration as keyof Temporal.DurationLike;
-						if (Number.isNaN(number) || !duration) return;
-						props.onPresetChange(Temporal.Duration.from({ [duration]: number }));
-					}}
-					legend={props.legend}
-					class="mx-2 my-1 flex flex-row items-center gap-2"
-				>
-					{props.children}
-				</Fieldset>
+				<div class="mx-2 my-1">{props.children}</div>
 				<DateSelector
 					name={props.name}
 					value={props.endDate()}
@@ -582,10 +560,12 @@ function DateSelector(props: {
 				max={props.max ? toIsoString(props.max, props.showHour) : undefined}
 				onInput={(e) => {
 					if (!props.onChange) return;
+					// do nothing if the input just has an incorrect date (assumed it's temporary)
+					if (e.currentTarget.value === "" && e.currentTarget.validity.badInput) return;
 					const d = new Date(e.currentTarget.value);
 					if (Number.isNaN(d.getTime())) return props.onChange(null);
 
-					const newDate = (props.value || Temporal.Now.zonedDateTimeISO()).with({
+					const newDate = Temporal.Now.zonedDateTimeISO().with({
 						year: d.getFullYear(),
 						month: d.getMonth() + 1,
 						day: d.getDate(),
