@@ -13,6 +13,11 @@
       & .label {
         color: theme("colors.error");
       }
+
+      & .inputWrapper:not(:focus-within) {
+        color: theme("colors.error");
+        text-decoration: underline wavy theme("colors.error");
+      }
     }
   }
   .wrapper {
@@ -181,9 +186,9 @@
     opacity: 0;
   }
   .field [data-part="input"] {
-    transition-property: all 0.15s ease;
+    transition: all 0.15s ease;
   }
-  .field:has(:where(input, textarea):not(:focus-within)) {
+  .field:has(:where(input, textarea):not(:focus-within):not(:user-invalid)) {
     & .overlay:not(:empty) {
       opacity: 1;
     }
