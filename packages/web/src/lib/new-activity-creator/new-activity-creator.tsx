@@ -27,7 +27,7 @@ import { Temporal } from "temporal-polyfill";
 import { createPetActivity } from "~/server/api/activity";
 import { createTranslator } from "~/server/i18n";
 import type { SupportedLocale } from "~/server/i18n/shared";
-import type { ActivityType, PetID, PrescriptionMedicationType } from "~/server/types";
+import type { ActivityType, PetID } from "~/server/types";
 import {
 	MultiScreenPopover,
 	MultiScreenPopoverContent,
@@ -322,8 +322,13 @@ function AppointmentActivityForm(props: ActivityCreatorProps) {
 }
 
 function PrescriptionActivityForm(props: ActivityCreatorProps) {
-	// hidden, unchangeable recorded date
+	const t = createTranslator("pets");
 	const recordedDate = () => Temporal.Now.zonedDateTimeISO();
+
+	const [dateStarted, setDateStarted] = createSignal<Temporal.ZonedDateTime | null>(
+		Temporal.Now.zonedDateTimeISO(),
+	);
+	const [endDate, setEndDate] = createSignal<Temporal.ZonedDateTime | null>(null);
 
 	return (
 		<NewActivityForm
@@ -333,8 +338,9 @@ function PrescriptionActivityForm(props: ActivityCreatorProps) {
 			petId={props.petId}
 			locale={props.locale}
 		>
-			<Fieldset legend="Type">
-				<div class="overflow-snap">
+			{/* Type should probably go into the schedule and dosage */}
+			{/* <Fieldset legend="Type">
+				<div class="overflow-snap-0 gap-2">
 					<RadioCard
 						name="schedule.type"
 						label="Pill"
@@ -356,15 +362,77 @@ function PrescriptionActivityForm(props: ActivityCreatorProps) {
 						value={"other" satisfies PrescriptionMedicationType}
 					/>
 				</div>
-			</Fieldset>
+			</Fieldset> */}
+			<TextField
+				label="Name of the medication"
+				name="name"
+				variant="ghost"
+				required
+				minLength={2}
+			/>
 			<DateSelector
-				name="recordedDate"
+				name="dateStarted"
 				label="Start date"
 				showHour={false}
-				inline={false}
 				locale={props.locale}
+				value={dateStarted()}
+				onChange={(newDateStarted) => {
+					const oldDateStarted = dateStarted();
+					const end = endDate();
+					batch(() => {
+						setDateStarted(newDateStarted);
+						if (newDateStarted && oldDateStarted && end) {
+							const diff = end.since(oldDateStarted);
+							setEndDate(newDateStarted.add(diff));
+						}
+					});
+				}}
+				inline={false}
 				required
 			/>
+			<EndDateSelector
+				name="endDate"
+				label="End date"
+				endDate={endDate}
+				onEndDateChange={setEndDate}
+				placeholder="When should the prescription end?"
+				locale={props.locale}
+			>
+				<Fieldset
+					legend={<span class="sr-only">{t("new-activity.vaccine.due-date.label")}</span>}
+					onChange={(e) => {
+						const startDate = dateStarted();
+						if (startDate) {
+							const weeks = Number.parseInt((e.target as HTMLInputElement).value);
+							const newDate = startDate.add({ weeks });
+							setEndDate(newDate);
+						}
+					}}
+					class="flex flex-row items-center gap-2"
+				>
+					<RadioCard
+						label="1 week"
+						// checked={monthsDiffDerived() === 1}
+						name="end-date-shortcut"
+						value={1}
+						class="rounded-full bg-surface"
+					/>
+					<RadioCard
+						label="2 weeks"
+						// checked={monthsDiffDerived() === 6}
+						name="end-date-shortcut"
+						value={2}
+						class="rounded-full bg-surface"
+					/>
+					<RadioCard
+						label="1 month"
+						// checked={monthsDiffDerived() === 12}
+						name="end-date-shortcut"
+						value={4}
+						class="rounded-full bg-surface"
+					/>
+				</Fieldset>
+			</EndDateSelector>
 		</NewActivityForm>
 	);
 }
