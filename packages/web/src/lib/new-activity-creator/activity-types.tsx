@@ -257,7 +257,7 @@ export function VaccinationActivityForm(props: ActivityCreatorProps) {
 				variant="ghost"
 				label={t("new-activity.vaccine.name.label")}
 				description={t("new-activity.vaccine.name.description")}
-				as="textarea"
+				placeholder={t("new-activity.vaccine.name.placeholder")}
 			/>
 			<EndDateSelector
 				name="nextDueDate"

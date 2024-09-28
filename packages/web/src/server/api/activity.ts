@@ -95,12 +95,11 @@ export const createPetActivity = action(async function createPetActivityServer(f
 			input = {
 				activityType,
 				name: formData.get("name")!.toString(),
-				schedule: formData.get("schedule")!.toString(),
 				dateStarted: formData.get("dateStarted")!.toString(),
 				endDate: formData.get("endDate")?.toString() || null,
-				dosage: formData.get("dosage")!.toString(),
 				note: formData.get("note")?.toString() || null,
 				recordedDate,
+				schedule: null,
 			};
 		} else {
 			throw new Error("Invalid activity type");

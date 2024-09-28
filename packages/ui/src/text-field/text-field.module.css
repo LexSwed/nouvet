@@ -15,6 +15,10 @@
         }
       }
     }
+    &::placeholder {
+      color: theme("colors.on-surface-variant/0.7");
+      font-weight: 400;
+    }
     /* &[type="date"] {
       padding-inline-end: theme(spacing.8);
     } */
