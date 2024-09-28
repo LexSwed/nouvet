@@ -256,7 +256,7 @@ export const activityRelationships = sqliteTable(
  * Stores the prescription details.
  */
 export const prescriptionsTable = sqliteTable("prescription", {
-	id: primaryId<"PrescriptionID">("id", "pr"),
+	id: primaryId<"PrescriptionID">("id", "mdc"),
 	activityId: text("activity_id")
 		.references(() => activitiesTable.id, { onDelete: "cascade" })
 		.notNull()
@@ -275,7 +275,7 @@ export const prescriptionsTable = sqliteTable("prescription", {
 export type DatabasePrescription = typeof prescriptionsTable.$inferSelect;
 
 export const vaccinationsTable = sqliteTable("vaccination", {
-	id: primaryId<"VaccinationID">("id", "vc"),
+	id: primaryId<"VaccinationID">("id", "vac"),
 	activityId: text("activity_id")
 		.references(() => activitiesTable.id, { onDelete: "cascade" })
 		.notNull()
@@ -286,7 +286,7 @@ export const vaccinationsTable = sqliteTable("vaccination", {
 });
 
 export const appointmentsTable = sqliteTable("appointment", {
-	id: primaryId<"VaccinationID">("id", "ap"),
+	id: primaryId<"AppointmentID">("id", "dv"),
 	activityId: text("activity_id")
 		.references(() => activitiesTable.id, { onDelete: "cascade" })
 		.notNull()

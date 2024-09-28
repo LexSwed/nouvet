@@ -77,6 +77,17 @@ const petsDict = {
 	"new-activity.note-placeholder-vaccine": "Anything worth remembering?",
 	"new-activity.note-description-appointment": "Relevant information for the appointment",
 	"new-activity.note-placeholder-appointment": "Symptoms, observations, concerns, etc.",
+	"new-activity.appointment.date.label": "Date of the appointment",
+	"new-activity.appointment.location.label": "Location",
+	"new-activity.appointment.location.description":
+		"Name of the clinic, hospital, doctor, or an address",
+	"new-activity.prescription.name.label": "Name of the medication",
+	"new-activity.prescription.dateStarted.label": "Start date",
+	"new-activity.prescription.endDate.label": "End date",
+	"new-activity.prescription.endDate.placeholder": "When should the prescription end?",
+	"new-activity.prescription.endDate.1-week": "1 week",
+	"new-activity.prescription.endDate.2-weeks": "2 weeks",
+	"new-activity.prescription.endDate.1-month": "1 month",
 } as const;
 
 export default petsDict;
