@@ -3,6 +3,7 @@ const petsDict = {
 	"new-pet-heading": "Add your pet",
 	"new-pet-text-field-label": "Name",
 	"new-pet-text-field-placeholder": "Garfield",
+	"header.back-to-pet": "Back to {{petName}}",
 	"animal-type.dog": "Dog",
 	"animal-type.cat": "Cat",
 	"animal-type.bird": "Bird",

@@ -112,31 +112,6 @@ export function PrescriptionActivityForm(props: ActivityCreatorProps) {
 			petId={props.petId}
 			locale={props.locale}
 		>
-			{/* Type should probably go into the schedule and dosage */}
-			{/* <Fieldset legend="Type">
-				<div class="overflow-snap-0 gap-2">
-					<RadioCard
-						name="schedule.type"
-						label="Pill"
-						value={"pill" satisfies PrescriptionMedicationType}
-					/>
-					<RadioCard
-						name="schedule.type"
-						label="Liquid"
-						value={"liquid" satisfies PrescriptionMedicationType}
-					/>
-					<RadioCard
-						name="schedule.type"
-						label="Injection"
-						value={"injection" satisfies PrescriptionMedicationType}
-					/>
-					<RadioCard
-						name="schedule.type"
-						label="Other"
-						value={"other" satisfies PrescriptionMedicationType}
-					/>
-				</div>
-			</Fieldset> */}
 			<TextField
 				label={t("new-activity.prescription.name.label")}
 				name="name"

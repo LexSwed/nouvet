@@ -1,4 +1,4 @@
-import { ButtonLink, Icon } from "@nou/ui";
+import { ButtonLink, Icon, tw } from "@nou/ui";
 import { createAsync, useLocation, useNavigate } from "@solidjs/router";
 import { type JSX, Match, type ParentProps, Show, Switch, children } from "solid-js";
 
@@ -11,6 +11,7 @@ export const AppHeader = (
 	props: ParentProps & {
 		backLink?: string;
 		onBackClick?: JSX.EventHandlerUnion<HTMLAnchorElement, MouseEvent>;
+		class?: string;
 	},
 ) => {
 	const user = createAsync(() => getUserFamily());
@@ -22,7 +23,7 @@ export const AppHeader = (
 	return (
 		<Show when={user()}>
 			{(user) => (
-				<header class="container flex items-center justify-between gap-8 py-4">
+				<header class={tw("container flex items-center justify-between gap-8 py-4", props.class)}>
 					<Switch>
 						<Match when={child()}>{child()}</Match>
 						<Match when={"backLink" in props && props.backLink}>
