@@ -78,8 +78,8 @@ export function AppointmentActivityForm(props: ActivityCreatorProps) {
 				required
 			/>
 			<NoteTextField
-				placeholder={t("new-activity.note-placeholder-appointment")}
-				description={t("new-activity.note-description-observation")}
+				placeholder={t("new-activity.appointment.note-placeholder")}
+				description={t("new-activity.appointment.note-description")}
 			/>
 		</NewActivityForm>
 	);
@@ -182,6 +182,10 @@ export function PrescriptionActivityForm(props: ActivityCreatorProps) {
 					/>
 				</Fieldset>
 			</EndDateSelector>
+			<NoteTextField
+				placeholder={t("new-activity.prescription.note-placeholder")}
+				description={t("new-activity.prescription.note-description")}
+			/>
 		</NewActivityForm>
 	);
 }
@@ -278,8 +282,8 @@ export function VaccinationActivityForm(props: ActivityCreatorProps) {
 				</Fieldset>
 			</EndDateSelector>
 			<NoteTextField
-				placeholder={t("new-activity.note-placeholder-vaccine")}
-				description={t("new-activity.note-description-vaccine")}
+				placeholder={t("new-activity.vaccine.note-placeholder")}
+				description={t("new-activity.vaccine.note-description")}
 			/>
 		</NewActivityForm>
 	);

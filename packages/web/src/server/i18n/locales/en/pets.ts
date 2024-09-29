@@ -75,10 +75,10 @@ const petsDict = {
 	"new-activity.vaccine.due-date.1-month": "1 month",
 	"new-activity.vaccine.due-date.6-months": "6 months",
 	"new-activity.vaccine.due-date.1-year": "1 year",
-	"new-activity.note-description-vaccine": "Recommendations, reaction, side effects, etc.",
-	"new-activity.note-placeholder-vaccine": "Anything worth remembering?",
-	"new-activity.note-description-appointment": "Relevant information for the appointment",
-	"new-activity.note-placeholder-appointment": "Symptoms, observations, concerns, etc.",
+	"new-activity.vaccine.note-description": "Recommendations, reaction, side effects, etc.",
+	"new-activity.vaccine.note-placeholder": "Anything worth remembering?",
+	"new-activity.appointment.note-description": "Relevant information for the appointment",
+	"new-activity.appointment.note-placeholder": "Symptoms, observations, concerns, etc.",
 	"new-activity.appointment.date.label": "Date of the appointment",
 	"new-activity.appointment.location.label": "Location",
 	"new-activity.appointment.location.description":
@@ -90,6 +90,8 @@ const petsDict = {
 	"new-activity.prescription.endDate.1-week": "1 week",
 	"new-activity.prescription.endDate.2-weeks": "2 weeks",
 	"new-activity.prescription.endDate.1-month": "1 month",
+	"new-activity.prescription.note-description": "Prescription side effects, recommendations, etc.",
+	"new-activity.prescription.note-placeholder": "Anything worth remembering?",
 } as const;
 
 export default petsDict;
