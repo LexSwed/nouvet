@@ -9,7 +9,7 @@ import {
 import { type Accessor, For, Match, Show, Suspense, Switch } from "solid-js";
 import { NewActivityCreator } from "~/lib/new-activity-creator";
 import { PetPicture } from "~/lib/pet-home-card";
-import { getPetActivities } from "~/server/api/activity";
+import { listAllPetActivities } from "~/server/api/activity";
 import { getPet } from "~/server/api/pet";
 import { getUser, getUserProfile } from "~/server/api/user";
 import { cacheTranslations, createTranslator } from "~/server/i18n";
@@ -28,7 +28,7 @@ const PetPage = (props: RouteSectionProps) => {
 	const t = createTranslator("pets");
 	const profile = createAsync(() => getUserProfile());
 	const pet = createAsync(() => getPet(props.params.petId as PetID));
-	const activities = createAsync(() => getPetActivities(null, props.params.petId as PetID));
+	const activities = createAsync(() => listAllPetActivities(null, props.params.petId as PetID));
 	return (
 		<>
 			<Title>{t("meta.title", { petName: pet()?.name ?? "" })}</Title>
