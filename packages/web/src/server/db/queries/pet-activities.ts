@@ -6,6 +6,7 @@ import {
 	type DatabaseActivity,
 	activitiesTable,
 	activityRelationships,
+	appointmentsTable,
 	prescriptionsTable,
 	userTable,
 	vaccinationsTable,
@@ -52,9 +53,10 @@ export async function petActivities(
 		.where(eq(activitiesTable.petId, petId))
 		.leftJoin(activityRelationships, eq(activityRelationships.parentActivityId, activitiesTable.id))
 		.leftJoin(prescriptionsTable, eq(prescriptionsTable.activityId, activitiesTable.id))
-		// .leftJoin(childActivity, eq(childActivity.id, activityRelationships.childActivityId))
 		.leftJoin(vaccinationsTable, eq(vaccinationsTable.activityId, activitiesTable.id))
+		.leftJoin(appointmentsTable, eq(appointmentsTable.activityId, activitiesTable.id))
 		.leftJoin(userTable, eq(userTable.id, activitiesTable.creatorId))
+		// .leftJoin(childActivity, eq(childActivity.id, activityRelationships.childActivityId))
 		.orderBy(desc(activitiesTable.date), desc(vaccinationsTable.nextDueDate))
 		.$dynamic();
 
