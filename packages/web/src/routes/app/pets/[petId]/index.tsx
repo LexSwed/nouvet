@@ -48,28 +48,26 @@ const PetPage = (props: RouteSectionProps) => {
 								<Text as="h3" with="headline-3" id="pet-activities-headline">
 									Past activities
 								</Text>
-								<ul class="flex flex-col gap-6">
+								<ul class="grid grid-cols-[auto,1fr] gap-6">
 									<For each={Object.entries(activities())}>
 										{([date, activities]) => (
-											<li>
+											<li class="contents">
 												<Text with="overline">{date}</Text>
-												<ul class="flex flex-col gap-4 ps-4">
+												<ul class="flex flex-1 flex-col gap-4 rounded-2xl bg-tertiary/5 p-3">
 													<For each={activities}>
-														{(act) => (
+														{(activity) => (
 															<li class="flex flex-row items-center gap-2">
-																<Text as="time" datetime={act.date} with="overline">
-																	{act.date}
-																</Text>
-																<div class="flex flex-1 flex-row gap-2 rounded-2xl p-3">
-																	<Icon
-																		use="note"
-																		class="size-10 rounded-full bg-yellow-100 p-2 text-yellow-950"
-																	/>
-																	<div class="flex flex-col gap-2">
-																		<Text with="body-sm" tone="light">
-																			{act.note}
-																		</Text>
-																	</div>
+																<Icon
+																	use="note"
+																	class="size-10 rounded-full bg-yellow-100 p-2 text-yellow-950"
+																/>
+																<div class="flex flex-col gap-2">
+																	<Text with="body-xs" as="div">
+																		{activity.type}
+																	</Text>
+																	<Text with="body-sm" tone="light">
+																		{activity.note}
+																	</Text>
 																</div>
 															</li>
 														)}
@@ -98,15 +96,12 @@ function MainPetCard(props: {
 	const location = useLocation();
 
 	return (
-		<Card variant="flat">
-			<div class="flex flex-col gap-4">
-				<div class="flex flex-row items-center gap-4">
-					<PetPicture pet={pet()} />
-					<Text with="headline-2" as="h2">
-						{pet()?.name}
-					</Text>
-				</div>
-				<div class="ms-auto mt-auto flex h-10 flex-row items-center justify-between gap-4">
+		<div class="flex flex-col gap-4">
+			<div class="flex flex-row items-center justify-between gap-4">
+				<Text with="headline-1" as="h1">
+					{pet()?.name}
+				</Text>
+				<div class="flex h-10 flex-row items-center justify-between gap-4">
 					<Switch>
 						<Match when={profile().id === pet().owner?.id}>
 							<ButtonLink
@@ -137,7 +132,8 @@ function MainPetCard(props: {
 					</Switch>
 				</div>
 			</div>
-		</Card>
+			<PetPicture pet={pet()} class="size-24 rounded-3xl" />
+		</div>
 	);
 }
 

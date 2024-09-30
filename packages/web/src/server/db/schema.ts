@@ -307,18 +307,21 @@ function zonedDateTimeISO(columnName: Parameters<typeof text>[0]) {
 	return dateTime(columnName).notNull();
 }
 
+export function utcNow() {
+	return sql<string>`(strftime('%FT%TZ', datetime('now')))`;
+}
+
 /**
  * ISO-8601 date time string stored in UTC.
  */
 function utcDateTime(columnName: Parameters<typeof text>[0], { autoUpdate = false } = {}) {
-	const utcNow = sql<string>`(strftime('%FT%TZ', datetime('now')))`;
 	const column = dateTime(columnName)
 		.notNull()
 		// see https://www.sqlite.org/lang_datefunc.html
 		// TODO: verify why datetime('now', 'utc') applies timezone twice. Drizzle bug? sqlite driver?
-		.default(utcNow);
+		.default(utcNow());
 	if (autoUpdate) {
-		column.$onUpdate(() => utcNow);
+		column.$onUpdate(() => utcNow());
 	}
 	return column;
 }

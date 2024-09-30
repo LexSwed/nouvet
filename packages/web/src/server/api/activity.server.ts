@@ -1,6 +1,7 @@
 "use server";
 
 import { json } from "@solidjs/router";
+import { parseISO } from "date-fns";
 import { Temporal } from "temporal-polyfill";
 import { getRequestUser } from "~/server/auth/request-user";
 import { petActivities } from "~/server/db/queries/pet-activities";
@@ -12,7 +13,24 @@ import type {
 } from "~/server/db/queries/pet-activity-create";
 import type { ActivityType, PetID } from "~/server/types";
 import { jsonFailure } from "~/server/utils";
-import { listAllPetActivities } from "./activity";
+import { petActivitiesScheduled } from "../db/queries/pet-activities-scheduled";
+import { getPetScheduledActivities, listAllPetActivities } from "./activity";
+
+export async function getPetScheduledActivitiesServer(petId: PetID) {
+	const currentUser = await getRequestUser();
+	if (!petId) {
+		throw new Error("petId is not provided");
+	}
+	try {
+		const activities = await petActivitiesScheduled(petId, currentUser.userId);
+		console.log(activities);
+		return activities;
+	} catch (error) {
+		// TODO: error handling?
+		console.error(error);
+		throw new Error("Something went wrong");
+	}
+}
 
 export async function listAllPetActivitiesServer(cursor: PetActivitiesCursor | null, petId: PetID) {
 	const currentUser = await getRequestUser();
@@ -23,7 +41,7 @@ export async function listAllPetActivitiesServer(cursor: PetActivitiesCursor | n
 		const activities = await petActivities(cursor, petId, currentUser.userId);
 		if (activities.length === 0) return {};
 
-		const groupedActivities: { [key: string]: Array<(typeof activities)[number]> } = {};
+		const groupedActivities: { [date: string]: Array<(typeof activities)[number]> } = {};
 		const shortFormatter = new Intl.DateTimeFormat(currentUser.locale, {
 			day: "numeric",
 			month: "short",
@@ -35,12 +53,19 @@ export async function listAllPetActivitiesServer(cursor: PetActivitiesCursor | n
 		});
 
 		for (const activity of activities) {
-			const date = Temporal.ZonedDateTime.from(activity.date);
-			const key = shortFormatter.format(date.epochMilliseconds);
+			let date: Date;
+			if (activity.type === "appointment") {
+				date = parseISO(activity.appointment?.date ?? activity.date);
+			} else if (activity.type === "prescription") {
+				date = parseISO(activity.prescription?.dateStarted ?? activity.date);
+			} else {
+				date = parseISO(activity.date);
+			}
+			const key = shortFormatter.format(date);
 			if (!groupedActivities[key]) {
 				groupedActivities[key] = [];
 			}
-			activity.date = longFormatter.format(date.epochMilliseconds);
+			activity.date = longFormatter.format(date);
 			groupedActivities[key].push(activity);
 		}
 		return groupedActivities;
@@ -106,7 +131,10 @@ export async function createPetActivityServer(formData: FormData) {
 
 		const activity = await petActivityCreate(input, petId as PetID, currentUser);
 
-		return json({ activity }, { revalidate: [listAllPetActivities.key] });
+		return json(
+			{ activity },
+			{ revalidate: [listAllPetActivities.key, getPetScheduledActivities.key] },
+		);
 	} catch (error) {
 		return jsonFailure<ActivityCreateSchema>(error);
 	}
