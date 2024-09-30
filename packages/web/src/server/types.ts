@@ -20,3 +20,5 @@ export type Brand<B> = { [__brand]: B };
 export type Branded<T, B> = T & Brand<B>;
 
 export type PrescriptionMedicationType = NonNullable<DatabasePrescription["schedule"]>["type"];
+
+export type { PetActivitiesCursor } from "~/server/db/queries/pet-activities";
