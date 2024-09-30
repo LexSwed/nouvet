@@ -269,6 +269,8 @@ export const prescriptionsTable = sqliteTable("prescription", {
 	dateStarted: dateTime("date_started"),
 	/** UTC date for ending the medication */
 	endDate: dateTime("end_date"),
+	/** UTC end date for when the medication was stopped */
+	dateCompleted: dateTime("date_completed"),
 	/** TODO: media storage for photos */
 });
 

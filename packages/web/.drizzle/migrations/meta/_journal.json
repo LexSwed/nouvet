@@ -57,6 +57,13 @@
       "when": 1727111124426,
       "tag": "0007_complete_raza",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1727714846518,
+      "tag": "0008_breezy_smasher",
+      "breakpoints": true
     }
   ]
 }
