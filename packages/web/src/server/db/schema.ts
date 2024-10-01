@@ -294,7 +294,6 @@ export const appointmentsTable = sqliteTable("appointment", {
 		.notNull()
 		.$type<DatabaseActivity["id"]>(),
 	location: text("location", { length: 400 }),
-	date: dateTime("date"),
 });
 
 /**

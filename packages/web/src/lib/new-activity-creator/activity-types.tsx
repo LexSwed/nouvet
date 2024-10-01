@@ -48,16 +48,15 @@ export function ObservationActivityForm(props: ActivityCreatorProps) {
 
 export function AppointmentActivityForm(props: ActivityCreatorProps) {
 	const t = createTranslator("pets");
-	const [date, setDate] = createSignal<Temporal.ZonedDateTime | null>(null);
-
-	// hidden, unchangeable recorded date
-	const recordedDate = () => Temporal.Now.zonedDateTimeISO();
+	const [recordedDate, setRecordedDate] = createSignal<Temporal.ZonedDateTime | null>(
+		Temporal.Now.zonedDateTimeISO(),
+	);
 
 	return (
 		<NewActivityForm
 			activityType="appointment"
 			recordedDate={recordedDate}
-			recordedDateHidden={true}
+			onRecordedDateChange={setRecordedDate}
 			petId={props.petId}
 			locale={props.locale}
 		>
@@ -66,16 +65,6 @@ export function AppointmentActivityForm(props: ActivityCreatorProps) {
 				label={t("new-activity.appointment.location.label")}
 				description={t("new-activity.appointment.location.description")}
 				variant="ghost"
-			/>
-			<DateSelector
-				name="date"
-				value={date()}
-				onChange={setDate}
-				label={t("new-activity.appointment.date.label")}
-				showHour
-				inline={false}
-				locale={props.locale}
-				required
 			/>
 			<NoteTextField
 				placeholder={t("new-activity.appointment.note-placeholder")}
