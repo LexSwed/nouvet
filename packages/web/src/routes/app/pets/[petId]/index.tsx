@@ -1,4 +1,5 @@
 import { Avatar, Button, ButtonLink, Card, Icon, Text } from "@nou/ui";
+import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
 import { Title } from "@solidjs/meta";
 import {
 	type RouteDefinition,
@@ -6,7 +7,18 @@ import {
 	createAsync,
 	useLocation,
 } from "@solidjs/router";
-import { type Accessor, For, Match, Show, Suspense, Switch, createMemo } from "solid-js";
+import {
+	type Accessor,
+	For,
+	Match,
+	Show,
+	Suspense,
+	Switch,
+	createEffect,
+	createMemo,
+	createSignal,
+} from "solid-js";
+import { createStore } from "solid-js/store";
 import { NewActivityCreator } from "~/lib/new-activity-creator";
 import { PetPicture } from "~/lib/pet-home-card";
 import { listAllPetActivities } from "~/server/api/activity";
@@ -102,46 +114,72 @@ function PastPetActivities(props: { petId: PetID }) {
 	// TODO: cursor pagination
 	const cursor = createMemo<null | PetActivitiesCursor>(() => null);
 	const activities = createAsync(() => listAllPetActivities(cursor(), props.petId));
+	const [allActivities, setAllActivities] = createStore(activities());
+
+	const [latestElement, setLatestElement] = createSignal<HTMLElement>();
+
+	const useVisibilityObserver = createVisibilityObserver({ threshold: 0.8 });
+
+	const visible = useVisibilityObserver(latestElement);
+
+	createEffect(() => {
+		console.log(visible(), latestElement()?.dataset.cursor);
+	});
+
+	createEffect(() => {
+		const newActivities = activities();
+		setAllActivities((prev) => ({ ...prev, ...newActivities }));
+	});
 
 	return (
-		<Show when={activities()}>
-			{(activities) => (
-				<Card class="flex flex-col gap-6" aria-labelledby="pet-activities-headline">
-					<ActivityQuickCreator petId={props.petId} />
-					<Text as="h3" with="headline-3" id="pet-activities-headline">
-						Past activities
-					</Text>
-					<ul class="grid grid-cols-[auto,1fr] gap-6">
-						<For each={Object.entries(activities())}>
-							{([date, activities]) => (
-								<li class="contents">
-									<Text with="overline">{date}</Text>
-									<ul class="flex flex-1 flex-col gap-4 rounded-2xl bg-tertiary/5 p-3">
-										<For each={activities}>
-											{(activity) => (
-												<li class="flex flex-row items-center gap-2">
-													<Icon
-														use="note"
-														class="size-10 rounded-full bg-yellow-100 p-2 text-yellow-950"
-													/>
-													<div class="flex flex-col gap-2">
-														<Text with="body-xs" as="div">
-															{activity.type}
-														</Text>
-														<Text with="body-sm" tone="light">
-															{activity.note}
-														</Text>
-													</div>
-												</li>
-											)}
-										</For>
-									</ul>
-								</li>
-							)}
-						</For>
-					</ul>
-				</Card>
-			)}
+		<Show when={allActivities}>
+			{(allActivities) => {
+				const activitiesEntries = Object.entries(allActivities());
+				return (
+					<Card class="flex flex-col gap-6" aria-labelledby="pet-activities-headline">
+						<ActivityQuickCreator petId={props.petId} />
+						<Text as="h3" with="headline-3" id="pet-activities-headline">
+							Past activities
+						</Text>
+						<ul class="grid grid-cols-[auto,1fr] gap-6">
+							<For each={activitiesEntries}>
+								{([date, activities], i) => {
+									const isLastEntry = i() === activitiesEntries.length - 1;
+									return (
+										<li
+											class="contents"
+											ref={isLastEntry ? setLatestElement : undefined}
+											data-cursor={isLastEntry ? activities.at(-1).cursor : undefined}
+										>
+											<Text with="overline">{date}</Text>
+											<ul class="flex flex-1 flex-col gap-4 rounded-2xl bg-tertiary/5 p-3">
+												<For each={activities}>
+													{(activity) => (
+														<li class="flex flex-row items-center gap-2">
+															<Icon
+																use="note"
+																class="size-10 rounded-full bg-yellow-100 p-2 text-yellow-950"
+															/>
+															<div class="flex flex-col gap-2">
+																<Text with="body-xs" as="div">
+																	{activity.type}
+																</Text>
+																<Text with="body-sm" tone="light">
+																	{activity.note}
+																</Text>
+															</div>
+														</li>
+													)}
+												</For>
+											</ul>
+										</li>
+									);
+								}}
+							</For>
+						</ul>
+					</Card>
+				);
+			}}
 		</Show>
 	);
 }

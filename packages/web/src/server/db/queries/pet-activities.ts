@@ -39,11 +39,16 @@ export async function petActivities(
 				name: prescriptionsTable.name,
 				schedule: prescriptionsTable.schedule,
 				dateStarted: prescriptionsTable.dateStarted,
+				dateCompleted: prescriptionsTable.dateCompleted,
 			},
 			vaccine: {
 				name: vaccinationsTable.name,
 				nextDueDate: vaccinationsTable.nextDueDate,
 				batchNumber: vaccinationsTable.batchNumber,
+			},
+			appointment: {
+				location: appointmentsTable.location,
+				date: appointmentsTable.date,
 			},
 			// child: {
 			// 	id: activityRelationships.childActivityId,
@@ -66,7 +71,7 @@ export async function petActivities(
 	}
 
 	const activities = petActivities
-		.limit(50)
+		.limit(5)
 		.all()
 		.map((activity) => {
 			(activity as typeof activity & { cursor: PetActivitiesCursor }).cursor = encodeCursor(
