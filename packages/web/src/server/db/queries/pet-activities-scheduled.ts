@@ -5,8 +5,10 @@ import { useDb } from "~/server/db";
 import {
 	activitiesTable,
 	activityRelationships,
+	appointmentsTable,
 	prescriptionsTable,
 	userTable,
+	utcNow,
 	vaccinationsTable,
 } from "~/server/db/schema";
 import type { PetID, UserID } from "~/server/types";
@@ -20,7 +22,7 @@ import { checkCanPerformPetAction } from "./can-perform-pet-action";
  * - vaccinations
  * - doctor's appointments
  */
-export async function scheduledPetActivites(petId: PetID, userId: UserID) {
+export async function petActivitiesScheduled(petId: PetID, userId: UserID) {
 	const db = useDb();
 
 	checkCanPerformPetAction(petId, userId);
@@ -28,7 +30,6 @@ export async function scheduledPetActivites(petId: PetID, userId: UserID) {
 	const petActivities = db
 		.select({
 			id: activitiesTable.id,
-			note: activitiesTable.note,
 			date: activitiesTable.date,
 			type: activitiesTable.type,
 			creator: {
@@ -39,29 +40,45 @@ export async function scheduledPetActivites(petId: PetID, userId: UserID) {
 				name: prescriptionsTable.name,
 				schedule: prescriptionsTable.schedule,
 				dateStarted: prescriptionsTable.dateStarted,
+				note: activitiesTable.note,
 			},
 			vaccine: {
 				name: vaccinationsTable.name,
 				nextDueDate: vaccinationsTable.nextDueDate,
 				batchNumber: vaccinationsTable.batchNumber,
+				note: activitiesTable.note,
 			},
-			// child: {
-			// 	id: activityRelationships.childActivityId,
-			// },
+			appointment: {
+				location: appointmentsTable.location,
+				note: activitiesTable.note,
+			},
 		})
 		.from(activitiesTable)
 		/** scheduled activity is the one which:
 		 * - for prescriptions: endDate is not passed
 		 * - for appointments: date is not passed
-		 * - for vaccinations 
+		 * - for vaccinations
 		 */
-		.where(and(eq(activitiesTable.petId, petId), gte(prescriptionsTable.)))
+		.where(eq(activitiesTable.petId, petId))
 		.leftJoin(activityRelationships, eq(activityRelationships.parentActivityId, activitiesTable.id))
-		.leftJoin(prescriptionsTable, eq(prescriptionsTable.activityId, activitiesTable.id))
-		// .leftJoin(childActivity, eq(childActivity.id, activityRelationships.childActivityId))
+		.leftJoin(
+			prescriptionsTable,
+			and(
+				eq(prescriptionsTable.activityId, activitiesTable.id),
+				gte(prescriptionsTable.dateCompleted, utcNow()),
+			),
+		)
 		.leftJoin(vaccinationsTable, eq(vaccinationsTable.activityId, activitiesTable.id))
+		.leftJoin(
+			appointmentsTable,
+			and(
+				eq(appointmentsTable.activityId, activitiesTable.id),
+				gte(activitiesTable.date, utcNow()),
+			),
+		)
 		.leftJoin(userTable, eq(userTable.id, activitiesTable.creatorId))
-		.orderBy(desc(activitiesTable.date), desc(vaccinationsTable.nextDueDate)).all()
+		.orderBy(desc(activitiesTable.date), desc(vaccinationsTable.nextDueDate))
+		.all();
 
 	return petActivities;
 }
