@@ -1,19 +1,7 @@
-import {
-	Button,
-	Card,
-	Fieldset,
-	Form,
-	RadioCard,
-	Text,
-	TextField,
-	Toast,
-	toast,
-	tw,
-} from "@nou/ui";
+import { Button, Card, Fieldset, Form, RadioCard, Text, TextField, Toast, toast } from "@nou/ui";
 import { useAction, useSubmission } from "@solidjs/router";
 import {
 	type Accessor,
-	type ComponentProps,
 	type ParentProps,
 	Show,
 	batch,
@@ -42,13 +30,18 @@ export function ObservationActivityForm(props: ActivityCreatorProps) {
 	);
 
 	return (
-		<NewActivityForm
-			recordedDate={recordedDate}
-			onRecordedDateChange={setRecordedDate}
-			activityType="observation"
-			petId={props.petId}
-			locale={props.locale}
-		>
+		<NewActivityForm activityType="observation" petId={props.petId} locale={props.locale}>
+			<DateSelector
+				value={recordedDate()}
+				onChange={setRecordedDate}
+				locale={props.locale}
+				name="recordedDate"
+				label={t("new-activity.note.recorded-date.label")}
+				class={"w-[80%] self-start rounded-xl"}
+				inline
+				showHour
+				required
+			/>
 			<NoteTextField
 				description={t("new-activity.note-description-observation")}
 				placeholder={t("new-activity.note-placeholder-observation")}
@@ -64,15 +57,18 @@ export function AppointmentActivityForm(props: ActivityCreatorProps) {
 	);
 
 	return (
-		<NewActivityForm
-			activityType="appointment"
-			recordedDateInline={false}
-			recordedDateLabel={t("new-activity.appointment.date.label")}
-			recordedDate={recordedDate}
-			onRecordedDateChange={setRecordedDate}
-			petId={props.petId}
-			locale={props.locale}
-		>
+		<NewActivityForm activityType="appointment" petId={props.petId} locale={props.locale}>
+			<DateSelector
+				value={recordedDate()}
+				onChange={setRecordedDate}
+				label={t("new-activity.appointment.date.label")}
+				locale={props.locale}
+				name="recordedDate"
+				inline={false}
+				showHour
+				class={"w-[80%] self-start rounded-xl"}
+				required
+			/>
 			<TextField
 				name="location"
 				label={t("new-activity.appointment.location.label")}
@@ -89,7 +85,7 @@ export function AppointmentActivityForm(props: ActivityCreatorProps) {
 
 export function PrescriptionActivityForm(props: ActivityCreatorProps) {
 	const t = createTranslator("pets");
-	const recordedDate = () => Temporal.Now.zonedDateTimeISO();
+	const now = Temporal.Now.zonedDateTimeISO();
 
 	const [dateStarted, setDateStarted] = createSignal<Temporal.ZonedDateTime | null>(
 		Temporal.Now.zonedDateTimeISO(),
@@ -107,13 +103,8 @@ export function PrescriptionActivityForm(props: ActivityCreatorProps) {
 	});
 
 	return (
-		<NewActivityForm
-			activityType="prescription"
-			recordedDate={recordedDate}
-			recordedDateHidden={true}
-			petId={props.petId}
-			locale={props.locale}
-		>
+		<NewActivityForm activityType="prescription" petId={props.petId} locale={props.locale}>
+			<input type="hidden" name="recordedDate" value={toIsoString(now)} />
 			<TextField
 				label={t("new-activity.prescription.name.label")}
 				name="name"
@@ -216,25 +207,28 @@ export function VaccinationActivityForm(props: ActivityCreatorProps) {
 	});
 
 	return (
-		<NewActivityForm
-			activityType="vaccination"
-			petId={props.petId}
-			locale={props.locale}
-			recordedDateInline={false}
-			recordedDateLabel={t("new-activity.vaccine.date.label")}
-			recordedDate={recordedDate}
-			onRecordedDateChange={(newRecordedDate) => {
-				const oldRecordedDate = recordedDate();
-				const dueDate = nextDueDate();
-				batch(() => {
-					setRecordedDate(newRecordedDate);
-					if (newRecordedDate && oldRecordedDate && dueDate) {
-						const diff = dueDate.since(oldRecordedDate);
-						setNextDueDate(newRecordedDate.add(diff));
-					}
-				});
-			}}
-		>
+		<NewActivityForm activityType="vaccination" petId={props.petId} locale={props.locale}>
+			<DateSelector
+				value={recordedDate()}
+				onChange={(newRecordedDate) => {
+					const oldRecordedDate = recordedDate();
+					const dueDate = nextDueDate();
+					batch(() => {
+						setRecordedDate(newRecordedDate);
+						if (newRecordedDate && oldRecordedDate && dueDate) {
+							const diff = dueDate.since(oldRecordedDate);
+							setNextDueDate(newRecordedDate.add(diff));
+						}
+					});
+				}}
+				locale={props.locale}
+				name="recordedDate"
+				inline={false}
+				showHour
+				label={t("new-activity.vaccine.date.label")}
+				class={"w-[80%] self-start rounded-xl"}
+				required
+			/>
 			<TextField
 				name="name"
 				variant="ghost"
@@ -297,11 +291,6 @@ function NewActivityForm(
 	props: ParentProps<
 		ActivityCreatorProps & {
 			activityType: ActivityType;
-			recordedDateInline?: boolean;
-			recordedDateLabel?: string;
-			recordedDateHidden?: boolean;
-			recordedDate: Accessor<Temporal.ZonedDateTime | null>;
-			onRecordedDateChange?: ComponentProps<typeof DateSelector>["onChange"];
 			ref?: (el: HTMLFormElement) => void;
 		}
 	>,
@@ -341,34 +330,7 @@ function NewActivityForm(
 			>
 				<input type="hidden" name="petId" value={props.petId} />
 				<input type="hidden" name="activityType" value={props.activityType} />
-				<input type="hidden" name="currentTimeZone" value={props.recordedDate()?.timeZoneId} />
-				<Show
-					when={!props.recordedDateHidden}
-					fallback={
-						<input
-							type="hidden"
-							name="recordedDate"
-							value={props.recordedDate() ? toIsoString(props.recordedDate()!) : ""}
-						/>
-					}
-				>
-					<DateSelector
-						value={props.recordedDate()}
-						onChange={props.onRecordedDateChange}
-						locale={props.locale}
-						name="recordedDate"
-						inline={props.recordedDateInline ?? true}
-						showHour
-						label={props.recordedDateLabel ?? t("new-activity.recorded-date.label")}
-						class={tw(
-							"w-[80%] self-start rounded-xl",
-							(props.recordedDateInline ?? true)
-								? "bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8"
-								: "",
-						)}
-						required
-					/>
-				</Show>
+				<input type="hidden" name="currentTimeZone" value={Temporal.Now.timeZoneId()} />
 				{props.children}
 				<div class="mt-4 flex flex-row justify-end gap-4 *:flex-1">
 					<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
