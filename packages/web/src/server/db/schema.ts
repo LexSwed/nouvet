@@ -288,7 +288,7 @@ export const vaccinationsTable = sqliteTable("vaccination", {
 });
 
 export const appointmentsTable = sqliteTable("appointment", {
-	id: primaryId<"AppointmentID">("id", "dv"),
+	id: primaryId<"AppointmentID">("id", "doc"),
 	activityId: text("activity_id")
 		.references(() => activitiesTable.id, { onDelete: "cascade" })
 		.notNull()

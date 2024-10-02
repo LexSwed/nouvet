@@ -9,6 +9,7 @@ import {
 	type InjectionDosage,
 	type LiquidDosage,
 	activitiesTable,
+	appointmentsTable,
 	prescriptionsTable,
 	vaccinationsTable,
 } from "~/server/db/schema";
@@ -77,9 +78,6 @@ const ActivityCreateSchema = v.variant("activityType", [
 		activityType: v.literal("appointment" satisfies ActivityType),
 		note: ActivityNoteSchema,
 		recordedDate: ActivityRecordedDateSchema,
-		date: v.config(ActivityRecordedDateSchema, {
-			message: "create-activity.appointment.date" satisfies ErrorKeys,
-		}),
 		location: v.config(v.pipe(v.string(), v.trim(), v.maxLength(400)), {
 			message: "create-activity.appointment.location" satisfies ErrorKeys,
 		}),
@@ -201,12 +199,19 @@ export async function petActivityCreate(
 			.get();
 
 		switch (activityInfo.activityType) {
+			case "appointment":
+				tx.insert(appointmentsTable).values({
+					activityId: activity.id,
+					location: activityInfo.location,
+				});
+				break;
 			case "prescription":
 				tx.insert(prescriptionsTable).values({
 					activityId: activity.id,
 					name: activityInfo.name,
 					schedule: activityInfo.schedule,
 					dateStarted: activityInfo.dateStarted,
+					endDate: activityInfo.endDate,
 				});
 				break;
 			case "vaccination":

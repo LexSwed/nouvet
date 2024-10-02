@@ -149,14 +149,10 @@ export async function createPetActivityServer(formData: FormData) {
 				recordedDate,
 			};
 		} else if (activityType === "appointment") {
-			let date = formData.get("date")!.toString();
-			const timeZone = formData.get("currentTimeZone")!.toString();
-			date = Temporal.ZonedDateTime.from(`${date}[${timeZone}]`).toString();
 			input = {
 				activityType,
 				note: formData.get("note")?.toString() || null,
 				recordedDate,
-				date,
 				location: formData.get("location")!.toString(),
 			};
 		} else if (activityType === "prescription") {
