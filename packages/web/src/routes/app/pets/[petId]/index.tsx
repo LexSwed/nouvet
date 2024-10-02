@@ -15,7 +15,6 @@ import {
 	Suspense,
 	Switch,
 	createEffect,
-	createMemo,
 	createSignal,
 } from "solid-js";
 import { createStore } from "solid-js/store";
@@ -25,7 +24,7 @@ import { listAllPetActivities } from "~/server/api/activity";
 import { getPet } from "~/server/api/pet";
 import { getUser, getUserProfile } from "~/server/api/user";
 import { cacheTranslations, createTranslator } from "~/server/i18n";
-import type { PetActivitiesCursor, PetID } from "~/server/types";
+import type { PetActivitiesPaginationCursor, PetID } from "~/server/types";
 
 export const route = {
 	preload({ params }) {
@@ -60,8 +59,8 @@ const PetPage = (props: RouteSectionProps) => {
 };
 
 function MainPetCard(props: {
-	pet: Accessor<Awaited<ReturnType<typeof getPet>>>;
-	profile: Accessor<Awaited<ReturnType<typeof getUserProfile>>>;
+	pet: Accessor<NonNullable<Awaited<ReturnType<typeof getPet>>>>;
+	profile: Accessor<NonNullable<Awaited<ReturnType<typeof getUserProfile>>>>;
 }) {
 	const { pet, profile } = props;
 	const appT = createTranslator("app");
@@ -72,7 +71,7 @@ function MainPetCard(props: {
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-row items-center justify-between gap-4">
 				<Text with="headline-1" as="h1">
-					{pet()?.name}
+					{pet().name}
 				</Text>
 				<div class="flex h-10 flex-row items-center justify-between gap-4">
 					<Switch>
@@ -112,29 +111,35 @@ function MainPetCard(props: {
 
 function PastPetActivities(props: { petId: PetID }) {
 	// TODO: cursor pagination
-	const cursor = createMemo<null | PetActivitiesCursor>(() => null);
-	const activities = createAsync(() => listAllPetActivities(cursor(), props.petId));
-	const [allActivities, setAllActivities] = createStore(activities());
+	const [cursor, setCursor] = createSignal<null | PetActivitiesPaginationCursor>(null);
+	const activities = createAsync(() => listAllPetActivities(props.petId, cursor()));
+	const [allActivities, setAllActivities] = createStore({ activities: activities()?.activities });
 
 	const [latestElement, setLatestElement] = createSignal<HTMLElement>();
 
-	const useVisibilityObserver = createVisibilityObserver({ threshold: 0.8 });
+	const useVisibilityObserver = createVisibilityObserver({ threshold: 0.5 });
 
 	const visible = useVisibilityObserver(latestElement);
 
 	createEffect(() => {
-		console.log(visible(), latestElement()?.dataset.cursor);
+		console.log(visible(), latestElement());
+		console.log(cursor(), activities.latest?.cursor, activities()?.cursor);
+		if (visible() && !cursor() && activities.latest?.cursor) {
+			setCursor(activities.latest?.cursor);
+		}
 	});
 
 	createEffect(() => {
-		const newActivities = activities();
-		setAllActivities((prev) => ({ ...prev, ...newActivities }));
+		const newActivities = activities()?.activities;
+		if (newActivities) {
+			setAllActivities("activities", newActivities);
+		}
 	});
 
 	return (
-		<Show when={allActivities}>
-			{(allActivities) => {
-				const activitiesEntries = Object.entries(allActivities());
+		<Show when={allActivities.activities && Object.entries(allActivities.activities)}>
+			{(activitiesEntries) => {
+				const lastDateIndex = activitiesEntries().length - 1;
 				return (
 					<Card class="flex flex-col gap-6" aria-labelledby="pet-activities-headline">
 						<ActivityQuickCreator petId={props.petId} />
@@ -142,17 +147,16 @@ function PastPetActivities(props: { petId: PetID }) {
 							Past activities
 						</Text>
 						<ul class="grid grid-cols-[auto,1fr] gap-6">
-							<For each={activitiesEntries}>
+							<For each={activitiesEntries()}>
 								{([date, activities], i) => {
-									const isLastEntry = i() === activitiesEntries.length - 1;
+									const isLastDate = i() === lastDateIndex;
 									return (
-										<li
-											class="contents"
-											ref={isLastEntry ? setLatestElement : undefined}
-											data-cursor={isLastEntry ? activities.at(-1).cursor : undefined}
-										>
+										<li class="contents">
 											<Text with="overline">{date}</Text>
-											<ul class="flex flex-1 flex-col gap-4 rounded-2xl bg-tertiary/5 p-3">
+											<ul
+												class="flex flex-1 flex-col gap-6 rounded-2xl bg-tertiary/5 p-3"
+												ref={isLastDate ? setLatestElement : undefined}
+											>
 												<For each={activities}>
 													{(activity) => (
 														<li class="flex flex-row items-center gap-2">
@@ -160,13 +164,13 @@ function PastPetActivities(props: { petId: PetID }) {
 																use="note"
 																class="size-10 rounded-full bg-yellow-100 p-2 text-yellow-950"
 															/>
-															<div class="flex flex-col gap-2">
-																<Text with="body-xs" as="div">
-																	{activity.type}
-																</Text>
-																<Text with="body-sm" tone="light">
-																	{activity.note}
-																</Text>
+															<div class="flex flex-1 flex-col gap-2">
+																<div class="flex flex-row items-center justify-between gap-4">
+																	<Text with="body-xs">{activity.type}</Text>
+																	<Text with="body-xs" tone="light">
+																		{activity.time}
+																	</Text>
+																</div>
 															</div>
 														</li>
 													)}

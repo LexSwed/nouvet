@@ -65,6 +65,7 @@ const petsDict = {
 	"new-activity.cta-cancel": "Cancel",
 	"new-activity.cta-create": "Create",
 	"new-activity.recorded-date.label": "Date of the event",
+	"new-activity.vaccine.date.label": "Date of the vaccination",
 	"new-activity.vaccine.name.label": "Vaccines",
 	"new-activity.vaccine.name.placeholder": "Rabies, DHPP, etc.",
 	"new-activity.vaccine.name.description": "Names of the vaccines administered",

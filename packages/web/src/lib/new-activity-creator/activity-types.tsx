@@ -1,4 +1,15 @@
-import { Button, Card, Fieldset, Form, RadioCard, Text, TextField, Toast, toast } from "@nou/ui";
+import {
+	Button,
+	Card,
+	Fieldset,
+	Form,
+	RadioCard,
+	Text,
+	TextField,
+	Toast,
+	toast,
+	tw,
+} from "@nou/ui";
 import { useAction, useSubmission } from "@solidjs/router";
 import {
 	type Accessor,
@@ -55,6 +66,8 @@ export function AppointmentActivityForm(props: ActivityCreatorProps) {
 	return (
 		<NewActivityForm
 			activityType="appointment"
+			recordedDateInline={false}
+			recordedDateLabel={t("new-activity.appointment.date.label")}
 			recordedDate={recordedDate}
 			onRecordedDateChange={setRecordedDate}
 			petId={props.petId}
@@ -207,6 +220,8 @@ export function VaccinationActivityForm(props: ActivityCreatorProps) {
 			activityType="vaccination"
 			petId={props.petId}
 			locale={props.locale}
+			recordedDateInline={false}
+			recordedDateLabel={t("new-activity.vaccine.date.label")}
 			recordedDate={recordedDate}
 			onRecordedDateChange={(newRecordedDate) => {
 				const oldRecordedDate = recordedDate();
@@ -282,6 +297,8 @@ function NewActivityForm(
 	props: ParentProps<
 		ActivityCreatorProps & {
 			activityType: ActivityType;
+			recordedDateInline?: boolean;
+			recordedDateLabel?: string;
 			recordedDateHidden?: boolean;
 			recordedDate: Accessor<Temporal.ZonedDateTime | null>;
 			onRecordedDateChange?: ComponentProps<typeof DateSelector>["onChange"];
@@ -340,10 +357,15 @@ function NewActivityForm(
 						onChange={props.onRecordedDateChange}
 						locale={props.locale}
 						name="recordedDate"
-						inline
+						inline={props.recordedDateInline ?? true}
 						showHour
-						label={t("new-activity.recorded-date.label")}
-						class="w-[80%] self-start rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8"
+						label={props.recordedDateLabel ?? t("new-activity.recorded-date.label")}
+						class={tw(
+							"w-[80%] self-start rounded-xl",
+							(props.recordedDateInline ?? true)
+								? "bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/8"
+								: "",
+						)}
 						required
 					/>
 				</Show>
