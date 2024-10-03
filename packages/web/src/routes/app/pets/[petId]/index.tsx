@@ -1,5 +1,4 @@
 import { Avatar, Button, ButtonLink, Card, Icon, Text } from "@nou/ui";
-import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
 import { Title } from "@solidjs/meta";
 import {
 	type RouteDefinition,
@@ -7,24 +6,14 @@ import {
 	createAsync,
 	useLocation,
 } from "@solidjs/router";
-import {
-	type Accessor,
-	For,
-	Match,
-	Show,
-	Suspense,
-	Switch,
-	createEffect,
-	createSignal,
-} from "solid-js";
-import { createStore } from "solid-js/store";
+import { type Accessor, For, Match, Show, Suspense, Switch } from "solid-js";
 import { NewActivityCreator } from "~/lib/new-activity-creator";
 import { PetPicture } from "~/lib/pet-home-card";
 import { listAllPetActivities } from "~/server/api/activity";
 import { getPet } from "~/server/api/pet";
 import { getUser, getUserProfile } from "~/server/api/user";
 import { cacheTranslations, createTranslator } from "~/server/i18n";
-import type { PetActivitiesPaginationCursor, PetID } from "~/server/types";
+import type { PetID } from "~/server/types";
 
 export const route = {
 	preload({ params }) {
@@ -111,76 +100,69 @@ function MainPetCard(props: {
 
 function PastPetActivities(props: { petId: PetID }) {
 	// TODO: cursor pagination
-	const [cursor, setCursor] = createSignal<null | PetActivitiesPaginationCursor>(null);
-	const activities = createAsync(() => listAllPetActivities(props.petId, cursor()));
-	const [allActivities, setAllActivities] = createStore({ activities: activities()?.activities });
+	const activities = createAsync(() => listAllPetActivities(props.petId));
 
-	const [latestElement, setLatestElement] = createSignal<HTMLElement>();
-
-	const useVisibilityObserver = createVisibilityObserver({ threshold: 0.5 });
-
-	const visible = useVisibilityObserver(latestElement);
-
-	createEffect(() => {
-		console.log(visible(), latestElement());
-		console.log(cursor(), activities.latest?.cursor, activities()?.cursor);
-		if (visible() && !cursor() && activities.latest?.cursor) {
-			setCursor(activities.latest?.cursor);
-		}
-	});
-
-	createEffect(() => {
-		const newActivities = activities()?.activities;
-		if (newActivities) {
-			setAllActivities("activities", newActivities);
-		}
-	});
+	// TODO: empty results, cursor pagination, current date highlight
 
 	return (
-		<Show when={allActivities.activities && Object.entries(allActivities.activities)}>
-			{(activitiesEntries) => {
-				const lastDateIndex = activitiesEntries().length - 1;
+		<Show when={activities()?.activities}>
+			{(yearActivities) => {
 				return (
 					<Card class="flex flex-col gap-6" aria-labelledby="pet-activities-headline">
 						<ActivityQuickCreator petId={props.petId} />
 						<Text as="h3" with="headline-3" id="pet-activities-headline">
 							Past activities
 						</Text>
-						<ul class="grid grid-cols-[auto,1fr] gap-6">
-							<For each={activitiesEntries()}>
-								{([date, activities], i) => {
-									const isLastDate = i() === lastDateIndex;
-									return (
-										<li class="contents">
-											<Text with="overline">{date}</Text>
-											<ul
-												class="flex flex-1 flex-col gap-6 rounded-2xl bg-tertiary/5 p-3"
-												ref={isLastDate ? setLatestElement : undefined}
+						<div class="grid grid-cols-[auto,1fr] gap-4">
+							<For each={yearActivities()}>
+								{([year, dateEntries]) => (
+									<section class="contents">
+										<header class="col-span-2">
+											<Text
+												with="overline"
+												tone="light"
+												class="rounded-md bg-on-surface/3 p-1 tabular-nums"
 											>
-												<For each={activities}>
-													{(activity) => (
-														<li class="flex flex-row items-center gap-2">
-															<Icon
-																use="note"
-																class="size-10 rounded-full bg-yellow-100 p-2 text-yellow-950"
-															/>
-															<div class="flex flex-1 flex-col gap-2">
-																<div class="flex flex-row items-center justify-between gap-4">
-																	<Text with="body-xs">{activity.type}</Text>
-																	<Text with="body-xs" tone="light">
-																		{activity.time}
-																	</Text>
-																</div>
-															</div>
+												{year}
+											</Text>
+										</header>
+										<ul class="contents">
+											<For each={dateEntries}>
+												{([date, activities]) => {
+													return (
+														<li class="contents">
+															<Text with="overline" class="sticky top-2 text-end tabular-nums">
+																{date}
+															</Text>
+															<ul class="flex flex-1 flex-col gap-6 rounded-2xl bg-tertiary/5 p-3">
+																<For each={activities}>
+																	{(activity) => (
+																		<li class="flex flex-row items-center gap-2">
+																			<Icon
+																				use="note"
+																				class="size-10 rounded-full bg-yellow-100 p-2 text-yellow-950"
+																			/>
+																			<div class="flex flex-1 flex-col gap-2">
+																				<div class="flex flex-row items-center justify-between gap-4">
+																					<Text with="body-xs">{activity.type}</Text>
+																					<Text with="body-xs" tone="light">
+																						{activity.time}
+																					</Text>
+																				</div>
+																			</div>
+																		</li>
+																	)}
+																</For>
+															</ul>
 														</li>
-													)}
-												</For>
-											</ul>
-										</li>
-									);
-								}}
+													);
+												}}
+											</For>
+										</ul>
+									</section>
+								)}
 							</For>
-						</ul>
+						</div>
 					</Card>
 				);
 			}}

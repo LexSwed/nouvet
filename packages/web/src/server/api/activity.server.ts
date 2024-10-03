@@ -34,7 +34,7 @@ export async function getPetScheduledActivitiesServer(petId: PetID) {
 
 export async function listAllPetActivitiesServer(
 	petId: PetID,
-	cursor: PetActivitiesPaginationCursor | null,
+	cursor: PetActivitiesPaginationCursor | null = null,
 ) {
 	console.log({ cursor });
 	const currentUser = await getRequestUser();
@@ -58,23 +58,15 @@ export async function listAllPetActivitiesServer(
 			timeStyle: "short",
 		});
 
-		// const activities =
-		// .map((activity) => {
-		// 	(activity as typeof activity & { cursor: PetActivitiesCursor }).cursor = encodeCursor(
-		// 		activity.date,
-		// 	);
-		// 	return activity as typeof activity & { cursor: PetActivitiesCursor };
-		// });
-
 		const groupedActivities = new Map<
 			string,
-			Array<(typeof activities)[number] & { time: string }>
+			Map<string, Array<(typeof activities)[number] & { time: string }>>
 		>();
 
 		/**
 		 * Latest key added to the map, to add the cursor to the last item only.
 		 */
-		let latestDateKey = "";
+		let latestDateKey: readonly [year: string, date: string] | null = null;
 		for (const activity of activities) {
 			let date: Date;
 			if (activity.type === "prescription") {
@@ -82,12 +74,19 @@ export async function listAllPetActivitiesServer(
 			} else {
 				date = parseISO(activity.date);
 			}
-			const key = dayMonthFormatter.format(date);
-			latestDateKey = key;
-			let dateActivities = groupedActivities.get(key);
+			const yearKey = date.getFullYear().toString();
+			const dateKey = dayMonthFormatter.format(date);
+
+			latestDateKey = [yearKey, dateKey];
+			let yearGroup = groupedActivities.get(yearKey);
+			let dateActivities = yearGroup?.get(dateKey);
+			if (!yearGroup) {
+				yearGroup = new Map();
+				groupedActivities.set(yearKey, yearGroup);
+			}
 			if (!dateActivities) {
 				dateActivities = [];
-				groupedActivities.set(key, dateActivities);
+				yearGroup.set(dateKey, dateActivities);
 			}
 			dateActivities.push(
 				Object.assign(activity, {
@@ -96,10 +95,21 @@ export async function listAllPetActivitiesServer(
 			);
 		}
 
-		const latestActivitiy = groupedActivities.get(latestDateKey)?.at(-1);
+		const latestActivitiy = latestDateKey
+			? groupedActivities.get(latestDateKey[0])?.get(latestDateKey[1])?.at(-1)
+			: null;
+
+		const serialisableDateEntries = Array.from(
+			groupedActivities
+				.entries()
+				.map(
+					([year, dateActivities]) =>
+						[Number.parseInt(year), Array.from(dateActivities.entries())] as const,
+				),
+		).toSorted((a, b) => b[0] - a[0]);
 
 		return {
-			activities: Object.fromEntries(groupedActivities.entries()),
+			activities: serialisableDateEntries,
 			cursor: latestActivitiy ? encodeCursor(latestActivitiy.date) : null,
 		};
 	} catch (error) {
