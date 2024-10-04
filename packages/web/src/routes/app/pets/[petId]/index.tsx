@@ -9,7 +9,7 @@ import {
 import { type Accessor, For, Match, Show, Suspense, Switch } from "solid-js";
 import { NewActivityCreator } from "~/lib/new-activity-creator";
 import { PetPicture } from "~/lib/pet-home-card";
-import { listAllPetActivities } from "~/server/api/activity";
+import { getPetScheduledActivities, listAllPetActivities } from "~/server/api/activity";
 import { getPet } from "~/server/api/pet";
 import { getUser, getUserProfile } from "~/server/api/user";
 import { cacheTranslations, createTranslator } from "~/server/i18n";
@@ -40,7 +40,7 @@ const PetPage = (props: RouteSectionProps) => {
 							</Show>
 						)}
 					</Show>
-					<PastPetActivities petId={props.params.petId as PetID} />
+					<PetScheduledActivities petId={props.params.petId as PetID} />
 				</div>
 			</div>
 		</>
@@ -95,6 +95,25 @@ function MainPetCard(props: {
 			</div>
 			<PetPicture pet={pet()} class="size-24 rounded-3xl" />
 		</div>
+	);
+}
+
+function PetScheduledActivities(props: { petId: PetID }) {
+	const t = createTranslator("pets");
+	const activities = createAsync(() => getPetScheduledActivities(props.petId));
+
+	return (
+		<Show when={activities()}>
+			{(activities) => (
+				<For each={activities()}>
+					{(activity) => (
+						<Card>
+							{activity.type} - {activity.date}
+						</Card>
+					)}
+				</For>
+			)}
+		</Show>
 	);
 }
 

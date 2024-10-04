@@ -1,6 +1,6 @@
 "use server";
 
-import { and, desc, eq, gte } from "drizzle-orm";
+import { and, desc, eq, gte, inArray, isNull, or } from "drizzle-orm";
 import { useDb } from "~/server/db";
 import {
 	activitiesTable,
@@ -59,13 +59,21 @@ export async function petActivitiesScheduled(petId: PetID, userId: UserID) {
 		 * - for appointments: date is not passed
 		 * - for vaccinations
 		 */
-		.where(eq(activitiesTable.petId, petId))
+		.where(
+			and(
+				eq(activitiesTable.petId, petId),
+				inArray(activitiesTable.type, ["appointment", "prescription", "vaccination"]),
+			),
+		)
 		.leftJoin(activityRelationships, eq(activityRelationships.parentActivityId, activitiesTable.id))
 		.leftJoin(
 			prescriptionsTable,
 			and(
 				eq(prescriptionsTable.activityId, activitiesTable.id),
-				gte(prescriptionsTable.dateCompleted, utcNow()),
+				or(
+					gte(prescriptionsTable.dateCompleted, utcNow()),
+					isNull(prescriptionsTable.dateCompleted),
+				),
 			),
 		)
 		.leftJoin(vaccinationsTable, eq(vaccinationsTable.activityId, activitiesTable.id))
@@ -77,7 +85,12 @@ export async function petActivitiesScheduled(petId: PetID, userId: UserID) {
 			),
 		)
 		.leftJoin(userTable, eq(userTable.id, activitiesTable.creatorId))
-		.orderBy(desc(activitiesTable.date), desc(vaccinationsTable.nextDueDate))
+		.orderBy(
+			desc(vaccinationsTable.nextDueDate),
+			desc(prescriptionsTable.dateStarted),
+			desc(activitiesTable.date),
+		)
+		.limit(100)
 		.all();
 
 	return petActivities;
