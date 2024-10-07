@@ -32,6 +32,7 @@ export async function petActivitiesScheduled(petId: PetID, userId: UserID) {
 			id: activitiesTable.id,
 			date: activitiesTable.date,
 			type: activitiesTable.type,
+			note: activitiesTable.note,
 			creator: {
 				id: userTable.id,
 				name: userTable.name,
@@ -40,17 +41,14 @@ export async function petActivitiesScheduled(petId: PetID, userId: UserID) {
 				name: prescriptionsTable.name,
 				schedule: prescriptionsTable.schedule,
 				dateStarted: prescriptionsTable.dateStarted,
-				note: activitiesTable.note,
 			},
 			vaccine: {
 				name: vaccinationsTable.name,
 				nextDueDate: vaccinationsTable.nextDueDate,
 				batchNumber: vaccinationsTable.batchNumber,
-				note: activitiesTable.note,
 			},
 			appointment: {
 				location: appointmentsTable.location,
-				note: activitiesTable.note,
 			},
 		})
 		.from(activitiesTable)

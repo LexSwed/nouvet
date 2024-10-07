@@ -36,7 +36,6 @@ export async function listAllPetActivitiesServer(
 	petId: PetID,
 	cursor: PetActivitiesPaginationCursor | null = null,
 ) {
-	console.log({ cursor });
 	const currentUser = await getRequestUser();
 	if (!petId) {
 		throw new Error("petId is not provided");
