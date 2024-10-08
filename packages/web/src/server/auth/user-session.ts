@@ -12,7 +12,7 @@ import { useLucia } from "~/server/auth/lucia";
 import { SESSION_COOKIE } from "~/server/const";
 import type { DatabaseUser } from "~/server/db/schema";
 import { env } from "~/server/env";
-import { acceptedLocaleLanguageTag } from "~/server/i18n/shared";
+import type { acceptedLocaleLanguageTag } from "~/server/i18n/shared";
 import type { UserID } from "~/server/types";
 
 /**
@@ -145,7 +145,10 @@ export async function useUserSession() {
 const userCookieSchema = v.object({
 	userId: v.pipe(v.string(), v.trim(), v.nonEmpty()),
 	sessionId: v.string(),
-	locale: v.picklist(acceptedLocaleLanguageTag),
+	locale: v.pipe(
+		v.string(),
+		v.transform((v) => v as (typeof acceptedLocaleLanguageTag)[number]),
+	),
 	timeZoneId: v.pipe(
 		v.string(),
 		v.trim(),
