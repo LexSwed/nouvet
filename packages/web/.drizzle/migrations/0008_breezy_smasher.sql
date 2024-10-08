@@ -1,1 +1,0 @@
-ALTER TABLE `prescription` ADD `date_completed` text(100);
