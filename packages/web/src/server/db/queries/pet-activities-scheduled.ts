@@ -30,9 +30,9 @@ export async function petActivitiesScheduled(petId: PetID, userId: UserID) {
 	const petActivities = db
 		.select({
 			id: activitiesTable.id,
+			note: activitiesTable.note,
 			date: activitiesTable.date,
 			type: activitiesTable.type,
-			note: activitiesTable.note,
 			creator: {
 				id: userTable.id,
 				name: userTable.name,
@@ -41,6 +41,7 @@ export async function petActivitiesScheduled(petId: PetID, userId: UserID) {
 				name: prescriptionsTable.name,
 				schedule: prescriptionsTable.schedule,
 				dateStarted: prescriptionsTable.dateStarted,
+				dateCompleted: prescriptionsTable.dateCompleted,
 			},
 			vaccine: {
 				name: vaccinationsTable.name,

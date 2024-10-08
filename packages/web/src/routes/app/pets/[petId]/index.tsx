@@ -40,7 +40,9 @@ const PetPage = (props: RouteSectionProps) => {
 							</Show>
 						)}
 					</Show>
+					<ActivityQuickCreator petId={props.params.petId as PetID} />
 					<PetScheduledActivities petId={props.params.petId as PetID} />
+					<PastPetActivities petId={props.params.petId as PetID} />
 				</div>
 			</div>
 		</>

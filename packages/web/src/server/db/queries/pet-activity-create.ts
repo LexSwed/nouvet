@@ -200,27 +200,33 @@ export async function petActivityCreate(
 
 		switch (activityInfo.activityType) {
 			case "appointment":
-				tx.insert(appointmentsTable).values({
-					activityId: activity.id,
-					location: activityInfo.location,
-				});
+				tx.insert(appointmentsTable)
+					.values({
+						activityId: activity.id,
+						location: activityInfo.location,
+					})
+					.run();
 				break;
 			case "prescription":
-				tx.insert(prescriptionsTable).values({
-					activityId: activity.id,
-					name: activityInfo.name,
-					schedule: activityInfo.schedule,
-					dateStarted: activityInfo.dateStarted,
-					endDate: activityInfo.endDate,
-				});
+				tx.insert(prescriptionsTable)
+					.values({
+						activityId: activity.id,
+						name: activityInfo.name,
+						schedule: activityInfo.schedule,
+						dateStarted: activityInfo.dateStarted,
+						endDate: activityInfo.endDate,
+					})
+					.run();
 				break;
 			case "vaccination":
-				tx.insert(vaccinationsTable).values({
-					activityId: activity.id,
-					name: activityInfo.name,
-					nextDueDate: activityInfo.nextDueDate,
-					batchNumber: activityInfo.batchNumber,
-				});
+				tx.insert(vaccinationsTable)
+					.values({
+						activityId: activity.id,
+						name: activityInfo.name,
+						nextDueDate: activityInfo.nextDueDate,
+						batchNumber: activityInfo.batchNumber,
+					})
+					.run();
 				break;
 			case "observation":
 				break;
