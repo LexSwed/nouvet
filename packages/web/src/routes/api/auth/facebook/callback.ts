@@ -68,7 +68,7 @@ export const GET = async (event: PageEvent) => {
 			provider: "facebook",
 			accountProviderId: facebookUser.id,
 			name: facebookUser.name,
-			locale: locale.language,
+			locale: locale.baseName,
 			timeZoneId: timeZoneId,
 			measurementSystem: measurementSystem,
 		});
@@ -76,7 +76,7 @@ export const GET = async (event: PageEvent) => {
 		await createUserSession(event.nativeEvent, {
 			userId: user.id,
 			timeZoneId: timeZoneId,
-			locale: locale.language as SupportedLocale,
+			locale: locale.baseName as SupportedLocale,
 			measurementSystem,
 		});
 
