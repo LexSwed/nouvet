@@ -41,6 +41,7 @@ export async function petActivitiesScheduled(petId: PetID, userId: UserID) {
 				name: prescriptionsTable.name,
 				schedule: prescriptionsTable.schedule,
 				dateStarted: prescriptionsTable.dateStarted,
+				endDate: prescriptionsTable.endDate,
 				dateCompleted: prescriptionsTable.dateCompleted,
 			},
 			vaccine: {

@@ -40,6 +40,7 @@ export async function petActivities(
 				name: prescriptionsTable.name,
 				schedule: prescriptionsTable.schedule,
 				dateStarted: prescriptionsTable.dateStarted,
+				endDate: prescriptionsTable.endDate,
 				dateCompleted: prescriptionsTable.dateCompleted,
 			},
 			vaccine: {

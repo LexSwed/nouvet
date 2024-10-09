@@ -7,8 +7,10 @@ import {
 	useLocation,
 } from "@solidjs/router";
 import { type Accessor, For, Match, Show, Suspense, Switch } from "solid-js";
+import { Temporal } from "temporal-polyfill";
 import { NewActivityCreator } from "~/lib/new-activity-creator";
 import { PetPicture } from "~/lib/pet-home-card";
+import { createFormattedDate } from "~/lib/utils/format-date";
 import { getPetScheduledActivities, listAllPetActivities } from "~/server/api/activity";
 import { getPet } from "~/server/api/pet";
 import { getUser, getUserProfile } from "~/server/api/user";
@@ -102,18 +104,78 @@ function MainPetCard(props: {
 
 function PetScheduledActivities(props: { petId: PetID }) {
 	const t = createTranslator("pets");
+	const user = createAsync(() => getUser());
 	const activities = createAsync(() => getPetScheduledActivities(props.petId));
 
 	return (
-		<Show when={activities()}>
+		<Show when={user() && activities()}>
 			{(activities) => (
-				<For each={activities()}>
-					{(activity) => (
-						<Card>
-							{activity.type} - {activity.date}
-						</Card>
-					)}
-				</For>
+				<ul>
+					<For each={activities()}>
+						{(activity) => (
+							<Switch>
+								<Match when={activity.type === "prescription" && activity.prescription}>
+									{(prescription) => (
+										<Card
+											as="li"
+											variant="tonal"
+											tone="secondary"
+											class="flex w-[max-content] flex-col gap-6"
+										>
+											<div class="flex flex-row items-center justify-between gap-2">
+												<Show when={prescription().endDate}>
+													{(utc) => {
+														const endDate = Temporal.PlainDate.from(utc());
+														const now = Temporal.Now.plainDateISO();
+														const diff = now.until(endDate, {
+															smallestUnit: "day",
+															largestUnit: "month",
+														});
+														const formatter = new Intl.RelativeTimeFormat(user()!.locale, {});
+														console.log(diff);
+														if (diff.months > 0) {
+															return (
+																<Text
+																	with="overline"
+																	as="time"
+																	datetime={utc()}
+																	title={endDate.toLocaleString()}
+																>
+																	{formatter.format(diff.months, "months")}
+																</Text>
+															);
+														}
+														if (diff.days > 0) {
+															return (
+																<Text
+																	with="overline"
+																	as="time"
+																	datetime={utc()}
+																	title={endDate.toLocaleString()}
+																>
+																	{formatter.format(diff.days, "days")}
+																</Text>
+															);
+														}
+														if (diff.days < 0) {
+															return createFormattedDate(
+																() => new Date(utc()),
+																() => user()!.locale,
+																{ hour: null },
+															);
+														}
+													}}
+												</Show>
+												<Icon use="dot" class="ms-auto" />
+											</div>
+											{prescription().name}
+										</Card>
+									)}
+								</Match>
+							</Switch>
+						)}
+					</For>
+				</ul>
 			)}
 		</Show>
 	);
