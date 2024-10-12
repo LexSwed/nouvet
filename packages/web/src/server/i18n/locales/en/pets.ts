@@ -93,6 +93,8 @@ const petsDict = {
 	"new-activity.prescription.endDate.1-month": "1 month",
 	"new-activity.prescription.note-description": "Prescription side effects, recommendations, etc.",
 	"new-activity.prescription.note-placeholder": "Anything worth remembering?",
+	"meds.heading": "Active medications",
+	"meds.ended": "Ended · {{endDate}}",
 } as const;
 
 export default petsDict;
