@@ -29,7 +29,7 @@ const textVariants = cva("m-0 whitespace-pre-line font-sans", {
 		tone: {
 			neutral: "text-on-background",
 			accent: "text-primary",
-			light: "text-on-surface-variant",
+			light: "text-[lch(from_currentColor_calc(l+30)_c_h)]",
 			success: "text-tertiary",
 			danger: "text-error",
 		},

@@ -142,7 +142,8 @@ function PetScheduledActivities(props: { petId: PetID }) {
 											if (diff.years > 0) {
 												return (
 													<Text
-														with="overline"
+														with="body-xs"
+														tone="light"
 														as="time"
 														datetime={utc()}
 														title={endDate.toLocaleString()}
@@ -154,7 +155,8 @@ function PetScheduledActivities(props: { petId: PetID }) {
 											if (diff.months > 0) {
 												return (
 													<Text
-														with="overline"
+														with="body-xs"
+														tone="light"
 														as="time"
 														datetime={utc()}
 														title={endDate.toLocaleString()}
@@ -166,7 +168,8 @@ function PetScheduledActivities(props: { petId: PetID }) {
 											if (diff.days > 0) {
 												return (
 													<Text
-														with="overline"
+														with="body-xs"
+														tone="light"
 														as="time"
 														datetime={utc()}
 														title={endDate.toLocaleString()}
@@ -183,7 +186,8 @@ function PetScheduledActivities(props: { petId: PetID }) {
 												);
 												return (
 													<Text
-														with="overline"
+														with="body-xs"
+														tone="light"
 														as="time"
 														datetime={utc()}
 														title={endDate.toLocaleString()}
