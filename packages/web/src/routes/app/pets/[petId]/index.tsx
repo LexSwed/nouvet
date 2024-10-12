@@ -107,72 +107,100 @@ function PetScheduledActivities(props: { petId: PetID }) {
 	const user = createAsync(() => getUser());
 	const activities = createAsync(() => getPetScheduledActivities(props.petId));
 
+	const prescriptions = () =>
+		activities()?.filter(
+			(
+				activity,
+			): activity is typeof activity & {
+				type: "prescription";
+				prescription: NonNullable<(typeof activity)["prescription"]>;
+			} => activity.type === "prescription" && activity.prescription !== null,
+		);
+
 	return (
-		<Show when={user() && activities()}>
-			{(activities) => (
-				<ul>
-					<For each={activities()}>
+		<Show when={user() && prescriptions()}>
+			{(prescriptions) => (
+				<ul class="flex flex-row items-stretch gap-2">
+					<For each={prescriptions()}>
 						{(activity) => (
-							<Switch>
-								<Match when={activity.type === "prescription" && activity.prescription}>
-									{(prescription) => (
-										<Card
-											as="li"
-											variant="tonal"
-											tone="secondary"
-											class="flex w-[max-content] flex-col gap-6"
-										>
-											<div class="flex flex-row items-center justify-between gap-2">
-												<Show when={prescription().endDate}>
-													{(utc) => {
-														const endDate = Temporal.PlainDate.from(utc());
-														const now = Temporal.Now.plainDateISO();
-														const diff = now.until(endDate, {
-															smallestUnit: "day",
-															largestUnit: "month",
-														});
-														const formatter = new Intl.RelativeTimeFormat(user()!.locale, {});
-														console.log(diff);
-														if (diff.months > 0) {
-															return (
-																<Text
-																	with="overline"
-																	as="time"
-																	datetime={utc()}
-																	title={endDate.toLocaleString()}
-																>
-																	{formatter.format(diff.months, "months")}
-																</Text>
-															);
-														}
-														if (diff.days > 0) {
-															return (
-																<Text
-																	with="overline"
-																	as="time"
-																	datetime={utc()}
-																	title={endDate.toLocaleString()}
-																>
-																	{formatter.format(diff.days, "days")}
-																</Text>
-															);
-														}
-														if (diff.days < 0) {
-															return createFormattedDate(
-																() => new Date(utc()),
-																() => user()!.locale,
-																{ hour: null },
-															);
-														}
-													}}
-												</Show>
-												<Icon use="dot" class="ms-auto" />
-											</div>
-											{prescription().name}
-										</Card>
-									)}
-								</Match>
-							</Switch>
+							<Card
+								as="li"
+								variant="tonal"
+								tone="secondary"
+								class="flex w-[max-content] flex-col gap-3"
+							>
+								<div class="flex flex-row items-center gap-2">
+									<Show when={activity.prescription.endDate}>
+										{(utc) => {
+											const endDate = Temporal.PlainDate.from(utc());
+											const now = Temporal.Now.plainDateISO();
+											const diff = now.until(endDate, {
+												smallestUnit: "day",
+												largestUnit: "year",
+											});
+											const formatter = new Intl.RelativeTimeFormat(user()!.locale, {});
+											if (diff.years > 0) {
+												return (
+													<Text
+														with="overline"
+														as="time"
+														datetime={utc()}
+														title={endDate.toLocaleString()}
+													>
+														{formatter.format(diff.years, "years")}
+													</Text>
+												);
+											}
+											if (diff.months > 0) {
+												return (
+													<Text
+														with="overline"
+														as="time"
+														datetime={utc()}
+														title={endDate.toLocaleString()}
+													>
+														{formatter.format(diff.months, "months")}
+													</Text>
+												);
+											}
+											if (diff.days > 0) {
+												return (
+													<Text
+														with="overline"
+														as="time"
+														datetime={utc()}
+														title={endDate.toLocaleString()}
+													>
+														{formatter.format(diff.days, "days")}
+													</Text>
+												);
+											}
+											if (diff.days < 0) {
+												const date = createFormattedDate(
+													() => new Date(utc()),
+													() => user()!.locale,
+													{ hour: null },
+												);
+												return (
+													<Text
+														with="overline"
+														as="time"
+														datetime={utc()}
+														title={endDate.toLocaleString()}
+													>
+														{date()}
+													</Text>
+												);
+											}
+										}}
+									</Show>
+									<Icon use="dot" size="md" class="ms-auto" />
+								</div>
+								<div class="flex flex-row items-center gap-2">
+									<Icon use="pill" />
+									{activity.prescription.name}
+								</div>
+							</Card>
 						)}
 					</For>
 				</ul>
