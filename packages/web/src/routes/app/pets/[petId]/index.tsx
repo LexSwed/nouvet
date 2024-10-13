@@ -186,7 +186,7 @@ function EmptyActivities(props: {
 }) {
 	const t = createTranslator("pets");
 	return (
-		<Card as="section" class="flex flex-col gap-2 bg-main">
+		<Card as="section" class="flex flex-col gap-4 bg-main">
 			<Text as="h2" with="headline-2" class="text-balance">
 				{t("empty-activities.heading")}
 			</Text>

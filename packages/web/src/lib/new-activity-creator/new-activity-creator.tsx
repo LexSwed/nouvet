@@ -19,9 +19,9 @@ type Step = ActivityType | "type-select";
 
 export function NewActivityCreator(props: {
 	id: string;
-	petId: PetID;
 	locale: SupportedLocale;
 	defaultType?: Step;
+	petId: PetID;
 }) {
 	return (
 		<MultiScreenPopover id={props.id} component="drawer" class="md:min-w-[420px]">
@@ -50,7 +50,12 @@ export function NewActivityCreator(props: {
 
 							<Switch>
 								<Match when={step() === "type-select"}>
-									<Text class="sr-only">{t("new-activity.heading-main")}</Text>
+									<>
+										<Text class="mt-4" with="label">
+											{t("new-activity.heading-main")}
+										</Text>
+										<div />
+									</>
 								</Match>
 								<Match when={step() === "observation"}>
 									<>
@@ -122,7 +127,7 @@ export function ActivitySelection(props: {
 }) {
 	const t = createTranslator("pets");
 	return (
-		<div class="grid grid-cols-2 gap-2">
+		<div class="grid grid-cols-2 gap-3">
 			<Button
 				class="flex flex-col items-start gap-3 rounded-2xl intent:bg-primary-container p-3 intent:text-on-primary-container"
 				onClick={() => props.update("observation")}

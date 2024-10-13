@@ -172,6 +172,7 @@ export const PetHomeCard = (props: PetHomeCardProps) => {
 
 export function PetPicture(props: {
 	pet: {
+		name?: string;
 		pictureUrl?: string | null;
 		gender: PetGender;
 		species: PetSpecies;
@@ -190,8 +191,16 @@ export function PetPicture(props: {
 		>
 			<Show
 				when={props.pet.pictureUrl}
-				children={(picture) => <img src={picture()} class="aspect-square w-full" alt="" />}
-				fallback={<Icon use={petIconMap[props.pet.species]} class="size-[50%]" />}
+				children={(picture) => (
+					<img src={picture()} class="aspect-square w-full" alt={props.pet.name} />
+				)}
+				fallback={
+					<Icon
+						use={petIconMap[props.pet.species]}
+						class="size-[50%]"
+						aria-label={props.pet.name}
+					/>
+				}
 			/>
 		</div>
 	);
