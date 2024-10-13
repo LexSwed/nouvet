@@ -15,6 +15,7 @@ function CreateNewPetForm(props: {
 	const t = createTranslator("pets");
 	const petSubmission = useSubmission(createPet);
 	const createPetAction = useAction(createPet);
+	let formElement: HTMLFormElement;
 
 	return (
 		<Form
@@ -26,11 +27,14 @@ function CreateNewPetForm(props: {
 				event.preventDefault();
 				const result = await createPetAction(new FormData(event.currentTarget));
 				if ("pet" in result) {
-					event.currentTarget.reset();
+					formElement.reset();
 					props.onSuccess?.(result.pet);
 				}
 			}}
 			aria-errormessage="error-message"
+			ref={(el) => {
+				formElement = el;
+			}}
 		>
 			<Text with="headline-2" as="h3" id="new-pet-headline" class="ps-2">
 				{t("new-pet-heading")}
