@@ -30,6 +30,7 @@ import { createFormattedDate } from "../utils/format-date";
 import { isSubmissionGenericError, pickSubmissionValidationErrors } from "../utils/submission";
 
 interface ActivityCreatorProps {
+	id: string;
 	petId: PetID;
 	locale: SupportedLocale;
 }
@@ -42,7 +43,12 @@ export function ObservationActivityForm(props: ActivityCreatorProps) {
 	);
 
 	return (
-		<NewActivityForm activityType="observation" petId={props.petId} locale={props.locale}>
+		<NewActivityForm
+			activityType="observation"
+			petId={props.petId}
+			locale={props.locale}
+			id={props.id}
+		>
 			<DateSelector
 				value={recordedDate()}
 				onChange={setRecordedDate}
@@ -69,7 +75,12 @@ export function AppointmentActivityForm(props: ActivityCreatorProps) {
 	);
 
 	return (
-		<NewActivityForm activityType="appointment" petId={props.petId} locale={props.locale}>
+		<NewActivityForm
+			activityType="appointment"
+			id={props.id}
+			petId={props.petId}
+			locale={props.locale}
+		>
 			<DateSelector
 				value={recordedDate()}
 				onChange={setRecordedDate}
@@ -117,7 +128,12 @@ export function PrescriptionActivityForm(props: ActivityCreatorProps) {
 	});
 
 	return (
-		<NewActivityForm activityType="prescription" petId={props.petId} locale={props.locale}>
+		<NewActivityForm
+			activityType="prescription"
+			id={props.id}
+			petId={props.petId}
+			locale={props.locale}
+		>
 			<input type="hidden" name="recordedDate" value={toIsoString(now)} />
 			<TextField
 				label={t("new-activity.prescription.name.label")}
@@ -221,7 +237,12 @@ export function VaccinationActivityForm(props: ActivityCreatorProps) {
 	});
 
 	return (
-		<NewActivityForm activityType="vaccination" petId={props.petId} locale={props.locale}>
+		<NewActivityForm
+			activityType="vaccination"
+			id={props.id}
+			petId={props.petId}
+			locale={props.locale}
+		>
 			<DateSelector
 				value={recordedDate()}
 				onChange={(newRecordedDate) => {
@@ -337,7 +358,7 @@ function NewActivityForm(
 						// TODO: different text depending on saved activity type
 						toast(() => <Toast heading={`The ${type} is saved!`} />);
 						form.reset();
-						document.getElementById("create-activity")?.hidePopover();
+						document.getElementById(props.id)?.hidePopover();
 					}
 				}}
 				ref={props.ref}
@@ -347,7 +368,7 @@ function NewActivityForm(
 				<input type="hidden" name="currentTimeZone" value={Temporal.Now.timeZoneId()} />
 				{props.children}
 				<div class="mt-4 flex flex-row justify-end gap-4 *:flex-1">
-					<Button variant="ghost" popoverTargetAction="hide" popoverTarget="create-activity">
+					<Button variant="ghost" popoverTargetAction="hide" popoverTarget={props.id}>
 						{t("new-activity.cta-cancel")}
 					</Button>
 					<Button type="submit" variant="tonal" tone="primary" pending={submission.pending}>
