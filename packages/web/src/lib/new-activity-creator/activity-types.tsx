@@ -1,4 +1,16 @@
-import { Button, Card, Fieldset, Form, RadioCard, Text, TextField, Toast, toast } from "@nou/ui";
+import {
+	Button,
+	Card,
+	Fieldset,
+	Form,
+	Icon,
+	RadioCard,
+	Text,
+	TextField,
+	Toast,
+	toast,
+	tw,
+} from "@nou/ui";
 import { useAction, useSubmission } from "@solidjs/router";
 import {
 	type Accessor,
@@ -143,7 +155,7 @@ export function PrescriptionActivityForm(props: ActivityCreatorProps) {
 				locale={props.locale}
 			>
 				<Fieldset
-					legend={<span class="sr-only">{t("new-activity.vaccine.due-date.label")}</span>}
+					aria-label={t("new-activity.prescription.due-date.intervals")}
 					onChange={(e) => {
 						const startDate = dateStarted();
 						if (startDate) {
@@ -152,7 +164,7 @@ export function PrescriptionActivityForm(props: ActivityCreatorProps) {
 							setEndDate(newDate);
 						}
 					}}
-					class="flex flex-row items-center gap-2"
+					class="contents"
 				>
 					<RadioCard
 						label={<Text with="label-sm">{t("new-activity.prescription.endDate.1-week")}</Text>}
@@ -247,7 +259,7 @@ export function VaccinationActivityForm(props: ActivityCreatorProps) {
 				locale={props.locale}
 			>
 				<Fieldset
-					legend={<span class="sr-only">{t("new-activity.vaccine.due-date.label")}</span>}
+					aria-label={t("new-activity.vaccine.due-date.intervals")}
 					onChange={(e) => {
 						const startDate = recordedDate();
 						if (startDate) {
@@ -256,7 +268,7 @@ export function VaccinationActivityForm(props: ActivityCreatorProps) {
 							setNextDueDate(newDate);
 						}
 					}}
-					class="flex flex-row items-center gap-2"
+					class="contents"
 				>
 					<RadioCard
 						label={<Text with="label-sm">{t("new-activity.vaccine.due-date.1-month")}</Text>}
@@ -386,6 +398,7 @@ function EndDateSelector(
 		onEndDateChange: (newDate: Temporal.ZonedDateTime | null) => void;
 	}>,
 ) {
+	const t = createTranslator("pets");
 	const id = createUniqueId();
 	return (
 		<div class="flex w-full flex-col gap-2">
@@ -393,7 +406,20 @@ function EndDateSelector(
 				{props.label}
 			</Text>
 			<div class="rounded-xl bg-on-surface/3 transition-colors duration-150 focus-within:bg-on-surface/5">
-				<div class="mx-2 my-1">{props.children}</div>
+				<div class="flex min-h-14 flex-row items-center gap-2 px-2 py-2">
+					{props.children}
+					<Button
+						icon
+						size="sm"
+						label={t("new-activity.end-date.clear")}
+						variant="ghost"
+						class={tw("ms-auto", props.endDate() ? "flex" : "hidden")}
+						onClick={() => props.onEndDateChange(null)}
+						aria-labelledby={id}
+					>
+						<Icon use="x" size="xs" />
+					</Button>
+				</div>
 				<DateSelector
 					name={props.name}
 					value={props.endDate()}
