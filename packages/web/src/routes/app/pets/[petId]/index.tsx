@@ -1,4 +1,4 @@
-import { Avatar, Button, ButtonLink, Card, Icon, Text } from "@nou/ui";
+import { Avatar, Button, ButtonLink, Icon, Text } from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import {
 	type RouteDefinition,
@@ -6,16 +6,16 @@ import {
 	createAsync,
 	useLocation,
 } from "@solidjs/router";
-import { type Accessor, For, Match, Show, Suspense, Switch } from "solid-js";
-import { Temporal } from "temporal-polyfill";
+import { type Accessor, Match, Show, Suspense, Switch } from "solid-js";
 import { NewActivityCreator } from "~/lib/new-activity-creator";
 import { PetPicture } from "~/lib/pet-home-card";
-import { createFormattedDate } from "~/lib/utils/format-date";
 import { getPetScheduledActivities, listAllPetActivities } from "~/server/api/activity";
 import { getPet } from "~/server/api/pet";
 import { getUser, getUserProfile } from "~/server/api/user";
 import { cacheTranslations, createTranslator } from "~/server/i18n";
 import type { PetID } from "~/server/types";
+import { PetPastActivities } from "./_lib/past-activities";
+import { PetPrescriptions, type PrescriptionActivity } from "./_lib/pet-prescriptions";
 
 export const route = {
 	preload({ params }) {
@@ -30,6 +30,11 @@ const PetPage = (props: RouteSectionProps) => {
 	const t = createTranslator("pets");
 	const profile = createAsync(() => getUserProfile());
 	const pet = createAsync(() => getPet(props.params.petId as PetID));
+	const user = createAsync(() => getUser());
+	const scheduledActivities = createAsync(() =>
+		getPetScheduledActivities(props.params.petId as PetID),
+	);
+	const activities = createAsync(() => listAllPetActivities(props.params.petId as PetID));
 	return (
 		<>
 			<Title>{t("meta.title", { petName: pet()?.name ?? "" })}</Title>
@@ -43,8 +48,15 @@ const PetPage = (props: RouteSectionProps) => {
 						)}
 					</Show>
 					<ActivityQuickCreator petId={props.params.petId as PetID} />
-					<PetScheduledActivities petId={props.params.petId as PetID} />
-					<PastPetActivities petId={props.params.petId as PetID} />
+					{/* TODO: No activities Empty state */}
+					<Show when={scheduledActivities()}>
+						{(scheduledActivities) => (
+							<PetScheduledActivities scheduledActivities={scheduledActivities} user={user} />
+						)}
+					</Show>
+					<Show when={activities()}>
+						{(activities) => <PetPastActivities activities={activities} />}
+					</Show>
 				</div>
 			</div>
 		</>
@@ -102,210 +114,23 @@ function MainPetCard(props: {
 	);
 }
 
-function PetScheduledActivities(props: { petId: PetID }) {
-	const t = createTranslator("pets");
-	const user = createAsync(() => getUser());
-	const activities = createAsync(() => getPetScheduledActivities(props.petId));
-
+function PetScheduledActivities(props: {
+	user: Accessor<Awaited<ReturnType<typeof getUser>>>;
+	scheduledActivities: Accessor<Awaited<ReturnType<typeof getPetScheduledActivities>>>;
+}) {
 	const prescriptions = () =>
-		activities()?.filter(
-			(
-				activity,
-			): activity is typeof activity & {
-				type: "prescription";
-				prescription: NonNullable<(typeof activity)["prescription"]>;
-			} => activity.type === "prescription" && activity.prescription !== null,
-		);
+		props
+			.scheduledActivities()
+			?.filter(
+				(activity): activity is PrescriptionActivity =>
+					activity.type === "prescription" && activity.prescription !== null,
+			);
 
 	return (
-		<Show when={user() && prescriptions()}>
+		<Show when={props.user() && prescriptions()}>
 			{(prescriptions) => (
-				<section class="flex flex-col gap-2" aria-labelledby="pet-meds-heading">
-					<Text as="h2" with="overline">
-						{t("meds.heading")}
-					</Text>
-					<div class="flex flex-row gap-2">
-						<Card
-							as="header"
-							variant="tonal"
-							tone="secondary"
-							class="flex flex-col items-center justify-center"
-							id="pet-meds-heading"
-						>
-							<Icon
-								use="pill"
-								class="size-10 rounded-full bg-on-tertiary-container/10 p-2 text-current"
-							/>
-						</Card>
-						<Card class="flex flex-1 flex-col gap-4" variant="tonal" tone="secondary">
-							<ul class="contents">
-								<For each={prescriptions()}>
-									{(activity) => (
-										<li class="contents">
-											<Button
-												popoverTarget={`prescription-${activity.id}`}
-												class="-m-2 flex-1 flex-row items-center gap-2 rounded-xl p-2"
-												variant="ghost"
-											>
-												<div class="flex flex-1 flex-col items-start gap-1">
-													<div class="flex flex-row items-center gap-2">
-														{activity.prescription.name}
-													</div>
-													<div class="flex flex-row items-center gap-2">
-														<Show when={activity.prescription.endDate}>
-															{(utc) => {
-																const endDate = Temporal.PlainDate.from(utc());
-																const now = Temporal.Now.plainDateISO();
-																const diff = now.until(endDate, {
-																	smallestUnit: "day",
-																	largestUnit: "year",
-																});
-																const formatter = new Intl.RelativeTimeFormat(user()!.locale, {});
-																if (diff.years > 0) {
-																	return (
-																		<Text
-																			with="body-xs"
-																			tone="light"
-																			as="time"
-																			datetime={utc()}
-																			title={endDate.toLocaleString()}
-																		>
-																			{formatter.format(diff.years, "years")}
-																		</Text>
-																	);
-																}
-																if (diff.months > 0) {
-																	return (
-																		<Text
-																			with="body-xs"
-																			tone="light"
-																			as="time"
-																			datetime={utc()}
-																			title={endDate.toLocaleString()}
-																		>
-																			{formatter.format(diff.months, "months")}
-																		</Text>
-																	);
-																}
-																if (diff.days > 0) {
-																	return (
-																		<Text
-																			with="body-xs"
-																			tone="light"
-																			as="time"
-																			datetime={utc()}
-																			title={endDate.toLocaleString()}
-																		>
-																			{formatter.format(diff.days, "days")}
-																		</Text>
-																	);
-																}
-																if (diff.days < 0) {
-																	const date = createFormattedDate(
-																		() => new Date(utc()),
-																		() => user()!.locale,
-																		{ hour: null },
-																	);
-																	return (
-																		<Text
-																			with="body-xs"
-																			tone="light"
-																			as="time"
-																			datetime={utc()}
-																			title={endDate.toLocaleString()}
-																		>
-																			{t("meds.ended", { endDate: date()! })}
-																		</Text>
-																	);
-																}
-															}}
-														</Show>
-													</div>
-												</div>
-												<div>
-													<Icon use="dot" size="md" />
-												</div>
-											</Button>
-										</li>
-									)}
-								</For>
-							</ul>
-						</Card>
-					</div>
-				</section>
+				<PetPrescriptions activities={prescriptions} locale={props.user()!.locale} />
 			)}
-		</Show>
-	);
-}
-
-function PastPetActivities(props: { petId: PetID }) {
-	// TODO: cursor pagination
-	const activities = createAsync(() => listAllPetActivities(props.petId));
-
-	// TODO: empty results, cursor pagination, current date highlight
-
-	return (
-		<Show when={activities()?.activities}>
-			{(yearActivities) => {
-				return (
-					<Card class="flex flex-col gap-6" aria-labelledby="pet-activities-headline">
-						<ActivityQuickCreator petId={props.petId} />
-						<Text as="h3" with="headline-3" id="pet-activities-headline">
-							Past activities
-						</Text>
-						<div class="grid grid-cols-[auto,1fr] gap-4">
-							<For each={yearActivities()}>
-								{([year, dateEntries]) => (
-									<section class="contents">
-										<header class="col-span-2">
-											<Text
-												with="overline"
-												tone="light"
-												class="rounded-md bg-on-surface/3 p-1 tabular-nums"
-											>
-												{year}
-											</Text>
-										</header>
-										<ul class="contents">
-											<For each={dateEntries}>
-												{([date, activities]) => {
-													return (
-														<li class="contents">
-															<Text with="overline" class="sticky top-2 text-end tabular-nums">
-																{date}
-															</Text>
-															<ul class="flex flex-1 flex-col gap-6 rounded-2xl bg-tertiary/5 p-3">
-																<For each={activities}>
-																	{(activity) => (
-																		<li class="flex flex-row items-center gap-2">
-																			<Icon
-																				use="note"
-																				class="size-10 rounded-full bg-yellow-100 p-2 text-yellow-950"
-																			/>
-																			<div class="flex flex-1 flex-col gap-2">
-																				<div class="flex flex-row items-center justify-between gap-4">
-																					<Text with="body-xs">{activity.type}</Text>
-																					<Text with="body-xs" tone="light">
-																						{activity.time}
-																					</Text>
-																				</div>
-																			</div>
-																		</li>
-																	)}
-																</For>
-															</ul>
-														</li>
-													);
-												}}
-											</For>
-										</ul>
-									</section>
-								)}
-							</For>
-						</div>
-					</Card>
-				);
-			}}
 		</Show>
 	);
 }

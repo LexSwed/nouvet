@@ -1,6 +1,6 @@
 "use server";
 
-import { and, desc, eq, gte, inArray, isNull, or } from "drizzle-orm";
+import { and, desc, eq, gte, inArray, isNull } from "drizzle-orm";
 import { useDb } from "~/server/db";
 import {
 	activitiesTable,
@@ -70,10 +70,7 @@ export async function petActivitiesScheduled(petId: PetID, userId: UserID) {
 			prescriptionsTable,
 			and(
 				eq(prescriptionsTable.activityId, activitiesTable.id),
-				or(
-					gte(prescriptionsTable.dateCompleted, utcNow()),
-					isNull(prescriptionsTable.dateCompleted),
-				),
+				isNull(prescriptionsTable.dateCompleted),
 			),
 		)
 		.leftJoin(vaccinationsTable, eq(vaccinationsTable.activityId, activitiesTable.id))
