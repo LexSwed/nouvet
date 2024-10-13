@@ -18,14 +18,16 @@ import {
 type Step = ActivityType | "type-select";
 
 export function NewActivityCreator(props: {
+	id: string;
 	petId: PetID;
 	locale: SupportedLocale;
+	defaultType?: Step;
 }) {
 	return (
-		<MultiScreenPopover id={"create-activity"} component="drawer" class="md:min-w-[420px]">
+		<MultiScreenPopover id={props.id} component="drawer" class="md:min-w-[420px]">
 			{(controls) => {
 				const t = createTranslator("pets");
-				const [step, setStep] = createSignal<Step>("type-select");
+				const [step, setStep] = createSignal<Step>(props.defaultType ?? "type-select");
 				const update = async (newStep: Step, direction: "forwards" | "backwards" = "forwards") => {
 					controls.update(async () => {
 						setStep(newStep);
@@ -114,36 +116,46 @@ export function NewActivityCreator(props: {
 	);
 }
 
-function ActivitySelection(props: { update: (newStep: Step) => void }) {
+export function ActivitySelection(props: {
+	update: (newStep: Step) => void;
+	popoverTarget?: string;
+}) {
 	const t = createTranslator("pets");
 	return (
-		<div class="mt-12 grid grid-cols-2 gap-2">
+		<div class="grid grid-cols-2 gap-2">
 			<Button
-				class="flex flex-col items-start gap-3 rounded-2xl p-3"
+				class="flex flex-col items-start gap-3 rounded-2xl intent:bg-primary-container p-3 intent:text-on-primary-container"
 				onClick={() => props.update("observation")}
+				popoverTarget={props.popoverTarget}
 			>
-				<Icon use="note" class="size-10 rounded-full bg-on-surface/8 p-2" />
+				<Icon use="note" class="size-10 rounded-full bg-[lch(from_currentColor_l_c_h/8%)] p-2" />
 				<Text>{t("new-activity.type-observation")}</Text>
 			</Button>
 			<Button
-				class="flex flex-col items-start gap-3 rounded-2xl p-3"
+				class="flex flex-col items-start gap-3 rounded-2xl intent:bg-primary-container p-3 intent:text-on-primary-container"
 				onClick={() => props.update("appointment")}
+				popoverTarget={props.popoverTarget}
 			>
-				<Icon use="first-aid" class="size-10 rounded-full bg-on-surface/8 p-2" />
+				<Icon
+					use="first-aid"
+					class="size-10 rounded-full bg-[lch(from_currentColor_l_c_h/8%)] p-2"
+				/>
 				<Text>{t("new-activity.type-appointment")}</Text>
 			</Button>
 			<Button
-				class="flex flex-col items-start gap-3 rounded-2xl p-3"
+				class="flex flex-col items-start gap-3 rounded-2xl intent:bg-primary-container p-3 intent:text-on-primary-container"
 				onClick={() => props.update("prescription")}
+				popoverTarget={props.popoverTarget}
 			>
-				<Icon use="pill" class="size-10 rounded-full bg-on-surface/8 p-2" />
+				<Icon use="pill" class="size-10 rounded-full bg-[lch(from_currentColor_l_c_h/8%)] p-2" />
 				<Text>{t("new-activity.type-prescription")}</Text>
 			</Button>
 			<Button
-				class="flex flex-col items-start gap-3 rounded-2xl p-3"
+				class="flex flex-col items-start gap-3 rounded-2xl intent:bg-primary-container p-3 intent:text-on-primary-container"
 				onClick={() => props.update("vaccination")}
+				popoverTarget={props.popoverTarget}
 			>
-				<Icon use="syringe" class="size-10 rounded-full bg-on-surface/8 p-2" />
+				<Icon use="syringe" class="size-10 rounded-full bg-[lch(from_currentColor_l_c_h/8%)] p-2" />
 				<Text>{t("new-activity.type-vaccination")}</Text>
 			</Button>
 		</div>

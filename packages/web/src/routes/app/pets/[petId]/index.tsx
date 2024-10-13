@@ -1,4 +1,4 @@
-import { Avatar, Button, ButtonLink, Icon, Text } from "@nou/ui";
+import { Avatar, Button, ButtonLink, Card, Icon, Text } from "@nou/ui";
 import { Title } from "@solidjs/meta";
 import {
 	type RouteDefinition,
@@ -6,14 +6,23 @@ import {
 	createAsync,
 	useLocation,
 } from "@solidjs/router";
-import { type Accessor, Match, Show, Suspense, Switch } from "solid-js";
+import {
+	type Accessor,
+	type ComponentProps,
+	Match,
+	Show,
+	Suspense,
+	Switch,
+	createSignal,
+} from "solid-js";
 import { NewActivityCreator } from "~/lib/new-activity-creator";
+import { ActivitySelection } from "~/lib/new-activity-creator/new-activity-creator";
 import { PetPicture } from "~/lib/pet-home-card";
 import { getPetScheduledActivities, listAllPetActivities } from "~/server/api/activity";
 import { getPet } from "~/server/api/pet";
 import { getUser, getUserProfile } from "~/server/api/user";
 import { cacheTranslations, createTranslator } from "~/server/i18n";
-import type { PetID } from "~/server/types";
+import type { ActivityType, PetID, UserSession } from "~/server/types";
 import { PetPastActivities } from "./_lib/past-activities";
 import { PetPrescriptions, type PrescriptionActivity } from "./_lib/pet-prescriptions";
 
@@ -35,6 +44,9 @@ const PetPage = (props: RouteSectionProps) => {
 		getPetScheduledActivities(props.params.petId as PetID),
 	);
 	const activities = createAsync(() => listAllPetActivities(props.params.petId as PetID));
+	const activityCreatorId = "pet-create-activity";
+	const [defaultActivityType, setDefaultActivityType] =
+		createSignal<ComponentProps<typeof NewActivityCreator>["defaultType"]>("type-select");
 	return (
 		<>
 			<Title>{t("meta.title", { petName: pet()?.name ?? "" })}</Title>
@@ -47,18 +59,51 @@ const PetPage = (props: RouteSectionProps) => {
 							</Show>
 						)}
 					</Show>
-					<ActivityQuickCreator petId={props.params.petId as PetID} />
-					{/* TODO: No activities Empty state */}
-					<Show when={scheduledActivities()}>
-						{(scheduledActivities) => (
-							<PetScheduledActivities scheduledActivities={scheduledActivities} user={user} />
+					<Show when={user()}>
+						{(user) => (
+							<>
+								<Button variant="tonal" tone="primary" popoverTarget={activityCreatorId}>
+									<Icon use="stack-plus" />
+									{t("new-activity.create")}
+								</Button>
+								{/* TODO: No activities Empty state */}
+								<Show
+									when={(scheduledActivities() ?? []).length > 0 ? scheduledActivities() : null}
+								>
+									{(scheduledActivities) => (
+										<PetScheduledActivities scheduledActivities={scheduledActivities} user={user} />
+									)}
+								</Show>
+								<Show
+									when={
+										activities() && (activities()!.activities || []).length > 0
+											? activities()
+											: null
+									}
+									fallback={
+										<EmptyActivities
+											activityCreatorId={activityCreatorId}
+											onClick={setDefaultActivityType}
+										/>
+									}
+								>
+									{(activities) => <PetPastActivities activities={activities} />}
+								</Show>
+							</>
 						)}
-					</Show>
-					<Show when={activities()}>
-						{(activities) => <PetPastActivities activities={activities} />}
 					</Show>
 				</div>
 			</div>
+			<Suspense fallback={null}>
+				<Show when={user()}>
+					<NewActivityCreator
+						id={activityCreatorId}
+						petId={props.params.petId as PetID}
+						locale={user()!.locale}
+						defaultType={defaultActivityType()}
+					/>
+				</Show>
+			</Suspense>
 		</>
 	);
 };
@@ -115,7 +160,7 @@ function MainPetCard(props: {
 }
 
 function PetScheduledActivities(props: {
-	user: Accessor<Awaited<ReturnType<typeof getUser>>>;
+	user: Accessor<UserSession>;
 	scheduledActivities: Accessor<Awaited<ReturnType<typeof getPetScheduledActivities>>>;
 }) {
 	const prescriptions = () =>
@@ -135,22 +180,24 @@ function PetScheduledActivities(props: {
 	);
 }
 
-function ActivityQuickCreator(props: { petId: PetID }) {
+function EmptyActivities(props: {
+	activityCreatorId: string;
+	onClick: (type: ActivityType) => void;
+}) {
 	const t = createTranslator("pets");
-	const user = createAsync(() => getUser());
-
 	return (
-		<>
-			<Button variant="tonal" tone="primary" popoverTarget="create-activity">
-				<Icon use="stack-plus" />
-				{t("new-activity.create")}
-			</Button>
-			<Suspense fallback={null}>
-				<Show when={user()}>
-					<NewActivityCreator petId={props.petId} locale={user()!.locale} />
-				</Show>
-			</Suspense>
-		</>
+		<Card as="section" class="flex flex-col gap-2 bg-main">
+			<Text as="h2" with="headline-2" class="text-balance">
+				{t("empty-activities.heading")}
+			</Text>
+			<ActivitySelection
+				popoverTarget={props.activityCreatorId}
+				update={(type) => {
+					// @ts-expect-error
+					props.onClick(type);
+				}}
+			/>
+		</Card>
 	);
 }
 

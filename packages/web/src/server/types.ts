@@ -22,3 +22,5 @@ export type Branded<T, B> = T & Brand<B>;
 export type PrescriptionMedicationType = NonNullable<DatabasePrescription["schedule"]>["type"];
 
 export type PetActivitiesPaginationCursor = Branded<string, "PetActivitiesPaginationCursor">;
+
+export type { UserSession } from "~/server/auth/user-session";

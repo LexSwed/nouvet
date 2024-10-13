@@ -76,6 +76,8 @@ export function AppointmentActivityForm(props: ActivityCreatorProps) {
 				variant="ghost"
 			/>
 			<NoteTextField
+				rows={1}
+				label={t("new-activity.appointment.note.label")}
 				placeholder={t("new-activity.appointment.note-placeholder")}
 				description={t("new-activity.appointment.note-description")}
 			/>
@@ -345,17 +347,22 @@ function NewActivityForm(
 	);
 }
 
-function NoteTextField(props: { placeholder?: string; description?: string }) {
+function NoteTextField(props: {
+	rows?: number;
+	label?: string;
+	placeholder?: string;
+	description?: string;
+}) {
 	const t = createTranslator("pets");
 	return (
 		<TextField
 			as="textarea"
 			name="note"
-			label={t("new-activity.note-label")}
+			label={props.label ?? t("new-activity.note-label")}
 			placeholder={props.placeholder}
 			description={props.description}
 			variant="ghost"
-			rows="2"
+			rows={props.rows ?? "2"}
 			maxLength={1000}
 			class="part-[input]:max-h-[5lh]"
 			onKeyDown={(e) => {
