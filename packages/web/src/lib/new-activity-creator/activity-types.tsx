@@ -25,7 +25,7 @@ import { Temporal } from "temporal-polyfill";
 import { createPetActivity } from "~/server/api/activity";
 import { createTranslator } from "~/server/i18n";
 import type { SupportedLocale } from "~/server/i18n/shared";
-import type { ActivityType, PetID } from "~/server/types";
+import type { ActivityID, ActivityType, PetID } from "~/server/types";
 import { createFormattedDate } from "../utils/format-date";
 import { isSubmissionGenericError, pickSubmissionValidationErrors } from "../utils/submission";
 
@@ -35,7 +35,40 @@ interface ActivityCreatorProps {
 	locale: SupportedLocale;
 }
 
-export function ObservationActivityForm(props: ActivityCreatorProps) {
+type ObservationActivity = {
+	id: ActivityID;
+	recordedDate: string;
+	note: string;
+};
+
+type AppointmentActivity = {
+	id: ActivityID;
+	recordedDate: string;
+	location: string;
+	note: string;
+};
+
+type PrescriptionActivity = {
+	id: ActivityID;
+	recordedDate: string | null;
+	name: string | null;
+	dateStarted: string | null;
+	endDate: string | null;
+	dateCompleted: string | null;
+	note: string | null;
+};
+
+type VaccinationActivity = {
+	id: ActivityID;
+	recordedDate: string;
+	nextDueDate: string;
+	name: string;
+	note: string;
+};
+
+export function ObservationActivityForm(
+	props: ActivityCreatorProps & { activity: ObservationActivity | null },
+) {
 	const t = createTranslator("pets");
 
 	const [recordedDate, setRecordedDate] = createSignal<Temporal.ZonedDateTime | null>(
@@ -43,7 +76,7 @@ export function ObservationActivityForm(props: ActivityCreatorProps) {
 	);
 
 	return (
-		<NewActivityForm
+		<ActivityForm
 			activityType="observation"
 			petId={props.petId}
 			locale={props.locale}
@@ -64,18 +97,20 @@ export function ObservationActivityForm(props: ActivityCreatorProps) {
 				description={t("new-activity.note-description-observation")}
 				placeholder={t("new-activity.note-placeholder-observation")}
 			/>
-		</NewActivityForm>
+		</ActivityForm>
 	);
 }
 
-export function AppointmentActivityForm(props: ActivityCreatorProps) {
+export function AppointmentActivityForm(
+	props: ActivityCreatorProps & { activity: AppointmentActivity | null },
+) {
 	const t = createTranslator("pets");
 	const [recordedDate, setRecordedDate] = createSignal<Temporal.ZonedDateTime | null>(
 		Temporal.Now.zonedDateTimeISO(),
 	);
 
 	return (
-		<NewActivityForm
+		<ActivityForm
 			activityType="appointment"
 			id={props.id}
 			petId={props.petId}
@@ -104,18 +139,34 @@ export function AppointmentActivityForm(props: ActivityCreatorProps) {
 				placeholder={t("new-activity.appointment.note-placeholder")}
 				description={t("new-activity.appointment.note-description")}
 			/>
-		</NewActivityForm>
+		</ActivityForm>
 	);
 }
 
-export function PrescriptionActivityForm(props: ActivityCreatorProps) {
+export function PrescriptionActivityForm(
+	props: ActivityCreatorProps & { activity: PrescriptionActivity | null },
+) {
 	const t = createTranslator("pets");
-	const now = Temporal.Now.zonedDateTimeISO();
 
-	const [dateStarted, setDateStarted] = createSignal<Temporal.ZonedDateTime | null>(
-		Temporal.Now.zonedDateTimeISO(),
+	const recordedDate = () =>
+		props.activity?.recordedDate
+			? Temporal.ZonedDateTime.from(props.activity?.recordedDate)
+			: Temporal.Now.zonedDateTimeISO();
+
+	const [dateStarted, setDateStarted] = createSignal<Temporal.PlainDate | null>(
+		props.activity?.dateStarted
+			? Temporal.PlainDate.from(props.activity.dateStarted)
+			: Temporal.Now.plainDateISO(),
 	);
-	const [endDate, setEndDate] = createSignal<Temporal.ZonedDateTime | null>(null);
+	const [endDate, setEndDate] = createSignal<Temporal.ZonedDateTime | null>(
+		props.activity?.endDate && recordedDate()?.timeZoneId
+			? Temporal.ZonedDateTime.from(
+					Temporal.PlainDate.from(props.activity.endDate).toZonedDateTime(
+						recordedDate()!.timeZoneId,
+					),
+				)
+			: null,
+	);
 
 	const weeksDiff = createMemo(() => {
 		const start = dateStarted();
@@ -128,13 +179,13 @@ export function PrescriptionActivityForm(props: ActivityCreatorProps) {
 	});
 
 	return (
-		<NewActivityForm
+		<ActivityForm
 			activityType="prescription"
 			id={props.id}
 			petId={props.petId}
 			locale={props.locale}
 		>
-			<input type="hidden" name="recordedDate" value={toIsoString(now)} />
+			<input type="hidden" name="recordedDate" value={toIsoString()} />
 			<TextField
 				label={t("new-activity.prescription.name.label")}
 				name="name"
@@ -209,11 +260,13 @@ export function PrescriptionActivityForm(props: ActivityCreatorProps) {
 				placeholder={t("new-activity.prescription.note-placeholder")}
 				description={t("new-activity.prescription.note-description")}
 			/>
-		</NewActivityForm>
+		</ActivityForm>
 	);
 }
 
-export function VaccinationActivityForm(props: ActivityCreatorProps) {
+export function VaccinationActivityForm(
+	props: ActivityCreatorProps & { activity: VaccinationActivity | null },
+) {
 	const t = createTranslator("pets");
 
 	const [recordedDate, setRecordedDate] = createSignal<Temporal.ZonedDateTime | null>(
@@ -237,7 +290,7 @@ export function VaccinationActivityForm(props: ActivityCreatorProps) {
 	});
 
 	return (
-		<NewActivityForm
+		<ActivityForm
 			activityType="vaccination"
 			id={props.id}
 			petId={props.petId}
@@ -318,11 +371,11 @@ export function VaccinationActivityForm(props: ActivityCreatorProps) {
 				placeholder={t("new-activity.vaccine.note-placeholder")}
 				description={t("new-activity.vaccine.note-description")}
 			/>
-		</NewActivityForm>
+		</ActivityForm>
 	);
 }
 
-function NewActivityForm(
+function ActivityForm(
 	props: ParentProps<
 		ActivityCreatorProps & {
 			activityType: ActivityType;
@@ -493,17 +546,14 @@ function DateSelector(props: {
 					if (!props.onChange) return;
 					// do nothing if the input just has an incorrect date (assumed it's temporary)
 					if (e.currentTarget.value === "" && e.currentTarget.validity.badInput) return;
-					const d = new Date(e.currentTarget.value);
-					if (Number.isNaN(d.getTime())) return props.onChange(null);
-
-					const newDate = Temporal.Now.zonedDateTimeISO().with({
-						year: d.getFullYear(),
-						month: d.getMonth() + 1,
-						day: d.getDate(),
-						hour: d.getHours(),
-						minute: d.getMinutes(),
-					});
-					props.onChange(newDate);
+					try {
+						const newDate = Temporal.PlainDateTime.from(e.currentTarget.value).toZonedDateTime(
+							Temporal.Now.timeZoneId(),
+						);
+						props.onChange(newDate);
+					} catch {
+						props.onChange(null);
+					}
 				}}
 				variant="ghost"
 				type={props.showHour ? "datetime-local" : "date"}

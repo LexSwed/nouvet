@@ -129,7 +129,7 @@ const FormField = (ownProps: FieldInnerProps) => {
 };
 
 const Fieldset = (
-	ownProps: ComponentProps<"fieldset"> & { legend: JSX.Element; description?: JSX.Element },
+	ownProps: ComponentProps<"fieldset"> & { legend?: JSX.Element; description?: JSX.Element },
 ) => {
 	const [local, props] = splitProps(ownProps, ["id", "legend", "children"]);
 
@@ -151,6 +151,7 @@ const Fieldset = (
 			return undefined;
 		},
 	};
+	const legend = children(() => local.legend);
 
 	return (
 		<fieldset
@@ -159,13 +160,15 @@ const Fieldset = (
 			class={tw(css.fieldset, props.class)}
 			aria-describedby={aria.describedBy}
 		>
-			<Text
-				as="legend"
-				with="label-sm"
-				class={tw(css.label, "ms-3 mb-1 flex w-full items-center justify-between gap-4")}
-			>
-				{local.legend}
-			</Text>
+			<Show when={legend()}>
+				<Text
+					as="legend"
+					with="label-sm"
+					class={tw(css.label, "ms-3 mb-1 flex w-full items-center justify-between gap-4")}
+				>
+					{legend()}
+				</Text>
+			</Show>
 			{local.children}
 			<Show when={aria.describedBy}>
 				<div aria-live="polite" class={tw(css.description)} id={aria.describedBy}>

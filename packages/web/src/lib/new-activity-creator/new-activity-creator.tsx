@@ -101,16 +101,16 @@ export function NewActivityCreator(props: {
 									<ActivitySelection update={update} />
 								</Match>
 								<Match when={step() === "observation"}>
-									<ObservationActivityForm {...props} />
+									<ObservationActivityForm {...props} activity={null} />
 								</Match>
 								<Match when={step() === "appointment"}>
-									<AppointmentActivityForm {...props} />
+									<AppointmentActivityForm {...props} activity={null} />
 								</Match>
 								<Match when={step() === "prescription"}>
-									<PrescriptionActivityForm {...props} />
+									<PrescriptionActivityForm {...props} activity={null} />
 								</Match>
 								<Match when={step() === "vaccination"}>
-									<VaccinationActivityForm {...props} />
+									<VaccinationActivityForm {...props} activity={null} />
 								</Match>
 							</Switch>
 						</MultiScreenPopoverContent>
