@@ -18,8 +18,8 @@ import {
 import { Card } from "../card";
 
 import { createRoot } from "solid-js";
-import { Icon } from "../_index";
 import { Button } from "../button";
+import { Icon } from "../icon";
 import { tw } from "../tw";
 import { mergeDefaultProps } from "../utils";
 import css from "./toast.module.css";
@@ -49,6 +49,7 @@ const Toast = (ownProps: ToastProps) => {
 			role="status"
 			tabIndex={0}
 			aria-atomic="true"
+			variant="elevated"
 			{...props}
 			class={tw(
 				"allow-discrete max-w-80 border border-on-background/5 shadow-popover",
@@ -90,10 +91,10 @@ interface ToastEntry {
 
 interface ToastOptions {
 	/** Time in ms after which the toast will be automatically hidden.
-	 * @example Infinity - disable automatic hiding.
+	 * @example null - disable automatic hiding.
 	 * @default 3000
 	 */
-	duration?: number;
+	duration?: number | null;
 	position?: "top" | "bottom";
 }
 
@@ -135,62 +136,65 @@ function Toaster(props: { label: string }) {
 	let isFocusIn = false;
 
 	return (
-		<div
-			// Popover is used to ensure that if notification is triggered from a dialog or any
-			// top layer element, the toast appears on top of it
+		<section
+			/* Popover is used to ensure that if notification is triggered from a dialog or any
+			top layer element, the toast appears on top of it.
+			For the same reason we don't want to create Popover within existing popover. Closing a popover with success
+			message shouldn't remove the toast from the DOM. */
 			popover="manual"
-			class="fixed top-12 mx-auto my-0 overflow-visible bg-transparent p-0"
-			role="region"
+			class="fixed top-12 mx-auto my-0 overflow-visible bg-transparent p-0 empty:hidden"
 			aria-label={props.label}
 			ref={setRef}
 		>
-			<ol
-				class={tw(
-					css.list,
-					"fixed inset-x-0 flex w-full flex-col items-center empty:pointer-events-none",
-				)}
-				tabIndex={-1}
-				onMouseEnter={() => {
-					isMouseIn = true;
-					toaster.resetTimers();
-				}}
-				onMouseLeave={() => {
-					isMouseIn = false;
-					if (!isFocusIn) {
-						toaster.restartTimers();
-					}
-				}}
-				onFocusIn={() => {
-					isFocusIn = true;
-					toaster.resetTimers();
-				}}
-				onFocusOut={() => {
-					isFocusIn = false;
-					if (!isMouseIn) {
-						toaster.restartTimers();
-					}
-				}}
-			>
-				<div class="-m-1 absolute h-1 w-full [anchor-name:--nou-toast-anchor-list]" aria-hidden />
-				<For each={toaster.items()}>
-					{(entry, index) => {
-						return (
-							<li
-								class={tw(css.toast, "min-h-16")}
-								style={{
-									"anchor-name": entry.anchorName,
-									"position-anchor": entry.positionAnchor ?? "--nou-toast-anchor-list",
-									"--nou-toast-index": toaster.items().length - index(),
-								}}
-								on:toast-dismiss={() => toaster.remove(entry.id)}
-							>
-								{entry.element()}
-							</li>
-						);
+			<Show when={toaster.items().length > 0}>
+				<ol
+					class={tw(css.list, "fixed inset-x-0 flex w-full flex-col items-center")}
+					tabIndex={-1}
+					onMouseEnter={() => {
+						isMouseIn = true;
+						toaster.resetTimers();
 					}}
-				</For>
-			</ol>
-		</div>
+					onMouseLeave={() => {
+						isMouseIn = false;
+						if (!isFocusIn) {
+							toaster.restartTimers();
+						}
+					}}
+					onFocusIn={() => {
+						isFocusIn = true;
+						toaster.resetTimers();
+					}}
+					onFocusOut={() => {
+						isFocusIn = false;
+						if (!isMouseIn) {
+							toaster.restartTimers();
+						}
+					}}
+				>
+					<div
+						class="-m-1 absolute h-1 w-full [anchor-name:--nou-toast-anchor-list]"
+						aria-hidden="true"
+					/>
+					<For each={toaster.items()}>
+						{(entry, index) => {
+							return (
+								<li
+									class={tw(css.toast, "min-h-16")}
+									style={{
+										"anchor-name": entry.anchorName,
+										"position-anchor": entry.positionAnchor ?? "--nou-toast-anchor-list",
+										"--nou-toast-index": toaster.items().length - index(),
+									}}
+									on:toast-dismiss={() => toaster.remove(entry.id)}
+								>
+									{entry.element()}
+								</li>
+							);
+						}}
+					</For>
+				</ol>
+			</Show>
+		</section>
 	);
 }
 
@@ -216,7 +220,7 @@ const useToastsController = createSingletonRoot(() => {
 		const id = createUniqueId();
 		const [positionAnchor, setPositionAnchor] = createSignal<string | undefined>(undefined);
 		const { duration = 3000 } = options || {};
-		let timer = setTimeout(() => removeToast(id), duration);
+		let timer = duration ? setTimeout(() => removeToast(id), duration) : null;
 		const newItem = {
 			id,
 			element,
@@ -228,9 +232,9 @@ const useToastsController = createSingletonRoot(() => {
 				setPositionAnchor(value);
 			},
 			timer: {
-				reset: () => clearTimeout(timer),
+				reset: () => (timer ? clearTimeout(timer) : undefined),
 				restart: (delay: number) => {
-					timer = setTimeout(() => removeToast(id), duration + delay);
+					timer = duration ? setTimeout(() => removeToast(id), duration + delay) : null;
 				},
 			},
 		} satisfies ToastEntry;

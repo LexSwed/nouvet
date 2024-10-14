@@ -7,12 +7,18 @@
     --start-padding: theme("spacing.3");
     display: inline-flex;
     flex-flow: column nowrap;
+    width: 100%;
     &:has(:user-invalid) {
       --border-color: theme("colors.error");
       --border-scale-y: 2;
       & .error,
       & .label {
         color: theme("colors.error");
+      }
+
+      & .inputWrapper:not(:focus-within) {
+        color: theme("colors.error");
+        text-decoration: underline wavy theme("colors.error");
       }
     }
   }
@@ -55,36 +61,53 @@
   }
   .wrapperGhost {
     --border-color: transparent;
-    & > .inputWrapper {
+    & .inputWrapper {
       border: 1px solid var(--border-color);
       transition: background-color 0.2s ease-out;
-      border-radius: theme("borderRadius.lg");
+      border-radius: theme("borderRadius.xl");
       background-color: theme("colors.on-surface/0.03");
     }
-    &:where(:hover) > .inputWrapper {
+    &:where(:hover) .inputWrapper {
       background-color: theme("colors.on-surface/0.05");
     }
-    &:where(:focus-within) > .inputWrapper {
+    &:where(:focus-within) .inputWrapper {
       background-color: theme("colors.on-surface/0.08");
     }
   }
   .wrapperInline {
-    & > .inputWrapper {
+    & > .label {
+      position: absolute;
+      padding-block: 0;
+    }
+    & .inputWrapper {
       background-color: transparent;
     }
     &:has(:where(input, textarea):not(:placeholder-shown)) {
       & > .label {
         opacity: 0;
-        transform: translateY(2px);
+        translate: 0 -80%;
         transition: 0.2s ease-out;
-        transition-property: opacity, transform;
+        transition-property: opacity, translate;
       }
       &:focus-within > .label {
-        transform: none;
+        translate: 0 -90%;
         opacity: 1;
       }
     }
   }
+  .sizeSm {
+    @apply text-sm;
+    & :where(input, textarea),
+    & select > button {
+      padding: theme("spacing.2") var(--start-padding);
+      min-height: theme("spacing.12");
+    }
+
+    & :where(.prefix, .suffix) {
+      padding-block-start: theme("spacing.2");
+    }
+  }
+
   .sizeBase {
     @apply text-base;
     & input,
@@ -114,6 +137,7 @@
     display: flex;
     align-items: flex-start;
     cursor: default;
+    width: 100%;
   }
   .label {
     color: theme("colors.on-surface");
@@ -125,6 +149,7 @@
   .description {
     /* same as label */
     padding-inline: var(--start-padding);
+    padding-block-end: theme("spacing.2");
     color: theme("colors.on-surface-variant");
     @apply text-sm;
   }
@@ -154,6 +179,24 @@
     & .error {
       color: theme("colors.error");
       white-space: pre;
+    }
+  }
+
+  .overlay {
+    pointer-events: none;
+    padding-inline: theme("spacing[3.5]");
+    transition: opacity 0.15s ease-out;
+    opacity: 0;
+  }
+  .field [data-part="input"] {
+    transition: all 0.15s ease;
+  }
+  .field:has(:where(input, textarea):not(:focus-within):not(:user-invalid)) {
+    & .overlay:not(:empty) {
+      opacity: 1;
+    }
+    &:has(.overlay:not(:empty) *:not(:empty)) [data-part="input"] {
+      color: transparent;
     }
   }
 }

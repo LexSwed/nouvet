@@ -24,6 +24,7 @@ const appDict = {
 	"pet-menu.add-weight": "Add weight",
 	"pet-menu.add-note": "Add a note",
 	"pet-menu.book": "Schedule visit",
+	"dialog.close": "Close",
 } as const;
 
 export default appDict;

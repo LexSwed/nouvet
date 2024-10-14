@@ -59,6 +59,7 @@ export const InviteWaitlist = (props: { onNext: () => void }) => {
 					</Match>
 				</Switch>
 				<Button
+					variant="accent"
 					onClick={() => {
 						props.onNext();
 					}}

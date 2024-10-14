@@ -20,14 +20,12 @@
 		"check": "npx @biomejs/biome check ."
 	},
 	"dependencies": {
-		"@fontsource-variable/inter": "^5.0.20",
-		"autoprefixer": "^10.4.20",
-		"postcss": "^8.4.45",
-		"tailwindcss": "^4.0.0-alpha.23",
+		"@fontsource-variable/inter": "^5.1.0",
+		"tailwindcss": "^4.0.0-alpha.26",
 		"tailwindcss-animate": "^1.0.7",
 		"tailwindcss-spring": "^1.0.1",
 		"typescript-plugin-css-modules": "^5.1.0",
-		"vite": "^5.4.3"
+		"vite": "^5.4.9"
 	},
 	"devDependencies": {
 		"colorjs.io": "^0.5.2"

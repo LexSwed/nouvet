@@ -22,6 +22,7 @@ export const formFieldVariants = cva(css.wrapper, {
 			ghost: css.wrapperGhost,
 		},
 		textSize: {
+			sm: css.sizeSm,
 			base: css.sizeBase,
 			lg: css.sizeLg,
 		},
@@ -37,6 +38,7 @@ export const formFieldVariants = cva(css.wrapper, {
 });
 
 export interface FormFieldProps extends VariantProps<typeof formFieldVariants> {
+	overlay?: JSXElement;
 	/** Field label. */
 	label?: JSXElement;
 	/** Helper text. */
@@ -58,7 +60,7 @@ interface FieldInnerProps
 }
 const FormField = (ownProps: FieldInnerProps) => {
 	const formContext = useFormContext();
-	const [local, props] = splitProps(ownProps, ["variant", "id", "textSize"]);
+	const [local, props] = splitProps(ownProps, ["variant", "inline", "id", "textSize"]);
 	const localId = createUniqueId();
 
 	const errorMessage = () => (props.name ? formContext().validationErrors?.[props.name] : null);
@@ -77,6 +79,7 @@ const FormField = (ownProps: FieldInnerProps) => {
 	const label = children(() => props.label);
 	const description = children(() => props.description);
 	const child = createMemo(() => props.children(aria));
+	const overlay = children(() => props.overlay);
 	return (
 		<div id={local.id} class={tw(css.field, props.class)} style={props.style}>
 			<div class={formFieldVariants(local)}>
@@ -90,17 +93,24 @@ const FormField = (ownProps: FieldInnerProps) => {
 						{label()}
 					</Text>
 				</Show>
-				<div class={css.inputWrapper}>
-					<Show when={prefix()}>
-						<label for={aria.id} class={css.prefix}>
-							{prefix()}
-						</label>
-					</Show>
-					{child()}
-					<Show when={suffix()}>
-						<label for={aria.id} class={css.suffix}>
-							{suffix()}
-						</label>
+				<div class="stack w-full place-items-baseline">
+					<div class={css.inputWrapper}>
+						<Show when={prefix()}>
+							<label for={aria.id} class={css.prefix}>
+								{prefix()}
+							</label>
+						</Show>
+						{child()}
+						<Show when={suffix()}>
+							<label for={aria.id} class={css.suffix}>
+								{suffix()}
+							</label>
+						</Show>
+					</div>
+					<Show when={overlay()}>
+						<Text as="label" with="label" tone="light" for={aria.id} class={css.overlay}>
+							{overlay()}
+						</Text>
 					</Show>
 				</div>
 			</div>
@@ -119,7 +129,7 @@ const FormField = (ownProps: FieldInnerProps) => {
 };
 
 const Fieldset = (
-	ownProps: ComponentProps<"fieldset"> & { legend: JSX.Element; description?: JSX.Element },
+	ownProps: ComponentProps<"fieldset"> & { legend?: JSX.Element; description?: JSX.Element },
 ) => {
 	const [local, props] = splitProps(ownProps, ["id", "legend", "children"]);
 
@@ -141,6 +151,7 @@ const Fieldset = (
 			return undefined;
 		},
 	};
+	const legend = children(() => local.legend);
 
 	return (
 		<fieldset
@@ -149,13 +160,15 @@ const Fieldset = (
 			class={tw(css.fieldset, props.class)}
 			aria-describedby={aria.describedBy}
 		>
-			<Text
-				as="legend"
-				with="label-sm"
-				class={tw(css.label, "ms-3 mb-1 flex w-full items-center justify-between gap-4")}
-			>
-				{local.legend}
-			</Text>
+			<Show when={legend()}>
+				<Text
+					as="legend"
+					with="label-sm"
+					class={tw(css.label, "ms-3 mb-1 flex w-full items-center justify-between gap-4")}
+				>
+					{legend()}
+				</Text>
+			</Show>
 			{local.children}
 			<Show when={aria.describedBy}>
 				<div aria-live="polite" class={tw(css.description)} id={aria.describedBy}>

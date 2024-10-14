@@ -3,7 +3,7 @@ import {
 	type Accessor,
 	type ComponentProps,
 	createContext,
-	createEffect,
+	createRenderEffect,
 	createSignal,
 	on,
 	splitProps,
@@ -39,7 +39,7 @@ export const Form = (ownProps: FormContext & ComponentProps<"form">) => {
 	const [nativeErrors, setNativeErrors] = createSignal<FormContext["validationErrors"]>({});
 
 	/* Sets custom validation errors on validationErrors prop fields */
-	createEffect(
+	createRenderEffect(
 		on(
 			() => local.validationErrors,
 			(newPropErrors) => {

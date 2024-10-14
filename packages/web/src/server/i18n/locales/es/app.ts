@@ -24,6 +24,7 @@ const appDict = {
 	"pet-menu.add-note": "Agregar una nota",
 	"pet-menu.book": "Programar visita",
 	"notifications-region": "Notificaciones",
+	"dialog.close": "Cerrar",
 } as const satisfies Record<keyof typeof import("../en/app").default, string>;
 
 export default appDict;

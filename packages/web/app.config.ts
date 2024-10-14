@@ -32,9 +32,6 @@ export default defineConfig({
 		build: {
 			target: "esnext",
 		},
-		define: {
-			"process.env.VITE_ACCEPTANCE_TESTING": JSON.stringify(process.env.VITE_ACCEPTANCE_TESTING),
-		},
 		plugins: [
 			tailwindcss(),
 			tsconfigPaths(),

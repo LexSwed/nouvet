@@ -4,13 +4,13 @@ import { json, redirect } from "@solidjs/router";
 import * as v from "valibot";
 
 import { getRequestUser } from "~/server/auth/request-user";
-import { type CreatePetSchema, petCreate } from "~/server/db/queries/petCreate";
-import { UpdatePetSchema, petUpdate } from "~/server/db/queries/petUpdate";
-import { userPets } from "~/server/db/queries/userPets";
+import { type CreatePetSchema, petCreate } from "~/server/db/queries/pet-create";
+import { UpdatePetSchema, petUpdate } from "~/server/db/queries/pet-update";
+import { userPets } from "~/server/db/queries/user-pets";
 import { jsonFailure } from "~/server/utils";
 
-import { userPet } from "~/server/db/queries/userPet";
-import { petDelete } from "../db/queries/petDelete";
+import { userPet } from "~/server/db/queries/user-pet";
+import { petDelete } from "../db/queries/pet-delete";
 import type { PetID } from "../types";
 import { getPet, getUserPets } from "./pet";
 

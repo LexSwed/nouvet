@@ -15,17 +15,15 @@
 
 @layer base {
   :root {
-    --nou-font-sans: ;
+    --nou-font-sans: "Inter Variable";
     view-transition-name: none;
+    interpolate-size: allow-keywords;
   }
 
   ::view-transition {
     pointer-events: none;
   }
 
-  * {
-    @apply min-w-0 font-sans;
-  }
   html,
   body,
   #app {
@@ -34,6 +32,10 @@
   }
   #app {
     @apply overflow-x-hidden;
+  }
+  /* Flex box children should be able to shrink */
+  * {
+    min-width: 0;
   }
 }
 

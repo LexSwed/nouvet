@@ -6,7 +6,7 @@ import {
 	createAsync,
 	useMatch,
 } from "@solidjs/router";
-import { Show } from "solid-js";
+import { Match, Switch } from "solid-js";
 
 import { AppHeader } from "~/lib/app-header";
 import { getPet } from "~/server/api/pet";
@@ -34,12 +34,16 @@ const PetPage = (props: RouteSectionProps) => {
 		<>
 			<Title>{t("meta.title")}</Title>
 			<AppHeader backLink="/app">
-				<Show when={match()}>
-					<ButtonLink href={`/app/pets/${props.params.petId}`} variant="tonal">
-						<Icon use="chevron-left" class="-ms-2" />
-						<Text with="body-sm">{pet()?.name}</Text>
-					</ButtonLink>
-				</Show>
+				<Switch>
+					<Match when={match()}>
+						<ButtonLink href={`/app/pets/${props.params.petId}`} variant="tonal">
+							<Icon use="chevron-left" class="-ms-2" />
+							<Text with="body-sm">
+								{t("header.back-to-pet", { petName: pet()?.name as string })}
+							</Text>
+						</ButtonLink>
+					</Match>
+				</Switch>
 			</AppHeader>
 			{props.children}
 		</>

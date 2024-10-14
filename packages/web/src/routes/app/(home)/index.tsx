@@ -8,7 +8,7 @@ import { getUserFamily } from "~/server/api/user";
 import { cacheTranslations, createTranslator } from "~/server/i18n";
 
 import { AppHeader } from "~/lib/app-header";
-import FamilyInviteDialog from "~/lib/family-invite/invite-dialog";
+import { FamilyInviteDialog } from "~/lib/family-invite";
 import { PetHomeCard } from "~/lib/pet-home-card";
 
 const CreateNewPetForm = lazy(() => import("~/lib/create-new-pet-form"));
@@ -48,9 +48,7 @@ const AppHomePage = () => {
 											<Button popoverTarget="family-invite" variant="link">
 												{t("family.no-name")}
 											</Button>
-											<Suspense>
-												<FamilyInviteDialog id="family-invite" />
-											</Suspense>
+											<FamilyInviteDialog id="family-invite" />
 										</>
 									</Match>
 									<Match when={user().family?.id}>
@@ -92,10 +90,7 @@ const UserPets = () => {
 					<h2 id={headingId} class="sr-only">
 						{t("pet-list")}
 					</h2>
-					<ul
-						class="overflow-snap -mx-4 -my-2 flex scroll-px-4 flex-row items-stretch gap-4 px-4 py-2"
-						aria-labelledby={headingId}
-					>
+					<ul class="overflow-snap-4 items-stretch gap-4" aria-labelledby={headingId}>
 						<li>
 							<Button
 								label={t("add-another")}

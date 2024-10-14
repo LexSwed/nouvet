@@ -1,8 +1,11 @@
 @import "@nou/config/theme.css" theme(reference);
 
-@layer components {
-  .input {
+@layer tw-components {
+  .input:is(select) {
+    /* ::picker(.input) { */
     appearance: base-select;
+  }
+  .input {
     width: 100%;
     outline: none;
 

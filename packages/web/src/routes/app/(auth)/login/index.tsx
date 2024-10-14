@@ -10,7 +10,7 @@ import { USER_TIMEZONE_COOKIE } from "~/server/const";
 
 let DevLogin: Component = () => null;
 
-if (import.meta.env.DEV || import.meta.env.VITE_ACCEPTANCE_TESTING) {
+if (import.meta.env.DEV) {
 	DevLogin = lazy(() => import("~/lib/dev-login-form"));
 }
 

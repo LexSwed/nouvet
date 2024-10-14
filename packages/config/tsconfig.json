@@ -18,6 +18,7 @@
 		"verbatimModuleSyntax": true,
 		"lib": ["ESNext", "DOM", "ESNext.Intl"],
 		"noUncheckedIndexedAccess": true,
+		"noUncheckedSideEffectImports": true,
 		"skipLibCheck": true,
 		"plugins": [
 			{

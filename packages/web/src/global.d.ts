@@ -2,7 +2,6 @@ interface ImportMetaEnv {
 	readonly FACEBOOK_APP_ID: string;
 	readonly FACEBOOK_APP_SECRET: string;
 	readonly DB: string;
-	readonly VITE_ACCEPTANCE_TESTING: string | undefined;
 }
 
 // biome-ignore lint/correctness/noUnusedVariables: <explanation>

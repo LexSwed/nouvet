@@ -1,5 +1,6 @@
 import { createAsync } from "@solidjs/router";
-import { type Accessor, createMemo } from "solid-js";
+import { type Accessor, createMemo, on } from "solid-js";
+import { Temporal } from "temporal-polyfill";
 
 import { getUser } from "~/server/api/user";
 import type { SupportedLocale } from "~/server/i18n/shared";
@@ -9,22 +10,27 @@ import type { SupportedLocale } from "~/server/i18n/shared";
  * Make sure the date string is in Unix or ISO format.
  */
 export function createFormattedDate(
-	date: Accessor<Date | undefined>,
+	date: Accessor<Date | Temporal.ZonedDateTime | null | undefined>,
 	locale: Accessor<SupportedLocale | undefined>,
-	options: Intl.DateTimeFormatOptions = {
-		month: "long",
-		day: "numeric",
-		hour: "numeric",
-		minute: "numeric",
-	},
+	options: { [K in keyof Intl.DateTimeFormatOptions]: Intl.DateTimeFormatOptions[K] | null } = {},
 ) {
-	const formatted = createMemo(() => {
-		if (date() && locale()) {
-			const formatter = new Intl.DateTimeFormat(locale(), options);
-			return formatter.format(date());
-		}
-		return undefined;
-	});
+	const formatted = createMemo(
+		on(date, (date) => {
+			if (date && locale()) {
+				const formatter = new Intl.DateTimeFormat(locale(), {
+					month: options.month ?? "long",
+					day: options.day ?? "numeric",
+					hour: options.hour === null ? undefined : (options.hour ?? "numeric"),
+					minute: options.hour === null ? undefined : (options.minute ?? "numeric"),
+					year: options.year ?? undefined,
+				});
+				return formatter.format(
+					date instanceof Temporal.ZonedDateTime ? new Date(date.epochMilliseconds) : date,
+				);
+			}
+			return undefined;
+		}),
+	);
 
 	return formatted;
 }

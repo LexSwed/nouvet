@@ -7,12 +7,12 @@ import type { SvgIcons } from "./svg-icons.d.ts";
 
 export type { SvgIcons } from "./svg-icons.d.ts";
 
-const iconVariants = cva("inline shrink-0 select-none", {
+const iconVariants = cva("inline-block shrink-0 select-none", {
 	variants: {
 		size: {
 			font: "size-font",
 			xs: "size-4",
-			sm: "size-6",
+			sm: "size-5",
 			md: "size-8",
 			lg: "size-16",
 			xl: "size-24",

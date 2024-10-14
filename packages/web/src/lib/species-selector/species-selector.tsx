@@ -50,7 +50,7 @@ const SpeciesSelector = (props: SpeciesSelectorProps) => {
 	];
 
 	return (
-		<div class={"overflow-snap -m-4 flex w-[stretch] scroll-px-4 gap-2 p-4"}>
+		<div class={"overflow-snap-4 w-[stretch] gap-2"}>
 			<For each={species()}>
 				{(item) => {
 					return (

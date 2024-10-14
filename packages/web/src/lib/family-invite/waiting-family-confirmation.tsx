@@ -15,7 +15,7 @@ export function WaitingFamilyConfirmation(props: {
 		<Card
 			role="group"
 			variant="flat"
-			class="flex flex-col gap-4 rounded-3xl border border-on-surface/2 bg-gradient-to-br bg-transparent from-primary/5 via-60% via-transparent to-on-surface/2"
+			class="flex flex-col gap-4 rounded-3xl border border-on-surface/3 bg-gradient-to-br bg-transparent from-primary/5 via-60% via-transparent to-on-surface/2"
 		>
 			<Text as="header" with="overline">
 				{t("invite.waitlist")}

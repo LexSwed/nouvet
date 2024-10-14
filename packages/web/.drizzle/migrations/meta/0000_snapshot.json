@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "63eab13b-61ae-40a9-8589-c63a842533b9",
+  "id": "ddf850f9-18fe-4d56-8379-44dc53ca8e0a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "activity": {
@@ -57,6 +57,27 @@
             "id"
           ],
           "isUnique": true
+        },
+        "pet_id_idx": {
+          "name": "pet_id_idx",
+          "columns": [
+            "pet_id"
+          ],
+          "isUnique": false
+        },
+        "type_idx": {
+          "name": "type_idx",
+          "columns": [
+            "type"
+          ],
+          "isUnique": false
+        },
+        "date_idx": {
+          "name": "date_idx",
+          "columns": [
+            "activity_date"
+          ],
+          "isUnique": false
         }
       },
       "foreignKeys": {
@@ -146,6 +167,58 @@
           "name": "activity_relationships_parent_activity_id_child_activity_id_pk"
         }
       },
+      "uniqueConstraints": {}
+    },
+    "activity_appointment": {
+      "name": "activity_appointment",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "activity_id": {
+          "name": "activity_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "location": {
+          "name": "location",
+          "type": "text(400)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "activity_appointment_id_unique": {
+          "name": "activity_appointment_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "activity_appointment_activity_id_activity_id_fk": {
+          "name": "activity_appointment_activity_id_activity_id_fk",
+          "tableFrom": "activity_appointment",
+          "tableTo": "activity",
+          "columnsFrom": [
+            "activity_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "oauth_account": {
@@ -288,7 +361,8 @@
           "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
       "indexes": {
@@ -347,7 +421,8 @@
           "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
       "indexes": {},
@@ -412,7 +487,8 @@
           "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
       "indexes": {},
@@ -521,6 +597,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "height": {
+          "name": "height",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "picture_url": {
           "name": "picture_url",
           "type": "text(120)",
@@ -540,14 +623,16 @@
           "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "(strftime('%FT%TZ', datetime('now')))"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
       "indexes": {
@@ -571,6 +656,86 @@
             "id"
           ],
           "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "activity_prescription": {
+      "name": "activity_prescription",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "activity_id": {
+          "name": "activity_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "drug_name": {
+          "name": "drug_name",
+          "type": "text(200)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "schedule": {
+          "name": "schedule",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "date_started": {
+          "name": "date_started",
+          "type": "text(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "text(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "date_completed": {
+          "name": "date_completed",
+          "type": "text(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "activity_prescription_id_unique": {
+          "name": "activity_prescription_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "activity_prescription_activity_id_activity_id_fk": {
+          "name": "activity_prescription_activity_id_activity_id_fk",
+          "tableFrom": "activity_prescription",
+          "tableTo": "activity",
+          "columnsFrom": [
+            "activity_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -655,7 +820,7 @@
         },
         "locale": {
           "name": "locale",
-          "type": "text(10)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -679,7 +844,8 @@
           "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "(strftime('%FT%TZ', datetime('now')))"
         }
       },
       "indexes": {
@@ -695,8 +861,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "vaccination": {
-      "name": "vaccination",
+    "activity_vaccination": {
+      "name": "activity_vaccination",
       "columns": {
         "id": {
           "name": "id",
@@ -709,19 +875,12 @@
           "name": "activity_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "vaccine_name": {
           "name": "vaccine_name",
           "type": "text(200)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "administered_date": {
-          "name": "administered_date",
-          "type": "text(100)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -735,15 +894,15 @@
         },
         "batch_number": {
           "name": "batch_number",
-          "type": "text(50)",
+          "type": "text(100)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         }
       },
       "indexes": {
-        "vaccination_id_unique": {
-          "name": "vaccination_id_unique",
+        "activity_vaccination_id_unique": {
+          "name": "activity_vaccination_id_unique",
           "columns": [
             "id"
           ],
@@ -751,9 +910,9 @@
         }
       },
       "foreignKeys": {
-        "vaccination_activity_id_activity_id_fk": {
-          "name": "vaccination_activity_id_activity_id_fk",
-          "tableFrom": "vaccination",
+        "activity_vaccination_activity_id_activity_id_fk": {
+          "name": "activity_vaccination_activity_id_activity_id_fk",
+          "tableFrom": "activity_vaccination",
           "tableTo": "activity",
           "columnsFrom": [
             "activity_id"
