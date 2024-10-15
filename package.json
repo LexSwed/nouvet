@@ -24,6 +24,6 @@
 		"typescript": "^5.6.3"
 	},
 	"overrides": {
-		"tailwindcss": "^4.0.0-alpha.26"
+		"tailwindcss": "^4.0.0-alpha.27"
 	}
 }

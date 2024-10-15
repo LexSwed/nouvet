@@ -21,7 +21,7 @@
 	},
 	"dependencies": {
 		"@fontsource-variable/inter": "^5.1.0",
-		"tailwindcss": "^4.0.0-alpha.26",
+		"tailwindcss": "^4.0.0-alpha.27",
 		"tailwindcss-animate": "^1.0.7",
 		"tailwindcss-spring": "^1.0.1",
 		"typescript-plugin-css-modules": "^5.1.0",
