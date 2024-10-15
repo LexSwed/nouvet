@@ -91,12 +91,6 @@ export const GET = async (event: PageEvent) => {
 				status: 400,
 			});
 		}
-		console.log(
-			"error happened",
-			error instanceof Response,
-			error instanceof Promise,
-			error instanceof Error,
-		);
 		console.error(error);
 		return new Response(null, {
 			status: 500,
