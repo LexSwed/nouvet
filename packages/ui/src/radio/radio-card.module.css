@@ -4,12 +4,8 @@
     flex-shrink: 0;
     border-radius: theme("borderRadius.lg");
     padding: theme("spacing.3");
-    transition:
-      border-color 0.24s ease-out,
-      background-color 0.24s ease-out,
-      color 0.24s ease-out,
-      border-radius 0.24s ease-out,
-      flex 0.3s ease-out;
+    transition: border-color 0.24s ease-out, background-color 0.24s ease-out,
+      color 0.24s ease-out, border-radius 0.24s ease-out, flex 0.3s ease-out;
     background-color: theme("colors.on-background/0.01");
     border: theme("borderWidth.DEFAULT") solid theme("colors.on-surface/0.08");
     &:where(:hover, :focus-within) {

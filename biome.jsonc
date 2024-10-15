@@ -33,17 +33,17 @@
 			}
 		}
 	},
-	// "css": {
-	// 	"formatter": {
-	// 		"enabled": true
-	// 	},
-	// 	"linter": {
-	// 		"enabled": true
-	// 	},
-	// 	"parser": {
-	// 		"cssModules": true
-	// 	}
-	// },
+	"css": {
+		"formatter": {
+			"enabled": true
+		},
+		"linter": {
+			"enabled": true
+		},
+		"parser": {
+			"cssModules": true
+		}
+	},
 	"files": {
 		"ignore": [
 			".vscode/**",
