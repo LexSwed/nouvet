@@ -3,10 +3,10 @@ import { sendRedirect } from "vinxi/http";
 
 import { setFacebookOAuthStateCookie, useFacebookAuth } from "./_shared";
 
-export const GET = async () => {
+export const GET = () => {
 	const state = generateState();
 	const facebook = useFacebookAuth();
-	const url = await facebook.createAuthorizationURL(state);
+	const url = facebook.createAuthorizationURL(state, []);
 
 	setFacebookOAuthStateCookie(state);
 

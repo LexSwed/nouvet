@@ -29,7 +29,7 @@ export const GET = async (event: PageEvent) => {
 
 	try {
 		const tokens = await facebookAuth.validateAuthorizationCode(code);
-		const facebookUser = await fetchFacebookUser(tokens.accessToken);
+		const facebookUser = await fetchFacebookUser(tokens.accessToken());
 
 		const existingUser = await getUserByAuthProviderId("facebook", facebookUser.id);
 		let returnUrl = getCookie(RETURN_URL_COOKIE);
