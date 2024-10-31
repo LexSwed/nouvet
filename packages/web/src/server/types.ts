@@ -24,3 +24,4 @@ export type PrescriptionMedicationType = NonNullable<DatabasePrescription["sched
 export type PetActivitiesPaginationCursor = Branded<string, "PetActivitiesPaginationCursor">;
 
 export type { UserSession } from "~/server/auth/user-session";
+export type { DatabaseSession } from "~/server/db/schema";

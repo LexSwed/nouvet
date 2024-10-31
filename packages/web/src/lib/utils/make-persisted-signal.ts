@@ -1,4 +1,4 @@
-import { cache, createAsync, revalidate } from "@solidjs/router";
+import { createAsync, query, revalidate } from "@solidjs/router";
 import { untrack } from "solid-js";
 import { isServer } from "solid-js/web";
 
@@ -27,7 +27,7 @@ const getServerSetting = async <T>(name: string) => {
 	return deserialize<T>(getCookie(name));
 };
 
-const setting = cache(async <T>(name: string): Promise<T | null> => {
+const setting = query(async <T>(name: string): Promise<T | null> => {
 	if (isServer) {
 		return getServerSetting<T>(name);
 	}

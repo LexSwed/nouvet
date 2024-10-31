@@ -1,4 +1,4 @@
-import { action, cache } from "@solidjs/router";
+import { action, query } from "@solidjs/router";
 
 import {
 	cancelFamilyJoinServer,
@@ -9,9 +9,9 @@ import {
 	updateFamilyServer,
 } from "./family.server";
 
-export const getFamilyMembers = cache(getFamilyMembersServer, "family-members");
+export const getFamilyMembers = query(getFamilyMembersServer, "family-members");
 
-export const getFamilyMember = cache(getFamilyMemberServer, "family-member");
+export const getFamilyMember = query(getFamilyMemberServer, "family-member");
 
 export const updateFamily = action(updateFamilyServer, "update-family");
 

@@ -11,12 +11,12 @@ import { Match, Switch } from "solid-js";
 import { AppHeader } from "~/lib/app-header";
 import { getPet } from "~/server/api/pet";
 import { getUserFamily } from "~/server/api/user";
-import { cacheTranslations, createTranslator } from "~/server/i18n";
+import { createTranslator, queryDictionary } from "~/server/i18n";
 import type { PetID } from "~/server/types";
 
 export const route = {
 	preload({ params }) {
-		void cacheTranslations("pets");
+		void queryDictionary("pets");
 		void getUserFamily();
 		if (params.petId) {
 			void getPet(params.petId as PetID);

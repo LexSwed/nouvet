@@ -16,12 +16,12 @@ import { GenderSwitch } from "~/lib/species-selector";
 import { isSubmissionValidationError } from "~/lib/utils/submission";
 import { deletePet, getPet, updatePet } from "~/server/api/pet";
 import type { DatabasePet } from "~/server/db/schema";
-import { T, cacheTranslations, createTranslator } from "~/server/i18n";
+import { T, createTranslator, queryDictionary } from "~/server/i18n";
 import type { PetGender, PetID, PetSpecies } from "~/server/types";
 
 export const route = {
 	preload({ params }) {
-		void cacheTranslations("pets");
+		void queryDictionary("pets");
 		void getPet(params.petId as PetID);
 	},
 } satisfies RouteDefinition;

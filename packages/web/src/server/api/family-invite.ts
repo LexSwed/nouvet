@@ -1,4 +1,4 @@
-import { action, cache } from "@solidjs/router";
+import { action, query } from "@solidjs/router";
 
 import {
 	checkFamilyInviteServer,
@@ -8,9 +8,9 @@ import {
 	moveUserFromTheWaitListServer,
 } from "./family-invite.server";
 
-export const getFamilyInvite = cache(getFamilyInviteServer, "family-invite-code");
+export const getFamilyInvite = query(getFamilyInviteServer, "family-invite-code");
 
-export const checkFamilyInvite = cache(checkFamilyInviteServer, "check-family-invite");
+export const checkFamilyInvite = query(checkFamilyInviteServer, "check-family-invite");
 
 export const joinFamilyWithLink = action(joinFamilyWithLinkServer, "join-family");
 

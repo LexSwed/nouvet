@@ -4,14 +4,14 @@ import { type RouteDefinition, type RouteSectionProps, createAsync } from "@soli
 import { Match, Show, Suspense, Switch } from "solid-js";
 
 import { getUserFamily } from "~/server/api/user";
-import { T, cacheTranslations, createTranslator } from "~/server/i18n";
+import { T, createTranslator, queryDictionary } from "~/server/i18n";
 
 import { AppHeader } from "~/lib/app-header";
 import { FamilyInviteDialog } from "~/lib/family-invite";
 
 export const route = {
 	preload() {
-		void cacheTranslations("family");
+		void queryDictionary("family");
 		void getUserFamily();
 	},
 } satisfies RouteDefinition;

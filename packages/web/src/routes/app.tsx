@@ -1,11 +1,11 @@
 import { Toaster } from "@nou/ui";
 import type { RouteDefinition, RouteSectionProps } from "@solidjs/router";
 
-import { cacheTranslations, createTranslator } from "~/server/i18n";
+import { createTranslator, queryDictionary } from "~/server/i18n";
 
 export const route = {
 	async preload() {
-		void cacheTranslations("app");
+		void queryDictionary("app");
 	},
 } satisfies RouteDefinition;
 

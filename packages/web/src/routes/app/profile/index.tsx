@@ -17,7 +17,7 @@ import { Show, Suspense } from "solid-js";
 
 import { getUserProfile, updateUserProfile } from "~/server/api/user";
 import type { DatabaseUser } from "~/server/db/schema";
-import { cacheTranslations, createTranslator } from "~/server/i18n";
+import { createTranslator, queryDictionary } from "~/server/i18n";
 import type { SupportedLocale } from "~/server/i18n/shared";
 
 import { AppHeader } from "~/lib/app-header";
@@ -25,7 +25,7 @@ import { pickSubmissionValidationErrors } from "~/lib/utils/submission";
 
 export const route = {
 	preload() {
-		void cacheTranslations("profile");
+		void queryDictionary("profile");
 		void getUserProfile();
 	},
 } satisfies RouteDefinition;

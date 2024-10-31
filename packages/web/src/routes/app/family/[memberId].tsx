@@ -3,12 +3,12 @@ import { type RouteDefinition, type RouteSectionProps, createAsync } from "@soli
 import { Show } from "solid-js";
 
 import { getFamilyMember, getFamilyMembers } from "~/server/api/family";
-import { cacheTranslations } from "~/server/i18n";
+import { queryDictionary } from "~/server/i18n";
 import type { UserID } from "~/server/types";
 
 export const route = {
 	load({ params }) {
-		void cacheTranslations("family");
+		void queryDictionary("family");
 		void getFamilyMember(params.memberId as UserID);
 	},
 } satisfies RouteDefinition;

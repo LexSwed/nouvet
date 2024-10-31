@@ -2,13 +2,13 @@ import { Icon, NavCard, type SvgIcons, Text } from "@nou/ui";
 import type { RouteDefinition } from "@solidjs/router";
 import { type Accessor, For, type ParentProps } from "solid-js";
 
-import { cacheTranslations, createTranslator } from "~/server/i18n";
+import { createTranslator, queryDictionary } from "~/server/i18n";
 
 import { LogoLink } from "~/lib/logo-link";
 
 export const route = {
 	preload() {
-		void cacheTranslations("www");
+		void queryDictionary("www");
 	},
 } satisfies RouteDefinition;
 

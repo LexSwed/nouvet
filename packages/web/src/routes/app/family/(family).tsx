@@ -17,7 +17,7 @@ import { For, Match, Show, Suspense, Switch } from "solid-js";
 
 import { cancelFamilyJoin, getFamilyMembers, leaveFamily } from "~/server/api/family";
 import { getUserFamily } from "~/server/api/user";
-import { T, cacheTranslations, createTranslator } from "~/server/i18n";
+import { T, createTranslator, queryDictionary } from "~/server/i18n";
 
 import { FamilyInviteDialog } from "~/lib/family-invite";
 import { FamilyNameForm } from "~/lib/family-invite/family-name-form";
@@ -25,7 +25,7 @@ import { WaitingFamilyConfirmation } from "~/lib/family-invite/waiting-family-co
 
 export const route = {
 	preload() {
-		void cacheTranslations("family");
+		void queryDictionary("family");
 		void getUserFamily();
 		void getFamilyMembers();
 	},

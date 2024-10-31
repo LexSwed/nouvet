@@ -1,11 +1,11 @@
-import { action, cache } from "@solidjs/router";
+import { action, query } from "@solidjs/router";
 
 import { getRequestUser } from "~/server/auth/request-user";
 import { userFamily } from "~/server/db/queries/user-family";
 
 import { getUserProfileServer, updateUserProfileServer } from "./user.server";
 
-export const getUserFamily = cache(async () => {
+export const getUserFamily = query(async () => {
 	"use server";
 	const currentUser = await getRequestUser();
 
@@ -17,12 +17,12 @@ export const getUserFamily = cache(async () => {
 	return user;
 }, "user-family");
 
-export const getUser = cache(async () => {
+export const getUser = query(async () => {
 	"use server";
 	const user = await getRequestUser();
 	return user;
 }, "user");
 
-export const getUserProfile = cache(getUserProfileServer, "user-profile");
+export const getUserProfile = query(getUserProfileServer, "user-profile");
 
 export const updateUserProfile = action(updateUserProfileServer, "update-user-profile");

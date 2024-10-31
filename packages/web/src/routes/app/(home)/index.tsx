@@ -5,7 +5,7 @@ import { For, Match, Show, Suspense, Switch, createUniqueId, lazy } from "solid-
 
 import { getUserPets } from "~/server/api/pet";
 import { getUserFamily } from "~/server/api/user";
-import { cacheTranslations, createTranslator } from "~/server/i18n";
+import { createTranslator, queryDictionary } from "~/server/i18n";
 
 import { AppHeader } from "~/lib/app-header";
 import { FamilyInviteDialog } from "~/lib/family-invite";
@@ -15,7 +15,7 @@ const CreateNewPetForm = lazy(() => import("~/lib/create-new-pet-form"));
 
 export const route = {
 	preload() {
-		void cacheTranslations("app");
+		void queryDictionary("app");
 		void getUserPets();
 		void getUserFamily();
 	},

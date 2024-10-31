@@ -12,7 +12,7 @@ import { Match, Show, Suspense, Switch } from "solid-js";
 import { checkFamilyInvite, joinFamilyWithLink } from "~/server/api/family-invite";
 import { getUserProfile } from "~/server/api/user";
 import { UserAlreadyInFamily, isErrorResponse } from "~/server/errors";
-import { cacheTranslations, createTranslator } from "~/server/i18n";
+import { createTranslator, queryDictionary } from "~/server/i18n";
 
 import { AccountMenu } from "~/lib/account-menu";
 import { FamilyInviteBenefits } from "~/lib/family-invite-benefits";
@@ -20,7 +20,7 @@ import { HeroImage } from "~/lib/hero-image";
 
 export const route = {
 	preload() {
-		void cacheTranslations("invited");
+		void queryDictionary("invited");
 		void getUserProfile();
 	},
 } satisfies RouteDefinition;

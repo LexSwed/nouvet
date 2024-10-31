@@ -21,14 +21,14 @@ import { PetPicture } from "~/lib/pet-home-card";
 import { getPetScheduledActivities, listAllPetActivities } from "~/server/api/activity";
 import { getPet } from "~/server/api/pet";
 import { getUser, getUserProfile } from "~/server/api/user";
-import { cacheTranslations, createTranslator } from "~/server/i18n";
+import { createTranslator, queryDictionary } from "~/server/i18n";
 import type { ActivityType, PetID, UserSession } from "~/server/types";
 import { PetPastActivities } from "./_lib/past-activities";
 import { PetPrescriptions, type PrescriptionActivity } from "./_lib/pet-prescriptions";
 
 export const route = {
 	preload({ params }) {
-		void cacheTranslations("pets");
+		void queryDictionary("pets");
 		void getPet(params.petId as PetID);
 		void getUserProfile();
 		void getUser();

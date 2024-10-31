@@ -1,4 +1,4 @@
-import { action, cache } from "@solidjs/router";
+import { action, query } from "@solidjs/router";
 
 import {
 	createPetServer,
@@ -11,7 +11,7 @@ import {
 	updatePetWeightServer,
 } from "./pet.server";
 
-export const getUserPets = cache(getUserPetsServer, "user-pets");
+export const getUserPets = query(getUserPetsServer, "user-pets");
 
 export const createPet = action(createPetServer, "create-pet");
 
@@ -23,6 +23,6 @@ export const updatePetBreed = action(updatePetBreedServer, "update-pet-breed");
 
 export const updatePet = action(updatePetServer, "update-pet");
 
-export const getPet = cache(getPetServer, "user-pet");
+export const getPet = query(getPetServer, "user-pet");
 
 export const deletePet = action(deletePetServer, "delete-pet");

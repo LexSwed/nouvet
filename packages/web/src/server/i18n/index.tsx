@@ -1,12 +1,12 @@
 import { resolveTemplate, translator } from "@solid-primitives/i18n";
-import { cache, createAsync } from "@solidjs/router";
+import { createAsync, query } from "@solidjs/router";
 import type { JSX, ParentProps } from "solid-js";
 import { getRequestEvent } from "solid-js/web";
 
 import { getDictionary } from "./dict";
 import type { Namespace, NamespaceMap } from "./dict";
 
-export const cacheTranslations = cache(async <T extends Namespace>(namespace: T) => {
+export const queryDictionary = query(async <T extends Namespace>(namespace: T) => {
 	"use server";
 	return getDictionary(namespace);
 	// 1 hour browser cache
@@ -22,14 +22,14 @@ export const cacheTranslations = cache(async <T extends Namespace>(namespace: T)
  * Revalidation is required to ensure no new deployed code is relying on translations that aren't available due to caching.
  */
 export const createTranslator = <T extends Namespace>(namespace: T) => {
-	const dict = createAsync(() => cacheTranslations(namespace) as Promise<NamespaceMap[T]>, {
+	const dict = createAsync(() => queryDictionary(namespace) as Promise<NamespaceMap[T]>, {
 		name: `t-${namespace}`,
 		deferStream: true,
 	});
 	return translator(dict, resolveTemplate);
 };
 
-export const getLocale = cache(async () => {
+export const getLocale = query(async () => {
 	"use server";
 	const event = getRequestEvent();
 	const locale = event?.locals.locale;
