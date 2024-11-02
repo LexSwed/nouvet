@@ -199,10 +199,11 @@ export const sessionTable = sqliteTable("user_session", {
 		.references(() => userTable.id)
 		.$type<DatabaseUser["id"]>(),
 	/**
-	 * unix seconds
+	 * UNIX milliseconds timestamp.
 	 */
-	expiresAt: integer("expires_at").notNull(),
+	expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
 });
+export type DatabaseSession = typeof sessionTable.$inferSelect;
 
 export const activitiesTable = sqliteTable(
 	"activity",

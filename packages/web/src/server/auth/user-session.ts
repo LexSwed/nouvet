@@ -1,19 +1,12 @@
-import type { User } from "lucia";
 import * as v from "valibot";
-import {
-	type CookieSerializeOptions,
-	type HTTPEvent,
-	sendRedirect,
-	updateSession,
-	useSession,
-} from "vinxi/server";
+import { type HTTPEvent, sendRedirect, updateSession, useSession } from "vinxi/server";
 
-import { useLucia } from "~/server/auth/lucia";
 import { SESSION_COOKIE } from "~/server/const";
 import type { DatabaseUser } from "~/server/db/schema";
 import { env } from "~/server/env";
 import type { acceptedLocaleLanguageTag } from "~/server/i18n/shared";
 import type { UserID } from "~/server/types";
+import { createSession, invalidateSession, validateSessionToken } from "./session";
 
 /**
  * Creates new auth session and stores it in cookie with other user basic user info.
@@ -34,8 +27,7 @@ export async function createUserSession(
 		measurementSystem: UserSession["measurementSystem"];
 	},
 ) {
-	const lucia = useLucia();
-	const authSession = await lucia.createSession(userId, {});
+	const authSession = await createSession(userId);
 
 	await updateRequestUser(
 		event,
@@ -46,11 +38,7 @@ export async function createUserSession(
 			measurementSystem,
 			sessionId: authSession.id,
 		},
-		{
-			// keep enabled in DEV for --host debugging on real device
-			secure: env.PROD,
-			expires: authSession.expiresAt,
-		},
+		authSession,
 	);
 }
 
@@ -58,7 +46,7 @@ export async function createUserSession(
  * Validates current auth session.
  * @throws {Error} if auth/database issues.
  */
-export async function validateAuthSession(event: HTTPEvent): Promise<User | null> {
+export async function validateAuthSession(event: HTTPEvent): Promise<DatabaseUser | null> {
 	// TODO: validate request origin, disabled while
 	// https://github.com/nksaraf/vinxi/issues/304
 	// if (env.PROD) {
@@ -72,7 +60,6 @@ export async function validateAuthSession(event: HTTPEvent): Promise<User | null
 	//     throw new Error('Request Origin is not matching');
 	//   }
 	// }
-	const lucia = useLucia();
 	const userSession = await unsafe_useUserSession();
 	if (!("sessionId" in userSession.data)) {
 		// Cleanup just in case
@@ -80,7 +67,7 @@ export async function validateAuthSession(event: HTTPEvent): Promise<User | null
 		return null;
 	}
 
-	const { session, user } = await lucia.validateSession(
+	const { session, user } = await validateSessionToken(
 		/**
 		 * NB: userSession.id is a unique identifier assigned to a user when visiting the website,
 		 * even before authentication. data.sessionId refers to the actual auth session ID stored in the database.
@@ -94,15 +81,7 @@ export async function validateAuthSession(event: HTTPEvent): Promise<User | null
 		return null;
 	}
 
-	// the session has been updated, update the cookie expiration date
-	if (session.fresh) {
-		const sessionCookie = lucia.createSessionCookie(session.id);
-		await updateRequestUser(
-			event,
-			{ ...userSession.data, sessionId: session.id },
-			sessionCookie.attributes,
-		);
-	}
+	await updateRequestUser(event, { ...userSession.data, sessionId: session.id }, session);
 
 	return user;
 }
@@ -112,7 +91,7 @@ export async function validateAuthSession(event: HTTPEvent): Promise<User | null
 export async function deleteUserSession() {
 	const session = await unsafe_useUserSession();
 	if ("sessionId" in session.data) {
-		await useLucia().invalidateSession(session.data.sessionId);
+		await invalidateSession(session.data.sessionId);
 	}
 	await session.clear();
 }
@@ -167,14 +146,18 @@ const userCookieSchema = v.object({
 async function updateRequestUser(
 	event: HTTPEvent,
 	user: UserSession,
-	config?: CookieSerializeOptions,
+	authSession: { expiresAt: Date },
 ) {
 	await updateSession(
 		event,
 		{
 			name: SESSION_COOKIE,
 			password: env.SESSION_SECRET,
-			cookie: config,
+			cookie: {
+				// keep enabled in DEV for --host debugging on real device
+				secure: env.PROD,
+				expires: authSession.expiresAt,
+			},
 		},
 		v.parse(userCookieSchema, user),
 	);
