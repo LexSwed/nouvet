@@ -227,6 +227,7 @@ export const activitiesTable = sqliteTable(
 		date: zonedDateTimeISO("activity_date"),
 	},
 	(table) => ({
+		// TODO: combined index depending on the access
 		petIdx: index("pet_id_idx").on(table.petId),
 		typeIdx: index("type_idx").on(table.type),
 		dateIdx: index("date_idx").on(table.date),
