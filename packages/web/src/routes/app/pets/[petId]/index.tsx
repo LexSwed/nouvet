@@ -71,7 +71,11 @@ const PetPage = (props: RouteSectionProps) => {
 									when={(scheduledActivities() ?? []).length > 0 ? scheduledActivities() : null}
 								>
 									{(scheduledActivities) => (
-										<PetScheduledActivities scheduledActivities={scheduledActivities} user={user} />
+										<PetScheduledActivities
+											petId={props.params.petId as PetID}
+											scheduledActivities={scheduledActivities}
+											user={user}
+										/>
 									)}
 								</Show>
 								<Show
@@ -160,6 +164,7 @@ function MainPetCard(props: {
 }
 
 function PetScheduledActivities(props: {
+	petId: PetID;
 	user: Accessor<UserSession>;
 	scheduledActivities: Accessor<Awaited<ReturnType<typeof getPetScheduledActivities>>>;
 }) {
@@ -174,7 +179,11 @@ function PetScheduledActivities(props: {
 	return (
 		<Show when={props.user() && prescriptions()}>
 			{(prescriptions) => (
-				<PetPrescriptions activities={prescriptions} locale={props.user()!.locale} />
+				<PetPrescriptions
+					petId={props.petId}
+					activities={prescriptions}
+					locale={props.user()!.locale}
+				/>
 			)}
 		</Show>
 	);

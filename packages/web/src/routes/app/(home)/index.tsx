@@ -103,12 +103,7 @@ const UserPets = () => {
 							>
 								<Icon use="plus" size="sm" />
 							</Button>
-							<Drawer
-								id="create-new-pet-drawer"
-								placement="center"
-								role="dialog"
-								class="sm:max-w-[420px]"
-							>
+							<Drawer id="create-new-pet-drawer" placement="center" class="sm:max-w-[420px]">
 								{(open) => (
 									<Show when={open()}>
 										<Suspense>
