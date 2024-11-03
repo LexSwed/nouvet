@@ -157,6 +157,9 @@ async function updateRequestUser(
 				// keep enabled in DEV for --host debugging on real device
 				secure: env.PROD,
 				expires: authSession.expiresAt,
+				httpOnly: true,
+				sameSite: "lax" as const,
+				path: "/",
 			},
 		},
 		v.parse(userCookieSchema, user),
