@@ -47,7 +47,7 @@ export const GET = async (event: PageEvent) => {
 		}
 
 		if (existingUser) {
-			await createUserSession(event.nativeEvent, {
+			await createUserSession({
 				userId: existingUser.id,
 				locale: existingUser.locale!,
 				timeZoneId: existingUser.timeZoneId!,
@@ -73,7 +73,7 @@ export const GET = async (event: PageEvent) => {
 			measurementSystem: measurementSystem,
 		});
 
-		await createUserSession(event.nativeEvent, {
+		await createUserSession({
 			userId: user.id,
 			timeZoneId: timeZoneId,
 			locale: locale.baseName as SupportedLocale,
@@ -91,12 +91,6 @@ export const GET = async (event: PageEvent) => {
 				status: 400,
 			});
 		}
-		console.log(
-			"error happened",
-			error instanceof Response,
-			error instanceof Promise,
-			error instanceof Error,
-		);
 		console.error(error);
 		return new Response(null, {
 			status: 500,

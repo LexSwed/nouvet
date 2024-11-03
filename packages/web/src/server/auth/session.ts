@@ -18,11 +18,9 @@ export async function createSession(userId: UserID) {
 	const session = {
 		id: sessionId,
 		userId,
-		expiresAt: new Date(SESSION.expiresAt()),
+		expiresAt: expiresAt(),
 	};
-	await useDb()
-		.insert(sessionTable)
-		.values({ ...session, expiresAt: session.expiresAt });
+	await useDb().insert(sessionTable).values(session);
 
 	return session;
 }
@@ -41,12 +39,12 @@ export async function validateSessionToken(token: string): Promise<SessionValida
 	}
 	const { user, session } = result;
 
-	if (Date.now() >= session.expiresAt.getTime()) {
-		await db.delete(sessionTable).where(eq(sessionTable.id, session.id));
+	if (isExpired(session)) {
+		await invalidateSession(session.id);
 		return { session: null, user: null };
 	}
-	if (Date.now() >= session.expiresAt.getTime() - SESSION.refreshAt()) {
-		session.expiresAt = new Date(SESSION.expiresAt());
+	if (shouldRefresh(session)) {
+		session.expiresAt = expiresAt();
 		await db
 			.update(sessionTable)
 			.set({
@@ -60,7 +58,7 @@ export async function validateSessionToken(token: string): Promise<SessionValida
 export async function invalidateSession(sessionId: string) {
 	const db = useDb();
 
-	await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
+	await db.delete(sessionTable).where(eq(sessionTable.id, sessionId)).run();
 }
 
 export type SessionValidationResult =
@@ -71,11 +69,17 @@ function encodeToken(token: string) {
 	return encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 }
 
-const SESSION = {
-	expiresAt() {
-		return Date.now() + Temporal.Duration.from({ days: 30 }).total("milliseconds");
-	},
-	refreshAt() {
-		return Date.now() + Temporal.Duration.from({ days: 10 }).total("milliseconds");
-	},
-};
+function expiresAt() {
+	return new Date(Date.now() + Temporal.Duration.from({ days: 30 }).total("milliseconds"));
+}
+
+function shouldRefresh(session: DatabaseSession) {
+	return (
+		Date.now() >=
+		session.expiresAt.getTime() - Temporal.Duration.from({ days: 14 }).total("milliseconds")
+	);
+}
+
+function isExpired(session: DatabaseSession) {
+	return Date.now() >= session.expiresAt.getTime();
+}
