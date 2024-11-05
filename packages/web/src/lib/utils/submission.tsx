@@ -1,9 +1,7 @@
-import type { useSubmission } from "@solidjs/router";
+import type { Submission } from "@solidjs/router";
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-type Submission<T extends any[], U, V> = ReturnType<typeof useSubmission<T, U, V>>;
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export type SubmissionResult<S> = S extends Submission<any, infer U, any> ? U : never;
+export type SubmissionResult<S> = S extends Submission<any, infer U> ? U : never;
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export type ValidationError<E = any> = {
@@ -19,7 +17,7 @@ export type SubmissionError<R> = R extends "validation" ? ValidationError : Gene
 export function isSubmissionFailure<
 	const Reason extends "validation" | "other",
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	const S extends Submission<any[], any, any>,
+	const S extends Submission<any[], any>,
 >(submission: S, reason: Reason) {
 	return !!(
 		typeof submission.result === "object" &&
@@ -31,12 +29,12 @@ export function isSubmissionFailure<
 
 export function isSubmissionValidationError<
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	S extends Submission<any[], any, any>,
+	S extends Submission<any[], any>,
 >(
 	submission: S,
 ): submission is Exclude<S, "result"> &
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	(S extends Submission<any[], infer U, any>
+	(S extends Submission<any[], infer U>
 		? {
 				result: U extends ValidationError<infer Errors> ? ValidationError<Errors> : never;
 			}
@@ -45,12 +43,12 @@ export function isSubmissionValidationError<
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export function pickSubmissionValidationErrors<S extends Submission<any[], any, any>>(
+export function pickSubmissionValidationErrors<S extends Submission<any[], any>>(
 	submission: S,
 ):
 	| (Exclude<S, "result"> &
 			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-			(S extends Submission<any[], infer U, any>
+			(S extends Submission<any[], infer U>
 				? {
 						result: U extends ValidationError<infer Errors> ? ValidationError<Errors> : never;
 					}
@@ -61,12 +59,12 @@ export function pickSubmissionValidationErrors<S extends Submission<any[], any, 
 
 export function isSubmissionGenericError<
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	S extends Submission<any[], any, any>,
+	S extends Submission<any[], any>,
 >(
 	submission: S,
 ): submission is Exclude<S, "result"> &
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	(S extends Submission<any[], infer U, any>
+	(S extends Submission<any[], infer U>
 		? {
 				result: U extends GenericError ? GenericError : never;
 			}
@@ -76,7 +74,7 @@ export function isSubmissionGenericError<
 
 export function isSubmissionSuccess<
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	S extends Submission<any[], any, any>,
+	S extends Submission<any[], any>,
 >(
 	submission: S,
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
