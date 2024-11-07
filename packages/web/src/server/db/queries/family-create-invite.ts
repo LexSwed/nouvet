@@ -1,7 +1,6 @@
 "use server";
 
-import { TimeSpan } from "lucia";
-
+import { Temporal } from "temporal-polyfill";
 import { useDb } from "~/server/db";
 import { familyInviteTable } from "~/server/db/schema";
 import type { UserID } from "~/server/types";
@@ -22,7 +21,7 @@ export async function createFamilyInvite(
 			inviterId,
 			inviteCode,
 			invitationHash,
-			expiresAt: Math.floor(Date.now() / 1000) + new TimeSpan(1, "h").seconds(),
+			expiresAt: Temporal.Now.zonedDateTimeISO("utc").add({ hours: 1 }).epochMilliseconds,
 		})
 		.returning({
 			expiresAt: familyInviteTable.expiresAt,

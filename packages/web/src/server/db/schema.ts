@@ -39,7 +39,7 @@ export const familyInviteTable = sqliteTable(
 			.references(() => userTable.id)
 			.$type<DatabaseUser["id"]>(),
 		/**
-		 * UNIX timestamp in **seconds**.
+		 * UNIX timestamp in milliseconds.
 		 */
 		expiresAt: integer("expires_at").notNull(),
 		/**

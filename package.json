@@ -5,7 +5,7 @@
 	"license": "GNU General Public License v3.0",
 	"workspaces": ["packages/acceptance-tests", "packages/config", "packages/ui", "packages/web"],
 	"engines": {
-		"node": ">=20",
+		"node": ">=22",
 		"npm": ">=10"
 	},
 	"packageManager": "npm@10.9.0",

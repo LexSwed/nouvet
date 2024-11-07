@@ -16,7 +16,6 @@
 		"db:studio": "drizzle-kit studio --port=3001"
 	},
 	"dependencies": {
-		"@lucia-auth/adapter-drizzle": "^1.1.0",
 		"@nou/ui": "^0.0.1",
 		"@solid-primitives/devices": "^1.2.6",
 		"@solid-primitives/i18n": "^2.1.1",
